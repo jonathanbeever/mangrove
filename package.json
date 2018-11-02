@@ -1,0 +1,34 @@
+{
+  "name": "soundscape-ecology-server",
+  "version": "1.0.0",
+  "description": "Data processing and visualization software for soundscape ecology research",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ucfcs/Fall2018-Group11"
+  },
+  "scripts": {
+    "pretest": "eslint --ignore-path .gitignore .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "contributors": [
+    "Ot Galbadon",
+    "Keith Guske",
+    "David Palumbo",
+    "Josh Pollmann",
+    "Brita Ramsay"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "nodemon": "^1.18.5"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  }
+}
