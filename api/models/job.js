@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 
 const jobSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  inputId: mongoose.Schema.Types.ObjectId,
-  jobSpecId: mongoose.Schema.Types.ObjectId,
-  author: String,
-  creationTimeMs: Number,
-  status: String,
+  input: { type: mongoose.Schema.Types.ObjectId, required: true },
+  jobSpec: { type: mongoose.Schema.Types.ObjectId, required: true },
+  author: { type: String, required: true },
+  creationTimeMs: { type: Number, required: true },
+  status: { type: String, required: true },
 });
 
 module.exports = mongoose.model('Job', jobSchema);

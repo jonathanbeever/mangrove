@@ -12,9 +12,10 @@ mongoose.connect('mongodb://127.0.0.1:27017/sse-test', {
 });
 
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// TODO: May want to switch to use the `cors` NPM package
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
