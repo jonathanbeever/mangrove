@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 
-const jobSchema = mongoose.Schema({
+const ndsiJobSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
+  type: { type: String, required: true },
   input: { type: mongoose.Schema.Types.ObjectId, required: true },
   jobSpec: { type: mongoose.Schema.Types.ObjectId, required: true },
   author: { type: String, required: true },
@@ -9,4 +10,4 @@ const jobSchema = mongoose.Schema({
   status: { type: String, required: true },
 });
 
-module.exports = mongoose.model('Job', jobSchema);
+module.exports = mongoose.model('NdsiJob', ndsiJobSchema);

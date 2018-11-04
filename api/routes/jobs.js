@@ -4,20 +4,49 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const Job = require('../models/job');
+const AciJob = require('../models/aciJob');
+const AdiJob = require('../models/adiJob');
+const AeiJob = require('../models/aeiJob');
+const BiJob = require('../models/biJob');
+const NdsiJob = require('../models/ndsiJob');
+const RmsJob = require('../models/rmsJob');
 
 // Create Job
 router.put('/', (req, res) => {
-  Job.find({
+  var jobModel = null;
+  switch (req.body.type) {
+    case "aci":
+      jobModel = AciJob;
+      break;
+    case "adi":
+      jobModel = AdiJob;
+      break;
+    case "aei":
+      jobModel = AeiJob;
+      break;
+    case "bi":
+      jobModel = BiJob;
+      break;
+    case "ndsi":
+      jobModel = NdsiJob;
+      break;
+    case "rms":
+      jobModel = RmsJob;
+      break;
+  }
+
+  jobModel.find({
     input: req.body.inputId,
+    type: req.body.type,
     jobSpec: req.body.jobSpecId,
-  }).select('_id input jobSpec author creationTimeMs status')
+  })
     .exec()
     .then((searchResult) => {
       console.log(searchResult);
       if (searchResult.length /* === 1 */) {
         res.status(200).json({
           jobId: searchResult[0]._id,
+          type: searchResult[0].type,
           input: searchResult[0].input,
           jobSpec: searchResult[0].jobSpec,
           author: searchResult[0].author,
@@ -25,8 +54,9 @@ router.put('/', (req, res) => {
           status: searchResult[0].status,
         });
       } else {
-        const job = new Job({
+        const job = new jobModel({
           _id: new mongoose.Types.ObjectId(),
+          type: req.body.type,
           input: req.body.inputId,
           jobSpec: req.body.jobSpecId,
           author: 'Test Author', // TODO: Implement user authentication
@@ -40,6 +70,7 @@ router.put('/', (req, res) => {
             console.log(createResult);
             res.status(201).json({
               jobId: createResult._id,
+              type: createResult.type,
               input: createResult.input,
               jobSpec: createResult.jobSpec,
               author: createResult.author,
