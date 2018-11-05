@@ -22,9 +22,9 @@ class ChooseAdiParams extends Component {
             <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['freq-step']} id="freq-step" />
           </div>
         </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input onChange={this.props.onChange} type="checkbox" class="form-check-input" id="shannon" value={this.props.params['shannon']} />
+        <div className="form-check">
+          <label className="form-check-label">
+            <input onChange={this.props.onChange} type="checkbox" className="form-check-input" id="shannon" value={this.props.params['shannon']} />
             Shannon Diversity
           </label>
         </div>

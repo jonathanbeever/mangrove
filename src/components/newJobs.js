@@ -23,7 +23,8 @@ class NewJobs extends Component {
     this.onClickIndex = this.onClickIndex.bind(this);
     this.handleParamChange = this.handleParamChange.bind(this);
     this.handleJobSubmit = this.handleJobSubmit.bind(this);
-    this.cancelJob = this.cancelJob.bind(this)
+    this.cancelJob = this.cancelJob.bind(this);
+    this.onChoosePreset = this.onChoosePreset.bind(this)
 
     this.state = {
         selectedIndex: '',
@@ -32,13 +33,30 @@ class NewJobs extends Component {
     };
   }
 
+  onChoosePreset = (e) => {
+    // clear params
+    let params = Object.assign({}, this.state.params);
+    
+
+    while(e.target.previousSibling != null) {
+      params[e.target.previousSibling.id] = e.target.previousSibling.children[1].textContent
+      alert(e.target.previousSibling.children[1].textContent)
+
+      e.target = e.target.previousSibling
+    }
+    console.log(params)
+    this.setState({params: params})    
+  }
+
+  timer = () => {setTimeout(() => {this.setState({changeIndexWarning: false})}, 3000)}
+
   onClickIndex = (e) => {
     // If another index is already select and the button clicked is disabled
     // tell user to start or cancel current job
     if(e.target.parentElement.className.indexOf('disabled') !== -1) {
       this.setState({changeIndexWarning: true})
 
-      setTimeout(() => {this.setState({changeIndexWarning: false})}, 3000);
+      this.timer()
     }
     // Otherwise set state selectedIndex to name of index
     else {
@@ -46,7 +64,7 @@ class NewJobs extends Component {
 
       switch(e.target.id) {
         case 'aci': {
-          this.setState({paramComp: <ChooseAciParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} />})
+          this.setState({paramComp: <ChooseAciParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} onChoosePreset={this.onChoosePreset} />})
           break;
         }
         case 'ndsi': {
@@ -67,6 +85,10 @@ class NewJobs extends Component {
         }
         case 'rms': {
           this.setState({paramComp: <ChooseRmsParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} />})
+          break;
+        }
+        default: {
+
           break;
         }
       }
@@ -106,7 +128,7 @@ class NewJobs extends Component {
             <div className='col-12'>
               <ChooseIndexButtons selectedIndex = {this.state.selectedIndex} onClickIndex={this.onClickIndex}/>
               {this.state.changeIndexWarning ?
-                (<div class="alert alert-warning" role="alert">
+                (<div className="alert alert-warning" role="alert">
                   <strong>Warning!</strong> Start or cancel current job before starting a new one.
                 </div>) : ''}
             </div>
@@ -118,6 +140,9 @@ class NewJobs extends Component {
           </div>
           <div className="row">
             <button className="btn btn-lg btn-info" onClick={this.cancelJob}>Cancel Job</button>
+          </div>
+          <div>
+            {this.state.params['j'] ? this.state.params['j'] : 'hi'}
           </div>
         </div>
     //   </div>
