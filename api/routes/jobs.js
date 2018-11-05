@@ -4,40 +4,43 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const AciJob = require('../models/aciJob');
-const AdiJob = require('../models/adiJob');
-const AeiJob = require('../models/aeiJob');
-const BiJob = require('../models/biJob');
-const NdsiJob = require('../models/ndsiJob');
-const RmsJob = require('../models/rmsJob');
+const Job = require('../models/job');
+const AciJob = require('../models/job.aci');
+const AdiJob = require('../models/job.adi');
+const AeiJob = require('../models/job.aei');
+const BiJob = require('../models/job.bi');
+const NdsiJob = require('../models/job.ndsi');
+const RmsJob = require('../models/job.rms');
 
 // Create Job
 router.put('/', (req, res) => {
-  var jobModel = null;
+  let JobModel = null;
   switch (req.body.type) {
-    case "aci":
-      jobModel = AciJob;
+    case 'aci':
+      JobModel = AciJob;
       break;
-    case "adi":
-      jobModel = AdiJob;
+    case 'adi':
+      JobModel = AdiJob;
       break;
-    case "aei":
-      jobModel = AeiJob;
+    case 'aei':
+      JobModel = AeiJob;
       break;
-    case "bi":
-      jobModel = BiJob;
+    case 'bi':
+      JobModel = BiJob;
       break;
-    case "ndsi":
-      jobModel = NdsiJob;
+    case 'ndsi':
+      JobModel = NdsiJob;
       break;
-    case "rms":
-      jobModel = RmsJob;
+    case 'rms':
+      JobModel = RmsJob;
+      break;
+    default:
+      // TODO: Decide what to do here
       break;
   }
 
-  jobModel.find({
+  JobModel.find({
     input: req.body.inputId,
-    type: req.body.type,
     jobSpec: req.body.jobSpecId,
   })
     .exec()
@@ -54,7 +57,7 @@ router.put('/', (req, res) => {
           status: searchResult[0].status,
         });
       } else {
-        const job = new jobModel({
+        const job = new JobModel({
           _id: new mongoose.Types.ObjectId(),
           type: req.body.type,
           input: req.body.inputId,
@@ -99,13 +102,13 @@ router.get('/:jobId', (req, res) => {
   const { jobId } = req.params;
 
   Job.findById(jobId)
-    .select('_id input jobSpec author creationTimeMs status')
     .exec()
     .then((searchResult) => {
       console.log(searchResult);
       if (searchResult) {
         res.status(200).json({
           jobId: searchResult._id,
+          type: searchResult.type,
           input: searchResult.input,
           jobSpec: searchResult.jobSpec,
           author: searchResult.author,
@@ -129,13 +132,13 @@ router.get('/:jobId', (req, res) => {
 // Get All Jobs
 router.get('/', (req, res) => {
   Job.find()
-    .select('_id input jobSpec author creationTimeMs status')
     .exec()
     .then((searchResult) => {
       res.status(200).json({
         count: searchResult.length,
         jobs: searchResult.map(job => ({
           jobId: job._id,
+          type: job.type,
           input: job.input,
           jobSpec: job.jobSpec,
           author: job.author,
