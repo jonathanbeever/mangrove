@@ -7,6 +7,8 @@ import ChooseBioacousticParams from './bioParams/chooseBioacousticParams';
 import ChooseEvennessParams from './evenParams/chooseEvennessParams';
 import ChooseRmsParams from './rmsParams/chooseRmsParams';
 import FileSelect from './selectFiles';
+import CurrentJob from './currentJob';
+import './newJobs.css';
 
 class NewJobs extends Component {
   constructor(props) {
@@ -25,16 +27,32 @@ class NewJobs extends Component {
     };
   }
 
-  onChoosePreset = (e) => {
-    // clear params
-    let params = Object.assign({}, this.state.params);
-    
-    while(e.target.previousSibling != null) {
-      params[e.target.previousSibling.id] = e.target.previousSibling.children[1].textContent
+  componentDidUpdate(prevProps, prevState) {
+  }
 
-      e.target = e.target.previousSibling
+  componentWillUpdate(nextProps, nextState) {
+  }
+
+  onChoosePreset = (e) => {
+    let params = Object.assign({}, this.state.params);
+    let target = e.target.parentElement.parentElement
+    let inputHtml = ''
+    // are params and html state needed?
+
+    while(target.previousSibling != null) {
+
+      let temp = (target.previousSibling.id + ' : ' + target.previousSibling.children[1].textContent + '\n\n')
+      inputHtml = (<div>{temp}{inputHtml}</div>)
+
+      params[target.previousSibling.id] = target.previousSibling.children[1].textContent
+
+      target = target.previousSibling
     }
     this.setState({params: params})    
+
+    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{inputHtml}</div>)
+ 
+    this.setState({inputHtml: inputHtml})
   }
 
   timer = () => {setTimeout(() => {this.setState({changeIndexWarning: false})}, 3000)}
@@ -85,19 +103,31 @@ class NewJobs extends Component {
   }
 
   handleParamChange (e) {
+    // To pass to other components
     let params = Object.assign({}, this.state.params);
 
     params[e.target.id] = e.target.value
 
-    this.setState({params: params})
+    this.setState({params: params});
+
+    // For rendering to screen
+    let keys = Object.keys(params)
+    let inputHtml = ''
+
+    keys.forEach(key => {
+      inputHtml = (<div>{inputHtml}{key} : {params[key]}</div>)
+    })
+
+    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{inputHtml}</div>)
+ 
+    this.setState({inputHtml: inputHtml})
   }
 
   handleJobSubmit () {
-
   }
 
   cancelJob () {
-    this.setState({selectedIndex: '', params: ''})
+    this.setState({selectedIndex: '', params: '', inputHtml: ''})
   }
 
   render() {
@@ -134,8 +164,8 @@ class NewJobs extends Component {
                 Only show after all input info is set as state*/}
             {/* <button type="submit" className="btn btn-primary">Add Job to Queue</button> */}
           </div>
-          <div className="col-3">
-          hiii
+          <div className="col-3 currentJob">
+            {this.state.params ? (<div><h4>Current Job</h4>{this.state.inputHtml}<div className="col-12"><button type="submit" className="startJob btn btn-primary">Add Job to Queue</button></div></div>) : ''}
           </div>
         </div>
       </div>
