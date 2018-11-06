@@ -12,6 +12,20 @@ class WorkingDirectory extends Component {
    }
 }
 
+class AnalysisView extends Component {
+  render() {
+    const chosenResult = this.props.chosenResult;
+
+
+    return (
+      <div class="analysis-container">
+        <h5>{chosenResult}</h5>
+        <p>Analysis goes here!</p>
+      </div>
+    );
+  }
+}
+
 class FilterJobs extends Component {
   render() {
     return(
@@ -21,14 +35,10 @@ class FilterJobs extends Component {
           <button type="submit"><i class="fa fa-search"></i></button>
         </form>
         <div id="radioButtons">
-          <label class="radio-container">Completed
-            <input name="searchType" type="radio" value="Completed" />
-            <span class="checkmark"></span>
-          </label>
-          <label class="radio-container">In Progress
-            <input name="searchType" type="radio" value="In Progress" />
-            <span class="checkmark"></span>
-          </label>
+          <input type="radio" value="completed" id="radio-complete" name="filterJob" checked="checked" />
+          <label for="radio-complete">Complete</label>
+          <input type="radio" value="inProgress" id="radio-progress" name="filterJob" />
+          <label for="radio-progress">In Progress</label>
         </div>
         <div id="filterIndex">
           <label for="index"><b>Filter by index</b></label>
@@ -66,10 +76,14 @@ class ResultTable extends Component {
     });
 
     return(
-      <div class="table-wrapper">
-        <table>
-          <tbody>{rows}</tbody>
-        </table>
+      <div id="table-wrapper">
+        <div class="scroll">
+          <div class="body">
+            <table>
+              <tbody>{rows}</tbody>
+            </table>
+          </div>
+        </div>
       </div>
     );
   }
@@ -82,6 +96,7 @@ class ResultName extends Component {
       <tr>
         <th>
           <b>{result}</b>
+          <input type="radio" name={result} />
         </th>
       </tr>
     );
@@ -118,14 +133,14 @@ class Catalog extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col">
+          <div className="col-4">
             <FilterJobs />
             <h4>Your Results</h4>
             <ResultTable
               results={this.props.results} />
           </div>
-          <div className="col">
-            // ToDo: analysis component
+          <div className="col-8">
+            <AnalysisView />
           </div>
         </div>
       </div>
