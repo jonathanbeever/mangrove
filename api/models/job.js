@@ -4,7 +4,7 @@ const options = { discriminatorKey: 'type' };
 
 const jobSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  input: { type: mongoose.Schema.Types.ObjectId, required: true },
+  input: { type: mongoose.Schema.Types.ObjectId, required: true }, // need to add ref
   author: { type: String, required: true },
   creationTimeMs: { type: Number, required: true },
   status: { type: String, required: true },
