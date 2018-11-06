@@ -8,11 +8,10 @@ class PresetAciParams extends Component {
   constructor(props) {
     super(props);
 
-  
-    this.state = {
-    };
+    this.state = {};
   }
 
+  // Toggles view of preset parameters when dropdown arrow is clicked
   onClickPreset = (e) => {
     let selectedSpecs = e.target.nextSibling
 
@@ -52,19 +51,20 @@ class PresetAciParams extends Component {
       }
     ]
 
+    // Map json object of param sets to html to render
     var htmlPresets = paramPresets.map((item, index) => {
       return (
         <li key={item.id} className="list-group-item" id={item.id}>
-          <h4 name='alias'>{item.alias}</h4>
-          <button onClick={this.onClickPreset} className="btn btn-secondary dropdown-toggle" type="button"></button>
+          <h4 class="presetAlias" name='alias'>{item.alias}&nbsp;&nbsp;</h4>
+          <button onClick={this.onClickPreset} className="btn btn-secondary dropdown-toggle presetDropdown" type="button"></button>
+          {/* Hide details of param set until dropdown is clicked */}
           <div hidden={true}>
-            <div id='min-freq' value={item.minFreq}><strong>min freq:</strong> <p>{item.minFreq}</p></div>
-            <div id='max-freq' value={5}><strong>max freq:</strong> <p>{item.maxFreq}</p></div>
+            <div id='min-freq'><strong>min freq:</strong> <p>{item.minFreq}</p></div>
+            <div id='max-freq'><strong>max freq:</strong> <p>{item.maxFreq}</p></div>
             <div id='j'><strong>j: </strong> <p>{item.j}</p></div>
             <div id='fft-w'><strong>fftW:</strong> <p>{item.fftW}</p></div>
             <button className="btn btn-secondary" onClick={this.props.onChoosePreset}>Select</button>
           </div>
-           
         </li>
       )
     })
@@ -73,7 +73,7 @@ class PresetAciParams extends Component {
   }
   render(props) {
     return (
-      <div>
+      <div className="col-10">
         <ul className="list-group">
           {this.state.htmlPresets ? this.state.htmlPresets : ''}
         </ul> 

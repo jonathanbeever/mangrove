@@ -1,0 +1,12 @@
+.presetDropdown {
+    float: left;
+}
+
+.presetAlias {
+    float: left;
+    margin-left: 3vw;
+}
+
+#min-freq {
+    clear: both;
+}

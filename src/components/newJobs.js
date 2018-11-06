@@ -1,13 +1,4 @@
 import React, { Component } from 'react';
-// import {
-//     ChooseIndexButtons,
-//     ChooseAciParams,
-//     ChooseNdsiParams,
-//     ChooseAdiParams,
-//     ChooseBioacousticParams,
-//     ChooseEvennessParams,
-//     ChooseRmsParams
-// } from './chooseParams';
 import ChooseIndexButtons from './chooseParams/chooseIndexButtons';
 import ChooseAciParams from './chooseParams/chooseAciParams';
 import ChooseNdsiParams from './chooseParams/chooseNdsiParams';
@@ -37,14 +28,11 @@ class NewJobs extends Component {
     // clear params
     let params = Object.assign({}, this.state.params);
     
-
     while(e.target.previousSibling != null) {
       params[e.target.previousSibling.id] = e.target.previousSibling.children[1].textContent
-      alert(e.target.previousSibling.children[1].textContent)
 
       e.target = e.target.previousSibling
     }
-    console.log(params)
     this.setState({params: params})    
   }
 
@@ -64,27 +52,27 @@ class NewJobs extends Component {
 
       switch(e.target.id) {
         case 'aci': {
-          this.setState({paramComp: <ChooseAciParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} onChoosePreset={this.onChoosePreset} />})
+          this.setState({paramComp: <ChooseAciParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
         case 'ndsi': {
-          this.setState({paramComp: <ChooseNdsiParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} />})
+          this.setState({paramComp: <ChooseNdsiParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
         case 'adi': {
-          this.setState({paramComp: <ChooseAdiParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} />})
+          this.setState({paramComp: <ChooseAdiParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
         case 'bioacoustic': {
-          this.setState({paramComp: <ChooseBioacousticParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} />})
+          this.setState({paramComp: <ChooseBioacousticParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
         case 'evenness': {
-          this.setState({paramComp: <ChooseEvennessParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} />})
+          this.setState({paramComp: <ChooseEvennessParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
         case 'rms': {
-          this.setState({paramComp: <ChooseRmsParams params = {this.state.params} onChange={this.handleParamChange} onSubmit={this.handleJobSubmit} />})
+          this.setState({paramComp: <ChooseRmsParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
         default: {
@@ -97,7 +85,7 @@ class NewJobs extends Component {
 
   handleParamChange (e) {
     let params = Object.assign({}, this.state.params);
-
+    alert(e.target.id, e.target.value)
     params[e.target.id] = e.target.value
 
     this.setState({params: params})
@@ -113,39 +101,34 @@ class NewJobs extends Component {
 
   render() {
     return (
-    //   <div className="App">
-        <div className="container-fluid">
-          <div className="row">
-            <div className='col-8'>
-              <h2>Start New Jobs</h2>
-              <h4>Select an index</h4>
-            </div>
-            <div className="col-4">
-              <button className="btn btn-lg btn-info">Change Working Directory</button>
-            </div>
+      <div className="container-fluid">
+        <div className="row">
+          <div className='col-4'>
           </div>
-          <div className="row">
-            <div className='col-12'>
-              <ChooseIndexButtons selectedIndex = {this.state.selectedIndex} onClickIndex={this.onClickIndex}/>
-              {this.state.changeIndexWarning ?
-                (<div className="alert alert-warning" role="alert">
-                  <strong>Warning!</strong> Start or cancel current job before starting a new one.
-                </div>) : ''}
-            </div>
+          <div className='col-4'>
+            <h2>Start New Jobs</h2>
+            <h4>Select an index</h4>
           </div>
-          <div className="row">
-            <div className="col-6">
-              {this.state.selectedIndex ? (<div><h4>Choose {this.state.selectedIndex.toUpperCase()} Parameters</h4> {this.state.paramComp} </div>) : ''}
-            </div>
-          </div>
-          <div className="row">
-            <button className="btn btn-lg btn-info" onClick={this.cancelJob}>Cancel Job</button>
-          </div>
-          <div>
-            {this.state.params['j'] ? this.state.params['j'] : 'hi'}
+          <div className="col-4">
+            <button className="btn btn-lg btn-info">Change Working Directory</button>
           </div>
         </div>
-    //   </div>
+        <div className="row">
+          <div className='col-12'>
+            <ChooseIndexButtons selectedIndex = {this.state.selectedIndex} onClickIndex={this.onClickIndex} onCancel={this.cancelJob}/>
+            {/* Show alert if changeIndexWarning is true */}
+            {this.state.changeIndexWarning ?
+              (<div className="alert alert-warning" role="alert">
+                <strong>Warning!</strong> Start or cancel current job before starting a new one.
+              </div>) : ''}
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-6">
+            {this.state.selectedIndex ? (<div>{this.state.paramComp}</div>) : ''}
+          </div>
+        </div>
+      </div>
     );
   }
 }
