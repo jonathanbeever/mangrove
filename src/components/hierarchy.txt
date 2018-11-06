@@ -1,0 +1,28 @@
+Main
+  Job Catalog Header
+  Working Directory
+  Search Jobs
+    Search Bar
+    Completed Radio
+    In Progress Radio
+    Filter dropdown
+  Results Table
+    Result
+  Analysis
+    Title and Info
+      Title
+      Date
+      Params
+    Graphs
+
+Pieces of Data:
+  Original list of results - passed in as props, not a state
+  Search text from user - state
+  Filter item from user - state
+  Value of radio buttons - state
+  Filtered list of results - can be computed, not a state
+
+States:
+  Search text from user
+  Filter item from user
+  Value of radio buttons

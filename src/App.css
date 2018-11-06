@@ -52,13 +52,17 @@
 .btn-info:not(:disabled):not(.disabled):active,.btn-info:not(:disabled):not(.disabled).active,.show>.btn-info.dropdown-toggle{color:#fff;background-color:#435252;border-color:#000}
 .btn-info:not(:disabled):not(.disabled):active:focus,.btn-info:not(:disabled):not(.disabled).active:focus,.show>.btn-info.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(0,90,90,0.5)}
 
+.table-wrapper {
+  overflow: auto;
+}
+
 input[type=text] {
   padding: 6px;
   font-size: 17px;
 }
 
-input[type=radio] {
-
+.search-container {
+  margin-bottom: 10px;
 }
 
 .search-container button {
@@ -136,4 +140,14 @@ input[type=radio] {
 	height: 8px;
 	border-radius: 50%;
 	background: white;
+}
+
+th {
+  text-align:left;
+  padding-bottom: 5px;
+}
+
+select {
+  margin-left: 5px;
+  width: 150px;
 }
