@@ -55,7 +55,7 @@ class PresetAciParams extends Component {
     var htmlPresets = paramPresets.map((item, index) => {
       return (
         <li key={item.id} className="list-group-item" id={item.id}>
-          <h4 class="presetAlias" name='alias'>{item.alias}&nbsp;&nbsp;</h4>
+          <h4 className="presetAlias" name='alias'>{item.alias}&nbsp;&nbsp;</h4>
           <button onClick={this.onClickPreset} className="btn btn-info dropdown-toggle presetDropdown" type="button"></button>
           {/* Hide details of param set until dropdown is clicked */}
           <div hidden={true}>
