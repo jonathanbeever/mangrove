@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import ChooseIndexButtons from './chooseParams/chooseIndexButtons';
-import ChooseAciParams from './chooseParams/chooseAciParams';
-import ChooseNdsiParams from './chooseParams/chooseNdsiParams';
-import ChooseAdiParams from './chooseParams/chooseAdiParams';
-import ChooseBioacousticParams from './chooseParams/chooseBioacousticParams';
-import ChooseEvennessParams from './chooseParams/chooseEvennessParams';
-import ChooseRmsParams from './chooseParams/chooseRmsParams';
+import ChooseIndexButtons from './chooseIndexButtons';
+import ChooseAciParams from './aciParams/chooseAciParams';
+import ChooseNdsiParams from './ndsiParams/chooseNdsiParams';
+import ChooseAdiParams from './adiParams/chooseAdiParams';
+import ChooseBioacousticParams from './bioParams/chooseBioacousticParams';
+import ChooseEvennessParams from './evenParams/chooseEvennessParams';
+import ChooseRmsParams from './rmsParams/chooseRmsParams';
+import FileSelect from './selectFiles';
 
 class NewJobs extends Component {
   constructor(props) {
@@ -85,7 +86,7 @@ class NewJobs extends Component {
 
   handleParamChange (e) {
     let params = Object.assign({}, this.state.params);
-    alert(e.target.id, e.target.value)
+
     params[e.target.id] = e.target.value
 
     this.setState({params: params})
@@ -124,8 +125,17 @@ class NewJobs extends Component {
           </div>
         </div>
         <div className="row">
-          <div className="col-6">
+          <div className="fileSelect col-3">
+            <FileSelect />
+          </div>
+          <div className="col-6 jobInput">
             {this.state.selectedIndex ? (<div>{this.state.paramComp}</div>) : ''}
+            {/* Put this button where? 
+                Only show after all input info is set as state*/}
+            {/* <button type="submit" className="btn btn-primary">Add Job to Queue</button> */}
+          </div>
+          <div className="col-3">
+          hiii
           </div>
         </div>
       </div>

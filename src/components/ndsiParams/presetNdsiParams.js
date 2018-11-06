@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import '../newJobs.css';
 
-// on componentDidMount call get aci presets for user
+// on componentDidMount call get Ndsi presets for user
 // 
 
-class PresetAciParams extends Component {
+class PresetNdsiParams extends Component {
 
   constructor(props) {
     super(props);
@@ -28,26 +29,26 @@ class PresetAciParams extends Component {
       {
         id: 123,
         alias: 'preset 1',
-        minFreq: 0,
-        maxFreq: 1000,
-        j: 5,
-        fftW: 30
+        anthroMin: 0,
+        anthroMax: 1000,
+        bioMin: 5,
+        bioMax: 30
       },
       {
         id: 125,
         alias: 'preset 2',
-        minFreq: 1000,
-        maxFreq: 1200,
-        j: 5,
-        fftW: 30
+        anthroMin: 1000,
+        anthroMax: 1200,
+        bioMin: 5,
+        bioMax: 30
       },
       {
         id: 500,
         alias: 'preset 3',
-        minFreq: 500,
-        maxFreq: 1000,
-        j: 5,
-        fftW: 10
+        anthroMin: 500,
+        anthroMax: 1000,
+        bioMin: 5,
+        bioMax: 10
       }
     ]
 
@@ -56,14 +57,18 @@ class PresetAciParams extends Component {
       return (
         <li key={item.id} className="list-group-item" id={item.id}>
           <h4 class="presetAlias" name='alias'>{item.alias}&nbsp;&nbsp;</h4>
-          <button onClick={this.onClickPreset} className="btn btn-secondary dropdown-toggle presetDropdown" type="button"></button>
+          <button onClick={this.onClickPreset} className="btn btn-info dropdown-toggle presetDropdown" type="button"></button>
           {/* Hide details of param set until dropdown is clicked */}
           <div hidden={true}>
-            <div id='min-freq'><strong>min freq:</strong> <p>{item.minFreq}</p></div>
-            <div id='max-freq'><strong>max freq:</strong> <p>{item.maxFreq}</p></div>
-            <div id='j'><strong>j: </strong> <p>{item.j}</p></div>
-            <div id='fft-w'><strong>fftW:</strong> <p>{item.fftW}</p></div>
-            <button className="btn btn-secondary" onClick={this.props.onChoosePreset}>Select</button>
+            <div className="row presetField" id='anthro-min'><strong>Anthro Min:&nbsp;</strong> <p>{item.anthroMin}</p></div>
+            <div className="row presetField" id='anthro-max'><strong>Anthro Max:&nbsp;</strong> <p>{item.anthroMax}</p></div>
+            <div className="row presetField" id='bio-min'><strong>Bio Min:&nbsp;</strong> <p>{item.bioMin}</p></div>
+            <div className="row presetField" id='bio-max'><strong>Bio Max:&nbsp;</strong> <p>{item.bioMax}</p></div>
+            <div className="row">
+              <div className="col-12">
+                <button className="selectPreset btn btn-info" onClick={this.props.onChoosePreset}>Select</button>
+              </div>
+            </div>
           </div>
         </li>
       )
@@ -73,7 +78,7 @@ class PresetAciParams extends Component {
   }
   render(props) {
     return (
-      <div className="col-10">
+      <div className="col-12">
         <ul className="list-group">
           {this.state.htmlPresets ? this.state.htmlPresets : ''}
         </ul> 
@@ -82,4 +87,4 @@ class PresetAciParams extends Component {
   }
 }
 
-export default PresetAciParams;
+export default PresetNdsiParams;

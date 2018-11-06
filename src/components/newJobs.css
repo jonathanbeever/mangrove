@@ -1,12 +1,58 @@
-.presetDropdown {
-    float: left;
+
+
+/* File(s) input */
+.fileSelect {
+    margin-top: 5vh;
 }
 
+.files {
+    margin-top: 5px;
+}
+
+.files li {
+    /* float: left; */
+    clear: both
+}
+
+/* Main input section */
+.jobInput {
+    margin-top: 5vh
+}
+
+/* Dropdown preset button */
+.presetDropdown {
+    float: right;
+}
+
+/* Preset name */
 .presetAlias {
     float: left;
-    margin-left: 3vw;
+    /* margin-left: 3vw; */
 }
 
-#min-freq {
+/* Specs listed in preset */
+.presetField {
+    margin-left: 1vw;
+}
+
+/* Spec name */
+.presetField strong {
+    clear: left;
+    float: left;
+}
+
+/* Preset spec value */
+.presetField p {
+    clear: right;
+    margin-right: 2vw;
+    float: right;
+}
+
+.presetField:first-child {
+    clear: both;
+}
+
+/* Select preset button */
+.selectPreset {
     clear: both;
 }
