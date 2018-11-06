@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 const JobSpec = require('./jobSpec');
 
 module.exports = JobSpec.discriminator('aei', new mongoose.Schema({
-  maxFreq:{Type:Number,min:0,max:100000,default:16000},
-  dbThreshold:{type:Number,default:32},
-  freqStep:{type:Number,min:1,default:512}
+  maxFreq: {
+    Type: Number, min: 0, max: 100000, default: 16000,
+  },
+  dbThreshold: { type: Number, default: 32 },
+  freqStep: { type: Number, min: 1, default: 512 },
 }));

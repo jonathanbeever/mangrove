@@ -10,6 +10,7 @@
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint-fix": "eslint --ignore-path .gitignore --fix .",
     "start": "nodemon server.js"
   },
   "contributors": [
