@@ -7,7 +7,6 @@ import ChooseBioacousticParams from './bioParams/chooseBioacousticParams';
 import ChooseEvennessParams from './evenParams/chooseEvennessParams';
 import ChooseRmsParams from './rmsParams/chooseRmsParams';
 import FileSelect from './selectFiles';
-import CurrentJob from './currentJob';
 import './newJobs.css';
 
 class NewJobs extends Component {
@@ -36,13 +35,12 @@ class NewJobs extends Component {
   onChoosePreset = (e) => {
     let params = Object.assign({}, this.state.params);
     let target = e.target.parentElement.parentElement
-    let inputHtml = ''
+    let inputHtml = []
     // are params and html state needed?
-
     while(target.previousSibling != null) {
 
-      let temp = (target.previousSibling.id + ' : ' + target.previousSibling.children[1].textContent + '\n\n')
-      inputHtml = (<div>{temp}{inputHtml}</div>)
+      let temp = <div key={target.previousSibling.id}>{target.previousSibling.id} : {target.previousSibling.children[1].textContent} </div>
+      inputHtml.push(temp)
 
       params[target.previousSibling.id] = target.previousSibling.children[1].textContent
 
@@ -50,7 +48,7 @@ class NewJobs extends Component {
     }
     this.setState({params: params})    
 
-    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{inputHtml}</div>)
+    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{inputHtml.reverse()}</div>)
  
     this.setState({inputHtml: inputHtml})
   }
@@ -114,11 +112,10 @@ class NewJobs extends Component {
     let keys = Object.keys(params)
     let inputHtml = ''
 
-    keys.forEach(key => {
-      inputHtml = (<div>{inputHtml}{key} : {params[key]}</div>)
+    let htmlJob = keys.map(key => {
+      return (<div key={key}> {key} : {params[key]} </div>)
     })
-
-    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{inputHtml}</div>)
+    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{htmlJob}</div>)
  
     this.setState({inputHtml: inputHtml})
   }
