@@ -3,11 +3,9 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const config = require('config');
 const cors = require('cors');
 
-const dbConfig = config.get('dbConfig');
 const corsConfig = {
   origin: '*',
   allowedHeaders: '*',
@@ -16,11 +14,7 @@ const corsConfig = {
 
 const jobRoutes = require('./api/routes/jobs');
 
-mongoose.connect(`mongodb://${dbConfig.host}:${dbConfig.port}/${dbConfig.dbName}`, {
-  useNewUrlParser: true,
-});
-
-app.use(morgan('dev'));
+if (config.util.getEnv('NODE_ENV') !== 'test') app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors(corsConfig));
