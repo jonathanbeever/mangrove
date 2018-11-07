@@ -2,16 +2,17 @@
   "name": "soundscape-ecology-server",
   "version": "1.0.0",
   "description": "Data processing and visualization software for soundscape ecology research",
-  "main": "index.js",
+  "main": "server.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/ucfcs/Fall2018-Group11"
   },
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "export NODE_ENV=test && mocha",
     "lint-fix": "eslint --ignore-path .gitignore --fix .",
-    "start": "nodemon server.js"
+    "dev": "export NODE_ENV=dev && nodemon server.js",
+    "start": "node server.js"
   },
   "contributors": [
     "Ot Galbadon",
@@ -22,13 +23,19 @@
   ],
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
     "eslint": "^5.8.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "mocha": "^5.2.0",
+    "mockgoose": "^7.3.5",
     "nodemon": "^1.18.5"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "config": "^2.0.1",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "moment": "^2.22.2",
     "mongoose": "^5.3.9",

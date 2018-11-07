@@ -3,28 +3,21 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
+const config = require('config');
+const cors = require('cors');
+
+const corsConfig = {
+  origin: '*',
+  allowedHeaders: '*',
+  methods: 'PUT, POST, DELETE, GET',
+};
 
 const jobRoutes = require('./api/routes/jobs');
 
-mongoose.connect('mongodb://127.0.0.1:27017/sse-test', {
-  useNewUrlParser: true,
-});
-
-app.use(morgan('dev'));
+if (config.util.getEnv('NODE_ENV') !== 'test') app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// TODO: May want to switch to use the `cors` NPM package
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', '*');
-  if (req.method === 'OPTIONS') {
-    res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE, GET');
-    return res.status(200).json({});
-  }
-  next();
-});
+app.use(cors(corsConfig));
 
 app.use('/jobs', jobRoutes);
 
