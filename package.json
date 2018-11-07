@@ -9,9 +9,13 @@
   },
   "scripts": {
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "export NODE_ENV=test && mocha",
+    "test": "run-script-os",
+    "test:darwin:linux": "export NODE_ENV=test && mocha",
+    "test:win32": "SET NODE_ENV=test&& mocha",
     "lint-fix": "eslint --ignore-path .gitignore --fix .",
-    "dev": "export NODE_ENV=dev && nodemon server.js",
+    "dev": "run-script-os",
+    "dev:darwin:linux": "export NODE_ENV=dev && nodemon server.js",
+    "dev:win32": "SET NODE_ENV=dev&& nodemon server.js",
     "start": "node server.js"
   },
   "contributors": [
@@ -39,6 +43,7 @@
     "express": "^4.16.4",
     "moment": "^2.22.2",
     "mongoose": "^5.3.9",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "run-script-os": "^1.0.3"
   }
 }
