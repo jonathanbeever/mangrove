@@ -1,66 +1,24 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .container-fluid{
   margin-top:8px;
 }
 
-.btn-info{
-  margin-right: 5px;
-  border-radius: 0px;
-}
+.scroll {
+  height: 350px;
 
-.btn-info:not(:disabled):not(.disabled):active:focus,.btn-info:not(:disabled):not(.disabled).active:focus,.show>.btn-info.dropdown-toggle:focus{
-  /* box-shadow:0 0 0 .2rem rgba(0,90,90,0.5) */
-  background-color: blueviolet;
-
-}
-
-.btn-info:hover{color:#fff;background-color:#374444;border-color:#025050}
-.btn-info:focus,.btn-info.focus{box-shadow:0 0 0 .2rem rgba(0,90,90,0.5)}
-.btn-info.disabled,.btn-info:disabled{color:#fff;background-color:rgb(72, 75, 75);border-color:#005a5a}
-.btn-info:not(:disabled):not(.disabled):active,.btn-info:not(:disabled):not(.disabled).active,.show>.btn-info.dropdown-toggle{color:#fff;background-color:#435252;border-color:#000}
-.btn-info:not(:disabled):not(.disabled):active:focus,.btn-info:not(:disabled):not(.disabled).active:focus,.show>.btn-info.dropdown-toggle:focus{box-shadow:0 0 0 .2rem rgba(0,90,90,0.5)}
-
-#table-wrapper {
-  height: 35em;
-  width: 350px;
   overflow-y: scroll;
 }
 
+.scroll table {
+  width: 100%;
+  table-layout: fixed;
+}
+
 .scroll th {
-  text-align:left;
   padding-bottom: 5px;
+}
+
+.scroll td {
+  border-bottom: dashed;
 }
 
 input[type=text] {
@@ -87,6 +45,10 @@ input[type=text] {
   margin-left: 15px;
 }
 
+.search-container {
+  margin-bottom: 10px;
+}
+
 .search-container input[type=radio]:hover {
   background-color: #c4bfbf;
 }
@@ -96,12 +58,7 @@ input[type=text] {
 }
 
 .search-container select {
-  margin-left: 5px;
   width: 150px;
-}
-
-.search-container {
-  margin-bottom: 10px;
 }
 
 .search-container button {
@@ -116,6 +73,6 @@ input[type=text] {
   background: #ccc;
 }
 
-.results-name-container {
-  text-align:left;
+.analysis-container {
+
 }

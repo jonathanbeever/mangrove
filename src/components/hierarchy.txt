@@ -24,5 +24,9 @@ Pieces of Data:
 
 States:
   Search text from user
+    ResultTable
   Filter item from user
+    ResultTable
   Value of radio buttons
+  Selected result from user
+    AnalysisView

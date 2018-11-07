@@ -43,5 +43,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "electron-devtools-installer": "^2.2.4"
+  }
 }
