@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const JobSpec = require('./jobSpec');
 
-module.exports = JobSpec.discriminator('aci', new mongoose.Schema({
+module.exports = JobSpec.discriminator('aciSpec', new mongoose.Schema({
   minFreq: { type: Number, min: 0, default: 0 },
   maxFreq: {
     type: Number, min: 0, max: 100000, default: 16000,
