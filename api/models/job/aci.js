@@ -7,4 +7,17 @@ module.exports = Job.discriminator('aci', new mongoose.Schema({
     ref: 'aciSpec',
     required: true,
   },
+  result: {
+    type: {
+      aciTotAllL: Number,
+      aciTotAllR: Number,
+      aciTotAllByMinL: Number,
+      aciTotAllByMinR: Number,
+      aciFlValsL: [Number],
+      aciFlValsR: [Number],
+      aciMatrixL: [[Number]],
+      aciMatrixR: [[Number]],
+    },
+    default: null,
+  },
 }));

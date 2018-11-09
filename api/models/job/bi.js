@@ -7,4 +7,11 @@ module.exports = Job.discriminator('bi', new mongoose.Schema({
     ref: 'biSpec',
     required: true,
   },
+  result: {
+    type: {
+      areaL: Number,
+      areaR: Number,
+    },
+    default: null,
+  },
 }));

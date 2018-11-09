@@ -7,4 +7,11 @@ module.exports = Job.discriminator('aei', new mongoose.Schema({
     ref: 'aeiSpec',
     required: true,
   },
+  result: {
+    type: {
+      aeiL: Number,
+      aeiR: Number,
+    },
+    default: null,
+  },
 }));
