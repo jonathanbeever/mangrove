@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 
 class SearchBar extends Component {
   render() {
+    const filterName = this.props.filterName;
+
     return(
       <form id="searchForm">
-        <input name="searchJob" type="text" placeholder="Search Jobs.." />
-        <button type="submit"><i class="fa fa-search"></i></button>
+        <input name="searchJob" type="text" placeholder="Search Jobs.." value={filterName}/>
+        {/*<button type="submit"><i class="fa fa-search"></i></button>*/}
       </form>
     );
   }
@@ -74,19 +76,15 @@ class ResultRow extends Component {
 }
 
 class ResultTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filterName: '',
-      filterIndex: ''
-    };
-  }
-
   render() {
+    const filterName = this.props.filterName;
+    const filterIndex = this.props.filterIndex;
     const rows = [];
     let lastName = null;
 
     this.props.results.forEach((result) => {
+      if(result.name.indexOf(filterName) === -1) return;
+      if(result.index.indexOf(filterIndex) === -1) return;
       if(result.name !== lastName) {
         rows.push(
           <ResultName
@@ -112,13 +110,48 @@ class ResultTable extends Component {
   }
 }
 
-class FilterJobs extends Component {
+class FilterableResultsTable extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterName: '',
+      filterIndex: ''
+    };
+  }
+
+  handleChange(e) {
+    
+  }
+
   render() {
+    return (
+      <div>
+        <FilterJobs
+          filterName={this.state.filterName}
+          filterIndex={this.state.filterIndex}
+          filterComplete={this.state.filterComplete} />
+        <h4>Your Results</h4>
+        <ResultTable
+          results={this.props.results}
+          filterName={this.state.filterName}
+          filterIndex={this.state.filterIndex} />
+      </div>
+    );
+  }
+}
+
+class FilterJobs extends Component {
+
+  render() {
+
     return(
       <div className="search-container">
-        <SearchBar />
-        <FilterRadios />
-        <FilterIndex />
+        <SearchBar
+          filterName={this.props.filterName} />
+        <FilterRadios
+          filterComplete={this.props.filterComplete} />
+        <FilterIndex
+          filterIndex={this.props.filterIndex} />
       </div>
     );
   }
@@ -140,7 +173,6 @@ class AnalysisView extends Component {
   render() {
     const chosenResult = this.props.chosenResult;
 
-
     return (
       <div>
         <h5>{chosenResult}</h5>
@@ -151,6 +183,7 @@ class AnalysisView extends Component {
 }
 
 class Catalog extends Component {
+
   render() {
     return (
       <div className="container-fluid">
@@ -166,12 +199,7 @@ class Catalog extends Component {
         <div className="row">
           <div className="col-4">
             <div className="row d-block">
-              <FilterJobs />
-            </div>
-            <div className="row d-block">
-              <h4>Your Results</h4>
-              <ResultTable
-                results={this.props.results} />
+              <FilterableResultsTable />
             </div>
           </div>
           <div className="col-8">
