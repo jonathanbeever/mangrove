@@ -1,11 +1,14 @@
 const mockObjectId = require('./mockObjectId');
 
-const Job = require('../../api/models/job');
+const { Job } = require('../../api/models/job');
 
 let currId = 0;
 
-// TODO: Allow for the creation of a mockJob using a mockSpec.
+// const mockSpec = () => {};
 
+// const nextMockSpec = () => {};
+
+// TODO: Allow for the creation of a mockJob using a mockSpec.
 const mockJob = (
   id,
   type,
@@ -32,6 +35,8 @@ const nextMockJob = (type) => {
 };
 
 module.exports = {
+  // mockSpec,
+  // nextMockSpec,
   mockJob,
   nextMockJob,
 };

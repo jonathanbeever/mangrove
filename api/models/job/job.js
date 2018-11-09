@@ -7,7 +7,7 @@ const jobSchema = new mongoose.Schema({
   input: { type: mongoose.Schema.Types.ObjectId, required: true }, // need to add ref
   author: { type: String, required: true },
   creationTimeMs: { type: Number, required: true },
-  status: { type: String, required: true },
+  status: { type: String, enum: ['queued', 'processing', 'finished', 'failed', 'cancelled'], required: true },
 }, options);
 
 module.exports = mongoose.model('Job', jobSchema);

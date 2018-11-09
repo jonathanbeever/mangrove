@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const JobSpec = require('./jobSpec');
+const Spec = require('./spec');
 
-module.exports = JobSpec.discriminator('ndsiSpec', new mongoose.Schema({
+module.exports = Spec.discriminator('ndsiSpec', new mongoose.Schema({
   fftW: { type: Number, min: 1, default: 10 },
   anthroMin: { type: Number, min: 0, default: 5001 },
   anthroMax: { type: Number, min: 0, default: 20000 },

@@ -4,13 +4,9 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const Job = require('../models/job');
-const AciJob = require('../models/job.aci');
-const AdiJob = require('../models/job.adi');
-const AeiJob = require('../models/job.aei');
-const BiJob = require('../models/job.bi');
-const NdsiJob = require('../models/job.ndsi');
-const RmsJob = require('../models/job.rms');
+const {
+  Job, AciJob, AdiJob, AeiJob, BiJob, NdsiJob, RmsJob,
+} = require('../models/job');
 
 // Create Job
 router.put('/', (req, res) => {

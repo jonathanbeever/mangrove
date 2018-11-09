@@ -4,19 +4,9 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const JobSpec = require('../models/jobSpec');
-const AciSpec = require('../models/jobSpec.aci');
-const AdiSpec = require('../models/jobSpec.adi');
-const AeiSpec = require('../models/jobSpec.aei');
-const BiSpec = require('../models/jobSpec.bi');
-const NdsiSpec = require('../models/jobSpec.ndsi');
-const RmsSpec = require('../models/jobSpec.rms');// Needs to be implemented
-// TODO: Add specs to rest of jobs
-
-// test
-router.get('/test', (req, res) => {
-  res.status(200).json({ message: 'specJobs has connection' });
-});
+const {
+  Spec, AciSpec, AdiSpec, AeiSpec, BiSpec, NdsiSpec, RmsSpec,
+} = require('../models/spec');
 
 // Create Spec
 router.put('/', (req, res) => {
@@ -116,7 +106,7 @@ router.put('/', (req, res) => {
 router.get('/:specId', (req, res) => {
   const { specId } = req.params;
 
-  JobSpec.findById(specId)
+  Spec.findById(specId)
     .exec()
     .then((searchResult) => {
       if (searchResult) {
@@ -136,7 +126,7 @@ router.get('/:specId', (req, res) => {
 
 // Get All Specs
 router.get('/', (req, res) => {
-  JobSpec.find()
+  Spec.find()
     .exec()
     .then((searchResult) => {
       res.status(200).json(searchResult);

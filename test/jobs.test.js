@@ -6,7 +6,7 @@ const { nextMockJob } = require('./util/mockDbModel');
 
 const app = require('../app');
 
-const Job = require('../api/models/job');
+const { Job } = require('../api/models/job');
 
 const { expect } = chai;
 
