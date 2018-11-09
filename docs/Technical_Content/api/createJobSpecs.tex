@@ -1,0 +1,260 @@
+\subsubsection{Create Job Specifications}
+Create job specifications for various metrics, including the Acoustic Complexity Index (ACI), Acoustic Diversity Index (ADI), Acoustic Evenness Index (AEI), Bioacoustic Index (BI), Normalized Difference Soundscape Index (NDSI), and Root Mean Square (RMS).
+
+\paragraph{POST} \mbox{}\\[\tabularheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/specs
+\end{htmlcode}
+
+\paragraph{Header} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{Content-Type}
+  & String
+  & \codesnip{"application/json"}
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Request Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Metric}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{jobSpecs}
+  & Object[]
+  &
+  & The list of job specifications to be created.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{metric}
+  & String
+  &
+  & The metric to be calculated for a given job spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}
+  \\ \hline
+
+  \hspace{3mm} \codesnip{minFreq}
+  & Number
+  & ACI, BI
+  & The minimum frequency to use when calculating the value, in Hertz.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{maxFreq}
+  & Number
+  & ACI, ADI, AEI, BI
+  & The maximum frequency to use when calculating the value, in Hertz.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{j}
+  & Number
+  & ACI
+  & The cluster size, in seconds.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{fftW}
+  & Number
+  & ACI, BI, NDSI
+  & The fast fourier transform window.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{dbThreshold}
+  & Number
+  & ADI, AEI
+  & The threshold.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{freqStep}
+  & Number
+  & ADI, AEI
+  & The size of frequency bands.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{shannon}
+  & Boolean
+  & ADI
+  & Set to \codesnip{true} to use the Shannon\textquotesingle s diversity
+      index.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{anthroMin}
+  & Number
+  & NDSI
+  & The minimum value of the range of frequencies of the anthrophony.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{anthroMax}
+  & Number
+  & NDSI
+  & The maximum value of the range of frequencies of the anthrophony.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bioMin}
+  & Number
+  & NDSI
+  & The minimum value of the range of frequencies of the biophony.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bioMax}
+  & Number
+  & NDSI
+  & The maximum value of the range of frequencies of the biophony.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Request Body} \mbox{}\\[\jsoncodeheaderspace]
+\begin{jsoncode}
+{
+  "jobSpecs": [
+    {
+      "metric": "aci",
+      "minFreq": 0,
+      "maxFreq": 16000,
+      "j": 30,
+      "fftW": 10
+    },
+    {
+      "metric": "adi",
+      "maxFreq": 16000,
+      "dbThreshold": 32,
+      "freqStep": 512,
+      "shannon": true
+    }
+  ]
+}
+\end{jsoncode}
+
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Metric}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{jobSpecs}
+  & Object[]
+  &
+  & The list of job specifications to be created.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{jobSpecId}
+  & String
+  &
+  & A unique identifier for the job specification.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{metric}
+  & String
+  &
+  & The metric to be calculated for a given job spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}
+  \\ \hline
+
+  \hspace{3mm} \codesnip{minFreq}
+  & Number
+  & ACI, BI
+  & The minimum frequency to use when calculating the value, in Hertz.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{maxFreq}
+  & Number
+  & ACI, ADI, AEI, BI
+  & The maximum frequency to use when calculating the value, in Hertz.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{j}
+  & Number
+  & ACI
+  & The cluster size, in seconds.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{fftW}
+  & Number
+  & ACI, BI, NDSI
+  & The fast fourier transform window.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{dbThreshold}
+  & Number
+  & ADI, AEI
+  & The threshold.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{freqStep}
+  & Number
+  & ADI, AEI
+  & The size of frequency bands.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{shannon}
+  & Boolean
+  & ADI
+  & Set to \codesnip{true} to use the Shannon\textquotesingle s diversity
+      index.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{anthroMin}
+  & Number
+  & NDSI
+  & The minimum value of the range of frequencies of the anthrophony.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{anthroMax}
+  & Number
+  & NDSI
+  & The maximum value of the range of frequencies of the anthrophony.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bioMin}
+  & Number
+  & NDSI
+  & The minimum value of the range of frequencies of the biophony.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bioMax}
+  & Number
+  & NDSI
+  & The maximum value of the range of frequencies of the biophony.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\jsoncodeheaderspace]
+\begin{jsoncode}
+{
+  "jobSpecs": [
+    {
+      "jobSpecId": "job-spec-a-uuid",
+      "metric": "aci",
+      "minFreq": 0,
+      "maxFreq": 16000,
+      "j": 30,
+      "fftW": 10
+    },
+    {
+      "jobSpecId": "job-spec-b-uuid",
+      "metric": "adi",
+      "maxFreq": 16000,
+      "dbThreshold": 32,
+      "freqStep": 512,
+      "shannon": true
+    }
+  ]
+}
+\end{jsoncode}

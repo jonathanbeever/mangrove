@@ -1,0 +1,92 @@
+\subsubsection{Cancel Jobs}
+Cancel jobs by \codesnip{jobId}. Only jobs with a \codesnip{status} of \codesnip{"queued"} or \codesnip{"processing"} can be cancelled.
+
+\paragraph{PUT} \mbox{}\\[\tabularheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/jobs/cancel
+\end{htmlcode}
+
+\paragraph{Header} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{Content-Type}
+  & String
+  & \codesnip{"application/json"}
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Request Body Fields} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{jobs}
+  & String[]
+  & A list of the jobs (listed by \codesnip{jobId}) to be cancelled.
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Example Request Body} \mbox{}\\[\jsoncodeheaderspace]
+\begin{jsoncode}
+{
+  "jobs": [
+    "job-2a-uuid",
+    "job-2b-uuid"
+  ]
+}
+\end{jsoncode}
+
+\paragraph{Response Body Fields} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{jobs}
+  & String[]
+  & The list of jobs that have been cancelled.
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\jsoncodeheaderspace]
+\begin{jsoncode}
+{
+  "jobs": [
+    {
+      "jobId": "job-2a-uuid",
+      "author": "user-1-uuid",
+      "input": "input-2-uuid",
+      "jobSpec": "job-spec-a-uuid",
+      "creationTimeMs": 1546318800000,
+      "status": "cancelled"
+    },
+    {
+      "jobId": "job-2b-uuid",
+      "author": "user-1-uuid",
+      "input": "input-2-uuid",
+      "jobSpec": "job-spec-b-uuid",
+      "creationTimeMs": 1546318800000,
+      "status": "cancelled"
+    }
+  ]
+}
+\end{jsoncode}

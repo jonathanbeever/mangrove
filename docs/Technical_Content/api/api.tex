@@ -1,0 +1,28 @@
+\subsection{Application Programming Interface}
+
+% Use these for correct spacing after each paragraph header (notice the \mbox{}\\[\Xheaderspace] )
+\newcommand{\tabularheaderspace}{5pt}
+\newcommand{\longtableheaderspace}{-24pt}
+\newcommand{\jsoncodeheaderspace}{-18pt}
+
+% General table formatting
+\newcommand{\fieldcolwidth}{3.2cm}
+\newcommand{\typecolwidth}{1.9cm}
+\newcommand{\metriccolwidth}{1.9cm}
+\newcommand{\desccolwidthlg}{8.8cm}
+\newcommand{\desccolwidthsm}{6.4cm}
+\newcommand{\cellpaddingvertical}{1.05}
+\newcommand{\reqhead}[1]{\bfseries \cellcolor{codebg} #1}
+\renewcommand\cellalign{lc}
+
+% API request listings
+\input{Technical_Content/api/searchInputs}
+
+\input{Technical_Content/api/createJobSpecs}
+\input{Technical_Content/api/searchJobSpecs}
+
+\input{Technical_Content/api/createJob}
+\input{Technical_Content/api/getJob}
+\input{Technical_Content/api/getJobResults}
+\input{Technical_Content/api/searchJobs}
+\input{Technical_Content/api/cancelJobs}

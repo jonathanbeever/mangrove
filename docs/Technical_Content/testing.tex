@@ -1,0 +1,125 @@
+\subsection{Testing}
+\subsubsection{Guidelines}
+  Testing is an important part of any project. Traditionaly tests are conducted manually via the developers themselves. Trying out different inputs and manually trying to break their code. While this method is tried and true for most computer science students, automated testing is needed to truly create a robust product. Automating our testing will maximizes the efficieny of our time. Allowing for more time to be focused on creating more features, rather than trying to break them. Especially with our product, since it focuses on a large amount data; ensuring that there are no bugs is a priority. The last thing we want is for a researcher to be weary of using our product in fear that he will acheive faulty results due to our program's faults. Creating a robust product with a high fault tolerance is on the fore-front of our priorities.
+\par Automation of testing can increase the resilience of a product but only if done correctly. Thus a best practice of automated testing must be established. If these rules are followed then testing will be a blessing rather than a burden. The rules are as follows:\newline
+
+1.) \textbf{Not Everything Can be Automated}
+\begin{adjustwidth}{3.5em}{0pt}
+  Not eveything can be automated, or at least automated easily enough to warrent its automation. As with any script, automating testing takes time. The more complex the testing case; the more time it will take to develop a script that can succefuly and efficiently ensure your program is working as expected. A good bench mark to decide wether or not a test is worth automating is how many times a task is repeated and how similar is the task being repeated. A task that is very similar and is repeated hundreds of times should be automated with no thoughts. On the other hand, if a task is very variable and can be checked with only a couple of test cases, maybe a human candidate would be better than a script. Some other things to consider when deciding wether or not to automate include: \newline
+
+  \begin{description}
+    \item [$\bullet$ Prone to human error] If a test is difficult for a human to construct then it may be better to write a script for it.
+    \item [$\bullet$ Requires multiple sets] If a test requires a human to access multiple data sets across different platforms it may be easier to set up a script.
+    \item [$\bullet$ High Risk] If a test is crucial to system performance, it may be a good idea to write a script that makes sure the section of code being tested works without a doubt.
+  \end{description}
+\end{adjustwidth}
+
+\vspace{10mm}
+
+2.) \textbf{Test Early and Test Often}
+\begin{adjustwidth}{3.5em}{0pt}
+  Ideally testing will start as soon as the first section of code has been written. Unit tests can be conducted as soon as the first logical chunk as been made. Integration testing can be done as soon as more than a single section of the system is functional. Data testing can be conducted as soon as a full path for data is established. As soon as a type of test is feasible to be conducted, it should be. This kind of mindset will be sure to catch bugs early and catch bugs often. Not only will this make a more robust product but it will save you time in the long run of production. This is due to the fact that usually the base off of which everything runs is written first in projects. If this is the case then a bug early on will halt development for everthing written on top of this basis.
+  \par On top of testing soon, testing should be done every time a change is made to the way the code functions. This does not mean every superficial change should be checked, since this would be much too redundant and would slow down developement. But everytime something changes in how the code functions it should be tested. This will make sure that no bugs will go missed. Allowing us to pinpoint exactly where the bugs are happening and avoiding complex mixtures of bugs to form.
+\end{adjustwidth}
+
+\vspace{10mm}
+
+3.) \textbf{Select the Right Automated Testing Tools}
+\begin{adjustwidth}{3.5em}{0pt}
+  Selecting the proper tools for our system was crucial to develop effecient solutions to automated testing. Without the proper tools creating any automated testing system would be an uphill battle and we would've ended up losing rather than saving time. We considered the following when selecting our tool for creating testing scripts: \newline
+    \begin{description}
+      \item [$\bullet$ Tool must support your platform]
+        We decided to go with Spectron because it was specifically made to go with out electron shell. This will make it easier to design cases that will only occur in our electron app.
+      \item [$\bullet$ Flexibility for skill levels] Our team consists of different levels of skill with scripting. Thus we decided to go with a tool that has very well documented api. This way those without as much experience can learn quickly and start developing scripts for their sections of the code.
+      \item [$\bullet$ Flexible Test] When choosing a tool we decided to go with a tool that allowed us to make flexible testing scripts. These scipts are not only resilient to changes in UI but can also be re-used across multiple sections of the system
+    \end{description}
+\end{adjustwidth}
+
+\vspace{10mm}
+
+4.) \textbf{Create Good Test Data}
+\begin{adjustwidth}{3.5em}{0pt}
+  Data for test cases should test all different possiblities for the code in the most effecient way possible. Instead of creating an extensive list of all possible inputs we will create sets of data that test all edge cases and any other special cases that may cause problems with the code. Along with constructing good test data we will also be using exteranl file sheets. By using external file sheets we will be able to re-use test scripts over several sections of similar code. This is because, as opposed to hard coded data, having external data allows us to easily change what is being input to our scripts. Allowing us to quickly create new test cases with appropriate data.
+  \par We will also be using a mixture of auto generated and specially constructed data. The auto consstructed data will be used when a vast set of data is needed to test the functionality of a code section. Data files provided to us by our sponser will be used when specific data sets are needed. This will make sure we have a good mixture of random data and real world data to test our product.
+\end{adjustwidth}
+
+\vspace{10mm}
+
+5.) \textbf{Make Robust Testing Scripts}
+\begin{adjustwidth}{3.5em}{0pt}
+  When creating our scripts we are going to use config files. Doing this will allow us to re-use our scripts through design iterations. These config files will contain variables within the code. These varaibles will be varaible names, positions of elemtns in the UI and any other dyanamic elements that we think will need to be chagned.
+\end{adjustwidth}
+
+\subsubsection{Types of Testing}
+  There are several types of testing available. We are going to be using a combination of several types of testing in order to ensure our entire system is full-proof. The following four testing types are going to be used:\newline
+
+1.) \textbf{Unit Testing}
+\begin{adjustwidth}{3.5em}{0pt}
+  Unit testing involves testing the smallest piece of code that can be logically isolated from a system. This piece of code can be a function, a subroutine or a method. This type of testing should be conducted by the programer. This is due to the fact that unit testing should be done continously while developing a section of code. Making it most effecient when implemented by the programer. We will be unit testing functions and API calls that are made before adding them to the main code. This will ensure that the number of faulty methods that are introduced are minimal.
+  \par The reason unit testing works so well stems from the idea that a whole is just made up of smaller parts. If each of the smaller parts of a system are working then in theory the whole system should work. In practice other types of tests are needed to ensure all subsystems are working together properly, but unit testing does resolve many of the issues within the subsystems. Resolving local issues makes it much easier to debug the whole system during the final stretch of the project.
+\end{adjustwidth}
+
+\vspace{10mm}
+
+2.) \textbf{Integration Testing}
+\begin{adjustwidth}{3.5em}{0pt}
+  Integration testing involves making sure the connections between pieces of a system are working properly. This is the area where unit testing tends to miss bugs and where most bugs are actually found. The reason for this is because unit testing should only be used on small logically seperated pieces of code. So when different sections are joined new undiscovered bugs are found. On top of this, different sections are usually programed by different developers. Meaning that there may be conflicts due to unexcpected outputs or unconveyed requirements for each section. This is where integration testing comes in. In order to properly do integration testing it is neccessary to take a step back from the code and analyze the flow of data through the system. This allows for any logical errors to be sniffed out before running tests. After we have made sure the flow of data is working logically you can run automated tests that run data all the way through the system. This makes sure that all points of connection are working properly and that data is not being corrupted or changed erroneously.
+  \par Without integration testing at every connection point, debugging code can become very difficult. This is due to the possibility of data "black holes". These black holes are where data is either lost or completly corrupted somewhere within the system pipeline. If a system is fully built without testing each connection it can be almost impossible to pinpoint exactly where this black hole is happening. Therefore, we will be conduction integration tests at every connection between two seperate systems.
+\end{adjustwidth}
+
+\vspace{10mm}
+
+3.) \textbf{Functional Testing / Data Driven Testing}
+\begin{adjustwidth}{3.5em}{0pt}
+  While functional testing and data driven testing are seperate ways of automated testing, in our project they will be conducted in almost the same way. Once the project has been built to a functional point. We will assume the role of users and guage the experience when using the product. This method is functional testing. While usually implemented by a team of individuals for our product much of the experience lays within how the data is proccessed and displayed. This is where data driven testing comes into play. We will pass multiple sound files and see if they match their expected outputs. If the outputs match we will then analyze run-time and clarity of the charts. This method of combininf both functional testind and data driven testing will allow us to full view the functionality of our product from the perspective of a user.
+  \par During the data driven portion of testing we will also be introducing some choas testing to the mix. This involves running the product in several different environments. ie.) Mac, Linux and Windows. Within each of these seperate enviroments we will also run a number of common applications a user might be running alongside our program. This will simulate real world use. Allowing us to see how our product preforms with fluxtuating CPU usage. It will also allow us to see if there are any compatability issues with other programs which, while rare, can be detremental to our product. Another element of chaos testing we will implement will be random shut offs and disconnections from networks during proccessing. This is to make sure that no data is corrupted or pementantly lost during these emergency events. Doing this type of chaos testing will allow us to ensure that our product is robust and secure even during complete failures of the system that is running it.
+\end{adjustwidth}
+
+\subsubsection{Framework}
+  We will be using a combination of frameworks in order to test our product. These frameworks include Spectron, Chai(Chai as promised, and Mocha). All of these frame works are excellent for running test in Node.js enviornments. Spectron is especially made for testing electron apps.\newline
+
+\textbf{Spectron:}
+  Spectron is an open source framework for writing automated scripts used to test electron apps. It allows developers to navigate web pages, simulate user input and run dedicated tests. It also simplifies the use of other testing frameworks by making setup, running and tearing down electron enviornments easier. Spectron comes with a full api. Developed by github it is the dedicated testing framework for Electron thus the first choice for writing test cases.\newline
+
+\par This example code finds the application. Then it sees if there is a visible window that contains the title 'My App'. Errors are then logged.
+
+\begin{javascriptcode}
+// A simple test to verify a visible window is opened with a title
+var Application = require('spectron').Application
+var assert = require('assert')
+
+var app = new Application({
+  path: '/Applications/MyApp.app/Contents/MacOS/MyApp'
+})
+
+app.start().then(function () {
+  // Check if the window is visible
+  return app.browserWindow.isVisible()
+}).then(function (isVisible) {
+  // Verify the window is visible
+  assert.equal(isVisible, true)
+}).then(function () {
+  // Get the window's title
+  return app.client.getTitle()
+}).then(function (title) {
+  // Verify the window's title
+  assert.equal(title, 'My App')
+}).then(function () {
+  // Stop the application
+  return app.stop()
+}).catch(function (error) {
+  // Log any failures
+  console.error('Test failed', error.message)
+})
+\end{javascriptcode}
+\newpage
+
+\textbf{Chai:}
+Chai is a BDD / TDD assertion library for Node.js. We will use Chai as Promised which extends Chai for asserting facts about Javascript promises. Thereby, we can transform any Chai assertion into one that acts on a promise. Combining Chai with Spectron will provide a powerful tool that allows us to use Javascript promises.
+
+\vspace{10mm}
+
+\textbf{Mocha:}
+Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Mocha allows us to use Chai as our assertion library. Mocha also supports asynchronous testing which is very useful when running tests with large amounts of data inputs.
+
+\par Scripts will be stored in a package.json file. These scripts can then be run using npm run <script-name>.
