@@ -4,7 +4,7 @@ const Job = require('./job');
 module.exports = Job.discriminator('rms', new mongoose.Schema({
   jobSpec: {
     type: mongoose.Schema.Types.ObjectId,
-    // ref: 'RmsJobSpec',
+    ref: 'rmsSpec',
     required: true,
   },
 }));
