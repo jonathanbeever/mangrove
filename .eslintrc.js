@@ -2,7 +2,7 @@ module.exports = {
   "extends": "airbnb-base",
   "env": {
     "node": true,
-    "mocha": true
+    "mocha": true,
   },
   "rules": {
     "consistent-return": "off",
@@ -16,4 +16,13 @@ module.exports = {
       },
     ],
   },
+  "overrides": [
+    {
+      "files": "*.test.js",
+      "rules": {
+        "no-unused-expressions": "off",
+        "no-unused-vars": "off",
+      }
+    },
+  ]
 };
