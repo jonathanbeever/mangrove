@@ -1,58 +1,12 @@
 import React, { Component } from 'react';
 
-class SearchBar extends Component {
-  render() {
-    const filterName = this.props.filterName;
-
-    return(
-      <form id="searchForm">
-        <input name="searchJob" type="text" placeholder="Search Jobs.." value={filterName}/>
-        {/*<button type="submit"><i class="fa fa-search"></i></button>*/}
-      </form>
-    );
-  }
-}
-
-class FilterRadios extends Component {
-  render() {
-    return(
-      <div id="radioButtons">
-        <input type="radio" value="completed" id="radio-complete" name="filterJob" checked="checked" />
-        <label for="radio-complete">Complete</label>
-        <input type="radio" value="inProgress" id="radio-progress" name="filterJob" />
-        <label for="radio-progress">In Progress</label>
-      </div>
-    );
-  }
-}
-
-class FilterIndex extends Component {
-  render() {
-    return(
-      <div id="filterIndex">
-        <label for="index"><b>Filter by index</b></label>
-        <select name="index">
-          <option value="ndsi">NDSI</option>
-          <option value="aci">ACI</option>
-          <option value="adi">ADI</option>
-          <option value="rms">RMS</option>
-        </select>
-      </div>
-    );
-  }
-}
-
 class ResultName extends Component {
   render(){
     const result = this.props.result;
     return(
       <tr>
-        <th>
-          <label for={result}><b>{result}</b></label>
-        </th>
-        <th></th>
-        <th>
-          <input type="radio" name={result} value={result} id={result} />
+        <th colSpan="2">
+          <b>{result}</b>
         </th>
       </tr>
     );
@@ -78,13 +32,16 @@ class ResultRow extends Component {
 class ResultTable extends Component {
   render() {
     const filterName = this.props.filterName;
+    const filterComplete = this.props.filterComplete;
     const filterIndex = this.props.filterIndex;
+
     const rows = [];
     let lastName = null;
 
     this.props.results.forEach((result) => {
       if(result.name.indexOf(filterName) === -1) return;
-      if(result.index.indexOf(filterIndex) === -1) return;
+      if(filterIndex !== 'none' && result.index.indexOf(filterIndex) === -1) return;
+      alert(result.name);
       if(result.name !== lastName) {
         rows.push(
           <ResultName
@@ -110,17 +67,70 @@ class ResultTable extends Component {
   }
 }
 
+class FilterJobs extends Component {
+  constructor(props){
+    super(props);
+    this.handleFilterNameChange = this.handleFilterNameChange.bind(this);
+    this.handleFilterIndexChange = this.handleFilterIndexChange.bind(this);
+  }
+
+  handleFilterNameChange(e) {
+    this.props.onFilterNameChange(e.target.value);
+  }
+
+  handleFilterIndexChange(e) {
+    this.props.onFilterIndexChange(e.target.value);
+  }
+
+  render() {
+    return(
+      <div className="search-container">
+        {/*<button type="submit"><i class="fa fa-search"></i></button>*/}
+        {/*<div id="radioButtons">
+          <input type="radio" value="completed" id="radio-complete" name="filterJob" checked="checked" />
+          <label for="radio-complete">Complete</label>
+          <input type="radio" value="inProgress" id="radio-progress" name="filterJob" />
+          <label for="radio-progress">In Progress</label>
+        </div>*/}
+        <form>
+          <input name="searchJob" type="text" placeholder="Search Jobs.." value={this.props.filterName} onChange={this.handleFilterNameChange} />
+          <label for="index"><b>Filter by index</b></label>
+          <select name="index" value={this.props.filterName} onChange={this.handleFilterIndexChange}>
+            <option value="none">No Filter</option>
+            <option value="NDSI">NDSI</option>
+            <option value="ACI">ACI</option>
+            <option value="ADI">ADI</option>
+            <option value="RMS">RMS</option>
+          </select>
+        </form>
+      </div>
+    );
+  }
+}
+
 class FilterableResultsTable extends Component {
   constructor(props) {
     super(props);
     this.state = {
       filterName: '',
-      filterIndex: ''
+      filterIndex: 'none',
+      filterComplete: true
     };
+
+    this.handleFilterNameChange = this.handleFilterNameChange.bind(this);
+    this.handleFilterIndexChange = this.handleFilterIndexChange.bind(this);
   }
 
-  handleChange(e) {
-    
+  handleFilterNameChange(filterName) {
+    this.setState({
+      filterName: filterName
+    });
+  }
+
+  handleFilterIndexChange(filterIndex) {
+    this.setState({
+      filterIndex: filterIndex
+    });
   }
 
   render() {
@@ -129,45 +139,31 @@ class FilterableResultsTable extends Component {
         <FilterJobs
           filterName={this.state.filterName}
           filterIndex={this.state.filterIndex}
-          filterComplete={this.state.filterComplete} />
+          filterComplete={this.state.filterComplete}
+          onFilterNameChange={this.handleFilterNameChange}
+          onFilterIndexChange={this.handleFilterIndexChange} />
         <h4>Your Results</h4>
         <ResultTable
           results={this.props.results}
           filterName={this.state.filterName}
-          filterIndex={this.state.filterIndex} />
+          filterIndex={this.state.filterIndex}
+          filterComplete={this.state.filterComplete} />
       </div>
     );
   }
 }
 
-class FilterJobs extends Component {
-
-  render() {
-
-    return(
-      <div className="search-container">
-        <SearchBar
-          filterName={this.props.filterName} />
-        <FilterRadios
-          filterComplete={this.props.filterComplete} />
-        <FilterIndex
-          filterIndex={this.props.filterIndex} />
-      </div>
-    );
-  }
-}
-
-class WorkingDirectory extends Component {
-   render() {
-     const wd = this.props.wd;
-     return (
-       <div>
-         <button className="btn btn-lg btn-info">Change Working Directory</button>
-         <p>{wd}</p>
-       </div>
-     );
-   }
-}
+// class WorkingDirectory extends Component {
+//    render() {
+//      const wd = this.props.wd;
+//      return (
+//        <div>
+//          <button className="btn btn-lg btn-info">Change Working Directory</button>
+//          <p>{wd}</p>
+//        </div>
+//      );
+//    }
+// }
 
 class AnalysisView extends Component {
   render() {
@@ -191,15 +187,16 @@ class Catalog extends Component {
           <div className="col-8">
             <h3>Your Results Catalog</h3>
           </div>
-          <div className="col-4">
+          {/*<div className="col-4">
             <WorkingDirectory
               wd="C:/WorkingDirectory" />
-          </div>
+          </div>*/}
         </div>
         <div className="row">
           <div className="col-4">
             <div className="row d-block">
-              <FilterableResultsTable />
+              <FilterableResultsTable
+                results={this.props.results}/>
             </div>
           </div>
           <div className="col-8">
