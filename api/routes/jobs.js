@@ -7,6 +7,7 @@ const moment = require('moment');
 const {
   Job, AciJob, AdiJob, AeiJob, BiJob, NdsiJob, RmsJob,
 } = require('../models/job');
+const Status = require('../models/status');
 
 // Create Job
 router.put('/', (req, res) => {
@@ -60,7 +61,7 @@ router.put('/', (req, res) => {
           jobSpec: req.body.jobSpecId,
           author: 'Test Author', // TODO: Implement user authentication
           creationTimeMs: moment().valueOf(),
-          status: 'queued', // TODO: Implement job queueing
+          status: Status.QUEUED, // TODO: Implement job queueing
         });
 
         job

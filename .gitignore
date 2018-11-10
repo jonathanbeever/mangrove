@@ -1,1 +1,12 @@
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.out
+*.pdf
+*.pyg
+*.run.xml
+*.toc
+_minted-main
 node_modules
