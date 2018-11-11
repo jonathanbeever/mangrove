@@ -39,16 +39,19 @@
 % Use this for small code snippets in need of minor formatting, e.g. var names
 \newcommand{\codesnip}[1]{\mintinline{html}{#1}}
 
-
 % End of preamble and beginning of text.
 \begin{document}
   \input{titlePage}
+  \pagestyle{empty}                                     % remove page numbers from TOC
+  \addtocontents{toc}{\protect\thispagestyle{empty}}    % remove page numbers from TOC
   \tableofcontents
   \newpage
 
   \spacing{1.25} % 1.25 is roughly equal to MS Word's 1.5 line spacing
 
-  \section{General Content}
+  \pagestyle{plain}           % used to force page numbering to start here
+  \setcounter{page}{1}        % used to force page numbering to start here
+  \section{General Content}   % used to force page numbering to start here
   \input{General_Content/description}
   \input{General_Content/broaderImpacts}
   \input{General_Content/motivations}
@@ -66,6 +69,7 @@
   \input{Technical_Content/permissions}
   \input{Technical_Content/facilities}
   \input{Technical_Content/testing}
+  \input{Technical_Content/benchmarking}
   \newpage
 
   \section{Administrative Content}
@@ -75,6 +79,7 @@
   \newpage
 
   \section{Related Content}
+  \input{Related_content/visualizations}
   \input{Related_Content/indices/indices}
   \newpage
 
