@@ -1,0 +1,110 @@
+\subsubsection{Get All Jobs}
+Retrieve the details of all existing jobs. This also provides results for any any jobs whose \codesnip{status} is \codesnip{"finished"}.
+
+\paragraph{GET} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/jobs
+\end{htmlcode}
+
+% TODO: Implement pagination
+%\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
+%\begingroup
+%\renewcommand{\arraystretch}{\cellpaddingvertical}
+%\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+%  \hline
+%  \reqhead{Field}
+%  & \reqhead{Type}
+%  & \reqhead{Description}
+%  \\ \hline
+%
+%  \codesnip{page}
+%  & Number
+%  &
+%  \\ \hline
+%
+%  \codesnip{perPage}
+%  & Number
+%  &
+%  \\ \hline
+%\end{tabular}
+%\endgroup
+
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Metric}
+  & \reqhead{Description}
+  \\ \hline
+
+  % TODO: Implement pagination.
+  %\codesnip{pages}
+  %& Number
+  %&
+  %& The total number of pages.
+  %\\ \hline
+
+  \codesnip{count}
+  & Number
+  &
+  & The total number of jobs.
+  \\ \hline
+
+  \codesnip{jobs}
+  & Object[]
+  &
+  & A list of all jobs. See the Get Jobs request for a complete listing of properties. % TODO: Implement pagination.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "count": 1,
+  "jobs": [
+    {
+      "jobId": "job-1a-uuid",
+      "type": "aci",
+      "input": "input-1-uuid",
+      "jobSpec": "job-spec-a-uuid",
+      "author": "user-1-uuid",
+      "creationTimeMs": 1546318800000,
+      "status": "finished",
+      "result": {
+        "aciTotAllL": 9.686,
+        "aciTotAllR": 9.168,
+        "aciTotAllLByMin": 29.06,
+        "aciTotAllRByMin": 27.50,
+        "aciFlLVals": [
+          3.087412,
+          2.281832,
+          2.328070,
+          1.989101
+        ],
+        "aciFlRVals": [
+          2.343111,
+          2.279407,
+          2.272682,
+          2.272511
+        ],
+        "aciLMatrix": [
+          [ 0.7882973, 0.7676500, 0.7303533, 0.8011109 ],
+          [ 0.6100598, 0.5697262, 0.5771978, 0.5248486 ],
+          [ 0.6087823, 0.5731910, 0.5840644, 0.5620326 ],
+          [ 0.5488723, 0.4599770, 0.5502799, 0.4299721 ]
+        ],
+        "aciRMatrix": [
+          [ 0.5662433, 0.6158158, 0.5839678, 0.5770842 ],
+          [ 0.5853032, 0.5145061, 0.6156399, 0.5639573 ],
+          [ 0.5664255, 0.5612574, 0.5577378, 0.5872616 ],
+          [ 0.5616194, 0.5644255, 0.5562360, 0.5902302 ]
+        ]
+      }
+    }
+  ]
+}
+\end{jsoncode}

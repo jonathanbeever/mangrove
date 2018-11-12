@@ -1,27 +1,10 @@
 \subsubsection{Get Job}
-Retrieve the details of an existing job by \codesnip{jobId}.
+Retrieve the details of an existing job by \codesnip{jobId}. This also provides results for any any jobs whose \codesnip{status} is \codesnip{"finished"}.
 
-\paragraph{GET} \mbox{}\\[\tabularheaderspace]
+\paragraph{GET} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
 https://<base-url>/api/jobs/:jobId
 \end{htmlcode}
-
-\paragraph{Header} \mbox{}\\[\tabularheaderspace]
-\begingroup
-\renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
-  \hline
-  \reqhead{Field}
-  & \reqhead{Type}
-  & \reqhead{Description}
-  \\ \hline
-
-  \codesnip{Content-Type}
-  & String
-  & \codesnip{"application/json"}
-  \\ \hline
-\end{tabular}
-\endgroup
 
 \paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
 \begingroup
@@ -40,7 +23,7 @@ https://<base-url>/api/jobs/:jobId
 \end{tabular}
 \endgroup
 
-\paragraph{Example Request: GET} \mbox{}\\[\tabularheaderspace]
+\paragraph{Example Request: GET} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
 https://<base-url>/api/jobs/job-1a-uuid
 \end{htmlcode}
@@ -48,51 +31,209 @@ https://<base-url>/api/jobs/job-1a-uuid
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
+  & \reqhead{Metric}
   & \reqhead{Description}
   \\ \hline
 
   \codesnip{jobId}
   & String
+  &
   & A unique identifier for the job created.
   \\ \hline
 
   \codesnip{type}
   & String
+  &
   & The type of metric to be run on the job. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
   \\ \hline
 
   \codesnip{input}
   & String
+  &
   & The \codesnip{inputId} of the input to be analyzed for metrics.
   \\ \hline
 
   \codesnip{jobSpec}
   & String
+  &
   & The \codesnip{jobSpecId} of the jobSpec to be used for the job.
   \\ \hline
 
   \codesnip{author}
   & String
+  &
   & The \codesnip{userId} of the user who made the job request.
   \\ \hline
 
   \codesnip{creationTimeMs}
   & Number
+  &
   & The time of the job's creation, listed in milliseconds since the Unix epoch.
   \\ \hline
 
   \codesnip{status}
   & String
+  &
   & The status of the job. Possible values: \codesnip{"queued"}, \codesnip{"processing"}, \codesnip{"finished"}, \codesnip{"failed"}, \codesnip{"cancelled"}.
+  \\ \hline
+
+  \codesnip{result}
+  & Object
+  &
+  & The data output from processing the job. If the \codesnip{status} of the job is \codesnip{"finished"}, this will be an object. Otherwise, it will be excluded.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciTotAllL}
+  & Number
+  & ACI
+  & The ACI total for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciTotAllR}
+  & Number
+  & ACI
+  & The ACI total for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciTotAllByMinL}
+  & Number
+  & ACI
+  & The ACI total for the left channel divided by the number of minutes.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciTotAllByMinR}
+  & Number
+  & ACI
+  & The ACI total for the right channel divided by the number of minutes.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciFlValsL}
+  & Number[]
+  & ACI
+  & The values of ACI(fl) for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciFlValsR}
+  & Number[]
+  & ACI
+  & The values of ACI(fl) for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciMatrixL}
+  & Number[][]
+  & ACI
+  & The matrix of all values before calculating ACI(fl) for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciMatrixR}
+  & Number[][]
+  & ACI
+  & The matrix of all values before calculating ACI(fl) for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{adiL}
+  & Number
+  & ADI
+  & The ADI value for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{adiR}
+  & Number
+  & ADI
+  & The ADI value for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bandL}
+  & Number[]
+  & ADI
+  & The vector of proportion values for each band for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bandR}
+  & Number[]
+  & ADI
+  & The vector of proportion values for each band for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bandRangeL}
+  & String[]
+  & ADI
+  & The vector of frequency values for each band for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{bandRangeR}
+  & String[]
+  & ADI
+  & The vector of frequency values for each band for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aeiL}
+  & Number
+  & AEI
+  & The AEI for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aeiR}
+  & Number
+  & AEI
+  & The AEI for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{areaL}
+  & Number
+  & BI
+  & The area under the curve for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{areaR}
+  & Number
+  & BI
+  & The area under the curve for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{ndsiL}
+  & Number
+  & NDSI
+  & The NDSI value for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{ndsiR}
+  & Number
+  & NDSI
+  & The NDSI value for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{biophonyL}
+  & Number
+  & NDSI
+  & The biophony value for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{biophonyR}
+  & Number
+  & NDSI
+  & The biophony value for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{anthrophonyL}
+  & Number
+  & NDSI
+  & The anthrophony value for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{anthrophonyR}
+  & Number
+  & NDSI
+  & The anthrophony value for the right channel.
   \\ \hline
 \end{longtable}
 \endgroup
 
-\paragraph{Example Response Body} \mbox{}\\[\jsoncodeheaderspace]
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
 \begin{jsoncode}
 {
   "jobId": "job-1a-uuid",
@@ -101,6 +242,6 @@ https://<base-url>/api/jobs/job-1a-uuid
   "jobSpec": "job-spec-a-uuid",
   "author": "user-1-uuid",
   "creationTimeMs": 1546318800000,
-  "status": "finished"
+  "status": "processing"
 }
 \end{jsoncode}
