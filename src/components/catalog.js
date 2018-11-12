@@ -4,16 +4,24 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
 
 class ResultName extends Component {
   render(){
-    const result = this.props.result;
     return(
-      <tr>
-        <th colSpan="2">
-          <b>{result}</b>
-        </th>
-      </tr>
+      <TableHead>
+        <TableRow>
+          <TableCell>Name</TableCell>
+          <TableCell>Date</TableCell>
+          <TableCell>Indices</TableCell>
+          <TableCell>Params</TableCell>
+          <TableCell />
+        </TableRow>
+      </TableHead>
     );
   }
 }
@@ -21,15 +29,20 @@ class ResultName extends Component {
 class ResultRow extends Component {
   render() {
     const result = this.props.result;
+    const resultName = result.name;
     const resultDate = result.date;
     const resultIndex = result.index;
     const resultParam = result.params;
     return(
-      <tr>
-        <td>{resultDate} </td>
-        <td>{resultIndex} </td>
-        <td>{resultParam}</td>
-      </tr>
+      <TableRow>
+        <TableCell><b>{resultName}</b></TableCell>
+        <TableCell>{resultDate}</TableCell>
+        <TableCell>{resultIndex}</TableCell>
+        <TableCell>{resultParam}</TableCell>
+        <TableCell>
+          <Button color="primary">Show Results</Button>
+        </TableCell>
+      </TableRow>
     );
   }
 }
@@ -48,22 +61,19 @@ class ResultTable extends Component {
       if(filterIndex !== 'none' && result.index.indexOf(filterIndex) === -1) return;
       if(result.name !== lastName) {
         rows.push(
-          <ResultName
-            result={result.name}
+          <ResultRow
+            result={result}
             key={result.name} />
         );
       }
-      rows.push(
-        <ResultRow
-          result={result}
-          key={result.name} />
-      );
+
       lastName = result.name;
     });
 
     return(
       <div className="scroll">
         <Table>
+          <ResultName />
           <TableBody>{rows}</TableBody>
         </Table>
       </div>
@@ -96,17 +106,27 @@ class FilterJobs extends Component {
           <input type="radio" value="inProgress" id="radio-progress" name="filterJob" />
           <label for="radio-progress">In Progress</label>
         </div>*/}
-        <form>
-          <input name="searchJob" type="text" placeholder="Search Jobs.." value={this.props.filterName} onChange={this.handleFilterNameChange} />
-          <label for="index"><b>Filter by index</b></label>
-          <select name="index" value={this.props.filterName} onChange={this.handleFilterIndexChange}>
-            <option value="none">No Filter</option>
+        <FormControl>
+          <Input placeholder="Search Jobs.." onChange={this.handleFilterNameChange} />
+          <br />
+          <Select
+            native
+            value={this.props.filterIndex}
+            onChange={this.handleFilterIndexChange}
+            inputProps={{
+              name: 'index',
+              id: 'age-native-simple',
+            }}
+          >
+            <option value="none">No Index Filter</option>
             <option value="NDSI">NDSI</option>
             <option value="ACI">ACI</option>
+            <option value="AEI">AEI</option>
             <option value="ADI">ADI</option>
             <option value="RMS">RMS</option>
-          </select>
-        </form>
+            <option value="BA">Bioacoustic</option>
+          </Select>
+        </FormControl>
       </div>
     );
   }
@@ -187,7 +207,7 @@ class Catalog extends Component {
   render() {
     return (
       <div className="container-fluid">
-        <div className="row">
+        <div className="row" id="header">
           <div className="col-8">
             <h3>Your Results Catalog</h3>
           </div>
