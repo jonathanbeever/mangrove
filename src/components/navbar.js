@@ -138,7 +138,7 @@ class NavBar extends Component {
           <Divider />
           <List>
             {['Catalog', 'Queue Job', 'Settings'].map((text, index) => (
-              <ListItem button key={text}>
+              <ListItem button key={text} onClick={this.props.onClick}>
                 {/*Put ListItemIcon components here in future*/}
                 <ListItemText primary={text} />
               </ListItem>
