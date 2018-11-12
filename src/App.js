@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import NavBar from './components/navbar';
 import QueueJob from './components/test.1'
 import Catalog from './components/test'
 import Settings from './components/test.2'
-
-const styles = {
-  testCenter: {
-    margin: '0 auto;'
-  }
-}
 
 class App extends Component {
   
