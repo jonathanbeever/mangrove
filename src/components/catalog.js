@@ -1,4 +1,9 @@
 import React, { Component } from 'react';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 class ResultName extends Component {
   render(){
@@ -41,7 +46,6 @@ class ResultTable extends Component {
     this.props.results.forEach((result) => {
       if(result.name.indexOf(filterName) === -1) return;
       if(filterIndex !== 'none' && result.index.indexOf(filterIndex) === -1) return;
-      alert(result.name);
       if(result.name !== lastName) {
         rows.push(
           <ResultName
@@ -59,9 +63,9 @@ class ResultTable extends Component {
 
     return(
       <div className="scroll">
-        <table>
-          <tbody>{rows}</tbody>
-        </table>
+        <Table>
+          <TableBody>{rows}</TableBody>
+        </Table>
       </div>
     );
   }
