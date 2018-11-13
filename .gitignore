@@ -10,3 +10,4 @@
 *.toc
 _minted-main
 node_modules
+package-lock.json
