@@ -1,55 +1,36 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import NavBar from './components/navbar';
 import NewJobs from './components/newJobs/newJobs';
 import Catalog from './components/test';
 import Settings from './components/test.2';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 
 class App extends Component {
   
   constructor() {
     super();
 
-    this.state = {
-      pageComponent: <Catalog /> 
-    };
-
-    this.handleNavClick = this.handleNavClick.bind(this);
-  }
-
-  handleNavClick(e) {
-    switch(e.target.innerText) {
-      case 'Catalog': {
-        this.setState({ pageComponent: <Catalog /> })
-        break;
-      }
-      case 'Queue Job': {
-        this.setState({ pageComponent: <NewJobs /> })
-        break;      
-      }
-      case 'Settings': {
-        this.setState({ pageComponent: <Settings /> })
-        break;      
-      }
-      default: {
-        this.setState({ pageComponent: <Catalog /> })
-        break;      
-      }
-    }
+    this.state = {};
   }
 
   render() {
     return (
-      <div className="App">
-        <NavBar selectedPage={this.state.pageComponent} onClick={this.handleNavClick}/>
-        {/* Need to fix css, navbar covers page contents */}
-        <div style={{margin: '0 0 0 280px'}}>
-          {this.state.pageComponent}
+      <Router>
+        <div>
+          <div className="App">
+            <NavBar />
+          </div> 
+          <Switch>
+            {/* Add login */}
+            <Route path="/catalog" component={Catalog} />
+            <Route path="/newJobs" component={NewJobs} />
+            <Route path="/settings" component={Settings} />
+          </Switch>
         </div>
-      </div>
+      </Router>
     );
   }
 }
-
+  
 export default App;
