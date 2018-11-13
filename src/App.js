@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import NavBar from './components/navbar';
-import QueueJob from './components/test.1'
-import Catalog from './components/test'
-import Settings from './components/test.2'
+import NewJobs from './components/newJobs/newJobs';
+import Catalog from './components/test';
+import Settings from './components/test.2';
 
 class App extends Component {
   
   constructor() {
     super();
+
     this.state = {
       pageComponent: <Catalog /> 
     };
@@ -24,7 +25,7 @@ class App extends Component {
         break;
       }
       case 'Queue Job': {
-        this.setState({ pageComponent: <QueueJob /> })
+        this.setState({ pageComponent: <NewJobs /> })
         break;      
       }
       case 'Settings': {
