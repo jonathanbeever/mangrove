@@ -1,6 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /node_modules
 =======
+=======
+>>>>>>> client_navbar
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -24,4 +27,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+<<<<<<< HEAD
 >>>>>>> ad726e19541ef24af2a252427b3efd6daa8ea92f
+=======
+=======
+/node_modules
+>>>>>>> client_new_jobs
+>>>>>>> client_navbar
