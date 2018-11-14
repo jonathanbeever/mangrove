@@ -31,6 +31,19 @@ _minted-main
 .env.development.local
 .env.test.local
 .env.production.local
+.npmrc
+
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.out
+*.pdf
+*.pyg
+_minted-main
+*.run.xml
+*.toc
 
 npm-debug.log*
 yarn-debug.log*
