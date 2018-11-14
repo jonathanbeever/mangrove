@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+package-lock.json
 /.pnp
 .pnp.js
 
@@ -10,6 +11,19 @@
 
 # production
 /build
+
+# docs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.out
+*.pdf
+*.pyg
+_minted-main
+*.run.xml
+*.toc
 
 # misc
 .DS_Store

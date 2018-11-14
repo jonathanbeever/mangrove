@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import NavBar from './components/navbar';
+import NewJobs from './components/newJobs/newJobs';
+import Settings from './components/test.2';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Catalog from './components/catalog';
 
 const RESULTS = [
@@ -18,16 +21,30 @@ const RESULTS = [
 ];
 
 class App extends Component {
+  
+  constructor() {
+    super();
+
+    this.state = {};
+  }
+
   render() {
     return (
-      <div className="App">
-        <Catalog
-          results={RESULTS} />
-      </div>
+      <Router>
+        <div>
+          <div className="App">
+            <NavBar />
+          </div> 
+          <Switch>
+            {/* Add login */}
+            <Route path="/catalog" render={() => <Catalog results={RESULTS} />}/>
+            <Route path="/newJobs" component={NewJobs} />
+            <Route path="/settings" component={Settings} />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }
-
-
-
+  
 export default App;
