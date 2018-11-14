@@ -16,6 +16,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 280;
 
@@ -137,12 +138,21 @@ class NavBar extends Component {
           </div>
           <Divider />
           <List>
-            {['Catalog', 'Queue Job', 'Settings'].map((text, index) => (
-              <ListItem button key={text} onClick={this.props.onClick}>
-                {/*Put ListItemIcon components here in future*/}
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
+            <ListItem>
+              <Link to="/catalog">
+                <ListItemText primary='Catalog' />
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/newJobs">
+                <ListItemText primary='Queue Job' />
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link to="/settings">
+                <ListItemText primary='Settings' />
+              </Link>
+            </ListItem>
           </List>
         </Drawer>
         <main
