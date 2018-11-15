@@ -29,12 +29,6 @@ class ResultName extends Component {
 class ResultRow extends Component {
   constructor(props){
     super(props);
-
-    this.handleChosenResult = this.handleChosenResult.bind(this);
-  }
-
-  handleChosenResult(e){
-    this.props.handleChosenResult(e.target.value);
   }
 
   render() {
@@ -50,7 +44,7 @@ class ResultRow extends Component {
         <TableCell>{resultIndex}</TableCell>
         <TableCell>{resultParam}</TableCell>
         <TableCell>
-          <Button color="primary" value={resultName} onClick={this.handleChosenResult}>Show Results</Button>
+          <Button color="primary" value={resultName} onClick={this.props.handleChosenResult}>Show Results</Button>
         </TableCell>
       </TableRow>
     );
@@ -61,11 +55,6 @@ class ResultTable extends Component {
   constructor(props){
     super(props);
 
-    this.handleChosenResult = this.handleChosenResult.bind(this);
-  }
-
-  handleChosenResult(e){
-    this.props.handleChosenResult(e.target.value);
   }
 
   render() {
@@ -84,7 +73,7 @@ class ResultTable extends Component {
           <ResultRow
             result={result}
             key={result.name}
-            handleChosenResult={this.handleChosenResult}/>
+            handleChosenResult={this.props.handleChosenResult}/>
         );
       }
 
@@ -163,7 +152,6 @@ class FilterableResultsTable extends Component {
 
     this.handleFilterNameChange = this.handleFilterNameChange.bind(this);
     this.handleFilterIndexChange = this.handleFilterIndexChange.bind(this);
-    this.handleChosenResult = this.handleChosenResult.bind(this);
   }
 
   handleFilterNameChange(filterName) {
@@ -176,10 +164,6 @@ class FilterableResultsTable extends Component {
     this.setState({
       filterIndex: filterIndex
     });
-  }
-
-  handleChosenResult(e) {
-    this.props.handleChosenResult(e.target.value);
   }
 
   render() {
@@ -197,7 +181,7 @@ class FilterableResultsTable extends Component {
           filterName={this.state.filterName}
           filterIndex={this.state.filterIndex}
           filterComplete={this.state.filterComplete}
-          handleChosenResult={this.handleChosenResult} />
+          handleChosenResult={this.props.handleChosenResult} />
       </div>
     );
   }
@@ -238,9 +222,9 @@ class Catalog extends Component {
     this.handleChosenResult = this.handleChosenResult.bind(this);
   }
 
-  handleChosenResult(chosenResult) {
+  handleChosenResult(e) {
     this.setState({
-      chosenResult: chosenResult
+      chosenResult: e.currentTarget.value
     });
   }
 
@@ -268,7 +252,7 @@ class Catalog extends Component {
             <div className="analysis-container">
               <div className="row">
                 <AnalysisView
-                  results={this.state.chosenResult}/>
+                  chosenResult={this.state.chosenResult}/>
               </div>
             </div>
           </div>
