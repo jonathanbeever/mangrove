@@ -27,6 +27,16 @@ class ResultName extends Component {
 }
 
 class ResultRow extends Component {
+  constructor(props){
+    super(props);
+
+    this.handleChosenResult = this.handleChosenResult.bind(this);
+  }
+
+  handleChosenResult(e){
+    this.props.handleChosenResult(e.target.value);
+  }
+
   render() {
     const result = this.props.result;
     const resultName = result.name;
@@ -40,7 +50,7 @@ class ResultRow extends Component {
         <TableCell>{resultIndex}</TableCell>
         <TableCell>{resultParam}</TableCell>
         <TableCell>
-          <Button color="primary">Show Results</Button>
+          <Button color="primary" value={resultName} onClick={this.handleChosenResult}>Show Results</Button>
         </TableCell>
       </TableRow>
     );
@@ -48,6 +58,16 @@ class ResultRow extends Component {
 }
 
 class ResultTable extends Component {
+  constructor(props){
+    super(props);
+
+    this.handleChosenResult = this.handleChosenResult.bind(this);
+  }
+
+  handleChosenResult(e){
+    this.props.handleChosenResult(e.target.value);
+  }
+
   render() {
     const filterName = this.props.filterName;
     const filterComplete = this.props.filterComplete;
@@ -63,7 +83,8 @@ class ResultTable extends Component {
         rows.push(
           <ResultRow
             result={result}
-            key={result.name} />
+            key={result.name}
+            handleChosenResult={this.handleChosenResult}/>
         );
       }
 
@@ -84,6 +105,7 @@ class ResultTable extends Component {
 class FilterJobs extends Component {
   constructor(props){
     super(props);
+
     this.handleFilterNameChange = this.handleFilterNameChange.bind(this);
     this.handleFilterIndexChange = this.handleFilterIndexChange.bind(this);
   }
@@ -99,7 +121,6 @@ class FilterJobs extends Component {
   render() {
     return(
       <div className="search-container">
-        {/*<button type="submit"><i class="fa fa-search"></i></button>*/}
         {/*<div id="radioButtons">
           <input type="radio" value="completed" id="radio-complete" name="filterJob" checked="checked" />
           <label for="radio-complete">Complete</label>
@@ -121,7 +142,6 @@ class FilterJobs extends Component {
             <option value="none">No Index Filter</option>
             <option value="NDSI">NDSI</option>
             <option value="ACI">ACI</option>
-            <option value="AEI">AEI</option>
             <option value="ADI">ADI</option>
             <option value="RMS">RMS</option>
             <option value="BA">Bioacoustic</option>
@@ -143,6 +163,7 @@ class FilterableResultsTable extends Component {
 
     this.handleFilterNameChange = this.handleFilterNameChange.bind(this);
     this.handleFilterIndexChange = this.handleFilterIndexChange.bind(this);
+    this.handleChosenResult = this.handleChosenResult.bind(this);
   }
 
   handleFilterNameChange(filterName) {
@@ -155,6 +176,10 @@ class FilterableResultsTable extends Component {
     this.setState({
       filterIndex: filterIndex
     });
+  }
+
+  handleChosenResult(e) {
+    this.props.handleChosenResult(e.target.value);
   }
 
   render() {
@@ -171,7 +196,8 @@ class FilterableResultsTable extends Component {
           results={this.props.results}
           filterName={this.state.filterName}
           filterIndex={this.state.filterIndex}
-          filterComplete={this.state.filterComplete} />
+          filterComplete={this.state.filterComplete}
+          handleChosenResult={this.handleChosenResult} />
       </div>
     );
   }
@@ -203,6 +229,20 @@ class AnalysisView extends Component {
 }
 
 class Catalog extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      chosenResult: ''
+    };
+
+    this.handleChosenResult = this.handleChosenResult.bind(this);
+  }
+
+  handleChosenResult(chosenResult) {
+    this.setState({
+      chosenResult: chosenResult
+    });
+  }
 
   render() {
     return (
@@ -220,13 +260,15 @@ class Catalog extends Component {
           <div className="col-4">
             <div className="row d-block">
               <FilterableResultsTable
-                results={this.props.results}/>
+                results={this.props.results}
+                handleChosenResult={this.handleChosenResult}/>
             </div>
           </div>
           <div className="col-8">
             <div className="analysis-container">
               <div className="row">
-                <AnalysisView />
+                <AnalysisView
+                  results={this.state.chosenResult}/>
               </div>
             </div>
           </div>
