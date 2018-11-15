@@ -1,12 +1,12 @@
-\subsubsection{Create Job}
-Create a job based on an input and a job specification. The job will be entered into a queue on the server to be processed for metric results.
+\subsubsection{Cancel Job}
+Cancel an existing job by \codesnip{jobId}. Only jobs with a \codesnip{status} of \codesnip{"queued"} or \codesnip{"processing"} can be cancelled. % TODO: Are cancelled jobs deleted after a certain amount of time?
 
 \paragraph{PUT} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/api/jobs
+https://<base-url>/api/jobs/:jobId/cancel
 \end{htmlcode}
 
-\paragraph{Header} \mbox{}\\[\tabularheaderspace]
+\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
 \begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
@@ -16,48 +16,17 @@ https://<base-url>/api/jobs
   & \reqhead{Description}
   \\ \hline
 
-  \codesnip{Content-Type}
+  \codesnip{jobId}
   & String
-  & \codesnip{"application/json"}
+  & The \codesnip{jobId} of the job for which details are desired.
   \\ \hline
 \end{tabular}
 \endgroup
 
-\paragraph{Request Body Fields} \mbox{}\\[\longtableheaderspace]
-\begingroup
-\renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
-  \hline
-  \reqhead{Field}
-  & \reqhead{Type}
-  & \reqhead{Description}
-  \\ \hline
-
-  \codesnip{type}
-  & String
-  & The type of metric to be run on the job. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
-  \\ \hline
-
-  \codesnip{inputId}
-  & String
-  & The input file (listed by \codesnip{inputId}) to be analyzed for metrics.
-  \\ \hline
-
-  \codesnip{jobSpecId}
-  & String
-  & The \codesnip{jobId} of the job specification to be used to analyze the input.
-  \\ \hline
-\end{longtable}
-\endgroup
-
-\paragraph{Example Request Body} \mbox{}\\[\codeheaderspace]
-\begin{jsoncode}
-{
-  "type": "aci",
-  "inputId": "input-1-uuid",
-  "jobSpecId": "job-spec-a-uuid"
-}
-\end{jsoncode}
+\paragraph{Example Request: PUT} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/jobs/job-1a-uuid/cancel
+\end{htmlcode}
 
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
@@ -101,7 +70,7 @@ https://<base-url>/api/jobs
 
   \codesnip{status}
   & String
-  & The status of the job. Possible values: \codesnip{"queued"}, \codesnip{"processing"}, \codesnip{"finished"}, \codesnip{"failed"}, \codesnip{"cancelled"}.
+  & The status of the job. In this case, \codesnip{"cancelled"}.
   \\ \hline
 \end{longtable}
 \endgroup
@@ -115,6 +84,6 @@ https://<base-url>/api/jobs
   "jobSpec": "job-spec-a-uuid",
   "author": "user-1-uuid",
   "creationTimeMs": 1546318800000,
-  "status": "queued"
+  "status": "cancelled"
 }
 \end{jsoncode}

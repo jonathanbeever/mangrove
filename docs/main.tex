@@ -29,7 +29,9 @@
 \definecolor{codebg}{RGB}{230,236,247}
 
 % Define 'htmlcode', 'jsoncode', and 'javascriptcode' minted code style shortcuts
-\newminted{html}{frame=lines,framesep=2mm,bgcolor=codebg}
+\newminted{html}{}
+\BeforeBeginEnvironment{htmlcode}{\begin{mdframed}[backgroundcolor=codebg,topline=true,bottomline=true,rightline=false,leftline=false]}
+\AfterEndEnvironment{htmlcode}{\end{mdframed}}
 \newminted{json}{}
 \BeforeBeginEnvironment{jsoncode}{\begin{mdframed}[backgroundcolor=codebg,topline=false,bottomline=false,rightline=false,leftline=false]}
 \AfterEndEnvironment{jsoncode}{\end{mdframed}}

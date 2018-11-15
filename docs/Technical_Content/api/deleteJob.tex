@@ -1,0 +1,59 @@
+\subsubsection{Delete Job}
+Delete an existing job by \codesnip{jobId}.
+
+\paragraph{DELETE} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/jobs/:jobId
+\end{htmlcode}
+
+\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{jobId}
+  & String
+  & The \codesnip{jobId} of the job to be deleted.
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Example Request: DELETE} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/jobs/job-1a-uuid
+\end{htmlcode}
+
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{success}
+  & Boolean
+  & A confirmation of whether or not the specified job was removed.
+  \\ \hline
+
+  \codesnip{message}
+  & String
+  & A message containing information regarding the deletion.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "success": true,
+  "message": "Successfully deleted Job with jobId: job-1a-uuid."
+}
+\end{jsoncode}
