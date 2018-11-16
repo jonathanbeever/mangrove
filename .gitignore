@@ -7,7 +7,6 @@ coverage
 # Package management
 *.pnp
 *.pnp.js
-.npmrc
 node_modules
 npm-debug.log*
 package-lock.json
