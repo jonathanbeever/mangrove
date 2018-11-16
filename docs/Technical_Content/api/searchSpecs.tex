@@ -181,9 +181,9 @@ https://<base-url>/api/search/specs
   & \reqhead{Description}
   \\ \hline
 
-  \codesnip{jobSpecs}
+  \codesnip{specs}
   & Object[]
-  & The list of job specifications that satisfy the parameters specified in the request body.
+  & The list of specifications that satisfy the parameters specified in the request body.
   \\ \hline
 \end{tabular}
 \endgroup
@@ -191,9 +191,9 @@ https://<base-url>/api/search/specs
 \paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
 \begin{jsoncode}
 {
-  "jobSpecs": [
+  "specs": [
     {
-      "jobSpecId": "job-spec-a-uuid",
+      "specId": "spec-a-uuid",
       "metric": "aci",
       "minFreq": 0,
       "maxFreq": 16000,
