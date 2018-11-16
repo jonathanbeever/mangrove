@@ -1,5 +1,5 @@
 \subsubsection{Create Job}
-Create a job based on an input and a job specification. The job will be entered into a queue on the server to be processed for metric results.
+Create a job based on an input and a specification. The job will be entered into a queue on the server to be processed for metric results.
 
 \paragraph{PUT} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
@@ -43,9 +43,9 @@ https://<base-url>/api/jobs
   & The input file (listed by \codesnip{inputId}) to be analyzed for metrics.
   \\ \hline
 
-  \codesnip{jobSpecId}
+  \codesnip{specId}
   & String
-  & The \codesnip{jobId} of the job specification to be used to analyze the input.
+  & The \codesnip{specId} of the specification to be used to analyze the input.
   \\ \hline
 \end{longtable}
 \endgroup
@@ -55,7 +55,7 @@ https://<base-url>/api/jobs
 {
   "type": "aci",
   "inputId": "input-1-uuid",
-  "jobSpecId": "job-spec-a-uuid"
+  "specId": "spec-a-uuid"
 }
 \end{jsoncode}
 
@@ -84,9 +84,9 @@ https://<base-url>/api/jobs
   & The \codesnip{inputId} of the input to be analyzed for metrics.
   \\ \hline
 
-  \codesnip{jobSpec}
+  \codesnip{spec}
   & String
-  & The \codesnip{jobSpecId} of the jobSpec to be used for the job.
+  & The \codesnip{specId} of the spec to be used for the job.
   \\ \hline
 
   \codesnip{author}
@@ -112,7 +112,7 @@ https://<base-url>/api/jobs
   "jobId": "job-1a-uuid",
   "type": "aci",
   "input": "input-1-uuid",
-  "jobSpec": "job-spec-a-uuid",
+  "spec": "spec-a-uuid",
   "author": "user-1-uuid",
   "creationTimeMs": 1546318800000,
   "status": "queued"

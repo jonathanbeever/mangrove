@@ -1,0 +1,79 @@
+\subsubsection{Get All Specifications}
+Retrieve the details of all existing specification by \codesnip{specId}.
+
+\paragraph{GET} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/specs/:specId
+\end{htmlcode}
+
+% TODO: Implement pagination
+%\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
+%\begingroup
+%\renewcommand{\arraystretch}{\cellpaddingvertical}
+%\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+%  \hline
+%  \reqhead{Field}
+%  & \reqhead{Type}
+%  & \reqhead{Description}
+%  \\ \hline
+%
+%  \codesnip{page}
+%  & Number
+%  &
+%  \\ \hline
+%
+%  \codesnip{perPage}
+%  & Number
+%  &
+%  \\ \hline
+%\end{tabular}
+%\endgroup
+
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Metric}
+  & \reqhead{Description}
+  \\ \hline
+
+  % TODO: Implement pagination.
+  %\codesnip{pages}
+  %& Number
+  %&
+  %& The total number of pages.
+  %\\ \hline
+
+  \codesnip{count}
+  & Number
+  &
+  & The total number of specs.
+  \\ \hline
+
+  \codesnip{specs}
+  & Object[]
+  &
+  & A list of all specs. See the Get Spec request for a complete listing of properties. % TODO: Implement pagination.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "count": 1,
+  "specs": [
+    {
+      "specId": "spec-a-uuid",
+      "metric": "aci",
+      "minFreq": 0,
+      "maxFreq": 16000,
+      "j": 30,
+      "fftW": 10
+    }
+  ]
+}
+\end{jsoncode}
