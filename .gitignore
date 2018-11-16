@@ -1,3 +1,20 @@
+# Production
+build
+
+# Testing
+coverage
+
+# Package management
+*.pnp
+*.pnp.js
+.npmrc
+node_modules
+npm-debug.log*
+package-lock.json
+yarn-debug.log*
+yarn-error.log*
+
+# Documentation (LaTeX)
 *.aux
 *.bbl
 *.bcf
@@ -9,5 +26,10 @@
 *.run.xml
 *.toc
 _minted-main
-node_modules
-package-lock.json
+
+# Miscellaneous
+.DS_Store
+.env.development.local
+.env.local
+.env.production.local
+.env.test.local

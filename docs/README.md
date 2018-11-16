@@ -1,6 +1,6 @@
-# Fall2018-Group11
-## Soundscape Ecology Analysis Software
-### Design Documentation
+# Soundscape Ecology Analysis Software
+
+## Design Documentation
 To compile this LaTeX document, you will need to run the following commands:
 ```
 $ cd docs
