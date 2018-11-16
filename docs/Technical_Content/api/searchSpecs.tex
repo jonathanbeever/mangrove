@@ -1,0 +1,205 @@
+\subsubsection{Search Specifications}
+Search for specifications that match a given description.
+
+\paragraph{GET} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/search/specs
+\end{htmlcode}
+
+\paragraph{Header} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{Content-Type}
+  & String
+  & \codesnip{"application/json"}
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Request Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Metric}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{metric}
+  & String
+  &
+  & Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}
+  \\ \hline
+
+  \codesnip{minFreq}
+  & Object
+  & ACI, BI
+  & The minimum frequency to use when calculating the value, in Hertz.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{minFreq}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{minFreq}. \\ \hline
+
+  \codesnip{maxFreq}
+  & Object
+  & ACI, ADI, AEI, BI
+  & The maximum frequency to use when calculating the value, in Hertz.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{maxFreq}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{maxFreq}. \\ \hline
+
+  \codesnip{j}
+  & Object
+  & ACI
+  & The cluster size, in seconds.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{j}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{j}. \\ \hline
+
+  \codesnip{fftW}
+  & Object
+  & ACI, BI, NDSI
+  & The fast fourier transform window.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{fftW}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{fftW}. \\ \hline
+
+  \codesnip{dbThreshold}
+  & Object
+  & ADI, AEI
+  & The threshold.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{dbThreshold}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{dbThreshold}. \\ \hline
+
+  \codesnip{freqStep}
+  & Object
+  & ADI, AEI
+  & The size of frequency bands.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{freqStep}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{freqStep}. \\ \hline
+
+  \codesnip{shannon}
+  & Boolean
+  & ADI
+  & Leave unset to allow for either \codesnip{true} or \codesnip{false}.
+  \\ \hline
+
+  \codesnip{anthroMin}
+  & Object
+  & NDSI
+  & The minimum value of the range of frequencies of the anthrophony.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{anthroMin}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{anthroMin}. \\ \hline
+
+  \codesnip{anthroMax}
+  & Object
+  & NDSI
+  & The maximum value of the range of frequencies of the anthrophony.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{anthroMax}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{anthroMax}. \\ \hline
+
+  \codesnip{bioMin}
+  & Object
+  & NDSI
+  & The minimum value of the range of frequencies of the biophony.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{bioMin}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{bioMin}. \\ \hline
+
+  \codesnip{bioMax}
+  & Object
+  & NDSI
+  & The maximum value of the range of frequencies of the biophony.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & & Minimum value of \codesnip{bioMax}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & & Maximum value of \codesnip{bioMax}. \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Request Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+    "metric": "aci",
+    "minFreq": {
+        "min": 0,
+        "max": 0
+    },
+    "maxFreq": {
+        "min": 16000,
+        "max": 16000
+    },
+    "j": {
+        "min": 30,
+        "max": 30
+    },
+    "fftW": {
+        "min": 10,
+        "max": 10
+    }
+}
+\end{jsoncode}
+
+\paragraph{Response Body Fields} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{specs}
+  & Object[]
+  & The list of specifications that satisfy the parameters specified in the request body.
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "specs": [
+    {
+      "specId": "spec-a-uuid",
+      "metric": "aci",
+      "minFreq": 0,
+      "maxFreq": 16000,
+      "j": 30,
+      "fftW": 10
+    }
+  ]
+}
+\end{jsoncode}

@@ -1,0 +1,161 @@
+\subsubsection{Search Inputs}
+Search for inputs that match a specified description.
+
+\paragraph{GET} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/search/inputs
+\end{htmlcode}
+
+\paragraph{Header} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{Content-Type}
+  & String
+  & \codesnip{"application/json"}
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Request Body Fields} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{filePath}
+  & String
+  & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
+  \\ \hline
+
+  \codesnip{siteName}
+  & String
+  & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \codesnip{timeRecordedMs}
+  & Object
+  & The time at which the input audio file was recorded.
+  \\ \hline
+  \hspace{3mm} \codesnip{min}
+  & Number & Minimum value of \codesnip{lat}. \\ \hline
+  \hspace{3mm} \codesnip{max}
+  & Number & Maximum value of \codesnip{lat}. \\ \hline
+
+  \codesnip{coords}
+  & Object
+  & The coordinates of the location in which the input was recorded.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{lat}
+  & Object
+  & The latitude of the recording location.
+  \\ \hline
+  \hspace{6mm} \codesnip{min}
+  & Number & Minimum value of \codesnip{lat}. \\ \hline
+  \hspace{6mm} \codesnip{max}
+  & Number & Maximum value of \codesnip{lat}. \\ \hline
+
+  \hspace{3mm} \codesnip{long}
+  & Object
+  & The longitude of the recording location.
+  \\ \hline
+  \hspace{6mm} \codesnip{min}
+  & Number & Minimum value of \codesnip{long}. \\ \hline
+  \hspace{6mm} \codesnip{max}
+  & Number & Maximum value of \codesnip{long}. \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Example Request Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "filePath": "fileName.wav",
+  "siteName": "UCF",
+  "timeRecordedMs": {
+    "min": 1504929600000,
+    "max": 1505102400000
+  },
+  "coords": {
+    "lat": {
+      "min": 28,
+      "max": 29
+    },
+    "long": {
+      "min": -82,
+      "max": -81
+    }
+  }
+}
+\end{jsoncode}
+
+\paragraph{Response Body Fields} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{inputId}
+  & String
+  & A unique identifier for the audio input file.
+  \\ \hline
+
+  \codesnip{filePath}
+  & String
+  & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
+  \\ \hline
+
+  \codesnip{siteName}
+  & String
+  & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \codesnip{timeRecordedMs}
+  & Object
+  & The time at which the input audio file was recorded.
+  \\ \hline
+
+  \codesnip{coords}
+  & Object
+  & The coordinates of the location in which the input was recorded.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{lat}
+  & Number
+  & The latitude of the recording location.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{long}
+  & Number
+  & The longitude of the recording location.
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "inputId": "input-1-uuid",
+  "filePath": "./path/to/file/fileName.wav",
+  "siteName": "UCF Arboretum",
+  "timeRecordedMs": 1505016000000,
+  "coords": {
+    "lat": 28.596238,
+    "long": -81.191381
+  }
+}
+\end{jsoncode}

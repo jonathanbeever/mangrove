@@ -1,1 +1,2 @@
-# Fall2018-Group11
+# Soundscape Ecology Analysis Software
+## Fall 2018, Group 11
