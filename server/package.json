@@ -1,0 +1,49 @@
+{
+  "name": "soundscape-ecology-server",
+  "version": "1.0.0",
+  "description": "Data processing and visualization software for soundscape ecology research",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ucfcs/Fall2018-Group11"
+  },
+  "scripts": {
+    "pretest": "eslint --ignore-path .gitignore .",
+    "test": "run-script-os",
+    "test:darwin:linux": "export NODE_ENV=test && mocha",
+    "test:win32": "SET NODE_ENV=test&& mocha",
+    "lint-fix": "eslint --ignore-path .gitignore --fix .",
+    "dev": "run-script-os",
+    "dev:darwin:linux": "export NODE_ENV=dev && nodemon server.js",
+    "dev:win32": "SET NODE_ENV=dev&& nodemon server.js",
+    "start": "node server.js"
+  },
+  "contributors": [
+    "Ot Galbadon",
+    "Keith Guske",
+    "David Palumbo",
+    "Josh Pollmann",
+    "Brita Ramsay"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "chai": "4.2.0",
+    "chai-http": "4.2.0",
+    "eslint": "5.8.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "2.14.0",
+    "mocha": "5.2.0",
+    "mockgoose": "7.3.5",
+    "nodemon": "1.18.5"
+  },
+  "dependencies": {
+    "body-parser": "1.18.3",
+    "config": "2.0.1",
+    "cors": "2.8.5",
+    "express": "4.16.4",
+    "moment": "2.22.2",
+    "mongoose": "5.3.9",
+    "morgan": "1.9.1",
+    "run-script-os": "1.0.3"
+  }
+}

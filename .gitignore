@@ -6,7 +6,8 @@
 *.out
 *.pdf
 *.pyg
-_minted-main
 *.run.xml
 *.toc
+_minted-main
 node_modules
+package-lock.json
