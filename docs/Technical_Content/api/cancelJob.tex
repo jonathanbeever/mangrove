@@ -1,0 +1,89 @@
+\subsubsection{Cancel Job}
+Cancel an existing job by \codesnip{jobId}. Only jobs with a \codesnip{status} of \codesnip{"queued"} or \codesnip{"processing"} can be cancelled. % TODO: Are cancelled jobs deleted after a certain amount of time?
+
+\paragraph{PUT} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/jobs/:jobId/cancel
+\end{htmlcode}
+
+\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{jobId}
+  & String
+  & The \codesnip{jobId} of the job for which details are desired.
+  \\ \hline
+\end{tabular}
+\endgroup
+
+\paragraph{Example Request: PUT} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/api/jobs/job-1a-uuid/cancel
+\end{htmlcode}
+
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \reqhead{Field}
+  & \reqhead{Type}
+  & \reqhead{Description}
+  \\ \hline
+
+  \codesnip{jobId}
+  & String
+  & A unique identifier for the job created.
+  \\ \hline
+
+  \codesnip{type}
+  & String
+  & The type of metric to be run on the job. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
+  \\ \hline
+
+  \codesnip{input}
+  & String
+  & The \codesnip{inputId} of the input to be analyzed for metrics.
+  \\ \hline
+
+  \codesnip{spec}
+  & String
+  & The \codesnip{specId} of the spec to be used for the job.
+  \\ \hline
+
+  \codesnip{author}
+  & String
+  & The \codesnip{userId} of the user who made the job request.
+  \\ \hline
+
+  \codesnip{creationTimeMs}
+  & Number
+  & The time of the job's creation, listed in milliseconds since the Unix epoch.
+  \\ \hline
+
+  \codesnip{status}
+  & String
+  & The status of the job. In this case, \codesnip{"cancelled"}.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "jobId": "job-1a-uuid",
+  "type": "aci",
+  "input": "input-1-uuid",
+  "spec": "spec-a-uuid",
+  "author": "user-1-uuid",
+  "creationTimeMs": 1546318800000,
+  "status": "cancelled"
+}
+\end{jsoncode}
