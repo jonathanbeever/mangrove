@@ -82,7 +82,7 @@ class ResultTable extends Component {
     });
 
     return(
-      <div className="scroll">
+      <div className="scrollTable">
         <Table>
           <ResultName />
           <TableBody>{rows}</TableBody>
@@ -204,15 +204,19 @@ class Catalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chosenResult: ''
+      chosenResult: null
     };
 
     this.handleChosenResult = this.handleChosenResult.bind(this);
   }
 
   handleChosenResult(e) {
+    let chosenName = e.currentTarget.value;
+    let results = this.props.results;
+    let found = results.find(obj => obj.name === chosenName)
+
     this.setState({
-      chosenResult: e.currentTarget.value
+      chosenResult: found
     });
   }
 

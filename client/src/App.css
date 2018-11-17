@@ -15,13 +15,13 @@
   margin-bottom: 8px;
 }
 
-.scroll {
+.scrollTable {
   height: 60vh;
   width: 100%;
   overflow-y: scroll;
 }
 
-.scroll table {
+.scrollTable table {
   table-layout: fixed;
 }
 
@@ -97,10 +97,6 @@ input[type=text] {
 
 .search-container button:hover {
   background: #ccc;
-}
-
-.analysis-container {
-
 }
 
 /*
