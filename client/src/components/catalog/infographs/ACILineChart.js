@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Recharts, {LineChart, Line, AreaChart, Area, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import Recharts, {LineChart, Line, Legend, AreaChart, Area, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 class ACILineChart extends Component {
 
@@ -18,6 +18,7 @@ class ACILineChart extends Component {
             <CartesianGrid strokeDasharray="3 3"/>
             <XAxis dataKey="name"/>
             <YAxis/>
+            <Legend />
             <Tooltip/>
             <Line type='natural' dataKey='leftData' stroke='#8884d8' />
             <Line type='natural' dataKey='rightData' stroke='#82ca9d' />
