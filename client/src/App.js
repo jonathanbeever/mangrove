@@ -4,7 +4,7 @@ import NavBar from './components/navbar';
 import NewJobs from './components/newJobs/newJobs';
 import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import Catalog from './components/catalog';
+import Catalog from './components/catalog/catalog';
 
 const RESULTS = [
   {name: 'UCF Arboretum', date: '10/19/2018', index: ['NDSI'], params: 'preset 2'},
@@ -21,7 +21,7 @@ const RESULTS = [
 ];
 
 class App extends Component {
-  
+
   constructor() {
     super();
 
@@ -34,7 +34,7 @@ class App extends Component {
         <div>
           <div className="App">
             <NavBar />
-          </div> 
+          </div>
           <Switch>
             {/* Add login */}
             <Route path="/catalog" render={() => <Catalog results={RESULTS} />}/>
@@ -46,5 +46,5 @@ class App extends Component {
     );
   }
 }
-  
+
 export default App;

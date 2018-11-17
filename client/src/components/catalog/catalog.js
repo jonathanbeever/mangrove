@@ -9,6 +9,7 @@ import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
+import AnalysisView from './analysis';
 
 class ResultName extends Component {
   render(){
@@ -198,19 +199,6 @@ class FilterableResultsTable extends Component {
 //      );
 //    }
 // }
-
-class AnalysisView extends Component {
-  render() {
-    const chosenResult = this.props.chosenResult;
-
-    return (
-      <div>
-        <h5>{chosenResult}</h5>
-        <p>Analysis goes here!</p>
-      </div>
-    );
-  }
-}
 
 class Catalog extends Component {
   constructor(props) {
