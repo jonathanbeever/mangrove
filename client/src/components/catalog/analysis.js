@@ -38,17 +38,7 @@ function convertNDSIResults(results) {
 
 function convertACIResults(results) {
   let ret = {
-    graph1:
-    [
-        {
-          name: 'Left Channel',
-          data: results.aci_fl_left_vals
-        },
-        {
-          name: 'Right Channel',
-          data: results.aci_fl_right_vals
-        }
-    ],
+    graph1: [],
     graph2:
     [
       {
@@ -60,6 +50,17 @@ function convertACIResults(results) {
         data: results.aciTotAll_right
       }
     ]
+  }
+
+  for(var i = 0; i < results.aci_fl_left_vals.length; i++)
+  {
+    let curObject = {
+      name: ((i + 1) * 5).toString(),
+      leftData: results.aci_fl_left_vals[i],
+      rightData: results.aci_fl_right_vals[i]
+    }
+
+    ret.graph1.push(curObject);
   }
 
   return ret;
