@@ -13,11 +13,13 @@ class ACILineChart extends Component {
         <h3>ACI Totals:</h3>
         <h5>{graph2[0].name} - {graph2[0].data}</h5>
         <h5>{graph2[1].name} - {graph2[1].data}</h5>
+        <h5>{graph2[2].name} - {graph2[2].data}</h5>
+        <h5>{graph2[3].name} - {graph2[3].data}</h5>
         <br />
           <LineChart width={900} height={600} data={graph1} syncId="anyId">
             <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey="name"/>
-            <YAxis/>
+            <XAxis dataKey="name" label="Time (s)"/>
+            <YAxis label="ACI Value"/>
             <Legend />
             <Tooltip/>
             <Line type='natural' dataKey='leftData' stroke='#8884d8' />

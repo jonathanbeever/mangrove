@@ -18,8 +18,8 @@ class ADILineChart extends Component {
         <br />
         <LineChart width={900} height={600} data={graph1} >
          <CartesianGrid strokeDasharray="3 3"/>
-         <XAxis dataKey="name"/>
-         <YAxis/>
+         <XAxis dataKey="name" label="Hz Range"/>
+         <YAxis label="ADI Value"/>
          <Tooltip/>
          <Legend />
          <ReferenceLine y={adiLeft} label="ADI Left" stroke="#433eaf"/>

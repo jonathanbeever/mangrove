@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NDSIBarChart from './infographs/NDSIBarChart';
 import ACILineChart from './infographs/ACILineChart';
 import ADILineChart from './infographs/ADILineChart';
+import BAAreaChart from './infographs/BAAreaChart';
 
 function convertNDSIResults(results) {
   let ret = {
@@ -48,6 +49,14 @@ function convertACIResults(results) {
       {
         name: 'ACI Total Right Channel',
         data: results.aciTotAll_right
+      },
+      {
+        name: 'ACI Total By Minutes Left Channel',
+        data: results.aciByMin_left
+      },
+      {
+        name: 'ACI Total By Minutes Right Channel',
+        data: results.aciByMin_right
       }
     ]
   }
@@ -90,6 +99,37 @@ function convertADIResults(results) {
       name: results.bandrange_values[i],
       leftBandVal: results.left_band_values[i],
       rightBandVal: results.right_band_values[i]
+    }
+
+    ret.graph1.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertBAResults(results) {
+  let ret = {
+    graph1: [],
+    graph2:
+    [
+      {
+        name: 'Left Channel Area',
+        data: results.left_area
+      },
+      {
+        name: 'Right Channel Area',
+        data: results.right_area
+      }
+    ]
+  }
+
+  for(var i = 0; i < results.freq_vals.length; i++)
+  {
+    let curObject =
+    {
+      name: results.freq_vals[i],
+      leftSpectrum: results.left_vals[i],
+      rightSpectrum: results.right_vals[i]
     }
 
     ret.graph1.push(curObject);
@@ -149,6 +189,15 @@ class AnalysisView extends Component {
             </div>
           )
         }
+      }else if(chosenResult.index.includes('Bioacoustic'))
+      {
+        results = convertBAResults(chosenResult.results);
+        content = (
+          <div>
+            <h5>{chosenResult.name}</h5>
+            <BAAreaChart results = {results} />
+          </div>
+        )
       }
     }
 

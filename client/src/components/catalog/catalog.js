@@ -134,7 +134,7 @@ class FilterJobs extends Component {
             <option value="ACI">ACI</option>
             <option value="ADI">ADI</option>
             <option value="RMS">RMS</option>
-            <option value="BA">Bioacoustic</option>
+            <option value="Bioacoustic">Bioacoustic</option>
           </Select>
         </FormControl>
       </div>

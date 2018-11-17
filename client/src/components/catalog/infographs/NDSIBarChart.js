@@ -11,8 +11,8 @@ class NDSIBarChart extends Component {
       <div>
         <BarChart width={900} height={600} data={graph1}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis dataKey="name" label="Channel"/>
+          <YAxis label="Value"/>
           <Tooltip />
           <Legend />
           <ReferenceLine y={0} stroke='#000' />
@@ -22,8 +22,8 @@ class NDSIBarChart extends Component {
         </BarChart>
         <BarChart width={900} height={600} data={graph2}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
+          <XAxis dataKey="name" label="Value"/>
+          <YAxis label="Variable"/>
           <Tooltip />
           <Legend />
           <ReferenceLine y={0} stroke='#000' />
