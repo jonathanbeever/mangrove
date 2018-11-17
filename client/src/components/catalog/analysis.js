@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import AnalysisBarChart from './infographs/AnalysisBarChart';
+import NDSIBarChart from './infographs/NDSIBarChart';
+import ACILineChart from './infographs/ACILineChart';
+
 
 function convertNDSIResults(results) {
   let ret = {
@@ -34,6 +36,35 @@ function convertNDSIResults(results) {
   return ret;
 }
 
+function convertACIResults(results) {
+  let ret = {
+    graph1:
+    [
+        {
+          name: 'Left Channel',
+          data: results.aci_fl_left_vals
+        },
+        {
+          name: 'Right Channel',
+          data: results.aci_fl_right_vals
+        }
+    ],
+    graph2:
+    [
+      {
+        name: 'ACI Total Left Channel',
+        data: results.aciTotAll_left
+      },
+      {
+        name: 'ACI Total Right Channel',
+        data: results.aciTotAll_right
+      }
+    ]
+  }
+
+  return ret;
+}
+
 class AnalysisView extends Component {
 
   render() {
@@ -54,9 +85,18 @@ class AnalysisView extends Component {
         content = (
           <div>
             <h5>{chosenResult.name}</h5>
-            <AnalysisBarChart results = {results} />
+            <NDSIBarChart results = {results} />
           </div>
         );
+      }else if(chosenResult.index.includes('ACI'))
+      {
+        results = convertACIResults(chosenResult.results);
+        content = (
+          <div>
+            <h5>{chosenResult.name}</h5>
+            <ACILineChart results = {results} />
+          </div>
+        )
       }
     }
 
