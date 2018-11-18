@@ -3,34 +3,36 @@ import NDSIBarChart from './infographs/NDSIBarChart';
 import ACILineChart from './infographs/ACILineChart';
 import ADILineChart from './infographs/ADILineChart';
 import BAAreaChart from './infographs/BAAreaChart';
+import CompareACIData from './infographs/CompareACIData';
+import CompareBioData from './infographs/CompareBioData';
 
 function convertNDSIResults(results) {
   let ret = {
     graph1: [
               { name: 'Left Channel',
-                ndsi: results.ndsi_left,
-                biophony: results.biophony_left,
-                anthrophony: results.anthrophony_left
+                ndsi: results.ndsiL,
+                biophony: results.biophonyL,
+                anthrophony: results.anthrophonyL
               },
               { name: 'Right Channel',
-                ndsi: results.ndsi_right,
-                biophony: results.biophony_right,
-                anthrophony: results.anthrophony_right
+                ndsi: results.ndsiR,
+                biophony: results.biophonyR,
+                anthrophony: results.anthrophonyR
               }
             ],
     graph2: [
               { name: 'NDSI',
-                leftChannel: results.ndsi_left,
-                rightChannel: results.ndsi_right
+                leftChannel: results.ndsiL,
+                rightChannel: results.ndsiR
               },
               { name: 'Biophony',
-                leftChannel: results.biophony_left,
-                rightChannel: results.biophony_right
+                leftChannel: results.biophonyL,
+                rightChannel: results.biophonyR
               },
               {
                 name: 'Anthrophony',
-                leftChannel: results.anthrophony_left,
-                rightChannel: results.anthrophony_right
+                leftChannel: results.anthrophonyL,
+                rightChannel: results.anthrophonyR
               }
             ]
   }
@@ -44,30 +46,30 @@ function convertACIResults(results) {
     [
       {
         name: 'ACI Total Left Channel',
-        data: results.aciTotAll_left
+        data: results.aciTotAllL
       },
       {
         name: 'ACI Total Right Channel',
-        data: results.aciTotAll_right
+        data: results.aciTotAllR
       },
       {
         name: 'ACI Total By Minutes Left Channel',
-        data: results.aciByMin_left
+        data: results.aciTotAllByMinL
       },
       {
         name: 'ACI Total By Minutes Right Channel',
-        data: results.aciByMin_right
+        data: results.aciTotAllByMinR
       }
     ]
   }
 
-  for(var i = 0; i < results.aci_fl_left_vals.length; i++)
+  for(var i = 0; i < results.aciFlValsL.length; i++)
   {
     let curObject =
     {
       name: ((i + 1) * 5).toString(),
-      leftData: results.aci_fl_left_vals[i],
-      rightData: results.aci_fl_right_vals[i]
+      leftData: results.aciFlValsL[i],
+      rightData: results.aciFlValsR[i]
     }
 
     ret.graph1.push(curObject);
@@ -83,22 +85,22 @@ function convertADIResults(results) {
     [
       {
         name: 'ADI Left Channel',
-        data: results.adi_left
+        data: results.adiL
       },
       {
         name: 'ADI Right Channel',
-        data: results.adi_right
+        data: results.adiR
       }
     ]
   }
 
-  for(var i = 0; i < results.left_band_values.length; i++)
+  for(var i = 0; i < results.bandL.length; i++)
   {
     let curObject =
     {
-      name: results.bandrange_values[i],
-      leftBandVal: results.left_band_values[i],
-      rightBandVal: results.right_band_values[i]
+      name: results.bandRangeL[i],
+      leftBandVal: results.bandL[i],
+      rightBandVal: results.bandR[i]
     }
 
     ret.graph1.push(curObject);
@@ -114,11 +116,11 @@ function convertBAResults(results) {
     [
       {
         name: 'Left Channel Area',
-        data: results.left_area
+        data: results.areaL
       },
       {
         name: 'Right Channel Area',
-        data: results.right_area
+        data: results.areaR
       }
     ]
   }
@@ -130,6 +132,46 @@ function convertBAResults(results) {
       name: results.freq_vals[i],
       leftSpectrum: results.left_vals[i],
       rightSpectrum: results.right_vals[i]
+    }
+
+    ret.graph1.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertCompareACIResultsOverTime(results) {
+  let ret = {
+    graph1: []
+  }
+
+  for(var i = 0; i < results.length; i++)
+  {
+    let curObject =
+    {
+      name: results[i].date,
+      leftData: results[i].results.aciTotAllByMinL,
+      rightData: results[i].results.aciTotAllByMinR
+    }
+
+    ret.graph1.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertCompareBioResultsOverTime(results) {
+  let ret = {
+    graph1: []
+  }
+
+  for(var i = 0; i < results.length; i++)
+  {
+    let curObject =
+    {
+      name: results[i].date,
+      areaL: results[i].areaL,
+      areaR: results[i].areaR
     }
 
     ret.graph1.push(curObject);
@@ -196,6 +238,24 @@ class AnalysisView extends Component {
           <div>
             <h5>{chosenResult.name}</h5>
             <BAAreaChart results = {results} />
+          </div>
+        )
+      }else if(chosenResult.index.includes('Test ACI'))
+      {
+        results = convertCompareACIResultsOverTime(chosenResult.results);
+        content = (
+          <div>
+            <h4>Comparing ACI Results</h4>
+            <CompareACIData results = {results} />
+          </div>
+        )
+      }else if(chosenResult.index.includes('Test Bioacoustic'))
+      {
+        results = convertCompareBioResultsOverTime(chosenResult.results);
+        content = (
+          <div>
+            <h4>Comparing Bioacoustic Results</h4>
+            <CompareBioData results = {results} />
           </div>
         )
       }

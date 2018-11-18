@@ -19,9 +19,17 @@ class BAAreaChart extends Component {
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey="name" label="Hz Range"/>
           <Legend />
-          <YAxis label="Spectrum Value"/>
+          <YAxis label="Spectrum Value" domain={['dataMin', 'dataMax']} />
           <Tooltip/>
           <Area type='monotone' dataKey='leftSpectrum' stackId="1" stroke='#8884d8' fill='#8884d8' />
+          <Brush />
+        </AreaChart>
+        <AreaChart width={900} height={600} data={graph1} >
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label="Hz Range"/>
+          <Legend />
+          <YAxis label="Spectrum Value" domain={['dataMin', 'dataMax']} />
+          <Tooltip/>
           <Area type='monotone' dataKey='rightSpectrum' stackId="1" stroke='#82ca9d' fill='#82ca9d' />
           <Brush />
         </AreaChart>

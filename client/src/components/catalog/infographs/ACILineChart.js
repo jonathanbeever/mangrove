@@ -22,8 +22,8 @@ class ACILineChart extends Component {
             <YAxis label="ACI Value"/>
             <Legend />
             <Tooltip/>
-            <Line type='natural' dataKey='leftData' stroke='#8884d8' />
-            <Line type='natural' dataKey='rightData' stroke='#82ca9d' />
+            <Line type='natural' dataKey='leftData' stroke='#8884d8' dot={false} />
+            <Line type='natural' dataKey='rightData' stroke='#82ca9d' dot={false} />
             <Brush />
           </LineChart>
       </div>
