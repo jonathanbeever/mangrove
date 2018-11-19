@@ -1,25 +1,30 @@
 import React, {Component} from 'react';
 import Recharts, {AreaChart, Brush, Legend, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import BAAreaChart from './infographs/BAAreaChart';
 
 class CompareBioData extends Component {
 
   render(){
     let graphs = this.props.results;
     let graph1 = graphs.graph1;
+    let graph2 = graphs.graph2;
 
     return(
       <div>
-        <h5>Comparing Bioacoustic Results</h5>
-        <AreaChart width={900} height={600} data={graph1} >
-          <CartesianGrid strokeDasharray="3 3"/>
-          <XAxis dataKey="name" label="Date"/>
-          <Legend />
-          <YAxis label="Area Value" domain={[0, 'dataMax+5']}/>
-          <Tooltip/>
-          <Area type='monotone' dataKey='areaL' stackId="1" stroke='#8884d8' fill='#8884d8' />
-          <Area type='monotone' dataKey='areaR' stackId="1" stroke='#82ca9d' fill='#82ca9d' />
-          <Brush />
-        </AreaChart>
+        <h5>Comparing Bioacoustic Area Over Time</h5>
+        <BAAreaChart results = {graphs1}
+                    xAxisLabel = {"Date"}
+                    yAxisLabel = {"Area Value"}
+                    dataKey1 = {'areaL'}
+                    dataKey2 = {'areaR'}
+                    />
+        <h5>Comparing Bioacoustic Area By Site</h5>
+        <BAAreaChart results = {graphs2}
+                    xAxisLabel = {"Site"}
+                    yAxisLabel = {"Area Value"}
+                    dataKey1 = {'areaL'}
+                    dataKey2 = {'areaR'}
+                    />
       </div>
     );
   }

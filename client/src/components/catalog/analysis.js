@@ -5,6 +5,7 @@ import ADILineChart from './infographs/ADILineChart';
 import BAAreaChart from './infographs/BAAreaChart';
 import CompareACIData from './infographs/CompareACIData';
 import CompareBioData from './infographs/CompareBioData';
+import OutlierLineChart from './infographs/OutlierLineChart';
 
 function convertNDSIResults(results) {
   let ret = {
@@ -140,10 +141,17 @@ function convertBAResults(results) {
   return ret;
 }
 
-function convertCompareACIResultsOverTime(results) {
+function convertCompareACIResults(results) {
   let ret = {
-    graph1: []
+    graph1: convertCompareACIResultsOverTime(results),
+    graph2: convertCompareACIResultsOverSite(results)
   }
+
+  return ret;
+}
+
+function convertCompareACIResultsOverTime(results) {
+  let ret = [];
 
   for(var i = 0; i < results.length; i++)
   {
@@ -154,16 +162,41 @@ function convertCompareACIResultsOverTime(results) {
       rightData: results[i].results.aciTotAllByMinR
     }
 
-    ret.graph1.push(curObject);
+    ret.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertCompareACIResultsOverSite(results) {
+  let ret = [];
+
+  for(var i = 0; i < results.length; i++)
+  {
+    let curObject =
+    {
+      name: results[i].site,
+      leftData: results[i].results.aciTotAllByMinL,
+      rightData: results[i].results.aciTotAllByMinR
+    }
+
+    ret.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertCompareBioResults(results) {
+  let ret = {
+    graph1: convertCompareBioResultsOverTime(results),
+    graph2: convertCompareBioResultsOverSite(results)
   }
 
   return ret;
 }
 
 function convertCompareBioResultsOverTime(results) {
-  let ret = {
-    graph1: []
-  }
+  let ret = [];
 
   for(var i = 0; i < results.length; i++)
   {
@@ -174,10 +207,39 @@ function convertCompareBioResultsOverTime(results) {
       areaR: results[i].areaR
     }
 
-    ret.graph1.push(curObject);
+    ret.push(curObject);
   }
 
   return ret;
+}
+
+function convertCompareBioResultsOverSite(results) {
+  let ret = [];
+
+  for(var i = 0; i < results.length; i++)
+  {
+    let curObject =
+    {
+      name: results[i].site,
+      areaL: results[i].areaL,
+      areaR: results[i].areaR
+    }
+
+    ret.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertOutlierResults(results) {
+  let ret = {
+    graph1: []
+  }
+
+  for(var i = 0; i < results.results.length; i++)
+  {
+
+  }
 }
 
 class AnalysisView extends Component {
@@ -209,7 +271,13 @@ class AnalysisView extends Component {
         content = (
           <div>
             <h5>{chosenResult.name}</h5>
-            <ACILineChart results = {results} />
+            <h3>ACI Totals:</h3>
+            <h5>{results.graph2[0].name} - {results.graph2[0].data}</h5>
+            <h5>{results.graph2[1].name} - {results.graph2[1].data}</h5>
+            <h5>{results.graph2[2].name} - {results.graph2[2].data}</h5>
+            <h5>{results.graph2[3].name} - {results.graph2[3].data}</h5>
+            <br />
+            <ACILineChart results = {results.graph1} xAxisLabel = {"Time (s)"} yAxisLabel = {"ACI Value"}/>
           </div>
         )
       }else if(chosenResult.index.includes('ADI'))
@@ -237,12 +305,21 @@ class AnalysisView extends Component {
         content = (
           <div>
             <h5>{chosenResult.name}</h5>
-            <BAAreaChart results = {results} />
+            <h3>Bioacoustic Area Values:</h3>
+            <h5>{results.graph2[0].name} - {results.graph2[0].data}</h5>
+            <h5>{results.graph2[1].name} - {results.graph2[1].data}</h5>
+            <br />
+            <BAAreaChart results = {results.graph1}
+                          xAxisLabel = {"Hz Range"}
+                          yAxisLabel = {"Spectrum Value"}
+                          dataKey1 = {'leftSpectrum'}
+                          dataKey2 = {'rightSpectrum'}
+                        />
           </div>
         )
       }else if(chosenResult.index.includes('Test ACI'))
       {
-        results = convertCompareACIResultsOverTime(chosenResult.results);
+        results = convertCompareACIResults(chosenResult.results);
         content = (
           <div>
             <h4>Comparing ACI Results</h4>
@@ -251,11 +328,19 @@ class AnalysisView extends Component {
         )
       }else if(chosenResult.index.includes('Test Bioacoustic'))
       {
-        results = convertCompareBioResultsOverTime(chosenResult.results);
+        results = convertCompareBioResults(chosenResult.results);
         content = (
           <div>
             <h4>Comparing Bioacoustic Results</h4>
             <CompareBioData results = {results} />
+          </div>
+        )
+      }else if(chosenResult.index.includes('Test Outliers'))
+      {
+        results = convertOutlierResults(chosenResult.results);
+        content = (
+          <div>
+            <OutlierLineChart />
           </div>
         )
       }
