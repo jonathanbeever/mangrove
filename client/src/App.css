@@ -34,13 +34,18 @@ input[type=text] {
   font-size: 17px;
 }
 
+#settings-head {
+	margin-bottom: 2em;
+}
+
 #settings-head > * {
   display: inline-block;
   float: right;
 }
 
-#settings-head h1 {
+#settings-head h2 {
   float: none;
+  margin-left: 1em;
 }
 
 .tfield {
