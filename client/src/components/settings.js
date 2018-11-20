@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
 class Settings extends Component {
@@ -14,12 +14,13 @@ class Settings extends Component {
 
 	render() {
 		return (
-			<div>
+			<div id="settings">
 			<div id="settings-head">
-				<h1>Settings</h1>
+				<h2>Settings</h2>
 				<Button>Submit</Button>
 				<Button>Cancel</Button>
 			</div>
+			<form>
 			<Grid
   				container
   				direction="row"
@@ -27,7 +28,7 @@ class Settings extends Component {
   				alignItems="stretch"
 			>
 				<div>
-					<h2>Account Settings</h2>
+					<h3>Account Settings</h3>
 					<fieldset>
 						<legend>Email</legend>
 						<TextField name="email"></TextField>
@@ -41,9 +42,9 @@ class Settings extends Component {
 				</div>
 
 				<div>
-					<h2>Group Server Access</h2>
+					<h3>Group Server Access</h3>
 					<div>
-						<h3>UCF Researchers</h3>
+						<h4>UCF Researchers</h4>
 						<p>Role: Admin</p>
 						<fieldset>
 							<legend>Update Credentials</legend>
@@ -59,23 +60,17 @@ class Settings extends Component {
 					</div>
 				</div>
 
-				<RadioGroup>
-					<h2>Processing</h2>
-					<div>
-						<Radio id="processing1" name="processing" value="local" />
-						<label for="processing1">Local machine</label>
-					</div>
-					<div>
-						<Radio id="processing2" name="processing" value="ucf" />
-						<label for="processing2">UCF Researchers</label>
-					</div>
-					<div>
-						<Radio id="processing3" name="processing" value="purdue" />
-						<label for="processing3">Purdue Univeresity</label>
-					</div>
+				<div>
+					<h3>Processing</h3>
+					<Select name="processing" value="local">
+						<MenuItem value="local">Local Server</MenuItem>
+						<MenuItem value="ucf">UCF Researchers</MenuItem>
+						<MenuItem value="purdue">Purdue Universityr</MenuItem>
+					</Select>
 
-				</RadioGroup>
+				</div>
 			</Grid>
+			</form>
 			</div>
 		);
 	}
