@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Recharts, {LineChart, Line, Legend, AreaChart, Area, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import Recharts, {LineChart, Line, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 class ACILineChart extends Component {
 

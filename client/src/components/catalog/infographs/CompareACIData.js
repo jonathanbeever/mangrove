@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import Recharts, {LineChart, Line, Legend, AreaChart, Area, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
-import ACILineChart from './infographs/ACILineChart';
+import ACILineChart from './ACILineChart';
 
 class CompareACIData extends Component {
 

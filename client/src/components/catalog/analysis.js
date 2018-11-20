@@ -6,6 +6,7 @@ import BAAreaChart from './infographs/BAAreaChart';
 import CompareACIData from './infographs/CompareACIData';
 import CompareBioData from './infographs/CompareBioData';
 import OutlierLineChart from './infographs/OutlierLineChart';
+import CompareNDSIData from './infographs/CompareNDSIData';
 
 function convertNDSIResults(results) {
   let ret = {
@@ -203,8 +204,8 @@ function convertCompareBioResultsOverTime(results) {
     let curObject =
     {
       name: results[i].date,
-      areaL: results[i].areaL,
-      areaR: results[i].areaR
+      areaL: results[i].results.areaL,
+      areaR: results[i].results.areaR
     }
 
     ret.push(curObject);
@@ -221,8 +222,93 @@ function convertCompareBioResultsOverSite(results) {
     let curObject =
     {
       name: results[i].site,
-      areaL: results[i].areaL,
-      areaR: results[i].areaR
+      areaL: results[i].results.areaL,
+      areaR: results[i].results.areaR
+    }
+
+    ret.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertCompareNDSIResults(results) {
+  let ret = {
+    graph1: convertCompareNDSIResultsOverTime(results, 'ndsi'),
+    graph2: convertCompareNDSIResultsOverSite(results, 'ndsi'),
+    graph3: convertCompareNDSIResultsOverTime(results, 'biophony'),
+    graph4: convertCompareNDSIResultsOverSite(results, 'biophony'),
+    graph5: convertCompareNDSIResultsOverTime(results, 'anthrophony'),
+    graph6: convertCompareNDSIResultsOverSite(results, 'anthrophony')
+  }
+
+  return ret;
+}
+
+function convertCompareNDSIResultsOverTime(results, value) {
+  let ret = [];
+
+  for(var i = 0; i < results.length; i++)
+  {
+    let curObject;
+
+    if(value === 'ndsi')
+    {
+      curObject = {
+        name: results[i].date,
+        ndsiL: results[i].results.ndsiL,
+        ndsiR: results[i].results.ndsiR
+      }
+    }else if(value === 'biophony')
+    {
+      curObject = {
+        name: results[i].date,
+        biophonyL: results[i].results.biophonyL,
+        biophonyR: results[i].results.biophonyR
+      }
+    }else if(value === 'anthrophony')
+    {
+      curObject = {
+        name: results[i].date,
+        anthrophonyL: results[i].results.anthrophonyL,
+        anthrophonyR: results[i].results.anthrophonyR
+      }
+    }
+
+    ret.push(curObject);
+  }
+
+  return ret;
+}
+
+function convertCompareNDSIResultsOverSite(results, value) {
+  let ret = [];
+
+  for(var i = 0; i < results.length; i++)
+  {
+    let curObject;
+
+    if(value === 'ndsi')
+    {
+      curObject = {
+        name: results[i].site,
+        ndsiL: results[i].results.ndsiL,
+        ndsiR: results[i].results.ndsiR
+      }
+    }else if(value === 'biophony')
+    {
+      curObject = {
+        name: results[i].site,
+        biophonyL: results[i].results.biophonyL,
+        biophonyR: results[i].results.biophonyR
+      }
+    }else if(value === 'anthrophony')
+    {
+      curObject = {
+        name: results[i].site,
+        anthrophonyL: results[i].results.anthrophonyL,
+        anthrophonyR: results[i].results.anthrophonyR
+      }
     }
 
     ret.push(curObject);
@@ -233,13 +319,32 @@ function convertCompareBioResultsOverSite(results) {
 
 function convertOutlierResults(results) {
   let ret = {
-    graph1: []
+    graph1: [],
+    index: results[0].index[0]
   }
 
-  for(var i = 0; i < results.results.length; i++)
+  for(var i = 0; i < results.length; i++)
   {
+    let curObject = {
+      name: results[i].name,
+      leftData: 0,
+      rightData: 0
+    }
 
+    if(ret.index === 'ACI')
+    {
+      curObject.leftData = results[i].results.aciTotAllByMinL;
+      curObject.rightData = results[i].results.aciTotAllByMinR;
+    }else if(ret.index === 'Bioacoustic')
+    {
+      curObject.leftData = results[i].results.areaL;
+      curObject.rightData = results[i].results.areaR;
+    }
+
+    ret.graph1.push(curObject);
   }
+
+  return ret;
 }
 
 class AnalysisView extends Component {
@@ -340,7 +445,18 @@ class AnalysisView extends Component {
         results = convertOutlierResults(chosenResult.results);
         content = (
           <div>
-            <OutlierLineChart />
+            <OutlierLineChart results = {results.graph1}
+                              index = {results.index}
+                              xAxisLabel = 'File Name'
+                              yAxisLabel = {results.index + ' Value'}/>
+          </div>
+        )
+      }else if(chosenResult.index.includes('Test NDSI'))
+      {
+        results = convertCompareNDSIResults(chosenResult.results);
+        content = (
+          <div>
+            <CompareNDSIData results = {results} />
           </div>
         )
       }

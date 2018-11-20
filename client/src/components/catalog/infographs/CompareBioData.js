@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import Recharts, {AreaChart, Brush, Legend, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
-import BAAreaChart from './infographs/BAAreaChart';
+import BALineChart from './BALineChart';
 
 class CompareBioData extends Component {
 
@@ -12,18 +11,14 @@ class CompareBioData extends Component {
     return(
       <div>
         <h5>Comparing Bioacoustic Area Over Time</h5>
-        <BAAreaChart results = {graphs1}
+        <BALineChart results = {graph1}
                     xAxisLabel = {"Date"}
                     yAxisLabel = {"Area Value"}
-                    dataKey1 = {'areaL'}
-                    dataKey2 = {'areaR'}
                     />
         <h5>Comparing Bioacoustic Area By Site</h5>
-        <BAAreaChart results = {graphs2}
+        <BALineChart results = {graph2}
                     xAxisLabel = {"Site"}
                     yAxisLabel = {"Area Value"}
-                    dataKey1 = {'areaL'}
-                    dataKey2 = {'areaR'}
                     />
       </div>
     );
