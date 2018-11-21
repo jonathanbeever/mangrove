@@ -220,16 +220,13 @@ class SelectResults extends Component {
 // Show all jobs w type of a checked index
 // And checked params
 
-
-// start w all indices checked and all jobs shown
   render() {
     return (
       <div className='col-8'>
-        {/* <Panel> */}
-          <Card>
-            <CardContent>
-          <h4>Filter Jobs</h4><p>View Result Visualizations</p>
-                
+        <Card>
+          <CardContent>
+            <h4>Filter Jobs</h4>
+            <p>View Result Visualizations</p>              
             <div className='row'>
               <div className='col-7'>
                 <FilterByIndex 
@@ -253,14 +250,12 @@ class SelectResults extends Component {
                 />
               </div>
               <div className='col-5'>
-              <SearchJobs searchedValue={this.state.searchedValue} handleSearch={this.handleSearch} submitSearch={this.submitSearch}/>
-              
+                <SearchJobs searchedValue={this.state.searchedValue} handleSearch={this.handleSearch} submitSearch={this.submitSearch}/>
                 <FilteredJobs results={this.state.filteredResults}/>
               </div>
             </div>
-            </CardContent>
-            
-            </Card>
+          </CardContent>    
+        </Card>
       </div>
     );
   }
