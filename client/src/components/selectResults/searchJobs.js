@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-// import Icon from '@material-ui/core/Icon';
+import './selectResults.css'
 
 class SearchJobs extends Component {
   constructor() {
@@ -13,17 +13,19 @@ class SearchJobs extends Component {
 
   render() {
     return (
-      <div>
+    <div className="row">
+      <div id="jobSearchBar">
         <TextField
-          id="jobSearchBar"
           label="Search site names or tags"
           onChange={this.props.handleSearch}
           value={this.props.searchValue}
         />
+      </div>
+
         <Button onClick={this.props.submitSearch}>
           Search
         </Button>
-      </div>
+        </div>
     );
   }
 }

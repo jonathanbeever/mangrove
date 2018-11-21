@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import FilterByIndex from './filterByIndex';
 import SelectParamsByIndex from './selectParamsByIndex';
 import FilteredJobs from './filteredJobs';
@@ -203,36 +205,33 @@ class SelectResults extends Component {
   }
 
   submitSearch = () => {
-    // console.log('jkbjstate: ' + this.state.searchedValue)
-    // 
+
     var newRes = [] 
-    // = this.state.filteredResults.map((job, index) => {
-    //   // If current job equals index unchecked
-    //   console.log(job)
-    //   if(job.siteName.toLowerCase().indexOf(this.state.searchedValue.toLowerCase()) !== -1) {
-    //     console.log('ya' + job.siteName)
-    //     return job
-    //   }
-    //   else return ''
-    // })
+
     this.state.filteredResults.forEach(job => {
       if(job.siteName.toLowerCase().indexOf(this.state.searchedValue.toLowerCase()) !== -1) {
         newRes.push(job)
       }
     })
-    console.log(newRes)
     this.setState({ filteredResults: newRes })
   }
+
+// Need 'x' in search bar
+// Show all jobs w type of a checked index
+// And checked params
+
+
 // start w all indices checked and all jobs shown
   render() {
     return (
       <div className='col-8'>
-        <Panel>
-          <Panel.Heading><h4>Filter Jobs</h4><p>View Result Visualizations</p></Panel.Heading>
-          <Panel.Body>
+        {/* <Panel> */}
+          <Card>
+            <CardContent>
+          <h4>Filter Jobs</h4><p>View Result Visualizations</p>
+                
             <div className='row'>
               <div className='col-7'>
-                <SearchJobs searchedValue={this.state.searchedValue} handleSearch={this.handleSearch} submitSearch={this.submitSearch}/>
                 <FilterByIndex 
                   checkedAci={this.state.checkedAci} 
                   checkedNdsi={this.state.checkedNdsi} 
@@ -254,11 +253,14 @@ class SelectResults extends Component {
                 />
               </div>
               <div className='col-5'>
+              <SearchJobs searchedValue={this.state.searchedValue} handleSearch={this.handleSearch} submitSearch={this.submitSearch}/>
+              
                 <FilteredJobs results={this.state.filteredResults}/>
               </div>
             </div>
-          </Panel.Body>
-        </Panel>
+            </CardContent>
+            
+            </Card>
       </div>
     );
   }

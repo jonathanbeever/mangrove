@@ -27,7 +27,7 @@ class App extends Component {
           </div>
           <Switch>
             {/* Add login */}
-            <Route path="/catalog" render={() => <Catalog results={RESULTS} />}/>
+            <Route path="/catalog" render={() => <Catalog />}/>
             <Route path="/newJobs" component={NewJobs} />
             {/* <Route path="/settings" component={Settings} /> */}
           </Switch>
