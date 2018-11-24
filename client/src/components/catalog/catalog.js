@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import AnalysisView from './analysis';
 
 class ResultName extends Component {
@@ -28,9 +27,6 @@ class ResultName extends Component {
 }
 
 class ResultRow extends Component {
-  constructor(props){
-    super(props);
-  }
 
   render() {
     const result = this.props.result;
@@ -53,10 +49,6 @@ class ResultRow extends Component {
 }
 
 class ResultTable extends Component {
-  constructor(props){
-    super(props);
-
-  }
 
   render() {
     const filterName = this.props.filterName;

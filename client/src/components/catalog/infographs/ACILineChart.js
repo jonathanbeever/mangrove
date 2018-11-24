@@ -9,6 +9,9 @@ class ACILineChart extends Component {
     let xLabel = this.props.xAxisLabel;
     let yLabel = this.props.yAxisLabel;
 
+    let firstDataKey = this.props.dataKey1;
+    let secondDataKey = this.props.dataKey2;
+
     return(
       <div>
           <LineChart width={900} height={600} data={data} syncId="anyId">
@@ -17,8 +20,8 @@ class ACILineChart extends Component {
             <YAxis label={yLabel}/>
             <Legend />
             <Tooltip/>
-            <Line type='natural' dataKey='leftData' stroke='#8884d8' dot={false} />
-            <Line type='natural' dataKey='rightData' stroke='#82ca9d' dot={false} />
+            <Line type='natural' dataKey={firstDataKey} stroke='#8884d8' dot={false} />
+            <Line type='natural' dataKey={secondDataKey} stroke='#82ca9d' dot={false} />
             <Brush />
           </LineChart>
       </div>
