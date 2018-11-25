@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import NavBar from './components/navbar';
 import NewJobs from './components/newJobs/newJobs';
-import Settings from './components/test.2';
+import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import Catalog from './components/catalog';
 

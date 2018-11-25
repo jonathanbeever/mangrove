@@ -34,6 +34,24 @@ input[type=text] {
   font-size: 17px;
 }
 
+#settings-head {
+	margin-bottom: 2em;
+}
+
+#settings-head > * {
+  display: inline-block;
+  float: right;
+}
+
+#settings-head h2 {
+  float: none;
+  margin-left: 1em;
+}
+
+.tfield {
+  display: block !important;
+}
+
 .search-container input[type=radio] {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -85,7 +103,7 @@ input[type=text] {
 
 }
 
-/* 
+/*
 .btn-info{
   margin-right: 5px;
   border-radius: 0px;
