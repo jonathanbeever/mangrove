@@ -10,7 +10,7 @@ class CompareADIData extends Component {
 
     return(
       <div>
-        <h5>Average ADI Value By Hour of Day</h5>
+        <h4>Average ADI Value By Hour of Day</h4>
         {/*<ADIAEICharts results = {graph1} xAxisLabel = {"Hour"} yAxisLabel = {"ADI Value By Minute"} />*/}
       </div>
     );

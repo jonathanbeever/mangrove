@@ -15,42 +15,42 @@ class CompareNDSIData extends Component {
 
     return(
       <div>
-        <h5>Comparing NDSI Over Time</h5>
+        <h4>Comparing NDSI Over Time</h4>
         <NDSICompareChart results = {graph1}
                     xAxisLabel = {"Date"}
                     yAxisLabel = {"NDSI Value"}
                     dataKey1 = {'ndsiL'}
                     dataKey2 = {'ndsiR'}
                     />
-        <h5>Comparing NDSI By Site</h5>
+        <h4>Comparing NDSI By Site</h4>
         <NDSICompareChart results = {graph2}
                     xAxisLabel = {"Site"}
                     yAxisLabel = {"NDSI Value"}
                     dataKey1 = {'ndsiL'}
                     dataKey2 = {'ndsiR'}
                     />
-        <h5>Comparing Biophony Over Time</h5>
+        <h4>Comparing Biophony Over Time</h4>
         <NDSICompareChart results = {graph3}
                     xAxisLabel = {"Date"}
                     yAxisLabel = {"Biophony Value"}
                     dataKey1 = {'biophonyL'}
                     dataKey2 = {'biophonyR'}
                     />
-        <h5>Comparing Biophony By Site</h5>
+        <h4>Comparing Biophony By Site</h4>
         <NDSICompareChart results = {graph4}
                     xAxisLabel = {"Site"}
                     yAxisLabel = {"Biophony Value"}
                     dataKey1 = {'biophonyL'}
                     dataKey2 = {'biophonyR'}
                     />
-        <h5>Comparing Anthrophony Over Time</h5>
+        <h4>Comparing Anthrophony Over Time</h4>
         <NDSICompareChart results = {graph5}
                     xAxisLabel = {"Date"}
                     yAxisLabel = {"Anthrophony Value"}
                     dataKey1 = {'anthrophonyL'}
                     dataKey2 = {'anthrophonyR'}
                     />
-        <h5>Comparing Anthrophony By Site</h5>
+        <h4>Comparing Anthrophony By Site</h4>
         <NDSICompareChart results = {graph6}
                     xAxisLabel = {"Site"}
                     yAxisLabel = {"Anthrophony Value"}

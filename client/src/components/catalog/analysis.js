@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import NDSICharts from './infographs/NDSICharts';
 import ACILineChart from './infographs/ACILineChart';
 import ADILineChart from './infographs/ADILineChart';
+import AEILineChart from './infographs/AEILineChart';
+import ADIAEICharts from './infographs/ADIAEICharts';
 import BAAreaChart from './infographs/BAAreaChart';
 import CompareACIData from './infographs/CompareACIData';
 import CompareBioData from './infographs/CompareBioData';
@@ -240,7 +242,7 @@ function convertADIResults(jobs) {
 
   if(jobs.length === 1)
   {
-    let results = jobs[0];
+    let results = jobs[0].results;
     ret = {
       graph1: [],
       graph2: [],
@@ -254,16 +256,17 @@ function convertADIResults(jobs) {
           name: 'ADI Right Channel',
           data: results.adiR
         }
-      ]
+      ],
+      graph4: []
     }
 
-    for(var i = 0; i < results.bandL.length; i++)
+    for(var i = 0; i < results.ADIbandRangeL.length; i++)
     {
       let curObject =
       {
-        name: results.bandRangeL[i],
-        leftBandVal: results.bandL[i],
-        rightBandVal: results.bandR[i]
+        name: results.ADIbandRangeL[i],
+        leftBandVal: results.ADIbandValsL[i],
+        rightBandVal: results.ADIbandValsR[i]
       }
 
       ret.graph1.push(curObject);
@@ -271,9 +274,214 @@ function convertADIResults(jobs) {
 
   }else
   {
+    let arrLength = jobs[0].results.ADIbandValsL.length;
+    let adiLTotal = 0;
+    let adiRTotal = 0;
+    let adiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
+    let adiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
+
+    jobs.forEach(function(job){
+      adiLTotal += job.results.adiL;
+      adiRTotal += job.results.adiR;
+
+      adiLBandTemp = adiLBandTemp.map(function(num, idx){
+        return num + job.results.ADIbandValsL[idx];
+      });
+
+      adiRBandTemp = adiRBandTemp.map(function(num, idx){
+        return num + job.results.ADIbandValsR[idx];
+      });
+
+    });
+
+    let adiLAvg = adiLTotal / jobs.length;
+    let adiRAvg = adiRTotal / jobs.length;
+
+    let adiLBand = adiLBandTemp.map(function(element){
+      return element / jobs.length;
+    });
+
+    let adiRBand = adiRBandTemp.map(function(element){
+      return element / jobs.length;
+    });
+
+    ret = {
+      graph1: [],
+      graph2: [],
+      graph3:
+      [
+        {
+          name: 'ADI Left Channel',
+          data: adiLAvg
+        },
+        {
+          name: 'ADI Right Channel',
+          data: adiRAvg
+        }
+      ],
+      graph4: []
+    }
+
+    for(var i = 0; i < adiLBand.length; i++)
+    {
+      let curObject =
+      {
+        name: jobs[0].results.ADIbandRangeL[i],
+        leftBandVal: adiLBand[i],
+        rightBandVal: adiRBand[i]
+      }
+
+      ret.graph1.push(curObject);
+    }
+
+    for(i = 0; i < jobs.length; i++)
+    {
+      let curObject =
+      {
+        name: jobs[i].time,
+        leftADIVal: jobs[i].results.adiL,
+        rightADIVal: jobs[i].results.adiR
+      }
+
+      ret.graph2.push(curObject);
+    }
+
+    jobs.forEach(function(job){
+      let curObject =
+      {
+        name: job.name,
+        leftADIVal: job.results.adiL,
+        rightADIVal: job.results.adiR
+      }
+
+      ret.graph4.push(curObject);
+    });
 
   }
 
+  return ret;
+}
+
+function convertAEIResults(jobs) {
+  let ret;
+
+  if(jobs.length === 1)
+  {
+    let results = jobs[0].results;
+    ret = {
+      graph1: [],
+      graph2: [],
+      graph3:
+      [
+        {
+          name: 'AEI Left Channel',
+          data: results.aeiL
+        },
+        {
+          name: 'AEI Right Channel',
+          data: results.aeiR
+        }
+      ],
+      graph4: []
+    }
+
+    for(var i = 0; i < results.AEIbandRangeL.length; i++)
+    {
+      let curObject =
+      {
+        name: results.AEIbandRangeL[i],
+        leftBandVal: results.AEIbandValsL[i],
+        rightBandVal: results.AEIbandValsR[i]
+      }
+
+      ret.graph1.push(curObject);
+    }
+
+  }else
+  {
+    let arrLength = jobs[0].results.AEIbandValsL.length;
+    let aeiLTotal = 0;
+    let aeiRTotal = 0;
+    let aeiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
+    let aeiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
+
+    jobs.forEach(function(job){
+      aeiLTotal += job.results.aeiL;
+      aeiRTotal += job.results.aeiR;
+
+      aeiLBandTemp = aeiLBandTemp.map(function(num, idx){
+        return num + job.results.AEIbandValsL[idx];
+      });
+
+      aeiRBandTemp = aeiRBandTemp.map(function(num, idx){
+        return num + job.results.AEIbandValsR[idx];
+      });
+
+    });
+
+    let aeiLAvg = aeiLTotal / jobs.length;
+    let aeiRAvg = aeiRTotal / jobs.length;
+
+    let aeiLBand = aeiLBandTemp.map(function(element){
+      return element / jobs.length;
+    });
+
+    let aeiRBand = aeiRBandTemp.map(function(element){
+      return element / jobs.length;
+    });
+
+    ret = {
+      graph1: [],
+      graph2: [],
+      graph3:
+      [
+        {
+          name: 'AEI Left Channel',
+          data: aeiLAvg
+        },
+        {
+          name: 'AEI Right Channel',
+          data: aeiRAvg
+        }
+      ],
+      graph4: []
+    }
+
+    for(var i = 0; i < aeiLBand.length; i++)
+    {
+      let curObject =
+      {
+        name: jobs[0].results.AEIbandRangeL[i],
+        leftBandVal: aeiLBand[i],
+        rightBandVal: aeiRBand[i]
+      }
+
+      ret.graph1.push(curObject);
+    }
+
+    for(i = 0; i < jobs.length; i++)
+    {
+      let curObject =
+      {
+        name: jobs[i].time,
+        leftAEIVal: jobs[i].results.aeiL,
+        rightAEIVal: jobs[i].results.aeiR
+      }
+
+      ret.graph2.push(curObject);
+    }
+
+    jobs.forEach(function(job){
+      let curObject =
+      {
+        name: job.name,
+        leftAEIVal: job.results.aeiL,
+        rightAEIVal: job.results.aeiR
+      }
+
+      ret.graph4.push(curObject);
+    });
+  }
 
   return ret;
 }
@@ -349,6 +557,45 @@ function convertBAResults(jobs) {
       ret.graph3.push(curObject);
     }
   }
+
+  return ret;
+}
+
+function convertADIAEICompare(jobs) {
+  let ret;
+
+  ret =
+  {
+    graph1: [], // compare aei and adi by time
+    graph2: []  // compare aei and adi by file
+  }
+
+  for(var i = 0; i < jobs.length; i++)
+  {
+    let curObject =
+    {
+      name: jobs[i].time,
+      leftADIVal: jobs[i].results.adiL,
+      rightADIVal: jobs[i].results.adiR,
+      leftAEIVal: jobs[i].results.aeiL,
+      rightAEIVal: jobs[i].results.aeiR
+    }
+
+    ret.graph1.push(curObject);
+  }
+
+  jobs.forEach(function(job){
+    let curObject =
+    {
+      name: job.name,
+      leftADIVal: job.results.adiL,
+      rightADIVal: job.results.adiR,
+      leftAEIVal: job.results.aeiL,
+      rightAEIVal: job.results.aeiR
+    }
+
+    ret.graph2.push(curObject);
+  });
 
   return ret;
 }
@@ -577,7 +824,7 @@ class AnalysisView extends Component {
         results = convertNDSIResults(chosenResult.jobs);
         content = (
           <div>
-            <h5>{chosenResult.name}</h5>
+            <h3>{chosenResult.name}</h3>
             <NDSICharts results = {results} />
           </div>
         );
@@ -588,8 +835,8 @@ class AnalysisView extends Component {
         {
           content = (
             <div>
-              <h5>{chosenResult.name}</h5>
-              <h3>ACI Totals:</h3>
+              <h3>{chosenResult.name}</h3>
+              <h5>ACI Totals:</h5>
               <h5>{results.graph2[0].name} - {results.graph2[0].data}</h5>
               <h5>{results.graph2[1].name} - {results.graph2[1].data}</h5>
               <h5>{results.graph2[2].name} - {results.graph2[2].data}</h5>
@@ -606,8 +853,8 @@ class AnalysisView extends Component {
         {
           content = (
             <div>
-              <h5>{chosenResult.name}</h5>
-              <h3>ACI Totals:</h3>
+              <h3>{chosenResult.name}</h3>
+              <h5>ACI Totals:</h5>
               <h5>{results.graph2[0].name} - {results.graph2[0].data}</h5>
               <h5>{results.graph2[1].name} - {results.graph2[1].data}</h5>
               <h5>{results.graph2[2].name} - {results.graph2[2].data}</h5>
@@ -632,16 +879,57 @@ class AnalysisView extends Component {
         {
           // this means they have calculated both ADI and AEI
           // we can do cooler stuff with this
-
-
+          let compareResults = convertADIAEICompare(chosenResult.jobs);
+          let adiResults = convertADIResults(chosenResult.jobs);
+          let aeiResults = convertAEIResults(chosenResult.jobs);
+          content = (
+            <div>
+              <h3>{chosenResult.name}</h3>
+              <ADILineChart results = {adiResults} />
+              <AEILineChart results = {aeiResults} />
+              <ADIAEICharts results = {compareResults}
+                            adiResults = {adiResults}
+                            aeiResults = {aeiResults} />
+            </div>
+          )
 
         }else
         {
           results = convertADIResults(chosenResult.jobs);
           content = (
             <div>
-              <h5>{chosenResult.name}</h5>
+              <h3>{chosenResult.name}</h3>
               <ADILineChart results = {results} />
+            </div>
+          )
+        }
+      }else if(chosenResult.index.includes('AEI'))
+      {
+        if(chosenResult.index.includes('ADI'))
+        {
+          // this means they have calculated both ADI and AEI
+          // we can do cooler stuff with this
+          let compareResults = convertADIAEICompare(chosenResult.jobs);
+          let adiResults = convertADIResults(chosenResult.jobs);
+          let aeiResults = convertAEIResults(chosenResult.jobs);
+          content = (
+            <div>
+              <h3>{chosenResult.name}</h3>
+              <ADILineChart results = {adiResults} />
+              <AEILineChart results = {aeiResults} />
+              <ADIAEICharts results = {compareResults}
+                            adiResults = {adiResults}
+                            aeiResults = {aeiResults} />
+            </div>
+          )
+
+        }else
+        {
+          results = convertAEIResults(chosenResult.jobs);
+          content = (
+            <div>
+              <h3>{chosenResult.name}</h3>
+              <AEILineChart results = {results} />
             </div>
           )
         }
@@ -653,10 +941,9 @@ class AnalysisView extends Component {
         {
           content = (
             <div>
-              <h5>{chosenResult.name}</h5>
-              <h3>Bioacoustic Area Values:</h3>
-              <h5>{results.graph2[0].name} - {results.graph2[0].data}</h5>
-              <h5>{results.graph2[1].name} - {results.graph2[1].data}</h5>
+              <h3>{chosenResult.name}</h3>
+              <h5>{results.graph2[0].name}: {results.graph2[0].data}</h5>
+              <h5>{results.graph2[1].name}: {results.graph2[1].data}</h5>
               <br />
               <BAAreaChart results = {results.graph1}
                             xAxisLabel = {"Hz Range"}
@@ -670,8 +957,8 @@ class AnalysisView extends Component {
         {
           content = (
             <div>
-              <h5>{chosenResult.name}</h5>
-              <h3>Bioacoustic Area Values:</h3>
+              <h3>{chosenResult.name}</h3>
+              <h5>Bioacoustic Area Values:</h5>
               <h5>{results.graph2[0].name} - {results.graph2[0].data}</h5>
               <h5>{results.graph2[1].name} - {results.graph2[1].data}</h5>
               <br />
@@ -687,7 +974,7 @@ class AnalysisView extends Component {
         results = convertCompareACIResults(chosenResult.jobs);
         content = (
           <div>
-            <h4>Comparing ACI Results</h4>
+            <h5>Comparing ACI Results</h5>
             <CompareACIData results = {results} />
           </div>
         )
@@ -696,7 +983,7 @@ class AnalysisView extends Component {
         results = convertCompareBioResults(chosenResult.jobs);
         content = (
           <div>
-            <h4>Comparing Bioacoustic Results</h4>
+            <h5>Comparing Bioacoustic Results</h5>
             <CompareBioData results = {results} />
           </div>
         )

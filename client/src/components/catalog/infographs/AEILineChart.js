@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Recharts, {LineChart, Line, XAxis, YAxis, ReferenceLine, CartesianGrid, Tooltip, Legend} from 'recharts';
 
-class ADILineChart extends Component {
+class AEILineChart extends Component {
 
   render(){
     let graphs = this.props.results;
@@ -9,8 +9,8 @@ class ADILineChart extends Component {
     let graph2 = graphs.graph2;
     let graph3 = graphs.graph3;
     let graph4 = graphs.graph4;
-    let adiLeft = graph3[0].data;
-    let adiRight = graph3[1].data;
+    let aeiLeft = graph3[0].data;
+    let aeiRight = graph3[1].data;
 
     let content;
 
@@ -20,11 +20,11 @@ class ADILineChart extends Component {
         <LineChart width={900} height={600} data={graph1} >
          <CartesianGrid strokeDasharray="3 3"/>
          <XAxis dataKey="name" label="Hz Range"/>
-         <YAxis label="ADI Value"/>
+         <YAxis label="AEI Value"/>
          <Tooltip/>
          <Legend />
-         <ReferenceLine y={adiLeft} label="ADI Left" stroke="#433eaf"/>
-         <ReferenceLine y={adiRight} label="ADI Right" stroke="#187139"/>
+         <ReferenceLine y={aeiLeft} label="AEI Left" stroke="#433eaf"/>
+         <ReferenceLine y={aeiRight} label="AEI Right" stroke="#187139"/>
          <Line type="monotone" dataKey="leftBandVal" stroke="#8884d8" dot={false}/>
          <Line type="monotone" dataKey="rightBandVal" stroke="#82ca9d" dot={false}/>
         </LineChart>
@@ -36,11 +36,11 @@ class ADILineChart extends Component {
           <LineChart width={900} height={600} data={graph1} >
            <CartesianGrid strokeDasharray="3 3"/>
            <XAxis dataKey="name" label="Hz Range"/>
-           <YAxis label="ADI Value"/>
+           <YAxis label="AEI Value"/>
            <Tooltip/>
            <Legend />
-           <ReferenceLine y={adiLeft} label="ADI Left" stroke="#433eaf"/>
-           <ReferenceLine y={adiRight} label="ADI Right" stroke="#187139"/>
+           <ReferenceLine y={aeiLeft} label="AEI Left" stroke="#433eaf"/>
+           <ReferenceLine y={aeiRight} label="AEI Right" stroke="#187139"/>
            <Line type="monotone" dataKey="leftBandVal" stroke="#8884d8" dot={false}/>
            <Line type="monotone" dataKey="rightBandVal" stroke="#82ca9d" dot={false}/>
           </LineChart>
@@ -48,25 +48,25 @@ class ADILineChart extends Component {
           <LineChart width={900} height={600} data={graph4} >
            <CartesianGrid strokeDasharray="3 3"/>
            <XAxis dataKey="name" label="File Name"/>
-           <YAxis label="ADI Value"/>
+           <YAxis label="AEI Value"/>
            <Tooltip/>
            <Legend />
-           <ReferenceLine y={adiLeft} label="ADI Left" stroke="#433eaf"/>
-           <ReferenceLine y={adiRight} label="ADI Right" stroke="#187139"/>
-           <Line type="monotone" dataKey="leftADIVal" stroke="#8884d8" dot={false}/>
-           <Line type="monotone" dataKey="rightADIVal" stroke="#82ca9d" dot={false}/>
+           <ReferenceLine y={aeiLeft} label="AEI Left" stroke="#433eaf"/>
+           <ReferenceLine y={aeiRight} label="AEI Right" stroke="#187139"/>
+           <Line type="monotone" dataKey="leftAEIVal" stroke="#8884d8" dot={false}/>
+           <Line type="monotone" dataKey="rightAEIVal" stroke="#82ca9d" dot={false}/>
           </LineChart>
           <br />
           <LineChart width={900} height={600} data={graph2} >
            <CartesianGrid strokeDasharray="3 3"/>
            <XAxis dataKey="name" label="Hour of Day"/>
-           <YAxis label="ADI Value"/>
+           <YAxis label="AEI Value"/>
            <Tooltip/>
            <Legend />
-           <ReferenceLine y={adiLeft} label="ADI Left" stroke="#433eaf"/>
-           <ReferenceLine y={adiRight} label="ADI Right" stroke="#187139"/>
-           <Line type="monotone" dataKey="leftADIVal" stroke="#8884d8" dot={false}/>
-           <Line type="monotone" dataKey="rightADIVal" stroke="#82ca9d" dot={false}/>
+           <ReferenceLine y={aeiLeft} label="AEI Left" stroke="#433eaf"/>
+           <ReferenceLine y={aeiRight} label="AEI Right" stroke="#187139"/>
+           <Line type="monotone" dataKey="leftAEIVal" stroke="#8884d8" dot={false}/>
+           <Line type="monotone" dataKey="rightAEIVal" stroke="#82ca9d" dot={false}/>
           </LineChart>
         </div>
       )
@@ -74,7 +74,7 @@ class ADILineChart extends Component {
 
     return(
       <div>
-        <h4>ADI Values</h4>
+        <h4>AEI Values</h4>
         <h5>{graph3[0].name}: {graph3[0].data}</h5>
         <h5>{graph3[1].name}: {graph3[1].data}</h5>
         <br />
@@ -84,7 +84,4 @@ class ADILineChart extends Component {
   }
 }
 
-
-
-
-export default ADILineChart;
+export default AEILineChart;

@@ -10,9 +10,9 @@ class CompareACIData extends Component {
 
     return(
       <div>
-        <h5>Comparing ACI Over Time</h5>
+        <h4>Comparing ACI Over Time</h4>
         <ACILineChart results = {graph1} xAxisLabel = {"Date"} yAxisLabel = {"ACI Value By Minute"} />
-        <h5>Comparing ACI By Site</h5>
+        <h4>Comparing ACI By Site</h4>
         <ACILineChart results = {graph2} xAxisLabel = {"Site"} yAxisLabel = {"ACI Value By Minute"} />
       </div>
     );

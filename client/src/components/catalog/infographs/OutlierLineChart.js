@@ -16,7 +16,7 @@ class OutlierLineChart extends Component {
 
     return(
       <div>
-        <h5>Identifying Outliers for {index}</h5>
+        <h4>Identifying Outliers for {index}</h4>
         <LineChart width={900} height={600} data={data} syncId="anyId">
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey='name' label={xLabel}/>

@@ -15,6 +15,12 @@ class NDSICharts extends Component {
     {
       content = (
         <div>
+          <h5>NDSI Left: {graph1[0].ndsi}</h5>
+          <h5>NDSI Right: {graph1[1].ndsi}</h5>
+          <h5>Biophony Left: {graph1[0].biophony}</h5>
+          <h5>Biophony Right: {graph1[1].biophony}</h5>
+          <h5>Anthrophony Left: {graph1[0].anthrophony}</h5>
+          <h5>Anthrophony Right: {graph1[1].anthrophony}</h5>
           <BarChart width={900} height={600} data={graph1}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" label="Channel"/>
@@ -42,6 +48,13 @@ class NDSICharts extends Component {
     {
       content = (
         <div>
+          <h5>NDSI Left: {graph1[0].ndsi}</h5>
+          <h5>NDSI Right: {graph1[1].ndsi}</h5>
+          <h5>Biophony Left: {graph1[0].biophony}</h5>
+          <h5>Biophony Right: {graph1[1].biophony}</h5>
+          <h5>Anthrophony Left: {graph1[0].anthrophony}</h5>
+          <h5>Anthrophony Right: {graph1[1].anthrophony}</h5>
+          <br />
           <BarChart width={900} height={600} data={graph1}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" label="Channel"/>

@@ -10,12 +10,12 @@ class CompareBioData extends Component {
 
     return(
       <div>
-        <h5>Comparing Bioacoustic Area Over Time</h5>
+        <h4>Comparing Bioacoustic Area Over Time</h4>
         <BALineChart results = {graph1}
                     xAxisLabel = {"Date"}
                     yAxisLabel = {"Area Value"}
                     />
-        <h5>Comparing Bioacoustic Area By Site</h5>
+        <h4>Comparing Bioacoustic Area By Site</h4>
         <BALineChart results = {graph2}
                     xAxisLabel = {"Site"}
                     yAxisLabel = {"Area Value"}
