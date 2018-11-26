@@ -1,5 +1,5 @@
 \subsubsection{Frameworks}
-We will use a combination of frameworks in order to test our product. These frameworks include Chai, Mocha, and Spectron. Each of these frameworks is tried and true, known well in the JavaScript development community for their ease of use in testing in Node.js environments.
+We will use a combination of frameworks in order to test our product. These frameworks include Chai, Mocha, Spectron, and Mockgoose. Each of these frameworks is tried and true, known well in the JavaScript development community for their ease of use in testing in Node.js environments.
 
 \paragraph{Chai} \mbox{}\\[\paragraphheaderspace]
 Chai is an assertion library purposed for behavior-driven and test-driven development in Node.js. We will use Chai as Promised, which extends Chai, for asserting facts about JavaScript promises. Thereby, we can transform any Chai assertion into one that acts on a promise. Combining Chai with Spectron will provide a powerful tool that allows us to use JavaScript promises.
@@ -40,3 +40,6 @@ app.start().then(function () {
   console.error('Test failed', error.message)
 })
 \end{javascriptcode}
+
+\paragraph{Mockgoose} \mbox{}\\[\paragraphheaderspace]
+Mockgoose is database mocking framework that allows for an in-memory MongoDB database to be spun up when calls to Mongoose (our MongoDB wrapper) are made. Mocking a database allows the development team to use a machine\textquotesingle s memory to run tests that make calls to the database, meaning that these tests have no persistence in any real database. This effectively isolates unit and integration tests from any of the problems that might come up as a result of persistent data left behind in the database from previous use.
