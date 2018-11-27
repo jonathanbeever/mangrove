@@ -225,3 +225,24 @@ https://<base-url>/api/specs
   "fftW": 10
 }
 \end{jsoncode}
+
+\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
+  \hline
+  \reqhead{Condition}
+  & \multicolumn{2}{|l|}{\reqhead{Response}}
+  \\ \hline
+
+  A field was included that was not listed as a valid request body field.
+  & 400
+  & An object containing a single field, \codesnip{message} (String), identifying the invalid field from the request. This may result from a valid request body field being included for the wrong \codesnip{metric}.
+  \\ \hline
+
+  A field contains an invalid value.
+  & 400
+  & An object containing a single field, \codesnip{message} (String), identifying the field in question and its possible values.
+  \\ \hline
+\end{longtable}
+\endgroup

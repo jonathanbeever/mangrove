@@ -132,3 +132,19 @@ https://<base-url>/api/specs/spec-a-uuid
   "fftW": 10
 }
 \end{jsoncode}
+
+\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
+  \hline
+  \reqhead{Condition}
+  & \multicolumn{2}{|l|}{\reqhead{Response}}
+  \\ \hline
+
+  The requested specification does not exist.
+  & 404
+  & An object containing a single field, \codesnip{message} (String), stating that a specification with the \codesnip{specId} provided in the request was not found.
+  \\ \hline
+\end{longtable}
+\endgroup

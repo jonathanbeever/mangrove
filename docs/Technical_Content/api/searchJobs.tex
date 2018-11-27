@@ -499,3 +499,24 @@ https://<base-url>/api/search/jobs
   ]
 }
 \end{jsoncode}
+
+\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
+  \hline
+  \reqhead{Condition}
+  & \multicolumn{2}{|l|}{\reqhead{Response}}
+  \\ \hline
+
+  A field was included that was not listed as a valid request body field.
+  & 400
+  & An object containing a single field, \codesnip{message} (String), identifying the invalid field from the request.
+  \\ \hline
+
+  A field contains an invalid value.
+  & 400
+  & An object containing a single field, \codesnip{message} (String), identifying the field in question and its possible values.
+  \\ \hline
+\end{longtable}
+\endgroup
