@@ -6,10 +6,10 @@ Search for specifications that match a given description.
 https://<base-url>/api/search/specs
 \end{htmlcode}
 
-\paragraph{Header} \mbox{}\\[\tabularheaderspace]
+\paragraph{Header} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
@@ -20,7 +20,7 @@ https://<base-url>/api/search/specs
   & String
   & \codesnip{"application/json"}
   \\ \hline
-\end{tabular}
+\end{longtable}
 \endgroup
 
 \paragraph{Request Body Fields} \mbox{}\\[\longtableheaderspace]
@@ -171,10 +171,10 @@ https://<base-url>/api/search/specs
 }
 \end{jsoncode}
 
-\paragraph{Response Body Fields} \mbox{}\\[\tabularheaderspace]
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
@@ -185,7 +185,7 @@ https://<base-url>/api/search/specs
   & Object[]
   & The list of specifications that satisfy the parameters specified in the request body.
   \\ \hline
-\end{tabular}
+\end{longtable}
 \endgroup
 
 \paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
