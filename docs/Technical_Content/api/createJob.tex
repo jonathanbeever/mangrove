@@ -59,6 +59,25 @@ https://<base-url>/api/jobs
 }
 \end{jsoncode}
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \reqhead{Code}
+  & \reqhead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 201
+  & A new job is created and returned.
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & No new job is created. The \codesnip{inputId} and \codesnip{specId} provided match an existing job, which is returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
