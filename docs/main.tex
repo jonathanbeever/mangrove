@@ -25,20 +25,24 @@
 \usepackage[backend=biber]{biblatex} % References library
 \bibliography{references}
 
-\newcommand\tab[1][1cm]{\hspace*{#1}}
+% General formatting
 \newcommand{\paragraphheaderspace}{8pt}
+\definecolor{bgcolor}{RGB}{230,236,247}
 
-\definecolor{codebg}{RGB}{230,236,247}
+% Table formatting
+\newcommand{\cellpaddingvertical}{1.05}
+\newcommand{\tablehead}[1]{\bfseries \cellcolor{bgcolor} #1}
+\renewcommand\cellalign{lc}
 
 % Define 'htmlcode', 'jsoncode', and 'javascriptcode' minted code style shortcuts
 \newminted{html}{}
-\BeforeBeginEnvironment{htmlcode}{\begin{mdframed}[backgroundcolor=codebg,topline=true,bottomline=true,rightline=false,leftline=false]}
+\BeforeBeginEnvironment{htmlcode}{\begin{mdframed}[backgroundcolor=bgcolor,topline=true,bottomline=true,rightline=false,leftline=false]}
 \AfterEndEnvironment{htmlcode}{\end{mdframed}}
 \newminted{json}{}
-\BeforeBeginEnvironment{jsoncode}{\begin{mdframed}[backgroundcolor=codebg,topline=false,bottomline=false,rightline=false,leftline=false]}
+\BeforeBeginEnvironment{jsoncode}{\begin{mdframed}[backgroundcolor=bgcolor,topline=false,bottomline=false,rightline=false,leftline=false]}
 \AfterEndEnvironment{jsoncode}{\end{mdframed}}
 \newminted{javascript}{}
-\BeforeBeginEnvironment{javascriptcode}{\begin{mdframed}[backgroundcolor=codebg,topline=false,bottomline=false,rightline=false,leftline=false]}
+\BeforeBeginEnvironment{javascriptcode}{\begin{mdframed}[backgroundcolor=bgcolor,topline=false,bottomline=false,rightline=false,leftline=false]}
 \AfterEndEnvironment{javascriptcode}{\end{mdframed}}
 % Use this for small code snippets in need of minor formatting, e.g. var names
 \newcommand{\codesnip}[1]{\mintinline{html}{#1}}
@@ -68,6 +72,7 @@
   \input{Technical_Content/techsUsed}
   \input{Technical_Content/database}
   \input{Technical_Content/infrastructure}
+  \input{Technical_Content/frontendGuidelines}
   \input{Technical_Content/User_Interface/userInterface}
   \input{Technical_Content/interfaceDesign}
   \input{Technical_Content/api/api}
