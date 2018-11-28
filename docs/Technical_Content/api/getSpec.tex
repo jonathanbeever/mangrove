@@ -6,10 +6,10 @@ Retrieve the details of an existing specification by \codesnip{specId}.
 https://<base-url>/api/specs/:specId
 \end{htmlcode}
 
-\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
+\paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
@@ -20,7 +20,7 @@ https://<base-url>/api/specs/:specId
   & String
   & The \codesnip{specId} of the spec for which details are desired.
   \\ \hline
-\end{tabular}
+\end{longtable}
 \endgroup
 
 \paragraph{Example Request: GET} \mbox{}\\[\codeheaderspace]
@@ -132,3 +132,19 @@ https://<base-url>/api/specs/spec-a-uuid
   "fftW": 10
 }
 \end{jsoncode}
+
+\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
+  \hline
+  \reqhead{Condition}
+  & \multicolumn{2}{|l|}{\reqhead{Response}}
+  \\ \hline
+
+  The requested specification does not exist.
+  & 404
+  & An object containing a single field, \codesnip{message} (String), stating that a specification with the \codesnip{specId} provided in the request was not found.
+  \\ \hline
+\end{longtable}
+\endgroup

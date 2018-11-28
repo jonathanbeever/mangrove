@@ -6,10 +6,10 @@ Search for jobs that match a specified description, which may contain metadata a
 https://<base-url>/api/search/jobs
 \end{htmlcode}
 
-\paragraph{Header} \mbox{}\\[\tabularheaderspace]
+\paragraph{Header} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
@@ -20,13 +20,13 @@ https://<base-url>/api/search/jobs
   & String
   & \codesnip{"application/json"}
   \\ \hline
-\end{tabular}
+\end{longtable}
 \endgroup
 
-\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
+\paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
@@ -42,7 +42,7 @@ https://<base-url>/api/search/jobs
   & Number
   &
   \\ \hline
-\end{tabular}
+\end{longtable}
 \endgroup
 
 \paragraph{Request Body Fields} \mbox{}\\[\longtableheaderspace]
@@ -467,10 +467,10 @@ https://<base-url>/api/search/jobs
 }
 \end{jsoncode}
 
-\paragraph{Response Body Fields} \mbox{}\\[\tabularheaderspace]
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
@@ -481,7 +481,7 @@ https://<base-url>/api/search/jobs
   & Object[]
   & The list of jobs that satisfy the parameters specified in the request body.
   \\ \hline
-\end{tabular}
+\end{longtable}
 \endgroup
 
 \paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
@@ -499,3 +499,29 @@ https://<base-url>/api/search/jobs
   ]
 }
 \end{jsoncode}
+
+\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
+  \hline
+  \reqhead{Condition}
+  & \multicolumn{2}{|l|}{\reqhead{Response}}
+  \\ \hline
+
+  A field was included that was not listed as a valid request body field.
+  & 400
+  & An object containing a single field, \codesnip{message} (String), identifying the invalid field from the request.
+  \\ \hline
+
+  A field contains an invalid value.
+  & 400
+  & An object containing a single field, \codesnip{message} (String), identifying the field in question and its possible values.
+  \\ \hline
+
+  An input or specification with the specified \codesnip{inputId} or \codesnip{specId} does not exist.
+  & 400
+  & An object containing a single field, \codesnip{message} (String), stating that an input or specification with the \codesnip{inputId} or \codesnip{specId} provided in the request was not found.
+  \\ \hline
+\end{longtable}
+\endgroup

@@ -6,10 +6,10 @@ Delete an existing job by \codesnip{jobId}.
 https://<base-url>/api/jobs/:jobId
 \end{htmlcode}
 
-\paragraph{URL Parameters} \mbox{}\\[\tabularheaderspace]
+\paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{tabular}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \reqhead{Field}
   & \reqhead{Type}
@@ -20,7 +20,7 @@ https://<base-url>/api/jobs/:jobId
   & String
   & The \codesnip{jobId} of the job to be deleted.
   \\ \hline
-\end{tabular}
+\end{longtable}
 \endgroup
 
 \paragraph{Example Request: DELETE} \mbox{}\\[\codeheaderspace]
@@ -57,3 +57,19 @@ https://<base-url>/api/jobs/job-1a-uuid
   "message": "Successfully deleted Job with jobId: job-1a-uuid."
 }
 \end{jsoncode}
+
+\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
+  \hline
+  \reqhead{Condition}
+  & \multicolumn{2}{|l|}{\reqhead{Response}}
+  \\ \hline
+
+  The requested job does not exist.
+  & 404
+  & An object containing a single field, \codesnip{message} (String), stating that a job with the \codesnip{jobId} provided in the request was not found.
+  \\ \hline
+\end{longtable}
+\endgroup
