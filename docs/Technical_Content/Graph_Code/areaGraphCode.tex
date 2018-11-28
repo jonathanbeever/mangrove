@@ -1,0 +1,18 @@
+\subsubsection{Area Graphs}
+
+\begin{javascriptcode}
+  <AreaChart width={900} height={600} data={data} >
+    <CartesianGrid strokeDasharray="3 3"/>
+    <XAxis dataKey="name" label={xLabel}/>
+    <Legend />
+    <YAxis label={yLabel} domain={['dataMin', 'dataMax']} />
+    <Tooltip/>
+    <Area type='monotone' dataKey={firstDataKey}
+                          stackId="1"
+                          stroke='#8884d8'
+                          fill='#8884d8' />
+    <Brush />
+  </ AreaChart>
+\end{javascriptcode}
+
+\noindent The area graphs are also very flexible, as they are not used as much in this service. Thus, using the code above, we can easily include area graphs wherever they are needed regardless of the index (which is only Bioacoustic index) by again passing parameters through components.

@@ -1,0 +1,22 @@
+\subsubsection{Composed Charts}
+
+\begin{javascriptcode}
+  <ComposedChart width={900} height={600} data={data}>
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="name" label={xLabel}/>
+    <YAxis label={yLabel}/>
+    <Tooltip />
+    <Legend />
+    <Brush dataKey='name' height={30} />
+    <Bar dataKey={firstDataKey} fill="#8884d8" />
+    <Bar dataKey={secondDataKey} fill="#82ca9d" />
+    <Line type='monotone' dataKey={firstDataKey}
+                          stroke='#8884d8'
+                          dot={false}/>
+    <Line type='monotone' dataKey={secondDataKey}
+                          stroke='#82ca9d'
+                          dot={false}/>
+  </ ComposedChart>
+\end{javascriptcode}
+
+\noindent This component is used only once, in the NDSI comparison charts. A composed chart includes more than one data representation, this one including bar graphs \textit{and} line graphs. The purpose of this is explained in the Data Visualization Research section of this paper. The code for doing this is mostly the same as the respective bar graph and line graph components, just used together in a parent ComposedChart component provided by Recharts.

@@ -1,0 +1,16 @@
+\subsubsection{Bar Graphs}
+
+\begin{javascriptcode}
+  <BarChart width={900} height={600} data={graph1}>
+    <CartesianGrid strokeDasharray="3 3" />
+    <XAxis dataKey="name" label="Channel"/>
+    <YAxis label="Value"/>
+    <Tooltip />
+    <Legend />
+    <Bar dataKey="ndsi" fill="#8884d8" />
+    <Bar dataKey="biophony" fill="#82ca9d" />
+    <Bar dataKey="anthrophony" fill="#e79797" />
+  </ BarChart>
+\end{javascriptcode}
+
+\noindent The NDSI bar charts are a bit more complicated to make flexible. One of the NDSI charts includes three different bar groups, while the other only includes two. So, making one all encompassing React component is out of the question. Thus, the code above is used for the three bar group visualization, with similar code used for the two bar graph visualization.
