@@ -1,0 +1,11 @@
+\subsubsection{Soundecology Package Dependencies}
+The core soundecology package does not handle wav file conversion to Wav object that is needed for use in the algorithms. This is handled by a package named tuneR, which takes in audio files and converts them to R objects compatible with the R algorithms in soundecology. This is the only package that is of any note, as it will require its own set of instructions during our processing of the user\textquotesingle s files. The script for converting a user file into a Wav object is the following
+
+\begin{javascriptcode}
+  tdir <- getwd()
+  tfile <- file.path(tdir, "SoundFileName.wav")
+  newWobj <- readWave(tfile)
+  result <- ndsi(newWobj)
+\end{javascriptcode}
+
+In order for this to work, the current working directory must be set to where the user\textquotesingle s files are located, and the SoundFileName must match the user\textquotesingle s as well. Luckily soundecology \textit{does} have a method, multiple_sounds, for going through all files in a subdirectory, and handles this natively. However multiple_sounds only goes through a directory, not for single file use.
