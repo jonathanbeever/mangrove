@@ -3,7 +3,7 @@ Retrieve the details of all existing jobs. This also provides results for any an
 
 \paragraph{GET} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/api/jobs
+https://<base-url>/jobs
 \end{htmlcode}
 
 % TODO: Implement pagination
@@ -32,30 +32,26 @@ https://<base-url>/api/jobs
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
   \hline
   \tablehead{Field}
   & \tablehead{Type}
-  & \tablehead{Metric}
   & \tablehead{Description}
   \\ \hline
 
   % TODO: Implement pagination.
   %\codesnip{pages}
   %& Number
-  %&
   %& The total number of pages.
   %\\ \hline
 
   \codesnip{count}
   & Number
-  &
   & The total number of jobs.
   \\ \hline
 
   \codesnip{jobs}
   & Object[]
-  &
   & A list of all jobs. See the Get Job request for a complete listing of properties. % TODO: Implement pagination.
   \\ \hline
 \end{longtable}

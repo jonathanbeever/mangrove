@@ -1,9 +1,9 @@
-\subsubsection{Delete Job}
-Delete an existing job by \codesnip{jobId}.
+\subsubsection{Delete Input}
+Delete an existing input by \codesnip{inputId}.
 
 \paragraph{DELETE} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/jobs/:jobId
+https://<base-url>/inputs/:inputId
 \end{htmlcode}
 
 \paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
@@ -16,16 +16,16 @@ https://<base-url>/jobs/:jobId
   & \tablehead{Description}
   \\ \hline
 
-  \codesnip{jobId}
+  \codesnip{inputId}
   & String
-  & The \codesnip{jobId} of the job to be deleted.
+  & The \codesnip{inputId} of the input to be deleted.
   \\ \hline
 \end{longtable}
 \endgroup
 
 \paragraph{Example Request: DELETE} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/jobs/job-1a-uuid
+https://<base-url>/inputs/input-1-uuid
 \end{htmlcode}
 
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
@@ -40,7 +40,7 @@ https://<base-url>/jobs/job-1a-uuid
 
   \codesnip{success}
   & Boolean
-  & A confirmation of whether or not the specified job was removed.
+  & A confirmation of whether or not the specified input was removed.
   \\ \hline
 
   \codesnip{message}
@@ -54,7 +54,7 @@ https://<base-url>/jobs/job-1a-uuid
 \begin{jsoncode}
 {
   "success": true,
-  "message": "Successfully deleted Job with jobId: job-1a-uuid."
+  "message": "Successfully deleted input with inputId: input-1-uuid."
 }
 \end{jsoncode}
 
@@ -67,9 +67,9 @@ https://<base-url>/jobs/job-1a-uuid
   & \multicolumn{2}{|l|}{\tablehead{Response}}
   \\ \hline
 
-  The requested job does not exist.
+  The requested input does not exist.
   & 404
-  & An object containing a single field, \codesnip{message} (String), stating that a job with the \codesnip{jobId} provided in the request was not found.
+  & An object containing a single field, \codesnip{message} (String), stating that a input with the \codesnip{inputId} provided in the request was not found.
   \\ \hline
 \end{longtable}
 \endgroup

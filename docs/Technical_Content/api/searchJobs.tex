@@ -3,7 +3,7 @@ Search for jobs that match a specified description, which may contain metadata a
 
 \paragraph{GET} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/api/search/jobs
+https://<base-url>/search/jobs
 \end{htmlcode}
 
 \paragraph{Header} \mbox{}\\[\longtableheaderspace]
@@ -23,27 +23,28 @@ https://<base-url>/api/search/jobs
 \end{longtable}
 \endgroup
 
-\paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
-\begingroup
-\renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
-  \hline
-  \tablehead{Field}
-  & \tablehead{Type}
-  & \tablehead{Description}
-  \\ \hline
-
-  \codesnip{page}
-  & Number
-  &
-  \\ \hline
-
-  \codesnip{perPage}
-  & Number
-  &
-  \\ \hline
-\end{longtable}
-\endgroup
+% TODO: Implement pagination
+%\paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
+%\begingroup
+%\renewcommand{\arraystretch}{\cellpaddingvertical}
+%\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+%  \hline
+%  \tablehead{Field}
+%  & \tablehead{Type}
+%  & \tablehead{Description}
+%  \\ \hline
+%
+%  \codesnip{page}
+%  & Number
+%  &
+%  \\ \hline
+%
+%  \codesnip{perPage}
+%  & Number
+%  &
+%  \\ \hline
+%\end{longtable}
+%\endgroup
 
 \paragraph{Request Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
@@ -84,7 +85,7 @@ https://<base-url>/api/search/jobs
   & A unique identifier for the audio input file.
   \\ \hline
 
-  \codesnip{filePath}
+  \codesnip{path}
   & String
   &
   & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
@@ -96,10 +97,10 @@ https://<base-url>/api/search/jobs
   & The name of the site in which the input was recorded.
   \\ \hline
 
-  \codesnip{timeRecordedMs}
+  \codesnip{recordTimeMs}
   & Object
   &
-  & The time at which the input audio file was recorded.
+  & The time at which the input audio file was recorded, listed in milliseconds since the Unix epoch.
   \\ \hline
   \hspace{3mm} \codesnip{min}
   & Number & & Minimum value of \codesnip{lat}. \\ \hline
@@ -423,9 +424,9 @@ https://<base-url>/api/search/jobs
   "status": [
     "finished"
   ],
-  "filePath": "fileName.wav",
+  "path": "fileName.wav",
   "siteName": "UCF",
-  "timeRecordedMs": {
+  "recordTimeMs": {
     "min": 1504929600000,
     "max": 1505102400000
   },
