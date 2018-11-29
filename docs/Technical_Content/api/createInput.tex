@@ -1,9 +1,9 @@
-\subsubsection{Search Inputs}
-Search for inputs that match a specified description.
+\subsubsection{Create Input}
+Create an input based on a WAV audio file and a set of fields that describe the conditions in which the file was recorded.
 
-\paragraph{GET} \mbox{}\\[\codeheaderspace]
+\paragraph{PUT} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/search/inputs
+https://<base-url>/inputs
 \end{htmlcode}
 
 \paragraph{Header} \mbox{}\\[\longtableheaderspace]
@@ -18,7 +18,7 @@ https://<base-url>/search/inputs
 
   \codesnip{Content-Type}
   & String
-  & \codesnip{"application/json"}
+  & \codesnip{"multipart/form-data"}
   \\ \hline
 \end{longtable}
 \endgroup
@@ -33,71 +33,91 @@ https://<base-url>/search/inputs
   & \tablehead{Description}
   \\ \hline
 
-  \codesnip{path}
-  & String
-  & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
+  \codesnip{file}
+  & File
+  & The WAV file to be analyzed in any given job that references this input.
   \\ \hline
 
-  \codesnip{siteName}
+  \codesnip{json}
+  & Text
+  & A description of the input being created. This should be a stringified JSON object containing the fields below.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{siteName}
   & String
   & The name of the site in which the input was recorded.
   \\ \hline
 
-  \codesnip{recordTimeMs}
-  & Object
+  \hspace{3mm} \codesnip{recordTimeMs}
+  & Number
   & The time at which the input audio file was recorded, listed in milliseconds since the Unix epoch.
   \\ \hline
-  \hspace{3mm} \codesnip{min}
-  & Number & Minimum value of \codesnip{lat}. \\ \hline
-  \hspace{3mm} \codesnip{max}
-  & Number & Maximum value of \codesnip{lat}. \\ \hline
 
-  \codesnip{coords}
+  \hspace{3mm} \codesnip{coords}
   & Object
   & The coordinates of the location in which the input was recorded.
   \\ \hline
 
-  \hspace{3mm} \codesnip{lat}
-  & Object
+  \hspace{6mm} \codesnip{lat}
+  & Number
   & The latitude of the recording location.
   \\ \hline
-  \hspace{6mm} \codesnip{min}
-  & Number & Minimum value of \codesnip{lat}. \\ \hline
-  \hspace{6mm} \codesnip{max}
-  & Number & Maximum value of \codesnip{lat}. \\ \hline
 
-  \hspace{3mm} \codesnip{long}
-  & Object
+  \hspace{6mm} \codesnip{long}
+  & Number
   & The longitude of the recording location.
   \\ \hline
-  \hspace{6mm} \codesnip{min}
-  & Number & Minimum value of \codesnip{long}. \\ \hline
-  \hspace{6mm} \codesnip{max}
-  & Number & Maximum value of \codesnip{long}. \\ \hline
 \end{longtable}
 \endgroup
 
-\paragraph{Example Request Body} \mbox{}\\[\codeheaderspace]
-\begin{jsoncode}
-{
-  "path": "fileName.wav",
-  "siteName": "UCF",
-  "recordTimeMs": {
-    "min": 1504929600000,
-    "max": 1505102400000
-  },
-  "coords": {
-    "lat": {
-      "min": 28,
-      "max": 29
-    },
-    "long": {
-      "min": -82,
-      "max": -81
+\paragraph{Example Request Body} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\valcolwidth} |}
+  \hline
+  \tablehead{Field}
+  & \tablehead{Value}
+  \\ \hline
+
+  \codesnip{file}
+  & \codesnip{arboretum.wav}
+  \\ \hline
+
+  \codesnip{json}
+  & \begin{mdframed}[backgroundcolor=bgcolor,skipabove=0pt,skipbelow=0pt,topline=false,bottomline=false,rightline=false,leftline=false]
+  \begin{minted}[gobble=2]{json}
+  {
+    "siteName": "UCF Arboretum",
+    "recordTimeMs": 1505016000000,
+    "coords": {
+      "lat": 28.596238,
+      "long": -81.191381
     }
   }
-}
-\end{jsoncode}
+  \end{minted}
+  \end{mdframed}
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 201
+  & A new input is created and returned.
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & No new input is created. The fields provided in the request match an existing input, which is returned.
+  \\ \hline
+\end{longtable}
+\endgroup
 
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup

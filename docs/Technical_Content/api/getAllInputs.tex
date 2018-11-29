@@ -1,9 +1,9 @@
-\subsubsection{Get All Specifications}
-Retrieve the details of all existing specifications.
+\subsubsection{Get All Inputs}
+Retrieve the details of all existing inputs.
 
 \paragraph{GET} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/specs
+https://<base-url>/inputs
 \end{htmlcode}
 
 % TODO: Implement pagination
@@ -47,12 +47,12 @@ https://<base-url>/specs
 
   \codesnip{count}
   & Number
-  & The total number of specs.
+  & The total number of inputs.
   \\ \hline
 
-  \codesnip{specs}
+  \codesnip{inputs}
   & Object[]
-  & A list of all specs. See the Get Spec request for a complete listing of properties. % TODO: Implement pagination.
+  & A list of all inputs. See the Get Input request for a complete listing of properties. % TODO: Implement pagination.
   \\ \hline
 \end{longtable}
 \endgroup
@@ -61,14 +61,16 @@ https://<base-url>/specs
 \begin{jsoncode}
 {
   "count": 1,
-  "specs": [
+  "inputs": [
     {
-      "specId": "spec-a-uuid",
-      "metric": "aci",
-      "minFreq": 0,
-      "maxFreq": 16000,
-      "j": 30,
-      "fftW": 10
+      "inputId": "input-1-uuid",
+      "path": "path/to/file/arboretum.wav",
+      "siteName": "UCF Arboretum",
+      "recordTimeMs": 1505016000000,
+      "coords": {
+        "lat": 28.596238,
+        "long": -81.191381
+      }
     }
   ]
 }
