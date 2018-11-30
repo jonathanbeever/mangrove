@@ -1,31 +1,5 @@
 \subsection{Benchmarking}
-The process of analyzing the sound files in the field of soundscape ecology is quite painful as it stands. Currently, our sponsor uses wav format sound files of size 1.29GB, each a recording of sixty minutes long. Some datasets used include over one hundred sound files, which amounts to over 100GB of sound files to process. It is important to know the length of time needed to process these files locally based on the end user\textquotesingle s hardware. The following are the results of NDSI index analysis on a single sound file of size 1.29GB, and the respective hardware involved. As a side note, it seems important to add that in order to run analysis on sound files in R, each wav file must be converted to a Wave object in R to be used in the index processes. This alone has proven to be a lengthy process on lower end systems.\\
+The process of analyzing the sound files in the field of soundscape ecology is quite painful as it stands. Currently, our sponsor uses wav format sound files of size 1.29GB, each a recording of sixty minutes long. Some datasets used include over one hundred sound files, which amounts to over 100GB of sound files to process. It is important to know the length of time needed to process these files locally based on the end user\textquotesingle s hardware. The following are the results of NDSI index analysis on a single sound file of size 1.29GB, and the respective hardware involved. In addition, results for file splicing are included as results of this research. As a side note, it seems important to add that in order to run analysis on sound files in R, each wav file must be converted to a Wave object in R to be used in the index processes. This alone has proven to be a lengthy process on lower end systems.\\
 
-\noindent\textbf{System 1: Intel i5 6500 4 Cores @ 3.2GHz / 16GB RAM}\\
-The analysis took 686.64 seconds to process a single 1.29GB wav sound file. That comes out to 1.29GB in eleven minutes and forty four seconds. For a data set comprised of one hundred 1.29GB sound files, that would estimate to around nineteen hours for 129GB of sound files.\\
-
-\noindent\textbf{System 2: Intel i7 7500U 2 Cores @ 2.7GHz / 16GB RAM}\\
-The analysis took 1045.95 seconds to process a single 1.29GB wav sound file. That comes out to 1.29GB in seventeen minutes and twenty five seconds. For a data set comprised of one hundred 1.29GB sound files, that would estimate to around twenty nine hours for 129GB of sound files.\\
-
-\noindent\textbf{System 3: Intel i5 5200U 2 Cores @ 2.2GHz / 8GB RAM}\\
-The process of converting this single wav file to a Wave object in R actually managed to freeze this system for around 30 minutes, before any analysis even began. Then after 315.4 seconds, a little over five minutes, the processing stopped with an error reading "cannot allocate vector of size 1.3GB." This was an unexpected result, raising questions as to possible user minimum required hardware specs. Thus, with this hardware, processing is not even feasible.\\
-
-\noindent\textbf{System 4: Intel i7 6500U 4 Cores @ 3.1GHz / 24GB RAM}\\
-The analysis took 585.19 seconds to process a single 1.29GB wav sound file. That comes out to 1.29GB in nine minutes and forty five seconds. For a data set comprised of one hundred 1.29GB sound files, that would estimate to around sixteen hours for 129GB of sound files.\\
-
-\noindent\textbf{System 5: Intel i7 7700HQ 4 Cores @ 2.8GHz / 16GB RAM}\\
-The analysis took 690 seconds to process a single 1.29GB wav sound file. That comes out to 1.29GB in eleven minutes and thirty seconds. For a data set comprised of one hundred 1.29GB sound files, that would estimate to around nineteen hours for 129GB of sound files.\\
-
-\noindent\textbf{System 6: Intel i5 5200U 4 Cores @ 2.7GHz / 8GB RAM}\\
-This system also could not manage to process the sound file due to memory issues. Again, processing with these specs is infeasible.\\
-
-\noindent\textbf{Solutions}\\
-A solution to the issue of memory problems and processing time is the splitting of sound files into smaller pieces. Currently, each file is sixty minutes long. The sample file used was cut into six, ten minute parts, still retaining the wav file type. The NDSI processing time improved a bit on System 1, with each file taking  about 102.41 seconds, coming to about ten minutes. Further, when attempting to run the ACI index on System 1 \textit{without} splitting the file, it could not be done due to memory issues, even at 16GB of RAM. However when splitting the file, not only could the processing occur succesfully, it did so in 29.33 seconds, almost three minutes for all six files. This is much more reasonable and successful all around, and will be implemented into the service. Luckily the \codesnip{soundecology} package includes parameters for splitting up large files into smaller sections for analysis, which solves some of these issues.\\
-
-\noindent\textbf{Conclusions}\\
-From the benchmarks above, it seems that some minimum user requirements could be placed. Both systems that failed to process had no more than 8GB of RAM, drawing the conclusion that more than 8GB is required, at least for NDSI. For ACI though, even 16GB was not enough. As for processing speeds and processor core numbers, the following analysis can be made.\par
-The only outlier that can be seen is System 5. This system had the same number of cores and RAM storage as the other systems, but with a much lower processing time compared to System 2, and a similar processing time compared to System 1. For System 2, this system compared to System 5 has the only difference of core numbers. What is interesting is that System 1 has a .4GHz clock speed advantage over System 5, yet a very similar processing time. The reasoning for this similarity is currently unknown.\par
-The lowest recorded processing time was from System 4. System 4 had both the highest RAM storage and the second highest processing speed, only behind by .1GHz to System 1.\par
-It is safe to conclude that RAM storage plays an important part in analysis here when comparing System 2 and System 6. Both have a clock speed of 2.7GHz, however System 6 only has 8GB of RAM. Along with System 2, these systems had the lowest amount of RAM out of those tested, and it can be concluded that 8GB of RAM is not enough for the processing of large sound files. Research on performance increases when splitting the files can be found in the next section.\par
-
+\input{Technical_Content/benchmarking/soundFileAnalysis}
 \input{Technical_Content/benchmarking/filesplits}
