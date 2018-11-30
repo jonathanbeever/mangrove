@@ -1,0 +1,142 @@
+\subsubsection{R Package Values}
+
+These tables show the default parameter values for each of the Soundecology algorithms.\par
+
+% Table formatting
+\newcommand{\parameter}{2.5cm}
+\newcommand{\default}{3.5cm}
+
+\paragraph{Acoustic Complexity Index (ACI)} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\parameter} | m{\default} |}
+  \hline
+  \tablehead{Parameter}
+  & \tablehead{Default}
+  \\ \hline
+
+  minFreq
+  & 0 Hz
+  \\ \hline
+
+  maxFreq
+  & Max frequency for file in Hz
+  \\ \hline
+
+  j
+  & 5 seconds
+  \\ \hline
+
+  fftW
+  & 512
+  \\ \hline
+\end{longtable}
+\endgroup
+
+
+\paragraph{Normalized Difference Soundscape Index (NDSI)} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\parameter} | m{\default} |}
+  \hline
+  \tablehead{Parameter}
+  & \tablehead{Default}
+  \\ \hline
+
+  fftW
+  & 1024
+  \\ \hline
+
+  anthroMin
+  & 1000 Hz
+  \\ \hline
+
+  anthroMax
+  & 2000 Hz
+  \\ \hline
+
+  bioMin
+  & 2000 Hz
+  \\ \hline
+  
+  bioMax
+  & 11000 Hz
+  \\ \hline
+\end{longtable}
+\endgroup
+
+
+\paragraph{Acoustic Diversity Index (ADI)} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\parameter} | m{\default} |}
+  \hline
+  \tablehead{Parameter}
+  & \tablehead{Default}
+  \\ \hline
+
+  maxFreq
+  & 10000 Hz
+  \\ \hline
+
+  dbThreshold
+  & -50 dBFS
+  \\ \hline
+
+  freqStep
+  & 1000
+  \\ \hline
+
+  shannon
+  & true
+  \\ \hline
+\end{longtable}
+\endgroup
+
+
+\paragraph{Bioacoustic Index} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\parameter} | m{\default} |}
+  \hline
+  \tablehead{Parameter}
+  & \tablehead{Default}
+  \\ \hline
+
+  minFreq
+  & 2000 Hz
+  \\ \hline
+
+  maxFreq
+  & 8000 Hz
+  \\ \hline
+
+  fftW
+  & 512
+  \\ \hline
+\end{longtable}
+\endgroup
+
+
+\paragraph{Acoustic Evenness Index} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\parameter} | m{\default} |}
+  \hline
+  \tablehead{Parameter}
+  & \tablehead{Default}
+  \\ \hline
+
+  maxFreq
+  & 10000 Hz
+  \\ \hline
+
+  dbThreshold
+  & -50 dBFS
+  \\ \hline
+
+  freqStep
+  & 1000
+  \\ \hline
+\end{longtable}
+\endgroup
