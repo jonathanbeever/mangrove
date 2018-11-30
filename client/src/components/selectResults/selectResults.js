@@ -5,7 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import FilterByIndex from './filterByIndex';
 import SelectParamsByIndex from './selectParamsByIndex';
 import FilteredJobs from './filteredJobs';
-import SearchJobs from './searchJobs'
+import SearchJobs from './searchJobs';
+import AnalysisView from '../analysisView/analysisView';
 
 const RESULTS = [
   {
@@ -153,12 +154,16 @@ class SelectResults extends Component {
       checkedEven: true,
       checkedBio: true,
       checkedRms: true,
-      searchedValue: ''
+      searchedValue: '',
+      selectedJob: null,
+      selectJobToCompare: null,
+      hideFiltering: false
     };
 
     this.handleIndexChange = this.handleIndexChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
     this.submitSearch = this.submitSearch.bind(this);
+    this.toggleFiltering = this.toggleFiltering.bind(this);
   }
 
   // When an index is checked or unchecked from filtering section
@@ -216,44 +221,86 @@ class SelectResults extends Component {
     this.setState({ filteredResults: newRes })
   }
 
+  selectJob = job => e => {
+    this.setState({ selectedJob : job })
+    this.setState({ hideFiltering: true })
+    this.setState({ selectedJobToCompare : null })
+  }
+
+  selectJobToCompare = job => e => {
+    this.setState({ selectedJobToCompare : job })
+  }
+
+  toggleFiltering = () => {
+    if(this.state.hideFiltering)
+      this.setState({ hideFiltering: false })
+    else
+      this.setState({ hideFiltering: true })
+  }
+
 // Need 'x' in search bar
 // Show all jobs w type of a checked index
 // And checked params
 
   render() {
     return (
-      <div className='col-8'>
+      <div className='col-12'>
         <Card>
           <CardContent>
-            <h4>Filter Jobs</h4>
-            <p>View Result Visualizations</p>              
-            <div className='row'>
-              <div className='col-7'>
-                <FilterByIndex 
-                  checkedAci={this.state.checkedAci} 
-                  checkedNdsi={this.state.checkedNdsi} 
-                  checkedAdi={this.state.checkedAdi} 
-                  checkedBio={this.state.checkedBio} 
-                  checkedEven={this.state.checkedEven} 
-                  checkedRms={this.state.checkedRms} 
-                  onChange={this.handleIndexChange}
-                />
-                <SelectParamsByIndex 
-                  aci={this.state.checkedAci} 
-                  ndsi={this.state.checkedNdsi} 
-                  adi={this.state.checkedAdi} 
-                  bio={this.state.checkedBio} 
-                  even={this.state.checkedEven} 
-                  rms={this.state.checkedRms} 
-                  // onChange={this.handleParamChange}
-                  presets={presets}
-                />
+            {this.state.hideFiltering === false ? 
+              <div>
+                <h4>Filter</h4>
+                <p>View Result Visualizations-chaneg</p>              
+                <div className='row'>
+                  <div className='col-6'>
+                    <FilterByIndex 
+                      checkedAci={this.state.checkedAci} 
+                      checkedNdsi={this.state.checkedNdsi} 
+                      checkedAdi={this.state.checkedAdi} 
+                      checkedBio={this.state.checkedBio} 
+                      checkedEven={this.state.checkedEven} 
+                      checkedRms={this.state.checkedRms} 
+                      onChange={this.handleIndexChange}
+                    />
+                    <SelectParamsByIndex 
+                      aci={this.state.checkedAci} 
+                      ndsi={this.state.checkedNdsi} 
+                      adi={this.state.checkedAdi} 
+                      bio={this.state.checkedBio} 
+                      even={this.state.checkedEven} 
+                      rms={this.state.checkedRms} 
+                      // onChange={this.handleParamChange}
+                      presets={presets}
+                    />
+                  </div>
+                  <div className='col-6'>
+                    { this.state.selectedJob ? 
+                      <button onClick={this.toggleFiltering}>View Selected Job Results</button>
+                      :
+                      ''
+                    }
+                    <SearchJobs searchedValue={this.state.searchedValue} handleSearch={this.handleSearch} submitSearch={this.submitSearch}/>
+                    <FilteredJobs results={this.state.filteredResults} selectJob={this.selectJob}/>
+                  </div>
+                </div>
               </div>
-              <div className='col-5'>
-                <SearchJobs searchedValue={this.state.searchedValue} handleSearch={this.handleSearch} submitSearch={this.submitSearch}/>
-                <FilteredJobs results={this.state.filteredResults}/>
+            : 
+              <div>
+                <h4>Select</h4>
+                <p>View Result Visualizations-chaneg</p>              
+                <div className='row'>
+                  <div className='col-4'>
+                    <div>
+                      <button onClick={this.toggleFiltering}>Show filtering</button>
+                      <FilteredJobs selectedJob={this.state.selectedJob} results={this.state.filteredResults} selectJob={this.selectJob} selectJobToCompare={this.selectJobToCompare}/>
+                    </div>
+                  </div>
+                  <div className='col-8'>
+                    <AnalysisView chosenResult={this.state.selectedJob} resultToCompare={this.state.selectedJobToCompare}/> 
+                  </div>
+                </div>
               </div>
-            </div>
+            }
           </CardContent>    
         </Card>
       </div>

@@ -28,10 +28,47 @@ class FilteredJobs extends Component {
         // change key later
         <div key={i}>
           <h5>
-            {job.siteName}
-            <Button color="primary">
-              View Results
-            </Button>
+            {props.selectedJob ? 
+              <div>
+        
+
+                {props.selectedJob === job ? 
+                  <div>
+                    {job.siteName}
+                    <Button color="primary">
+                      Selected
+                    </Button>
+                  </div>
+                  :
+                  <div>
+                    {props.selectedJob.type === job.type ? 
+                      <div>
+                        {job.siteName}
+                        <Button color="primary" onClick={this.props.selectJobToCompare(job)}>
+                          Compare
+                        </Button>
+                      </div>
+                      :
+                      <div>
+                        {job.siteName}
+                        <Button color="primary" onClick={this.props.selectJob(job)}>
+                          View Results
+                        </Button>
+                      </div>
+                    }
+                  </div>
+                }
+                
+              </div>
+              : 
+              <div>
+                {job.siteName}
+                <Button color="primary" onClick={this.props.selectJob(job)}>
+                  View Results
+                </Button>
+              </div>
+         
+            }
           </h5>
           <p>{job.type.toUpperCase()}&nbsp;&nbsp;&nbsp;&nbsp;{job.input}&nbsp;&nbsp;&nbsp;&nbsp;{job.status}</p>
           <p>{job.spec.alias}</p>
