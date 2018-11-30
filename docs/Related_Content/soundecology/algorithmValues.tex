@@ -1,142 +1,162 @@
-\subsubsection{R Package Values}
-
-These tables show the default parameter values for each of the Soundecology algorithms.\par
+\subsubsection{Parameters for \codesnip{soundecology} Algorithms}
+The following tables show the ranges and default values of the parameters for each algorithm in the \codesnip{soundecology} package. Note that these are taken into consideration in the implementation of this project\textquotesingle s Application Programming Interface.\par
 
 % Table formatting
-\newcommand{\parameter}{2.5cm}
-\newcommand{\default}{3.5cm}
+\newcommand{\pkgparameter}{5.3cm}
+\newcommand{\pkgrange}{4.3cm}
+\newcommand{\pkgdefault}{4.3cm}
 
 \paragraph{Acoustic Complexity Index (ACI)} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\parameter} | m{\default} |}
+\begin{longtable}{| m{\pkgparameter} | m{\pkgrange} | m{\pkgdefault} |}
   \hline
   \tablehead{Parameter}
+  & \tablehead{Range}
   & \tablehead{Default}
   \\ \hline
 
-  minFreq
-  & 0 Hz
+  \codesnip{min_freq} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{0}
   \\ \hline
 
-  maxFreq
-  & Max frequency for file in Hz
+  \codesnip{max_freq} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & Sample rate of file
   \\ \hline
 
-  j
-  & 5 seconds
+  \codesnip{j} (seconds)
+  & \codesnip{1} -- \codesnip{Inf}
+  & \codesnip{5}
   \\ \hline
 
-  fftW
-  & 512
-  \\ \hline
-\end{longtable}
-\endgroup
-
-
-\paragraph{Normalized Difference Soundscape Index (NDSI)} \mbox{}\\[\longtableheaderspace]
-\begingroup
-\renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\parameter} | m{\default} |}
-  \hline
-  \tablehead{Parameter}
-  & \tablehead{Default}
-  \\ \hline
-
-  fftW
-  & 1024
-  \\ \hline
-
-  anthroMin
-  & 1000 Hz
-  \\ \hline
-
-  anthroMax
-  & 2000 Hz
-  \\ \hline
-
-  bioMin
-  & 2000 Hz
-  \\ \hline
-  
-  bioMax
-  & 11000 Hz
+  \codesnip{fft_w}
+  & \codesnip{1} -- \codesnip{Inf}
+  & \codesnip{512}
   \\ \hline
 \end{longtable}
 \endgroup
-
 
 \paragraph{Acoustic Diversity Index (ADI)} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\parameter} | m{\default} |}
+\begin{longtable}{| m{\pkgparameter} | m{\pkgrange} | m{\pkgdefault} |}
   \hline
   \tablehead{Parameter}
+  & \tablehead{Range}
   & \tablehead{Default}
   \\ \hline
 
-  maxFreq
-  & 10000 Hz
+  \codesnip{max_freq} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{10000}
   \\ \hline
 
-  dbThreshold
-  & -50 dBFS
+  \codesnip{db_threshold} (dBFS)
+  & \codesnip{-Inf} -- \codesnip{Inf}
+  & \codesnip{-50}
   \\ \hline
 
-  freqStep
-  & 1000
+  \codesnip{freq_step} (Hertz)
+  & \codesnip{1} -- \codesnip{Inf}
+  & \codesnip{1000}
   \\ \hline
 
-  shannon
-  & true
+  \codesnip{shannon}
+  & \codesnip{TRUE} or \codesnip{FALSE}
+  & \codesnip{TRUE}
   \\ \hline
 \end{longtable}
 \endgroup
 
-
-\paragraph{Bioacoustic Index} \mbox{}\\[\longtableheaderspace]
+\paragraph{Acoustic Evenness Index (AEI)} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\parameter} | m{\default} |}
+\begin{longtable}{| m{\pkgparameter} | m{\pkgrange} | m{\pkgdefault} |}
   \hline
   \tablehead{Parameter}
+  & \tablehead{Range}
   & \tablehead{Default}
   \\ \hline
 
-  minFreq
-  & 2000 Hz
+  \codesnip{max_freq} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{10000}
   \\ \hline
 
-  maxFreq
-  & 8000 Hz
+  \codesnip{db_threshold} (dBFS)
+  & \codesnip{-Inf} -- \codesnip{Inf}
+  & \codesnip{-50}
   \\ \hline
 
-  fftW
-  & 512
+  \codesnip{freq_step} (Hertz)
+  & \codesnip{1} -- \codesnip{Inf}
+  & \codesnip{1000}
   \\ \hline
 \end{longtable}
 \endgroup
 
-
-\paragraph{Acoustic Evenness Index} \mbox{}\\[\longtableheaderspace]
+\paragraph{Bioacoustic Index (BI)} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\parameter} | m{\default} |}
+\begin{longtable}{| m{\pkgparameter} | m{\pkgrange} | m{\pkgdefault} |}
   \hline
   \tablehead{Parameter}
+  & \tablehead{Range}
   & \tablehead{Default}
   \\ \hline
 
-  maxFreq
-  & 10000 Hz
+  \codesnip{min_freq} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{2000}
   \\ \hline
 
-  dbThreshold
-  & -50 dBFS
+  \codesnip{max_freq} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{8000}
   \\ \hline
 
-  freqStep
-  & 1000
+  \codesnip{fft_w}
+  & \codesnip{1} -- \codesnip{Inf}
+  & \codesnip{512}
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Normalized Difference Soundscape Index (NDSI)} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\pkgparameter} | m{\pkgrange} | m{\pkgdefault} |}
+  \hline
+  \tablehead{Parameter}
+  & \tablehead{Range}
+  & \tablehead{Default}
+  \\ \hline
+
+  \codesnip{fft_w}
+  & \codesnip{1} -- \codesnip{Inf}
+  & \codesnip{1024}
+  \\ \hline
+
+  \codesnip{anthro_min} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{1000}
+  \\ \hline
+
+  \codesnip{anthro_max} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{2000}
+  \\ \hline
+
+  \codesnip{bio_min} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{2000}
+  \\ \hline
+
+  \codesnip{bio_max} (Hertz)
+  & \codesnip{0} -- \codesnip{Inf}
+  & \codesnip{11000}
   \\ \hline
 \end{longtable}
 \endgroup

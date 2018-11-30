@@ -33,4 +33,3 @@ _minted-main
 .env.local
 .env.production.local
 .env.test.local
-
