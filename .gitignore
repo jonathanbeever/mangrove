@@ -18,6 +18,7 @@ yarn-error.log*
 *.bbl
 *.bcf
 *.blg
+*.dvi
 *.log
 *.out
 *.pdf
