@@ -1,5 +1,5 @@
 \subsubsection{Hidden Markov Model}
-While Markov Models are very descriptive models of an environment, oftentimes when analyzing sound data, we do not have the information to paint the full picture. This means that we don\textquotesingle t have the full sequence of states, but we do have measurements from those states. Specifically, our states are the specific sounds that are made by an animal. We can call this a syllable (many bird songs consist of syllables). Sadly, we do not know these syllables, we only know the acoustic signals that they produce. These signals would be the evidence or observation in our current definition of the Hidden Markov Model (HMM). Using the sound waves we translated via Fourier transform, we can eventually get to the actual syllables made by the animal.\par
+While Markov Models are very descriptive models of an environment, oftentimes when analyzing sound data, we do not have the information to paint the full picture. This means that we don\textquotesingle t have the full sequence of states, but we do have measurements from those states. Specifically, our states are the specific sounds that are made by an animal. We can call this a syllable (many bird songs consist of syllables). Unfortunately, we do not know these syllables, we only know the acoustic signals that they produce. These signals would be the evidence or observation in our current definition of the Hidden Markov Model (HMM). Using the sound waves we translated via Fourier transform, we can eventually get to the actual syllables made by the animal.\par
 
 \begin{center}
   \includegraphics[width=\textwidth]{HMM}
@@ -47,7 +47,7 @@ We must then re-weight the likelihood of the current belief based on the probabi
   \end{equation}
 \end{center}
 
-The following image shows how HMM\textquotesingle s update their belief based of off time updates and then evidence updates.
+The following image shows how HMM\textquotesingle s update their belief based off of time updates and then evidence updates.
 
 \begin{center}
   \includegraphics[width=\textwidth]{HMMupdate}
