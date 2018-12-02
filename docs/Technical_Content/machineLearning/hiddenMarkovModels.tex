@@ -27,17 +27,6 @@ We then update the belief via the following function:\par
   \end{equation}
 \end{center}
 
-Once we have an observation of the new evidence, we include that into the model with the following function:\par
-
-\vspace{-32px}
-\begin{center}
-  \begin{equation}
-    B'(X_{t+1})
-    = P(X_{t+1} | e_{1}, ..., e_{t})
-    = \sum_{X_{t}} P(X_{t+1} | X_{t}) P(X_{t} | e_{1}, ..., e_{t})
-  \end{equation}
-\end{center}
-
 We must then re-weight the likelihood of the current belief based on the probability of that belief state with the current evidence, using:
 
 \vspace{-32px}
