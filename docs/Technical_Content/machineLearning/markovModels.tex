@@ -1,0 +1,15 @@
+\subsubsection{Markov Models}
+Markov models can be considered chain structured Baye's Nets. Where each network is tied into the previous and next network in a fashion similar to a linked list. We can consider each network a node along that linked list. Each node within this "list" contains the same CPT, excluding the starting node. The very first node has a CPT that represents the initial probability distribution of the starting state. Since these node are Baye's Nets similar classes of problems can be modeled. The advantage is that with the addition of linking an element of time can be added. Taking this into account we can see why the CPT for each node after the initial node is the same. It takes into account the probability of state space changes from one state to another. In technical terms we can call this a transition model and it can be described by the following equation:
+\vspace{10px}
+\begin{center}
+$P(X_{t+1}|X_{t})\:$Where $X_{1}$ is the initial state.
+\end{center}
+\vspace{10px}
+This basic idea can be implemented over, theoretically, infinite time steps. Where at each time step you apply the transition function onto the Baye's Network. The function is as follows:
+\vspace{10px}
+\begin{center}
+	$$\sum_{X_{t-1}} P(X_{t}|X_{t-1})\:P(X_{t-1})$$ where $X_{t-1}$ is the previous time step.
+\end{center}
+\vspace{10px}
+This type of algorithm goes by the name Mini-Forward Algorithm. A very interesting quality of this algorithm is that for infinite time steps you most always reach a convergent state. Meaning that the $X_{t-1}$ time step will be equal to $X_{t}$ for all following iterations. This property allows us to find a final resting state within a stochastic system. Which can be useful for many applications.
+--Include how this relates to vocal recognition.
