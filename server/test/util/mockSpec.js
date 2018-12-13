@@ -1,5 +1,5 @@
 const { nextMockObjectId } = require('./mockObjectId');
-// const mockParams = require('./mockParams');
+const mockType = require('./mockType');
 
 // const {
 //   AciSpec, AdiSpec, AeiSpec, BiSpec, NdsiSpec, RmsSpec,
@@ -12,18 +12,24 @@ const mockSpec = (
   param = {},
   creationTimeMs = 0,
   author = 'Test Author',
-) => new Spec({
-  _id,
-  type,
-  ...param,
-  creationTimeMs,
-  author,
-});
+) => {
+  if (type === null) {
+    return { Error: 'Input Type was not valid' };
+  }
+  return new Spec({
+    _id,
+    type,
+    ...param,
+    creationTimeMs,
+    author,
+  });
+};
 
 // TODO: Create parameter validation.
 const nextMockSpec = (type, param) => {
   const id = nextMockObjectId();
-  return mockSpec(id, type, param);
+  const verifiedType = mockType(type);
+  return mockSpec(id, verifiedType, param);
 };
 
 module.exports = {
