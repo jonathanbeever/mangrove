@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Mockgoose } = require('mockgoose');
+const { Mockgoose } = require('mock-mongoose');
 
 const mockgoose = new Mockgoose(mongoose);
 const { uri } = require('../../util/db');
