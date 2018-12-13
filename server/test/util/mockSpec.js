@@ -20,6 +20,7 @@ const mockSpec = (
   author,
 });
 
+// TODO: Create parameter validation.
 const nextMockSpec = (type, param) => {
   const id = nextMockObjectId();
   return mockSpec(id, type, param);

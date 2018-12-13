@@ -42,39 +42,45 @@ router.put('/', (req, res) => {
 
   // try to find this spec in the database.
   SpecModel.find({
-    ...(
-      // ACI/BI minFreq Check
-      ((SpecModel === AciSpec || SpecModel === BiSpec) && { minFreq: req.body.minFreq }),
-      // ACI/ADI/AEI/BI maxFreq Check
-      ((SpecModel === AciSpec || SpecModel === AdiSpec || SpecModel === AeiSpec
-         || SpecModel === BiSpec) && { maxFreq: req.body.maxFreq }),
-      // ACI j Check
-      ((SpecModel === AciSpec) && { j: req.body.j }),
-      // ACI/BI/NDSI fftW Check
-      ((SpecModel === AciSpec || SpecModel === BiSpec
-        || SpecModel === NdsiSpec) && { fftW: req.body.fftW }),
-      // ADI/AEI dbThreshold Check
-      ((SpecModel === AdiSpec || SpecModel === AeiSpec) && { dbThreshold: req.body.dbThreshold }),
-      // ADI/AEI freqStep Check
-      ((SpecModel === AdiSpec || SpecModel === AeiSpec) && { freqStep: req.body.freqStep }),
-      // ADI shannon Check
-      ((SpecModel === AdiSpec) && { shannon: req.body.shannon }),
-      // NDSI anthroMin Check
-      ((SpecModel === NdsiSpec) && { anthroMin: req.body.anthroMin }),
-      // NDSI anthroMax Check
-      ((SpecModel === NdsiSpec) && { anthroMax: req.body.anthroMax }),
-      // NDSI bioMin Check
-      ((SpecModel === NdsiSpec) && { bioMin: req.body.bioMin }),
-      // NDSI bioMax Check
-      ((SpecModel === NdsiSpec) && { bioMax: req.body.bioMax })
-    ),
+    ...((SpecModel === AciSpec || SpecModel === BiSpec) && {
+      minFreq: req.body.minFreq,
+    },
+    // ACI/ADI/AEI/BI maxFreq Check
+    (SpecModel === AciSpec
+      || SpecModel === AdiSpec
+      || SpecModel === AeiSpec
+      || SpecModel === BiSpec) && { maxFreq: req.body.maxFreq },
+    // ACI j Check
+    SpecModel === AciSpec && { j: req.body.j },
+    // ACI/BI/NDSI fftW Check
+    (SpecModel === AciSpec
+      || SpecModel === BiSpec
+      || SpecModel === NdsiSpec) && { fftW: req.body.fftW },
+    // ADI/AEI dbThreshold Check
+    (SpecModel === AdiSpec || SpecModel === AeiSpec) && {
+      dbThreshold: req.body.dbThreshold,
+    },
+    // ADI/AEI freqStep Check
+    (SpecModel === AdiSpec || SpecModel === AeiSpec) && {
+      freqStep: req.body.freqStep,
+    },
+    // ADI shannon Check
+    SpecModel === AdiSpec && { shannon: req.body.shannon },
+    // NDSI anthroMin Check
+    SpecModel === NdsiSpec && { anthroMin: req.body.anthroMin },
+    // NDSI anthroMax Check
+    SpecModel === NdsiSpec && { anthroMax: req.body.anthroMax },
+    // NDSI bioMin Check
+    SpecModel === NdsiSpec && { bioMin: req.body.bioMin },
+    // NDSI bioMax Check
+    SpecModel === NdsiSpec && { bioMax: req.body.bioMax }),
   })
     .exec()
     .then((returnSpec) => {
       if (returnSpec.length >= 1) {
         res.status(200).json({ error: 'Item already in database', returnSpec }); // if already created then return data object
       } else {
-      // add id and creation time to spec document
+        // add id and creation time to spec document
         req.body._id = new mongoose.Types.ObjectId();
         req.body.creationTimeMs = moment().valueOf();
 
@@ -97,7 +103,8 @@ router.put('/', (req, res) => {
             });
           });
       }
-    }).catch((err) => {
+    })
+    .catch((err) => {
       res.status(500).json({ message: `Error in finding Spec :: ${err}` });
     });
 });
@@ -129,7 +136,8 @@ router.get('/', (req, res) => {
   Spec.find()
     .exec()
     .then((searchResult) => {
-      res.status(200).json(searchResult);
+      const count = searchResult.length;
+      res.status(200).json({ count, specs: searchResult });
     })
     .catch((err) => {
       console.log(err);
@@ -139,8 +147,6 @@ router.get('/', (req, res) => {
     });
 });
 
-
 // Delete Spec
-
 
 module.exports = router;
