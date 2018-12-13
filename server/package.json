@@ -8,11 +8,11 @@
     "url": "https://github.com/ucfcs/Fall2018-Group11"
   },
   "scripts": {
-    "pretest": "eslint --ignore-path .gitignore .",
+    "pretest": "eslint --ignore-path ../.gitignore .",
     "test": "run-script-os",
-    "test:darwin:linux": "export NODE_ENV=test && mocha",
-    "test:win32": "SET NODE_ENV=test&& mocha",
-    "lint-fix": "eslint --ignore-path .gitignore --fix .",
+    "test:darwin:linux": "export NODE_ENV=test && nyc mocha",
+    "test:win32": "SET NODE_ENV=test&& nyc mocha",
+    "lint-fix": "eslint --ignore-path ../.gitignore --fix .",
     "dev": "run-script-os",
     "dev:darwin:linux": "export NODE_ENV=dev && nodemon server.js",
     "dev:win32": "SET NODE_ENV=dev&& nodemon server.js",
@@ -34,7 +34,8 @@
     "eslint-plugin-import": "2.14.0",
     "mocha": "5.2.0",
     "mockgoose": "7.3.5",
-    "nodemon": "1.18.5"
+    "nodemon": "1.18.5",
+    "nyc": "13.1.0"
   },
   "dependencies": {
     "body-parser": "1.18.3",

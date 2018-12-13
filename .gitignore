@@ -3,6 +3,7 @@ build
 
 # Testing
 coverage
+.nyc_output
 
 # Package management
 *.pnp
