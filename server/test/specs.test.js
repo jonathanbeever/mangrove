@@ -26,4 +26,22 @@ describe('Specs', () => {
       done();
     });
   });
+
+  describe('/GET specs', () => {
+    it('It should GET all the Specs (none)', (done) => {
+      chai.request(app)
+        .get('/specs')
+        .then((res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body.count).to.be.eql(0);
+          expect(res.body.specs).to.be.an('array');
+          expect(res.body.specs).to.be.empty;
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+  });
 });
