@@ -15,23 +15,17 @@ router.put('/', (req, res) => {
   let JobModel = null;
   switch (req.body.type) {
     case Type.ACI:
-      JobModel = AciJob;
-      break;
+      JobModel = AciJob; break;
     case Type.ADI:
-      JobModel = AdiJob;
-      break;
+      JobModel = AdiJob; break;
     case Type.AEI:
-      JobModel = AeiJob;
-      break;
+      JobModel = AeiJob; break;
     case Type.BI:
-      JobModel = BiJob;
-      break;
+      JobModel = BiJob; break;
     case Type.NDSI:
-      JobModel = NdsiJob;
-      break;
+      JobModel = NdsiJob; break;
     case Type.RMS:
-      JobModel = RmsJob;
-      break;
+      JobModel = RmsJob; break;
     default:
       // TODO: Decide what to do here
       break;
@@ -52,6 +46,9 @@ router.put('/', (req, res) => {
           author: searchResult[0].author,
           creationTimeMs: searchResult[0].creationTimeMs,
           status: searchResult[0].status,
+          ...(searchResult[0].status === Status.FINISHED && {
+            result: searchResult[0].result,
+          }),
         });
       } else {
         const job = new JobModel({
@@ -75,6 +72,9 @@ router.put('/', (req, res) => {
               author: createResult.author,
               creationTimeMs: createResult.creationTimeMs,
               status: createResult.status,
+              ...(createResult.status === Status.FINISHED && {
+                result: createResult.result,
+              }),
             });
           })
           .catch((err) => {
@@ -107,6 +107,9 @@ router.get('/:jobId', (req, res) => {
           author: searchResult.author,
           creationTimeMs: searchResult.creationTimeMs,
           status: searchResult.status,
+          ...(searchResult.status === Status.FINISHED && {
+            result: searchResult.result,
+          }),
         });
       } else {
         res.status(404).json({
@@ -136,6 +139,9 @@ router.get('/', (req, res) => {
           author: job.author,
           creationTimeMs: job.creationTimeMs,
           status: job.status,
+          ...(job.status === Status.FINISHED && {
+            result: job.result,
+          }),
         })),
       });
     })
