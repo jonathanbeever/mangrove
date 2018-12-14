@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Job = require('./job');
+const Type = require('../type');
 
-module.exports = Job.discriminator('bi', new mongoose.Schema({
+module.exports = Job.discriminator(Type.BI, new mongoose.Schema({
   spec: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'biSpec',
