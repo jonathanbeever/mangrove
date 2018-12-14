@@ -43,7 +43,6 @@ router.put('/', (req, res) => {
   })
     .exec()
     .then((searchResult) => {
-      console.log(searchResult);
       if (searchResult.length /* === 1 */) {
         res.status(200).json({
           jobId: searchResult[0]._id,
@@ -68,7 +67,6 @@ router.put('/', (req, res) => {
         job
           .save()
           .then((createResult) => {
-            console.log(createResult);
             res.status(201).json({
               jobId: createResult._id,
               type: createResult.type,
@@ -80,7 +78,6 @@ router.put('/', (req, res) => {
             });
           })
           .catch((err) => {
-            console.log(err);
             res.status(500).json({
               error: err,
             });
@@ -88,7 +85,6 @@ router.put('/', (req, res) => {
       }
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });
@@ -102,7 +98,6 @@ router.get('/:jobId', (req, res) => {
   Job.findById(jobId)
     .exec()
     .then((searchResult) => {
-      console.log(searchResult);
       if (searchResult) {
         res.status(200).json({
           jobId: searchResult._id,
@@ -120,7 +115,6 @@ router.get('/:jobId', (req, res) => {
       }
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });
@@ -146,7 +140,6 @@ router.get('/', (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });
@@ -160,7 +153,6 @@ router.delete('/:jobId', (req, res) => {
   Job.remove({ _id: jobId })
     .exec()
     .then((deleteResult) => {
-      console.log(deleteResult);
       res.status(200).json({
         success: true,
         message: (
@@ -171,7 +163,6 @@ router.delete('/:jobId', (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });
