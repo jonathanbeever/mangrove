@@ -7,28 +7,29 @@ const moment = require('moment');
 const {
   Job, AciJob, AdiJob, AeiJob, BiJob, NdsiJob, RmsJob,
 } = require('../models/job');
+const Type = require('../models/type');
 const Status = require('../models/status');
 
 // Create Job
 router.put('/', (req, res) => {
   let JobModel = null;
   switch (req.body.type) {
-    case 'aci':
+    case Type.ACI:
       JobModel = AciJob;
       break;
-    case 'adi':
+    case Type.ADI:
       JobModel = AdiJob;
       break;
-    case 'aei':
+    case Type.AEI:
       JobModel = AeiJob;
       break;
-    case 'bi':
+    case Type.BI:
       JobModel = BiJob;
       break;
-    case 'ndsi':
+    case Type.NDSI:
       JobModel = NdsiJob;
       break;
-    case 'rms':
+    case Type.RMS:
       JobModel = RmsJob;
       break;
     default:

@@ -7,6 +7,7 @@ const { nextMockJob } = require('./util/mockDbModel');
 const app = require('../app');
 
 const { Job } = require('../api/models/job');
+const Type = require('../api/models/type');
 
 const { expect } = chai;
 
@@ -46,12 +47,12 @@ describe('Jobs', () => {
 
     it('It should GET all the Jobs (many)', (done) => {
       const jobs = [];
-      jobs.push(nextMockJob('aci'));
-      jobs.push(nextMockJob('adi'));
-      jobs.push(nextMockJob('aei'));
-      jobs.push(nextMockJob('bi'));
-      jobs.push(nextMockJob('ndsi'));
-      jobs.push(nextMockJob('rms'));
+      jobs.push(nextMockJob(Type.ACI));
+      jobs.push(nextMockJob(Type.ADI));
+      jobs.push(nextMockJob(Type.AEI));
+      jobs.push(nextMockJob(Type.BI));
+      jobs.push(nextMockJob(Type.NDSI));
+      jobs.push(nextMockJob(Type.RMS));
 
       Job.insertMany(jobs)
         .then(() => {
