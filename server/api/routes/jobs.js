@@ -38,7 +38,7 @@ router.put('/', (req, res) => {
 
   JobModel.find({
     input: req.body.inputId,
-    jobSpec: req.body.jobSpecId,
+    spec: req.body.specId,
   })
     .exec()
     .then((searchResult) => {
@@ -48,7 +48,7 @@ router.put('/', (req, res) => {
           jobId: searchResult[0]._id,
           type: searchResult[0].type,
           input: searchResult[0].input,
-          jobSpec: searchResult[0].jobSpec,
+          spec: searchResult[0].spec,
           author: searchResult[0].author,
           creationTimeMs: searchResult[0].creationTimeMs,
           status: searchResult[0].status,
@@ -58,7 +58,7 @@ router.put('/', (req, res) => {
           _id: new mongoose.Types.ObjectId(),
           type: req.body.type,
           input: req.body.inputId,
-          jobSpec: req.body.jobSpecId,
+          spec: req.body.specId,
           author: 'Test Author', // TODO: Implement user authentication
           creationTimeMs: moment().valueOf(),
           status: Status.QUEUED, // TODO: Implement job queueing
@@ -72,7 +72,7 @@ router.put('/', (req, res) => {
               jobId: createResult._id,
               type: createResult.type,
               input: createResult.input,
-              jobSpec: createResult.jobSpec,
+              spec: createResult.spec,
               author: createResult.author,
               creationTimeMs: createResult.creationTimeMs,
               status: createResult.status,
@@ -107,7 +107,7 @@ router.get('/:jobId', (req, res) => {
           jobId: searchResult._id,
           type: searchResult.type,
           input: searchResult.input,
-          jobSpec: searchResult.jobSpec,
+          spec: searchResult.spec,
           author: searchResult.author,
           creationTimeMs: searchResult.creationTimeMs,
           status: searchResult.status,
@@ -137,7 +137,7 @@ router.get('/', (req, res) => {
           jobId: job._id,
           type: job.type,
           input: job.input,
-          jobSpec: job.jobSpec,
+          spec: job.spec,
           author: job.author,
           creationTimeMs: job.creationTimeMs,
           status: job.status,

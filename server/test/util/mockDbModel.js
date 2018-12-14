@@ -13,7 +13,7 @@ const mockJob = (
   id,
   type,
   input,
-  jobSpec,
+  spec,
   author = 'Test Author',
   creationTimeMs = 0,
   status = 'queued',
@@ -21,7 +21,7 @@ const mockJob = (
   _id: id,
   type,
   input,
-  jobSpec,
+  spec,
   author,
   creationTimeMs,
   status,
@@ -30,8 +30,8 @@ const mockJob = (
 const nextMockJob = (type) => {
   const id = mockObjectId(currId += 1);
   const input = mockObjectId(currId += 1);
-  const jobSpec = mockObjectId(currId += 1);
-  return mockJob(id, type, input, jobSpec);
+  const spec = mockObjectId(currId += 1);
+  return mockJob(id, type, input, spec);
 };
 
 module.exports = {
