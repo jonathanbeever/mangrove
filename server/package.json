@@ -10,8 +10,8 @@
   "scripts": {
     "pretest": "eslint --ignore-path ../.gitignore .",
     "test": "run-script-os",
-    "test:darwin:linux": "export NODE_ENV=test && nyc mocha",
-    "test:win32": "SET NODE_ENV=test&& nyc mocha",
+    "test:darwin:linux": "export NODE_ENV=test && nyc --reporter=text --reporter=html mocha",
+    "test:win32": "SET NODE_ENV=test&& nyc --reporter=text --reporter=html mocha --timeout 12000",
     "lint-fix": "eslint --ignore-path ../.gitignore --fix .",
     "dev": "run-script-os",
     "dev:darwin:linux": "export NODE_ENV=dev && nodemon server.js",
