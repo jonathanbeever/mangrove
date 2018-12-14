@@ -127,7 +127,7 @@ router.get('/:specId', (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).json({ error: `Error searching for jobId :: ${err}` });
+      res.status(500).json({ error: `Error searching for specId :: ${err}` });
     });
 });
 
@@ -142,7 +142,7 @@ router.get('/', (req, res) => {
     .catch((err) => {
       console.log(err);
       res.status(500).json({
-        error: `Error getting all job specs :: ${err}`,
+        error: `Error getting all specs :: ${err}`,
       });
     });
 });

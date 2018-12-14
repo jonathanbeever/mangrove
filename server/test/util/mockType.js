@@ -1,10 +1,11 @@
 const mockType = (type) => {
   if (
-    type === 'aci'
-    || type === 'aei'
-    || type === 'bi'
-    || type === 'ndsi'
-    || type === 'rms'
+    type === 'aciSpec'
+    || type === 'adiSpec'
+    || type === 'aeiSpec'
+    || type === 'biSpec'
+    || type === 'ndsiSpec'
+    || type === 'rmsSpec'
   ) {
     return type;
   }

@@ -9,21 +9,16 @@ const { Spec } = require('../../api/models/spec');
 const mockSpec = (
   _id,
   type,
-  param = {},
+  param,
   creationTimeMs = 0,
   author = 'Test Author',
-) => {
-  if (type === null) {
-    return { Error: 'Input Type was not valid' };
-  }
-  return new Spec({
-    _id,
-    type,
-    ...param,
-    creationTimeMs,
-    author,
-  });
-};
+) => new Spec({
+  _id,
+  type,
+  ...param,
+  creationTimeMs,
+  author,
+});
 
 // TODO: Create parameter validation.
 const nextMockSpec = (type, param) => {
