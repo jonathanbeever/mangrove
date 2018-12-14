@@ -6,7 +6,9 @@ const { nextMockSpec } = require('./util/mockSpec');
 
 const app = require('../app');
 
-const { Spec, maxNum } = require('../api/models/spec');
+const { Spec } = require('../api/models/spec');
+
+const { MAX_NUM_R } = require('../api/models/spec/config');
 
 const { expect } = chai;
 
@@ -341,7 +343,6 @@ describe('Specs', () => {
 
                 expect(spec).to.be.an('object');
               });
-              console.log(maxNum);
               done();
             })
             .catch((err) => {

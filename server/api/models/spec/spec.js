@@ -11,4 +11,4 @@ const spec = new mongoose.Schema(
   options,
 );
 
-module.exports = { Spec: mongoose.model('Spec', spec), maxNum: 2147483647 };
+module.exports = mongoose.model('Spec', spec);
