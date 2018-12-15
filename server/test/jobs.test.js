@@ -224,4 +224,49 @@ describe('Jobs', () => {
         });
     });
   });
+
+  describe('/DELETE Job', () => {
+    it('It should DELETE a Job (not found)', (done) => {
+      chai.request(app)
+        .delete(`/jobs/${nextMockObjectId()}`)
+        .then((res) => {
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('success', 'message');
+          expect(res.body.success).to.be.a('boolean');
+          expect(res.body.success).to.be.true;
+          expect(res.body.message).to.be.a('string');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should DELETE a Job (found)', (done) => {
+      const job = nextMockJob(Type.ACI);
+
+      job
+        .save()
+        .then(() => {
+          chai.request(app)
+            .delete(`/jobs/${job._id}`)
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.all.keys('success', 'message');
+              expect(res.body.success).to.be.a('boolean');
+              expect(res.body.success).to.be.true;
+              expect(res.body.message).to.be.a('string');
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+  });
 });
