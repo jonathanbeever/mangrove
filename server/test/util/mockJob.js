@@ -46,17 +46,11 @@ const nextMockJob = (type, status = Status.QUEUED) => {
   return mockJob(jobId, type, input, spec, author, creationTimeMs, status);
 };
 
-const mockJobCreateJson = (type, inputId, specId) => {
-  if (Object.values(Type).indexOf(type) <= -1) {
-    return `Error: Invalid \`type\` parameter (${type}).`;
-  }
-
-  return JSON.stringify({
-    type,
-    inputId,
-    specId,
-  });
-};
+const mockJobCreateJson = (type, inputId, specId) => JSON.stringify({
+  type,
+  inputId,
+  specId,
+});
 
 const nextMockJobCreateJson = (type) => {
   const inputId = nextMockObjectId();

@@ -27,8 +27,9 @@ router.put('/', (req, res) => {
     case Type.RMS:
       JobModel = RmsJob; break;
     default:
-      // TODO: Decide what to do here
-      break;
+      return res.status(400).json({
+        message: `Invalid type: ${req.body.type}.`,
+      });
   }
 
   JobModel.find({
