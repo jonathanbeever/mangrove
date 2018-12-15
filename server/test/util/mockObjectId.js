@@ -1,3 +1,5 @@
+let currId = 0;
+
 const mockObjectId = (n) => {
   if (!Number.isInteger(n)) {
     return `Error: Cannot create ObjectId from non-integer (${n}).`;
@@ -10,4 +12,12 @@ const mockObjectId = (n) => {
   return (`000000000000000000000000${n.toString(16)}`).substr(-24);
 };
 
-module.exports = mockObjectId;
+const nextMockObjectId = () => {
+  currId += 1;
+  return mockObjectId(currId);
+};
+
+module.exports = {
+  mockObjectId,
+  nextMockObjectId,
+};

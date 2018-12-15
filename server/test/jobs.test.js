@@ -2,7 +2,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 
 const mockDb = require('./util/mockDb');
-const { nextMockJob } = require('./util/mockDbModel');
+const { nextMockJob } = require('./util/mockJob');
 
 const app = require('../app');
 
