@@ -8,10 +8,10 @@ module.exports = Job.discriminator(Type.RMS, new mongoose.Schema({
     ref: 'rmsSpec',
     required: true,
   },
-  // result: {
-  //   type: {
-  //     // TBD
-  //   },
-  //   default: null,
-  // },
+  result: {
+    type: {
+      // TODO: Determine the correct result for RMS jobs
+    },
+    default: null,
+  },
 }));

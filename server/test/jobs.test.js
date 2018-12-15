@@ -80,6 +80,7 @@ describe('Jobs', () => {
               expect(res.body.creationTimeMs).to.be.a('number');
               expect(res.body.status).to.be.a('string');
               expect(res.body.status).to.be.oneOf(Object.values(Status));
+              expect(res.body.status).to.not.equal(Status.FINISHED);
               done();
             })
             .catch((err) => {
@@ -123,8 +124,8 @@ describe('Jobs', () => {
               expect(res.body.author).to.be.a('string');
               expect(res.body.creationTimeMs).to.be.a('number');
               expect(res.body.status).to.be.a('string');
-              expect(res.body.status).to.be.oneOf(Object.values(Status));
-              expect(res.body.result).to.be.a('null'); // TODO: 'object'
+              expect(res.body.status).to.equal(Status.FINISHED);
+              expect(res.body.result).to.be.an('null'); // TODO: 'object'
               done();
             })
             .catch((err) => {
@@ -155,11 +156,11 @@ describe('Jobs', () => {
         });
     });
 
-    it('It should GET all Jobs (many)', (done) => {
+    it('It should GET all Jobs (many, unfinished)', (done) => {
       const jobs = [];
       jobs.push(nextMockJob(Type.ACI, Status.CANCELLED));
       jobs.push(nextMockJob(Type.ADI, Status.FAILED));
-      jobs.push(nextMockJob(Type.AEI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.AEI, Status.PROCESSING));
       jobs.push(nextMockJob(Type.BI, Status.PROCESSING));
       jobs.push(nextMockJob(Type.NDSI, Status.QUEUED));
       jobs.push(nextMockJob(Type.RMS, Status.QUEUED));
@@ -176,32 +177,15 @@ describe('Jobs', () => {
               expect(res.body.jobs).to.be.an('array');
               expect(res.body.jobs).to.have.lengthOf(jobs.length);
               res.body.jobs.forEach((job) => {
-                expect(job).to.have.any.keys('status');
-                expect(job.status).to.be.a('string');
-                expect(job.status).to.be.oneOf(Object.values(Status));
-                if (job.status !== Status.FINISHED) {
-                  expect(job).to.have.all.keys(
-                    'jobId',
-                    'type',
-                    'input',
-                    'spec',
-                    'author',
-                    'creationTimeMs',
-                    'status',
-                  );
-                } else {
-                  expect(job).to.have.all.keys(
-                    'jobId',
-                    'type',
-                    'input',
-                    'spec',
-                    'author',
-                    'creationTimeMs',
-                    'status',
-                    'result',
-                  );
-                  expect(job.result).to.be.an('null'); // TODO: 'object'
-                }
+                expect(job).to.have.all.keys(
+                  'jobId',
+                  'type',
+                  'input',
+                  'spec',
+                  'author',
+                  'creationTimeMs',
+                  'status',
+                );
                 expect(job.jobId).to.be.a('string');
                 expect(ObjectId(job.jobId).toString()).to.equal(job.jobId);
                 expect(job.type).to.be.a('string');
@@ -212,6 +196,65 @@ describe('Jobs', () => {
                 expect(ObjectId(job.spec).toString()).to.equal(job.spec);
                 expect(job.author).to.be.a('string');
                 expect(job.creationTimeMs).to.be.a('number');
+                expect(job.status).to.be.a('string');
+                expect(job.status).to.be.oneOf(Object.values(Status));
+                expect(job.status).to.not.equal(Status.FINISHED);
+              });
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should GET all Jobs (many, finished)', (done) => {
+      const jobs = [];
+      jobs.push(nextMockJob(Type.ACI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.ADI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.AEI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.BI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.NDSI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.RMS, Status.FINISHED));
+
+      Job.insertMany(jobs)
+        .then(() => {
+          chai.request(app)
+            .get('/jobs')
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.all.keys('count', 'jobs');
+              expect(res.body.count).to.be.eql(jobs.length);
+              expect(res.body.jobs).to.be.an('array');
+              expect(res.body.jobs).to.have.lengthOf(jobs.length);
+              res.body.jobs.forEach((job) => {
+                expect(job).to.have.all.keys(
+                  'jobId',
+                  'type',
+                  'input',
+                  'spec',
+                  'author',
+                  'creationTimeMs',
+                  'status',
+                  'result',
+                );
+                expect(job.jobId).to.be.a('string');
+                expect(ObjectId(job.jobId).toString()).to.equal(job.jobId);
+                expect(job.type).to.be.a('string');
+                expect(job.type).to.be.oneOf(Object.values(Type));
+                expect(job.input).to.be.a('string');
+                expect(ObjectId(job.input).toString()).to.equal(job.input);
+                expect(job.spec).to.be.a('string');
+                expect(ObjectId(job.spec).toString()).to.equal(job.spec);
+                expect(job.author).to.be.a('string');
+                expect(job.creationTimeMs).to.be.a('number');
+                expect(job.status).to.be.a('string');
+                expect(job.status).to.equal(Status.FINISHED);
+                expect(job.result).to.be.an('null'); // TODO: 'object'
               });
               done();
             })
