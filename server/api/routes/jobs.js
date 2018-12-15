@@ -156,7 +156,7 @@ router.get('/', (req, res) => {
 router.delete('/:jobId', (req, res) => {
   const { jobId } = req.params;
 
-  Job.remove({ _id: jobId })
+  Job.deleteOne({ _id: jobId })
     .exec()
     .then((deleteResult) => {
       res.status(200).json({
