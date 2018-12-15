@@ -73,9 +73,6 @@ router.put('/', (req, res) => {
               author: createResult.author,
               creationTimeMs: createResult.creationTimeMs,
               status: createResult.status,
-              ...(createResult.status === Status.FINISHED && {
-                result: createResult.result,
-              }),
             });
           })
           .catch((err) => {

@@ -4,7 +4,9 @@ const chaiHttp = require('chai-http');
 const { ObjectId } = require('mongoose').Types;
 
 const mockDb = require('./util/mockDb');
-const { nextMockJob, nextMockJobCreateJson } = require('./util/mockJob');
+const {
+  nextMockJob, nextMockJobCreateJson, getJsonFromMockJob,
+} = require('./util/mockJob');
 const { nextMockObjectId } = require('./util/mockObjectId');
 
 const app = require('../app');
@@ -29,6 +31,194 @@ describe('Jobs', () => {
   beforeEach((done) => {
     Job.deleteMany({}, (err) => {
       done();
+    });
+  });
+
+  describe('/PUT Job', () => {
+    it('It should PUT a Job (invalid type)', (done) => {
+      const jobJson = nextMockJobCreateJson('invalid');
+
+      chai.request(app)
+        .put('/jobs')
+        .set('Content-Type', 'application/json')
+        .send(jobJson)
+        .then((res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('message');
+          expect(res.body.message).to.be.a('string');
+        })
+        .catch((err) => {
+          done(err);
+        });
+
+      done();
+    });
+
+    it('It should PUT a Job (new)', (done) => {
+      const jobJsons = [];
+      jobJsons.push(nextMockJobCreateJson(Type.ACI));
+      jobJsons.push(nextMockJobCreateJson(Type.ADI));
+      jobJsons.push(nextMockJobCreateJson(Type.AEI));
+      jobJsons.push(nextMockJobCreateJson(Type.BI));
+      jobJsons.push(nextMockJobCreateJson(Type.NDSI));
+      jobJsons.push(nextMockJobCreateJson(Type.RMS));
+
+      jobJsons.forEach((json) => {
+        chai.request(app)
+          .put('/jobs')
+          .set('Content-Type', 'application/json')
+          .send(json)
+          .then((res) => {
+            expect(res).to.have.status(201);
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.all.keys(
+              'jobId',
+              'type',
+              'input',
+              'spec',
+              'author',
+              'creationTimeMs',
+              'status',
+            );
+            expect(res.body.jobId).to.be.a('string');
+            expect(ObjectId.isValid(res.body.jobId)).to.be.true;
+            expect(res.body.type).to.be.a('string');
+            expect(res.body.type).to.be.oneOf(Object.values(Type));
+            expect(res.body.input).to.be.a('string');
+            expect(ObjectId.isValid(res.body.input)).to.be.true;
+            expect(res.body.spec).to.be.a('string');
+            expect(ObjectId.isValid(res.body.spec)).to.be.true;
+            expect(res.body.author).to.be.a('string');
+            expect(res.body.creationTimeMs).to.be.a('number');
+            expect(res.body.status).to.be.a('string');
+            expect(res.body.status).to.be.oneOf(Object.values(Status));
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
+
+      done();
+    });
+
+    it('It should PUT a Job (existing, unfinished)', (done) => {
+      const jobs = [];
+      jobs.push(nextMockJob(Type.ACI, Status.CANCELLED));
+      jobs.push(nextMockJob(Type.ADI, Status.FAILED));
+      jobs.push(nextMockJob(Type.AEI, Status.PROCESSING));
+      jobs.push(nextMockJob(Type.BI, Status.PROCESSING));
+      jobs.push(nextMockJob(Type.NDSI, Status.QUEUED));
+      jobs.push(nextMockJob(Type.RMS, Status.QUEUED));
+
+      Job.insertMany(jobs)
+        .then(() => {
+          const jobJsons = [];
+          jobs.forEach((job) => {
+            jobJsons.push(getJsonFromMockJob(job));
+          });
+
+          jobJsons.forEach((json) => {
+            chai.request(app)
+              .put('/jobs')
+              .set('Content-Type', 'application/json')
+              .send(json)
+              .then((res) => {
+                expect(res).to.have.status(200);
+                expect(res.body).to.be.an('object');
+                expect(res.body).to.have.all.keys(
+                  'jobId',
+                  'type',
+                  'input',
+                  'spec',
+                  'author',
+                  'creationTimeMs',
+                  'status',
+                );
+                expect(res.body.jobId).to.be.a('string');
+                expect(ObjectId.isValid(res.body.jobId)).to.be.true;
+                expect(res.body.type).to.be.a('string');
+                expect(res.body.type).to.be.oneOf(Object.values(Type));
+                expect(res.body.input).to.be.a('string');
+                expect(ObjectId.isValid(res.body.input)).to.be.true;
+                expect(res.body.spec).to.be.a('string');
+                expect(ObjectId.isValid(res.body.spec)).to.be.true;
+                expect(res.body.author).to.be.a('string');
+                expect(res.body.creationTimeMs).to.be.a('number');
+                expect(res.body.status).to.be.a('string');
+                expect(res.body.status).to.be.oneOf(Object.values(Status));
+                expect(res.body.status).to.not.equal(Status.FINISHED);
+              })
+              .catch((err) => {
+                done(err);
+              });
+          });
+
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should PUT a Job (existing, finished)', (done) => {
+      const jobs = [];
+      jobs.push(nextMockJob(Type.ACI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.ADI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.AEI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.BI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.NDSI, Status.FINISHED));
+      jobs.push(nextMockJob(Type.RMS, Status.FINISHED));
+
+      Job.insertMany(jobs)
+        .then(() => {
+          const jobJsons = [];
+          jobs.forEach((job) => {
+            jobJsons.push(getJsonFromMockJob(job));
+          });
+
+          jobJsons.forEach((json) => {
+            chai.request(app)
+              .put('/jobs')
+              .set('Content-Type', 'application/json')
+              .send(json)
+              .then((res) => {
+                expect(res).to.have.status(200);
+                expect(res.body).to.be.an('object');
+                expect(res.body).to.have.all.keys(
+                  'jobId',
+                  'type',
+                  'input',
+                  'spec',
+                  'author',
+                  'creationTimeMs',
+                  'status',
+                  'result',
+                );
+                expect(res.body.jobId).to.be.a('string');
+                expect(ObjectId.isValid(res.body.jobId)).to.be.true;
+                expect(res.body.type).to.be.a('string');
+                expect(res.body.type).to.be.oneOf(Object.values(Type));
+                expect(res.body.input).to.be.a('string');
+                expect(ObjectId.isValid(res.body.input)).to.be.true;
+                expect(res.body.spec).to.be.a('string');
+                expect(ObjectId.isValid(res.body.spec)).to.be.true;
+                expect(res.body.author).to.be.a('string');
+                expect(res.body.creationTimeMs).to.be.a('number');
+                expect(res.body.status).to.be.a('string');
+                expect(res.body.status).to.equal(Status.FINISHED);
+                expect(res.body.result).to.be.an('null'); // TODO: 'object'
+              })
+              .catch((err) => {
+                done(err);
+              });
+          });
+
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
     });
   });
 

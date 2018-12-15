@@ -58,7 +58,15 @@ const nextMockJobCreateJson = (type) => {
   return mockJobCreateJson(type, inputId, specId);
 };
 
+const getJsonFromMockJob = (job) => {
+  const { type } = job;
+  const inputId = job.input.toString();
+  const specId = job.spec.toString();
+  return mockJobCreateJson(type, inputId, specId);
+};
+
 module.exports = {
   nextMockJob,
   nextMockJobCreateJson,
+  getJsonFromMockJob,
 };
