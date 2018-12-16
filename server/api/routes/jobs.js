@@ -7,58 +7,56 @@ const moment = require('moment');
 const {
   Job, AciJob, AdiJob, AeiJob, BiJob, NdsiJob, RmsJob,
 } = require('../models/job');
+const Type = require('../models/type');
 const Status = require('../models/status');
 
 // Create Job
 router.put('/', (req, res) => {
   let JobModel = null;
   switch (req.body.type) {
-    case 'aci':
-      JobModel = AciJob;
-      break;
-    case 'adi':
-      JobModel = AdiJob;
-      break;
-    case 'aei':
-      JobModel = AeiJob;
-      break;
-    case 'bi':
-      JobModel = BiJob;
-      break;
-    case 'ndsi':
-      JobModel = NdsiJob;
-      break;
-    case 'rms':
-      JobModel = RmsJob;
-      break;
+    case Type.ACI:
+      JobModel = AciJob; break;
+    case Type.ADI:
+      JobModel = AdiJob; break;
+    case Type.AEI:
+      JobModel = AeiJob; break;
+    case Type.BI:
+      JobModel = BiJob; break;
+    case Type.NDSI:
+      JobModel = NdsiJob; break;
+    case Type.RMS:
+      JobModel = RmsJob; break;
     default:
-      // TODO: Decide what to do here
-      break;
+      return res.status(400).json({
+        message: `Invalid type: ${req.body.type}.`,
+      });
   }
 
   JobModel.find({
     input: req.body.inputId,
-    jobSpec: req.body.jobSpecId,
+    spec: req.body.specId,
   })
     .exec()
     .then((searchResult) => {
-      console.log(searchResult);
       if (searchResult.length /* === 1 */) {
         res.status(200).json({
           jobId: searchResult[0]._id,
           type: searchResult[0].type,
           input: searchResult[0].input,
-          jobSpec: searchResult[0].jobSpec,
+          spec: searchResult[0].spec,
           author: searchResult[0].author,
           creationTimeMs: searchResult[0].creationTimeMs,
           status: searchResult[0].status,
+          ...(searchResult[0].status === Status.FINISHED && {
+            result: searchResult[0].result,
+          }),
         });
       } else {
         const job = new JobModel({
           _id: new mongoose.Types.ObjectId(),
           type: req.body.type,
           input: req.body.inputId,
-          jobSpec: req.body.jobSpecId,
+          spec: req.body.specId,
           author: 'Test Author', // TODO: Implement user authentication
           creationTimeMs: moment().valueOf(),
           status: Status.QUEUED, // TODO: Implement job queueing
@@ -67,19 +65,17 @@ router.put('/', (req, res) => {
         job
           .save()
           .then((createResult) => {
-            console.log(createResult);
             res.status(201).json({
               jobId: createResult._id,
               type: createResult.type,
               input: createResult.input,
-              jobSpec: createResult.jobSpec,
+              spec: createResult.spec,
               author: createResult.author,
               creationTimeMs: createResult.creationTimeMs,
               status: createResult.status,
             });
           })
           .catch((err) => {
-            console.log(err);
             res.status(500).json({
               error: err,
             });
@@ -87,7 +83,6 @@ router.put('/', (req, res) => {
       }
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });
@@ -101,16 +96,18 @@ router.get('/:jobId', (req, res) => {
   Job.findById(jobId)
     .exec()
     .then((searchResult) => {
-      console.log(searchResult);
       if (searchResult) {
         res.status(200).json({
           jobId: searchResult._id,
           type: searchResult.type,
           input: searchResult.input,
-          jobSpec: searchResult.jobSpec,
+          spec: searchResult.spec,
           author: searchResult.author,
           creationTimeMs: searchResult.creationTimeMs,
           status: searchResult.status,
+          ...(searchResult.status === Status.FINISHED && {
+            result: searchResult.result,
+          }),
         });
       } else {
         res.status(404).json({
@@ -119,7 +116,6 @@ router.get('/:jobId', (req, res) => {
       }
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });
@@ -137,15 +133,17 @@ router.get('/', (req, res) => {
           jobId: job._id,
           type: job.type,
           input: job.input,
-          jobSpec: job.jobSpec,
+          spec: job.spec,
           author: job.author,
           creationTimeMs: job.creationTimeMs,
           status: job.status,
+          ...(job.status === Status.FINISHED && {
+            result: job.result,
+          }),
         })),
       });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });
@@ -156,10 +154,9 @@ router.get('/', (req, res) => {
 router.delete('/:jobId', (req, res) => {
   const { jobId } = req.params;
 
-  Job.remove({ _id: jobId })
+  Job.deleteOne({ _id: jobId })
     .exec()
     .then((deleteResult) => {
-      console.log(deleteResult);
       res.status(200).json({
         success: true,
         message: (
@@ -170,7 +167,6 @@ router.delete('/:jobId', (req, res) => {
       });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: err,
       });

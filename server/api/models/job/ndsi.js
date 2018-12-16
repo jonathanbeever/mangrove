@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const Job = require('./job');
+const Type = require('../type');
 
-module.exports = Job.discriminator('ndsi', new mongoose.Schema({
-  jobSpec: {
+module.exports = Job.discriminator(Type.NDSI, new mongoose.Schema({
+  spec: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ndsiSpec',
     required: true,
