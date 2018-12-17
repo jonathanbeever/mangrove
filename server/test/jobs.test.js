@@ -12,12 +12,18 @@ const { nextMockObjectId } = require('./util/mockObjectId');
 const app = require('../app');
 
 const { Job } = require('../api/models/job');
+const { getJobKeys } = require('../api/models/job/utils');
 const Type = require('../api/models/type');
 const Status = require('../api/models/status');
 
 const { expect } = chai;
 
 chai.use(chaiHttp);
+
+const types = Object.values(Type);
+const statuses = Object.values(Status);
+const statusesNotFinished = statuses.slice();
+statusesNotFinished.splice(statusesNotFinished.indexOf(Status.FINISHED), 1);
 
 describe('Jobs', () => {
   before(async () => {
@@ -57,14 +63,11 @@ describe('Jobs', () => {
 
     it('It should PUT a Job (new)', (done) => {
       const jobJsons = [];
-      jobJsons.push(nextMockJobCreateJson(Type.ACI));
-      jobJsons.push(nextMockJobCreateJson(Type.ADI));
-      jobJsons.push(nextMockJobCreateJson(Type.AEI));
-      jobJsons.push(nextMockJobCreateJson(Type.BI));
-      jobJsons.push(nextMockJobCreateJson(Type.NDSI));
-      jobJsons.push(nextMockJobCreateJson(Type.RMS));
+      types.forEach((type) => {
+        jobJsons.push(nextMockJobCreateJson(type));
+      });
 
-      jobJsons.forEach((json) => {
+      jobJsons.forEach((json, index) => {
         chai.request(app)
           .put('/jobs')
           .set('Content-Type', 'application/json')
@@ -72,19 +75,11 @@ describe('Jobs', () => {
           .then((res) => {
             expect(res).to.have.status(201);
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.all.keys(
-              'jobId',
-              'type',
-              'input',
-              'spec',
-              'author',
-              'creationTimeMs',
-              'status',
-            );
+            expect(res.body).to.have.all.keys(getJobKeys(types[index % types.length], false));
             expect(res.body.jobId).to.be.a('string');
             expect(ObjectId.isValid(res.body.jobId)).to.be.true;
             expect(res.body.type).to.be.a('string');
-            expect(res.body.type).to.be.oneOf(Object.values(Type));
+            expect(res.body.type).to.be.oneOf(types);
             expect(res.body.input).to.be.a('string');
             expect(ObjectId.isValid(res.body.input)).to.be.true;
             expect(res.body.spec).to.be.a('string');
@@ -92,7 +87,7 @@ describe('Jobs', () => {
             expect(res.body.author).to.be.a('string');
             expect(res.body.creationTimeMs).to.be.a('number');
             expect(res.body.status).to.be.a('string');
-            expect(res.body.status).to.be.oneOf(Object.values(Status));
+            expect(res.body.status).to.be.oneOf(statuses);
           })
           .catch((err) => {
             done(err);
@@ -104,12 +99,9 @@ describe('Jobs', () => {
 
     it('It should PUT a Job (existing, unfinished)', (done) => {
       const jobs = [];
-      jobs.push(nextMockJob(Type.ACI, Status.CANCELLED));
-      jobs.push(nextMockJob(Type.ADI, Status.FAILED));
-      jobs.push(nextMockJob(Type.AEI, Status.PROCESSING));
-      jobs.push(nextMockJob(Type.BI, Status.PROCESSING));
-      jobs.push(nextMockJob(Type.NDSI, Status.QUEUED));
-      jobs.push(nextMockJob(Type.RMS, Status.QUEUED));
+      types.forEach((type, index) => {
+        jobs.push(nextMockJob(type, statusesNotFinished[index % (statusesNotFinished.length)]));
+      });
 
       Job.insertMany(jobs)
         .then(() => {
@@ -118,7 +110,7 @@ describe('Jobs', () => {
             jobJsons.push(getJsonFromMockJob(job));
           });
 
-          jobJsons.forEach((json) => {
+          jobJsons.forEach((json, index) => {
             chai.request(app)
               .put('/jobs')
               .set('Content-Type', 'application/json')
@@ -126,19 +118,11 @@ describe('Jobs', () => {
               .then((res) => {
                 expect(res).to.have.status(200);
                 expect(res.body).to.be.an('object');
-                expect(res.body).to.have.all.keys(
-                  'jobId',
-                  'type',
-                  'input',
-                  'spec',
-                  'author',
-                  'creationTimeMs',
-                  'status',
-                );
+                expect(res.body).to.have.all.keys(getJobKeys(types[index % types.length], false));
                 expect(res.body.jobId).to.be.a('string');
                 expect(ObjectId.isValid(res.body.jobId)).to.be.true;
                 expect(res.body.type).to.be.a('string');
-                expect(res.body.type).to.be.oneOf(Object.values(Type));
+                expect(res.body.type).to.be.oneOf(types);
                 expect(res.body.input).to.be.a('string');
                 expect(ObjectId.isValid(res.body.input)).to.be.true;
                 expect(res.body.spec).to.be.a('string');
@@ -146,7 +130,7 @@ describe('Jobs', () => {
                 expect(res.body.author).to.be.a('string');
                 expect(res.body.creationTimeMs).to.be.a('number');
                 expect(res.body.status).to.be.a('string');
-                expect(res.body.status).to.be.oneOf(Object.values(Status));
+                expect(res.body.status).to.be.oneOf(statuses);
                 expect(res.body.status).to.not.equal(Status.FINISHED);
               })
               .catch((err) => {
@@ -163,12 +147,9 @@ describe('Jobs', () => {
 
     it('It should PUT a Job (existing, finished)', (done) => {
       const jobs = [];
-      jobs.push(nextMockJob(Type.ACI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.ADI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.AEI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.BI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.NDSI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.RMS, Status.FINISHED));
+      types.forEach((type) => {
+        jobs.push(nextMockJob(type, Status.FINISHED));
+      });
 
       Job.insertMany(jobs)
         .then(() => {
@@ -177,7 +158,7 @@ describe('Jobs', () => {
             jobJsons.push(getJsonFromMockJob(job));
           });
 
-          jobJsons.forEach((json) => {
+          jobJsons.forEach((json, index) => {
             chai.request(app)
               .put('/jobs')
               .set('Content-Type', 'application/json')
@@ -185,20 +166,11 @@ describe('Jobs', () => {
               .then((res) => {
                 expect(res).to.have.status(200);
                 expect(res.body).to.be.an('object');
-                expect(res.body).to.have.all.keys(
-                  'jobId',
-                  'type',
-                  'input',
-                  'spec',
-                  'author',
-                  'creationTimeMs',
-                  'status',
-                  'result',
-                );
+                expect(res.body).to.have.all.keys(getJobKeys(types[index % types.length]));
                 expect(res.body.jobId).to.be.a('string');
                 expect(ObjectId.isValid(res.body.jobId)).to.be.true;
                 expect(res.body.type).to.be.a('string');
-                expect(res.body.type).to.be.oneOf(Object.values(Type));
+                expect(res.body.type).to.be.oneOf(types);
                 expect(res.body.input).to.be.a('string');
                 expect(ObjectId.isValid(res.body.input)).to.be.true;
                 expect(res.body.spec).to.be.a('string');
@@ -249,19 +221,11 @@ describe('Jobs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.be.an('object');
-              expect(res.body).to.have.all.keys(
-                'jobId',
-                'type',
-                'input',
-                'spec',
-                'author',
-                'creationTimeMs',
-                'status',
-              );
+              expect(res.body).to.have.all.keys(getJobKeys(Type.ACI, false));
               expect(res.body.jobId).to.be.a('string');
               expect(ObjectId(res.body.jobId).toString()).to.equal(res.body.jobId);
               expect(res.body.type).to.be.a('string');
-              expect(res.body.type).to.be.oneOf(Object.values(Type));
+              expect(res.body.type).to.be.oneOf(types);
               expect(res.body.input).to.be.a('string');
               expect(ObjectId(res.body.input).toString()).to.equal(res.body.input);
               expect(res.body.spec).to.be.a('string');
@@ -269,7 +233,7 @@ describe('Jobs', () => {
               expect(res.body.author).to.be.a('string');
               expect(res.body.creationTimeMs).to.be.a('number');
               expect(res.body.status).to.be.a('string');
-              expect(res.body.status).to.be.oneOf(Object.values(Status));
+              expect(res.body.status).to.be.oneOf(statuses);
               expect(res.body.status).to.not.equal(Status.FINISHED);
               done();
             })
@@ -293,20 +257,11 @@ describe('Jobs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.be.an('object');
-              expect(res.body).to.have.all.keys(
-                'jobId',
-                'type',
-                'input',
-                'spec',
-                'author',
-                'creationTimeMs',
-                'status',
-                'result',
-              );
+              expect(res.body).to.have.all.keys(getJobKeys(Type.ACI));
               expect(res.body.jobId).to.be.a('string');
               expect(ObjectId(res.body.jobId).toString()).to.equal(res.body.jobId);
               expect(res.body.type).to.be.a('string');
-              expect(res.body.type).to.be.oneOf(Object.values(Type));
+              expect(res.body.type).to.be.oneOf(types);
               expect(res.body.input).to.be.a('string');
               expect(ObjectId(res.body.input).toString()).to.equal(res.body.input);
               expect(res.body.spec).to.be.a('string');
@@ -348,12 +303,9 @@ describe('Jobs', () => {
 
     it('It should GET all Jobs (many, unfinished)', (done) => {
       const jobs = [];
-      jobs.push(nextMockJob(Type.ACI, Status.CANCELLED));
-      jobs.push(nextMockJob(Type.ADI, Status.FAILED));
-      jobs.push(nextMockJob(Type.AEI, Status.PROCESSING));
-      jobs.push(nextMockJob(Type.BI, Status.PROCESSING));
-      jobs.push(nextMockJob(Type.NDSI, Status.QUEUED));
-      jobs.push(nextMockJob(Type.RMS, Status.QUEUED));
+      types.forEach((type, index) => {
+        jobs.push(nextMockJob(type, statusesNotFinished[index % (statusesNotFinished.length)]));
+      });
 
       Job.insertMany(jobs)
         .then(() => {
@@ -366,20 +318,12 @@ describe('Jobs', () => {
               expect(res.body.count).to.be.eql(jobs.length);
               expect(res.body.jobs).to.be.an('array');
               expect(res.body.jobs).to.have.lengthOf(jobs.length);
-              res.body.jobs.forEach((job) => {
-                expect(job).to.have.all.keys(
-                  'jobId',
-                  'type',
-                  'input',
-                  'spec',
-                  'author',
-                  'creationTimeMs',
-                  'status',
-                );
+              res.body.jobs.forEach((job, index) => {
+                expect(job).to.have.all.keys(getJobKeys(types[index % types.length], false));
                 expect(job.jobId).to.be.a('string');
                 expect(ObjectId(job.jobId).toString()).to.equal(job.jobId);
                 expect(job.type).to.be.a('string');
-                expect(job.type).to.be.oneOf(Object.values(Type));
+                expect(job.type).to.be.oneOf(types);
                 expect(job.input).to.be.a('string');
                 expect(ObjectId(job.input).toString()).to.equal(job.input);
                 expect(job.spec).to.be.a('string');
@@ -387,7 +331,7 @@ describe('Jobs', () => {
                 expect(job.author).to.be.a('string');
                 expect(job.creationTimeMs).to.be.a('number');
                 expect(job.status).to.be.a('string');
-                expect(job.status).to.be.oneOf(Object.values(Status));
+                expect(job.status).to.be.oneOf(statuses);
                 expect(job.status).to.not.equal(Status.FINISHED);
               });
               done();
@@ -403,12 +347,9 @@ describe('Jobs', () => {
 
     it('It should GET all Jobs (many, finished)', (done) => {
       const jobs = [];
-      jobs.push(nextMockJob(Type.ACI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.ADI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.AEI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.BI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.NDSI, Status.FINISHED));
-      jobs.push(nextMockJob(Type.RMS, Status.FINISHED));
+      types.forEach((type) => {
+        jobs.push(nextMockJob(type, Status.FINISHED));
+      });
 
       Job.insertMany(jobs)
         .then(() => {
@@ -421,21 +362,12 @@ describe('Jobs', () => {
               expect(res.body.count).to.be.eql(jobs.length);
               expect(res.body.jobs).to.be.an('array');
               expect(res.body.jobs).to.have.lengthOf(jobs.length);
-              res.body.jobs.forEach((job) => {
-                expect(job).to.have.all.keys(
-                  'jobId',
-                  'type',
-                  'input',
-                  'spec',
-                  'author',
-                  'creationTimeMs',
-                  'status',
-                  'result',
-                );
+              res.body.jobs.forEach((job, index) => {
+                expect(job).to.have.all.keys(getJobKeys(types[index % types.length]));
                 expect(job.jobId).to.be.a('string');
                 expect(ObjectId(job.jobId).toString()).to.equal(job.jobId);
                 expect(job.type).to.be.a('string');
-                expect(job.type).to.be.oneOf(Object.values(Type));
+                expect(job.type).to.be.oneOf(types);
                 expect(job.input).to.be.a('string');
                 expect(ObjectId(job.input).toString()).to.equal(job.input);
                 expect(job.spec).to.be.a('string');
