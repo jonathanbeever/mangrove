@@ -7,6 +7,8 @@ const RmsJob = require('./rms');
 
 const Type = require('../type');
 
+const newJobKeys = ['type', 'inputId', 'specId'];
+
 const getJobModel = (type) => {
   switch (type) {
     case Type.ACI:
@@ -41,6 +43,7 @@ const getJobKeys = (type, finished = true) => {
 };
 
 module.exports = {
+  newJobKeys,
   getJobModel,
   getJobKeys,
 };

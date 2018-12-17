@@ -41,7 +41,50 @@ describe('Jobs', () => {
   });
 
   describe('/PUT Job', () => {
-    it('It should PUT a Job (invalid type)', (done) => {
+    it('It should fail to PUT a Job (missing required keys)', (done) => {
+      const jobJson = '';
+
+      chai.request(app)
+        .put('/jobs')
+        .set('Content-Type', 'application/json')
+        .send(jobJson)
+        .then((res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('message');
+          expect(res.body.message).to.be.a('string');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should fail to PUT a Job (invalid keys)', (done) => {
+      const jobJson = JSON.stringify({
+        type: Type.ACI,
+        inputId: nextMockObjectId(),
+        specId: nextMockObjectId(),
+        extra: true,
+      });
+
+      chai.request(app)
+        .put('/jobs')
+        .set('Content-Type', 'application/json')
+        .send(jobJson)
+        .then((res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('message');
+          expect(res.body.message).to.be.a('string');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should fail to PUT a Job (invalid type)', (done) => {
       const jobJson = nextMockJobCreateJson('invalid');
 
       chai.request(app)
@@ -53,12 +96,11 @@ describe('Jobs', () => {
           expect(res.body).to.be.an('object');
           expect(res.body).to.have.all.keys('message');
           expect(res.body.message).to.be.a('string');
+          done();
         })
         .catch((err) => {
           done(err);
         });
-
-      done();
     });
 
     it('It should PUT a Job (new)', (done) => {
@@ -195,7 +237,7 @@ describe('Jobs', () => {
   });
 
   describe('/GET Job', () => {
-    it('It should GET a Job (not found)', (done) => {
+    it('It should fail to GET a Job (not found)', (done) => {
       chai.request(app)
         .get(`/jobs/${nextMockObjectId()}`)
         .then((res) => {

@@ -5,15 +5,31 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 const { Job } = require('../models/job');
-const { getJobModel } = require('../models/job/utils');
+const { newJobKeys, getJobModel } = require('../models/job/utils');
 const Status = require('../models/status');
+const Type = require('../models/type');
 
 // Create Job
 router.put('/', (req, res) => {
+  const missingKeys = newJobKeys.filter(key => !Object.keys(req.body).includes(key));
+  if (missingKeys.length > 0) {
+    return res.status(400).json({
+      message: `Missing required keys: ${missingKeys.join(', ')}.`,
+    });
+  }
+
+  const extraKeys = Object.keys(req.body).filter(key => !newJobKeys.includes(key));
+  if (extraKeys.length > 0) {
+    return res.status(400).json({
+      message: `Invalid keys: ${extraKeys.join(', ')}.`,
+    });
+  }
+
   const JobModel = getJobModel(req.body.type);
   if (!JobModel) {
+    const types = Object.values(Type).join(', ');
     return res.status(400).json({
-      message: `Invalid type: ${req.body.type}.`,
+      message: `Invalid type: ${req.body.type}. Must be one of: ${types}.`,
     });
   }
 
