@@ -7,23 +7,29 @@ const RmsJob = require('./rms');
 
 const Type = require('../type');
 
-const getJobKeys = (type, finished = true) => {
-  let JobModel = null;
+const getJobModel = (type) => {
   switch (type) {
     case Type.ACI:
-      JobModel = AciJob; break;
+      return AciJob;
     case Type.ADI:
-      JobModel = AdiJob; break;
+      return AdiJob;
     case Type.AEI:
-      JobModel = AeiJob; break;
+      return AeiJob;
     case Type.BI:
-      JobModel = BiJob; break;
+      return BiJob;
     case Type.NDSI:
-      JobModel = NdsiJob; break;
+      return NdsiJob;
     case Type.RMS:
-      JobModel = RmsJob; break;
+      return RmsJob;
     default:
-      return `Error: Invalid \`type\` parameter (${type}).`;
+      return null;
+  }
+};
+
+const getJobKeys = (type, finished = true) => {
+  const JobModel = getJobModel(type);
+  if (!JobModel) {
+    return `Error: Invalid \`type\` parameter (${type}).`;
   }
 
   const keys = Object.keys(JobModel.schema.paths);
@@ -35,5 +41,6 @@ const getJobKeys = (type, finished = true) => {
 };
 
 module.exports = {
+  getJobModel,
   getJobKeys,
 };

@@ -1,29 +1,13 @@
 const { nextMockObjectId } = require('./mockObjectId');
 
-const {
-  AciJob, AdiJob, AeiJob, BiJob, NdsiJob, RmsJob,
-} = require('../../api/models/job');
-const Type = require('../../api/models/type');
+const { getJobModel } = require('../../api/models/job/utils');
 const Status = require('../../api/models/status');
 
 // TODO: Allow for the creation of a mockJob using a mockSpec.
 const mockJob = (_id, type, input, spec, author, creationTimeMs, status) => {
-  let JobModel = null;
-  switch (type) {
-    case Type.ACI:
-      JobModel = AciJob; break;
-    case Type.ADI:
-      JobModel = AdiJob; break;
-    case Type.AEI:
-      JobModel = AeiJob; break;
-    case Type.BI:
-      JobModel = BiJob; break;
-    case Type.NDSI:
-      JobModel = NdsiJob; break;
-    case Type.RMS:
-      JobModel = RmsJob; break;
-    default:
-      return `Error: Invalid \`type\` parameter (${type}).`;
+  const JobModel = getJobModel(type);
+  if (!JobModel) {
+    return `Error: Invalid \`type\` parameter (${type}).`;
   }
 
   return new JobModel({

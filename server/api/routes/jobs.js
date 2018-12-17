@@ -4,32 +4,17 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const {
-  Job, AciJob, AdiJob, AeiJob, BiJob, NdsiJob, RmsJob,
-} = require('../models/job');
-const Type = require('../models/type');
+const { Job } = require('../models/job');
+const { getJobModel } = require('../models/job/utils');
 const Status = require('../models/status');
 
 // Create Job
 router.put('/', (req, res) => {
-  let JobModel = null;
-  switch (req.body.type) {
-    case Type.ACI:
-      JobModel = AciJob; break;
-    case Type.ADI:
-      JobModel = AdiJob; break;
-    case Type.AEI:
-      JobModel = AeiJob; break;
-    case Type.BI:
-      JobModel = BiJob; break;
-    case Type.NDSI:
-      JobModel = NdsiJob; break;
-    case Type.RMS:
-      JobModel = RmsJob; break;
-    default:
-      return res.status(400).json({
-        message: `Invalid type: ${req.body.type}.`,
-      });
+  const JobModel = getJobModel(req.body.type);
+  if (!JobModel) {
+    return res.status(400).json({
+      message: `Invalid type: ${req.body.type}.`,
+    });
   }
 
   JobModel.find({
