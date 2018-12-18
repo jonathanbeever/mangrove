@@ -24,27 +24,28 @@ class SelectParamsByIndex extends Component {
 
   filterPresets = (props) => {
     const indices = ['aci', 'ndsi', 'adi', 'even', 'bio', 'rms']
- 
+
     var formattedPresets = indices.map(index => {
       // If index checkbox is checked and presets for this index exist
       if(props[index] === true && props.presets[index]) {
         return (
           <div key={index}>
-            <h5>
-              {index + ' Parameter Presets'} 
-            </h5>
+            <h4>
+              {index + ' Parameter Presets'}
+            </h4>
             {props.presets[index].map((indexPresets, position) => {
-              var specType = Object.keys(indexPresets); 
+              var specType = Object.keys(indexPresets);
 
               return (
                 <div key={position}>
-                  {specType.map((spec, i) => { 
+                  {specType.map((spec, i) => {
                     return (
                       <div key={index+'-'+spec}>
                         <p><strong>{spec}</strong> : {indexPresets[spec]}</p>
                       </div>
                     )
                   })}
+                  <hr />
                 </div>
               )
             })}
