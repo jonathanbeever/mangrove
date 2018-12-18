@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Panel } from 'react-bootstrap';
-import NDSICharts from './infographs/NDSICharts';
-import ACILineChart from './infographs/ACILineChart';
-import ADILineChart from './infographs/ADILineChart';
-import AEILineChart from './infographs/AEILineChart';
-import ADIAEICharts from './infographs/ADIAEICharts';
-import BAAreaChart from './infographs/BAAreaChart';
-import CompareACIData from './infographs/CompareACIData';
-import CompareBioData from './infographs/CompareBioData';
-import OutlierLineChart from './infographs/OutlierLineChart';
-import CompareNDSIData from './infographs/CompareNDSIData';
-import BALineChart from './infographs/BALineChart';
+import NDSICharts from '../infographs/NDSICharts';
+import ACILineChart from '../infographs/ACILineChart';
+import ADILineChart from '../infographs/ADILineChart';
+import AEILineChart from '../infographs/AEILineChart';
+import ADIAEICharts from '../infographs/ADIAEICharts';
+import BAAreaChart from '../infographs/BAAreaChart';
+import CompareACIData from '../infographs/CompareACIData';
+import CompareBioData from '../infographs/CompareBioData';
+import OutlierLineChart from '../infographs/OutlierLineChart';
+import CompareNDSIData from '../infographs/CompareNDSIData';
+import BALineChart from '../infographs/BALineChart';
 
 function convertNDSIResults(jobs) {
   let ret;
