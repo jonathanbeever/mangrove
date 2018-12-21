@@ -23,61 +23,85 @@ class FilteredJobs extends Component {
   }
 
   formatJobs = (props) => {
-    var formattedJobs = props.results.map((job, i) => {
-      return (
-        // change key later
-        <div key={i}>
-          <h5>
-            {props.selectedJob ?
-              <div>
-                {props.selectedJob === job ?
-                  <div>
-                    {job.siteName}
-                    <Button color="primary">
-                      Selected
-                    </Button>
-                  </div>
-                  :
-                  <div>
-                    {props.selectedJob.type === job.type ?
-                      <div>
-                        {job.siteName}
-                        <Button color="primary" onClick={this.props.selectJobToCompare(job)}>
-                          Compare
-                        </Button>
-                      </div>
-                      :
-                      <div>
-                        {job.siteName}
-                        <Button color="primary" onClick={this.props.selectJob(job)}>
-                          View Results
-                        </Button>
-                      </div>
-                    }
-                  </div>
-                }
+    console.log(props)
 
-              </div>
-              :
-              <div>
-                {job.siteName}
-                <Button color="primary" onClick={this.props.selectJob(job)}>
-                  View Results
-                </Button>
-              </div>
+    // var aciJobs = []
+    // var formattedJobs =''
+    // props.results.forEach((job, i) => {
+    //   switch (job.type) {
+    //     case 'aci' : {
+    //       aciJobs.push(job)
+    //       formattedJobs = aciJobs.map(
+    //         this.format(job, i, props)
+    //       );
+    //     }
+    //   }
+    // });
+    
 
-            }
-          </h5>
+    // var formattedJobs = aciJobs.map(
+    //   this.format(job, i)
+    // );
 
-          {/*<p>{job.type.toUpperCase()}&nbsp;&nbsp;&nbsp;&nbsp;{job.input}&nbsp;&nbsp;&nbsp;&nbsp;{job.status}</p>*/}
-          <p>{job.type[0].toUpperCase()}</p>
-          <p>{job.status}</p>
-          <p>{job.spec.alias}</p>
-          <hr />
-        </div>
-      )
-    });
-    this.setState({ htmlJobs: formattedJobs })
+
+
+    // this.setState({ htmlJobs: (<div><h4>ACI</h4>{formattedJobs}</div>) })
+  }
+
+  format =       (job, i, props) => {
+     
+    return (
+      // change key later
+      <div key={i}>
+        <h5>
+          {props.selectedJob ?
+            <div>
+              {props.selectedJob === job ?
+                <div>
+                  {job.siteName}
+                  <Button color="primary">
+                    Selected
+                  </Button>
+                </div>
+                :
+                <div>
+                  {props.selectedJob.type === job.type ?
+                    <div>
+                      {job.siteName}
+                      <Button color="primary" onClick={this.props.selectJobToCompare(job)}>
+                        Compare
+                      </Button>
+                    </div>
+                    :
+                    <div>
+                      {job.siteName}
+                      <Button color="primary" onClick={this.props.selectJob(job)}>
+                        View Results
+                      </Button>
+                    </div>
+                  }
+                </div>
+              }
+
+            </div>
+            :
+            <div>
+              {job.siteName}
+              <Button color="primary" onClick={this.props.selectJob(job)}>
+                View Results
+              </Button>
+            </div>
+
+          }
+        </h5>
+
+        {/*<p>{job.type.toUpperCase()}&nbsp;&nbsp;&nbsp;&nbsp;{job.input}&nbsp;&nbsp;&nbsp;&nbsp;{job.status}</p>*/}
+        <p>{job.type[0].toUpperCase()}</p>
+        <p>{job.status}</p>
+        <p>{job.spec.alias}</p>
+        <hr />
+      </div>
+    )
   }
 
   render() {
