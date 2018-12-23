@@ -4,32 +4,33 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const moment = require('moment');
 
-const {
-  Job, AciJob, AdiJob, AeiJob, BiJob, NdsiJob, RmsJob,
-} = require('../models/job');
-const Type = require('../models/type');
+const { Job } = require('../models/job');
+const { newJobKeys, getJobModel } = require('../models/job/utils');
 const Status = require('../models/status');
+const Type = require('../models/type');
 
 // Create Job
 router.put('/', (req, res) => {
-  let JobModel = null;
-  switch (req.body.type) {
-    case Type.ACI:
-      JobModel = AciJob; break;
-    case Type.ADI:
-      JobModel = AdiJob; break;
-    case Type.AEI:
-      JobModel = AeiJob; break;
-    case Type.BI:
-      JobModel = BiJob; break;
-    case Type.NDSI:
-      JobModel = NdsiJob; break;
-    case Type.RMS:
-      JobModel = RmsJob; break;
-    default:
-      return res.status(400).json({
-        message: `Invalid type: ${req.body.type}.`,
-      });
+  const missingKeys = newJobKeys.filter(key => !Object.keys(req.body).includes(key));
+  if (missingKeys.length > 0) {
+    return res.status(400).json({
+      message: `Missing required keys: ${missingKeys.join(', ')}.`,
+    });
+  }
+
+  const extraKeys = Object.keys(req.body).filter(key => !newJobKeys.includes(key));
+  if (extraKeys.length > 0) {
+    return res.status(400).json({
+      message: `Invalid keys: ${extraKeys.join(', ')}.`,
+    });
+  }
+
+  const JobModel = getJobModel(req.body.type);
+  if (!JobModel) {
+    const types = Object.values(Type).join(', ');
+    return res.status(400).json({
+      message: `Invalid type: ${req.body.type}. Must be one of: ${types}.`,
+    });
   }
 
   JobModel.find({
