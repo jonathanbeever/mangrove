@@ -14,20 +14,6 @@ package-lock.json
 yarn-debug.log*
 yarn-error.log*
 
-# Documentation (LaTeX)
-*.aux
-*.bbl
-*.bcf
-*.blg
-*.dvi
-*.log
-*.out
-*.pdf
-*.pyg
-*.run.xml
-*.toc
-_minted-main
-
 # Miscellaneous
 .DS_Store
 .env.development.local
