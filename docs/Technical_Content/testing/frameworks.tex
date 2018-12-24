@@ -7,6 +7,9 @@ Chai is an assertion library purposed for behavior-driven and test-driven develo
 \paragraph{Mocha} \mbox{}\\[\paragraphheaderspace]
 Mocha is a feature-rich JavaScript test framework running on Node.js and in the browser. Mocha tests run serially, allowing for flexible and accurate reporting, while mapping uncaught exceptions to the correct test cases. Mocha allows us to use Chai as our assertion library. It also supports asynchronous testing, which can be useful when running tests with large amounts of data inputs.
 
+\paragraph{Istanbul} \mbox{}\\[\paragraphheaderspace]
+Istanbul is a code coverage tool that provides coverage reports when running tests. Using its command-line client, \codesnip{nyc}, Istanbul integrates with Mocha, computing the statement, line, function, and branch coverage of each file. In this project, we will use these metrics to keep at least 80\% coverage for each application.
+
 \paragraph{Spectron} \mbox{}\\[\paragraphheaderspace]
 Spectron is an open source framework for writing automated tests for Electron apps. It allows developers to navigate web pages, simulate user input and run dedicated tests. It also simplifies the use of other testing frameworks by making the setting up, running, and tearing down of Electron environments easier. Developed by GitHub, it is the dedicated testing framework for Electron, and therefore, it is the first choice for writing test cases for our Electron-based front end application.\par
 The following example code finds the application, checks to see if there is a visible window containing the title \lq My App\rq, and finishes by logging any errors:
