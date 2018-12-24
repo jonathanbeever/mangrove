@@ -56,9 +56,8 @@ const nextMockSpec = (type, param) => {
 
 const mockSpecCreateJson = (type, param) => {
   const checkedParam = mockParameter(type, param);
-
   return JSON.stringify({
-    type,
+    specType: type,
     ...checkedParam,
   });
 };

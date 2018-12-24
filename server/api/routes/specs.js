@@ -14,27 +14,28 @@ const {
   RmsSpec
 } = require("../models/spec");
 
+const { specType } = require("../models/specType");
+
 // Create Spec
 router.put("/", (req, res) => {
   let SpecModel = null;
-  console.log(req.body.specType);
   switch (req.body.specType) {
-    case "aciSpec":
+    case specType.ACI:
       SpecModel = AciSpec;
       break;
-    case "adiSpec":
+    case specType.ADI:
       SpecModel = AdiSpec;
       break;
-    case "aeiSpec":
+    case specType.AEI:
       SpecModel = AeiSpec;
       break;
-    case "biSpec":
+    case specType.BI:
       SpecModel = BiSpec;
       break;
-    case "ndsiSpec":
+    case specType.NDSI:
       SpecModel = NdsiSpec;
       break;
-    case "rmsSpec":
+    case specType.RMS:
       SpecModel = RmsSpec;
       break;
     default:
@@ -48,38 +49,43 @@ router.put("/", (req, res) => {
 
   // try to find this spec in the database.
   SpecModel.find({
-    ...((SpecModel === AciSpec || SpecModel === BiSpec) && {
-      minFreq: req.body.minFreq
-    },
-    // ACI/ADI/AEI/BI maxFreq Check
-    (SpecModel === AciSpec ||
-      SpecModel === AdiSpec ||
-      SpecModel === AeiSpec ||
-      SpecModel === BiSpec) && { maxFreq: req.body.maxFreq },
-    // ACI j Check
-    SpecModel === AciSpec && { j: req.body.j },
-    // ACI/BI/NDSI fftW Check
-    (SpecModel === AciSpec ||
-      SpecModel === BiSpec ||
-      SpecModel === NdsiSpec) && { fftW: req.body.fftW },
-    // ADI/AEI dbThreshold Check
-    (SpecModel === AdiSpec || SpecModel === AeiSpec) && {
-      dbThreshold: req.body.dbThreshold
-    },
-    // ADI/AEI freqStep Check
-    (SpecModel === AdiSpec || SpecModel === AeiSpec) && {
-      freqStep: req.body.freqStep
-    },
-    // ADI shannon Check
-    SpecModel === AdiSpec && { shannon: req.body.shannon },
-    // NDSI anthroMin Check
-    SpecModel === NdsiSpec && { anthroMin: req.body.anthroMin },
-    // NDSI anthroMax Check
-    SpecModel === NdsiSpec && { anthroMax: req.body.anthroMax },
-    // NDSI bioMin Check
-    SpecModel === NdsiSpec && { bioMin: req.body.bioMin },
-    // NDSI bioMax Check
-    SpecModel === NdsiSpec && { bioMax: req.body.bioMax })
+    $or: [
+      {
+        //ACI
+        minFreq: req.body.minFreq,
+        maxFreq: req.body.maxFreq,
+        j: req.body.j,
+        fftW: req.body.fftW
+      },
+      {
+        //ADI
+        maxFreq: req.body.maxFreq,
+        dbThreshold: req.body.dbThreshold,
+        freqStep: req.body.freqStep,
+        shannon: req.body.shannon
+      },
+      {
+        //AEI
+        maxFreq: req.body.maxFreq,
+        dbThreshold: req.body.dbThreshold,
+        freqStep: req.body.freqStep
+      },
+      {
+        //BI
+        minFreq: req.body.minFreq,
+        maxFreq: req.body.maxFreq,
+        fftW: req.body.fftW
+      },
+      {
+        //NDSI
+        fftW: req.body.fftW,
+        anthroMin: req.body.anthroMin,
+        anthroMax: req.body.anthroMax,
+        bioMin: req.body.bioMin,
+        bioMax: req.body.bioMax
+      }
+      //RMS has no param
+    ]
   })
     .exec()
     .then(returnSpec => {
@@ -89,7 +95,6 @@ router.put("/", (req, res) => {
         // add id and creation time to spec document
         req.body._id = new mongoose.Types.ObjectId();
         // req.body.creationTimeMs = moment().valueOf();
-
         const spec = new SpecModel(
           req.body // Put requested item in a new spec variable
         );
@@ -123,9 +128,7 @@ router.get("/:specId", (req, res) => {
     .exec()
     .then(searchResult => {
       if (searchResult) {
-        res.status(200).json({
-          searchResult
-        });
+        res.status(200).json(searchResult);
       } else {
         res.status(404).json({
           error: `No valid entry found for ${specId}`
