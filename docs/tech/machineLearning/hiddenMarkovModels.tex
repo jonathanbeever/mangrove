@@ -12,7 +12,7 @@ When we talk about HMM, we are talking about the belief the current system is in
   = P_{t}(X_{t} | e_{1}, ..., e_{t})
   \textnormal{ where } e \textnormal{ is the evidence, }
   X \textnormal{ is the current state}
-\end{equation}
+\end{equation} \\[\eqnspace]
 
 We then update the belief via the following function:\par
 
@@ -20,13 +20,13 @@ We then update the belief via the following function:\par
   B'(X_{t+1})
   = P(X_{t+1} | e_{1}, ..., e_{t})
   = \sum_{X_{t}} P(X_{t+1} | X_{t}) P(X_{t} | e_{1}, ..., e_{t})
-\end{equation}
+\end{equation} \\[\eqnspace]
 
 We must then re-weight the likelihood of the current belief based on the probability of that belief state with the current evidence, using:
 
 \begin{equation}
   B'(X_{t+1}) P(e_{t+1} | X_{t+1})
-\end{equation}
+\end{equation} \\[\eqnspace]
 
 The following image shows how HMM\textquotesingle s update their belief based off of time updates and then evidence updates.
 

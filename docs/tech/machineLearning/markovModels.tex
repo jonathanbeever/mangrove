@@ -4,13 +4,13 @@ Markov Models can be considered chain-structured Bayesian networks where each ne
 \begin{equation}
   P(X_{t+1}|X_{t})
   \textnormal{ where } X_{1} \textnormal{ is the initial state}
-\end{equation}
+\end{equation} \\[\eqnspace]
 
 Theoretically, this idea can be implemented over infinite time steps, where at each time step we apply the transition function onto the Bayesian network. The function is as follows:\par
 
 \begin{equation}
   \sum_{X_{t-1}} P(X_{t}|X_{t-1}) P(X_{t-1})
   \textnormal{ where } X_{t-1} \textnormal{ is the previous time step}
-\end{equation}
+\end{equation} \\[\eqnspace]
 
 This type of algorithm is called the Mini-Forward Algorithm. An interesting quality of this algorithm is that for infinite time steps it always reaches a convergent state. This means that the $X_{t-1}$ time step will be equal to $X_{t}$ for all following iterations. This property allows us to find a final resting state within a stochastic system, which can be useful for many applications.

@@ -8,7 +8,7 @@ In this project we will use a modified version of Hidden Markov Models in order 
 The models we will be constructing are called probabilistic models. The very bases of these models are that the chance of moving from one state to another can be found out using previous data. After extrapolation, a model of state space and chance of movement between these states can be built. Using the model above as an example, we can see that we have two states: Sunny and Rainy. The chance of either staying in a state or moving from one state to another can be seen by looking at the arrows. The probability of moving is shown as a number from 0 to 1 (0\% to 100\%). While this is not a Bayesian network, it is the very basic idea from which Bayesian networks are built. Using the above model, we can create a conditional probability table (CPT). The corresponding table can be seen below.\par
 
 \begin{center}
-	\begin{tabular}{|c|c|c|}
+	\begin{longtable}{|c|c|c|}
     \hline
 		\tablehead{Current}
     & \tablehead{Next}
@@ -34,7 +34,7 @@ The models we will be constructing are called probabilistic models. The very bas
     & Rainy
     & 0.60
     \\ \hline
-	\end{tabular}
+	\end{longtable}
 \end{center}
 
 Now that we have some idea of what a probabilistic model is, we can apply one of the most useful concepts in Bayesian networks: \textit{conditional independence}. This means that one variable is independent from another variable, depending on given information. The formula for calculating conditional independence is as follows:\par
@@ -42,11 +42,11 @@ Now that we have some idea of what a probabilistic model is, we can apply one of
 \begin{equation}
   \textnormal{Independence: }
   P(A|B) = P(A)
-\end{equation}
+\end{equation} \\[\eqnspace]
 \begin{equation}
   \textnormal{Conditional Independence: }
   P(A|B,C) = P(A|C)
-\end{equation}
+\end{equation} \\[\eqnspace]
 
 An example of this would be if you have an alarm system. Every time there is a break-in at your house, there is a high chance that the alarm goes off. When the alarm goes off, there is also a chance that your neighbor calls you. Initially with no information, your neighbor calling you will be dependent on whether or not there is a break-in. This changes when you know that the alarm is already ringing. The reasoning for this is that if you already know the alarm is going off, knowing that there is a break in does not give you any more information on the alarm going off. Since the alarm is the only thing that can directly affect your neighbor calling you, then the break-in variable is conditionally unlinked from your neighbor calling you, making the two variables independent.\par
 It is possible to map out interactions like this with a Bayesian network, each node being a variable and each arrow connecting two dependent variables. These networks must be acyclic directed graphs. The following figure demonstrates the previous example with added variables: earthquake and one additional neighbor. The alarm is dependent on the earthquake and your other neighbor calling is still dependent only on the alarm.\par
