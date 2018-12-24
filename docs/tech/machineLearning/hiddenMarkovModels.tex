@@ -7,34 +7,26 @@ While Markov Models are very descriptive models of an environment, oftentimes wh
 
 When we talk about HMM, we are talking about the belief the current system is in. This is in reference to running an inference of the state based on what kind on evidence we have received. An example would be figuring that there is a 60\% chance that, with the current configuration of sound waves, syllable A is the sound made by the bird. This belief is obtained by filtering the current state with previous evidence. The method can be described by the following:\par
 
-\vspace{-32px}
-\begin{center}
-  \begin{equation}
-    B_{t}(X)
-    = P_{t}(X_{t} | e_{1}, ..., e_{t})
-  \end{equation}
-  where e is the evidence and X is the current state.
-\end{center}
+\begin{equation}
+  B_{t}(X)
+  = P_{t}(X_{t} | e_{1}, ..., e_{t})
+  \textnormal{ where } e \textnormal{ is the evidence, }
+  X \textnormal{ is the current state}
+\end{equation}
 
 We then update the belief via the following function:\par
 
-\vspace{-32px}
-\begin{center}
-  \begin{equation}
-    B'(X_{t+1})
-    = P(X_{t+1} | e_{1}, ..., e_{t})
-    = \sum_{X_{t}} P(X_{t+1} | X_{t}) P(X_{t} | e_{1}, ..., e_{t})
-  \end{equation}
-\end{center}
+\begin{equation}
+  B'(X_{t+1})
+  = P(X_{t+1} | e_{1}, ..., e_{t})
+  = \sum_{X_{t}} P(X_{t+1} | X_{t}) P(X_{t} | e_{1}, ..., e_{t})
+\end{equation}
 
 We must then re-weight the likelihood of the current belief based on the probability of that belief state with the current evidence, using:
 
-\vspace{-32px}
-\begin{center}
-  \begin{equation}
-    B'(X_{t+1}) P(e_{t+1} | X_{t+1})
-  \end{equation}
-\end{center}
+\begin{equation}
+  B'(X_{t+1}) P(e_{t+1} | X_{t+1})
+\end{equation}
 
 The following image shows how HMM\textquotesingle s update their belief based off of time updates and then evidence updates.
 

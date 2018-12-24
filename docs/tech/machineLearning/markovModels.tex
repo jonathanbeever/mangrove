@@ -1,22 +1,16 @@
 \subsubsection{Markov Models}
 Markov Models can be considered chain-structured Bayesian networks where each network is tied into the previous and next networks in a fashion similar to a linked list. We can consider each network a node along that linked list, each node within the list containing the same CPT, excluding the starting node. The very first node has a CPT that represents the initial probability distribution of the starting state. Since these nodes are Bayesian networks, similar classes of problems can be modeled. The advantage is that with the addition of linking, an element of time can be added. Taking this into account, we can see why the CPT for each node after the initial node is the same. It takes into account the probability of state space changes from one state to another. In technical terms, we can call this a \textit{transition model} and it can be described by the following equation:\par
 
-\vspace{-32px}
-\begin{center}
-  \begin{equation}
-    P(X_{t+1}|X_{t})
-  \end{equation}
-  where $X_{1}$ is the initial state
-\end{center}
+\begin{equation}
+  P(X_{t+1}|X_{t})
+  \textnormal{ where } X_{1} \textnormal{ is the initial state}
+\end{equation}
 
 Theoretically, this idea can be implemented over infinite time steps, where at each time step we apply the transition function onto the Bayesian network. The function is as follows:\par
 
-\vspace{-32px}
-\begin{center}
-  \begin{equation}
-    \sum_{X_{t-1}} P(X_{t}|X_{t-1})\:P(X_{t-1})
-  \end{equation}
-  where $X_{t-1}$ is the previous time step.
-\end{center}
+\begin{equation}
+  \sum_{X_{t-1}} P(X_{t}|X_{t-1}) P(X_{t-1})
+  \textnormal{ where } X_{t-1} \textnormal{ is the previous time step}
+\end{equation}
 
 This type of algorithm is called the Mini-Forward Algorithm. An interesting quality of this algorithm is that for infinite time steps it always reaches a convergent state. This means that the $X_{t-1}$ time step will be equal to $X_{t}$ for all following iterations. This property allows us to find a final resting state within a stochastic system, which can be useful for many applications.
