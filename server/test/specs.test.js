@@ -290,11 +290,12 @@ describe('Specs', () => {
 
   // TODO PUT SPECS
   describe('/PUT specs', () => {
-    it('It should add spec (One)', (done) => {
-      const testSpecJson = mockSpecCreateJson(specType.AEI, {
-        maxFreq: 1000,
-        dbThreshold: 14,
-        freqStep: 25,
+    it('It should add spec, ACI (One)', (done) => {
+      const testSpecJson = mockSpecCreateJson(specType.ACI, {
+        minFreq: 1,
+        maxFreq: 3001,
+        j: 30,
+        fftW: 13,
       });
       chai
         .request(app)
@@ -305,6 +306,186 @@ describe('Specs', () => {
           const content = res.body;
           expect(res).to.not.be.null;
           expect(content).to.not.be.null;
+          expect(res).to.have.status(201);
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+    it('It should add spec, AEI (One)', (done) => {
+      const testSpecJson = mockSpecCreateJson(specType.AEI, {
+        maxFreq: 3000,
+        dbThreshold: 45,
+        freqStep: 18,
+      });
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(testSpecJson)
+        .then((res) => {
+          const content = res.body;
+          expect(res).to.not.be.null;
+          expect(content).to.not.be.null;
+          expect(res).to.have.status(201);
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should add spec, ADI (One)', (done) => {
+      const testSpecJson = mockSpecCreateJson(specType.ADI, {
+        maxFreq: 3000,
+        dbThreshold: 45,
+        freqStep: 18,
+        shannon: false,
+      });
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(testSpecJson)
+        .then((res) => {
+          const content = res.body;
+          expect(res).to.not.be.null;
+          expect(content).to.not.be.null;
+          expect(res).to.have.status(201);
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+    it('It should add spec, BI (One)', (done) => {
+      const testSpecJson = mockSpecCreateJson(specType.BI, {
+        minFreq: 100,
+        maxFreq: 2000,
+        fftW: 20,
+      });
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(testSpecJson)
+        .then((res) => {
+          const content = res.body;
+          expect(res).to.not.be.null;
+          expect(content).to.not.be.null;
+          expect(res).to.have.status(201);
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+    it('It should add spec, NDSI (One)', (done) => {
+      const testSpecJson = mockSpecCreateJson(specType.NDSI, {
+        fftW: 20,
+        anthroMin: 10,
+        anthroMax: 3000,
+        bioMin: 3005,
+        bioMax: 5002,
+      });
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(testSpecJson)
+        .then((res) => {
+          const content = res.body;
+          expect(res).to.not.be.null;
+          expect(content).to.not.be.null;
+          expect(res).to.have.status(201);
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+    it('It should add spec, RMS (One)', (done) => {
+      const testSpecJson = mockSpecCreateJson(specType.RMS, {});
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(testSpecJson)
+        .then((res) => {
+          const content = res.body;
+          expect(res).to.not.be.null;
+          expect(content).to.not.be.null;
+          expect(res).to.have.status(201);
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should try to create duplicate, should only create one', (done) => {
+      const testSpecJson = mockSpecCreateJson(specType.AEI, {
+        maxFreq: 2000,
+        dbThreshold: 17,
+        freqStep: 26,
+      });
+
+      // add the same spec twice, making sure that it only adds once
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(testSpecJson)
+        .then((res) => {
+          const content = res.body;
+          expect(res).to.not.be.null;
+          expect(content).to.not.be.null;
+          expect(content.maxFreq).to.be.eql(2000);
+          expect(content.dbThreshold).to.be.eql(17);
+          expect(content.freqStep).to.be.eql(26);
+          expect(res).to.have.status(201);
+
+          chai
+            .request(app)
+            .put('/specs')
+            .set('Content-Type', 'application/json')
+            .send(testSpecJson)
+            .then((innerRes) => {
+              const innerContent = innerRes.body;
+              expect(innerRes).to.not.be.null;
+              expect(innerContent).to.not.be.null;
+              expect(innerContent.maxFreq).to.be.eql(2000);
+              expect(innerContent.dbThreshold).to.be.eql(17);
+              expect(innerContent.freqStep).to.be.eql(26);
+              expect(innerRes).to.have.status(200);
+              // status code should return 200 OK, if 201 then that means a new spec was created.
+            })
+            .catch((err) => {
+              done(err);
+            });
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+    it('It should not recognize the invalid spec type', (done) => {
+      const testSpecJson = mockSpecCreateJson('invalidSpec', {
+        maxFreq: 2000,
+        dbThreshold: 17,
+        freqStep: 26,
+      });
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(testSpecJson)
+        .then((res) => {
+          const content = res.body;
+          expect(res).to.not.be.null;
+          expect(content).to.not.be.null;
+          expect(Object.keys(content)[0]).to.be.string('error');
           done();
         })
         .catch((err) => {
