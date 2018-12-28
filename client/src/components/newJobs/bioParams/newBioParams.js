@@ -7,21 +7,21 @@ class NewBioParams extends Component {
     return (
       <form>
         <div className="form-group row">
-          <label htmlFor="min-freq" className="col-5 col-form-label">Min Frequency</label>
+          <label htmlFor="minFreq" className="col-5 col-form-label">Min Frequency</label>
           <div className="col-6">
-            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['min-freq']} id="min-freq" />
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['minFreq']} id="minFreq" />
           </div>
         </div>
         <div className="form-group row">
-          <label htmlFor="max-freq" className="col-5 col-form-label">Max Frequency</label>
+          <label htmlFor="maxFreq" className="col-5 col-form-label">Max Frequency</label>
           <div className="col-6">
-            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['max-freq']} id="max-freq" />
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['maxFreq']} id="maxFreq" />
           </div>
         </div>
         <div className="form-group row">
-          <label htmlFor="fft-w" className="col-5 col-form-label">fft-w</label>
+          <label htmlFor="fftW" className="col-5 col-form-label">fft-w</label>
           <div className="col-6">
-            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['fft-w']} id="fft-w" />
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['fftW']} id="fftW" />
           </div>
         </div>
       </form>

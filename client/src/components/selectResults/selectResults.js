@@ -820,15 +820,14 @@ class SelectResults extends Component {
     console.log(formatted)
     this.setState({allFormatted: formatted})
     this.setState({currentFormatted: formatted})
-
+    this.setState({currentSearchFormatted: formatted})
+    
     // Format nested array to render 
     this.setHtmlFormatted(formatted)
   }
 
   setHtmlFormatted = jobs => {
-    console.log(Object.keys(jobs))
     var html = Object.keys(jobs).map(site => {
-      console.log(Object.keys(jobs[site]).length, 'len')
       return (
         <div>
           { Object.keys(jobs[site]).length ? 
@@ -856,126 +855,85 @@ class SelectResults extends Component {
         </div>
       )
     })
-    console.log(html)
     this.setState({html: <div>{html}</div>})
   }
 
-  // get all jobs by one sitename
-  
-  // listBySiteName = (jobs, name) => {
-  //   const indices = ['aci', 'ndsi', 'adi', 'even', 'bio', 'rms']
-
-  //   var jobBySiteName = jobs.filter(job => {
-  //     return job.input.siteName === name ? job : ''
-  //   })
-  //   console.log(jobBySiteName)
-
-  //   // var htmlJobsBySiteName = ({
-  //   //   indices.map(index => {
-
-  //   //   })
-  //   // })
-  // }
-
-
-
-
   // When an index is checked or unchecked from filtering section
   handleIndexChange = name => e => {
-    console.log(this.state.allFormatted, this.state.currentFormatted)
-    // Set variable to value of filteredResults state
-    var res = []
     var newRes = []
+    var res = []
+
     if(this.state.currentFormatted)
       res = this.state.currentFormatted
-    // If the index was checked
 
+    // If the index was checked
     if(e.target.checked === true) {
-      // Loop through all results
-      console.log(this.state.allFormatted[0])
       Object.keys(this.state.allFormatted).forEach(site => {
-        console.log(this.state.allFormatted[site])
         Object.keys(this.state.allFormatted[site]).forEach(index => {
-          // If current job type equals the index checked
           if(index === e.target.value) {
-            // If current job is not already selected
-            console.log(index, e.target.value)
-            if(!res[site][index]) {
-              res[site][index] = this.state.allFormatted[site][index]
-              // res.push(job)
+            if(this.state.searchedValue) { 
+              if(site.toLowerCase().indexOf(this.state.searchedValue.toLowerCase()) !== -1) {
+                if(!res[site][index]) {
+                  res[site][index] = this.state.allFormatted[site][index]
+                }
+              }
+            }
+            else {
+              if(!res[site][index]) {
+                res[site][index] = this.state.allFormatted[site][index]
+              }
             }
           }
         })
-        
       })
-      // console.log(res)
       this.setState({ currentFormatted: res })
       this.setHtmlFormatted(res)
     }
     // If index was unchecked
     else {
-
-      console.log(res)
-
-      // console.log(this.state.allFormatted[0])
       Object.keys(res).forEach(site => {
         newRes[site] = []
-        // console.log(res[site][e.target.value])
         Object.keys(res[site]).forEach(index => {
           if(index !== e.target.value) {
             newRes[site][index] = res[site][index]
           }
         })
-        // delete res[site][e.target.value]
-        // console.log(res[site])
-        // return res
       })
-      console.log(newRes, res)
-
       this.setState({ currentFormatted: newRes })
       this.setHtmlFormatted(newRes)
-
-
-      // // Set variable to filteredResults
-      // var newRes = []
-      // // Loop through filtered resutls
-      // res.forEach((job, index) => {
-      //   // If current job equals index unchecked
-      //   if(job.type !== e.target.value) {
-      //     // Only push jobs to new array that are not the type of the unchecked index
-      //     newRes.push(job)
-      //   }
-      // })
-      // Set filtered results to res
-      // this.setState({ filteredPopResults: newRes })
     }
-
     // Set state of checkbox value to event checked property
     this.setState({ [name]: e.target.checked })
   }
 
-  // handleSearch = (e) => {
-  //   this.setState({ searchedValue: e.target.value })
-  //   // Search with every letter or on submit??
-  // }
+  handleSearch = (e) => {
+    this.setState({ searchedValue: e.target.value })
+    // Search with every letter or on submit??
+  }
 
-  // submitSearch = () => {
+  submitSearch = () => {
 
-  //   var newRes = []
-
-  //   this.state.filteredResults.forEach(job => {
-  //     if(job.siteName.toLowerCase().indexOf(this.state.searchedValue.toLowerCase()) !== -1) {
-  //       newRes.push(job)
-  //     }
-  //   })
-  //   this.setState({ filteredResults: newRes })
-  // }
+    var newRes = []
+    var hi = 'currentFormatted'
+    console.log(this.state.hi)
+    Object.keys(this.state.currentFormatted).forEach(site => {
+      if(site.toLowerCase().indexOf(this.state.searchedValue.toLowerCase()) !== -1) {
+        console.log('yes')
+        newRes[site] = this.state.currentFormatted[site]
+      }
+      else
+        newRes[site] = []
+    })
+    this.setState({ currentFormatted: newRes })
+    this.setHtmlFormatted(newRes)
+  }
 
   selectJob = job => e => {
     this.setState({ selectedJob : job })
     this.setState({ hideFiltering: true })
     this.setState({ selectedJobToCompare : null })
   }
+
 
   // selectJobToCompare = job => e => {
   //   this.setState({ selectedJobToCompare : job })

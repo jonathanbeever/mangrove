@@ -8,6 +8,7 @@ import ChooseEvennessParams from './evenParams/chooseEvennessParams';
 import ChooseRmsParams from './rmsParams/chooseRmsParams';
 import FileSelect from './selectFiles';
 import './newJobs.css';
+import axios from 'axios';
 
 class NewJobs extends Component {
   constructor(props) {
@@ -46,7 +47,9 @@ class NewJobs extends Component {
 
       target = target.previousSibling
     }
-    this.setState({params: params})    
+    // this.setState({params: params})    
+    // test ACI spec
+    this.setState({specId: "5c2547480af83b2bac5133f6"})
 
     inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{inputHtml.reverse()}</div>)
  
@@ -80,11 +83,11 @@ class NewJobs extends Component {
           this.setState({paramComp: <ChooseAdiParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
-        case 'bioacoustic': {
+        case 'bi': {
           this.setState({paramComp: <ChooseBioacousticParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
-        case 'evenness': {
+        case 'aei': {
           this.setState({paramComp: <ChooseEvennessParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
           break;
         }
@@ -103,12 +106,19 @@ class NewJobs extends Component {
   handleParamChange (e) {
     // To pass to other components
     let params = Object.assign({}, this.state.params);
-
-    params[e.target.id] = e.target.value
+    // Set specType for new job request
+    params["specType"] = this.state.selectedIndex + 'Spec'
+    // Set author until users are implemented
+    params["author"] = "Test Author"
+    // Set index parameters
+    if(e.target.id === 'shannon')
+      params[e.target.id] = e.target.checked
+    else
+      params[e.target.id] = e.target.value
 
     this.setState({params: params});
 
-    // For rendering to screen
+    // For rendering to screen, may remove later
     let keys = Object.keys(params)
     let inputHtml = ''
 
@@ -121,6 +131,38 @@ class NewJobs extends Component {
   }
 
   handleJobSubmit () {
+    axios.put(
+        "http://localhost:3000/specs",  
+        this.state.params,
+        {headers: {"Content-Type": "application/json"}}
+    )
+    .then(res => {
+      // New spec was added
+      var specId = ''
+      if(res.status === 201) 
+        specId = res.data.createResult._id
+      // Spec already exists
+      else if(res.status === 200) 
+        specId = res.data.returnSpec[0]._id
+      
+      axios.put(
+        "http://localhost:3000/jobs",  
+        {
+          type: this.state.selectedIndex,
+          inputId: "5c2547480af83b2bac5133f7",
+          specId: specId
+        },
+        {headers: {"Content-Type": "application/json"}}
+      )
+      .then(res => {
+        // New spec was added
+        console.log(res)
+  
+      })
+      .catch(err => console.log(err));
+    })
+    .catch(err => console.log(err));
+
   }
 
   cancelJob () {
@@ -162,7 +204,7 @@ class NewJobs extends Component {
             {/* <button type="submit" className="btn btn-primary">Add Job to Queue</button> */}
           </div>
           <div className="col-3 currentJob">
-            {this.state.params ? (<div><h4>Current Job</h4>{this.state.inputHtml}<div className="col-12"><button type="submit" className="startJob btn btn-primary">Add Job to Queue</button></div></div>) : ''}
+            {this.state.params ? (<div><h4>Current Job</h4>{this.state.inputHtml}<div className="col-12"><button type="submit" onClick={this.handleJobSubmit} className="startJob btn btn-primary">Add Job to Queue</button></div></div>) : ''}
           </div>
         </div>
       </div>

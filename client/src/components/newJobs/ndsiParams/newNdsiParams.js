@@ -7,27 +7,33 @@ class NewNdsiParams extends Component {
     return (
       <form>
         <div className="form-group row">
-          <label htmlFor="anthro-min" className="col-5 col-form-label">Anthro Min</label>
+          <label htmlFor="anthroMin" className="col-5 col-form-label">Anthro Min</label>
           <div className="col-6">
-            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['anthro-min']} id="anthro-min" />
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['anthroMin']} id="anthroMin" />
           </div>
         </div>
         <div className="form-group row">
-          <label htmlFor="anthro-max" className="col-5 col-form-label">Anthro Max</label>
+          <label htmlFor="anthroMax" className="col-5 col-form-label">Anthro Max</label>
           <div className="col-6">
-            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['anthro-max']} id="anthro-max" />
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['anthroMax']} id="anthroMax" />
           </div>
         </div>
         <div className="form-group row">
-          <label htmlFor="bio-min" className="col-5 col-form-label">Bio Min</label>
+          <label htmlFor="bioMin" className="col-5 col-form-label">Bio Min</label>
           <div className="col-6">
-            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['bio-min']} id="bio-min" />
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['bioMin']} id="bioMin" />
           </div>
         </div>
         <div className="form-group row">
-          <label htmlFor="bio-max" className="col-5 col-form-label">Bio Max</label>
+          <label htmlFor="bioMax" className="col-5 col-form-label">Bio Max</label>
           <div className="col-6">
-            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['bio-max']} id="bio-max" />
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['bioMax']} id="bioMax" />
+          </div>
+        </div>
+        <div className="form-group row">
+          <label htmlFor="fftW" className="col-5 col-form-label">fft-w</label>
+          <div className="col-6">
+            <input onChange={this.props.onChange} className="form-control" type="text" value={this.props.params['fftW']} id="fftW" />
           </div>
         </div>
       </form>
