@@ -23,7 +23,8 @@ class NewJobs extends Component {
     this.state = {
         selectedIndex: '',
         changeIndexWarning: false,
-        params: ''
+        params: '',
+        inputs: ["5c2547480af83b2bac5133f7","5c2547480bf83b2bac5133f7","5c2547480cf83b2bac5133f7"]
     };
   }
 
@@ -146,24 +147,27 @@ class NewJobs extends Component {
       // Spec already exists, save id
       else if(res.status === 200) 
         specId = res.data.returnSpec[0]._id
-      // Request to queue new job
-      axios.put(
-        "http://localhost:3000/jobs",  
-        {
-          type: this.state.selectedIndex,
-          // Add a document with this id to inputs collection until input api req is set up
-          inputId: "5c2547480af83b2bac5133f7",
-          specId: specId
-        },
-        {headers: {"Content-Type": "application/json"}}
-      )
-      .then(res => {
-        if(res.status === 201)
-          alert('Job queued')
-        else if(res.status === 200)
-          alert('Job already created')
+      // Loop through inputs and make requests
+      this.state.inputs.forEach(inputId => {
+        // Request to queue new job
+        axios.put(
+          "http://localhost:3000/jobs",  
+          {
+            type: this.state.selectedIndex,
+            // Add a document with this id to inputs collection until input api req is set up
+            inputId: inputId,
+            specId: specId
+          },
+          {headers: {"Content-Type": "application/json"}}
+        )
+        .then(res => {
+          if(res.status === 201)
+            alert('Job queued')
+          else if(res.status === 200)
+            alert('Job already created')
+        })
+        .catch(err => console.log(err));
       })
-      .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
 
