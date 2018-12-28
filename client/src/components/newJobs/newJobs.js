@@ -131,33 +131,37 @@ class NewJobs extends Component {
   }
 
   handleJobSubmit () {
+    // Find or create spec
     axios.put(
         "http://localhost:3000/specs",  
         this.state.params,
         {headers: {"Content-Type": "application/json"}}
     )
     .then(res => {
-      // New spec was added
+      // var to hold id of created or found spec
       var specId = ''
+      // If new spec was create set id
       if(res.status === 201) 
         specId = res.data.createResult._id
-      // Spec already exists
+      // Spec already exists, save id
       else if(res.status === 200) 
         specId = res.data.returnSpec[0]._id
-      
+      // Request to queue new job
       axios.put(
         "http://localhost:3000/jobs",  
         {
           type: this.state.selectedIndex,
+          // Add a document with this id to inputs collection until input api req is set up
           inputId: "5c2547480af83b2bac5133f7",
           specId: specId
         },
         {headers: {"Content-Type": "application/json"}}
       )
       .then(res => {
-        // New spec was added
-        console.log(res)
-  
+        if(res.status === 201)
+          alert('Job queued')
+        else if(res.status === 200)
+          alert('Job already created')
       })
       .catch(err => console.log(err));
     })
