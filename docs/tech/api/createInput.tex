@@ -33,19 +33,19 @@ https://<base-url>/inputs
   & \tablehead{Description}
   \\ \hline
 
-  \codesnip{file}
-  & File
-  & The WAV file to be analyzed in any given job that references this input.
-  \\ \hline
-
   \codesnip{json}
   & Text
   & A description of the input being created. This should be a stringified JSON object containing the fields below.
   \\ \hline
 
-  \hspace{3mm} \codesnip{siteName}
+  \hspace{3mm} \codesnip{site}
   & String
   & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{series}
+  & String
+  & The name of the series of recordings that the input is a part of.
   \\ \hline
 
   \hspace{3mm} \codesnip{recordTimeMs}
@@ -67,6 +67,11 @@ https://<base-url>/inputs
   & Number
   & The longitude of the recording location.
   \\ \hline
+
+  \codesnip{file}
+  & File
+  & The WAV file to be analyzed in any given job that references this input. Note: Be sure that this is sent last in the request.
+  \\ \hline
 \end{longtable}
 \endgroup
 
@@ -79,15 +84,12 @@ https://<base-url>/inputs
   & \tablehead{Value}
   \\ \hline
 
-  \codesnip{file}
-  & \codesnip{arboretum.wav}
-  \\ \hline
-
   \codesnip{json}
   & \begin{mdframed}[backgroundcolor=bgcolor,skipabove=0pt,skipbelow=0pt,topline=false,bottomline=false,rightline=false,leftline=false]
   \begin{minted}[gobble=2]{json}
   {
-    "siteName": "UCF Arboretum",
+    "site": "UCF Arboretum",
+    "series": "Hurricane Irma",
     "recordTimeMs": 1505016000000,
     "coords": {
       "lat": 28.596238,
@@ -96,6 +98,10 @@ https://<base-url>/inputs
   }
   \end{minted}
   \end{mdframed}
+  \\ \hline
+
+  \codesnip{file}
+  & \codesnip{irma-1.wav}
   \\ \hline
 \end{longtable}
 \endgroup
@@ -139,9 +145,14 @@ https://<base-url>/inputs
   & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
   \\ \hline
 
-  \codesnip{siteName}
+  \codesnip{site}
   & String
   & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \codesnip{series}
+  & String
+  & The name of the series of recordings that the input is a part of.
   \\ \hline
 
   \codesnip{recordTimeMs}
@@ -170,8 +181,9 @@ https://<base-url>/inputs
 \begin{jsoncode}
 {
   "inputId": "input-1-uuid",
-  "path": "path/to/file/arboretum.wav",
-  "siteName": "UCF Arboretum",
+  "path": "./UCF Arboretum/Hurricane Irma/irma-1.wav",
+  "site": "UCF Arboretum",
+  "series": "Hurricane Irma",
   "recordTimeMs": 1505016000000,
   "coords": {
     "lat": 28.596238,

@@ -91,10 +91,16 @@ https://<base-url>/search/jobs
   & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
   \\ \hline
 
-  \codesnip{siteName}
+  \codesnip{site}
   & String
   &
   & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \codesnip{series}
+  & String
+  &
+  & The name of the series of recordings that the input is a part of.
   \\ \hline
 
   \codesnip{recordTimeMs}
@@ -425,7 +431,8 @@ https://<base-url>/search/jobs
     "finished"
   ],
   "path": "fileName.wav",
-  "siteName": "UCF",
+  "site": "UCF Arboretum",
+  "series": "Hurricane Irma",
   "recordTimeMs": {
     "min": 1504929600000,
     "max": 1505102400000

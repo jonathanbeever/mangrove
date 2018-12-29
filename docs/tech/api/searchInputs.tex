@@ -38,9 +38,14 @@ https://<base-url>/search/inputs
   & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
   \\ \hline
 
-  \codesnip{siteName}
+  \codesnip{site}
   & String
   & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \codesnip{series}
+  & String
+  & The name of the series of recordings that the input is a part of.
   \\ \hline
 
   \codesnip{recordTimeMs}
@@ -81,7 +86,8 @@ https://<base-url>/search/inputs
 \begin{jsoncode}
 {
   "path": "fileName.wav",
-  "siteName": "UCF",
+  "site": "UCF Arboretum",
+  "series": "Hurricane Irma",
   "recordTimeMs": {
     "min": 1504929600000,
     "max": 1505102400000
@@ -119,9 +125,14 @@ https://<base-url>/search/inputs
   & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
   \\ \hline
 
-  \codesnip{siteName}
+  \codesnip{site}
   & String
   & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \codesnip{series}
+  & String
+  & The name of the series of recordings that the input is a part of.
   \\ \hline
 
   \codesnip{recordTimeMs}
@@ -150,8 +161,9 @@ https://<base-url>/search/inputs
 \begin{jsoncode}
 {
   "inputId": "input-1-uuid",
-  "path": "path/to/file/arboretum.wav",
-  "siteName": "UCF Arboretum",
+  "path": "./UCF Arboretum/Hurricane Irma/irma-1.wav",
+  "site": "UCF Arboretum",
+  "series": "Hurricane Irma",
   "recordTimeMs": 1505016000000,
   "coords": {
     "lat": 28.596238,
