@@ -1,0 +1,112 @@
+\subsubsection{Get Input}
+Retrieve the details of an existing input by \codesnip{inputId}.
+
+\paragraph{GET} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/inputs/:inputId
+\end{htmlcode}
+
+\paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \tablehead{Field}
+  & \tablehead{Type}
+  & \tablehead{Description}
+  \\ \hline
+
+  \codesnip{inputId}
+  & String
+  & The \codesnip{inputId} of the input for which details are desired.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Request: GET} \mbox{}\\[\codeheaderspace]
+\begin{htmlcode}
+https://<base-url>/inputs/input-1-uuid
+\end{htmlcode}
+
+\paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\desccolwidthlg} |}
+  \hline
+  \tablehead{Field}
+  & \tablehead{Type}
+  & \tablehead{Description}
+  \\ \hline
+
+  \codesnip{inputId}
+  & String
+  & A unique identifier for the audio input file.
+  \\ \hline
+
+  \codesnip{path}
+  & String
+  & The path to the input file on the host machine, from the root input folder. Note: This will always be a path to a WAV file.
+  \\ \hline
+
+  \codesnip{site}
+  & String
+  & The name of the site in which the input was recorded.
+  \\ \hline
+
+  \codesnip{series}
+  & String
+  & The name of the series of recordings that the input is a part of.
+  \\ \hline
+
+  \codesnip{recordTimeMs}
+  & Object
+  & The time at which the input audio file was recorded, listed in milliseconds since the Unix epoch.
+  \\ \hline
+
+  \codesnip{coords}
+  & Object
+  & The coordinates of the location in which the input was recorded.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{lat}
+  & Number
+  & The latitude of the recording location.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{long}
+  & Number
+  & The longitude of the recording location.
+  \\ \hline
+\end{longtable}
+\endgroup
+
+\paragraph{Example Response Body} \mbox{}\\[\codeheaderspace]
+\begin{jsoncode}
+{
+  "inputId": "input-1-uuid",
+  "path": "./UCF Arboretum/Hurricane Irma/irma-1.wav",
+  "site": "UCF Arboretum",
+  "series": "Hurricane Irma",
+  "recordTimeMs": 1505016000000,
+  "coords": {
+    "lat": 28.596238,
+    "long": -81.191381
+  }
+}
+\end{jsoncode}
+
+\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
+  \hline
+  \tablehead{Condition}
+  & \multicolumn{2}{|l|}{\tablehead{Response}}
+  \\ \hline
+
+  The requested input does not exist.
+  & 404
+  & An object containing a single field, \codesnip{message} (String), stating that an input with the \codesnip{inputId} provided in the request was not found.
+  \\ \hline
+\end{longtable}
+\endgroup

@@ -1,0 +1,22 @@
+\subsubsection{Acoustic Diversity \& Evenness Indices}
+The ADI (Acoustic Diversity Index) bases its numerical evaluation on the concept of evenness of a set. A statistical theory first appearing in the 1960\textquotesingle s it is used to measure the diversity of a set of data.\par
+
+\begin{quote}
+  ``For example, in a sample of 10 species, one extreme would be a sample with one species represented by 99 individuals and the other nine being represented by one individual each. The other extreme would be where each of the 10 species was each represented by 100 individuals. In simple terms, maximum diversity (equitability) exists if each individual belongs to a different species. Minimum diversity exists if all individuals belong to one species.''\cite{shannonWiener}
+\end{quote}
+
+The equation comes from Shannon\textquotesingle s index:\par
+
+\begin{equation}
+  H = -\sum_{i=1}^n{p_i \ln p_i}
+\end{equation} \\[\eqnspace]
+
+This was then turned into the equation for species diversity:\par
+
+\begin{equation}
+  D = -\sum_{i=1}^s{p_i (\ln p_i)}
+\end{equation} \\[\eqnspace]
+
+Where $D$ is the species diversity, $p_i$ is the relative abundance (\# of organisms in species $p_i$ / total \# of organisms in data set) of the $i$\textsuperscript{th} species.\par
+One of the great features of the ADI using the Shannon-Wiener index is that it is not greatly affected by sample size. Along with that the ADI can capture a lot of information in one expression. Which can be helpful to express data to a general audience. That being said you must put this index into context. Mainly one must state the range of values that the index can output. These minimum and maximum values put the output value into context for the data collected. Just like most indices it is important that diversity indices are used along other measures. This allows for a holistic measure of the state the environment is in.\cite{shannonWiener}\par
+While the method of taking individual sounds of birds and using ratios of specific calls is much more accurate, it is very difficult to identify individual calls in an automated fashion. Thus, when using a script to calculate the evenness or diversity of a sound clip, bands of frequencies are often used. For example, one might divide a spectrogram into 5 kHz intervals and then compare the intensity of each band in ratio of the total intensity of the sound recording. This provides insight into the diversity of the types of frequencies that are found within a recording. Since most species have a frequency range into which their calls fall, it can provide an insight into the ratio of types of species.

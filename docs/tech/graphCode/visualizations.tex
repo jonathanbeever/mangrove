@@ -1,0 +1,43 @@
+\subsubsection{Visualization With Recharts}
+Using the Recharts framework, expanded on in the Technologies Used section of this paper, we can create flexible line charts, bar graphs, and more to help explain the user\textquotesingle s data and draw conclusions. This section will cover some of the code used in this service to ensure that our code base is as flexible as possible while still creating useful visualizations.\par
+Common components used in each of these include XAxis, YAxis, Legend, Tooltip, Brush, and CartesianGrid, which are mostly self explanatory. Brushes are used to allow the user to filter their data into smaller sections to make observing the data easier, especially in larger data sets.\par
+The format for passing data to each of these components is mostly the same, although the actual content of the data changes by index. In general, the data being passed is of the following format.\par
+
+\begin{javascriptcode}
+{
+  graph1: [
+            {
+              name: 'Left Channel',
+              ndsi: results.ndsiL,
+              biophony: results.biophonyL,
+              anthrophony: results.anthrophonyL
+            },
+            {
+              name: 'Right Channel',
+              ndsi: results.ndsiR,
+              biophony: results.biophonyR,
+              anthrophony: results.anthrophonyR
+            }
+          ],
+  graph2: [
+            {
+              name: 'NDSI',
+              leftChannel: results.ndsiL,
+              rightChannel: results.ndsiR
+            },
+            {
+              name: 'Biophony',
+              leftChannel: results.biophonyL,
+              rightChannel: results.biophonyR
+            },
+            {
+              name: 'Anthrophony',
+              leftChannel: results.anthrophonyL,
+              rightChannel: results.anthrophonyR
+            }
+          ],
+  graph3: []
+}
+\end{javascriptcode}
+
+Some indices include more graphs naturally, as to better visualize the different data outputs. The code above represents the simplest graph, that being the NDSI bar charts. These three graphs are lists of JSON objects, inside of a parent JSON object, that is in turn passed into the NDSI component responsible for creating the graphs. Graph1 represents the two bar group visualization, while Graph2 represents the three bar group one. Note that Graph3 is used only when the dataset is comprised of multiple files, and is used for calculating an overall NDSI over all the files in the dataset. The name field is used for determining which data the X axis should track, while the other fields represent actual data to be represented by the graphs in the visualization component, which are passed as data keys in the components.
