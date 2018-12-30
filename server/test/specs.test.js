@@ -37,7 +37,7 @@ describe('Specs', () => {
     });
   });
 
-  describe('/GET specs', () => {
+  describe('/GET all specs', () => {
     it('It should GET all the Specs (none)', (done) => {
       chai
         .request(app)
@@ -228,7 +228,9 @@ describe('Specs', () => {
           done(err);
         });
     });
+  });
 
+  describe('/GET spec', (req, res) => {
     it('It should get a spec by ID (One)', (done) => {
       const testSpec = nextMockSpec(specType.AEI, {
         maxFreq: 1000,
@@ -243,8 +245,8 @@ describe('Specs', () => {
           chai
             .request(app)
             .get(`/specs/${testId}`)
-            .then((res) => {
-              const content = res.body;
+            .then((innerRes) => {
+              const content = innerRes.body;
               expect(content).to.be.not.null;
               expect(content._id).to.be.equal(testId);
               done();
@@ -271,8 +273,8 @@ describe('Specs', () => {
           chai
             .request(app)
             .get(`/specs/${testId}`)
-            .then((res) => {
-              const content = res.body;
+            .then((innerRes) => {
+              const content = innerRes.body;
               expect(content).to.be.not.null;
               expect(content.error).to.not.be.null;
               expect(content.error).to.be.a('string');
@@ -288,7 +290,6 @@ describe('Specs', () => {
     });
   });
 
-  // TODO PUT SPECS
   describe('/PUT specs', () => {
     it('It should add spec, ACI (One)', (done) => {
       const testSpecJson = mockSpecCreateJson(specType.ACI, {
@@ -495,4 +496,47 @@ describe('Specs', () => {
   });
 
   // TODO DELETE SPECS
+  describe('/DELETE Spec', () => {
+    it('It should delete one spec given Id', (done) => {
+      const testSpec = nextMockSpec(specType.AEI, {
+        maxFreq: 2000,
+        dbThreshold: 17,
+        freqStep: 26,
+      });
+
+      Spec.create(testSpec)
+        .then(
+          chai
+            .request(app)
+            .delete(`/specs/${testSpec.id}`)
+            .then((res) => {
+              const content = res.body;
+              expect(content.success).to.be.true;
+              expect(content.message).to.be.string(
+                `Succesfully deleted Spec with specId: ${testSpec.id}`,
+              );
+            })
+            .catch((err) => {
+              done(err);
+            }),
+          chai
+            .request(app)
+            .delete(`/specs/${testSpec.id}`)
+            .then((res) => {
+              const content = res.body;
+              expect(content.success).to.be.true;
+              expect(content.message).to.be.string(
+                `No valid entry found for specId: ${testSpec.id}`,
+              );
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            }),
+        )
+        .catch((err) => {
+          done(err);
+        });
+    });
+  });
 });

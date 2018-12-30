@@ -135,7 +135,6 @@ router.put('/', (req, res) => {
             res.status(201).json(createResult);
           })
           .catch((err) => {
-            console.log(spec);
             res.status(500).json({
               error: `Error in saving Spec :: ${err}`,
             });
@@ -176,7 +175,6 @@ router.get('/', (req, res) => {
       res.status(200).json({ count, specs: searchResult });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
         error: `Error getting all specs :: ${err}`,
       });
@@ -184,5 +182,22 @@ router.get('/', (req, res) => {
 });
 
 // TODO Delete Spec
+router.delete('/:specId', (req, res) => {
+  const { specId } = req.params;
+  Spec.deleteOne({ _id: specId })
+    .exec()
+    .then((deleteResult) => {
+      res.status(200).json({
+        success: true,
+        message:
+          deleteResult.n > 0
+            ? `Succesfully deleted Spec with specId: ${specId}`
+            : `No valid entry found for specId: ${specId}.`,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: err });
+    });
+});
 
 module.exports = router;
