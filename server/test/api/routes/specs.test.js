@@ -3,26 +3,26 @@ const chaiHttp = require('chai-http');
 
 const { ObjectId } = require('mongoose').Types;
 
-const mockDb = require('./util/mockDb');
+const mockDb = require('../../mock/mockDb');
 const {
   mockSpec,
   nextMockSpec,
   mockSpecCreateJson,
   nextMockSpecCreateJson,
   getJsonFromMockSpec,
-} = require('./util/mockSpec');
-const { nextMockObjectId } = require('./util/mockObjectId');
+} = require('../../mock/mockSpec');
+const { nextMockObjectId } = require('../../mock/mockObjectId');
 
-const app = require('../app');
+const app = require('../../../app');
 
-const { Spec } = require('../api/models/spec');
+const { Spec } = require('../../../api/models/spec');
 const {
   specTypeToType,
   getSpecKeys,
   getParamsFromSpec,
-} = require('../api/models/spec/utils');
-const Type = require('../api/models/type');
-const Param = require('../api/models/spec/param');
+} = require('../../../api/models/spec/utils');
+const Type = require('../../../api/models/type');
+const Param = require('../../../api/models/spec/param');
 
 const { expect } = chai;
 

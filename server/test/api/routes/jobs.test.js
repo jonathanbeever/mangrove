@@ -3,20 +3,20 @@ const chaiHttp = require('chai-http');
 
 const { ObjectId } = require('mongoose').Types;
 
-const mockDb = require('./util/mockDb');
+const mockDb = require('../../mock/mockDb');
 const {
   nextMockJob,
   nextMockJobCreateJson,
   getJsonFromMockJob,
-} = require('./util/mockJob');
-const { nextMockObjectId } = require('./util/mockObjectId');
+} = require('../../mock/mockJob');
+const { nextMockObjectId } = require('../../mock/mockObjectId');
 
-const app = require('../app');
+const app = require('../../../app');
 
-const { Job } = require('../api/models/job');
-const { getJobKeys } = require('../api/models/job/utils');
-const Type = require('../api/models/type');
-const Status = require('../api/models/status');
+const { Job } = require('../../../api/models/job');
+const { getJobKeys } = require('../../../api/models/job/utils');
+const Type = require('../../../api/models/type');
+const Status = require('../../../api/models/status');
 
 const { expect } = chai;
 
