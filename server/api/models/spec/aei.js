@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
 const { MAX_NUM_R } = require('./config');
+const { specDefaults } = require('../specDefaults');
 
 module.exports = Spec.discriminator(
   'aeiSpec',
@@ -9,18 +10,18 @@ module.exports = Spec.discriminator(
       type: Number,
       min: 0,
       max: MAX_NUM_R,
-      default: 16000,
+      default: specDefaults.aei.maxFreq,
     },
     dbThreshold: {
       type: Number,
-      default: 32,
+      default: specDefaults.aei.dbThreshold,
       min: -MAX_NUM_R,
       max: MAX_NUM_R,
     },
     freqStep: {
       type: Number,
       min: 1,
-      default: 512,
+      default: specDefaults.aei.freqStep,
       max: MAX_NUM_R,
     },
   }),

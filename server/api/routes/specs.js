@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const mongoose = require('mongoose');
-// const moment = require('moment');
 
 const {
   Spec,
@@ -13,6 +12,8 @@ const {
   NdsiSpec,
   RmsSpec,
 } = require('../models/spec');
+
+const { specDefaults } = require('../models/specDefaults');
 
 const { specType } = require('../models/specType');
 
@@ -48,69 +49,225 @@ router.put('/', (req, res) => {
   }
   // try to find this spec in the database.
   SpecModel.find({
+    // If any of the following model sets are triggered it means that a copy of the
+    // model being requested already exists.
     $or: [
       {
         $and: [
           // ACI
-          { minFreq: { $exists: true } },
-          { fftW: { $exists: true } },
-          { maxFreq: { $exists: true } },
-          { j: { $exists: true } },
-          { minFreq: req.body.minFreq },
-          { maxFreq: req.body.maxFreq },
-          { j: req.body.j },
-          { fftW: req.body.fftW },
+          {
+            // Checks to see if the value exists or is a default within the
+            $or: [
+              { minFreq: { $exists: true } },
+              { minFreq: specDefaults.aci.minFreq },
+            ],
+          },
+          {
+            $or: [{ fftW: { $exists: true } }, { fftW: specDefaults.aci.fftW }],
+          },
+          {
+            $or: [
+              { maxFreq: { $exists: true } },
+              { fftW: specDefaults.aci.maxFreq },
+            ],
+          },
+          { $or: [{ j: { $exists: true } }, { j: specDefaults.aci.j }] },
+          {
+            $or: [
+              { minFreq: req.body.minFreq },
+              { minFreq: specDefaults.aci.minFreq },
+            ],
+          },
+          {
+            $or: [
+              { maxFreq: req.body.maxFreq },
+              { maxFreq: specDefaults.aci.maxFreq },
+            ],
+          },
+          { $or: [{ j: req.body.j }, { j: specDefaults.aci.j }] },
+          { $or: [{ fftW: req.body.fftW }, { fftW: specDefaults.aci.fftW }] },
         ],
       },
-      // ADD EXISTS TOO THE REST OF THESE CASES
       {
         $and: [
           // ADI
-          { maxFreq: req.body.maxFreq },
-          { dbThreshold: req.body.dbThreshold },
-          { freqStep: req.body.freqStep },
-          { shannon: req.body.shannon },
-          { maxFreq: { $exists: true } },
-          { dbThreshold: { $exists: true } },
-          { freqStep: { $exists: true } },
-          { shannon: { $exists: true } },
+          {
+            $or: [
+              { maxFreq: req.body.maxFreq },
+              { maxFreq: specDefaults.adi.maxFreq },
+            ],
+          },
+          {
+            $or: [
+              { dbThreshold: req.body.dbThreshold },
+              { dbThreshold: specDefaults.adi.dbThreshold },
+            ],
+          },
+          {
+            $or: [
+              { freqStep: req.body.freqStep },
+              { freqStep: specDefaults.adi.freqStep },
+            ],
+          },
+          {
+            $or: [
+              { shannon: req.body.shannon },
+              { shannon: specDefaults.adi.shannon },
+            ],
+          },
+          {
+            $or: [
+              { maxFreq: { $exists: true } },
+              { maxFreq: specDefaults.adi.maxFreq },
+            ],
+          },
+          {
+            $or: [
+              { dbThreshold: { $exists: true } },
+              { dbThreshold: specDefaults.adi.dbThreshold },
+            ],
+          },
+          {
+            $or: [
+              { freqStep: { $exists: true } },
+              { freqStep: specDefaults.adi.freqStep },
+            ],
+          },
+          {
+            $or: [
+              { shannon: { $exists: true } },
+              { shannon: specDefaults.adi.shannon },
+            ],
+          },
         ],
       },
       {
         $and: [
           // AEI
-          { maxFreq: req.body.maxFreq },
-          { dbThreshold: req.body.dbThreshold },
-          { freqStep: req.body.freqStep },
-          { maxFreq: { $exists: true } },
-          { dbThreshold: { $exists: true } },
-          { freqStep: { $exists: true } },
+          {
+            $or: [
+              { maxFreq: req.body.maxFreq },
+              { maxFreq: specDefaults.aei.maxFreq },
+            ],
+          },
+          {
+            $or: [
+              { dbThreshold: req.body.dbThreshold },
+              { dbThreshold: specDefaults.aei.dbThreshold },
+            ],
+          },
+          {
+            $or: [
+              { freqStep: req.body.freqStep },
+              { freqStep: specDefaults.aei.freqStep },
+            ],
+          },
+          {
+            $or: [
+              { maxFreq: { $exists: true } },
+              { maxFreq: specDefaults.aei.maxFreq },
+            ],
+          },
+          {
+            $or: [
+              { dbThreshold: { $exists: true } },
+              { dbThreshold: specDefaults.aei.dbThreshold },
+            ],
+          },
+          {
+            $or: [
+              { freqStep: { $exists: true } },
+              { freqStep: specDefaults.aei.freqStep },
+            ],
+          },
         ],
       },
       {
         $and: [
           // BI
-          { minFreq: req.body.minFreq },
-          { maxFreq: req.body.maxFreq },
-          { fftW: req.body.fftW },
-          { minFreq: { $exists: true } },
-          { maxFreq: { $exists: true } },
-          { fftW: { $exists: true } },
+          {
+            $or: [
+              { minFreq: req.body.minFreq },
+              { minFreq: specDefaults.bi.minFreq },
+            ],
+          },
+          {
+            $or: [
+              { maxFreq: req.body.maxFreq },
+              { maxFreq: specDefaults.bi.maxFreq },
+            ],
+          },
+          { $or: [{ fftW: req.body.fftW }, { fftW: specDefaults.bi.fftW }] },
+          {
+            $or: [
+              { minFreq: { $exists: true } },
+              { minFreq: specDefaults.bi.minFreq },
+            ],
+          },
+          {
+            $or: [
+              { maxFreq: { $exists: true } },
+              { maxFreq: specDefaults.bi.maxFreq },
+            ],
+          },
+          { $or: [{ fftW: { $exists: true } }, { fftW: specDefaults.bi.fftW }] },
         ],
       },
       {
         $and: [
           // NDSI
-          { fftW: req.body.fftW },
-          { anthroMin: req.body.anthroMin },
-          { anthroMax: req.body.anthroMax },
-          { bioMin: req.body.bioMin },
-          { bioMax: req.body.bioMax },
-          { fftW: { $exists: true } },
-          { anthroMin: { $exists: true } },
-          { anthroMax: { $exists: true } },
-          { bioMin: { $exists: true } },
-          { bioMax: { $exists: true } },
+          { $or: [{ fftW: req.body.fftW }, { fftW: specDefaults.ndsi.fftW }] },
+          {
+            $or: [
+              { anthroMin: req.body.anthroMin },
+              { anthroMin: specDefaults.ndsi.anthroMin },
+            ],
+          },
+          {
+            $or: [
+              { anthroMax: req.body.anthroMax },
+              { anthroMax: specDefaults.ndsi.anthroMax },
+            ],
+          },
+          {
+            $or: [
+              { bioMin: req.body.bioMin },
+              { bioMin: specDefaults.ndsi.bioMin },
+            ],
+          },
+          {
+            $or: [
+              { bioMax: req.body.bioMax },
+              { bioMax: specDefaults.ndsi.bioMax },
+            ],
+          },
+          {
+            $or: [{ fftW: { $exists: true } }, { fftW: specDefaults.ndsi.fftW }],
+          },
+          {
+            $or: [
+              { anthroMin: { $exists: true } },
+              { anthroMin: specDefaults.ndsi.anthroMin },
+            ],
+          },
+          {
+            $or: [
+              { anthroMax: { $exists: true } },
+              { anthroMax: specDefaults.ndsi.anthroMax },
+            ],
+          },
+          {
+            $or: [
+              { bioMin: { $exists: true } },
+              { bioMin: specDefaults.ndsi.bioMin },
+            ],
+          },
+          {
+            $or: [
+              { bioMax: { $exists: true } },
+              { bioMax: specDefaults.ndsi.bioMax },
+            ],
+          },
         ],
       },
       // RMS has no param
@@ -132,7 +289,7 @@ router.put('/', (req, res) => {
         spec
           .save()
           .then((createResult) => {
-            res.status(201).json(createResult);
+            res.status(201).json({ createResult, test: AciSpec });
           })
           .catch((err) => {
             res.status(500).json({
