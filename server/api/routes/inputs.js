@@ -4,12 +4,12 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
 const mkdirp = require('mkdirp');
-const settings = require('../../util/settings');
+const {
+  getUploadPath,
+  deleteInputFile,
+} = require('../../util/storage');
 
 const Input = require('../models/input');
-
-const inputDir = settings.value('inputDir');
-const getUploadPath = json => `${inputDir}/${json.site}/${json.series}`;
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -80,15 +80,96 @@ router.put('/', upload.single('file'), (req, res) => {
 });
 
 // Get Input
-// router.get('/:inputId', (req, res) => {
-// });
+router.get('/:inputId', (req, res) => {
+  const { inputId } = req.params;
+
+  Input.findById(inputId)
+    .exec()
+    .then((searchResult) => {
+      if (searchResult) {
+        res.status(200).json({
+          inputId: searchResult._id,
+          path: searchResult.path,
+          site: searchResult.site,
+          series: searchResult.series,
+          recordTimeMs: searchResult.recordTimeMs,
+          coords: {
+            lat: searchResult.coords.lat,
+            long: searchResult.coords.long,
+          },
+        });
+      } else {
+        res.status(404).json({
+          message: `No valid entry found for inputId: ${inputId}.`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
 
 // Get All Inputs
-// router.get('/', (req, res) => {
-// });
+router.get('/', (req, res) => {
+  Input.find()
+    .exec()
+    .then((searchResult) => {
+      res.status(200).json({
+        count: searchResult.length,
+        inputs: searchResult.map(input => ({
+          inputId: input._id,
+          path: input.path,
+          site: input.site,
+          series: input.series,
+          recordTimeMs: input.recordTimeMs,
+          coords: {
+            lat: input.coords.lat,
+            long: input.coords.long,
+          },
+        })),
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
 
 // Delete Input
-// router.delete('/:inputId', (req, res) => {
-// });
+router.delete('/:inputId', (req, res) => {
+  const { inputId } = req.params;
+
+  Input.findById(inputId)
+    .exec()
+    .then((searchResult) => {
+      Input.deleteOne({ _id: inputId })
+        .exec()
+        .then((deleteResult) => {
+          if (searchResult) deleteInputFile(searchResult.path);
+
+          res.status(200).json({
+            success: true,
+            message: (
+              deleteResult.n > 0
+                ? `Successfully deleted Input with inputId: ${inputId}.`
+                : `No valid entry found for inputId: ${inputId}.`
+            ),
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            error: err,
+          });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
 
 module.exports = router;
