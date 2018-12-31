@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DateAndTimePickers from './dataTimePicker';
 import Button from '@material-ui/core/Button';
 import './selectResults.css';
+import InputsTable from './inputsTable.js';
 
 const styles = theme => ({
   container: {
@@ -23,8 +24,12 @@ class FilterInputs extends Component {
     super(props);
   }
 
+  componentDidMount = () => {
+    console.log(this.props)
+  }
   render() {
     return (
+      <div className="row">
       <div className="col-4">
         <h5>Filter By Input Files</h5>
         <TextField
@@ -55,6 +60,10 @@ class FilterInputs extends Component {
         </Button>
         </div>
         
+      </div>
+      <div className="col-8">
+        <InputsTable filteredInputs={this.props.filteredInputs}/>
+      </div>
       </div>
     );
   }

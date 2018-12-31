@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Tabs from './filteringTabs';
 import axios from 'axios';
 
+// TODO fix css
 const inputFiles = [
   {
     inputId: '1',
@@ -56,12 +57,14 @@ class StepperTest
       setName : '',
       fileDate : '',
       latitude : '',
-      longitude : ''
+      longitude : '',
+      filteredInputs : inputFiles
     };
 
   }
 
   componentDidMount = () => {
+    console.log(this.state.filteredInputs)
     // axios.get('http://localhost:3000/jobs')
     //   .then(res => {
     //     console.log(res.data.jobs)
@@ -87,7 +90,6 @@ class StepperTest
         }
       }
     })
-    console.log(filteredInputs)
 
     this.setState({ filteredInputs: filteredInputs })
   }
@@ -100,6 +102,7 @@ class StepperTest
           setName={this.state.setName} 
           latitude={this.state.latitude}
           longitude={this.state.longitude}
+          filteredInputs={this.state.filteredInputs}
           onChangeInput={this.handleInputChange} 
           onSubmitInput={this.submitIndexFilter}
         />

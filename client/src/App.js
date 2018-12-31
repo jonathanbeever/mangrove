@@ -4,8 +4,9 @@ import NavBar from './components/navbar';
 import NewJobs from './components/newJobs/newJobs';
 import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-import Catalog from './components/selectResults/selectResults';
-import FilteringTest from './components/selectResults/FilteringTest.js';
+// import Catalog from './components/catalog';
+// import Catalog from './components/selectResults/selectResults';
+import FilteringTest from './components/selectResults/filteringTest.js';
 
 const RESULTS = [
   {name: 'UCF Arboretum-1', date: '10/19/2018',  time: '9', site: 'Arboretum', index: ['NDSI'], params: 'preset 2',
@@ -2043,7 +2044,7 @@ class App extends Component {
           </div>
           <Switch>
             {/* Add login */}
-            <Route path="/catalog" render={() => <Catalog results={RESULTS} />}/>
+            {/* <Route path="/catalog" render={() => <Catalog results={RESULTS} />}/> */}
             <Route path="/filteringTest" component={FilteringTest} />
             <Route path="/newJobs" component={NewJobs} />
             <Route path="/settings" component={Settings} />

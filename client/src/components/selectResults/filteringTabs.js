@@ -53,6 +53,7 @@ class SimpleTabs extends React.Component {
             setName={this.props.setName} 
             latitude={this.props.latitude}
             longitude={this.props.longitude}
+            filteredInputs={this.props.filteredInputs}
             onChangeInput={this.props.onChangeInput} 
             onSubmitInput={this.props.onSubmitInput} /></TabContainer>}
         {value === 1 && <TabContainer>Item Two</TabContainer>}
