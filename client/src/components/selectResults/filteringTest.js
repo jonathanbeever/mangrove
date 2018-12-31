@@ -93,6 +93,10 @@ class StepperTest
 
     this.setState({ filteredInputs: filteredInputs })
   }
+  // Array of inputIds selected in table
+  updateSelectedInputs = (selected) => {
+    console.log(selected)
+  }
 
   render() {
     return (
@@ -105,6 +109,7 @@ class StepperTest
           filteredInputs={this.state.filteredInputs}
           onChangeInput={this.handleInputChange} 
           onSubmitInput={this.submitIndexFilter}
+          updateSelectedInputs={this.updateSelectedInputs} 
         />
       </div>
     );

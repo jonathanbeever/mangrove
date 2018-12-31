@@ -81,7 +81,7 @@ class FilterInputs extends Component {
         </div>
 
         <div className="col-8">
-          <InputsTable filteredInputs={this.props.filteredInputs}/>
+          <InputsTable updateSelectedInputs={this.props.updateSelectedInputs} filteredInputs={this.props.filteredInputs}/>
         </div>
       </div>
     );

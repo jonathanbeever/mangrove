@@ -20,9 +20,9 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 let counter = 0;
-function createData(name, calories, fat, carbs, protein) {
+function createData(id, siteName, setName, fileName, latitude, longitude) {
   counter += 1;
-  return { id: counter, name, calories, fat, carbs, protein };
+  return { id: id, siteName, setName, fileName, latitude, longitude };
 }
 
 function desc(a, b, orderBy) {
@@ -213,7 +213,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredInputs.map(input => {
-      return createData(input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
+      return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
     })
     this.setState({data: data})
   }
@@ -221,7 +221,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredInputs.map(input => {
-        return createData(input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
+        return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
       })
       this.setState({data: data})
     }
@@ -264,6 +264,7 @@ class EnhancedTable extends React.Component {
       );
     }
 
+    this.props.updateSelectedInputs(newSelected)
     this.setState({ selected: newSelected });
   };
 
@@ -314,12 +315,12 @@ class EnhancedTable extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
-                        {n.name}
+                        {n.siteName}
                       </TableCell>
-                      <TableCell align="right">{n.calories}</TableCell>
-                      <TableCell align="right">{n.fat}</TableCell>
-                      <TableCell align="right">{n.carbs}</TableCell>
-                      <TableCell align="right">{n.protein}</TableCell>
+                      <TableCell align="right">{n.setName}</TableCell>
+                      <TableCell align="right">{n.fileName}</TableCell>
+                      <TableCell align="right">{n.latitude}</TableCell>
+                      <TableCell align="right">{n.longitude}</TableCell>
                     </TableRow>
                   );
                 })}
