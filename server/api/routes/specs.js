@@ -2,47 +2,16 @@ const express = require('express');
 
 const router = express.Router();
 const mongoose = require('mongoose');
-
-const {
-  Spec,
-  AciSpec,
-  AdiSpec,
-  AeiSpec,
-  BiSpec,
-  NdsiSpec,
-  RmsSpec,
-} = require('../models/spec');
-
+const { Spec } = require('../models/spec');
 const { specDefaults } = require('../models/specDefaults');
 
-const { specType } = require('../models/specType');
+const { getSpecType } = require('../models/specType');
 
 // Create Spec
 router.put('/', (req, res) => {
   let SpecModel = null;
-  switch (req.body.specType) {
-    case specType.ACI:
-      SpecModel = AciSpec;
-      break;
-    case specType.ADI:
-      SpecModel = AdiSpec;
-      break;
-    case specType.AEI:
-      SpecModel = AeiSpec;
-      break;
-    case specType.BI:
-      SpecModel = BiSpec;
-      break;
-    case specType.NDSI:
-      SpecModel = NdsiSpec;
-      break;
-    case specType.RMS:
-      SpecModel = RmsSpec;
-      break;
-    default:
-      SpecModel = null;
-      break;
-  }
+
+  SpecModel = getSpecType(req.body.specType);
 
   if (SpecModel === null) {
     res.status(404).json({ error: 'Not a Supported SpecModel Type' });
@@ -210,13 +179,17 @@ router.put('/', (req, res) => {
               { maxFreq: specDefaults.bi.maxFreq },
             ],
           },
-          { $or: [{ fftW: { $exists: true } }, { fftW: specDefaults.bi.fftW }] },
+          {
+            $or: [{ fftW: { $exists: true } }, { fftW: specDefaults.bi.fftW }],
+          },
         ],
       },
       {
         $and: [
           // NDSI
-          { $or: [{ fftW: req.body.fftW }, { fftW: specDefaults.ndsi.fftW }] },
+          {
+            $or: [{ fftW: req.body.fftW }, { fftW: specDefaults.ndsi.fftW }],
+          },
           {
             $or: [
               { anthroMin: req.body.anthroMin },
@@ -280,7 +253,6 @@ router.put('/', (req, res) => {
       } else {
         // add id and creation time to spec document
         req.body._id = new mongoose.Types.ObjectId();
-        // req.body.creationTimeMs = moment().valueOf();
         const spec = new SpecModel(
           req.body, // Put requested item in a new spec variable
         );
@@ -289,7 +261,7 @@ router.put('/', (req, res) => {
         spec
           .save()
           .then((createResult) => {
-            res.status(201).json({ createResult, test: AciSpec });
+            res.status(201).json(createResult);
           })
           .catch((err) => {
             res.status(500).json({

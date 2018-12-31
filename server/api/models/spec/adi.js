@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
-const { MAX_NUM_R } = require('./config');
+const { MAX_NUM_R } = require('../../../util/rConstants');
 const { specDefaults } = require('../specDefaults');
 
 module.exports = Spec.discriminator(

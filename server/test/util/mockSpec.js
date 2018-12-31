@@ -1,41 +1,14 @@
 const { nextMockObjectId } = require('./mockObjectId');
 const { mockParameter } = require('./mockParam');
-const {
-  AciSpec,
-  AeiSpec,
-  AdiSpec,
-  BiSpec,
-  NdsiSpec,
-  RmsSpec,
-} = require('../../api/models/spec');
 
-const { specType } = require('../../api/models/specType');
+const { getSpecType } = require('../../api/models/specType');
 
 const mockSpec = (_id, type, param) => {
   let SpecModel = null;
-  switch (type) {
-    case specType.ACI:
-      SpecModel = AciSpec;
-      break;
-    case specType.ADI:
-      SpecModel = AdiSpec;
-      break;
-    case specType.AEI:
-      SpecModel = AeiSpec;
-      break;
-    case specType.BI:
-      SpecModel = BiSpec;
-      break;
-    case specType.NDSI:
-      SpecModel = NdsiSpec;
-      break;
-    case specType.RMS:
-      SpecModel = RmsSpec;
-      break;
-    default:
-      return `Error: Invalid \`type\` parameter (${type}).`;
+  SpecModel = getSpecType(type);
+  if (SpecModel === null) {
+    return `Error with spec type :: ${type}`;
   }
-
   return new SpecModel({
     _id,
     type,

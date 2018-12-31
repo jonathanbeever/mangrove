@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
 const { specDefaults } = require('../specDefaults');
-const { MAX_NUM_R } = require('./config');
+const { MAX_NUM_R } = require('../../../util/rConstants');
 
 module.exports = Spec.discriminator(
   'ndsiSpec',
