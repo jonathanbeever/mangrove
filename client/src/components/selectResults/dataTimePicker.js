@@ -10,10 +10,13 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   textField: {
-    // marginLeft: theme.spacing.unit,
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
-    width: 200,
+    width: '100%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginTop: 0,
+    paddingTop: 20,
+    paddingBottom: 0,
+    fontWeight: 500
   }
 });
 
@@ -21,16 +24,14 @@ function DateAndTimePickers(props) {
   const { classes } = props;
 
   return (
-    <form className={classes.container} noValidate>
+    // TODO: format to match other inputs
+    <form noValidate>
       <TextField
         id="datetime-local"
-        label={<div><p className={classes.resize} >Date/Time of Recording</p><br/></div>}
+        label="Date/Time of Recording"
         type="datetime-local"
         defaultValue=""
         className={classes.textField}
-        InputLabelProps={{
-            shrink: true        
-        }}
       />
     </form>
   );
