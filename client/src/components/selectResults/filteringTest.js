@@ -58,21 +58,26 @@ class StepperTest
       fileDate : '',
       latitude : '',
       longitude : '',
-      filteredInputs : inputFiles
+      filteredInputs : inputFiles,
+      index : ''
     };
 
   }
 
   componentDidMount = () => {
+    // get all inputs
     console.log(this.state.filteredInputs)
-    // axios.get('http://localhost:3000/jobs')
-    //   .then(res => {
-    //     console.log(res.data.jobs)
-    //   })
+    // get all db specs
+    axios.get('http://localhost:3000/specs')
+      .then(res => {
+        console.log(res.data)
+        this.setState({ allSpecs: res.data })
+      })
   }
 
-  // Todo: validation for date and number type on certian inputs
+  // Input selection functions
   handleInputChange = name => e => {
+    console.log('hi')
     this.setState({
       [name]: e.target.value,
     });
@@ -98,10 +103,21 @@ class StepperTest
     console.log(selected)
   }
 
+  // Spec selection functions
+  // TODO:
+  // Handle index change
+  handleIndexChange = (e) => {
+    this.setState({ index: e.target.value })
+  }
+  // Handle spec change
+  // Submit specs
+  // Update selected specs
+
   render() {
     return (
-      <div className="container-fluid">
+      <div className="container">
         <Tabs 
+          // Input select props 
           siteName={this.state.siteName} 
           setName={this.state.setName} 
           latitude={this.state.latitude}
@@ -110,6 +126,10 @@ class StepperTest
           onChangeInput={this.handleInputChange} 
           onSubmitInput={this.submitIndexFilter}
           updateSelectedInputs={this.updateSelectedInputs} 
+          // Specs select props
+          allSpecs={this.state.allSpecs}
+          index={this.state.index}
+          handleIndexChange={this.handleIndexChange}
         />
       </div>
     );

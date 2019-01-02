@@ -6,10 +6,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import FilterInputs from './filterInputs';
+import FilterSpecs from './filterSpecs';
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 3 * 2 }}>
+    <Typography component="div" style={{ padding: 0 }}>
       {props.children}
     </Typography>
   );
@@ -48,7 +49,8 @@ class SimpleTabs extends React.Component {
             <Tab label={<div><h5>Jobs</h5></div>} />
           </Tabs>
         </AppBar>
-        {value === 0 && <TabContainer><FilterInputs 
+        {value === 0 && <TabContainer>
+          <FilterInputs 
             siteName={this.props.siteName} 
             setName={this.props.setName} 
             latitude={this.props.latitude}
@@ -56,8 +58,16 @@ class SimpleTabs extends React.Component {
             filteredInputs={this.props.filteredInputs}
             onChangeInput={this.props.onChangeInput} 
             onSubmitInput={this.props.onSubmitInput} 
-            updateSelectedInputs={this.props.updateSelectedInputs} /></TabContainer>}
-        {value === 1 && <TabContainer>Item Two</TabContainer>}
+            updateSelectedInputs={this.props.updateSelectedInputs} 
+          />
+        </TabContainer>}
+        {value === 1 && <TabContainer>
+          <FilterSpecs 
+            allSpecs={this.props.allSpecs}
+            index={this.props.index}
+            handleIndexChange={this.props.handleIndexChange}
+          />
+        </TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
       </div>
     );
