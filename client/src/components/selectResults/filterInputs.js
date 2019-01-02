@@ -36,6 +36,7 @@ class FilterInputs extends Component {
   componentDidMount = () => {
     console.log(this.props)
   }
+
   render() {
     const { classes } = this.props;
 
@@ -48,13 +49,13 @@ class FilterInputs extends Component {
               label="Site Name"
               value={this.props.siteName}
               className={classes.textField}
-              onChange={this.props.onChangeInput('siteName')}
+              onChange={this.props.onChange('siteName')}
             />
             <TextField
               label="File Set Name"
               value={this.props.setname}
               className={classes.textField}
-              onChange={this.props.onChangeInput('setName')}
+              onChange={this.props.onChange('setName')}
             />
             {/* TODO */}
             <DateAndTimePickers />
@@ -62,13 +63,13 @@ class FilterInputs extends Component {
               label="Latitude"
               value={this.props.latitude}
               className={classes.textField}
-              onChange={this.props.onChangeInput('latitude')}
+              onChange={this.props.onChange('latitude')}
             />
             <TextField
               label="Longitude"
               value={this.props.longitude}
               className={classes.textField}
-              onChange={this.props.onChangeInput('longitude')}
+              onChange={this.props.onChange('longitude')}
             />
             <div className="row filterSubmit">
               <Button onClick={this.props.onSubmitInput} variant="contained" color="primary">

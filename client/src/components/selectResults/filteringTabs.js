@@ -56,7 +56,7 @@ class SimpleTabs extends React.Component {
             latitude={this.props.latitude}
             longitude={this.props.longitude}
             filteredInputs={this.props.filteredInputs}
-            onChangeInput={this.props.onChangeInput} 
+            onChange={this.props.onChange} 
             onSubmitInput={this.props.onSubmitInput} 
             updateSelectedInputs={this.props.updateSelectedInputs} 
           />
@@ -66,6 +66,13 @@ class SimpleTabs extends React.Component {
             allSpecs={this.props.allSpecs}
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
+            onChange={this.props.onChange} 
+            specParams={this.props.specParams}
+            minFreq={this.props.minFreq}
+            maxFreq={this.props.maxFreq}
+            j={this.props.j}
+            fftW={this.props.fftW}
+            onSubmitSpecs={this.props.onSubmitSpecs}
           />
         </TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}

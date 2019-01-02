@@ -59,7 +59,11 @@ class StepperTest
       latitude : '',
       longitude : '',
       filteredInputs : inputFiles,
-      index : ''
+      index : '',
+      minFreq: '',
+      maxFreq: '',
+      j: '',
+      fftW: ''
     };
 
   }
@@ -76,8 +80,8 @@ class StepperTest
   }
 
   // Input selection functions
-  handleInputChange = name => e => {
-    console.log('hi')
+  handleChange = name => e => {
+    console.log(name, e.target.value, this.state[name])
     this.setState({
       [name]: e.target.value,
     });
@@ -108,9 +112,22 @@ class StepperTest
   // Handle index change
   handleIndexChange = (e) => {
     this.setState({ index: e.target.value })
+    switch (e.target.value) {
+      case 'aci': {
+        // id and label of specs
+        this.setState({ specParams: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
+      }
+    }
   }
   // Handle spec change
+  handleSpecChange = name => e => {
+
+  }
   // Submit specs
+  handleSpecSubmit = () => {
+    console.log(this.state);
+    
+  }
   // Update selected specs
 
   render() {
@@ -123,13 +140,19 @@ class StepperTest
           latitude={this.state.latitude}
           longitude={this.state.longitude}
           filteredInputs={this.state.filteredInputs}
-          onChangeInput={this.handleInputChange} 
+          onChange={this.handleChange} 
           onSubmitInput={this.submitIndexFilter}
           updateSelectedInputs={this.updateSelectedInputs} 
           // Specs select props
           allSpecs={this.state.allSpecs}
           index={this.state.index}
           handleIndexChange={this.handleIndexChange}
+          specParams={this.state.specParams}
+          minFreq={this.state.minFreq}
+          maxFreq={this.state.maxFreq}
+          j={this.state.j}
+          fftW={this.state.fftW}
+          onSubmitSpecs={this.handleSpecSubmit}
         />
       </div>
     );

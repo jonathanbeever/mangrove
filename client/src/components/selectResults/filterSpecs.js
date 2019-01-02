@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import DateAndTimePickers from './dateTimePicker';
 import Button from '@material-ui/core/Button';
 import './selectResults.css';
 import InputsTable from './inputsTable.js';
@@ -32,19 +31,59 @@ const styles = theme => ({
     fontWeight: 500
   },
   formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120,
+    // margin: theme.spacing.unit,
+    // minWidth: 120,
   }
 });
 
 class FilterSpecs extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      specInputHtml: ''
+    }
   }
 
+
   componentDidMount = () => {
-    console.log(this.props)
+    
   }
+// todo: mount functions w this
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if(prevProps !== this.props) {
+      this.formatSpecInput(this.props.specParams)
+    }
+  }
+
+  formatSpecInput = (params) => {
+    const {classes} = this.props
+    // Format text field for each parameter
+    var specInputHtml = params.map(param => {
+      return (
+        <TextField
+          label={param[1]}
+          value={this.props[param[0]]}
+          className={classes.textField}
+          onChange={this.props.onChange(param[0])}
+        />   
+      )
+    })
+    // Add title and submit button to html
+    specInputHtml = (
+      <div>
+        <h4>Choose Specs</h4>
+        {specInputHtml} 
+        <div className="row filterSubmit">
+          <Button onClick={this.props.onSubmitSpecs} variant="contained" color="primary">
+            Apply Spec Filters
+          </Button>
+        </div>
+      </div>
+    )
+    this.setState({ specInputHtml: specInputHtml })
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -53,26 +92,27 @@ class FilterSpecs extends Component {
         <div className="col-4">
           <Paper className={classes.root}>
             <h5>Filter By Index Specifications</h5>
-            <form className={classes.root} autoComplete="off">
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="indexSelect">Index</InputLabel>
-                  <Select
-                    value={this.props.index}
-                    onChange={this.props.handleIndexChange}
-                    inputProps={{
-                      name: 'index',
-                      id: 'indexSelect',
-                    }}
-                  >
-                  <MenuItem value='aci'>ACI</MenuItem>
-                  <MenuItem value='ndsi'>NDSI</MenuItem>
-                  <MenuItem value='adi'>ADI</MenuItem>
-                  <MenuItem value='aei'>AEI</MenuItem>
-                  <MenuItem value='bi'>BIO</MenuItem>
-                  <MenuItem value='rms'>RMS</MenuItem>
-                </Select>
-              </FormControl>
-            </form>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="indexSelect">Index</InputLabel>
+                <Select
+                  value={this.props.index}
+                  onChange={this.props.handleIndexChange}
+                  className={classes.textField}
+                  inputProps={{
+                    name: 'index',
+                    id: 'indexSelect',
+                  }}
+                >
+                <MenuItem value='aci'>ACI</MenuItem>
+                <MenuItem value='ndsi'>NDSI</MenuItem>
+                <MenuItem value='adi'>ADI</MenuItem>
+                <MenuItem value='aei'>AEI</MenuItem>
+                <MenuItem value='bi'>BIO</MenuItem>
+                <MenuItem value='rms'>RMS</MenuItem>
+              </Select>
+              {/* add dynamic form for each index */}
+              {this.state.specInputHtml}
+            </FormControl>
           </Paper>
         </div>
         <div className="col-8">
