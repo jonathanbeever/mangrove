@@ -52,20 +52,22 @@ class FilterSpecs extends Component {
 // todo: mount functions w this
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
-      this.formatSpecInput(this.props.specParams)
+      this.formatSpecInput(this.props.specParamsList)
     }
   }
 
   formatSpecInput = (params) => {
     const {classes} = this.props
     // Format text field for each parameter
+    console.log(this.props.specParamsList)
     var specInputHtml = params.map(param => {
       return (
         <TextField
+          key={param[0]}
           label={param[1]}
-          value={this.props[param[0]]}
+          value={this.props.specParamsByIndex[this.props.index][param[0]]}
           className={classes.textField}
-          onChange={this.props.onChange(param[0])}
+          onChange={this.props.handleSpecChange(param[0])}
         />   
       )
     })

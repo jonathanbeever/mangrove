@@ -59,11 +59,39 @@ class StepperTest
       latitude : '',
       longitude : '',
       filteredInputs : inputFiles,
-      index : '',
-      minFreq: '',
-      maxFreq: '',
-      j: '',
-      fftW: ''
+      index: '',
+      specParamsByIndex : {
+        aci: {
+          minFreq: '',
+          maxFreq: '',
+          j: '',
+          fftW: ''
+        },
+        ndsi: {
+          anthroMin: '',
+          anthroMax: '',
+          bioMin: '',
+          bioMax: '',
+          fftW: ''
+        },
+        adi: {
+          maxFreq: '',
+          dbThreshold: '',
+          freqStep: '',
+          shannon: ''
+        },
+        aei: {
+          maxFreq: '',
+          dbThreshold: '',
+          freqStep: ''
+        },
+        bi: {
+          minFreq: '',
+          maxFreq: '',
+          fftW: ''
+        }
+      }
+      
     };
 
   }
@@ -112,16 +140,41 @@ class StepperTest
   // Handle index change
   handleIndexChange = (e) => {
     this.setState({ index: e.target.value })
+    console.log(this.state.specParamsList)
     switch (e.target.value) {
       case 'aci': {
         // id and label of specs
-        this.setState({ specParams: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
+        this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
+        break;
+      }
+      case 'ndsi': {
+        this.setState({ specParamsList: [['anthroMin', 'Min Anthrophony'], ['anthroMax', 'Max Anthrophony'], ['bioMin', 'Min Biophony'], ['bioMax', 'Max Biophony'], ['fftW', 'fft-W']] })
+        break;
+      }
+      case 'adi': {
+        this.setState({ specParamsList: [['maxFreq', 'Max Frequency'], ['dbThreshold', 'db Threshold'], ['freqStep', 'Frequency Step'], ['shannon', 'Shannon']] })
+        break;
+      }
+      case 'aei': {
+        this.setState({ specParamsList: [['maxFreq', 'Max Frequency'], ['dbThreshold', 'db Threshold'], ['freqStep', 'Frequency Step']] })
+        break;      
+      }
+      case 'bi': {
+        this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['fftW', 'fft-W']] })
+        break;      
+      }
+      case 'rms': {
+        this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
+        break;      
       }
     }
   }
   // Handle spec change
   handleSpecChange = name => e => {
+    var tempState = this.state.specParamsByIndex
+    tempState[this.state.index][name] = e.target.value
 
+    this.setState({ specParamsByIndex: tempState })
   }
   // Submit specs
   handleSpecSubmit = () => {
@@ -147,11 +200,9 @@ class StepperTest
           allSpecs={this.state.allSpecs}
           index={this.state.index}
           handleIndexChange={this.handleIndexChange}
-          specParams={this.state.specParams}
-          minFreq={this.state.minFreq}
-          maxFreq={this.state.maxFreq}
-          j={this.state.j}
-          fftW={this.state.fftW}
+          specParamsList={this.state.specParamsList}
+          handleSpecChange={this.handleSpecChange}
+          specParamsByIndex={this.state.specParamsByIndex}
           onSubmitSpecs={this.handleSpecSubmit}
         />
       </div>

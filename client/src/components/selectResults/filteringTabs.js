@@ -66,12 +66,9 @@ class SimpleTabs extends React.Component {
             allSpecs={this.props.allSpecs}
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
-            onChange={this.props.onChange} 
-            specParams={this.props.specParams}
-            minFreq={this.props.minFreq}
-            maxFreq={this.props.maxFreq}
-            j={this.props.j}
-            fftW={this.props.fftW}
+            specParamsList={this.props.specParamsList}
+            handleSpecChange={this.props.handleSpecChange}
+            specParamsByIndex={this.props.specParamsByIndex}
             onSubmitSpecs={this.props.onSubmitSpecs}
           />
         </TabContainer>}
