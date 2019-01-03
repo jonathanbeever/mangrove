@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
-const { MAX_NUM_R } = require('../../../util/rConstants');
 const { specDefaults } = require('../specDefaults');
 
 module.exports = Spec.discriminator(
@@ -8,22 +7,22 @@ module.exports = Spec.discriminator(
   new mongoose.Schema({
     maxFreq: {
       type: Number,
-      min: 0,
-      max: MAX_NUM_R,
-      default: specDefaults.adi.maxFreq,
+      min: specDefaults.adi.maxFreq.min,
+      max: specDefaults.adi.maxFreq.max,
+      default: specDefaults.adi.maxFreq.default,
     },
     dbThreshold: {
       type: Number,
-      default: specDefaults.adi.dbThreshold,
-      min: -MAX_NUM_R,
-      max: MAX_NUM_R,
+      default: specDefaults.adi.dbThreshold.default,
+      min: specDefaults.adi.dbThreshold.min,
+      max: specDefaults.adi.dbThreshold.max,
     },
     freqStep: {
       type: Number,
-      min: 1,
-      default: specDefaults.adi.freqStep,
-      max: MAX_NUM_R,
+      min: specDefaults.adi.freqStep.min,
+      default: specDefaults.adi.freqStep.default,
+      max: specDefaults.adi.freqStep.max,
     },
-    shannon: { type: Boolean, default: specDefaults.adi.shannon },
+    shannon: { type: Boolean, default: specDefaults.adi.shannon.default },
   }),
 );

@@ -9,21 +9,20 @@ const mockSpec = (_id, type, param) => {
   if (SpecModel === null) {
     return `Error with spec type :: ${type}`;
   }
+
   return new SpecModel({
     _id,
     type,
-    param,
+    ...param,
   });
 };
 
-const nextUncheckedMockSpec = (type, param) => {
+const nextMockSpec = (type, param, check = true) => {
   const specId = nextMockObjectId();
-  return mockSpec(specId, type, param);
-};
-
-const nextMockSpec = (type, param) => {
-  const specId = nextMockObjectId();
-  const params = mockParameter(type, param);
+  let params = param;
+  if (check) {
+    params = mockParameter(type, param);
+  }
   return mockSpec(specId, type, params);
 };
 
@@ -41,5 +40,4 @@ module.exports = {
   nextMockSpec,
   mockSpecCreateJson,
   getJsonFromMockSpec,
-  nextUncheckedMockSpec,
 };
