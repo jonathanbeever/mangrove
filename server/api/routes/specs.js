@@ -4,7 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const { Spec } = require('../models/spec');
 const { specDefaults } = require('../models/specDefaults');
-const { validateParam } = require('../../util/specValidation');
+const { validateParam, fillDefaults } = require('../../util/specValidation');
 
 const { getSpecType } = require('../models/specType');
 
@@ -12,8 +12,9 @@ const { getSpecType } = require('../models/specType');
 router.put('/', (req, res) => {
   let SpecModel = null;
 
-  const validatedBody = validateParam(req.body);
+  let validatedBody = validateParam(req.body);
   SpecModel = getSpecType(validatedBody.specType);
+  validatedBody = fillDefaults(validatedBody);
 
   if (SpecModel === null) {
     res.status(404).json({ error: 'Not a Supported SpecModel Type' });
@@ -27,45 +28,17 @@ router.put('/', (req, res) => {
         $and: [
           // ACI
           {
-            // Checks to see if the value exists or is a default within the
-            $or: [
-              { minFreq: { $exists: true } },
-              { minFreq: specDefaults.aci.minFreq.default }
-            ]
+            minFreq: validatedBody.minFreq
           },
           {
-            $or: [
-              { fftW: { $exists: true } },
-              { fftW: specDefaults.aci.fftW.default }
-            ]
+            maxFreq: validatedBody.maxFreq
+          },
+          { j: validatedBody.j },
+          {
+            fftW: validatedBody.fftW
           },
           {
-            $or: [
-              { maxFreq: { $exists: true } },
-              { fftW: specDefaults.aci.maxFreq.default }
-            ]
-          },
-          {
-            $or: [{ j: { $exists: true } }, { j: specDefaults.aci.j.default }]
-          },
-          {
-            $or: [
-              { minFreq: validatedBody.minFreq },
-              { minFreq: specDefaults.aci.minFreq.default }
-            ]
-          },
-          {
-            $or: [
-              { maxFreq: validatedBody.maxFreq },
-              { maxFreq: specDefaults.aci.maxFreq.default }
-            ]
-          },
-          { $or: [{ j: validatedBody.j }, { j: specDefaults.aci.j.default }] },
-          {
-            $or: [
-              { fftW: validatedBody.fftW },
-              { fftW: specDefaults.aci.fftW.default }
-            ]
+            type: 'aciSpec'
           }
         ]
       },
@@ -73,52 +46,16 @@ router.put('/', (req, res) => {
         $and: [
           // ADI
           {
-            $or: [
-              { maxFreq: validatedBody.maxFreq },
-              { maxFreq: specDefaults.adi.maxFreq.default }
-            ]
+            maxFreq: validatedBody.maxFreq
           },
           {
-            $or: [
-              { dbThreshold: validatedBody.dbThreshold },
-              { dbThreshold: specDefaults.adi.dbThreshold.default }
-            ]
+            dbThreshold: validatedBody.dbThreshold
           },
           {
-            $or: [
-              { freqStep: validatedBody.freqStep },
-              { freqStep: specDefaults.adi.freqStep.default }
-            ]
+            freqStep: validatedBody.freqStep
           },
           {
-            $or: [
-              { shannon: validatedBody.shannon },
-              { shannon: specDefaults.adi.shannon.default }
-            ]
-          },
-          {
-            $or: [
-              { maxFreq: { $exists: true } },
-              { maxFreq: specDefaults.adi.maxFreq.default }
-            ]
-          },
-          {
-            $or: [
-              { dbThreshold: { $exists: true } },
-              { dbThreshold: specDefaults.adi.dbThreshold.default }
-            ]
-          },
-          {
-            $or: [
-              { freqStep: { $exists: true } },
-              { freqStep: specDefaults.adi.freqStep.default }
-            ]
-          },
-          {
-            $or: [
-              { shannon: { $exists: true } },
-              { shannon: specDefaults.adi.shannon.default }
-            ]
+            shannon: validatedBody.shannon
           }
         ]
       },
@@ -126,40 +63,13 @@ router.put('/', (req, res) => {
         $and: [
           // AEI
           {
-            $or: [
-              { maxFreq: validatedBody.maxFreq },
-              { maxFreq: specDefaults.aei.maxFreq.default }
-            ]
+            maxFreq: validatedBody.maxFreq
           },
           {
-            $or: [
-              { dbThreshold: validatedBody.dbThreshold },
-              { dbThreshold: specDefaults.aei.dbThreshold.default }
-            ]
+            dbThreshold: validatedBody.dbThreshold
           },
           {
-            $or: [
-              { freqStep: validatedBody.freqStep },
-              { freqStep: specDefaults.aei.freqStep.default }
-            ]
-          },
-          {
-            $or: [
-              { maxFreq: { $exists: true } },
-              { maxFreq: specDefaults.aei.maxFreq.default }
-            ]
-          },
-          {
-            $or: [
-              { dbThreshold: { $exists: true } },
-              { dbThreshold: specDefaults.aei.dbThreshold.default }
-            ]
-          },
-          {
-            $or: [
-              { freqStep: { $exists: true } },
-              { freqStep: specDefaults.aei.freqStep.default }
-            ]
+            freqStep: validatedBody.freqStep
           }
         ]
       },
@@ -167,40 +77,13 @@ router.put('/', (req, res) => {
         $and: [
           // BI
           {
-            $or: [
-              { minFreq: validatedBody.minFreq },
-              { minFreq: specDefaults.bi.minFreq.default }
-            ]
+            minFreq: validatedBody.minFreq
           },
           {
-            $or: [
-              { maxFreq: validatedBody.maxFreq },
-              { maxFreq: specDefaults.bi.maxFreq.default }
-            ]
+            maxFreq: validatedBody.maxFreq
           },
           {
-            $or: [
-              { fftW: validatedBody.fftW },
-              { fftW: specDefaults.bi.fftW.default }
-            ]
-          },
-          {
-            $or: [
-              { minFreq: { $exists: true } },
-              { minFreq: specDefaults.bi.minFreq.default }
-            ]
-          },
-          {
-            $or: [
-              { maxFreq: { $exists: true } },
-              { maxFreq: specDefaults.bi.maxFreq.default }
-            ]
-          },
-          {
-            $or: [
-              { fftW: { $exists: true } },
-              { fftW: specDefaults.bi.fftW.default }
-            ]
+            fftW: validatedBody.fftW
           }
         ]
       },
@@ -208,64 +91,19 @@ router.put('/', (req, res) => {
         $and: [
           // NDSI
           {
-            $or: [
-              { fftW: validatedBody.fftW },
-              { fftW: specDefaults.ndsi.fftW.default }
-            ]
+            fftW: validatedBody.fftW
           },
           {
-            $or: [
-              { anthroMin: validatedBody.anthroMin },
-              { anthroMin: specDefaults.ndsi.anthroMin.default }
-            ]
+            anthroMin: validatedBody.anthroMin
           },
           {
-            $or: [
-              { anthroMax: validatedBody.anthroMax },
-              { anthroMax: specDefaults.ndsi.anthroMax.default }
-            ]
+            anthroMax: validatedBody.anthroMax
           },
           {
-            $or: [
-              { bioMin: validatedBody.bioMin },
-              { bioMin: specDefaults.ndsi.bioMin.default }
-            ]
+            bioMin: validatedBody.bioMin
           },
           {
-            $or: [
-              { bioMax: validatedBody.bioMax },
-              { bioMax: specDefaults.ndsi.bioMax.default }
-            ]
-          },
-          {
-            $or: [
-              { fftW: { $exists: true } },
-              { fftW: specDefaults.ndsi.fftW.default }
-            ]
-          },
-          {
-            $or: [
-              { anthroMin: { $exists: true } },
-              { anthroMin: specDefaults.ndsi.anthroMin.default }
-            ]
-          },
-          {
-            $or: [
-              { anthroMax: { $exists: true } },
-              { anthroMax: specDefaults.ndsi.anthroMax.default }
-            ]
-          },
-          {
-            $or: [
-              { bioMin: { $exists: true } },
-              { bioMin: specDefaults.ndsi.bioMin.default }
-            ]
-          },
-          {
-            $or: [
-              { bioMax: { $exists: true } },
-              { bioMax: specDefaults.ndsi.bioMax.default }
-            ]
+            bioMax: validatedBody.bioMax
           }
         ]
       }
@@ -275,7 +113,7 @@ router.put('/', (req, res) => {
     .exec()
     .then(returnSpec => {
       if (returnSpec.length >= 1) {
-        res.status(200).json(returnSpec[0]); // if already created then return data object
+        res.status(200).json(returnSpec); // if already created then return data object
       } else {
         // add id and creation time to spec document
         validatedBody._id = new mongoose.Types.ObjectId();

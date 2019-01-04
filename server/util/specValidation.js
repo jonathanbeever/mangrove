@@ -1,15 +1,16 @@
 const { specDefaults } = require('../api/models/specDefaults');
+const Type = require('../api/models/type');
 
 const validateParam = function validateParam(body) {
   const type = body.specType.substring(0, body.specType.length - 4);
   const newBody = body;
-  Object.keys(body).forEach((key) => {
+  Object.keys(body).forEach(key => {
     if (
-      key !== 'specType'
-      && key !== 'shannon'
-      && (typeof body[key] !== 'number'
-        || specDefaults[type][key].min > body[key]
-        || specDefaults[type][key].max < body[key])
+      key !== 'specType' &&
+      key !== 'shannon' &&
+      (typeof body[key] !== 'number' ||
+        specDefaults[type][key].min > body[key] ||
+        specDefaults[type][key].max < body[key])
     ) {
       newBody[key] = specDefaults[type][key].default;
     }
@@ -20,4 +21,16 @@ const validateParam = function validateParam(body) {
   return newBody;
 };
 
-module.exports = { validateParam };
+const fillDefaults = function fillDefaults(body) {
+  const type = body.specType.substring(0, body.specType.length - 4);
+
+  Object.keys(specDefaults[type]).forEach(key => {
+    if (!body[key]) {
+      body[key] = specDefaults[type][key].default;
+    }
+  });
+
+  return body;
+};
+
+module.exports = { validateParam, fillDefaults };
