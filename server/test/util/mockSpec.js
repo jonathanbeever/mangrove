@@ -27,7 +27,7 @@ const nextMockSpec = (type, param, check = true) => {
 };
 
 const mockSpecCreateJson = (type, param) => JSON.stringify({
-  specType: type,
+  type,
   ...param,
 });
 

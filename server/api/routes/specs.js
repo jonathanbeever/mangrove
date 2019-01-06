@@ -10,12 +10,20 @@ const { getSpecType } = require('../models/specType');
 // Create Spec
 router.put('/', (req, res) => {
   let SpecModel = null;
-  SpecModel = getSpecType(req.body.specType);
+
+  // lets the user use "type" instead of "specType" to add specs.
+  const newBody = req.body;
+  newBody.specType = newBody.type;
+  delete newBody.type;
+
+  SpecModel = getSpecType(newBody.specType);
   if (SpecModel === null) {
     res.status(404).json({ error: 'Not a Supported SpecModel Type' });
   }
-  let validatedBody = validateParam(req.body);
+
+  let validatedBody = validateParam(newBody);
   validatedBody = fillDefaults(validatedBody);
+
   // try to find this spec in the database.
   SpecModel.find({
     // If any of the following model sets are triggered it means that a copy of the
