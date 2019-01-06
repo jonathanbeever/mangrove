@@ -1,4 +1,5 @@
 const { specType } = require('../../api/models/specType');
+const { specDefaults } = require('../../api/models/specDefaults');
 const {
   AciSpec,
   AeiSpec,
@@ -9,60 +10,13 @@ const {
 } = require('../../api/models/spec');
 
 const checkDefault = (type, param) => {
-  switch (type) {
-    case specType.ACI:
-      if (
-        param.minFreq === 0
-        && param.maxFreq === 16000
-        && param.j === 30
-        && param.fftW === 10
-      ) {
-        return true;
-      }
+  const newType = type.substring(0, type.length - 4);
+  Object.keys(specDefaults[newType]).forEach((params) => {
+    if (param[params] !== specDefaults[newType][params].default) {
       return false;
-    case specType.ADI:
-      if (
-        param.maxFreq === 16000
-        && param.dbThreshold === 32
-        && param.freqStep === 512
-        && param.shannon === true
-      ) {
-        return true;
-      }
-      return false;
-    case specType.AEI:
-      if (
-        param.maxFreq === 16000
-        && param.dbThreshold === 32
-        && param.freqStep === 512
-      ) {
-        return true;
-      }
-      return false;
-    case specType.BI:
-      if (param.minFreq === 0 && param.maxFreq === 16000 && param.fftW === 10) {
-        return true;
-      }
-      return false;
-
-    case specType.NDSI:
-      if (
-        param.fftW === 10
-        && param.anthroMin === 5001
-        && param.anthroMax === 20000
-        && param.bioMin === 0
-        && param.bioMax === 5000
-      ) {
-        return true;
-      }
-      return false;
-
-    case specType.RMS:
-      return true;
-
-    default:
-      return `Error: Invalid \`type\` parameter (${type}).`;
-  }
+    }
+  });
+  return true;
 };
 const checkKeys = (type, keys, param) => {
   if (keys.length !== Object.keys(param).length) {
