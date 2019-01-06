@@ -415,6 +415,7 @@ describe('Specs', () => {
               expect(content.freqStep).to.be.eql(26);
               expect(res).to.have.status(200);
               // status code should return 200 OK, if 201 then that means a new spec was created.
+              done();
             })
             .catch((err) => {
               done(err);

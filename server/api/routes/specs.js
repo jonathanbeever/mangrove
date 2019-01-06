@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const { Spec } = require('../models/spec');
-const { specDefaults } = require('../models/specDefaults');
 const { validateParam, fillDefaults } = require('../../util/specValidation');
 
 const { getSpecType } = require('../models/specType');
@@ -11,14 +10,12 @@ const { getSpecType } = require('../models/specType');
 // Create Spec
 router.put('/', (req, res) => {
   let SpecModel = null;
-
-  let validatedBody = validateParam(req.body);
-  SpecModel = getSpecType(validatedBody.specType);
-  validatedBody = fillDefaults(validatedBody);
-
+  SpecModel = getSpecType(req.body.specType);
   if (SpecModel === null) {
     res.status(404).json({ error: 'Not a Supported SpecModel Type' });
   }
+  let validatedBody = validateParam(req.body);
+  validatedBody = fillDefaults(validatedBody);
   // try to find this spec in the database.
   SpecModel.find({
     // If any of the following model sets are triggered it means that a copy of the
@@ -28,116 +25,283 @@ router.put('/', (req, res) => {
         $and: [
           // ACI
           {
-            minFreq: validatedBody.minFreq
+            minFreq: { $exists: true },
           },
           {
-            maxFreq: validatedBody.maxFreq
+            maxFreq: { $exists: true },
+          },
+          {
+            j: { $exists: true },
+          },
+          {
+            fftW: { $exists: true },
+          },
+          {
+            dbThreshold: { $exists: false },
+          },
+          {
+            freqStep: { $exists: false },
+          },
+          {
+            shannon: { $exists: false },
+          },
+          {
+            anthroMin: { $exists: false },
+          },
+          {
+            anthroMax: { $exists: false },
+          },
+          {
+            bioMin: { $exists: false },
+          },
+          {
+            bioMax: { $exists: false },
+          },
+          {
+            minFreq: validatedBody.minFreq,
+          },
+          {
+            maxFreq: validatedBody.maxFreq,
           },
           { j: validatedBody.j },
           {
-            fftW: validatedBody.fftW
+            fftW: validatedBody.fftW,
           },
-          {
-            type: 'aciSpec'
-          }
-        ]
+        ],
       },
       {
         $and: [
           // ADI
           {
-            maxFreq: validatedBody.maxFreq
+            minFreq: { $exists: false },
           },
           {
-            dbThreshold: validatedBody.dbThreshold
+            maxFreq: { $exists: true },
           },
           {
-            freqStep: validatedBody.freqStep
+            j: { $exists: false },
           },
           {
-            shannon: validatedBody.shannon
-          }
-        ]
+            fftW: { $exists: false },
+          },
+          {
+            dbThreshold: { $exists: true },
+          },
+          {
+            freqStep: { $exists: true },
+          },
+          {
+            shannon: { $exists: true },
+          },
+          {
+            anthroMin: { $exists: false },
+          },
+          {
+            anthroMax: { $exists: false },
+          },
+          {
+            bioMin: { $exists: false },
+          },
+          {
+            bioMax: { $exists: false },
+          },
+          {
+            maxFreq: validatedBody.maxFreq,
+          },
+          {
+            dbThreshold: validatedBody.dbThreshold,
+          },
+          {
+            freqStep: validatedBody.freqStep,
+          },
+          {
+            shannon: validatedBody.shannon,
+          },
+        ],
       },
       {
         $and: [
           // AEI
           {
-            maxFreq: validatedBody.maxFreq
+            minFreq: { $exists: false },
           },
           {
-            dbThreshold: validatedBody.dbThreshold
+            maxFreq: { $exists: true },
           },
           {
-            freqStep: validatedBody.freqStep
-          }
-        ]
+            j: { $exists: false },
+          },
+          {
+            fftW: { $exists: false },
+          },
+          {
+            dbThreshold: { $exists: true },
+          },
+          {
+            freqStep: { $exists: true },
+          },
+          {
+            shannon: { $exists: false },
+          },
+          {
+            anthroMin: { $exists: false },
+          },
+          {
+            anthroMax: { $exists: false },
+          },
+          {
+            bioMin: { $exists: false },
+          },
+          {
+            bioMax: { $exists: false },
+          },
+          {
+            maxFreq: validatedBody.maxFreq,
+          },
+          {
+            dbThreshold: validatedBody.dbThreshold,
+          },
+          {
+            freqStep: validatedBody.freqStep,
+          },
+        ],
       },
       {
         $and: [
           // BI
           {
-            minFreq: validatedBody.minFreq
+            minFreq: { $exists: true },
           },
           {
-            maxFreq: validatedBody.maxFreq
+            maxFreq: { $exists: true },
           },
           {
-            fftW: validatedBody.fftW
-          }
-        ]
+            j: { $exists: false },
+          },
+          {
+            fftW: { $exists: true },
+          },
+          {
+            dbThreshold: { $exists: false },
+          },
+          {
+            freqStep: { $exists: false },
+          },
+          {
+            shannon: { $exists: false },
+          },
+          {
+            anthroMin: { $exists: false },
+          },
+          {
+            anthroMax: { $exists: false },
+          },
+          {
+            bioMin: { $exists: false },
+          },
+          {
+            bioMax: { $exists: false },
+          },
+          {
+            minFreq: validatedBody.minFreq,
+          },
+          {
+            maxFreq: validatedBody.maxFreq,
+          },
+          {
+            fftW: validatedBody.fftW,
+          },
+        ],
       },
       {
         $and: [
           // NDSI
           {
-            fftW: validatedBody.fftW
+            minFreq: { $exists: false },
           },
           {
-            anthroMin: validatedBody.anthroMin
+            maxFreq: { $exists: false },
           },
           {
-            anthroMax: validatedBody.anthroMax
+            j: { $exists: false },
           },
           {
-            bioMin: validatedBody.bioMin
+            fftW: { $exists: true },
           },
           {
-            bioMax: validatedBody.bioMax
-          }
-        ]
-      }
+            dbThreshold: { $exists: false },
+          },
+          {
+            freqStep: { $exists: false },
+          },
+          {
+            shannon: { $exists: false },
+          },
+          {
+            anthroMin: { $exists: true },
+          },
+          {
+            anthroMax: { $exists: true },
+          },
+          {
+            bioMin: { $exists: true },
+          },
+          {
+            bioMax: { $exists: true },
+          },
+          {
+            fftW: validatedBody.fftW,
+          },
+          {
+            anthroMin: validatedBody.anthroMin,
+          },
+          {
+            anthroMax: validatedBody.anthroMax,
+          },
+          {
+            bioMin: validatedBody.bioMin,
+          },
+          {
+            bioMax: validatedBody.bioMax,
+          },
+        ],
+      },
       // RMS has no param
-    ]
+    ],
   })
     .exec()
-    .then(returnSpec => {
+    .then((returnSpec) => {
       if (returnSpec.length >= 1) {
-        res.status(200).json(returnSpec); // if already created then return data object
+        const newResult = returnSpec[0]._doc;
+        newResult.specId = newResult._id;
+        delete newResult._id;
+        delete newResult.__v;
+
+        res.status(200).json(newResult); // if already created then return data object
       } else {
         // add id and creation time to spec document
         validatedBody._id = new mongoose.Types.ObjectId();
         const spec = new SpecModel(
-          validatedBody // Put requested item in a new spec variable
+          validatedBody, // Put requested item in a new spec variable
         );
         // save spec
         spec
           .save()
-          .then(createResult => {
-            const newResult = createResult;
-            // newResult.specId = createResult._id;
-            // delete newResult[_id];
-            // delete newResult[__v];
+          .then((createResult) => {
+            const newResult = createResult._doc;
+            newResult.specId = newResult._id;
+            delete newResult._id;
+            delete newResult.__v;
             res.status(201).json(newResult);
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(500).json({
-              error: `Error in saving Spec :: ${err}`
+              error: `Error in saving Spec :: ${err}`,
             });
           });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({ error: `Error in finding Spec :: ${err}` });
     });
 });
@@ -148,16 +312,16 @@ router.get('/:specId', (req, res) => {
 
   Spec.findById(specId)
     .exec()
-    .then(searchResult => {
+    .then((searchResult) => {
       if (searchResult) {
         res.status(200).json(searchResult);
       } else {
         res.status(404).json({
-          error: `No valid entry found for ${specId}`
+          error: `No valid entry found for ${specId}`,
         });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({ error: `Error searching for specId :: ${err}` });
     });
 });
@@ -166,13 +330,13 @@ router.get('/:specId', (req, res) => {
 router.get('/', (req, res) => {
   Spec.find()
     .exec()
-    .then(searchResult => {
+    .then((searchResult) => {
       const count = searchResult.length;
       res.status(200).json({ count, specs: searchResult });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({
-        error: `Error getting all specs :: ${err}`
+        error: `Error getting all specs :: ${err}`,
       });
     });
 });
@@ -182,16 +346,16 @@ router.delete('/:specId', (req, res) => {
   const { specId } = req.params;
   Spec.deleteOne({ _id: specId })
     .exec()
-    .then(deleteResult => {
+    .then((deleteResult) => {
       res.status(200).json({
         success: true,
         message:
           deleteResult.n > 0
             ? `Succesfully deleted Spec with specId: ${specId}`
-            : `No valid entry found for specId: ${specId}.`
+            : `No valid entry found for specId: ${specId}.`,
       });
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(500).json({ error: err });
     });
 });
@@ -199,10 +363,10 @@ router.delete('/:specId', (req, res) => {
 router.delete('/', (req, res) => {
   Spec.deleteMany()
     .exec()
-    .then(result => {
+    .then((result) => {
       res.json(result);
     })
-    .catch(err => {
+    .catch((err) => {
       res.json(err);
     });
 });

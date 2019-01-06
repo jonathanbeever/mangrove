@@ -11,14 +11,18 @@ const Type = require('../models/type');
 
 // Create Job
 router.put('/', (req, res) => {
-  const missingKeys = newJobKeys.filter(key => !Object.keys(req.body).includes(key));
+  const missingKeys = newJobKeys.filter(
+    key => !Object.keys(req.body).includes(key),
+  );
   if (missingKeys.length > 0) {
     return res.status(400).json({
       message: `Missing required keys: ${missingKeys.join(', ')}.`,
     });
   }
 
-  const extraKeys = Object.keys(req.body).filter(key => !newJobKeys.includes(key));
+  const extraKeys = Object.keys(req.body).filter(
+    key => !newJobKeys.includes(key),
+  );
   if (extraKeys.length > 0) {
     return res.status(400).json({
       message: `Invalid keys: ${extraKeys.join(', ')}.`,
@@ -160,11 +164,10 @@ router.delete('/:jobId', (req, res) => {
     .then((deleteResult) => {
       res.status(200).json({
         success: true,
-        message: (
+        message:
           deleteResult.n > 0
             ? `Successfully deleted Job with jobId: ${jobId}.`
-            : `No valid entry found for jobId: ${jobId}.`
-        ),
+            : `No valid entry found for jobId: ${jobId}.`,
       });
     })
     .catch((err) => {
