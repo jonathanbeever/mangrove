@@ -19,8 +19,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
-function createData(id, siteName, setName, fileName, latitude, longitude) {
-  return { id: id, siteName, setName, fileName, latitude, longitude };
+function createData(id, author, minFreq, maxFreq, j, fftW) {
+  return { id: id, author, minFreq, maxFreq, j, fftW };
 }
 
 function desc(a, b, orderBy) {
@@ -47,12 +47,13 @@ function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
+// TODO: creation time
 const rows = [
-  { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
-  { id: 'setName', numeric: false, disablePadding: false, label: 'File Set Name' },
-  { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
-  { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
-  { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
+  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
+  { id: 'minFreq', numeric: true, disablePadding: false, label: 'Min Freq' },
+  { id: 'maxFreq', numeric: true, disablePadding: false, label: 'Max Freq' },
+  { id: 'j', numeric: true, disablePadding: false, label: 'j' },
+  { id: 'fftW', numeric: true, disablePadding: false, label: 'fftW' }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -153,7 +154,7 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">
-            Matching Inputs
+            Matching specs
           </Typography>
         )}
       </div>
@@ -200,7 +201,8 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'calories',
+    // TODO: by time
+    orderBy: 'calories', 
     selected: [],
     data: [
       
@@ -210,17 +212,20 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
-    var data = this.props.filteredInputs.map(input => {
-      return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
+    console.log(this.state.index)
+    var data = this.props.filteredSpecs.map(spec => {
+      return createData(spec._id, spec.author, spec.minFreq, spec.maxFreq, spec.j, spec.fftW)
     })
     this.setState({data: data})
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
-      var data = this.props.filteredInputs.map(input => {
-        return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
-      })
+      var data = this.props.filteredSpecs.map(spec => {
+        console.log(spec)
+
+        return createData(spec._id, spec.author, spec.minFreq, spec.maxFreq, spec.j, spec.fftW)
+    })
       this.setState({data: data})
     }
   }
@@ -261,8 +266,8 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
-
-    this.props.updateSelectedInputs(newSelected)
+    // TODO: update for select some?
+    this.props.updateSelectedspecs(newSelected)
     this.setState({ selected: newSelected });
   };
 
@@ -313,12 +318,12 @@ class EnhancedTable extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
-                        {n.siteName}
+                        {n.author}
                       </TableCell>
-                      <TableCell align="right">{n.setName}</TableCell>
-                      <TableCell align="right">{n.fileName}</TableCell>
-                      <TableCell align="right">{n.latitude}</TableCell>
-                      <TableCell align="right">{n.longitude}</TableCell>
+                      <TableCell align="right">{n.minFreq}</TableCell>
+                      <TableCell align="right">{n.maxFreq}</TableCell>
+                      <TableCell align="right">{n.j}</TableCell>
+                      <TableCell align="right">{n.fftW}</TableCell>
                     </TableRow>
                   );
                 })}

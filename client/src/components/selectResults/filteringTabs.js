@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import FilterInputs from './filterInputs';
 import FilterSpecs from './filterSpecs';
+import SelectJobs from './selectJobs'
 
 function TabContainer(props) {
   return (
@@ -23,7 +24,6 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
   },
 });
 
@@ -51,10 +51,12 @@ class SimpleTabs extends React.Component {
         </AppBar>
         {value === 0 && <TabContainer>
           <FilterInputs 
-            siteName={this.props.siteName} 
-            setName={this.props.setName} 
-            latitude={this.props.latitude}
-            longitude={this.props.longitude}
+            // siteName={this.props.siteName} 
+            // setName={this.props.setName} 
+            // latitude={this.props.latitude}
+            // longitude={this.props.longitude}
+            inputFiltering={this.props.inputFiltering}
+            onDelete={this.props.onDelete}
             filteredInputs={this.props.filteredInputs}
             onChange={this.props.onChange} 
             onSubmitInput={this.props.onSubmitInput} 
@@ -63,16 +65,23 @@ class SimpleTabs extends React.Component {
         </TabContainer>}
         {value === 1 && <TabContainer>
           <FilterSpecs 
-            allSpecs={this.props.allSpecs}
+            // allSpecs={this.props.allSpecs}
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
             specParamsList={this.props.specParamsList}
             handleSpecChange={this.props.handleSpecChange}
             specParamsByIndex={this.props.specParamsByIndex}
             onSubmitSpecs={this.props.onSubmitSpecs}
+            filteredSpecs={this.props.filteredSpecs}
           />
         </TabContainer>}
-        {value === 2 && <TabContainer>Item Three</TabContainer>}
+        {value === 2 && <TabContainer>
+          <SelectJobs 
+            filteredJobs={this.props.filteredJobs}
+            inputFiltering={this.props.inputFiltering}
+            onDelete={this.props.onDelete}
+          />
+        </TabContainer>}
       </div>
     );
   }

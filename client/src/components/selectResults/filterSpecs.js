@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import './selectResults.css';
-import InputsTable from './inputsTable.js';
+import SpecsTable from './specsTable.js';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const styles = theme => ({
   root: {
@@ -59,17 +59,34 @@ class FilterSpecs extends Component {
   formatSpecInput = (params) => {
     const {classes} = this.props
     // Format text field for each parameter
-    console.log(this.props.specParamsList)
     var specInputHtml = params.map(param => {
-      return (
-        <TextField
-          key={param[0]}
-          label={param[1]}
-          value={this.props.specParamsByIndex[this.props.index][param[0]]}
-          className={classes.textField}
-          onChange={this.props.handleSpecChange(param[0])}
-        />   
-      )
+      if(param[0] !== 'shannon') {
+        return (
+          <TextField
+            key={param[0]}
+            label={param[1]}
+            value={this.props.specParamsByIndex[this.props.index][param[0]]}
+            className={classes.textField}
+            onChange={this.props.handleSpecChange(param[0])}
+          />   
+        )
+      }
+      else {
+        return (
+          <FormControlLabel
+            key={param[0]}
+            control={
+              <Checkbox
+                checked={this.props.specParamsByIndex.adi.shannon}
+                onChange={this.props.handleSpecChange('shannon')}
+                value="shannon"
+                color="primary"
+              />
+            }
+            label="Shannon Diversity Index"
+          />
+        )
+      }
     })
     // Add title and submit button to html
     specInputHtml = (
@@ -112,13 +129,13 @@ class FilterSpecs extends Component {
                 <MenuItem value='bi'>BIO</MenuItem>
                 <MenuItem value='rms'>RMS</MenuItem>
               </Select>
-              {/* add dynamic form for each index */}
+              {/* Spec form for index selected */}
               {this.state.specInputHtml}
             </FormControl>
           </Paper>
         </div>
         <div className="col-8">
-          {/* <InputsTable updateSelectedInputs={this.props.updateSelectedInputs} filteredInputs={this.props.filteredInputs}/> */}
+          <SpecsTable index={this.props.index} filteredSpecs={this.props.filteredSpecs} specParamsByIndex={this.props.specParamsByIndex} />
         </div>
       </div>
     );

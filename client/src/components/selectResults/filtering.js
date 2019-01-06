@@ -5,21 +5,21 @@ import axios from 'axios';
 // TODO fix css
 const inputFiles = [
   {
-    inputId: '1',
+    inputId: '5c2547480af83b2bac5133f7',
     siteName: 'Zoo',
     setName: 'aci-zoo',
     fileName: 'zoo1.wav',
     location: [65.01, 40.45]
   },
   {
-    inputId: '2',
+    inputId: '5c2547480bf83b2bac5133f7',
     siteName: 'Zoo',
     setName: 'aci-zoo',
     fileName: 'zoo2.wav',
     location: [65.01, 40.45]
   },
   {
-    inputId: '3',
+    inputId: '5c2547480cf83b2bac5133f7',
     siteName: 'Zoo',
     setName: 'aci-zoo',
     fileName: 'zoo1.wav',
@@ -48,16 +48,17 @@ const inputFiles = [
   }
 ]
 
-class StepperTest
- extends Component {
+class StepperTest extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      siteName : '',
-      setName : '',
-      fileDate : '',
-      latitude : '',
-      longitude : '',
+      inputFiltering: {
+        siteName : '',
+        setName : '',
+        fileDate : '',
+        latitude : '',
+        longitude : ''
+      },
       filteredInputs : inputFiles,
       index: '',
       specParamsByIndex : {
@@ -78,7 +79,7 @@ class StepperTest
           maxFreq: '',
           dbThreshold: '',
           freqStep: '',
-          shannon: ''
+          shannon: false
         },
         aei: {
           maxFreq: '',
@@ -90,10 +91,9 @@ class StepperTest
           maxFreq: '',
           fftW: ''
         }
-      }
-      
+      },
+      selectedSpecs: []
     };
-
   }
 
   componentDidMount = () => {
@@ -102,25 +102,40 @@ class StepperTest
     // get all db specs
     axios.get('http://localhost:3000/specs')
       .then(res => {
+        // Set all specs state
         console.log(res.data)
         this.setState({ allSpecs: res.data })
+        // Set filtered specs will all initially
+        // Choose specs of multiple indices?
+        this.setState({ filteredSpecs: res.data })
+      })
+
+      axios.get('http://localhost:3000/jobs')
+      .then(res => {
+        // Set all specs state
+        console.log(res.data.jobs)
+        this.setState({ allJobs: res.data.jobs })
+        this.setState({ jobsFiltered: res.data.jobs })
+
+        // Choose specs of multiple indices?
+        // this.setState({ filteredSpecs: res.data })
       })
   }
 
   // Input selection functions
   handleChange = name => e => {
-    console.log(name, e.target.value, this.state[name])
-    this.setState({
-      [name]: e.target.value,
-    });
+    var inputFiltering = this.state.inputFiltering
+    inputFiltering[name] = e.target.value
+    
+    this.setState({ inputFiltering: inputFiltering })
   };
 
   submitIndexFilter = () => {
     var filteredInputs = inputFiles.filter(file => {
-      if(!this.state.siteName || this.state.siteName.toLowerCase() === file.siteName.toLowerCase()) {
-        if(!this.state.setName || this.state.setName.toLowerCase() === file.setName.toLowerCase()) {
-          if(!this.state.latitude || Number(this.state.latitude) === file.location[0]) {
-            if(!this.state.longitude || Number(this.state.longitude) === file.location[1]) {
+      if(!this.state.inputFiltering.siteName || this.state.inputFiltering.siteName.toLowerCase() === file.siteName.toLowerCase()) {
+        if(!this.state.inputFiltering.setName || this.state.inputFiltering.setName.toLowerCase() === file.setName.toLowerCase()) {
+          if(!this.state.inputFiltering.latitude || Number(this.state.inputFiltering.latitude) === file.location[0]) {
+            if(!this.state.inputFiltering.longitude || Number(this.state.inputFiltering.longitude) === file.location[1]) {
               return file;
             }
           }
@@ -130,17 +145,41 @@ class StepperTest
 
     this.setState({ filteredInputs: filteredInputs })
   }
+
+  handleChipDelete = (label) => {
+    // var param = label.split(' : ')
+    label = label.split(' : ')
+    var inputFiltering = this.state.inputFiltering
+    inputFiltering[label[0]] = ''
+    console.log(inputFiltering)
+    this.submitIndexFilter()
+    this.setState({ inputFiltering : inputFiltering })
+    // console.log(label)
+    // this.setState({
+    //   []
+    // })
+  }
   // Array of inputIds selected in table
   updateSelectedInputs = (selected) => {
-    console.log(selected)
+    // Filter list of all jobs by list of selected inputs
+    var filteredJobByInput = this.state.allJobs.filter(job => {
+      // return jobs if id in array 'selected'
+      // and spec id is in state selectedSpecs or no fitlering of specs has been done
+      if(selected.indexOf(job.input) !== -1 && (!this.state.selectedSpecs.length) || (this.state.selectedSpecs.indexOf(job.specId) !== -1)) {
+        return job
+      }
+    })
+    console.log(filteredJobByInput)
+    // Set state selectedInputs for filtering by specs
+    this.setState({ selectedInputs: selected })
+    this.setState({ jobsFiltered: filteredJobByInput })
   }
+  // TODO: filter by specs
 
   // Spec selection functions
-  // TODO:
-  // Handle index change
   handleIndexChange = (e) => {
     this.setState({ index: e.target.value })
-    console.log(this.state.specParamsList)
+
     switch (e.target.value) {
       case 'aci': {
         // id and label of specs
@@ -169,30 +208,42 @@ class StepperTest
       }
     }
   }
-  // Handle spec change
+
   handleSpecChange = name => e => {
     var tempState = this.state.specParamsByIndex
-    tempState[this.state.index][name] = e.target.value
+
+    if(name !== 'shannon')
+      tempState[this.state.index][name] = e.target.value
+    else
+      tempState[this.state.index][name] = e.target.checked
 
     this.setState({ specParamsByIndex: tempState })
   }
-  // Submit specs
+
   handleSpecSubmit = () => {
     console.log(this.state);
     
   }
-  // Update selected specs
+
+  // TODO; add author and creationtime to specs input
+  // table of specs
+  // filter table
+  // select specs
+  // multiple filtering specification ?
+  // chips to clear them
 
   render() {
     return (
       <div className="container">
         <Tabs 
           // Input select props 
-          siteName={this.state.siteName} 
-          setName={this.state.setName} 
-          latitude={this.state.latitude}
-          longitude={this.state.longitude}
+          inputFiltering = {this.state.inputFiltering}
+          // siteName={this.state.siteName} 
+          // setName={this.state.setName} 
+          // latitude={this.state.latitude}
+          // longitude={this.state.longitude}
           filteredInputs={this.state.filteredInputs}
+          onDelete={this.handleChipDelete}
           onChange={this.handleChange} 
           onSubmitInput={this.submitIndexFilter}
           updateSelectedInputs={this.updateSelectedInputs} 
@@ -204,11 +255,15 @@ class StepperTest
           handleSpecChange={this.handleSpecChange}
           specParamsByIndex={this.state.specParamsByIndex}
           onSubmitSpecs={this.handleSpecSubmit}
+          filteredSpecs={this.state.filteredSpecs}
+          // Jobs select props
+          filteredJobs={this.state.filteredJobs}
+          // TODO: Send filtering formation for chips
+          //    chips, onclick 'x', function to clear state and update list of inputs/specs and jobs
         />
       </div>
     );
   }
 }
 
-export default StepperTest
-;
+export default StepperTest;

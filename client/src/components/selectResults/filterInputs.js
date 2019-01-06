@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import DateAndTimePickers from './dateTimePicker';
 import Button from '@material-ui/core/Button';
 import './selectResults.css';
-import InputsTable from './inputsTable.js';
+import InputsTable from './inputsTable';
+import Chip from './chip'
 
 const styles = theme => ({
   root: {
@@ -25,18 +25,56 @@ const styles = theme => ({
     paddingBottom: 0,
     marginTop: 0,
     fontWeight: 500
-  },
+  }
 });
 
 class FilterInputs extends Component {
+
   constructor(props) {
     super(props);
+    this.state = {
+      chips: ''
+    }
   }
-
   componentDidMount = () => {
     console.log(this.props)
+    this.formatChipHtml()
   }
 
+  // componentDidUpdate = (prevProps, prevState, snapshot) => {
+  //   if(prevProps !== this.props) {
+  //     this.formatChipHtml()
+     
+  //   }
+  // }
+
+  deleteChip = (label) => {
+    this.props.onDelete(label)
+    this.setState({ chips : '' })
+  }
+
+  formatChipHtml = () => {
+    var chipHtml = []
+    Object.keys(this.props.inputFiltering).forEach(param => {
+      if(this.props.inputFiltering[param].length) {
+        chipHtml.push(
+          <Chip
+            key={param}
+            label={param + ' : ' + this.props.inputFiltering[param]}
+            
+            onDelete={this.deleteChip}
+          />
+        )
+      }
+    })
+    console.log(chipHtml)
+    this.setState({ chips: <div>{chipHtml}</div> })
+  }
+
+  onSubmit = () => {
+    this.formatChipHtml()
+    this.props.onSubmitInput()
+  }
   render() {
     const { classes } = this.props;
 
@@ -44,16 +82,17 @@ class FilterInputs extends Component {
       <div className="row">
         <div className="col-4">
           <Paper className={classes.root}>
+            {this.state.chips}
             <h5>Filter By Input Files</h5>
             <TextField
               label="Site Name"
-              value={this.props.siteName}
+              value={this.props.inputFiltering.siteName}
               className={classes.textField}
               onChange={this.props.onChange('siteName')}
             />
             <TextField
               label="File Set Name"
-              value={this.props.setname}
+              value={this.props.inputFiltering.setName}
               className={classes.textField}
               onChange={this.props.onChange('setName')}
             />
@@ -61,18 +100,18 @@ class FilterInputs extends Component {
             <DateAndTimePickers />
             <TextField
               label="Latitude"
-              value={this.props.latitude}
+              value={this.props.inputFiltering.latitude}
               className={classes.textField}
               onChange={this.props.onChange('latitude')}
             />
             <TextField
               label="Longitude"
-              value={this.props.longitude}
+              value={this.props.inputFiltering.longitude}
               className={classes.textField}
               onChange={this.props.onChange('longitude')}
             />
             <div className="row filterSubmit">
-              <Button onClick={this.props.onSubmitInput} variant="contained" color="primary">
+              <Button onClick={this.onSubmit} variant="contained" color="primary">
                 Apply Input Filters
               </Button>
             </div>
