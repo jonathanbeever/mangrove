@@ -47,6 +47,9 @@ input[type=text] {
   float: none;
   margin-left: 1em;
 }
+#settings-popover > * {
+	padding: 1em;
+}
 
 .tfield {
   display: block !important;
