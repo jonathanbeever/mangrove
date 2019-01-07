@@ -35,6 +35,7 @@ input[type=text] {
 }
 
 #settings-head {
+	margin: 0 1vw;
 	margin-bottom: 2em;
 }
 
