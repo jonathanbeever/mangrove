@@ -61,6 +61,7 @@ class StepperTest extends Component {
       },
       filteredInputs : inputFiles,
       index: '',
+      selectedInputs : [],
       specParamsByIndex : {
         aci: {
           minFreq: '',
@@ -97,8 +98,24 @@ class StepperTest extends Component {
   }
 
   componentDidMount = () => {
-    // get all inputs
-    console.log(this.state.filteredInputs)
+    // make indexed object of inputs
+    var indexedFiles = {}
+    var selected = []
+
+    inputFiles.forEach(file => {
+      selected.push(file.inputId)
+
+      indexedFiles[file.inputId] = {
+        fileName : file.fileName,
+        location : file.location,
+        setName : file.setName,
+        siteName : file.siteName
+      } 
+    })
+
+    this.setState({ selectedInputs : selected })
+
+    this.setState({ indexedFiles : indexedFiles})
     // get all db specs
     axios.get('http://localhost:3000/specs')
       .then(res => {
@@ -129,7 +146,8 @@ class StepperTest extends Component {
     
     this.setState({ inputFiltering: inputFiltering })
   };
-
+  // when form is submitted
+  // when chip is deleted
   submitIndexFilter = () => {
     var filteredInputs = inputFiles.filter(file => {
       if(!this.state.inputFiltering.siteName || this.state.inputFiltering.siteName.toLowerCase() === file.siteName.toLowerCase()) {
@@ -142,7 +160,11 @@ class StepperTest extends Component {
         }
       }
     })
-
+    var selected = filteredInputs.map(input => {
+      return input.inputId
+    })
+    // this.setState({ selectedInputs: selected })
+    this.updateSelectedInputs(selected)
     this.setState({ filteredInputs: filteredInputs })
   }
 
@@ -152,8 +174,8 @@ class StepperTest extends Component {
     var inputFiltering = this.state.inputFiltering
     inputFiltering[label[0]] = ''
     console.log(inputFiltering)
-    this.submitIndexFilter()
     this.setState({ inputFiltering : inputFiltering })
+    this.submitIndexFilter()
     // console.log(label)
     // this.setState({
     //   []
@@ -174,6 +196,7 @@ class StepperTest extends Component {
     this.setState({ selectedInputs: selected })
     this.setState({ jobsFiltered: filteredJobByInput })
   }
+
   // TODO: filter by specs
 
   // Spec selection functions
@@ -238,10 +261,6 @@ class StepperTest extends Component {
         <Tabs 
           // Input select props 
           inputFiltering = {this.state.inputFiltering}
-          // siteName={this.state.siteName} 
-          // setName={this.state.setName} 
-          // latitude={this.state.latitude}
-          // longitude={this.state.longitude}
           filteredInputs={this.state.filteredInputs}
           onDelete={this.handleChipDelete}
           onChange={this.handleChange} 
@@ -257,9 +276,9 @@ class StepperTest extends Component {
           onSubmitSpecs={this.handleSpecSubmit}
           filteredSpecs={this.state.filteredSpecs}
           // Jobs select props
-          filteredJobs={this.state.filteredJobs}
-          // TODO: Send filtering formation for chips
-          //    chips, onclick 'x', function to clear state and update list of inputs/specs and jobs
+          filteredJobs={this.state.jobsFiltered}
+          indexedFiles={this.state.indexedFiles}
+          selected={this.state.selectedInputs}
         />
       </div>
     );

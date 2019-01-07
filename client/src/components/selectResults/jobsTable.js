@@ -18,9 +18,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import moment from 'moment';
 
-function createData(id, siteName, setName, fileName, latitude, longitude) {
-  return { id: id, siteName, setName, fileName, latitude, longitude };
+function createData(id, type, author, time, input, spec) {
+  return { id: id, type, author, time, input, spec };
 }
 
 function desc(a, b, orderBy) {
@@ -46,13 +47,13 @@ function stableSort(array, cmp) {
 function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
-
+// id, type, author, time, input, input, spec
 const rows = [
-  { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
-  { id: 'setName', numeric: false, disablePadding: false, label: 'File Set Name' },
-  { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
-  { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
-  { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
+  { id: 'type', numeric: false, disablePadding: true, label: 'Index' },
+  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
+  { id: 'creationTimeMs', numeric: false, disablePadding: false, label: 'Time Started' },
+  { id: 'input', numeric: false, disablePadding: false, label: 'Input File' },
+  { id: 'spec', numeric: false, disablePadding: false, label: 'Parameters' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -139,6 +140,7 @@ const toolbarStyles = theme => ({
 
 let EnhancedTableToolbar = props => {
   const { numSelected, classes } = props;
+
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -200,28 +202,27 @@ class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
     orderBy: 'calories',
-    // send prop form filtering?
-    selected: this.props.selected,
+    selected: [],
     data: [
       
     ],
     page: 0,
     rowsPerPage: 5,
   };
-
+//   id, type, author, time, input, input, spec
   componentDidMount = () => {
-    var data = this.props.filteredInputs.map(input => {
-      return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
+      console.log(this.props)
+    var data = this.props.filteredJobs.map(job => {
+      return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
     })
     this.setState({data: data})
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
-      var data = this.props.filteredInputs.map(input => {
-        return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
+      var data = this.props.filteredJobs.map(job => {
+        return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
       })
-      this.setState({selected: this.props.selected})
       this.setState({data: data})
     }
   }
@@ -239,13 +240,10 @@ class EnhancedTable extends React.Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      var list = this.state.data.map(n => n.id) 
-      this.setState({ selected: list });
-      this.props.updateSelectedInputs(list)      
+      this.setState(state => ({ selected: state.data.map(n => n.id) }));
       return;
     }
     this.setState({ selected: [] });
-    this.props.updateSelectedInputs([])
   };
 
   handleClick = (event, id) => {
@@ -317,12 +315,12 @@ class EnhancedTable extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       <TableCell component="th" scope="row" padding="none">
-                        {n.siteName}
+                        {n.type}
                       </TableCell>
-                      <TableCell align="right">{n.setName}</TableCell>
-                      <TableCell align="right">{n.fileName}</TableCell>
-                      <TableCell align="right">{n.latitude}</TableCell>
-                      <TableCell align="right">{n.longitude}</TableCell>
+                      <TableCell align="right">{n.author}</TableCell>
+                      <TableCell align="right">{n.time}</TableCell>
+                      <TableCell align="right">{n.input}</TableCell>
+                      <TableCell align="right">{n.spec}</TableCell>
                     </TableRow>
                   );
                 })}

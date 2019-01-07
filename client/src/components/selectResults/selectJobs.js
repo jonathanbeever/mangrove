@@ -7,7 +7,8 @@ import DateAndTimePickers from './dateTimePicker';
 import Button from '@material-ui/core/Button';
 import './selectResults.css';
 import InputsTable from './inputsTable.js';
-import Chip from './chip'
+import Chip from './chip';
+import JobsTable from './jobsTable';
 
 const styles = theme => ({
   root: {
@@ -33,18 +34,17 @@ class SelectJobs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chips: ''
+      inputChips: ''
     }
   }
 
   componentDidMount = () => {
-    console.log(this.props)
     this.formatChipHtml()
   }
   
   deleteChip = (label) => {
     this.props.onDelete(label)
-    this.setState({ chips : '' })
+    this.formatChipHtml()
   }
 
   formatChipHtml = () => {
@@ -55,14 +55,12 @@ class SelectJobs extends Component {
           <Chip
             key={param}
             label={param + ' : ' + this.props.inputFiltering[param]}
-            
             onDelete={this.deleteChip}
           />
         )
       }
     })
-    console.log(chipHtml)
-    this.setState({ chips: <div>{chipHtml}</div> })
+    this.setState({ inputChips: <div>{chipHtml}</div> })
   }
 
   render() {
@@ -70,8 +68,25 @@ class SelectJobs extends Component {
 
     return (
       <div className="row">
-                  {this.state.chips}
-
+        <div className="col-4">
+          <Paper className={classes.root}>
+          <div className="row">
+            <div className="col-6">
+              Input Specifications
+              {this.state.inputChips}
+            </div>
+            <div className="col-6">
+              Parameter Specifications
+            </div>
+            </div>
+          </Paper>
+        </div>
+        <div className="col-8">
+          <JobsTable 
+            filteredJobs={this.props.filteredJobs}
+            indexedFiles={this.props.indexedFiles}          
+          />
+        </div>
       </div>
     );
   }

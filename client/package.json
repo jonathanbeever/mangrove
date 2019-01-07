@@ -19,6 +19,7 @@
     "electron": "3.0.7",
     "electron-builder": "20.31.2",
     "electron-is-dev": "1.0.1",
+    "moment": "2.23.0",
     "react": "16.6.0",
     "react-bootstrap": "0.32.4",
     "react-dom": "16.6.0",

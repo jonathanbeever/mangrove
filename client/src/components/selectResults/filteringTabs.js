@@ -61,6 +61,7 @@ class SimpleTabs extends React.Component {
             onChange={this.props.onChange} 
             onSubmitInput={this.props.onSubmitInput} 
             updateSelectedInputs={this.props.updateSelectedInputs} 
+            selected={this.props.selected}
           />
         </TabContainer>}
         {value === 1 && <TabContainer>
@@ -80,6 +81,7 @@ class SimpleTabs extends React.Component {
             filteredJobs={this.props.filteredJobs}
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
+            indexedFiles={this.props.indexedFiles}
           />
         </TabContainer>}
       </div>

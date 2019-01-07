@@ -9,21 +9,12 @@ import DoneIcon from '@material-ui/icons/Done';
 const styles = theme => ({
   root: {
     display: 'flex',
-    justifyContent: 'center',
     flexWrap: 'wrap',
   },
   chip: {
-    margin: theme.spacing.unit,
+    // margin: theme.spacing.unit,
   },
 });
-
-function handleDelete(props) {
-    console.log(props)
-}
-
-function handleClick() {
-  alert('You clicked the Chip.'); // eslint-disable-line no-alert
-}
 
 function OutlinedChips(props) {
   const { classes } = props;

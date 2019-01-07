@@ -36,21 +36,9 @@ class FilterInputs extends Component {
       chips: ''
     }
   }
+
   componentDidMount = () => {
-    console.log(this.props)
     this.formatChipHtml()
-  }
-
-  // componentDidUpdate = (prevProps, prevState, snapshot) => {
-  //   if(prevProps !== this.props) {
-  //     this.formatChipHtml()
-     
-  //   }
-  // }
-
-  deleteChip = (label) => {
-    this.props.onDelete(label)
-    this.setState({ chips : '' })
   }
 
   formatChipHtml = () => {
@@ -61,13 +49,11 @@ class FilterInputs extends Component {
           <Chip
             key={param}
             label={param + ' : ' + this.props.inputFiltering[param]}
-            
             onDelete={this.deleteChip}
           />
         )
       }
     })
-    console.log(chipHtml)
     this.setState({ chips: <div>{chipHtml}</div> })
   }
 
@@ -75,6 +61,12 @@ class FilterInputs extends Component {
     this.formatChipHtml()
     this.props.onSubmitInput()
   }
+  
+  deleteChip = (label) => {
+    this.props.onDelete(label)
+    this.formatChipHtml()
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -118,7 +110,11 @@ class FilterInputs extends Component {
           </Paper>
         </div>
         <div className="col-8">
-          <InputsTable updateSelectedInputs={this.props.updateSelectedInputs} filteredInputs={this.props.filteredInputs}/>
+          <InputsTable 
+            updateSelectedInputs={this.props.updateSelectedInputs} 
+            filteredInputs={this.props.filteredInputs} 
+            selected={this.props.selected}          
+          />
         </div>
       </div>
     );
