@@ -1,40 +1,53 @@
 const { nextMockObjectId } = require('./mockObjectId');
-const { mockParameter } = require('./mockParam');
+const { nextMockParams } = require('./mockParam');
 
-const { getSpecType } = require('../../api/models/specType');
+const {
+  typeToSpecType,
+  specTypeToType,
+  getSpecModel,
+  getParamsFromSpec,
+} = require('../../api/models/spec/utils');
 
-const mockSpec = (_id, type, param) => {
-  let SpecModel = null;
-  SpecModel = getSpecType(type);
+const mockSpec = (_id, type, params) => {
+  const specType = typeToSpecType(type);
+  const SpecModel = getSpecModel(specType);
   if (SpecModel === null) {
-    return `Error with spec type :: ${type}`;
+    return `Error: Invalid \`type\` parameter (${type}).`;
   }
 
   return new SpecModel({
     _id,
-    type,
-    ...param,
+    specType,
+    ...params,
   });
 };
 
-const nextMockSpec = (type, param, check = true) => {
+const nextMockSpec = (type) => {
   const specId = nextMockObjectId();
-  let params = param;
-  if (check) {
-    params = mockParameter(type, param);
-  }
+  const params = nextMockParams(type);
   return mockSpec(specId, type, params);
 };
 
-const mockSpecCreateJson = (type, param) => JSON.stringify({
+const mockSpecCreateJson = (type, params) => JSON.stringify({
   type,
-  ...param,
+  ...params,
 });
 
-// TODO: get json from spec
-const getJsonFromMockSpec = spec => JSON.stringify(spec);
+const nextMockSpecCreateJson = (type) => {
+  const params = nextMockParams(type);
+  return mockSpecCreateJson(type, params);
+};
+
+const getJsonFromMockSpec = (spec) => {
+  const type = specTypeToType(spec.type);
+  const params = getParamsFromSpec(spec);
+  return mockSpecCreateJson(type, params);
+};
+
 module.exports = {
+  mockSpec,
   nextMockSpec,
   mockSpecCreateJson,
+  nextMockSpecCreateJson,
   getJsonFromMockSpec,
 };

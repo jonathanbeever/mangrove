@@ -1,14 +1,14 @@
-const { MAX_NUM_R } = require('../../util/rConstants');
+const { MAX_NUM_R } = require('../../../util/rConstants');
 
-const specDefaults = Object.freeze({
+const Param = Object.freeze({
   aci: {
-    minFreq: { min: 0, default: 0, max: MAX_NUM_R },
-    maxFreq: { min: 0, max: MAX_NUM_R, default: 16000 },
+    minFreq: { default: 0, min: 0, max: MAX_NUM_R },
+    maxFreq: { default: 16000, min: 0, max: MAX_NUM_R },
     j: { default: 30, min: 1, max: MAX_NUM_R },
     fftW: { default: 10, min: 1, max: MAX_NUM_R },
   },
   adi: {
-    maxFreq: { min: 0, default: 16000, max: MAX_NUM_R },
+    maxFreq: { default: 16000, min: 0, max: MAX_NUM_R },
     dbThreshold: { default: 32, min: -MAX_NUM_R, max: MAX_NUM_R },
     freqStep: { default: 512, min: 1, max: MAX_NUM_R },
     shannon: { default: true },
@@ -33,4 +33,4 @@ const specDefaults = Object.freeze({
   rms: {},
 });
 
-module.exports = { specDefaults };
+module.exports = Param;

@@ -1,33 +1,33 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
-const { specDefaults } = require('../specDefaults');
+const Param = require('./param');
 
 module.exports = Spec.discriminator(
   'aciSpec',
   new mongoose.Schema({
     minFreq: {
       type: Number,
-      min: specDefaults.aci.minFreq.min,
-      default: specDefaults.aci.minFreq.default,
-      max: specDefaults.aci.minFreq.max,
+      min: Param.aci.minFreq.min,
+      default: Param.aci.minFreq.default,
+      max: Param.aci.minFreq.max,
     },
     maxFreq: {
       type: Number,
-      min: specDefaults.aci.maxFreq.min,
-      max: specDefaults.aci.maxFreq.max,
-      default: specDefaults.aci.maxFreq.default,
+      min: Param.aci.maxFreq.min,
+      max: Param.aci.maxFreq.max,
+      default: Param.aci.maxFreq.default,
     },
     j: {
       type: Number,
-      min: specDefaults.aci.j.min,
-      default: specDefaults.aci.j.default,
-      max: specDefaults.aci.j.max,
+      min: Param.aci.j.min,
+      default: Param.aci.j.default,
+      max: Param.aci.j.max,
     },
     fftW: {
       type: Number,
-      min: specDefaults.aci.fftW.min,
-      default: specDefaults.aci.fftW.default,
-      max: specDefaults.aci.fftW.max,
+      min: Param.aci.fftW.min,
+      default: Param.aci.fftW.default,
+      max: Param.aci.fftW.max,
     },
   }),
 );

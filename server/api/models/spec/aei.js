@@ -1,27 +1,27 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
-const { specDefaults } = require('../specDefaults');
+const Param = require('./param');
 
 module.exports = Spec.discriminator(
   'aeiSpec',
   new mongoose.Schema({
     maxFreq: {
       type: Number,
-      min: specDefaults.aei.maxFreq.min,
-      max: specDefaults.aei.maxFreq.max,
-      default: specDefaults.aei.maxFreq.default,
+      min: Param.aei.maxFreq.min,
+      max: Param.aei.maxFreq.max,
+      default: Param.aei.maxFreq.default,
     },
     dbThreshold: {
       type: Number,
-      default: specDefaults.aei.dbThreshold.default,
-      min: specDefaults.aei.dbThreshold.min,
-      max: specDefaults.aei.dbThreshold.max,
+      default: Param.aei.dbThreshold.default,
+      min: Param.aei.dbThreshold.min,
+      max: Param.aei.dbThreshold.max,
     },
     freqStep: {
       type: Number,
-      min: specDefaults.aei.freqStep.min,
-      default: specDefaults.aei.freqStep.default,
-      max: specDefaults.aei.freqStep.max,
+      min: Param.aei.freqStep.min,
+      default: Param.aei.freqStep.default,
+      max: Param.aei.freqStep.max,
     },
   }),
 );

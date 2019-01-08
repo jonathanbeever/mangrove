@@ -1,39 +1,39 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
-const { specDefaults } = require('../specDefaults');
+const Param = require('./param');
 
 module.exports = Spec.discriminator(
   'ndsiSpec',
   new mongoose.Schema({
     fftW: {
       type: Number,
-      min: specDefaults.ndsi.fftW.min,
-      default: specDefaults.ndsi.fftW.default,
-      max: specDefaults.ndsi.fftW.max,
+      min: Param.ndsi.fftW.min,
+      default: Param.ndsi.fftW.default,
+      max: Param.ndsi.fftW.max,
     },
     anthroMin: {
       type: Number,
-      min: specDefaults.ndsi.anthroMin.min,
-      default: specDefaults.ndsi.anthroMin.default,
-      max: specDefaults.ndsi.anthroMin.max,
+      min: Param.ndsi.anthroMin.min,
+      default: Param.ndsi.anthroMin.default,
+      max: Param.ndsi.anthroMin.max,
     },
     anthroMax: {
       type: Number,
-      min: specDefaults.ndsi.anthroMax.min,
-      default: specDefaults.ndsi.anthroMax.default,
-      max: specDefaults.ndsi.anthroMax.max,
+      min: Param.ndsi.anthroMax.min,
+      default: Param.ndsi.anthroMax.default,
+      max: Param.ndsi.anthroMax.max,
     },
     bioMin: {
       type: Number,
-      min: specDefaults.ndsi.bioMin.min,
-      default: specDefaults.ndsi.bioMin.default,
-      max: specDefaults.ndsi.bioMin.max,
+      min: Param.ndsi.bioMin.min,
+      default: Param.ndsi.bioMin.default,
+      max: Param.ndsi.bioMin.max,
     },
     bioMax: {
       type: Number,
-      min: specDefaults.ndsi.bioMax.min,
-      default: specDefaults.ndsi.bioMax.default,
-      max: specDefaults.ndsi.bioMax.max,
+      min: Param.ndsi.bioMax.min,
+      default: Param.ndsi.bioMax.default,
+      max: Param.ndsi.bioMax.max,
     },
   }),
 );

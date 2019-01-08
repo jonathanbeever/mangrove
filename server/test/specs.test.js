@@ -1,23 +1,28 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
+const { ObjectId } = require('mongoose').Types;
+
 const mockDb = require('./util/mockDb');
 const {
+  mockSpec,
   nextMockSpec,
   mockSpecCreateJson,
+  nextMockSpecCreateJson,
   getJsonFromMockSpec,
 } = require('./util/mockSpec');
+const { nextMockObjectId } = require('./util/mockObjectId');
 
 const app = require('../app');
 
 const { Spec } = require('../api/models/spec');
-
-const { specType } = require('../api/models/specType');
-
-const { MAX_NUM_R } = require('../util/rConstants');
-const { mockParameter, checkDefault } = require('../test/util/mockParam');
-
-// const { specDefaults } = require('../api/models/specDefaults');
+const {
+  specTypeToType,
+  getSpecKeys,
+  getParamsFromSpec,
+} = require('../api/models/spec/utils');
+const Type = require('../api/models/type');
+const Param = require('../api/models/spec/param');
 
 const { expect } = chai;
 
@@ -38,7 +43,272 @@ describe('Specs', () => {
     });
   });
 
-  describe('/GET all specs', () => {
+  describe('/PUT Specs', () => {
+    it('It should fail to PUT a Spec (missing required keys)', (done) => {
+      const specJson = '';
+
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(specJson)
+        .then((res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('message');
+          expect(res.body.message).to.be.a('string');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should fail to PUT a Spec (invalid keys)', (done) => {
+      const specJson = JSON.stringify({
+        type: Type.ACI,
+        minFreq: Param.aci.minFreq.default,
+        maxFreq: Param.aci.maxFreq.default,
+        j: Param.aci.j.default,
+        fftW: Param.aci.fftW.default,
+        extra: true,
+      });
+
+      chai.request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(specJson)
+        .then((res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('message');
+          expect(res.body.message).to.be.a('string');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should fail to PUT a Spec (invalid type)', (done) => {
+      const specJson = mockSpecCreateJson('invalid', {});
+
+      chai
+        .request(app)
+        .put('/specs')
+        .set('Content-Type', 'application/json')
+        .send(specJson)
+        .then((res) => {
+          expect(res).to.have.status(400);
+          expect(res.body).to.have.all.keys('message');
+          expect(res.body.message).to.be.a('string');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should fail to PUT a Spec (invalid param values)', (done) => {
+      const specJsons = [];
+      specJsons.push(mockSpecCreateJson(Type.ACI, {
+        minFreq: -1,
+        maxFreq: Param.aci.maxFreq.max + 1,
+        j: 0,
+        fftW: 'Thats not an integer',
+      }));
+      specJsons.push(mockSpecCreateJson(Type.ADI, {
+        maxFreq: {},
+        dbThreshold: Param.adi.dbThreshold.min - 1,
+        freqStep: Param.adi.freqStep.max + 1,
+        shannon: false,
+      }));
+      specJsons.push(mockSpecCreateJson(Type.AEI, {
+        maxFreq: -1,
+        dbThreshold: Param.aei.dbThreshold.min - 1,
+        freqStep: null,
+      }));
+      specJsons.push(mockSpecCreateJson(Type.BI, {
+        minFreq: -1,
+        maxFreq: -1,
+        fftW: 0,
+      }));
+      specJsons.push(mockSpecCreateJson(Type.NDSI, {
+        fftW: -1,
+        anthroMin: -1,
+        anthroMax: Param.ndsi.anthroMax.max + 1,
+        bioMin: Param.ndsi.bioMin.min - 1,
+        bioMax: Param.ndsi.bioMax.max + 1,
+      }));
+      // specJsons.push(mockSpecCreateJson(Type.RMS, {
+      //   // TODO
+      // }));
+
+      specJsons.forEach((json) => {
+        chai
+          .request(app)
+          .put('/specs')
+          .set('Content-Type', 'application/json')
+          .send(json)
+          .then((res) => {
+            expect(res).to.have.status(400);
+            expect(res.body).to.have.all.keys('message');
+            expect(res.body.message).to.be.a('string');
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
+      done();
+    });
+
+    it('It should PUT a Spec (new)', (done) => {
+      const specs = [];
+      specs.push(nextMockSpec(Type.ACI));
+      specs.push(nextMockSpec(Type.ADI));
+      specs.push(nextMockSpec(Type.AEI));
+      specs.push(nextMockSpec(Type.BI));
+      specs.push(nextMockSpec(Type.NDSI));
+      // specs.push(nextMockSpec(Type.RMS)); // TODO
+
+      const specJsons = [];
+      specs.forEach((spec) => {
+        specJsons.push(getJsonFromMockSpec(spec));
+      });
+
+      specJsons.forEach((json, index) => {
+        chai
+          .request(app)
+          .put('/specs')
+          .set('Content-Type', 'application/json')
+          .send(json)
+          .then((res) => {
+            expect(res).to.have.status(201);
+            expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
+            expect(res.body.type).to.eql(specTypeToType(specs[index].type));
+            expect(getParamsFromSpec(res.body)).to.deep.eql(
+              getParamsFromSpec(specs[index]),
+            );
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
+
+      done();
+    });
+
+    it('It should PUT a Spec (existing)', (done) => {
+      const spec = nextMockSpec(Type.AEI);
+      const specJson = getJsonFromMockSpec(spec);
+
+      Spec.create(spec)
+        .then(() => {
+          chai
+            .request(app)
+            .put('/specs')
+            .set('Content-Type', 'application/json')
+            .send(specJson)
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
+              expect(ObjectId(res.body.specId).toString()).to.equal(
+                ObjectId(spec._id).toString(),
+              );
+              expect(res.body.type).to.eql(specTypeToType(spec.type));
+              expect(getParamsFromSpec(res.body)).to.deep.eql(getParamsFromSpec(spec));
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should PUT a Spec (default params)', (done) => {
+      const specs = [];
+      specs.push(mockSpec(nextMockObjectId(), Type.ACI, {}));
+      specs.push(mockSpec(nextMockObjectId(), Type.ADI, {}));
+      specs.push(mockSpec(nextMockObjectId(), Type.AEI, {}));
+      specs.push(mockSpec(nextMockObjectId(), Type.BI, {}));
+      specs.push(mockSpec(nextMockObjectId(), Type.NDSI, {}));
+      // specs.push(mockSpec(nextMockObjectId(), Type.RMS, {})); // TODO
+
+      const specJsons = [];
+      specs.forEach((spec) => {
+        specJsons.push(getJsonFromMockSpec(spec));
+      });
+
+      specJsons.forEach((json, index) => {
+        chai
+          .request(app)
+          .put('/specs')
+          .set('Content-Type', 'application/json')
+          .send(json)
+          .then((res) => {
+            expect(res).to.have.status(201);
+            expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
+            expect(res.body.type).to.eql(specTypeToType(specs[index].type));
+            expect(getParamsFromSpec(res.body)).to.deep.eql(
+              getParamsFromSpec(specs[index]),
+            );
+          })
+          .catch((err) => {
+            done(err);
+          });
+      });
+      done();
+    });
+  });
+
+  describe('/GET Spec', () => {
+    it('It should fail to GET a Spec (not found)', (done) => {
+      chai
+        .request(app)
+        .get(`/specs/${nextMockObjectId()}`)
+        .then((res) => {
+          expect(res).to.have.status(404);
+          expect(res.body).to.have.all.keys('message');
+          expect(res.body.message).to.be.a('string');
+          done();
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+
+    it('It should GET a Spec (found)', (done) => {
+      const spec = nextMockSpec(Type.AEI);
+
+      Spec.create(spec)
+        .then(() => {
+          chai
+            .request(app)
+            .get(`/specs/${spec._id}`)
+            .then((res) => {
+              expect(res).to.have.status(200);
+              expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
+              expect(ObjectId(res.body.specId).toString()).to.equal(
+                ObjectId(spec._id).toString(),
+              );
+              expect(res.body.type).to.eql(specTypeToType(spec.type));
+              expect(getParamsFromSpec(res.body)).to.deep.eql(getParamsFromSpec(spec));
+              done();
+            })
+            .catch((err) => {
+              done(err);
+            });
+        })
+        .catch((err) => {
+          done(err);
+        });
+    });
+  });
+
+  describe('/GET all Specs', () => {
     it('It should GET all the Specs (none)', (done) => {
       chai
         .request(app)
@@ -56,67 +326,14 @@ describe('Specs', () => {
         });
     });
 
-    it('It should Get all the Specs (many)', (done) => {
+    it('It should GET all the Specs (many)', (done) => {
       const specs = [];
-      specs.push(
-        nextMockSpec(
-          specType.ACI,
-          {
-            minFreq: 1,
-            maxFreq: 20000,
-            j: 25,
-            fftW: 15,
-          },
-          false,
-        ),
-      );
-      specs.push(
-        nextMockSpec(
-          specType.ADI,
-          {
-            maxFreq: 20000,
-            dbThreshold: 30,
-            freqStep: 2,
-            shannon: false,
-          },
-          false,
-        ),
-      );
-      specs.push(
-        nextMockSpec(
-          specType.AEI,
-          {
-            maxFreq: 20001,
-            dbThreshold: 35,
-            freqStep: 16,
-          },
-          false,
-        ),
-      );
-      specs.push(
-        nextMockSpec(
-          specType.BI,
-          {
-            minFreq: 1,
-            maxFreq: 20000,
-            fftW: 15,
-          },
-          false,
-        ),
-      );
-      specs.push(
-        nextMockSpec(
-          specType.NDSI,
-          {
-            fftW: 15,
-            anthroMin: 2,
-            anthroMax: 17000,
-            bioMin: 5,
-            bioMax: 6000,
-          },
-          false,
-        ),
-      );
+      specs.push(nextMockSpec(Type.ACI));
+      specs.push(nextMockSpec(Type.ADI));
+      specs.push(nextMockSpec(Type.AEI));
+      specs.push(nextMockSpec(Type.BI));
+      specs.push(nextMockSpec(Type.NDSI));
+      // specs.push(nextMockSpec(Type.RMS)); // TODO
 
       Spec.insertMany(specs)
         .then(() => {
@@ -130,14 +347,15 @@ describe('Specs', () => {
               expect(res.body.count).to.be.eql(specs.length);
               expect(res.body.specs).to.be.an('array');
               expect(res.body.specs).to.have.lengthOf(specs.length);
-              res.body.specs.forEach((spec) => {
-                // splitting keys between type specific and base keys
-                const keys = Object.keys(spec);
-                const baseKeys = keys.splice(keys.length - 3, 3);
-                // mock paramater only takes in type specific keys for comparison,
-                // hacky way to re-use code.
-                expect(mockParameter(spec.type, spec, true)).to.be.an('object');
-                expect(baseKeys.includes('_id', 'type', '__v'));
+              res.body.specs.forEach((spec, index) => {
+                expect(spec).to.have.all.keys(getSpecKeys(specs[index].type));
+                expect(ObjectId(spec.specId).toString()).to.equal(
+                  ObjectId(specs[index]._id).toString(),
+                );
+                expect(spec.type).to.eql(specTypeToType(specs[index].type));
+                expect(getParamsFromSpec(spec)).to.deep.eql(
+                  getParamsFromSpec(specs[index]),
+                );
               });
               done();
             })
@@ -149,197 +367,18 @@ describe('Specs', () => {
     });
   });
 
-  describe('/GET spec', (req, res) => {
-    it('It should get a spec by ID (One)', (done) => {
-      const testSpec = nextMockSpec(specType.AEI, {
-        maxFreq: 1000,
-        dbThreshold: 14,
-        freqStep: 25,
-      });
-
-      const testId = testSpec.id;
-
-      Spec.create(testSpec)
-        .then(() => {
-          chai
-            .request(app)
-            .get(`/specs/${testId}`)
-            .then((innerRes) => {
-              const content = innerRes.body;
-              expect(content).to.be.not.null;
-              expect(content._id).to.be.equal(testId);
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        })
-        .catch((err) => {
-          done(err);
-        });
-    });
-
-    it('It should fail to get a spec by ID (One)', (done) => {
-      const testSpec = nextMockSpec(specType.AEI, {
-        maxFreq: 1000,
-        dbThreshold: 14,
-        freqStep: 25,
-      });
-
-      const testId = 'ffffffffffffffffffffffff';
-
-      Spec.create(testSpec)
-        .then(() => {
-          chai
-            .request(app)
-            .get(`/specs/${testId}`)
-            .then((innerRes) => {
-              const content = innerRes.body;
-              expect(content).to.be.not.null;
-              expect(content.error).to.not.be.null;
-              expect(content.error).to.be.a('string');
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        })
-        .catch((err) => {
-          done(err);
-        });
-    });
-  });
-
-  describe('/PUT specs', () => {
-    it('It should add spec (many)', (done) => {
-      const testSpecJsons = [];
-      testSpecJsons.push(
-        mockSpecCreateJson(specType.ACI, {
-          minFreq: 1,
-          maxFreq: 3001,
-          j: 30,
-          fftW: 13,
-        }),
-      );
-      testSpecJsons.push(
-        mockSpecCreateJson(specType.AEI, {
-          maxFreq: 3000,
-          dbThreshold: 45,
-          freqStep: 18,
-        }),
-      );
-      testSpecJsons.push(
-        mockSpecCreateJson(specType.ADI, {
-          maxFreq: 3000,
-          dbThreshold: 45,
-          freqStep: 18,
-          shannon: false,
-        }),
-      );
-      testSpecJsons.push(
-        mockSpecCreateJson(specType.BI, {
-          minFreq: 100,
-          maxFreq: 2000,
-          fftW: 20,
-        }),
-      );
-      testSpecJsons.push(
-        mockSpecCreateJson(specType.NDSI, {
-          fftW: 20,
-          anthroMin: 10,
-          anthroMax: 3000,
-          bioMin: 3005,
-          bioMax: 5002,
-        }),
-      );
-      testSpecJsons.push(mockSpecCreateJson(specType.RMS, {}));
-
-      testSpecJsons.forEach((spec) => {
-        chai
-          .request(app)
-          .put('/specs')
-          .set('Content-Type', 'application/json')
-          .send(spec)
-          .then((res) => {
-            const content = res.body;
-            expect(res).to.not.be.null;
-            expect(content).to.not.be.null;
-            expect(res).to.have.status(201);
-            const specObjFromJson = JSON.parse(spec);
-            Object.keys(specObjFromJson).forEach((key) => {
-              if (key === 'specType') {
-                expect(content).to.have.property('type');
-                expect(content.type).to.eql(specObjFromJson.specType);
-              } else {
-                expect(content).to.have.property(key);
-                expect(content[key]).to.eql(specObjFromJson[key]);
-              }
-            });
-          })
-          .catch((err) => {
-            done(err);
-          });
-      });
-
-      done();
-    });
-
-    it('It should try to create duplicate, should only create one', (done) => {
-      const testSpecJson = mockSpecCreateJson(specType.AEI, {
-        maxFreq: 2000,
-        dbThreshold: 17,
-        freqStep: 26,
-      });
-      const testSpec = nextMockSpec(specType.AEI, {
-        maxFreq: 2000,
-        dbThreshold: 17,
-        freqStep: 26,
-      });
-      // console.log(`Test spec ${testSpec}`);
-      // add the same spec twice, making sure that it only adds once
-      Spec.create(testSpec)
-        .then(() => {
-          chai
-            .request(app)
-            .put('/specs')
-            .set('Content-Type', 'application/json')
-            .send(testSpecJson)
-            .then((res) => {
-              const content = res.body;
-              expect(res).to.not.be.null;
-              expect(content).to.not.be.null;
-              expect(content.maxFreq).to.be.eql(2000);
-              expect(content.dbThreshold).to.be.eql(17);
-              expect(content.freqStep).to.be.eql(26);
-              expect(res).to.have.status(200);
-              // status code should return 200 OK, if 201 then that means a new spec was created.
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        })
-        .catch((err) => {
-          done(err);
-        });
-    });
-
-    it('It should not recognize the invalid spec type', (done) => {
-      const testSpecJson = mockSpecCreateJson('invalidSpec', {
-        maxFreq: 2000,
-        dbThreshold: 17,
-        freqStep: 26,
-      });
+  describe('/DELETE Spec', () => {
+    it('It should DELETE a Spec (not found)', (done) => {
       chai
         .request(app)
-        .put('/specs')
-        .set('Content-Type', 'application/json')
-        .send(testSpecJson)
+        .delete(`/specs/${nextMockObjectId()}`)
         .then((res) => {
-          const content = res.body;
-          expect(res).to.not.be.null;
-          expect(content).to.not.be.null;
-          expect(Object.keys(content)[0]).to.be.string('error');
+          expect(res).to.have.status(200);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys('success', 'message');
+          expect(res.body.success).to.be.a('boolean');
+          expect(res.body.success).to.be.true;
+          expect(res.body.message).to.be.a('string');
           done();
         })
         .catch((err) => {
@@ -347,133 +386,27 @@ describe('Specs', () => {
         });
     });
 
-    it('It should create all the Specs no Errors, Defaults', (done) => {
-      const specs = [];
-      specs.push(mockSpecCreateJson(specType.ACI, {}));
-      specs.push(mockSpecCreateJson(specType.ADI, {}));
-      specs.push(mockSpecCreateJson(specType.AEI, {}));
-      specs.push(mockSpecCreateJson(specType.BI, {}));
-      specs.push(mockSpecCreateJson(specType.NDSI, {}));
-      specs.push(mockSpecCreateJson(specType.RMS, {}));
-      specs.forEach((json) => {
-        chai
-          .request(app)
-          .put('/specs')
-          .set('Content-Type', 'application/json')
-          .send(json)
-          .then((res) => {
-            const content = res.body;
-            expect(res).to.have.status(201);
-            expect(content).to.be.an('object');
-            expect(checkDefault(content.type, content)).to.be.true;
-          })
-          .catch((err) => {
-            done(err);
-          });
-      });
-      done();
-    });
+    it('It should DELETE a Spec (found)', (done) => {
+      const spec = nextMockSpec(Type.AEI);
 
-    it('It should put all the Specs (many), Errors, no Defaults', (done) => {
-      const specs = [];
-      specs.push(
-        mockSpecCreateJson(specType.ACI, {
-          minFreq: -1,
-          maxFreq: MAX_NUM_R + 1,
-          j: 0,
-          fftW: 'Thats not an integer',
-        }),
-      );
-      specs.push(
-        mockSpecCreateJson(specType.ADI, {
-          maxFreq: {},
-          dbThreshold: -MAX_NUM_R - 1,
-          freqStep: MAX_NUM_R + 1,
-          shannon: false,
-        }),
-      );
-      specs.push(
-        mockSpecCreateJson(specType.AEI, {
-          maxFreq: -1,
-          dbThreshold: -MAX_NUM_R - 1,
-          freqStep: null,
-        }),
-      );
-      specs.push(
-        mockSpecCreateJson(specType.BI, { minFreq: -1, maxFreq: -1, fftW: 0 }),
-      );
-      specs.push(
-        mockSpecCreateJson('ndsiSpec', {
-          fftW: -1,
-          anthroMin: -1,
-          anthroMax: MAX_NUM_R + 1,
-          bioMin: -MAX_NUM_R - 1,
-          bioMax: MAX_NUM_R + 1,
-        }),
-      );
-      specs.push(mockSpecCreateJson(specType.RMS, {}));
-
-      specs.forEach((json) => {
-        chai
-          .request(app)
-          .put('/specs')
-          .set('Content-Type', 'application/json')
-          .send(json)
-          .then((res) => {
-            const content = res.body;
-            expect(res).to.have.status(201);
-            expect(content).to.be.an('object');
-            expect(checkDefault(content.type, content)).to.be.true;
-          })
-          .catch((err) => {
-            done(err);
-          });
-      });
-      done();
-    });
-  });
-
-  describe('/DELETE Spec', () => {
-    it('It should delete one spec given Id', (done) => {
-      const testSpec = nextMockSpec(specType.AEI, {
-        maxFreq: 2000,
-        dbThreshold: 17,
-        freqStep: 26,
-      });
-
-      Spec.create(testSpec)
+      Spec.create(spec)
         .then(
           chai
             .request(app)
-            .delete(`/specs/${testSpec.id}`)
+            .delete(`/specs/${spec._id}`)
             .then((res) => {
-              const content = res.body;
-              expect(content.success).to.be.true;
-              expect(content.message).to.be.string(
-                `Succesfully deleted Spec with specId: ${testSpec.id}`,
-              );
-            })
-            .catch((err) => {
-              done(err);
-            }),
-        )
-        .then(
-          chai
-            .request(app)
-            .delete(`/specs/${testSpec.id}`)
-            .then((res) => {
-              const content = res.body;
-              expect(content.success).to.be.true;
-              expect(content.message).to.be.string(
-                `No valid entry found for specId: ${testSpec.id}`,
-              );
+              expect(res).to.have.status(200);
+              expect(res.body).to.be.an('object');
+              expect(res.body).to.have.all.keys('success', 'message');
+              expect(res.body.success).to.be.a('boolean');
+              expect(res.body.success).to.be.true;
+              expect(res.body.message).to.be.a('string');
               done();
             })
             .catch((err) => {
               done(err);
             }),
         )
-        .catch(err => done(err))
         .catch((err) => {
           done(err);
         });

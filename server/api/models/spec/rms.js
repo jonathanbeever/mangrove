@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
-// const { specDefaults } = require('../specDefaults');
+// const Param = require('./param');
 
 module.exports = Spec.discriminator(
   'rmsSpec',

@@ -1,27 +1,27 @@
 const mongoose = require('mongoose');
 const Spec = require('./spec');
-const { specDefaults } = require('../specDefaults');
+const Param = require('./param');
 
 module.exports = Spec.discriminator(
   'biSpec',
   new mongoose.Schema({
     minFreq: {
       type: Number,
-      min: specDefaults.bi.minFreq.min,
-      default: specDefaults.bi.minFreq.default,
-      max: specDefaults.bi.minFreq.max,
+      min: Param.bi.minFreq.min,
+      default: Param.bi.minFreq.default,
+      max: Param.bi.minFreq.max,
     },
     maxFreq: {
       type: Number,
-      min: specDefaults.bi.maxFreq.min,
-      default: specDefaults.bi.maxFreq.default,
-      max: specDefaults.bi.maxFreq.max,
+      min: Param.bi.maxFreq.min,
+      default: Param.bi.maxFreq.default,
+      max: Param.bi.maxFreq.max,
     },
     fftW: {
       type: Number,
-      min: specDefaults.bi.fftW.min,
-      default: specDefaults.bi.fftW.default,
-      max: specDefaults.bi.fftW.max,
+      min: Param.bi.fftW.min,
+      default: Param.bi.fftW.default,
+      max: Param.bi.fftW.max,
     },
   }),
 );

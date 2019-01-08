@@ -1,74 +1,63 @@
-const { specType } = require('../../api/models/specType');
-const { specDefaults } = require('../../api/models/specDefaults');
+const Param = require('../../api/models/spec/param');
+
 const {
-  AciSpec,
-  AeiSpec,
-  AdiSpec,
-  BiSpec,
-  NdsiSpec,
-  RmsSpec,
-} = require('../../api/models/spec');
+  getParamVarType,
+  validateParam,
+  validateParams,
+} = require('../../api/models/spec/utils');
 
-const checkDefault = (type, param) => {
-  const newType = type.substring(0, type.length - 4);
-  Object.keys(specDefaults[newType]).forEach((params) => {
-    if (param[params] !== specDefaults[newType][params].default) {
-      return false;
-    }
+const currParam = {
+  aci: {
+    minFreq: Param.aci.minFreq.min,
+    maxFreq: Param.aci.maxFreq.min,
+    j: Param.aci.j.min,
+    fftW: Param.aci.fftW.min,
+  },
+  adi: {
+    maxFreq: Param.adi.maxFreq.min,
+    dbThreshold: Param.adi.dbThreshold.min,
+    freqStep: Param.adi.freqStep.min,
+    shannon: Param.adi.shannon.default,
+  },
+  aei: {
+    maxFreq: Param.aei.maxFreq.min,
+    dbThreshold: Param.aei.dbThreshold.min,
+    freqStep: Param.aei.freqStep.min,
+  },
+  bi: {
+    minFreq: Param.bi.minFreq.min,
+    maxFreq: Param.bi.maxFreq.min,
+    fftW: Param.bi.fftW.min,
+  },
+  ndsi: {
+    fftW: Param.ndsi.fftW.min,
+    anthroMin: Param.ndsi.anthroMin.min,
+    anthroMax: Param.ndsi.anthroMax.min,
+    bioMin: Param.ndsi.bioMin.min,
+    bioMax: Param.ndsi.bioMax.min,
+  },
+  rms: {},
+};
+
+const nextMockParam = (type, param) => {
+  const varType = getParamVarType(type, param);
+  if (varType === 'number') {
+    currParam[type][param] = currParam[type][param] + 1 > Param[type][param].max
+      ? Param[type][param].min
+      : currParam[type][param] + 1;
+  } else if (varType === 'boolean') {
+    currParam[type][param] = !currParam[type][param];
+  }
+  return validateParam(type, param, currParam[type][param]);
+};
+
+const nextMockParams = (type) => {
+  Object.keys(currParam[type]).forEach((param) => {
+    nextMockParam(type, param);
   });
-  return true;
-};
-const checkKeys = (type, keys, param) => {
-  if (keys.length !== Object.keys(param).length) {
-    return `${type} was given too many paramaters (${param})`;
-  }
-  keys.forEach((key) => {
-    if (!(key in param)) {
-      return `${type} was given incorrect paramaters (${param})`;
-    }
-  });
-
-  return param;
+  return validateParams(type, currParam[type]);
 };
 
-const mockParameter = (type, param, trim = false) => {
-  let typeKeys = [];
-  const paramaters = param;
-  // used in testing to get rid of the base params
-  if (trim) {
-    delete paramaters._id;
-    delete paramaters.__v;
-    delete paramaters.type;
-  }
-  switch (type) {
-    case specType.ACI:
-      typeKeys = Object.keys(AciSpec.schema.obj);
-      // deleting parent class spec varaibles as they do not need to be checked.
-      typeKeys.splice(typeKeys.length - 1, 1);
-      return checkKeys(specType.ACI, typeKeys, paramaters);
-    case specType.ADI:
-      typeKeys = Object.keys(AdiSpec.schema.obj);
-      typeKeys.splice(typeKeys.length - 1, 1);
-      return checkKeys(specType.ADI, typeKeys, paramaters);
-    case specType.AEI:
-      typeKeys = Object.keys(AeiSpec.schema.obj);
-      typeKeys.splice(typeKeys.length - 1, 1);
-      return checkKeys(specType.AEI, typeKeys, paramaters);
-    case specType.BI:
-      typeKeys = Object.keys(BiSpec.schema.obj);
-      typeKeys.splice(typeKeys.length - 1, 1);
-      return checkKeys(specType.BI, typeKeys, paramaters);
-    case specType.NDSI:
-      typeKeys = Object.keys(NdsiSpec.schema.obj);
-      typeKeys.splice(typeKeys.length - 1, 1);
-      return checkKeys(specType.NDSI, typeKeys, paramaters);
-    case specType.RMS:
-      typeKeys = Object.keys(RmsSpec.schema.obj);
-      typeKeys.splice(typeKeys.length - 1, 1);
-      return checkKeys(specType.RMS, typeKeys, paramaters);
-    default:
-      return `Error: Invalid \`type\` parameter (${type}).`;
-  }
+module.exports = {
+  nextMockParams,
 };
-
-module.exports = { mockParameter, checkDefault };
