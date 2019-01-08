@@ -61,7 +61,6 @@ class StepperTest extends Component {
       },
       filteredInputs : inputFiles,
       index: '',
-      selectedInputs : [],
       specParamsByIndex : {
         aci: {
           minFreq: '',
@@ -91,13 +90,18 @@ class StepperTest extends Component {
           minFreq: '',
           maxFreq: '',
           fftW: ''
+        },
+        rms: {
+          test: ''
         }
       },
+      selectedInputs : [],
       selectedSpecs: []
     };
   }
 
   componentDidMount = () => {
+    this.handleIndexChange('aci')
     // make indexed object of inputs
     var indexedFiles = {}
     var selected = []
@@ -119,23 +123,30 @@ class StepperTest extends Component {
     // get all db specs
     axios.get('http://localhost:3000/specs')
       .then(res => {
+        var specs = {
+          'aci': [],
+          'ndsi': []
+        }
+
+        res.data.forEach(spec => {
+          var type = spec.type.substring(0, spec.type.indexOf('Spec'))
+          specs[type].push(spec)
+        })
+        console.log(specs)
         // Set all specs state
-        console.log(res.data)
         this.setState({ allSpecs: res.data })
-        // Set filtered specs will all initially
+        this.setState({ indexedSpecs: specs })
+        // Set filtered specs with all initially
         // Choose specs of multiple indices?
-        this.setState({ filteredSpecs: res.data })
+        // this.setState({ filteredSpecs: res.data })
+        this.setState({ filteredSpecs: specs })
       })
 
       axios.get('http://localhost:3000/jobs')
       .then(res => {
         // Set all specs state
-        console.log(res.data.jobs)
         this.setState({ allJobs: res.data.jobs })
         this.setState({ jobsFiltered: res.data.jobs })
-
-        // Choose specs of multiple indices?
-        // this.setState({ filteredSpecs: res.data })
       })
   }
 
@@ -146,8 +157,7 @@ class StepperTest extends Component {
     
     this.setState({ inputFiltering: inputFiltering })
   };
-  // when form is submitted
-  // when chip is deleted
+
   submitIndexFilter = () => {
     var filteredInputs = inputFiles.filter(file => {
       if(!this.state.inputFiltering.siteName || this.state.inputFiltering.siteName.toLowerCase() === file.siteName.toLowerCase()) {
@@ -160,27 +170,27 @@ class StepperTest extends Component {
         }
       }
     })
+
+    this.setState({ filteredInputs: filteredInputs })
+
     var selected = filteredInputs.map(input => {
       return input.inputId
     })
-    // this.setState({ selectedInputs: selected })
+    
     this.updateSelectedInputs(selected)
-    this.setState({ filteredInputs: filteredInputs })
   }
 
   handleChipDelete = (label) => {
-    // var param = label.split(' : ')
     label = label.split(' : ')
+
     var inputFiltering = this.state.inputFiltering
     inputFiltering[label[0]] = ''
-    console.log(inputFiltering)
+
     this.setState({ inputFiltering : inputFiltering })
+
     this.submitIndexFilter()
-    // console.log(label)
-    // this.setState({
-    //   []
-    // })
   }
+
   // Array of inputIds selected in table
   updateSelectedInputs = (selected) => {
     // Filter list of all jobs by list of selected inputs
@@ -191,7 +201,6 @@ class StepperTest extends Component {
         return job
       }
     })
-    console.log(filteredJobByInput)
     // Set state selectedInputs for filtering by specs
     this.setState({ selectedInputs: selected })
     this.setState({ jobsFiltered: filteredJobByInput })
@@ -201,9 +210,16 @@ class StepperTest extends Component {
 
   // Spec selection functions
   handleIndexChange = (e) => {
-    this.setState({ index: e.target.value })
-
-    switch (e.target.value) {
+    var index = ''
+    if(e.target) {
+      this.setState({ index: e.target.value })
+      index = e.target.value
+    }
+    else {
+      this.setState({ index: e })
+      index = e
+    }
+    switch (index) {
       case 'aci': {
         // id and label of specs
         this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
@@ -253,7 +269,6 @@ class StepperTest extends Component {
   // filter table
   // select specs
   // multiple filtering specification ?
-  // chips to clear them
 
   render() {
     return (
@@ -267,7 +282,8 @@ class StepperTest extends Component {
           onSubmitInput={this.submitIndexFilter}
           updateSelectedInputs={this.updateSelectedInputs} 
           // Specs select props
-          allSpecs={this.state.allSpecs}
+          // allSpecs={this.state.allSpecs}
+          allSpecs={this.state.indexedSpecs}
           index={this.state.index}
           handleIndexChange={this.handleIndexChange}
           specParamsList={this.state.specParamsList}
@@ -278,7 +294,7 @@ class StepperTest extends Component {
           // Jobs select props
           filteredJobs={this.state.jobsFiltered}
           indexedFiles={this.state.indexedFiles}
-          selected={this.state.selectedInputs}
+          selectedInputs={this.state.selectedInputs}
         />
       </div>
     );

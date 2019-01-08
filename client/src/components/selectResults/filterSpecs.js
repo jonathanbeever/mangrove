@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import ExpansionPanel from './expansionPanel';
 
 const styles = theme => ({
   root: {
@@ -47,11 +48,14 @@ class FilterSpecs extends Component {
 
 
   componentDidMount = () => {
-    
+    this.formatSpecTables()
+    if(this.props.index)
+      this.formatSpecInput(this.props.specParamsList)
   }
 // todo: mount functions w this
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if(prevProps !== this.props) {
+    if(prevProps.index !== this.props.index) {
+      this.formatSpecTables()
       this.formatSpecInput(this.props.specParamsList)
     }
   }
@@ -103,6 +107,27 @@ class FilterSpecs extends Component {
     this.setState({ specInputHtml: specInputHtml })
   }
 
+  formatSpecTables = () => {
+    var expansionPanels = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms'].map(index => {
+      if(this.props.filteredSpecs[index]){
+        return (
+          <ExpansionPanel 
+            key={index}
+            index={index}
+            chosen={this.props.index}
+            expanded={this.props.index === index} 
+            specs={this.props.filteredSpecs[index]}
+            params={Object.keys(this.props.specParamsByIndex[index])}
+            handleChange={this.props.handleIndexChange}
+          />
+        )      
+      }
+    })
+    this.setState({ expansionPanels: <div>{expansionPanels}</div> })
+  }
+
+
+
   render() {
     const { classes } = this.props;
 
@@ -135,7 +160,9 @@ class FilterSpecs extends Component {
           </Paper>
         </div>
         <div className="col-8">
-          <SpecsTable index={this.props.index} filteredSpecs={this.props.filteredSpecs} specParamsByIndex={this.props.specParamsByIndex} />
+        <Paper className={classes.root}>
+          {this.state.expansionPanels ? this.state.expansionPanels : ''}
+          </Paper>
         </div>
       </div>
     );

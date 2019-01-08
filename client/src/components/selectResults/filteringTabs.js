@@ -61,7 +61,7 @@ class SimpleTabs extends React.Component {
             onChange={this.props.onChange} 
             onSubmitInput={this.props.onSubmitInput} 
             updateSelectedInputs={this.props.updateSelectedInputs} 
-            selected={this.props.selected}
+            selected={this.props.selectedInputs}
           />
         </TabContainer>}
         {value === 1 && <TabContainer>

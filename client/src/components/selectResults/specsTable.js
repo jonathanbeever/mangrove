@@ -19,8 +19,12 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
-function createData(id, author, minFreq, maxFreq, j, fftW) {
-  return { id: id, author, minFreq, maxFreq, j, fftW };
+function createAciData(id, author, minFreq, maxFreq, j, fftW) {
+  return { id: id, author, minFreq, maxFreq, j, fftW};
+}
+
+function createNdsiData(id, author, anthroMin, anthroMax, bioMin, bioMax, fftW) {
+  return { id: id, author, anthroMin, anthroMax, bioMin, bioMax, fftW};
 }
 
 function desc(a, b, orderBy) {
@@ -47,22 +51,13 @@ function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-// TODO: creation time
-const rows = [
-  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
-  { id: 'minFreq', numeric: true, disablePadding: false, label: 'Min Freq' },
-  { id: 'maxFreq', numeric: true, disablePadding: false, label: 'Max Freq' },
-  { id: 'j', numeric: true, disablePadding: false, label: 'j' },
-  { id: 'fftW', numeric: true, disablePadding: false, label: 'fftW' }
-];
-
 class EnhancedTableHead extends React.Component {
   createSortHandler = property => event => {
     this.props.onRequestSort(event, property);
   };
 
   render() {
-    const { onSelectAllClick, order, orderBy, numSelected, rowCount } = this.props;
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, rows } = this.props;
 
     return (
       <TableHead>
@@ -128,7 +123,7 @@ const toolbarStyles = theme => ({
           backgroundColor: theme.palette.secondary.dark,
         },
   spacer: {
-    flex: '1 1 100%',
+    // flex: '1 1 100%',
   },
   actions: {
     color: theme.palette.text.secondary,
@@ -212,21 +207,59 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.state.index)
-    var data = this.props.filteredSpecs.map(spec => {
-      return createData(spec._id, spec.author, spec.minFreq, spec.maxFreq, spec.j, spec.fftW)
+    var rows = [{id: 'author', numeric: false, disablePadding: true, label: 'Author' }]
+    
+    this.props.params.forEach(param => {
+      if(param !== 'shannon')
+        rows.push({ id: param, numeric: true, disablePadding: true, label: param })
+      else
+        rows.push({ id: param, numeric: false, disablePadding: true, label: param })
     })
-    this.setState({data: data})
+    
+    this.setState({ rows: rows })
+
+    switch (this.props.index) {
+      case 'aci' : {
+        var data = this.props.specs.map(spec => {
+          return createAciData(spec._id, spec.author, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+        })
+        this.setState({data: data})
+      }
+      case 'ndsi' : {
+        var data = this.props.specs.map(spec => {
+          return createNdsiData(spec._id, spec.author, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]], spec[this.props.params[4]])
+        })
+        this.setState({data: data})
+      }
+    }
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if(prevProps !== this.props) {
-      var data = this.props.filteredSpecs.map(spec => {
-        console.log(spec)
+    if(prevProps.params !== this.props.params) {
+      var rows = [{id: 'author', numeric: false, disablePadding: true, label: 'Author' }]
+    
+      this.props.params.forEach(param => {
+        rows.push({ id: param, numeric: true, disablePadding: true, label: param })
+      })
+      
+      this.setState({ rows: rows })
 
-        return createData(spec._id, spec.author, spec.minFreq, spec.maxFreq, spec.j, spec.fftW)
-    })
-      this.setState({data: data})
+      switch (this.props.index) {
+        case 'aci' : {
+          var data = this.props.specs.map(spec => {
+            return createAciData(spec._id, spec.author, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+          })
+          this.setState({data: data})
+          break;
+        }
+        case 'ndsi' : {
+          var data = this.props.specs.map(spec => {
+            return createNdsiData(spec._id, spec.author, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]], spec[this.props.params[4]])
+          })
+          this.setState({data: data})
+          break;
+        }
+      }
     }
   }
 
@@ -287,53 +320,56 @@ class EnhancedTable extends React.Component {
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
-      <Paper className={classes.root}>
+      <div className="col-12">
         <EnhancedTableToolbar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleClick(event, n.id)}
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} />
-                      </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
-                        {n.author}
-                      </TableCell>
-                      <TableCell align="right">{n.minFreq}</TableCell>
-                      <TableCell align="right">{n.maxFreq}</TableCell>
-                      <TableCell align="right">{n.j}</TableCell>
-                      <TableCell align="right">{n.fftW}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+          {this.state.rows ? 
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                rows={this.state.rows}
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {stableSort(data, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    const isSelected = this.isSelected(n.id);
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleClick(event, n.id)}
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n.id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={isSelected} />
+                        </TableCell>
+                        {this.state.rows.map((row, i) => {
+                          return (   
+                            <TableCell key={row.id} align="left">{n[row.id]}</TableCell> 
+                          )
+                        })}
+                      </TableRow> 
+                    ); 
+                  })}
+                {emptyRows > 0 && ( 
+                  <TableRow style={{ height: 49 * emptyRows }}> 
+                    <TableCell colSpan={0} /> 
+                  </TableRow> 
+                )} 
+              </TableBody> 
+            </Table>
+          : 
+            ''
+          }
         </div>
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
@@ -350,7 +386,7 @@ class EnhancedTable extends React.Component {
           onChangePage={this.handleChangePage}
           onChangeRowsPerPage={this.handleChangeRowsPerPage}
         />
-      </Paper>
+      </div>
     );
   }
 }

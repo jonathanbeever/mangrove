@@ -154,7 +154,7 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">
-            Matching Inputs
+            Matching Jobs
           </Typography>
         )}
       </div>
@@ -203,15 +203,16 @@ class EnhancedTable extends React.Component {
     order: 'asc',
     orderBy: 'calories',
     selected: [],
+    // selected: this.props.selectedJobs
     data: [
       
     ],
     page: 0,
     rowsPerPage: 5,
+    rows: []
   };
-//   id, type, author, time, input, input, spec
+
   componentDidMount = () => {
-      console.log(this.props)
     var data = this.props.filteredJobs.map(job => {
       return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
     })
@@ -223,6 +224,7 @@ class EnhancedTable extends React.Component {
       var data = this.props.filteredJobs.map(job => {
         return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
       })
+      // this.setState({ selected: this.props.selectedJobs })
       this.setState({data: data})
     }
   }
@@ -240,10 +242,13 @@ class EnhancedTable extends React.Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map(n => n.id) }));
+      var list = this.state.data.map(n => n.id) 
+      this.setState({ selected: list });
+      // this.props.updateSelectedJobs(list)      
       return;
     }
     this.setState({ selected: [] });
+    // this.props.updateSelectedJobs([])
   };
 
   handleClick = (event, id) => {
@@ -264,7 +269,7 @@ class EnhancedTable extends React.Component {
       );
     }
 
-    this.props.updateSelectedInputs(newSelected)
+    // this.props.updateSelectedJobs(newSelected)
     this.setState({ selected: newSelected });
   };
 
