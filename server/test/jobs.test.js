@@ -5,7 +5,9 @@ const { ObjectId } = require('mongoose').Types;
 
 const mockDb = require('./util/mockDb');
 const {
-  nextMockJob, nextMockJobCreateJson, getJsonFromMockJob,
+  nextMockJob,
+  nextMockJobCreateJson,
+  getJsonFromMockJob,
 } = require('./util/mockJob');
 const { nextMockObjectId } = require('./util/mockObjectId');
 
@@ -44,7 +46,8 @@ describe('Jobs', () => {
     it('It should fail to PUT a Job (missing required keys)', (done) => {
       const jobJson = '';
 
-      chai.request(app)
+      chai
+        .request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
         .send(jobJson)
@@ -258,20 +261,27 @@ describe('Jobs', () => {
       job
         .save()
         .then(() => {
-          chai.request(app)
+          chai
+            .request(app)
             .get(`/jobs/${job._id}`)
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.be.an('object');
               expect(res.body).to.have.all.keys(getJobKeys(Type.ACI, false));
               expect(res.body.jobId).to.be.a('string');
-              expect(ObjectId(res.body.jobId).toString()).to.equal(res.body.jobId);
+              expect(ObjectId(res.body.jobId).toString()).to.equal(
+                res.body.jobId,
+              );
               expect(res.body.type).to.be.a('string');
               expect(res.body.type).to.be.oneOf(types);
               expect(res.body.input).to.be.a('string');
-              expect(ObjectId(res.body.input).toString()).to.equal(res.body.input);
+              expect(ObjectId(res.body.input).toString()).to.equal(
+                res.body.input,
+              );
               expect(res.body.spec).to.be.a('string');
-              expect(ObjectId(res.body.spec).toString()).to.equal(res.body.spec);
+              expect(ObjectId(res.body.spec).toString()).to.equal(
+                res.body.spec,
+              );
               expect(res.body.author).to.be.a('string');
               expect(res.body.creationTimeMs).to.be.a('number');
               expect(res.body.status).to.be.a('string');
@@ -294,20 +304,27 @@ describe('Jobs', () => {
       job
         .save()
         .then(() => {
-          chai.request(app)
+          chai
+            .request(app)
             .get(`/jobs/${job._id}`)
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.be.an('object');
               expect(res.body).to.have.all.keys(getJobKeys(Type.ACI));
               expect(res.body.jobId).to.be.a('string');
-              expect(ObjectId(res.body.jobId).toString()).to.equal(res.body.jobId);
+              expect(ObjectId(res.body.jobId).toString()).to.equal(
+                res.body.jobId,
+              );
               expect(res.body.type).to.be.a('string');
               expect(res.body.type).to.be.oneOf(types);
               expect(res.body.input).to.be.a('string');
-              expect(ObjectId(res.body.input).toString()).to.equal(res.body.input);
+              expect(ObjectId(res.body.input).toString()).to.equal(
+                res.body.input,
+              );
               expect(res.body.spec).to.be.a('string');
-              expect(ObjectId(res.body.spec).toString()).to.equal(res.body.spec);
+              expect(ObjectId(res.body.spec).toString()).to.equal(
+                res.body.spec,
+              );
               expect(res.body.author).to.be.a('string');
               expect(res.body.creationTimeMs).to.be.a('number');
               expect(res.body.status).to.be.a('string');
@@ -327,7 +344,8 @@ describe('Jobs', () => {
 
   describe('/GET all Jobs', () => {
     it('It should GET all Jobs (none)', (done) => {
-      chai.request(app)
+      chai
+        .request(app)
         .get('/jobs')
         .then((res) => {
           expect(res).to.have.status(200);
@@ -351,7 +369,8 @@ describe('Jobs', () => {
 
       Job.insertMany(jobs)
         .then(() => {
-          chai.request(app)
+          chai
+            .request(app)
             .get('/jobs')
             .then((res) => {
               expect(res).to.have.status(200);
@@ -395,7 +414,8 @@ describe('Jobs', () => {
 
       Job.insertMany(jobs)
         .then(() => {
-          chai.request(app)
+          chai
+            .request(app)
             .get('/jobs')
             .then((res) => {
               expect(res).to.have.status(200);
@@ -434,7 +454,8 @@ describe('Jobs', () => {
 
   describe('/DELETE Job', () => {
     it('It should DELETE a Job (not found)', (done) => {
-      chai.request(app)
+      chai
+        .request(app)
         .delete(`/jobs/${nextMockObjectId()}`)
         .then((res) => {
           expect(res).to.have.status(200);
@@ -456,7 +477,8 @@ describe('Jobs', () => {
       job
         .save()
         .then(() => {
-          chai.request(app)
+          chai
+            .request(app)
             .delete(`/jobs/${job._id}`)
             .then((res) => {
               expect(res).to.have.status(200);

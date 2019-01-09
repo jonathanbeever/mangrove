@@ -2,103 +2,93 @@ const express = require('express');
 
 const router = express.Router();
 const mongoose = require('mongoose');
-const moment = require('moment');
 
+const { Spec } = require('../models/spec');
 const {
-  Spec, AciSpec, AdiSpec, AeiSpec, BiSpec, NdsiSpec, RmsSpec,
-} = require('../models/spec');
+  typeToSpecType,
+  specTypeToType,
+  getSpecModel,
+  newSpecKeys,
+  getParamsFromSpec,
+  validateParams,
+  fillDefaultParams,
+} = require('../models/spec/utils');
+const Type = require('../models/type');
 
 // Create Spec
 router.put('/', (req, res) => {
-  let SpecModel = null;
-  console.log(req.body.specType);
-  switch (req.body.specType) {
-    case 'aciSpec':
-      SpecModel = AciSpec;
-      break;
-    case 'adiSpec':
-      SpecModel = AdiSpec;
-      break;
-    case 'aeiSpec':
-      SpecModel = AeiSpec;
-      break;
-    case 'biSpec':
-      SpecModel = BiSpec;
-      break;
-    case 'ndsiSpec':
-      SpecModel = NdsiSpec;
-      break;
-    case 'rmsSpec':
-      SpecModel = RmsSpec;
-      break;
-    default:
-      SpecModel = null;
-      break;
+  const missingKeys = newSpecKeys().filter(
+    key => !Object.keys(req.body).includes(key),
+  );
+  if (missingKeys.length > 0) {
+    return res.status(400).json({
+      message: `Missing required keys: ${missingKeys.join(', ')}.`,
+    });
   }
 
-  if (SpecModel === null) {
-    res.status(404).json({ err: 'Not a Supported SpecModel Type' });
+  const specType = typeToSpecType(req.body.type);
+  const SpecModel = getSpecModel(specType);
+  if (!SpecModel) {
+    const types = Object.values(Type).join(', ');
+    return res.status(400).json({
+      message: `Invalid type: ${req.body.type}. Must be one of: ${types}.`,
+    });
   }
 
-  // try to find this spec in the database.
-  SpecModel.find({
-    ...(
-      // ACI/BI minFreq Check
-      ((SpecModel === AciSpec || SpecModel === BiSpec) && { minFreq: req.body.minFreq }),
-      // ACI/ADI/AEI/BI maxFreq Check
-      ((SpecModel === AciSpec || SpecModel === AdiSpec || SpecModel === AeiSpec
-         || SpecModel === BiSpec) && { maxFreq: req.body.maxFreq }),
-      // ACI j Check
-      ((SpecModel === AciSpec) && { j: req.body.j }),
-      // ACI/BI/NDSI fftW Check
-      ((SpecModel === AciSpec || SpecModel === BiSpec
-        || SpecModel === NdsiSpec) && { fftW: req.body.fftW }),
-      // ADI/AEI dbThreshold Check
-      ((SpecModel === AdiSpec || SpecModel === AeiSpec) && { dbThreshold: req.body.dbThreshold }),
-      // ADI/AEI freqStep Check
-      ((SpecModel === AdiSpec || SpecModel === AeiSpec) && { freqStep: req.body.freqStep }),
-      // ADI shannon Check
-      ((SpecModel === AdiSpec) && { shannon: req.body.shannon }),
-      // NDSI anthroMin Check
-      ((SpecModel === NdsiSpec) && { anthroMin: req.body.anthroMin }),
-      // NDSI anthroMax Check
-      ((SpecModel === NdsiSpec) && { anthroMax: req.body.anthroMax }),
-      // NDSI bioMin Check
-      ((SpecModel === NdsiSpec) && { bioMin: req.body.bioMin }),
-      // NDSI bioMax Check
-      ((SpecModel === NdsiSpec) && { bioMax: req.body.bioMax })
-    ),
-  })
+  const extraKeys = Object.keys(req.body).filter(
+    key => !newSpecKeys(specType, true).includes(key),
+  );
+  if (extraKeys.length > 0) {
+    return res.status(400).json({
+      message: `Invalid keys for type (${req.body.type}): ${extraKeys.join(', ')}.`,
+    });
+  }
+
+  const params = getParamsFromSpec(req.body);
+  try {
+    validateParams(req.body.type, params);
+  } catch (err) {
+    return res.status(400).json({
+      message: err.message,
+    });
+  }
+
+  SpecModel.find(fillDefaultParams(req.body.type, params))
     .exec()
-    .then((returnSpec) => {
-      if (returnSpec.length >= 1) {
-        res.status(200).json({ error: 'Item already in database', returnSpec }); // if already created then return data object
+    .then((searchResult) => {
+      if (searchResult.length /* === 1 */) {
+        res.status(200).json({
+          specId: searchResult[0]._id,
+          type: specTypeToType(searchResult[0].type),
+          ...getParamsFromSpec(searchResult[0]),
+        });
       } else {
-      // add id and creation time to spec document
-        req.body._id = new mongoose.Types.ObjectId();
-        req.body.creationTimeMs = moment().valueOf();
+        const spec = new SpecModel({
+          _id: new mongoose.Types.ObjectId(),
+          type: specType,
+          ...params,
+        });
 
-        const spec = new SpecModel(
-          req.body, // Put requested item in a new spec variable
-        );
-
-        // save spec
         spec
           .save()
           .then((createResult) => {
             res.status(201).json({
-              createResult,
+              specId: createResult._id,
+              type: specTypeToType(createResult.type),
+              ...getParamsFromSpec(createResult),
             });
           })
           .catch((err) => {
-            console.log(spec);
             res.status(500).json({
-              error: `Error in saving Spec :: ${err}`,
+              error: err,
             });
           });
       }
-    }).catch((err) => {
-      res.status(500).json({ message: `Error in finding Spec :: ${err}` });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
     });
 });
 
@@ -111,16 +101,20 @@ router.get('/:specId', (req, res) => {
     .then((searchResult) => {
       if (searchResult) {
         res.status(200).json({
-          searchResult,
+          specId: searchResult._id,
+          type: specTypeToType(searchResult.type),
+          ...getParamsFromSpec(searchResult),
         });
       } else {
         res.status(404).json({
-          error: `No valid entry found for ${specId}`,
+          message: `No valid entry found for ${specId}`,
         });
       }
     })
     .catch((err) => {
-      res.status(500).json({ error: `Error searching for jobId :: ${err}` });
+      res.status(500).json({
+        error: err,
+      });
     });
 });
 
@@ -129,18 +123,41 @@ router.get('/', (req, res) => {
   Spec.find()
     .exec()
     .then((searchResult) => {
-      res.status(200).json(searchResult);
+      res.status(200).json({
+        count: searchResult.length,
+        specs: searchResult.map(spec => ({
+          specId: spec._id,
+          type: specTypeToType(spec.type),
+          ...getParamsFromSpec(spec),
+        })),
+      });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({
-        error: `Error getting all job specs :: ${err}`,
+        error: err,
       });
     });
 });
 
-
 // Delete Spec
-
+router.delete('/:specId', (req, res) => {
+  const { specId } = req.params;
+  Spec.deleteOne({ _id: specId })
+    .exec()
+    .then((deleteResult) => {
+      res.status(200).json({
+        success: true,
+        message:
+          deleteResult.n > 0
+            ? `Succesfully deleted Spec with specId: ${specId}`
+            : `No valid entry found for specId: ${specId}.`,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
+    });
+});
 
 module.exports = router;
