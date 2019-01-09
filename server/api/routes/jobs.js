@@ -9,20 +9,18 @@ const { newJobKeys, getJobModel } = require('../models/job/utils');
 const Status = require('../models/status');
 const Type = require('../models/type');
 
+const { arrayDiff } = require('../../util/array');
+
 // Create Job
 router.put('/', (req, res) => {
-  const missingKeys = newJobKeys.filter(
-    key => !Object.keys(req.body).includes(key),
-  );
+  const missingKeys = arrayDiff(newJobKeys, Object.keys(req.body));
   if (missingKeys.length > 0) {
     return res.status(400).json({
       message: `Missing required keys: ${missingKeys.join(', ')}.`,
     });
   }
 
-  const extraKeys = Object.keys(req.body).filter(
-    key => !newJobKeys.includes(key),
-  );
+  const extraKeys = arrayDiff(Object.keys(req.body), newJobKeys);
   if (extraKeys.length > 0) {
     return res.status(400).json({
       message: `Invalid keys: ${extraKeys.join(', ')}.`,
