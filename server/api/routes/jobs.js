@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 
 const { Job } = require('../models/job');
-const { newJobKeys, getJobModel } = require('../models/job/utils');
+const {
+  getJobModel,
+  newJobKeys,
+} = require('../models/job/utils');
 const Status = require('../models/status');
 const Type = require('../models/type');
 
@@ -13,14 +16,14 @@ const { arrayDiff } = require('../../util/array');
 
 // Create Job
 router.put('/', (req, res) => {
-  const missingKeys = arrayDiff(newJobKeys, Object.keys(req.body));
+  const missingKeys = arrayDiff(newJobKeys(), Object.keys(req.body));
   if (missingKeys.length > 0) {
     return res.status(400).json({
       message: `Missing required keys: ${missingKeys.join(', ')}.`,
     });
   }
 
-  const extraKeys = arrayDiff(Object.keys(req.body), newJobKeys);
+  const extraKeys = arrayDiff(Object.keys(req.body), newJobKeys());
   if (extraKeys.length > 0) {
     return res.status(400).json({
       message: `Invalid keys: ${extraKeys.join(', ')}.`,

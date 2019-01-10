@@ -12,7 +12,7 @@ const mockSpec = (_id, type, params) => {
   const specType = typeToSpecType(type);
   const SpecModel = getSpecModel(specType);
   if (SpecModel === null) {
-    return `Error: Invalid \`type\` parameter (${type}).`;
+    throw new Error(`Invalid 'type' parameter (${type}).`);
   }
 
   return new SpecModel({
