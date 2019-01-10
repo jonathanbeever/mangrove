@@ -74,6 +74,8 @@ class SimpleTabs extends React.Component {
             specParamsByIndex={this.props.specParamsByIndex}
             onSubmitSpecs={this.props.onSubmitSpecs}
             filteredSpecs={this.props.filteredSpecs}
+            updateSelectedSpecs={this.props.updateSelectedSpecs}
+            selectedSpecs={this.props.selectedSpecs}
           />
         </TabContainer>}
         {value === 2 && <TabContainer>

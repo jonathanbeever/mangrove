@@ -24,9 +24,8 @@ function handleClick(e) {
 
 function SimpleExpansionPanel(props) {
   const { classes } = props;
-
   return (
-    <div className={classes.root} onClick={handleClick()}>
+    <div className={classes.root}>
     {/* onChange={props.handleChange({'target': props.index})} */}
       <ExpansionPanel expanded={props.expanded}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -37,6 +36,8 @@ function SimpleExpansionPanel(props) {
             index={props.index}
             specs={props.specs}
             params={props.params}
+            updateSelectedSpecs={props.updateSelectedSpecs}
+            selectedSpecs={props.selectedSpecs}
           />
         </ExpansionPanelDetails>
       </ExpansionPanel>

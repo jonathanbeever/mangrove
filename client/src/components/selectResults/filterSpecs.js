@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import './selectResults.css';
-import SpecsTable from './specsTable.js';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -49,8 +48,7 @@ class FilterSpecs extends Component {
 
   componentDidMount = () => {
     this.formatSpecTables()
-    if(this.props.index)
-      this.formatSpecInput(this.props.specParamsList)
+    this.formatSpecInput(this.props.specParamsList)
   }
 // todo: mount functions w this
   componentDidUpdate = (prevProps, prevState, snapshot) => {
@@ -119,6 +117,8 @@ class FilterSpecs extends Component {
             specs={this.props.filteredSpecs[index]}
             params={Object.keys(this.props.specParamsByIndex[index])}
             handleChange={this.props.handleIndexChange}
+            updateSelectedSpecs={this.props.updateSelectedSpecs}
+            selectedSpecs={this.props.selectedSpecs[index]}            
           />
         )      
       }

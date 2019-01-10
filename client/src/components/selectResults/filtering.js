@@ -96,11 +96,16 @@ class StepperTest extends Component {
         }
       },
       selectedInputs : [],
-      selectedSpecs: []
+      selectedSpecs: {
+        aci: [],
+        ndsi: []
+      }
     };
   }
 
   componentDidMount = () => {
+    console.log(this.state.selectedSpecs)
+
     this.handleIndexChange('aci')
     // make indexed object of inputs
     var indexedFiles = {}
@@ -193,17 +198,59 @@ class StepperTest extends Component {
 
   // Array of inputIds selected in table
   updateSelectedInputs = (selected) => {
-    // Filter list of all jobs by list of selected inputs
-    var filteredJobByInput = this.state.allJobs.filter(job => {
-      // return jobs if id in array 'selected'
-      // and spec id is in state selectedSpecs or no fitlering of specs has been done
-      if(selected.indexOf(job.input) !== -1 && (!this.state.selectedSpecs.length) || (this.state.selectedSpecs.indexOf(job.specId) !== -1)) {
-        return job
+    var filteredJobByInputs = []
+    
+    var check = 0
+
+    var indices = ['aci', 'ndsi']
+    indices.forEach(indx => {
+      if(this.state.selectedSpecs[indx].length) {
+        check++
       }
     })
+
+    if(check !== 0) {
+      this.state.allJobs.forEach(job => {
+        // return jobs if id in array 'selected'
+        // and spec id is in state selectedSpecs or no fitlering of specs has been done
+        indices.forEach(indx => {
+          if(this.state.selectedSpecs[indx].indexOf(job.spec) !== -1) {
+            if(selected.indexOf(job.input) !== -1) {
+              filteredJobByInputs.push(job)
+            }
+          }
+        })
+      })
+    }
+    else {
+      this.state.allJobs.forEach(job => {
+        // return jobs if id in array 'selected'
+        // and spec id is in state selectedSpecs or no fitlering of specs has been done
+        if(selected.indexOf(job.input) !== -1) {
+          filteredJobByInputs.push(job)
+        }
+      })
+    }
+    console.log(filteredJobByInputs)
+   
+    // this.setState({ selectedSpecs: selectedSpecs })
+
+
+
+    this.setState({ jobsFiltered: filteredJobByInputs })
+    
+    
+    // Filter list of all jobs by list of selected inputs
+    // var filteredJobByInput = this.state.allJobs.filter(job => {
+    //   // return jobs if id in array 'selected'
+    //   // and spec id is in state selectedSpecs or no fitlering of specs has been done
+    //   if(selected.indexOf(job.input) !== -1 && ((!this.state.selectedSpecs.length) || (this.state.selectedSpecs.indexOf(job.specId) !== -1))) {
+    //     return job
+    //   }
+    // })
     // Set state selectedInputs for filtering by specs
     this.setState({ selectedInputs: selected })
-    this.setState({ jobsFiltered: filteredJobByInput })
+    // this.setState({ jobsFiltered: filteredJobByInput })
   }
 
   // TODO: filter by specs
@@ -264,10 +311,32 @@ class StepperTest extends Component {
     
   }
 
+  updateSelectedSpecs = (selected, index) => {
+    var selectedSpecs = this.state.selectedSpecs
+    selectedSpecs[index] = selected
+
+    var filteredJobBySpecs = []
+
+    this.state.allJobs.forEach(job => {
+      // return jobs if id in array 'selected'
+      // and spec id is in state selectedSpecs or no fitlering of specs has been done
+      ['aci', 'ndsi'].forEach(indx => {
+        if(selectedSpecs[indx].indexOf(job.spec) !== -1) {
+          if(this.state.selectedInputs.indexOf(job.input) !== -1) {
+            filteredJobBySpecs.push(job)
+          }
+        }
+      })
+  
+    })
+    this.setState({ selectedSpecs: selectedSpecs })
+    this.setState({ jobsFiltered: filteredJobBySpecs })
+  }
+
+
   // TODO; add author and creationtime to specs input
-  // table of specs
   // filter table
-  // select specs
+  // select specs ?
   // multiple filtering specification ?
 
   render() {
@@ -291,6 +360,8 @@ class StepperTest extends Component {
           specParamsByIndex={this.state.specParamsByIndex}
           onSubmitSpecs={this.handleSpecSubmit}
           filteredSpecs={this.state.filteredSpecs}
+          updateSelectedSpecs={this.updateSelectedSpecs}
+          selectedSpecs={this.state.selectedSpecs}
           // Jobs select props
           filteredJobs={this.state.jobsFiltered}
           indexedFiles={this.state.indexedFiles}
