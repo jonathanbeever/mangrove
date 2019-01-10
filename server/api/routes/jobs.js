@@ -65,8 +65,7 @@ router.put('/', (req, res) => {
           status: Status.QUEUED, // TODO: Implement job queueing
         });
 
-        job
-          .save()
+        Job.create(job)
           .then((createResult) => {
             res.status(201).json({
               jobId: createResult._id,

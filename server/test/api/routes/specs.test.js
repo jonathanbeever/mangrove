@@ -67,14 +67,11 @@ describe('Specs', () => {
     it('It should fail to PUT a Spec (invalid keys)', (done) => {
       const specJson = JSON.stringify({
         type: Type.ACI,
-        minFreq: Param.aci.minFreq.default,
-        maxFreq: Param.aci.maxFreq.default,
-        j: Param.aci.j.default,
-        fftW: Param.aci.fftW.default,
         extra: true,
       });
 
-      chai.request(app)
+      chai
+        .request(app)
         .put('/specs')
         .set('Content-Type', 'application/json')
         .send(specJson)
@@ -172,9 +169,7 @@ describe('Specs', () => {
       // specs.push(nextMockSpec(Type.RMS)); // TODO
 
       const specJsons = [];
-      specs.forEach((spec) => {
-        specJsons.push(getJsonFromMockSpec(spec));
-      });
+      specs.forEach(spec => specJsons.push(getJsonFromMockSpec(spec)));
 
       specJsons.forEach((json, index) => {
         chai
@@ -185,8 +180,11 @@ describe('Specs', () => {
           .then((res) => {
             expect(res).to.have.status(201);
             expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
-            expect(res.body.type).to.eql(specTypeToType(specs[index].type));
-            expect(getParamsFromSpec(res.body)).to.deep.eql(
+            expect(ObjectId(res.body.specId).toString()).to.equal(
+              res.body.specId, // Check whether it's a valid ObjectId
+            );
+            expect(res.body.type).to.equal(specTypeToType(specs[index].type));
+            expect(getParamsFromSpec(res.body)).to.deep.equal(
               getParamsFromSpec(specs[index]),
             );
           })
@@ -212,11 +210,11 @@ describe('Specs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
-              expect(ObjectId(res.body.specId).toString()).to.equal(
-                ObjectId(spec._id).toString(),
+              expect(res.body.specId).to.equal(spec.id);
+              expect(res.body.type).to.equal(specTypeToType(spec.type));
+              expect(getParamsFromSpec(res.body)).to.deep.equal(
+                getParamsFromSpec(spec),
               );
-              expect(res.body.type).to.eql(specTypeToType(spec.type));
-              expect(getParamsFromSpec(res.body)).to.deep.eql(getParamsFromSpec(spec));
               done();
             })
             .catch((err) => {
@@ -238,9 +236,7 @@ describe('Specs', () => {
       // specs.push(mockSpec(nextMockObjectId(), Type.RMS, {})); // TODO
 
       const specJsons = [];
-      specs.forEach((spec) => {
-        specJsons.push(getJsonFromMockSpec(spec));
-      });
+      specs.forEach(spec => specJsons.push(getJsonFromMockSpec(spec)));
 
       specJsons.forEach((json, index) => {
         chai
@@ -251,8 +247,8 @@ describe('Specs', () => {
           .then((res) => {
             expect(res).to.have.status(201);
             expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
-            expect(res.body.type).to.eql(specTypeToType(specs[index].type));
-            expect(getParamsFromSpec(res.body)).to.deep.eql(
+            expect(res.body.type).to.equal(specTypeToType(specs[index].type));
+            expect(getParamsFromSpec(res.body)).to.deep.equal(
               getParamsFromSpec(specs[index]),
             );
           })
@@ -287,15 +283,15 @@ describe('Specs', () => {
         .then(() => {
           chai
             .request(app)
-            .get(`/specs/${spec._id}`)
+            .get(`/specs/${spec.id}`)
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
-              expect(ObjectId(res.body.specId).toString()).to.equal(
-                ObjectId(spec._id).toString(),
+              expect(res.body.specId).to.equal(spec.id);
+              expect(res.body.type).to.equal(specTypeToType(spec.type));
+              expect(getParamsFromSpec(res.body)).to.deep.equal(
+                getParamsFromSpec(spec),
               );
-              expect(res.body.type).to.eql(specTypeToType(spec.type));
-              expect(getParamsFromSpec(res.body)).to.deep.eql(getParamsFromSpec(spec));
               done();
             })
             .catch((err) => {
@@ -316,7 +312,7 @@ describe('Specs', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
-          expect(res.body.count).to.be.eql(0);
+          expect(res.body.count).to.be.equal(0);
           expect(res.body.specs).to.be.an('array');
           expect(res.body.specs).to.be.empty;
           done();
@@ -344,16 +340,14 @@ describe('Specs', () => {
               expect(res).to.have.status(200);
               expect(res.body).to.be.an('object');
               expect(res.body).to.have.all.keys('count', 'specs');
-              expect(res.body.count).to.be.eql(specs.length);
+              expect(res.body.count).to.be.equal(specs.length);
               expect(res.body.specs).to.be.an('array');
               expect(res.body.specs).to.have.lengthOf(specs.length);
               res.body.specs.forEach((spec, index) => {
                 expect(spec).to.have.all.keys(getSpecKeys(specs[index].type));
-                expect(ObjectId(spec.specId).toString()).to.equal(
-                  ObjectId(specs[index]._id).toString(),
-                );
-                expect(spec.type).to.eql(specTypeToType(specs[index].type));
-                expect(getParamsFromSpec(spec)).to.deep.eql(
+                expect(spec.specId).to.equal(specs[index].id);
+                expect(spec.type).to.equal(specTypeToType(specs[index].type));
+                expect(getParamsFromSpec(spec)).to.deep.equal(
                   getParamsFromSpec(specs[index]),
                 );
               });
@@ -393,7 +387,7 @@ describe('Specs', () => {
         .then(
           chai
             .request(app)
-            .delete(`/specs/${spec._id}`)
+            .delete(`/specs/${spec.id}`)
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.be.an('object');

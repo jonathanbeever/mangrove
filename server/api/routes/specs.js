@@ -67,8 +67,7 @@ router.put('/', (req, res) => {
           ...params,
         });
 
-        spec
-          .save()
+        Spec.create(spec)
           .then((createResult) => {
             res.status(201).json({
               specId: createResult._id,
