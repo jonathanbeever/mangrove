@@ -7,7 +7,7 @@ const Status = require('../../api/models/status');
 const mockJob = (_id, type, input, spec, author, creationTimeMs, status) => {
   const JobModel = getJobModel(type);
   if (!JobModel) {
-    return `Error: Invalid \`type\` parameter (${type}).`;
+    throw new Error(`Invalid 'type' parameter (${type}).`);
   }
 
   return new JobModel({

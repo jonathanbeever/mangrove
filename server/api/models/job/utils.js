@@ -7,31 +7,22 @@ const RmsJob = require('./rms');
 
 const Type = require('../type');
 
-const newJobKeys = ['type', 'inputId', 'specId'];
-
 const getJobModel = (type) => {
   switch (type) {
-    case Type.ACI:
-      return AciJob;
-    case Type.ADI:
-      return AdiJob;
-    case Type.AEI:
-      return AeiJob;
-    case Type.BI:
-      return BiJob;
-    case Type.NDSI:
-      return NdsiJob;
-    case Type.RMS:
-      return RmsJob;
-    default:
-      return null;
+    case Type.ACI: return AciJob;
+    case Type.ADI: return AdiJob;
+    case Type.AEI: return AeiJob;
+    case Type.BI: return BiJob;
+    case Type.NDSI: return NdsiJob;
+    case Type.RMS: return RmsJob;
+    default: return null;
   }
 };
 
 const getJobKeys = (type, finished = true) => {
   const JobModel = getJobModel(type);
   if (!JobModel) {
-    return `Error: Invalid \`type\` parameter (${type}).`;
+    throw new Error(`Error: Invalid 'type' parameter (${type}).`);
   }
 
   const keys = Object.keys(JobModel.schema.paths);
@@ -42,8 +33,10 @@ const getJobKeys = (type, finished = true) => {
   return keys;
 };
 
+const newJobKeys = () => ['type', 'inputId', 'specId'];
+
 module.exports = {
-  newJobKeys,
   getJobModel,
   getJobKeys,
+  newJobKeys,
 };

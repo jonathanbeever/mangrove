@@ -15,11 +15,11 @@ const {
 } = require('../models/spec/utils');
 const Type = require('../models/type');
 
+const { arrayDiff } = require('../../util/array');
+
 // Create Spec
 router.put('/', (req, res) => {
-  const missingKeys = newSpecKeys().filter(
-    key => !Object.keys(req.body).includes(key),
-  );
+  const missingKeys = arrayDiff(newSpecKeys(), Object.keys(req.body));
   if (missingKeys.length > 0) {
     return res.status(400).json({
       message: `Missing required keys: ${missingKeys.join(', ')}.`,
@@ -35,9 +35,7 @@ router.put('/', (req, res) => {
     });
   }
 
-  const extraKeys = Object.keys(req.body).filter(
-    key => !newSpecKeys(specType, true).includes(key),
-  );
+  const extraKeys = arrayDiff(Object.keys(req.body), newSpecKeys(specType, true));
   if (extraKeys.length > 0) {
     return res.status(400).json({
       message: `Invalid keys for type (${req.body.type}): ${extraKeys.join(', ')}.`,
@@ -69,8 +67,7 @@ router.put('/', (req, res) => {
           ...params,
         });
 
-        spec
-          .save()
+        Spec.create(spec)
           .then((createResult) => {
             res.status(201).json({
               specId: createResult._id,
