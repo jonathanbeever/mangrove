@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const config = require('config');
 const cors = require('cors');
 
+require('./util/settings').load();
+
 const jobRoutes = require('./api/routes/jobs');
 const specRoutes = require('./api/routes/specs');
 

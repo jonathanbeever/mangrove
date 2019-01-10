@@ -45,6 +45,7 @@
     "moment": "2.22.2",
     "mongoose": "5.3.9",
     "morgan": "1.9.1",
-    "run-script-os": "1.0.3"
+    "run-script-os": "1.0.3",
+    "settings-store": "1.4.1"
   }
 }
