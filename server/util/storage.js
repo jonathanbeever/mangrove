@@ -1,4 +1,5 @@
 const fs = require('fs');
+const rimraf = require('rimraf');
 
 const settings = require('./settings');
 
@@ -30,7 +31,25 @@ const deleteInputFile = (path) => {
   });
 };
 
+const deleteInputDir = (cb) => {
+  rimraf(inputDir, (err) => {
+    if (!err) {
+      cb();
+    } else {
+      console.error(err);
+    }
+  });
+};
+
+const deleteRootDir = () => {
+  rimraf(settings.rootDir, (err) => {
+    if (err) console.error(err);
+  });
+};
+
 module.exports = {
   getUploadPath,
   deleteInputFile,
+  deleteInputDir,
+  deleteRootDir,
 };

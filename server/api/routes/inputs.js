@@ -4,6 +4,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
 const mkdirp = require('mkdirp');
+
 const {
   getUploadPath,
   deleteInputFile,
@@ -25,6 +26,7 @@ const upload = multer({
       });
     },
     filename(req, file, cb) {
+      // TODO: Rename to `${json.recordTimeMs}.wav`
       cb(null, file.originalname);
     },
   }),
@@ -139,6 +141,7 @@ router.get('/', (req, res) => {
 });
 
 // Delete Input
+// TODO: Delete Jobs associated with the Input
 router.delete('/:inputId', (req, res) => {
   const { inputId } = req.params;
 
