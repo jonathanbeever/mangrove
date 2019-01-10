@@ -231,26 +231,10 @@ class StepperTest extends Component {
         }
       })
     }
-    console.log(filteredJobByInputs)
-   
-    // this.setState({ selectedSpecs: selectedSpecs })
-
-
 
     this.setState({ jobsFiltered: filteredJobByInputs })
-    
-    
-    // Filter list of all jobs by list of selected inputs
-    // var filteredJobByInput = this.state.allJobs.filter(job => {
-    //   // return jobs if id in array 'selected'
-    //   // and spec id is in state selectedSpecs or no fitlering of specs has been done
-    //   if(selected.indexOf(job.input) !== -1 && ((!this.state.selectedSpecs.length) || (this.state.selectedSpecs.indexOf(job.specId) !== -1))) {
-    //     return job
-    //   }
-    // })
-    // Set state selectedInputs for filtering by specs
+    // Set state selectedInputs for filtering
     this.setState({ selectedInputs: selected })
-    // this.setState({ jobsFiltered: filteredJobByInput })
   }
 
   // TODO: filter by specs
@@ -306,9 +290,29 @@ class StepperTest extends Component {
     this.setState({ specParamsByIndex: tempState })
   }
 
-  handleSpecSubmit = () => {
-    console.log(this.state);
-    
+  handleSpecSubmit = (index) => {
+    var newSpecs = []
+    var keys = Object.keys(this.state.specParamsByIndex[index])
+
+    this.state.indexedSpecs[index].forEach(spec => {
+      var check = 0;
+      keys.forEach(key => {
+        if(this.state.specParamsByIndex[index][key]) {
+          if(this.state.specParamsByIndex[index][key] != spec[key]) {
+            check++
+          }
+        }
+      })
+
+      if(check === 0) {
+        newSpecs.push(spec)
+      }
+    })
+
+    var filteredSpecs = this.state.filteredSpecs
+    filteredSpecs[index] = newSpecs
+
+    this.setState({ filteredSpecs: filteredSpecs })
   }
 
   updateSelectedSpecs = (selected, index) => {

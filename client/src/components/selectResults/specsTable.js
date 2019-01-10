@@ -257,7 +257,6 @@ class EnhancedTable extends React.Component {
       switch (this.props.index) {
         case 'aci' : {
           var data = this.props.specs.map(spec => {
-            console.log(spec)
             return createAciData(spec._id, spec.author, moment(spec.creationTimeMs).format('MMM Do YY, h:mm:ss a'), spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
           })
           this.setState({data: data})

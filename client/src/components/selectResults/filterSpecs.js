@@ -52,10 +52,15 @@ class FilterSpecs extends Component {
   }
 // todo: mount functions w this
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if(prevProps.index !== this.props.index) {
+    if(prevProps !== this.props) {
       this.formatSpecTables()
       this.formatSpecInput(this.props.specParamsList)
     }
+  }
+
+  onSubmitSpecs = () => {
+    this.props.onSubmitSpecs(this.props.index)
+
   }
 
   formatSpecInput = (params) => {
@@ -96,7 +101,7 @@ class FilterSpecs extends Component {
         <h4>Choose Specs</h4>
         {specInputHtml} 
         <div className="row filterSubmit">
-          <Button onClick={this.props.onSubmitSpecs} variant="contained" color="primary">
+          <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
             Apply Spec Filters
           </Button>
         </div>
