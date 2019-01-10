@@ -20,12 +20,12 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import moment from 'moment';
 
-function createAciData(id, author, date, minFreq, maxFreq, j, fftW) {
-  return { id: id, author, date, minFreq, maxFreq, j, fftW};
+function createAciData(id, minFreq, maxFreq, j, fftW) {
+  return { id: id, minFreq, maxFreq, j, fftW};
 }
 
-function createNdsiData(id, author, date, anthroMin, anthroMax, bioMin, bioMax, fftW) {
-  return { id: id, author, anthroMin, date, anthroMax, bioMin, bioMax, fftW};
+function createNdsiData(id, anthroMin, anthroMax, bioMin, bioMax, fftW) {
+  return { id: id, anthroMin, anthroMax, bioMin, bioMax, fftW};
 }
 
 function desc(a, b, orderBy) {
@@ -209,10 +209,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     console.log(this.props.selectedSpecs, this.state.selected)
-    var rows = [
-      {id: 'author', numeric: false, disablePadding: true, label: 'Author' },
-      {id: 'date', numeric: false, disablePadding: true, label: 'Creation Time' },    
-    ]
+    var rows = []
     
     this.props.params.forEach(param => {
       if(param !== 'shannon')
@@ -226,14 +223,14 @@ class EnhancedTable extends React.Component {
     switch (this.props.index) {
       case 'aci' : {
         var data = this.props.specs.map(spec => {
-          return createAciData(spec._id, spec.author, moment(spec.creationTimeMs).format('MMM Do YY, h:mm:ss a'), spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+          return createAciData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
         })
         this.setState({data: data})
         break;
       }
       case 'ndsi' : {
         var data = this.props.specs.map(spec => {
-          return createNdsiData(spec._id, spec.author, moment(spec.creationTimeMs).format('MMM Do YY, h:mm:ss a'), spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]], spec[this.props.params[4]])
+          return createNdsiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]], spec[this.props.params[4]])
         })
         this.setState({data: data})
         break;
@@ -243,7 +240,7 @@ class EnhancedTable extends React.Component {
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps.params !== this.props.params) {
-      var rows = [{id: 'author', numeric: false, disablePadding: true, label: 'Author' }]
+      var rows = []
     
       this.props.params.forEach(param => {
         if(param !== 'shannon')
@@ -257,14 +254,14 @@ class EnhancedTable extends React.Component {
       switch (this.props.index) {
         case 'aci' : {
           var data = this.props.specs.map(spec => {
-            return createAciData(spec._id, spec.author, moment(spec.creationTimeMs).format('MMM Do YY, h:mm:ss a'), spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+            return createAciData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
           })
           this.setState({data: data})
           break;
         }
         case 'ndsi' : {
           var data = this.props.specs.map(spec => {
-            return createNdsiData(spec._id, spec.author, moment(spec.creationTimeMs).format('MMM Do YY, h:mm:ss a'), spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]], spec[this.props.params[4]])
+            return createNdsiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]], spec[this.props.params[4]])
           })
           this.setState({data: data})
           break;

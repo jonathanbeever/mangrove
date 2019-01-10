@@ -132,14 +132,14 @@ class StepperTest extends Component {
           'aci': [],
           'ndsi': []
         }
-
-        res.data.forEach(spec => {
-          var type = spec.type.substring(0, spec.type.indexOf('Spec'))
-          specs[type].push(spec)
+        console.log(res)
+        res.data.specs.forEach(spec => {
+          // var type = spec.type.substring(0, spec.type.indexOf('Spec'))
+          specs[spec.type].push(spec)
         })
         console.log(specs)
         // Set all specs state
-        this.setState({ allSpecs: res.data })
+        this.setState({ allSpecs: res.data.specs })
         this.setState({ indexedSpecs: specs })
         // Set filtered specs with all initially
         // Choose specs of multiple indices?
@@ -291,6 +291,8 @@ class StepperTest extends Component {
   }
 
   handleSpecSubmit = (index) => {
+    console.log(this.state.indexedSpecs, this.state.filteredSpecs)
+    console.log('hi')    
     var newSpecs = []
     var keys = Object.keys(this.state.specParamsByIndex[index])
 
@@ -307,10 +309,13 @@ class StepperTest extends Component {
       if(check === 0) {
         newSpecs.push(spec)
       }
+
     })
 
-    var filteredSpecs = this.state.filteredSpecs
+    var filteredSpecs = Object.assign([],this.state.filteredSpecs)
+
     filteredSpecs[index] = newSpecs
+    console.log(this.state.indexedSpecs, filteredSpecs)
 
     this.setState({ filteredSpecs: filteredSpecs })
   }
