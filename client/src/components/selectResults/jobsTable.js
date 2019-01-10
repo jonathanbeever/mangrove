@@ -202,8 +202,8 @@ class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
     orderBy: 'calories',
-    selected: [],
-    // selected: this.props.selectedJobs
+    // selected: [],
+    selected: this.props.selectedJobs,
     data: [
       
     ],
@@ -224,7 +224,6 @@ class EnhancedTable extends React.Component {
       var data = this.props.filteredJobs.map(job => {
         return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
       })
-      // this.setState({ selected: this.props.selectedJobs })
       this.setState({data: data})
     }
   }
@@ -244,11 +243,11 @@ class EnhancedTable extends React.Component {
     if (event.target.checked) {
       var list = this.state.data.map(n => n.id) 
       this.setState({ selected: list });
-      // this.props.updateSelectedJobs(list)      
+      this.props.updateSelectedJobs(list)      
       return;
     }
     this.setState({ selected: [] });
-    // this.props.updateSelectedJobs([])
+    this.props.updateSelectedJobs([])
   };
 
   handleClick = (event, id) => {
@@ -269,7 +268,7 @@ class EnhancedTable extends React.Component {
       );
     }
 
-    // this.props.updateSelectedJobs(newSelected)
+    this.props.updateSelectedJobs(newSelected)
     this.setState({ selected: newSelected });
   };
 

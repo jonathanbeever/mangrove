@@ -84,7 +84,9 @@ class SelectJobs extends Component {
         <div className="col-8">
           <JobsTable 
             filteredJobs={this.props.filteredJobs}
-            indexedFiles={this.props.indexedFiles}          
+            indexedFiles={this.props.indexedFiles}    
+            updateSelectedJobs={this.props.updateSelectedJobs}
+            selectedJobs={this.props.selectedJobs}
           />
         </div>
       </div>

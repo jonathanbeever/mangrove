@@ -51,10 +51,6 @@ class SimpleTabs extends React.Component {
         </AppBar>
         {value === 0 && <TabContainer>
           <FilterInputs 
-            // siteName={this.props.siteName} 
-            // setName={this.props.setName} 
-            // latitude={this.props.latitude}
-            // longitude={this.props.longitude}
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
             filteredInputs={this.props.filteredInputs}
@@ -66,7 +62,6 @@ class SimpleTabs extends React.Component {
         </TabContainer>}
         {value === 1 && <TabContainer>
           <FilterSpecs 
-            // allSpecs={this.props.allSpecs}
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
             specParamsList={this.props.specParamsList}
@@ -84,6 +79,8 @@ class SimpleTabs extends React.Component {
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
             indexedFiles={this.props.indexedFiles}
+            updateSelectedJobs={this.props.updateSelectedJobs}
+            selectedJobs={this.props.selectedJobs}
           />
         </TabContainer>}
       </div>

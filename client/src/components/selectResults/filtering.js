@@ -99,7 +99,8 @@ class StepperTest extends Component {
       selectedSpecs: {
         aci: [],
         ndsi: []
-      }
+      },
+      selectedJobs: []
     };
   }
 
@@ -291,8 +292,6 @@ class StepperTest extends Component {
   }
 
   handleSpecSubmit = (index) => {
-    console.log(this.state.indexedSpecs, this.state.filteredSpecs)
-    console.log('hi')    
     var newSpecs = []
     var keys = Object.keys(this.state.specParamsByIndex[index])
 
@@ -309,13 +308,10 @@ class StepperTest extends Component {
       if(check === 0) {
         newSpecs.push(spec)
       }
-
     })
 
     var filteredSpecs = Object.assign([],this.state.filteredSpecs)
-
     filteredSpecs[index] = newSpecs
-    console.log(this.state.indexedSpecs, filteredSpecs)
 
     this.setState({ filteredSpecs: filteredSpecs })
   }
@@ -342,11 +338,9 @@ class StepperTest extends Component {
     this.setState({ jobsFiltered: filteredJobBySpecs })
   }
 
-
-  // TODO; add author and creationtime to specs input
-  // filter table
-  // select specs ?
-  // multiple filtering specification ?
+  updateSelectedJobs = (selected) => {
+    this.setState({ selectedJobs: selected })
+  }
 
   render() {
     return (
@@ -375,6 +369,8 @@ class StepperTest extends Component {
           filteredJobs={this.state.jobsFiltered}
           indexedFiles={this.state.indexedFiles}
           selectedInputs={this.state.selectedInputs}
+          updateSelectedJobs={this.updateSelectedJobs}
+          selectedJobs={this.state.selectedJobs}
         />
       </div>
     );
