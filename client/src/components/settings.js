@@ -1,23 +1,58 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Popover from '@material-ui/core/Popover';
 
 
 class Settings extends Component {
+	/*
 	constructor(props) {
 		super(props);
 	}
+	*/
+
+	state = {
+		anchorEl: null,
+	};
+
+	handleSubmitClick = event => {
+		this.setState({
+			anchorEl: event.currentTarget,
+    	});
+  	};
+
+	handleSubmitClose = () => {
+		this.setState({
+			anchorEl: null,
+		});
+	};
 
 	render() {
+		const { anchorEl } = this.state;
+		const submitOpen = Boolean(anchorEl);
+
 		return (
 			<div id="settings">
 			<div id="settings-head">
 				<h2>Settings</h2>
-				<Button>Submit</Button>
+				<Button onClick={this.handleSubmitClick}>Submit</Button>
+				<Popover
+					anchorEl={anchorEl}
+					open={submitOpen}
+					anchorOrigin={{
+            			vertical: 'bottom',
+            			horizontal: 'center',
+          			}}
+          			transformOrigin={{
+            			vertical: 'top',
+            			horizontal: 'center',
+          			}}
+					id="settings-popover"
+					onClose={this.handleSubmitClose}>Your settings have been updated</Popover>
 				<Button>Cancel</Button>
 			</div>
 			<form>
