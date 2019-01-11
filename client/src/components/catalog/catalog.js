@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
+import AnalysisView from './analysis';
 
 class ResultName extends Component {
   render(){
@@ -27,9 +27,6 @@ class ResultName extends Component {
 }
 
 class ResultRow extends Component {
-  constructor(props){
-    super(props);
-  }
 
   render() {
     const result = this.props.result;
@@ -52,10 +49,6 @@ class ResultRow extends Component {
 }
 
 class ResultTable extends Component {
-  constructor(props){
-    super(props);
-
-  }
 
   render() {
     const filterName = this.props.filterName;
@@ -81,7 +74,7 @@ class ResultTable extends Component {
     });
 
     return(
-      <div className="scroll">
+      <div className="scrollTable">
         <Table>
           <ResultName />
           <TableBody>{rows}</TableBody>
@@ -133,7 +126,7 @@ class FilterJobs extends Component {
             <option value="ACI">ACI</option>
             <option value="ADI">ADI</option>
             <option value="RMS">RMS</option>
-            <option value="BA">Bioacoustic</option>
+            <option value="Bioacoustic">Bioacoustic</option>
           </Select>
         </FormControl>
       </div>
@@ -199,32 +192,23 @@ class FilterableResultsTable extends Component {
 //    }
 // }
 
-class AnalysisView extends Component {
-  render() {
-    const chosenResult = this.props.chosenResult;
-
-    return (
-      <div>
-        <h5>{chosenResult}</h5>
-        <p>Analysis goes here!</p>
-      </div>
-    );
-  }
-}
-
 class Catalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chosenResult: ''
+      chosenResult: null
     };
 
     this.handleChosenResult = this.handleChosenResult.bind(this);
   }
 
   handleChosenResult(e) {
+    let chosenName = e.currentTarget.value;
+    let results = this.props.results;
+    let found = results.find(obj => obj.name === chosenName)
+
     this.setState({
-      chosenResult: e.currentTarget.value
+      chosenResult: found
     });
   }
 
