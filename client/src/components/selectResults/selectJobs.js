@@ -34,20 +34,22 @@ class SelectJobs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputChips: ''
+      inputChips: '',
+      specChips: ''
     }
   }
 
   componentDidMount = () => {
-    this.formatChipHtml()
+    this.formatInputChipHtml()
+    this.formatSpecChipHtml()
   }
   
-  deleteChip = (label) => {
+  deleteInputChip = (label) => {
     this.props.onDelete(label)
-    this.formatChipHtml()
+    this.formatInputChipHtml()
   }
 
-  formatChipHtml = () => {
+  formatInputChipHtml = () => {
     var chipHtml = []
     Object.keys(this.props.inputFiltering).forEach(param => {
       if(this.props.inputFiltering[param].length) {
@@ -55,12 +57,37 @@ class SelectJobs extends Component {
           <Chip
             key={param}
             label={param + ' : ' + this.props.inputFiltering[param]}
-            onDelete={this.deleteChip}
+            onDelete={this.deleteInputChip}
           />
         )
       }
     })
     this.setState({ inputChips: <div>{chipHtml}</div> })
+  }
+
+  deleteSpecChip = (label) => {
+    this.props.onDeleteSpecChip(label)
+    this.formatSpecChipHtml()
+  }
+
+  formatSpecChipHtml = () => {
+    var chipHtml = []
+    var indices = ['aci', 'ndsi']
+    indices.forEach(index => {
+      Object.keys(this.props.specParamsByIndex[index]).forEach(param => {
+        if(this.props.specParamsByIndex[index][param].length) {
+          chipHtml.push(
+            <Chip
+              key={param}
+              label={index + ' : ' + param + ' - ' + this.props.specParamsByIndex[index][param]}
+              onDelete={this.deleteSpecChip}
+            />
+          )
+        }
+      })
+      this.setState({ specChips: <div>{chipHtml}</div> })
+    })
+
   }
 
   render() {
@@ -77,6 +104,7 @@ class SelectJobs extends Component {
             </div>
             <div className="col-6">
               Parameter Specifications
+              {this.state.specChips}
             </div>
             </div>
           </Paper>

@@ -201,8 +201,7 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'calories',
-    // selected: [],
+    orderBy: 'creationTimeMs',
     selected: this.props.selectedJobs,
     data: [
       

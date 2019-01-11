@@ -71,6 +71,7 @@ class SimpleTabs extends React.Component {
             filteredSpecs={this.props.filteredSpecs}
             updateSelectedSpecs={this.props.updateSelectedSpecs}
             selectedSpecs={this.props.selectedSpecs}
+            onDelete={this.props.deleteSpecChip}
           />
         </TabContainer>}
         {value === 2 && <TabContainer>
@@ -81,6 +82,8 @@ class SimpleTabs extends React.Component {
             indexedFiles={this.props.indexedFiles}
             updateSelectedJobs={this.props.updateSelectedJobs}
             selectedJobs={this.props.selectedJobs}
+            onDeleteSpecChip={this.props.deleteSpecChip}
+            specParamsByIndex={this.props.specParamsByIndex}
           />
         </TabContainer>}
       </div>

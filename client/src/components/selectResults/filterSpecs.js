@@ -12,6 +12,7 @@ import Select from '@material-ui/core/Select'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import ExpansionPanel from './expansionPanel';
+import Chip from './chip'
 
 const styles = theme => ({
   root: {
@@ -41,7 +42,8 @@ class FilterSpecs extends Component {
     super(props);
 
     this.state = {
-      specInputHtml: ''
+      specInputHtml: '',
+      chips: ''
     }
   }
 
@@ -49,6 +51,7 @@ class FilterSpecs extends Component {
   componentDidMount = () => {
     this.formatSpecTables()
     this.formatSpecInput(this.props.specParamsList)
+    this.formatChipHtml()
   }
 // todo: mount functions w this
   componentDidUpdate = (prevProps, prevState, snapshot) => {
@@ -60,7 +63,29 @@ class FilterSpecs extends Component {
 
   onSubmitSpecs = () => {
     this.props.onSubmitSpecs(this.props.index)
+    this.formatChipHtml()
+  }
 
+  formatChipHtml = () => {
+    var chipHtml = []
+
+    Object.keys(this.props.specParamsByIndex[this.props.index]).forEach(param => {
+      if(this.props.specParamsByIndex[this.props.index][param].length) {
+        chipHtml.push(
+          <Chip
+            key={param}
+            label={this.props.index + ' : ' + param + ' - ' + this.props.specParamsByIndex[this.props.index][param]}
+            onDelete={this.deleteChip}
+          />
+        )
+      }
+    })
+    this.setState({ chips: <div>{chipHtml}</div> })
+  }
+  
+  deleteChip = (label) => {
+    this.props.onDelete(label)
+    this.formatChipHtml()
   }
 
   formatSpecInput = (params) => {
@@ -140,6 +165,7 @@ class FilterSpecs extends Component {
       <div className="row">
         <div className="col-4">
           <Paper className={classes.root}>
+            {this.state.chips}
             <h5>Filter By Index Specifications</h5>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="indexSelect">Index</InputLabel>

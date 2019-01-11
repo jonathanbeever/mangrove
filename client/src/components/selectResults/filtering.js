@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Tabs from './filteringTabs';
 import axios from 'axios';
+var _ = require('lodash');
 
 // TODO fix css
 const inputFiles = [
@@ -133,18 +134,14 @@ class StepperTest extends Component {
           'aci': [],
           'ndsi': []
         }
-        console.log(res)
         res.data.specs.forEach(spec => {
           // var type = spec.type.substring(0, spec.type.indexOf('Spec'))
           specs[spec.type].push(spec)
         })
-        console.log(specs)
         // Set all specs state
         this.setState({ allSpecs: res.data.specs })
         this.setState({ indexedSpecs: specs })
         // Set filtered specs with all initially
-        // Choose specs of multiple indices?
-        // this.setState({ filteredSpecs: res.data })
         this.setState({ filteredSpecs: specs })
       })
 
@@ -202,7 +199,7 @@ class StepperTest extends Component {
     var filteredJobByInputs = []
     
     var check = 0
-
+    // add all
     var indices = ['aci', 'ndsi']
     indices.forEach(indx => {
       if(this.state.selectedSpecs[indx].length) {
@@ -237,8 +234,6 @@ class StepperTest extends Component {
     // Set state selectedInputs for filtering
     this.setState({ selectedInputs: selected })
   }
-
-  // TODO: filter by specs
 
   // Spec selection functions
   handleIndexChange = (e) => {
@@ -340,6 +335,30 @@ class StepperTest extends Component {
 
   updateSelectedJobs = (selected) => {
     this.setState({ selectedJobs: selected })
+    var jobs = _.cloneDeep(this.state.jobsFiltered)
+
+    var selectedJobs = jobs.filter(job => {
+      if(selected.indexOf(job.jobId) !== -1) {
+        var temp = job
+        temp.input = this.state.indexedFiles[job.input]
+        job = temp
+        
+        return job 
+      }
+    })
+    this.setState({ selectedIndexedJobs: selectedJobs })
+  }
+
+  deleteSpecChip = (label) => {
+    label = label.split(' : ')
+    var index = label[0]
+    var param = label[1].split(' - ')
+
+    var newSpecs = this.state.specParamsByIndex
+    newSpecs[index][param[0]] = ''
+
+    this.setState({ specParamsByIndex: newSpecs })
+    this.handleSpecSubmit(index)
   }
 
   render() {
@@ -365,6 +384,7 @@ class StepperTest extends Component {
           filteredSpecs={this.state.filteredSpecs}
           updateSelectedSpecs={this.updateSelectedSpecs}
           selectedSpecs={this.state.selectedSpecs}
+          deleteSpecChip={this.deleteSpecChip}
           // Jobs select props
           filteredJobs={this.state.jobsFiltered}
           indexedFiles={this.state.indexedFiles}
