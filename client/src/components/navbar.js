@@ -149,11 +149,6 @@ class NavBar extends Component {
               </Link>
             </ListItem>
             <ListItem>
-              <Link to="/filtering">
-                <ListItemText primary='New Filtering (temp nav)' />
-              </Link>
-            </ListItem>
-            <ListItem>
               <Link to="/settings">
                 <ListItemText primary='Settings' />
               </Link>

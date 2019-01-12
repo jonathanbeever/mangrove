@@ -6,7 +6,7 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import SpecsTable from './specsTable';
+import SpecsTable from '../specs/specsTable';
 
 const styles = theme => ({
   root: {
@@ -19,6 +19,17 @@ const styles = theme => ({
 });
 
 function handleClick(e) {
+  /**
+   * props.expanded = true if index is selected
+   * if clicked when false, 
+   *  change index function
+   *  set expanded state true
+   * if props.expanded = true, set state to true
+   * state.expanded = props.expanded
+   * onclick changeindex
+   * compdidupdate props.expanded
+   *  set state expanded
+   */
   console.log(e)
 }
 

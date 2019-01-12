@@ -208,7 +208,6 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props.selectedSpecs, this.state.selected)
     var rows = []
     
     this.props.params.forEach(param => {

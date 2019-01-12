@@ -3,11 +3,10 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import DateAndTimePickers from './dateTimePicker';
+import DateAndTimePickers from '../components/dateTimePicker';
 import Button from '@material-ui/core/Button';
-import './selectResults.css';
-import InputsTable from './inputsTable.js';
-import Chip from './chip';
+import '../selectResults.css';
+import Chip from '../components/chip';
 import JobsTable from './jobsTable';
 
 const styles = theme => ({
@@ -116,7 +115,10 @@ class SelectJobs extends Component {
             updateSelectedJobs={this.props.updateSelectedJobs}
             selectedJobs={this.props.selectedJobs}
           />
-        </div>
+          <Button  color="primary" disabled={!this.props.selectedJobs.length} onClick={this.props.sendJobs} >
+            View Results
+          </Button>
+        </div>  
       </div>
     );
   }

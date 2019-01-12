@@ -108,9 +108,9 @@ class NewJobs extends Component {
     // To pass to other components
     let params = Object.assign({}, this.state.params);
     // Set specType for new job request
-    params["specType"] = this.state.selectedIndex + 'Spec'
+    params["type"] = this.state.selectedIndex  +'Spec'
     // Set author until users are implemented
-    params["author"] = "Test Author"
+    // params["author"] = "Test Author"
     // Set index parameters
     if(e.target.id === 'shannon')
       params[e.target.id] = e.target.checked
@@ -139,6 +139,7 @@ class NewJobs extends Component {
         {headers: {"Content-Type": "application/json"}}
     )
     .then(res => {
+      console.log(res)
       // var to hold id of created or found spec
       var specId = ''
       // If new spec was create set id

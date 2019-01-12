@@ -5,9 +5,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import FilterInputs from './filterInputs';
-import FilterSpecs from './filterSpecs';
-import SelectJobs from './selectJobs'
+import FilterInputs from '../inputs/filterInputs';
+import FilterSpecs from '../specs/filterSpecs';
+import SelectJobs from '../jobs/selectJobs';
+import AnalysisView from '../../analysisView/analysisView';
 
 function TabContainer(props) {
   return (
@@ -34,7 +35,18 @@ class SimpleTabs extends React.Component {
 
   handleChange = (event, value) => {
     this.setState({ value });
+    if(this.props.showAnalysis === true && value !== 3) 
+      this.props.showFiltering()
   };
+
+  componentDidUpdate = (prevProps, prevState, snapshot) => {
+    if(prevProps.showAnalysis !== this.props.showAnalysis) {
+      if(this.props.showAnalysis === true) 
+        this.setState({ value : 3 })
+      else
+        this.setState({ value: 0 })
+    }
+  }
 
   render() {
     const { classes } = this.props;
@@ -47,6 +59,7 @@ class SimpleTabs extends React.Component {
             <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Specifications</h5></div>} />
             <Tab label={<div><h5>Jobs</h5></div>} />
+            <Tab label={<div><h5>Analysis</h5></div>} />
           </Tabs>
         </AppBar>
         {value === 0 && <TabContainer>
@@ -84,6 +97,15 @@ class SimpleTabs extends React.Component {
             selectedJobs={this.props.selectedJobs}
             onDeleteSpecChip={this.props.deleteSpecChip}
             specParamsByIndex={this.props.specParamsByIndex}
+            selectedIndexedJobs={this.props.selectedIndexedJobs}
+            sendJobs={this.props.sendJobs}
+          />
+        </TabContainer>}
+        {value === 3 && <TabContainer>
+          <AnalysisView
+            selectedJobs={this.props.selectedIndexedJobs}          
+            index={this.props.index}
+            showFiltering={this.props.showFiltering}
           />
         </TabContainer>}
       </div>

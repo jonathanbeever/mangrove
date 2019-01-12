@@ -4,15 +4,15 @@ import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import './selectResults.css';
+import '../selectResults.css';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import ExpansionPanel from './expansionPanel';
-import Chip from './chip'
+import ExpansionPanel from '../components/expansionPanel';
+import Chip from '../components/chip'
 
 const styles = theme => ({
   root: {
@@ -47,13 +47,12 @@ class FilterSpecs extends Component {
     }
   }
 
-
   componentDidMount = () => {
     this.formatSpecTables()
     this.formatSpecInput(this.props.specParamsList)
     this.formatChipHtml()
   }
-// todo: mount functions w this
+  // todo: mount functions w this
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       this.formatSpecTables()

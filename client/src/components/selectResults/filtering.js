@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tabs from './filteringTabs';
+import Tabs from './components/tabs';
 import axios from 'axios';
 var _ = require('lodash');
 
@@ -101,7 +101,8 @@ class StepperTest extends Component {
         aci: [],
         ndsi: []
       },
-      selectedJobs: []
+      selectedJobs: [],
+      showAnalysis: false
     };
   }
 
@@ -346,6 +347,7 @@ class StepperTest extends Component {
         return job 
       }
     })
+    console.log(selectedJobs)
     this.setState({ selectedIndexedJobs: selectedJobs })
   }
 
@@ -361,6 +363,14 @@ class StepperTest extends Component {
     this.handleSpecSubmit(index)
   }
 
+  sendJobs = () => {
+    this.setState({ showAnalysis: true })
+  }
+
+  showFiltering = () => {
+    this.setState({ showAnalysis: false })
+  }
+
   render() {
     return (
       <div className="container">
@@ -373,7 +383,6 @@ class StepperTest extends Component {
           onSubmitInput={this.submitIndexFilter}
           updateSelectedInputs={this.updateSelectedInputs} 
           // Specs select props
-          // allSpecs={this.state.allSpecs}
           allSpecs={this.state.indexedSpecs}
           index={this.state.index}
           handleIndexChange={this.handleIndexChange}
@@ -391,6 +400,11 @@ class StepperTest extends Component {
           selectedInputs={this.state.selectedInputs}
           updateSelectedJobs={this.updateSelectedJobs}
           selectedJobs={this.state.selectedJobs}
+          selectedIndexedJobs={this.state.selectedIndexedJobs}
+          sendJobs={this.sendJobs}
+          // Tabs props
+          showAnalysis={this.state.showAnalysis}
+          showFiltering={this.state.showFiltering}
         />
       </div>
     );
