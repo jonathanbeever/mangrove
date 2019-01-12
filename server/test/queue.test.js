@@ -15,11 +15,10 @@ const { Job } = require('../api/models/job');
 const { expect } = chai;
 chai.use(chaiHttp);
 
-let q = null;
 
 describe('Queue', () => {
   before(async () => {
-    q = intialize(true);
+    intialize(true);
     await mockDb.setup();
   });
 
@@ -39,24 +38,16 @@ describe('Queue', () => {
       Job.create(job)
         .then((createResult) => {
           qJob(createResult)
-            .then((qResult) => {
-              console.log('QUEUE RESULT:');
-              console.log(qResult);
-              Job.findById(qResult._id)
-                .then((searchResult) => {
-                  console.log('SEARCH RESULT:');
-                  console.log(searchResult);
-                  console.log(getHistory());
-                  expect(searchResult.status).to.be.string(Status.QUEUED);
+            .then((qJobResult) => {
+              console.log(qJobResult.updatedJob);
+              qJobResult.proccessPromise
+                .then((proccessedResult) => {
+                  console.log(proccessedResult);
                   done();
                 })
-                .catch((err) => {
-                  done(err);
-                });
+                .catch((proccessedErr) => { done(proccessedErr); });
             })
-            .catch((err) => {
-              done(err);
-            });
+            .catch((err) => { console.log(err); });
         })
         .catch((err) => {
           done(err);

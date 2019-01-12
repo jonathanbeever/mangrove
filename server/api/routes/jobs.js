@@ -65,7 +65,7 @@ router.put('/', (req, res) => {
           spec: req.body.specId,
           author: 'Test Author', // TODO: Implement user authentication
           creationTimeMs: moment().valueOf(),
-          status: Status.QUEUED, // TODO: Implement job queueing
+          status: Status.WAITING, // TODO: Implement job queueing
         });
 
         Job.create(job)

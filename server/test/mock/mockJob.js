@@ -21,7 +21,7 @@ const mockJob = (_id, type, input, spec, author, creationTimeMs, status) => {
   });
 };
 
-const nextMockJob = (type, status = Status.QUEUED) => {
+const nextMockJob = (type, status = Status.WAITING) => {
   const jobId = nextMockObjectId();
   const input = nextMockObjectId();
   const spec = nextMockObjectId();
