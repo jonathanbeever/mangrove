@@ -39,10 +39,11 @@ describe('Queue', () => {
         .then((createResult) => {
           qJob(createResult)
             .then((qJobResult) => {
-              console.log(qJobResult.updatedJob);
+              expect(qJobResult).to.have.all.keys('proccessPromise', 'updatedJob');
+              expect(qJobResult.updatedJob.status).to.be.string(Status.QUEUED);
               qJobResult.proccessPromise
                 .then((proccessedResult) => {
-                  console.log(proccessedResult);
+                  expect(proccessedResult.status).to.be.string(Status.FINISHED);
                   done();
                 })
                 .catch((proccessedErr) => { done(proccessedErr); });
