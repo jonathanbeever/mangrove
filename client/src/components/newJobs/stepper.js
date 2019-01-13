@@ -7,6 +7,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ChooseIndex from './chooseIndex';
+import ChooseSpecs from './chooseSpecs';
 
 const styles = theme => ({
   root: {
@@ -33,7 +34,7 @@ function getStepContent(step, props) {
     case 1:
       return <ChooseIndex index={props.index} changeIndex={props.changeIndex} />;
     case 2:
-      return 'Set Parameters';
+      return <ChooseSpecs index={props.index} specParams={props.specParams} onSpecChange={props.onSpecChange} />;
     default:
       return 'Unknown step';
   }

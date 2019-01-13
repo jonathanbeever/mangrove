@@ -108,6 +108,7 @@ class NewJobs extends Component {
     // To pass to other components
     let params = Object.assign({}, this.state.params);
 <<<<<<< refs/remotes/origin/master
+<<<<<<< refs/remotes/origin/master
     // Set specType for new job request
     params["type"] = this.state.selectedIndex  +'Spec'
 =======
@@ -115,6 +116,8 @@ class NewJobs extends Component {
 
     params[e.target.id] = e.target.value
 =======
+=======
+>>>>>>> HEAD~0
     // Set specType for new job request
     params["type"] = this.state.selectedIndex 
 >>>>>>> cherry pick new jobs commit
@@ -130,8 +133,11 @@ class NewJobs extends Component {
     else {
       params[e.target.id] = parseInt(e.target.value)
     }
+<<<<<<< refs/remotes/origin/master
 >>>>>>> 5ec7c66... Material-ui partially added to new jobs page
 >>>>>>> cherry pick new jobs commit
+=======
+>>>>>>> HEAD~0
 
     this.setState({params: params});
 
@@ -149,10 +155,13 @@ class NewJobs extends Component {
 
   handleJobSubmit () {
 <<<<<<< refs/remotes/origin/master
+<<<<<<< refs/remotes/origin/master
 =======
 <<<<<<< HEAD
 =======
 >>>>>>> cherry pick new jobs commit
+=======
+>>>>>>> HEAD~0
     // Find or create spec
     axios.put(
         "http://localhost:3000/specs",  
@@ -201,9 +210,12 @@ class NewJobs extends Component {
     .catch(err => console.log(err));
 
 <<<<<<< refs/remotes/origin/master
+<<<<<<< refs/remotes/origin/master
 =======
 >>>>>>> 5ec7c66... Material-ui partially added to new jobs page
 >>>>>>> cherry pick new jobs commit
+=======
+>>>>>>> HEAD~0
   }
 
   cancelJob () {
