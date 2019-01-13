@@ -136,7 +136,7 @@ describe('Jobs', () => {
             );
             expect(res.body.author).to.equal(jobs[index].author);
             expect(res.body.creationTimeMs).to.be.a('number');
-            expect(res.body.status).to.equal(Status.QUEUED);
+            expect(res.body.status).to.equal(Status.WAITING);
           })
           .catch((err) => {
             done(err);

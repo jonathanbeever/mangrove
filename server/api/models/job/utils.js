@@ -1,3 +1,4 @@
+const Job = require('./job');
 const AciJob = require('./aci');
 const AdiJob = require('./adi');
 const AeiJob = require('./aei');
@@ -35,8 +36,15 @@ const getJobKeys = (type, finished = true) => {
 
 const newJobKeys = () => ['type', 'inputId', 'specId'];
 
+const updateStatus = (job, newStatus) => Job.findByIdAndUpdate(
+  job._id,
+  { status: newStatus },
+  { new: true },
+);
+
 module.exports = {
   getJobModel,
   getJobKeys,
   newJobKeys,
+  updateStatus,
 };
