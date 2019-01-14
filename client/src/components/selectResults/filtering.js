@@ -23,25 +23,25 @@ const inputFiles = [
     inputId: '5c2547480cf83b2bac5133f7',
     siteName: 'Zoo',
     setName: 'aci-zoo',
-    fileName: 'zoo1.wav',
+    fileName: 'zoo3.wav',
     location: [67.01, 40.45]
   },
   {
-    inputId: '4',
+    inputId: '5c2547480df83b2bac5133f7',
     siteName: 'Zoo',
     setName: 'aci-zoo',
-    fileName: 'zoo2.wav',
+    fileName: 'zoo4.wav',
     location: [67.01, 40.45]
   },
   {
-    inputId: '5',
+    inputId: '5c2547480ef83b2bac5133f7',
     siteName: 'UCF',
     setName: 'aci-ucf',
     fileName: 'ucf1.wav',
     location: [65.71, 40.25]
   },
   {
-    inputId: '6',
+    inputId: '5c2547480ff83b2bac5133f7',
     siteName: 'UCF',
     setName: 'aci-ucf',
     fileName: 'ucf2.wav',

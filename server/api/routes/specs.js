@@ -21,7 +21,6 @@ const { arrayDiff } = require('../../util/array');
 router.put('/', (req, res) => {
   const missingKeys = arrayDiff(newSpecKeys(), Object.keys(req.body));
   if (missingKeys.length > 0) {
-    console.log('hi')
     return res.status(400).json({
       message: `Missing required keys: ${missingKeys.join(', ')}.`,
     });
@@ -31,8 +30,6 @@ router.put('/', (req, res) => {
   const SpecModel = getSpecModel(specType);
   if (!SpecModel) {
     const types = Object.values(Type).join(', ');
-    console.log('hi')
-
     return res.status(400).json({
       message: `Invalid type: ${req.body.type}. Must be one of: ${types}.`,
     });
@@ -40,8 +37,6 @@ router.put('/', (req, res) => {
 
   const extraKeys = arrayDiff(Object.keys(req.body), newSpecKeys(specType, true));
   if (extraKeys.length > 0) {
-    console.log('hi')
-
     return res.status(400).json({
       message: `Invalid keys for type (${req.body.type}): ${extraKeys.join(', ')}.`,
     });
