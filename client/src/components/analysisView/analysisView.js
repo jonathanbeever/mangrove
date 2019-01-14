@@ -47,7 +47,7 @@ import BALineChart from '../infographs/BALineChart';
 
 function convertNDSIResults(jobs) {
   let ret;
-  let results = jobs[0].results;
+  let results = jobs[0].input.results;
 
   let ndsiLTotal = 0;
   let ndsiRTotal = 0;
@@ -57,12 +57,12 @@ function convertNDSIResults(jobs) {
   let anthrophonyRTotal = 0;
 
   jobs.forEach(function(job){
-    ndsiLTotal += job.result.ndsiL;
-    ndsiRTotal += job.result.ndsiR;
-    biophonyLTotal += job.result.biophonyL;
-    biophonyRTotal += job.result.biophonyR;
-    anthrophonyLTotal += job.result.anthrophonyL;
-    anthrophonyRTotal += job.result.anthrophonyR;
+    ndsiLTotal += job.input.result.ndsiL;
+    ndsiRTotal += job.input.result.ndsiR;
+    biophonyLTotal += job.input.result.biophonyL;
+    biophonyRTotal += job.input.result.biophonyR;
+    anthrophonyLTotal += job.input.result.anthrophonyL;
+    anthrophonyRTotal += job.input.result.anthrophonyR;
   });
 
   let ndsiLAvg = ndsiLTotal / jobs.length;
@@ -106,7 +106,7 @@ function convertNDSIResults(jobs) {
   for(var i = 0; i < jobs.length; i++)
   {
     let curObject = {
-      name: jobs[i].input.date,
+      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
       ndsiL: jobs[i].result.ndsiL,
       ndsiR: jobs[i].result.ndsiR,
       biophonyL: jobs[i].result.biophonyL,
@@ -134,13 +134,13 @@ function convertACIResults(jobs) {
   let aciFlValsR = [];
 
   jobs.forEach(function(job){
-    aciTotAllL += job.result.aciTotAllL;
-    aciTotAllR += job.result.aciTotAllR;
-    aciTotAllByMinL += job.result.aciTotAllByMinL;
-    aciTotAllByMinR += job.result.aciTotAllByMinR;
+    aciTotAllL += job.input.result.aciTotAllL;
+    aciTotAllR += job.input.result.aciTotAllR;
+    aciTotAllByMinL += job.input.result.aciTotAllByMinL;
+    aciTotAllByMinR += job.input.result.aciTotAllByMinR;
 
-    aciFlValsL.push.apply(aciFlValsL, job.result.aciFlValsL);
-    aciFlValsR.push.apply(aciFlValsR, job.result.aciFlValsR);
+    aciFlValsL.push.apply(aciFlValsL, job.input.result.aciFlValsL);
+    aciFlValsR.push.apply(aciFlValsR, job.input.result.aciFlValsR);
   });
 
   ret = {
@@ -183,9 +183,9 @@ function convertACIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].time,
-      aciLeft: jobs[i].result.aciTotAllByMinL,
-      aciRight: jobs[i].result.aciTotAllByMinR
+      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+      aciLeft: jobs[i].input.result.aciTotAllByMinL,
+      aciRight: jobs[i].input.result.aciTotAllByMinR
     }
 
     ret.graph3.push(curObject);
@@ -196,22 +196,22 @@ function convertACIResults(jobs) {
 function convertADIResults(jobs) {
   let ret;
 
-  let arrLength = jobs[0].result.ADIbandValsL.length;
+  let arrLength = jobs[0].input.result.ADIbandValsL.length;
   let adiLTotal = 0;
   let adiRTotal = 0;
   let adiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
   let adiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
 
   jobs.forEach(function(job){
-    adiLTotal += job.result.adiL;
-    adiRTotal += job.result.adiR;
+    adiLTotal += job.input.result.adiL;
+    adiRTotal += job.input.result.adiR;
 
     adiLBandTemp = adiLBandTemp.map(function(num, idx){
-      return num + job.result.ADIbandValsL[idx];
+      return num + job.input.result.ADIbandValsL[idx];
     });
 
     adiRBandTemp = adiRBandTemp.map(function(num, idx){
-      return num + job.result.ADIbandValsR[idx];
+      return num + job.input.result.ADIbandValsR[idx];
     });
 
   });
@@ -248,7 +248,7 @@ function convertADIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].result.ADIbandRangeL[i],
+      name: jobs[0].input.result.ADIbandRangeL[i],
       leftBandVal: adiLBand[i],
       rightBandVal: adiRBand[i]
     }
@@ -260,9 +260,9 @@ function convertADIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].date,
-      leftADIVal: jobs[i].result.adiL,
-      rightADIVal: jobs[i].result.adiR
+      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+      leftADIVal: jobs[i].input.result.adiL,
+      rightADIVal: jobs[i].input.result.adiR
     }
 
     ret.graph2.push(curObject);
@@ -271,9 +271,9 @@ function convertADIResults(jobs) {
   jobs.forEach(function(job){
     let curObject =
     {
-      name: job.filename,
-      leftADIVal: job.result.adiL,
-      rightADIVal: job.result.adiR
+      name: job.input.fileName,
+      leftADIVal: job.input.result.adiL,
+      rightADIVal: job.input.result.adiR
     }
 
     ret.graph4.push(curObject);
@@ -286,22 +286,22 @@ function convertADIResults(jobs) {
 function convertAEIResults(jobs) {
   let ret;
 
-  let arrLength = jobs[0].result.AEIbandValsL.length;
+  let arrLength = jobs[0].input.result.AEIbandValsL.length;
   let aeiLTotal = 0;
   let aeiRTotal = 0;
   let aeiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
   let aeiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
 
   jobs.forEach(function(job){
-    aeiLTotal += job.result.aeiL;
-    aeiRTotal += job.result.aeiR;
+    aeiLTotal += job.input.result.aeiL;
+    aeiRTotal += job.input.result.aeiR;
 
     aeiLBandTemp = aeiLBandTemp.map(function(num, idx){
-      return num + job.result.AEIbandValsL[idx];
+      return num + job.input.result.AEIbandValsL[idx];
     });
 
     aeiRBandTemp = aeiRBandTemp.map(function(num, idx){
-      return num + job.result.AEIbandValsR[idx];
+      return num + job.input.result.AEIbandValsR[idx];
     });
 
   });
@@ -338,7 +338,7 @@ function convertAEIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].result.AEIbandRangeL[i],
+      name: jobs[0].input.result.AEIbandRangeL[i],
       leftBandVal: aeiLBand[i],
       rightBandVal: aeiRBand[i]
     }
@@ -350,9 +350,9 @@ function convertAEIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].date,
-      leftAEIVal: jobs[i].result.aeiL,
-      rightAEIVal: jobs[i].result.aeiR
+      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+      leftAEIVal: jobs[i].input.result.aeiL,
+      rightAEIVal: jobs[i].input.result.aeiR
     }
 
     ret.graph2.push(curObject);
@@ -361,9 +361,9 @@ function convertAEIResults(jobs) {
   jobs.forEach(function(job){
     let curObject =
     {
-      name: job.filename,
-      leftAEIVal: job.result.aeiL,
-      rightAEIVal: job.result.aeiR
+      name: job.input.fileName,
+      leftAEIVal: job.input.result.aeiL,
+      rightAEIVal: job.input.result.aeiR
     }
 
     ret.graph4.push(curObject);
@@ -380,8 +380,8 @@ function convertBAResults(jobs) {
   let areaRTotal = 0;
 
   jobs.forEach(function(job){
-    areaLTotal += job.result.areaL;
-    areaRTotal += job.result.areaR;
+    areaLTotal += job.input.result.areaL;
+    areaRTotal += job.input.result.areaR;
   });
 
   ret = {
@@ -403,9 +403,9 @@ function convertBAResults(jobs) {
   for(var i = 0; i < jobs.length; i++)
   {
     let curObject = {
-      name: jobs[i].filename,
-      areaL: jobs[i].result.areaL,
-      areaR: jobs[i].result.areaR
+      name: jobs[i].input.fileName,
+      areaL: jobs[i].input.result.areaL,
+      areaR: jobs[i].input.result.areaR
     }
 
     ret.graph3.push(curObject);
@@ -429,11 +429,11 @@ function convertADIAEICompare(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].date,
-      leftADIVal: jobs[i].result.adiL,
-      rightADIVal: jobs[i].result.adiR,
-      leftAEIVal: jobs[i].result.aeiL,
-      rightAEIVal: jobs[i].result.aeiR
+      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+      leftADIVal: jobs[i].input.result.adiL,
+      rightADIVal: jobs[i].input.result.adiR,
+      leftAEIVal: jobs[i].input.result.aeiL,
+      rightAEIVal: jobs[i].input.result.aeiR
     }
 
     ret.graph1.push(curObject);
@@ -442,11 +442,11 @@ function convertADIAEICompare(jobs) {
   jobs.forEach(function(job){
     let curObject =
     {
-      name: job.filename,
-      leftADIVal: job.result.adiL,
-      rightADIVal: job.result.adiR,
-      leftAEIVal: job.result.aeiL,
-      rightAEIVal: job.result.aeiR
+      name: job.input.fileName,
+      leftADIVal: job.input.result.adiL,
+      rightADIVal: job.input.result.adiR,
+      leftAEIVal: job.input.result.aeiL,
+      rightAEIVal: job.input.result.aeiR
     }
 
     ret.graph2.push(curObject);
@@ -471,9 +471,9 @@ function convertCompareACIResultsOverTime(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].date,
-      leftData: jobs[i].result.aciTotAllByMinL,
-      rightData: jobs[i].result.aciTotAllByMinR
+      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+      leftData: jobs[i].input.result.aciTotAllByMinL,
+      rightData: jobs[i].input.result.aciTotAllByMinR
     }
 
     ret.push(curObject);
@@ -489,9 +489,9 @@ function convertCompareACIResultsOverSite(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].sitename,
-      leftData: jobs[i].result.aciTotAllByMinL,
-      rightData: jobs[i].result.aciTotAllByMinR
+      name: jobs[i].input.siteName,
+      leftData: jobs[i].input.result.aciTotAllByMinL,
+      rightData: jobs[i].input.result.aciTotAllByMinR
     }
 
     ret.push(curObject);
@@ -516,9 +516,9 @@ function convertCompareBioResultsOverTime(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].date,
-      areaL: jobs[i].result.areaL,
-      areaR: jobs[i].result.areaR
+      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+      areaL: jobs[i].input.result.areaL,
+      areaR: jobs[i].input.result.areaR
     }
 
     ret.push(curObject);
@@ -534,9 +534,9 @@ function convertCompareBioResultsOverSite(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].sitename,
-      areaL: jobs[i].result.areaL,
-      areaR: jobs[i].result.areaR
+      name: jobs[i].input.siteName,
+      areaL: jobs[i].input.result.areaL,
+      areaR: jobs[i].input.result.areaR
     }
 
     ret.push(curObject);
@@ -568,23 +568,23 @@ function convertCompareNDSIResultsOverTime(jobs, value) {
     if(value === 'ndsi')
     {
       curObject = {
-        name: jobs[i].date,
-        ndsiL: jobs[i].result.ndsiL,
-        ndsiR: jobs[i].result.ndsiR
+        name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+        ndsiL: jobs[i].input.result.ndsiL,
+        ndsiR: jobs[i].input.result.ndsiR
       }
     }else if(value === 'biophony')
     {
       curObject = {
-        name: jobs[i].date,
-        biophonyL: jobs[i].result.biophonyL,
-        biophonyR: jobs[i].result.biophonyR
+        name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+        biophonyL: jobs[i].input.result.biophonyL,
+        biophonyR: jobs[i].input.result.biophonyR
       }
     }else if(value === 'anthrophony')
     {
       curObject = {
-        name: jobs[i].date,
-        anthrophonyL: jobs[i].result.anthrophonyL,
-        anthrophonyR: jobs[i].result.anthrophonyR
+        name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+        anthrophonyL: jobs[i].input.result.anthrophonyL,
+        anthrophonyR: jobs[i].input.result.anthrophonyR
       }
     }
 
@@ -604,23 +604,23 @@ function convertCompareNDSIResultsOverSite(jobs, value) {
     if(value === 'ndsi')
     {
       curObject = {
-        name: jobs[i].sitename,
-        ndsiL: jobs[i].result.ndsiL,
-        ndsiR: jobs[i].result.ndsiR
+        name: jobs[i].input.siteName,
+        ndsiL: jobs[i].input.result.ndsiL,
+        ndsiR: jobs[i].input.result.ndsiR
       }
     }else if(value === 'biophony')
     {
       curObject = {
-        name: jobs[i].sitename,
-        biophonyL: jobs[i].result.biophonyL,
-        biophonyR: jobs[i].result.biophonyR
+        name: jobs[i].input.siteName,
+        biophonyL: jobs[i].input.result.biophonyL,
+        biophonyR: jobs[i].input.result.biophonyR
       }
     }else if(value === 'anthrophony')
     {
       curObject = {
-        name: jobs[i].sitename,
-        anthrophonyL: jobs[i].result.anthrophonyL,
-        anthrophonyR: jobs[i].result.anthrophonyR
+        name: jobs[i].input.siteName,
+        anthrophonyL: jobs[i].input.result.anthrophonyL,
+        anthrophonyR: jobs[i].input.result.anthrophonyR
       }
     }
 
