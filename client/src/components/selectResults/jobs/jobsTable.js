@@ -224,6 +224,8 @@ class EnhancedTable extends React.Component {
         return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
       })
       this.setState({data: data})
+
+      this.setState({ selected: this.props.selectedJobs })
     }
   }
 

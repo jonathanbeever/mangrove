@@ -81,7 +81,8 @@ const styles = theme => ({
 
 class Expansion extends React.Component {
   state = {
-    expanded: this.props.expanded
+    expanded: this.props.expanded,
+    selected: this.props.selectedSpecs
   };
 
   handleClick = (event, value) => {
@@ -92,6 +93,9 @@ class Expansion extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps.expanded !== this.props.expanded)
       this.setState({ expanded: this.props.expanded })
+    if(prevProps.selectedSpecs !== this.props.selectedSpecs) {
+      this.setState({ selected: this.props.selectedSpecs })
+    }
   }
 
   render() {
@@ -109,7 +113,7 @@ class Expansion extends React.Component {
               specs={this.props.specs}
               params={this.props.params}
               updateSelectedSpecs={this.props.updateSelectedSpecs}
-              selectedSpecs={this.props.selectedSpecs}
+              selectedSpecs={this.state.selected}
             />
           </ExpansionPanelDetails>
         </ExpansionPanel>

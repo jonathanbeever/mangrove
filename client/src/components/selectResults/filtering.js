@@ -349,7 +349,6 @@ class StepperTest extends Component {
     var selectedSpecs = this.state.selectedSpecs
 
     Object.keys(selectedSpecs).forEach(indx => {
-      console.log(index, indx, selected)
       if(index === indx) {
         selectedSpecs[indx] = selected
       }
@@ -361,21 +360,15 @@ class StepperTest extends Component {
     var filteredJobBySpecs = []
 
     this.state.allJobs.forEach(job => {
-      // return jobs if id in array 'selected'
-      // and spec id is in state selectedSpecs or no fitlering of specs has been done
-      // ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms'].forEach(indx => {
-        console.log(selectedSpecs[index], job.spec.toString())
-        
       if(selectedSpecs[index].indexOf(job.spec) !== -1) {
-          if(this.state.selectedInputs.indexOf(job.input) !== -1) {
-            filteredJobBySpecs.push(job)
-          }
+        if(this.state.selectedInputs.indexOf(job.input) !== -1) {
+          filteredJobBySpecs.push(job)
         }
-      // })
+      }
     })
-    console.log(filteredJobBySpecs)
     this.setState({ selectedSpecs: selectedSpecs })
     this.setState({ jobsFiltered: filteredJobBySpecs })
+    this.setState({ selectedJobs: [] })
   }
 
   updateSelectedJobs = (selected) => {

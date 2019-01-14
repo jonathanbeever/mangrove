@@ -320,6 +320,9 @@ class EnhancedTable extends React.Component {
         }
       }
     }
+
+    if(prevProps.selectedSpecs !== this.props.selectedSpecs)
+      this.setState({ selected: this.props.selectedSpecs })
   }
 
   handleRequestSort = (event, property) => {
