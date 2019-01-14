@@ -1,19 +1,37 @@
 const async = require('async');
 
 const Status = require('../api/models/status');
-const { updateStatus } = require('../api/models/job/utils');
-
+const { getJobModel } = require('../api/models/job/utils');
 const { options } = require('./queue_options');
+
+
+const updateJob = (job) => {
+  const JobModel = getJobModel(job.type);
+
+  return JobModel.findByIdAndUpdate(
+    job._id,
+    job,
+    { new: true },
+  )
+    .then(updatedJob => updatedJob)
+    .catch(() => {
+      throw new Error(`Failed to update status to ${job.status}`);
+    });
+};
 
 function JobQueue() {
   this.queue = null;
 
+
   this.init = (jobProcessFn) => {
     this.queue = async.queue((job, callback) => {
-      updateStatus(job, Status.PROCESSING)
+      Object.assign(job, { status: Status.PROCESSING });
+      updateJob(job)
         .then((queuedJob) => {
-          const processedJob = jobProcessFn(queuedJob);
-          callback(null, processedJob);
+          jobProcessFn(queuedJob)
+            .then((processedJob) => {
+              callback(null, processedJob);
+            });
         })
         .catch((err) => {
           console.log(err, null);
@@ -29,18 +47,22 @@ function JobQueue() {
     if (!this.queue) {
       throw new Error('JobQueue has not been initialized.');
     }
-
-    updateStatus(job, Status.QUEUED)
+    Object.assign(job, { status: Status.QUEUED });
+    updateJob(job)
       .then((queuedJob) => {
         const process = new Promise((resolveProcess, rejectProcess) => {
           this.queue.push(queuedJob, (err, processedJob) => {
             if (err) {
-              updateStatus(processedJob, Status.FAILED)
+              Object.assign(processedJob, { status: Status.FAILED });
+              updateJob(processedJob)
                 .then(rejectProcess(err))
                 .catch(statusFailedErr => rejectProcess(statusFailedErr));
             } else {
-              updateStatus(processedJob, Status.FINISHED)
-                .then((finishedJob) => { resolveProcess(finishedJob); })
+              Object.assign(processedJob, { status: Status.FINISHED });
+              updateJob(processedJob)
+                .then((finishedJob) => {
+                  resolveProcess(finishedJob);
+                })
                 .catch(finishedJobErr => rejectProcess(finishedJobErr));
             }
           });

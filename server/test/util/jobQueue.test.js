@@ -3,7 +3,7 @@ const chaiAsPromised = require('chai-as-promised');
 
 const mockDb = require('../../test/mock/mockDb');
 const { nextMockJob } = require('../../test/mock/mockJob');
-const { mockProcessJob } = require('../mock/mockProcessJob');
+const { mockProcessJob, mockResult } = require('../mock/mockProcessJob');
 
 const { Job } = require('../../api/models/job');
 const Type = require('../../api/models/type');
@@ -41,8 +41,8 @@ describe('Job Queue', () => {
             expect(qJobResult.job.status).to.be.string(Status.QUEUED);
             qJobResult.process
               .then((processResult) => {
-                console.log(processResult);
                 expect(processResult.status).to.be.string(Status.FINISHED);
+                expect(processResult.result).to.be.eql(mockResult);
                 done();
               })
               .catch((processedErr) => { done(processedErr); });
