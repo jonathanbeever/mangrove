@@ -81,7 +81,7 @@ class FilterSpecs extends Component {
     })
     this.setState({ chips: <div>{chipHtml}</div> })
   }
-  
+
   deleteChip = (label) => {
     this.props.onDelete(label)
     this.formatChipHtml()
@@ -99,7 +99,7 @@ class FilterSpecs extends Component {
             value={this.props.specParamsByIndex[this.props.index][param[0]]}
             className={classes.textField}
             onChange={this.props.handleSpecChange(param[0])}
-          />   
+          />
         )
       }
       else {
@@ -123,7 +123,7 @@ class FilterSpecs extends Component {
     specInputHtml = (
       <div>
         <h4>Choose Specs</h4>
-        {specInputHtml} 
+        {specInputHtml}
         <div className="row filterSubmit">
           <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
             Apply Spec Filters
@@ -138,19 +138,19 @@ class FilterSpecs extends Component {
     var expansionPanels = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms'].map(index => {
       var panel = ''
       if(this.props.filteredSpecs[index]){
-        panel = (
-          <ExpansionPanel 
+        return (
+          <ExpansionPanel
             key={index}
             index={index}
             chosen={this.props.index}
-            expanded={this.props.index === index} 
+            expanded={this.props.index === index}
             specs={this.props.filteredSpecs[index]}
             params={Object.keys(this.props.specParamsByIndex[index])}
             handleChange={this.props.handleIndexChange}
             updateSelectedSpecs={this.props.updateSelectedSpecs}
-            selectedSpecs={this.props.selectedSpecs[index]}            
+            selectedSpecs={this.props.selectedSpecs[index]}
           />
-        )      
+        )
       }
       return panel;
     })

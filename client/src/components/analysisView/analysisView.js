@@ -631,28 +631,28 @@ function convertCompareNDSIResultsOverSite(jobs, value) {
 }
 
 function convertOutlierResults(job) {
-  let ret = {
-    graph1: [],
-    index: job.type
-  }
-
-  let curObject = {
-    name: jobs[i].name,
-    leftData: 0,
-    rightData: 0
-  }
-
-  if(ret.index === 'aci')
-  {
-    curObject.leftData = job.result.aciTotAllByMinL;
-    curObject.rightData = job.result.aciTotAllByMinR;
-  }else if(ret.index === 'bio')
-  {
-    curObject.leftData = jobs.result.areaL;
-    curObject.rightData = jobs.result.areaR;
-  }
-
-  ret.graph1.push(curObject);
+  // let ret = {
+  //   graph1: [],
+  //   index: job.type
+  // }
+  //
+  // let curObject = {
+  //   name: jobs[i].name,
+  //   leftData: 0,
+  //   rightData: 0
+  // }
+  //
+  // if(ret.index === 'aci')
+  // {
+  //   curObject.leftData = job.result.aciTotAllByMinL;
+  //   curObject.rightData = job.result.aciTotAllByMinR;
+  // }else if(ret.index === 'bio')
+  // {
+  //   curObject.leftData = jobs.result.areaL;
+  //   curObject.rightData = jobs.result.areaR;
+  // }
+  //
+  // ret.graph1.push(curObject);
 
   // for(var i = 0; i < jobs.length; i++)
   // {
@@ -675,7 +675,7 @@ function convertOutlierResults(job) {
   //   ret.graph1.push(curObject);
   // }
 
-  return ret;
+  // return ret;
 }
 
 class AnalysisView extends Component {
