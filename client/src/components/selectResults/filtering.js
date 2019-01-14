@@ -99,7 +99,11 @@ class StepperTest extends Component {
       selectedInputs : [],
       selectedSpecs: {
         aci: [],
-        ndsi: []
+        ndsi: [],
+        adi: [],
+        aei: [],
+        bi: [],
+        rms: []
       },
       selectedJobs: [],
       showAnalysis: false
@@ -133,7 +137,11 @@ class StepperTest extends Component {
       .then(res => {
         var specs = {
           'aci': [],
-          'ndsi': []
+          'ndsi': [],
+          'adi': [],
+          'aei': [],
+          'bi': [],
+          'rms': []
         }
         res.data.specs.forEach(spec => {
           // var type = spec.type.substring(0, spec.type.indexOf('Spec'))
@@ -201,7 +209,7 @@ class StepperTest extends Component {
     
     var check = 0
     // add all
-    var indices = ['aci', 'ndsi']
+    var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
     indices.forEach(indx => {
       if(this.state.selectedSpecs[indx].length) {
         check++
@@ -312,24 +320,60 @@ class StepperTest extends Component {
     this.setState({ filteredSpecs: filteredSpecs })
   }
 
+  // Allows choosing multiple specs
+  // updateSelectedSpecs = (selected, index) => {
+  //   var selectedSpecs = this.state.selectedSpecs
+  //   selectedSpecs[index] = selected
+
+  //   var filteredJobBySpecs = []
+
+  //   this.state.allJobs.forEach(job => {
+  //     // return jobs if id in array 'selected'
+  //     // and spec id is in state selectedSpecs or no fitlering of specs has been done
+  //     ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms'].forEach(indx => {
+  //       if(selectedSpecs[indx].indexOf(job.spec) !== -1) {
+  //         if(this.state.selectedInputs.indexOf(job.input) !== -1) {
+  //           filteredJobBySpecs.push(job)
+  //         }
+  //       }
+  //     })
+  
+  //   })
+  //   this.setState({ selectedSpecs: selectedSpecs })
+  //   this.setState({ jobsFiltered: filteredJobBySpecs })
+  // }
+
+  // Only allow choosing one spec
+  // TODO, change checkboxes on table to radio buttons
   updateSelectedSpecs = (selected, index) => {
     var selectedSpecs = this.state.selectedSpecs
-    selectedSpecs[index] = selected
+
+    Object.keys(selectedSpecs).forEach(indx => {
+      console.log(index, indx, selected)
+      if(index === indx) {
+        selectedSpecs[indx] = selected
+      }
+      else {
+        selectedSpecs[indx] = []
+      }
+    })
 
     var filteredJobBySpecs = []
 
     this.state.allJobs.forEach(job => {
       // return jobs if id in array 'selected'
       // and spec id is in state selectedSpecs or no fitlering of specs has been done
-      ['aci', 'ndsi'].forEach(indx => {
-        if(selectedSpecs[indx].indexOf(job.spec) !== -1) {
+      // ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms'].forEach(indx => {
+        console.log(selectedSpecs[index], job.spec.toString())
+        
+      if(selectedSpecs[index].indexOf(job.spec) !== -1) {
           if(this.state.selectedInputs.indexOf(job.input) !== -1) {
             filteredJobBySpecs.push(job)
           }
         }
-      })
-  
+      // })
     })
+    console.log(filteredJobBySpecs)
     this.setState({ selectedSpecs: selectedSpecs })
     this.setState({ jobsFiltered: filteredJobBySpecs })
   }

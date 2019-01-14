@@ -71,7 +71,7 @@ class SelectJobs extends Component {
 
   formatSpecChipHtml = () => {
     var chipHtml = []
-    var indices = ['aci', 'ndsi']
+    var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
     indices.forEach(index => {
       Object.keys(this.props.specParamsByIndex[index]).forEach(param => {
         if(this.props.specParamsByIndex[index][param].length) {

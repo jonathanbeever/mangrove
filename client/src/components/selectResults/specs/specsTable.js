@@ -28,6 +28,18 @@ function createNdsiData(id, anthroMin, anthroMax, bioMin, bioMax, fftW) {
   return { id: id, anthroMin, anthroMax, bioMin, bioMax, fftW};
 }
 
+function createAdiData(id, maxFreq, dbThreshold, freqStep, shannon) {
+  return { id: id, maxFreq, dbThreshold, freqStep, shannon };
+}
+
+function createAeiData(id, maxFreq, dbThreshold, freqStep) {
+  return { id: id, maxFreq, dbThreshold, freqStep };
+}
+
+function createBiData(id, minFreq, maxFreq, fftW) {
+  return { id: id, minFreq, maxFreq, fftW};
+}
+  
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -59,14 +71,13 @@ class EnhancedTableHead extends React.Component {
 
   render() {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, rows } = this.props;
-
     return (
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
+              checked={numSelected === rowCount && rowCount !== 0}
               onChange={onSelectAllClick}
             />
           </TableCell>
@@ -234,6 +245,27 @@ class EnhancedTable extends React.Component {
         this.setState({data: data})
         break;
       }
+      case 'adi' : {
+        var data = this.props.specs.map(spec => {
+          return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+        })
+        this.setState({data: data})
+        break;
+      }
+      case 'aei' : {
+        var data = this.props.specs.map(spec => {
+          return createAeiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]])
+        })
+        this.setState({data: data})
+        break;
+      }
+      case 'bi' : {
+        var data = this.props.specs.map(spec => {
+          return createBiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]])
+        })
+        this.setState({data: data})
+        break;
+      }
     }
   }
 
@@ -261,6 +293,27 @@ class EnhancedTable extends React.Component {
         case 'ndsi' : {
           var data = this.props.specs.map(spec => {
             return createNdsiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]], spec[this.props.params[4]])
+          })
+          this.setState({data: data})
+          break;
+        }
+        case 'adi' : {
+          var data = this.props.specs.map(spec => {
+            return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+          })
+          this.setState({data: data})
+          break;
+        }
+        case 'aei' : {
+          var data = this.props.specs.map(spec => {
+            return createAeiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]])
+          })
+          this.setState({data: data})
+          break;
+        }
+        case 'bi' : {
+          var data = this.props.specs.map(spec => {
+            return createBiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]])
           })
           this.setState({data: data})
           break;
