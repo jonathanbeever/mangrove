@@ -90,15 +90,24 @@ class SimpleTabs extends React.Component {
         {value === 2 && <TabContainer>
           <SelectJobs 
             filteredJobs={this.props.filteredJobs}
+            // Input filtering
+            indexedFiles={this.props.indexedFiles}
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
-            indexedFiles={this.props.indexedFiles}
+            // Jobs selected for AnalysisView
             updateSelectedJobs={this.props.updateSelectedJobs}
             selectedJobs={this.props.selectedJobs}
-            onDeleteSpecChip={this.props.deleteSpecChip}
-            specParamsByIndex={this.props.specParamsByIndex}
+            // Spec Filtering
+            selectedIndex={this.props.selectedIndex}
+            selectedSpecs={this.props.selectedSpecs}
+            filteredSpecs={this.props.filteredSpecs}
+            // Results for AnalysisView
             selectedIndexedJobs={this.props.selectedIndexedJobs}
             sendJobs={this.props.sendJobs}
+            // Filtering jobs by author or date
+            jobFiltering={this.props.jobFiltering}
+            onChangeJobFilter={this.props.handleJobFilter}
+            onSubmitFiltering={this.props.submitJobFilter}
           />
         </TabContainer>}
         {/* {value === 3 && <TabContainer>

@@ -40,7 +40,13 @@ class SelectJobs extends Component {
 
   componentDidMount = () => {
     this.formatInputChipHtml()
-    this.formatSpecChipHtml()
+    this.formatSpecFilterHtml()
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if(prevProps.inputFiltering !== this.props.inputFiltering) {
+      this.formatInputChipHtml()
+    }
   }
   
   deleteInputChip = (label) => {
@@ -61,7 +67,10 @@ class SelectJobs extends Component {
         )
       }
     })
-    this.setState({ inputChips: <div>{chipHtml}</div> })
+    if(chipHtml.length)
+      this.setState({ inputChips: <div>{chipHtml}</div> })
+    else
+      this.setState({ inputChips: '' })
   }
 
   deleteSpecChip = (label) => {
@@ -69,24 +78,23 @@ class SelectJobs extends Component {
     this.formatSpecChipHtml()
   }
 
-  formatSpecChipHtml = () => {
-    var chipHtml = []
-    var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
-    indices.forEach(index => {
-      Object.keys(this.props.specParamsByIndex[index]).forEach(param => {
-        if(this.props.specParamsByIndex[index][param].length) {
-          chipHtml.push(
-            <Chip
-              key={param}
-              label={index + ' : ' + param + ' - ' + this.props.specParamsByIndex[index][param]}
-              onDelete={this.deleteSpecChip}
-            />
-          )
-        }
-      })
-      this.setState({ specChips: <div>{chipHtml}</div> })
-    })
-
+  formatSpecFilterHtml = () => {
+    var html = ''
+    var html2 = ''
+    if(this.props.selectedIndex.length) {
+      html = <h5><strong>Index: </strong>{this.props.selectedIndex}</h5>
+      // change from array if keeping pne spec
+      if(this.props.selectedSpecs[this.props.selectedIndex][0] === this.props.filteredSpecs[this.props.selectedIndex][0].specId) {
+        html2 = Object.keys(this.props.filteredSpecs[this.props.selectedIndex][0]).map(param => {
+          if(param !== 'specId' && param !== 'type')
+            return <div key={param}>{param + ': ' + this.props.filteredSpecs[this.props.selectedIndex][0][param]}</div>
+          else
+            return null;
+        })
+      }
+      html = <div>{html}<div>{html2}</div></div>
+    }
+    this.setState({ specHtml: html })
   }
 
   render() {
@@ -95,29 +103,58 @@ class SelectJobs extends Component {
     return (
       <div className="row">
         <div className="col-4">
-          <Paper className={classes.root}>
-          <div className="row">
-            <div className="col-6">
-              Input Specifications
+          {this.props.selectedIndex.length ? 
+            <Paper className={classes.root}>
+              {/* <div className="row"> */}
+                {this.state.specHtml}
+              {/* </div> */}
+            </Paper>
+          :
+            ''
+          }
+          {this.state.inputChips !== '' ? 
+            <Paper className={classes.root}>
+              <h5>Input Specifications</h5>
               {this.state.inputChips}
-            </div>
-            <div className="col-6">
-              Parameter Specifications
-              {this.state.specChips}
-            </div>
+            </Paper>
+          :
+            ''
+          }
+          <Paper className={classes.root}>
+            <div>
+              <TextField
+                label="Author"
+                value={this.props.jobFiltering.author}
+                className={classes.textField}
+                onChange={this.props.onChangeJobFilter('author')}
+              />
+              {/* TODO */}
+              <DateAndTimePickers />
             </div>
           </Paper>
+          <div className="row filterSubmit">
+            <Button onClick={this.props.onSubmitFiltering} variant="contained" color="primary">
+              Apply Job Filters
+            </Button>
+          </div>
         </div>
         <div className="col-8">
-          <JobsTable 
-            filteredJobs={this.props.filteredJobs}
-            indexedFiles={this.props.indexedFiles}    
-            updateSelectedJobs={this.props.updateSelectedJobs}
-            selectedJobs={this.props.selectedJobs}
-          />
-          <Button  color="primary" disabled={!this.props.selectedJobs.length} onClick={this.props.sendJobs} >
-            View Results
-          </Button>
+          {this.props.selectedIndex ? 
+            <div>
+              <JobsTable 
+                filteredJobs={this.props.filteredJobs}
+                indexedFiles={this.props.indexedFiles}    
+                updateSelectedJobs={this.props.updateSelectedJobs}
+                selectedJobs={this.props.selectedJobs}
+              />
+              <Button  color="primary" disabled={!this.props.selectedJobs.length} onClick={this.props.sendJobs} >
+                View Results
+              </Button>
+            </div>
+          :
+            <Paper className={classes.root}><h5>Please Select an Index and Parameter Specifications</h5></Paper>
+          }
+          
         </div>  
       </div>
     );

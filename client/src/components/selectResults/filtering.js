@@ -105,14 +105,16 @@ class StepperTest extends Component {
         bi: [],
         rms: []
       },
+      selectedIndex: '',
+      jobFiltering: {
+        author: ''
+      },
       selectedJobs: [],
       showAnalysis: false
     };
   }
 
   componentDidMount = () => {
-    console.log(this.state.selectedSpecs)
-
     this.handleIndexChange('aci')
     // make indexed object of inputs
     var indexedFiles = {}
@@ -144,7 +146,6 @@ class StepperTest extends Component {
           'rms': []
         }
         res.data.specs.forEach(spec => {
-          // var type = spec.type.substring(0, spec.type.indexOf('Spec'))
           specs[spec.type].push(spec)
         })
         // Set all specs state
@@ -158,7 +159,8 @@ class StepperTest extends Component {
       .then(res => {
         // Set all specs state
         this.setState({ allJobs: res.data.jobs })
-        this.setState({ jobsFiltered: res.data.jobs })
+        // this.setState({ jobsFiltered: res.data.jobs })
+        this.setState({ jobsFiltered: [] })
       })
   }
 
@@ -172,15 +174,17 @@ class StepperTest extends Component {
 
   submitIndexFilter = () => {
     var filteredInputs = inputFiles.filter(file => {
+      var matchingFile = ''
       if(!this.state.inputFiltering.siteName || this.state.inputFiltering.siteName.toLowerCase() === file.siteName.toLowerCase()) {
         if(!this.state.inputFiltering.setName || this.state.inputFiltering.setName.toLowerCase() === file.setName.toLowerCase()) {
           if(!this.state.inputFiltering.latitude || Number(this.state.inputFiltering.latitude) === file.location[0]) {
             if(!this.state.inputFiltering.longitude || Number(this.state.inputFiltering.longitude) === file.location[1]) {
-              return file;
+              matchingFile = file
             }
           }
         }
       }
+      return matchingFile
     })
 
     this.setState({ filteredInputs: filteredInputs })
@@ -207,34 +211,14 @@ class StepperTest extends Component {
   updateSelectedInputs = (selected) => {
     var filteredJobByInputs = []
     
-    var check = 0
-    // add all
-    var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
-    indices.forEach(indx => {
-      if(this.state.selectedSpecs[indx].length) {
-        check++
-      }
-    })
-
-    if(check !== 0) {
+    if(this.state.selectedIndex.length) {
       this.state.allJobs.forEach(job => {
-        // return jobs if id in array 'selected'
-        // and spec id is in state selectedSpecs or no fitlering of specs has been done
-        indices.forEach(indx => {
-          if(this.state.selectedSpecs[indx].indexOf(job.spec) !== -1) {
-            if(selected.indexOf(job.input) !== -1) {
-              filteredJobByInputs.push(job)
-            }
+      // return jobs if id in array 'selected'
+      // and spec id is in state selectedSpecs or no fitlering of specs has been done
+        if(this.state.selectedSpecs[this.state.selectedIndex].indexOf(job.spec) !== -1) {
+          if(selected.indexOf(job.input) !== -1) {
+            filteredJobByInputs.push(job)
           }
-        })
-      })
-    }
-    else {
-      this.state.allJobs.forEach(job => {
-        // return jobs if id in array 'selected'
-        // and spec id is in state selectedSpecs or no fitlering of specs has been done
-        if(selected.indexOf(job.input) !== -1) {
-          filteredJobByInputs.push(job)
         }
       })
     }
@@ -281,10 +265,14 @@ class StepperTest extends Component {
         this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
         break;      
       }
+      default : {
+        break;
+      }
     }
   }
 
   handleSpecChange = name => e => {
+    // chear otehr index filter when spec chnaged
     var tempState = this.state.specParamsByIndex
 
     if(name !== 'shannon')
@@ -303,7 +291,7 @@ class StepperTest extends Component {
       var check = 0;
       keys.forEach(key => {
         if(this.state.specParamsByIndex[index][key]) {
-          if(this.state.specParamsByIndex[index][key] != spec[key]) {
+          if(parseInt(this.state.specParamsByIndex[index][key]) !== spec[key]) {
             check++
           }
         }
@@ -369,6 +357,11 @@ class StepperTest extends Component {
     this.setState({ selectedSpecs: selectedSpecs })
     this.setState({ jobsFiltered: filteredJobBySpecs })
     this.setState({ selectedJobs: [] })
+    
+    if(selected.length === 0)
+      this.setState({ selectedIndex: '' })
+    else
+      this.setState({ selectedIndex: index })
   }
 
   updateSelectedJobs = (selected) => {
@@ -383,8 +376,8 @@ class StepperTest extends Component {
         
         return job 
       }
+      return null;
     })
-    console.log(selectedJobs)
     this.setState({ selectedIndexedJobs: selectedJobs })
   }
 
@@ -398,6 +391,29 @@ class StepperTest extends Component {
 
     this.setState({ specParamsByIndex: newSpecs })
     this.handleSpecSubmit(index)
+  }
+
+  handleJobFilter = label => e => {
+    console.log(label, e.target.value)
+    var filter = this.state.jobFiltering
+    filter[label] = e.target.value
+    this.setState({ jobFiltering : filter })
+  }
+
+  handleSubmitJobFilter = () => {
+    var filteredJobs = []
+    this.state.allJobs.forEach(job => {
+      if(this.state.selectedSpecs[this.state.selectedIndex].indexOf(job.spec) !== -1) {
+        if(this.state.selectedInputs.indexOf(job.input) !== -1) {
+          if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {
+            filteredJobs.push(job)
+          }
+        }
+      }
+    })
+   
+    console.log(filteredJobs)
+    this.setState({ jobsFiltered: filteredJobs })
   }
 
   sendJobs = () => {
@@ -439,6 +455,10 @@ class StepperTest extends Component {
           selectedJobs={this.state.selectedJobs}
           selectedIndexedJobs={this.state.selectedIndexedJobs}
           sendJobs={this.sendJobs}
+          handleJobFilter={this.handleJobFilter}
+          jobFiltering={this.state.jobFiltering}
+          submitJobFilter={this.handleSubmitJobFilter}
+          selectedIndex={this.state.selectedIndex}
           // Tabs props
           showAnalysis={this.state.showAnalysis}
           showFiltering={this.state.showFiltering}

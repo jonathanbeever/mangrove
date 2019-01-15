@@ -20,8 +20,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import moment from 'moment';
 
-function createData(id, type, author, time, input, spec) {
-  return { id: id, type, author, time, input, spec };
+function createData(id, type, author, time, input) {
+  return { id: id, type, author, time, input };
 }
 
 function desc(a, b, orderBy) {
@@ -52,8 +52,8 @@ const rows = [
   { id: 'type', numeric: false, disablePadding: true, label: 'Index' },
   { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
   { id: 'creationTimeMs', numeric: false, disablePadding: false, label: 'Time Started' },
-  { id: 'input', numeric: false, disablePadding: false, label: 'Input File' },
-  { id: 'spec', numeric: false, disablePadding: false, label: 'Parameters' },
+  { id: 'input', numeric: false, disablePadding: false, label: 'Input File' }
+  // { id: 'spec', numeric: false, disablePadding: false, label: 'Parameters' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -213,7 +213,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredJobs.map(job => {
-      return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
+      return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName)
     })
     this.setState({data: data})
   }
@@ -221,7 +221,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredJobs.map(job => {
-        return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName, job.spec)
+        return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName)
       })
       this.setState({data: data})
 
@@ -325,7 +325,7 @@ class EnhancedTable extends React.Component {
                       <TableCell align="right">{n.author}</TableCell>
                       <TableCell align="right">{n.time}</TableCell>
                       <TableCell align="right">{n.input}</TableCell>
-                      <TableCell align="right">{n.spec}</TableCell>
+                      {/* <TableCell align="right">{n.spec}</TableCell> */}
                     </TableRow>
                   );
                 })}
