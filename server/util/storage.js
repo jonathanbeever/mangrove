@@ -5,7 +5,7 @@ const settings = require('./settings');
 
 const inputDir = settings.value('inputDir');
 
-const getUploadPath = json => `${inputDir}/${json.site}/${json.series}`;
+const getUploadPath = input => `${inputDir}/${input.site}/${input.series}`;
 
 function getParentDirectory(path) {
   return path.substring(0, path.lastIndexOf('/'));

@@ -4,40 +4,55 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
 const mkdirp = require('mkdirp');
+const config = require('config');
 
+const { arrayDiff } = require('../../util/array');
 const {
   getUploadPath,
   deleteInputFile,
 } = require('../../util/storage');
 
 const Input = require('../models/input');
+const { parseInputJson } = require('../models/input/utils');
+
+const error = config.get('error');
 
 const upload = multer({
+  fileFilter(req, file, cb) {
+    const extraKeys = arrayDiff(Object.keys(req.body), ['json']);
+    if (extraKeys.length > 0) {
+      cb(new Error(`Invalid keys: ${extraKeys.join(', ')}.`));
+    } else if (typeof req.body.json === 'undefined') {
+      cb(new Error('Missing required field: json'));
+    } else if (file.mimetype !== 'audio/wave') {
+      cb(new Error(`Invalid MIME type: ${file.mimetype}. Must be audio/wave`));
+    } else {
+      cb(null, true);
+    }
+  },
   storage: multer.diskStorage({
     destination(req, file, cb) {
-      const json = JSON.parse(req.body.json);
-      const path = getUploadPath(json);
-      mkdirp(path, (err) => {
-        if (err) {
-          console.error(err);
-        } else {
-          cb(null, path);
-        }
-      });
+      try {
+        const parsedJson = parseInputJson(req.body.json);
+        const path = getUploadPath(parsedJson);
+
+        // TODO: Check if file already exists
+        mkdirp(path, (err) => {
+          if (err) {
+            cb(err); // FIXME: Handle this error with a 500
+          } else {
+            cb(null, path);
+          }
+        });
+      } catch (err) {
+        cb(err);
+      }
     },
     filename(req, file, cb) {
-      // TODO: Rename to `${json.recordTimeMs}.wav`
-      cb(null, file.originalname);
+      cb(null, file.originalname); // Rename to `${json.recordTimeMs}.wav`?
     },
   }),
   // limits: { fileSize: 1024 * 1024 * 1024 }, // 1 GB
-  fileFilter(req, file, cb) {
-    if (file.mimetype === 'audio/wave') {
-      cb(null, true);
-    } else {
-      cb(null, false);
-    }
-  },
 });
 
 // Create Input
@@ -45,40 +60,65 @@ const upload = multer({
 // 'json' listed first, so that we can be sure that we've received the necessary
 // path information from req.body.json by the time we're storing the file. This
 // is a limitation of the Multer package. See the 'upload' variable above.
-router.put('/', upload.single('file'), (req, res) => {
-  const json = JSON.parse(req.body.json);
-  const input = new Input({
-    _id: new mongoose.Types.ObjectId(),
-    path: req.file.path,
-    site: json.site,
-    series: json.series,
-    recordTimeMs: json.recordTimeMs,
-    coords: {
-      lat: json.coords.lat,
-      long: json.coords.long,
-    },
-  });
+router.put('/', (req, res) => {
+  upload.single('file')(req, res, (uploadErr) => {
+    if (uploadErr) {
+      if (uploadErr instanceof multer.MulterError) {
+        console.error(uploadErr);
+        return res.status(500).json({
+          error: error.internal,
+        });
+      }
+      return res.status(400).json({
+        message: uploadErr.message,
+      });
+    }
 
-  input
-    .save()
-    .then((createResult) => {
-      res.status(201).json({
-        inputId: createResult._id,
-        path: createResult.path,
-        site: createResult.site,
-        series: createResult.series,
-        recordTimeMs: createResult.recordTimeMs,
-        coords: {
-          lat: createResult.coords.lat,
-          long: createResult.coords.long,
-        },
+    if (!req.file) { // No Multer error but still no file
+      if (typeof req.body.json === 'undefined') {
+        return res.status(400).json({
+          message: 'Missing required fields: json, file',
+        });
+      }
+      return res.status(400).json({
+        message: 'Missing required field: file',
       });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
+    }
+
+    const parsedJson = parseInputJson(req.body.json);
+    const input = new Input({
+      _id: new mongoose.Types.ObjectId(),
+      path: req.file.path,
+      site: parsedJson.site,
+      series: parsedJson.series,
+      recordTimeMs: parsedJson.recordTimeMs,
+      coords: {
+        lat: parsedJson.coords.lat,
+        long: parsedJson.coords.long,
+      },
     });
+
+    Input.create(input)
+      .then((createResult) => {
+        res.status(201).json({
+          inputId: createResult._id,
+          path: createResult.path,
+          site: createResult.site,
+          series: createResult.series,
+          recordTimeMs: createResult.recordTimeMs,
+          coords: {
+            lat: createResult.coords.lat,
+            long: createResult.coords.long,
+          },
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).json({
+          error: error.internal,
+        });
+      });
+  });
 });
 
 // Get Input
@@ -107,8 +147,9 @@ router.get('/:inputId', (req, res) => {
       }
     })
     .catch((err) => {
+      console.error(err);
       res.status(500).json({
-        error: err,
+        error: error.internal,
       });
     });
 });
@@ -134,8 +175,9 @@ router.get('/', (req, res) => {
       });
     })
     .catch((err) => {
+      console.error(err);
       res.status(500).json({
-        error: err,
+        error: error.internal,
       });
     });
 });
@@ -163,14 +205,16 @@ router.delete('/:inputId', (req, res) => {
           });
         })
         .catch((err) => {
+          console.error(err);
           res.status(500).json({
-            error: err,
+            error: error.internal,
           });
         });
     })
     .catch((err) => {
+      console.error(err);
       res.status(500).json({
-        error: err,
+        error: error.internal,
       });
     });
 });

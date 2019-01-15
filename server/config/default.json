@@ -9,5 +9,8 @@
   "storage": {
     "root": ".sse-server",
     "inputs": "inputs"
+  },
+  "error": {
+    "internal": "An unexpected internal error has occurred."
   }
 }
