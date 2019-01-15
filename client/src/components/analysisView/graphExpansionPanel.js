@@ -38,14 +38,14 @@ function SimpleExpansionPanel(props) {
   return (
     <div className={classes.root}>
     {/* onChange={props.handleChange({'target': props.index})} */}
-      <ExpansionPanel expanded={props.expanded}>
-        <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>{props.title}</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          Graphs go here
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+    <ExpansionPanel>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <Typography className={classes.heading}>{this.props.title}</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
+        {this.props.graph}
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
     </div>
   );
 }

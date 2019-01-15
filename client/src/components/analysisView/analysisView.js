@@ -11,7 +11,7 @@ import CompareBioData from '../infographs/CompareBioData';
 import OutlierLineChart from '../infographs/OutlierLineChart';
 import CompareNDSIData from '../infographs/CompareNDSIData';
 import BALineChart from '../infographs/BALineChart';
-import GraphExpansionPanel from './graphExpansionPanel';
+import GraphsTable from './graphsTable';
 
 // {
 //   type: "ndsi",
@@ -45,8 +45,8 @@ import GraphExpansionPanel from './graphExpansionPanel';
 //   }
 // }
 
-
 function convertNDSIResults(jobs) {
+  
   let ret;
   let results = jobs[0].input.results;
 
@@ -124,6 +124,7 @@ function convertNDSIResults(jobs) {
 }
 
 function convertACIResults(jobs) {
+  console.log(jobs)
   let ret;
 
   let aciTotAllL = 0;
@@ -702,6 +703,29 @@ class AnalysisView extends Component {
 
   formatJob = (props) => {
     console.log(this.props)
+    console.log(this.props.selectedJobs)
+    let graphs;
+    switch(this.props.index)
+    {
+      case "aci":
+        graphs = convertACIResults(this.props.selectedJobs)
+        break;
+      case "ndsi":
+        graphs = convertNDSIResults(this.props.selectedJobs)
+        break;
+      case "adi":
+        graphs = convertADIResults(this.props.selectedJobs)
+        break;
+      case "aei":
+        graphs = convertAEIResults(this.props.selectedJobs)
+        break;
+      case "bio":
+        graphs = convertBAResults(this.props.selectedJobs)
+        break;
+      default:
+        graphs = null
+    }
+
     var formattedJob = (
       <div>
         <h4>
@@ -713,8 +737,8 @@ class AnalysisView extends Component {
         <h4>
           {this.props.selectedJobs[0].spec}
         </h4>
-        <GraphExpansionPanel
-          title="Graph1"
+        <GraphsTable
+          graphs={graphs}
         />
       </div>
     )
