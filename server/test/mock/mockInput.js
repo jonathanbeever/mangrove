@@ -1,6 +1,7 @@
 const { nextMockObjectId } = require('./mockObjectId');
 
 const settings = require('../../util/settings');
+const storage = require('../../util/storage');
 
 const Input = require('../../api/models/input');
 
@@ -10,7 +11,9 @@ const inputDir = settings.value('inputDir');
 
 function mockInput(_id, site, series, recordTimeMs, coords) {
   const path = `${inputDir}/${site}/${series}/test.wav`;
-  // TODO: Copy test.wav to path
+
+  storage.copyFile('./test/mock/wav/test.wav', path);
+
   return new Input({
     _id,
     path,
