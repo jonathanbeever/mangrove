@@ -1,8 +1,16 @@
 {
+  "settingsFile": "settings.json",
   "port": 3000,
   "dbConfig": {
     "host": "127.0.0.1",
     "port": 27017,
     "dbName": "soundscape-ecology"
+  },
+  "storage": {
+    "root": ".sse-server",
+    "inputs": "inputs"
+  },
+  "error": {
+    "internal": "An unexpected internal error has occurred."
   }
 }

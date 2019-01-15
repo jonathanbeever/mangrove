@@ -312,6 +312,7 @@ describe('Specs', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.be.an('object');
+          expect(res.body).to.have.all.keys(['count', 'specs']);
           expect(res.body.count).to.be.equal(0);
           expect(res.body.specs).to.be.an('array');
           expect(res.body.specs).to.be.empty;
@@ -339,7 +340,7 @@ describe('Specs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.be.an('object');
-              expect(res.body).to.have.all.keys('count', 'specs');
+              expect(res.body).to.have.all.keys(['count', 'specs']);
               expect(res.body.count).to.be.equal(specs.length);
               expect(res.body.specs).to.be.an('array');
               expect(res.body.specs).to.have.lengthOf(specs.length);
@@ -384,7 +385,7 @@ describe('Specs', () => {
       const spec = nextMockSpec(Type.AEI);
 
       Spec.create(spec)
-        .then(
+        .then(() => {
           chai
             .request(app)
             .delete(`/specs/${spec.id}`)
@@ -399,8 +400,8 @@ describe('Specs', () => {
             })
             .catch((err) => {
               done(err);
-            }),
-        )
+            });
+        })
         .catch((err) => {
           done(err);
         });

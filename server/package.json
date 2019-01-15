@@ -28,6 +28,7 @@
   "license": "ISC",
   "devDependencies": {
     "chai": "4.2.0",
+    "chai-fs": "2.0.0",
     "chai-http": "4.2.0",
     "eslint": "5.8.0",
     "eslint-config-airbnb-base": "13.1.0",
@@ -42,9 +43,13 @@
     "config": "2.0.1",
     "cors": "2.8.5",
     "express": "4.16.4",
+    "mkdirp": "0.5.1",
     "moment": "2.22.2",
     "mongoose": "5.3.9",
     "morgan": "1.9.1",
-    "run-script-os": "1.0.3"
+    "multer": "1.4.1",
+    "rimraf": "2.6.2",
+    "run-script-os": "1.0.3",
+    "settings-store": "1.4.1"
   }
 }

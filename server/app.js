@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const config = require('config');
 const cors = require('cors');
 
+require('./util/settings').load();
+
+const inputRoutes = require('./api/routes/inputs');
 const jobRoutes = require('./api/routes/jobs');
 const specRoutes = require('./api/routes/specs');
 
@@ -18,6 +21,7 @@ app.use(cors({
   methods: 'PUT, POST, DELETE, GET',
 }));
 
+app.use('/inputs', inputRoutes);
 app.use('/jobs', jobRoutes);
 app.use('/specs', specRoutes);
 
