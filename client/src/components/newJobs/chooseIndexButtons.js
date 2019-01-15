@@ -13,11 +13,11 @@ class App extends Component {
         <label className={"btn btn-lg btn-info" + (this.props.selectedIndex === '' ? '' : (this.props.selectedIndex === 'adi' ? '':' disabled'))}>
           <input onClick={this.props.onClickIndex} type="radio" name="options" id="adi" autoComplete="off"/> ADI
         </label>
-        <label className={"btn btn-lg btn-info" + (this.props.selectedIndex === '' ? '' : (this.props.selectedIndex === 'evenness' ? '':' disabled'))}>
-          <input onClick={this.props.onClickIndex} type="radio" name="options" id="evenness" autoComplete="off"/> Evenness
+        <label className={"btn btn-lg btn-info" + (this.props.selectedIndex === '' ? '' : (this.props.selectedIndex === 'aei' ? '':' disabled'))}>
+          <input onClick={this.props.onClickIndex} type="radio" name="options" id="aei" autoComplete="off"/> Evenness
         </label>
-        <label className={"btn btn-lg btn-info" + (this.props.selectedIndex === '' ? '' : (this.props.selectedIndex === 'bioacoustic' ? '':' disabled'))}>
-          <input onClick={this.props.onClickIndex} type="radio" name="options" id="bioacoustic" autoComplete="off"/> Bioacoustic
+        <label className={"btn btn-lg btn-info" + (this.props.selectedIndex === '' ? '' : (this.props.selectedIndex === 'bi' ? '':' disabled'))}>
+          <input onClick={this.props.onClickIndex} type="radio" name="options" id="bi" autoComplete="off"/> Bioacoustic
         </label>
         <label className={"btn btn-lg btn-info" + (this.props.selectedIndex === '' ? '' : (this.props.selectedIndex === 'rms' ? '':' disabled'))}>
           <input onClick={this.props.onClickIndex} type="radio" name="options" id="rms" autoComplete="off"/> RMS

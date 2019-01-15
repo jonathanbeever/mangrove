@@ -18,7 +18,7 @@ import classNames from 'classnames';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Link } from 'react-router-dom';
 
-const drawerWidth = 280;
+const drawerWidth = 200;
 
 const styles = theme => ({
   root: {
