@@ -107,15 +107,31 @@ class NewJobs extends Component {
   handleParamChange (e) {
     // To pass to other components
     let params = Object.assign({}, this.state.params);
+<<<<<<< refs/remotes/origin/master
     // Set specType for new job request
     params["type"] = this.state.selectedIndex  +'Spec'
+=======
+<<<<<<< HEAD
+
+    params[e.target.id] = e.target.value
+=======
+    // Set specType for new job request
+    params["type"] = this.state.selectedIndex 
+>>>>>>> cherry pick new jobs commit
     // Set author until users are implemented
     // params["author"] = "Test Author"
     // Set index parameters
     if(e.target.id === 'shannon')
       params[e.target.id] = e.target.checked
+<<<<<<< refs/remotes/origin/master
     else
       params[e.target.id] = e.target.value
+=======
+    else {
+      params[e.target.id] = parseInt(e.target.value)
+    }
+>>>>>>> 5ec7c66... Material-ui partially added to new jobs page
+>>>>>>> cherry pick new jobs commit
 
     this.setState({params: params});
 
@@ -132,6 +148,11 @@ class NewJobs extends Component {
   }
 
   handleJobSubmit () {
+<<<<<<< refs/remotes/origin/master
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> cherry pick new jobs commit
     // Find or create spec
     axios.put(
         "http://localhost:3000/specs",  
@@ -144,10 +165,17 @@ class NewJobs extends Component {
       var specId = ''
       // If new spec was create set id
       if(res.status === 201) 
+<<<<<<< refs/remotes/origin/master
         specId = res.data.createResult._id
       // Spec already exists, save id
       else if(res.status === 200) 
         specId = res.data.returnSpec[0]._id
+=======
+        specId = res.data.specId
+      // Spec already exists, save id
+      else if(res.status === 200) 
+        specId = res.data.specId
+>>>>>>> cherry pick new jobs commit
       // Loop through inputs and make requests
       this.state.inputs.forEach(inputId => {
         // Request to queue new job
@@ -172,6 +200,10 @@ class NewJobs extends Component {
     })
     .catch(err => console.log(err));
 
+<<<<<<< refs/remotes/origin/master
+=======
+>>>>>>> 5ec7c66... Material-ui partially added to new jobs page
+>>>>>>> cherry pick new jobs commit
   }
 
   cancelJob () {
