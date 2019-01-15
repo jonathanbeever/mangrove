@@ -4,9 +4,7 @@ import NavBar from './components/navbar';
 import NewJobs from './components/newJobs/newJobs';
 import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
-// import Catalog from './components/selectResults/selectResults';
-import Catalog from './components/selectResults/filtering.js';
-
+import Catalog from './components/selectResults/catalog';
 
 // const RESULTS = [
 //   {

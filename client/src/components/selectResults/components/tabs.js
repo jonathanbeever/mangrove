@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import FilterInputs from '../inputs/filterInputs';
 import FilterSpecs from '../specs/filterSpecs';
 import SelectJobs from '../jobs/selectJobs';
-// import AnalysisView from '../../analysisView/analysisView';
+import AnalysisView from '../../analysisView/analysisView';
 
 function TabContainer(props) {
   return (
@@ -94,14 +94,13 @@ class SimpleTabs extends React.Component {
             indexedFiles={this.props.indexedFiles}
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
-            // Jobs selected for AnalysisView
-            updateSelectedJobs={this.props.updateSelectedJobs}
-            selectedJobs={this.props.selectedJobs}
             // Spec Filtering
             selectedIndex={this.props.selectedIndex}
             selectedSpecs={this.props.selectedSpecs}
             filteredSpecs={this.props.filteredSpecs}
             // Results for AnalysisView
+            updateSelectedJobs={this.props.updateSelectedJobs}
+            selectedJobs={this.props.selectedJobs}
             selectedIndexedJobs={this.props.selectedIndexedJobs}
             sendJobs={this.props.sendJobs}
             // Filtering jobs by author or date
@@ -110,13 +109,12 @@ class SimpleTabs extends React.Component {
             onSubmitFiltering={this.props.submitJobFilter}
           />
         </TabContainer>}
-        {/* {value === 3 && <TabContainer>
+        {value === 3 && <TabContainer>
           <AnalysisView
             selectedJobs={this.props.selectedIndexedJobs}          
-            index={this.props.index}
-            showFiltering={this.props.showFiltering}
+            index={this.props.selectedIndex}
           />
-        </TabContainer>} */}
+        </TabContainer>}
       </div>
     );
   }

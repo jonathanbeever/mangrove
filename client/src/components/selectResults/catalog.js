@@ -49,7 +49,7 @@ const inputFiles = [
   }
 ]
 
-class StepperTest extends Component {
+class Catalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -357,7 +357,7 @@ class StepperTest extends Component {
     this.setState({ selectedSpecs: selectedSpecs })
     this.setState({ jobsFiltered: filteredJobBySpecs })
     this.setState({ selectedJobs: [] })
-    
+
     if(selected.length === 0)
       this.setState({ selectedIndex: '' })
     else
@@ -468,4 +468,4 @@ class StepperTest extends Component {
   }
 }
 
-export default StepperTest;
+export default Catalog;
