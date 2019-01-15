@@ -51,9 +51,8 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: 'type', numeric: false, disablePadding: true, label: 'Index' },
   { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
-  { id: 'creationTimeMs', numeric: false, disablePadding: false, label: 'Time Started' },
+  { id: 'time', numeric: true, disablePadding: false, label: 'Time Started' },
   { id: 'input', numeric: false, disablePadding: false, label: 'Input File' }
-  // { id: 'spec', numeric: false, disablePadding: false, label: 'Parameters' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -201,7 +200,7 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'creationTimeMs',
+    orderBy: 'time',
     selected: this.props.selectedJobs,
     data: [
       
@@ -213,7 +212,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredJobs.map(job => {
-      return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName)
+      return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].fileName)
     })
     this.setState({data: data})
   }
@@ -221,7 +220,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredJobs.map(job => {
-        return createData(job.jobId, job.type, job.author, moment(job.creationTimeMs).format('MMM Do YY, h:mm:ss a'), this.props.indexedFiles[job.input].fileName)
+        return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].fileName)
       })
       this.setState({data: data})
 
@@ -232,7 +231,6 @@ class EnhancedTable extends React.Component {
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
-
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc';
     }
@@ -323,7 +321,7 @@ class EnhancedTable extends React.Component {
                         {n.type}
                       </TableCell>
                       <TableCell align="right">{n.author}</TableCell>
-                      <TableCell align="right">{n.time}</TableCell>
+                      <TableCell align="right">{moment(n.time).format('MMM Do YY, h:mm:ss a')}</TableCell>
                       <TableCell align="right">{n.input}</TableCell>
                       {/* <TableCell align="right">{n.spec}</TableCell> */}
                     </TableRow>
