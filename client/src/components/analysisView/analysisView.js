@@ -11,6 +11,7 @@ import CompareBioData from '../infographs/CompareBioData';
 import OutlierLineChart from '../infographs/OutlierLineChart';
 import CompareNDSIData from '../infographs/CompareNDSIData';
 import BALineChart from '../infographs/BALineChart';
+import GraphExpansionPanel from './graphExpansionPanel';
 
 // {
 //   type: "ndsi",
@@ -695,21 +696,26 @@ class AnalysisView extends Component {
   }
 
   componentDidMount = () => {
-    this.formatJob(this.props.chosenResult)
+    // console.log(this.props)
+    this.formatJob(this.props.selectedResult)
   }
 
   formatJob = (props) => {
+    console.log(this.props)
     var formattedJob = (
       <div>
         <h4>
-          {props.input.sitename}
+          {this.props.selectedJobs[0].input.siteName} - {this.props.index.toUpperCase()}
         </h4>
-
-        {/*<p>{job.type.toUpperCase()}&nbsp;&nbsp;&nbsp;&nbsp;{job.input}&nbsp;&nbsp;&nbsp;&nbsp;{job.status}</p>*/}
-        <h5>{props.input.sitename}</h5>
-        <p>{props.input.type.toUpperCase()}</p>
-
-        // <p>{props.input.spec.name}</p>
+        <h4>
+          By: {this.props.selectedJobs[0].author}
+        </h4>
+        <h4>
+          {this.props.selectedJobs[0].spec}
+        </h4>
+        <GraphExpansionPanel
+          title="Graph1"
+        />
       </div>
     )
     this.setState({ formattedJob: formattedJob })
