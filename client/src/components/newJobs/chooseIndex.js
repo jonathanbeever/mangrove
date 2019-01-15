@@ -49,7 +49,7 @@ class ChooseIndex extends React.Component {
         break;
       }
       case 'ndsi': {
-        var html = (
+        html = (
           <div>
             <h3>Normalized Difference Soundscape Index</h3>
             <p>
@@ -64,7 +64,7 @@ collected sound samples" Kasten, et al. 2012.
         break;
       }
       case 'aei': {
-        var html = (
+        html = (
           <div>
             <h3>Acoustic Evenness Index</h3>
             <p>
@@ -79,7 +79,7 @@ index applied to these bins.
         break;
       }
       case 'adi': {
-        var html = (
+        html = (
           <div>
             <h3>Acoustic Diversity Index</h3>
             <p>
@@ -93,7 +93,7 @@ threshold default -50 dBFS. The ADI is the result of the Shannon index applied t
         break;
       }
       case 'bi': {
-        var html = (
+        html = (
           <div>
             <h3>Bioacoustic Index</h3>
             <p>
@@ -111,7 +111,7 @@ avifauna" Boelman, et al. 2007.
         break;
       }
       case 'rms': {
-        var html = (
+        html = (
           <div>
             <h3>Root Mean Squared</h3>
             <p>
@@ -128,6 +128,8 @@ avifauna" Boelman, et al. 2007.
         this.setState({ indexInfo: html })
         break;
       }
+      default:
+        break;
     }
   }
 
