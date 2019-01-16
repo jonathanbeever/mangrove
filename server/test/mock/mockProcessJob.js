@@ -5,7 +5,12 @@ const mockProcessJob = job => new Promise((resolve) => {
   resolve(job);
 });
 
+const mockFreezeJob = job => new Promise(() => {
+  Object.assign(job, { result: 'Frozen' });
+});
+
 module.exports = {
   mockProcessJob,
+  mockFreezeJob,
   mockResult,
 };

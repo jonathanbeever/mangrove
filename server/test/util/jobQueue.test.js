@@ -3,13 +3,15 @@ const chaiAsPromised = require('chai-as-promised');
 
 const mockDb = require('../../test/mock/mockDb');
 const { nextMockJob } = require('../../test/mock/mockJob');
-const { mockProcessJob, mockResult } = require('../mock/mockProcessJob');
+const { mockProcessJob, mockResult, mockFreezeJob } = require('../mock/mockProcessJob');
 
 const { Job } = require('../../api/models/job');
 const Type = require('../../api/models/type');
 const Status = require('../../api/models/status');
 
+const { makeRandomJobs, printCountsWithNames, getAwaitingJobs } = require('./queueHelpers');
 const jobQueue = require('../../util/jobQueue');
+const { options } = require('../../util/queue_options');
 
 const { expect } = chai;
 
@@ -22,6 +24,7 @@ describe('Job Queue', () => {
   });
 
   after(async () => {
+    jobQueue.uninit();
     await mockDb.teardown();
   });
 
@@ -35,7 +38,7 @@ describe('Job Queue', () => {
     const job = nextMockJob(Type.ACI);
     Job.create(job)
       .then((createResult) => {
-        jobQueue.push(createResult)
+        jobQueue.enqueue(createResult)
           .then((qJobResult) => {
             expect(qJobResult).to.have.all.keys('job', 'process');
             expect(qJobResult.job.status).to.be.string(Status.QUEUED);
@@ -52,5 +55,46 @@ describe('Job Queue', () => {
       .catch((err) => {
         done(err);
       });
+  });
+});
+
+
+describe('Scan on Start', () => {
+  before(async () => {
+    await mockDb.setup();
+  });
+
+  after(async () => {
+    await mockDb.teardown();
+  });
+
+  beforeEach((done) => {
+    Job.deleteMany({}, (err) => {
+      done();
+    });
+  });
+
+
+  it('Scan Database for already Proccesing and Queued Jobs', (done) => {
+    const randomJobs = makeRandomJobs(5);
+
+    printCountsWithNames(Status, randomJobs.statusCounter);
+    printCountsWithNames(Type, randomJobs.typeCounter);
+    const countOfStatus = randomJobs.statusCounter;
+
+
+    Job.insertMany(randomJobs.jobs)
+      .then(() => {
+        jobQueue.init(mockFreezeJob)
+          .then((queue) => {
+            setTimeout(() => {
+              expect(queue.workersList().length)
+                .to.be.eql(getAwaitingJobs(countOfStatus, options.cores));
+              done();
+            }, 3000);
+          })
+          .catch(err => done(err));
+      })
+      .catch(err => done(err));
   });
 });
