@@ -7,6 +7,18 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GraphExpansionPanel from './graphExpansionPanel';
+import NDSICharts from '../infographs/NDSICharts';
+import ACILineChart from '../infographs/ACILineChart';
+import ADILineChart from '../infographs/ADILineChart';
+import AEILineChart from '../infographs/AEILineChart';
+import ADIAEICharts from '../infographs/ADIAEICharts';
+import BAAreaChart from '../infographs/BAAreaChart';
+import CompareACIData from '../infographs/CompareACIData';
+import CompareBioData from '../infographs/CompareBioData';
+import OutlierLineChart from '../infographs/OutlierLineChart';
+import CompareNDSIData from '../infographs/CompareNDSIData';
+import BALineChart from '../infographs/BALineChart';
+
 
 const styles = theme => ({
   root: {
@@ -26,14 +38,54 @@ class GraphsTable extends React.Component {
     console.log(graphs)
     const rows = [];
 
-    this.props.graphs.forEach((graph) => {
-      rows.push(
-        <GraphExpansionPanel
-          title={graph.title}
-          graph={graph}
-        />
-      );
-    })
+    for (var key in this.props.graphs) {
+      // skip loop if the property is from prototype
+      if (!this.props.graphs.hasOwnProperty(key)) continue;
+
+      var obj = this.props.graphs[key];
+      for (var prop in obj) {
+        // skip loop if the property is from prototype
+        if(!obj.hasOwnProperty(prop)) continue;
+
+        let xLabel = this.props.xAxisLabel;
+        let yLabel = this.props.yAxisLabel;
+
+        let firstDataKey = this.props.dataKey1;
+        let secondDataKey = this.props.dataKey2;
+
+        switch(this.props.index)
+        {
+          case "aci":
+            const passedGraph = ({}) => (
+              <ACILineChart
+                results={obj}
+                xAxisLabel="ACI Val"
+                yAxisLabel="ACI Val"
+              />
+            )
+            break;
+          case "ndsi":
+            passedGraph =
+            break;
+          case "adi":
+            passedGraph =
+            break;
+          case "aei":
+            passedGraph =
+            break;
+          case "bio":
+            passedGraph =
+            break;
+        }
+
+        rows.push(
+          // <GraphExpansionPanel
+          //   title={obj.title}
+          //   graph={passedGraph}
+          // />
+        )
+      }
+    }
 
     return(
       {rows}
