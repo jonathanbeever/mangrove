@@ -6,6 +6,9 @@ import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Button from '@material-ui/core/Button';
+import '../selectResults/selectResults.css';
+import SpecsTable from '../selectResults/specs/specsTable';
 
 const styles = theme => ({
   root: {
@@ -43,6 +46,7 @@ class ChooseSpecs extends Component {
 
   componentDidMount = () => {
     // this.formatSpecTables()
+    console.log(this.props)
     this.formatSpecInput(this.props.specParams[this.props.index])
   }
   // todo: mount functions w this
@@ -70,7 +74,7 @@ class ChooseSpecs extends Component {
             key={param}
             label={param}
             value={this.props.specParams[this.props.index][param]}
-            className={classes.textField}
+            // className={classes.textField}
             onChange={this.props.onSpecChange(param)}
           />   
         )
@@ -95,12 +99,12 @@ class ChooseSpecs extends Component {
     // Add title and submit button to html
     specInputHtml = (
       <div>
-        <h4>Choose Specs</h4>
+        <h4>Define New Specs</h4>
         {specInputHtml} 
-        <div className="row ChooseSubmit">
-          {/* <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
-            Apply Spec Chooses
-          </Button> */}
+        <div className="row filterSubmit">
+          <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
+            Apply Spec Choices
+          </Button>
         </div>
       </div>
     )
@@ -136,16 +140,23 @@ class ChooseSpecs extends Component {
     return (
       <div className="row">
         <div className="col-4">
-          <Paper className={classes.root}>
+          {/* <Paper className={classes.root}> */}
             <FormControl className={classes.formControl}>
               {this.state.specInputHtml}
             </FormControl>
-          </Paper>
+          {/* </Paper> */}
         </div>
         <div className="col-8">
-        <Paper className={classes.root}>
-          {/* {this.state.expansionPanels ? this.state.expansionPanels : ''} */}
-          </Paper>
+          {/* <Paper className={classes.root}> */}
+          <h4>Choose From Previous Specs</h4>
+            <SpecsTable 
+              index={this.props.index}
+              specs={this.props.specs[this.props.index]}
+              params={Object.keys(this.props.specParams[this.props.index])}
+              updateSelectedSpecs={this.props.updateSelectedSpec}
+              selectedSpecs={this.props.selectedSpec}
+            />
+          {/* </Paper> */}
         </div>
       </div>
     );

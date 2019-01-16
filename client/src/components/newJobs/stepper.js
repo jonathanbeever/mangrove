@@ -34,7 +34,16 @@ function getStepContent(step, props) {
     case 1:
       return <ChooseIndex index={props.index} changeIndex={props.changeIndex} />;
     case 2:
-      return <ChooseSpecs index={props.index} specParams={props.specParams} onSpecChange={props.onSpecChange} />;
+      return (
+        <ChooseSpecs 
+          index={props.index} 
+          specParams={props.specParams} 
+          onSpecChange={props.onSpecChange} 
+          updateSelectedSpec={props.updateSelectedSpec}
+          selectedSpec={props.selectedSpec}
+          specs={props.specs}
+        />
+      )
     default:
       return 'Unknown step';
   }
@@ -47,6 +56,11 @@ class HorizontalLinearStepper extends React.Component {
 
   handleNext = () => {
     const { activeStep } = this.state;
+
+    if(this.state.activeStep === getSteps().length - 1) {
+      this.props.submitJob()
+    }
+
     this.setState({
       activeStep: activeStep + 1
     });
@@ -95,9 +109,7 @@ class HorizontalLinearStepper extends React.Component {
           ) : (
             <div>
               <div>
-                {getStepContent(activeStep, this.props)}
-
-                <Button
+              <Button
                   disabled={activeStep === 0}
                   onClick={this.handleBack}
                   className={classes.button}
@@ -112,6 +124,9 @@ class HorizontalLinearStepper extends React.Component {
                 >
                   {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
+                {getStepContent(activeStep, this.props)}
+
+               
               </div>
             </div>
           )}
