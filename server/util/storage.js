@@ -1,4 +1,6 @@
 const fs = require('fs');
+const nodePath = require('path');
+
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 
@@ -8,63 +10,33 @@ settings.load();
 
 const inputDir = settings.value('inputDir');
 
-const getUploadPath = input => `${inputDir}/${input.site}/${input.series}`;
-
-function getParentDirectory(path) {
-  return path.substring(0, path.lastIndexOf('/'));
-}
+const getUploadPath = input => nodePath.join(inputDir, input.site, input.series);
 
 const copyFile = (source, dest) => {
-  if (fs.existsSync(source)) {
-    const path = getParentDirectory(dest);
-    mkdirp(path, (mkdirErr) => {
-      if (mkdirErr) {
-        throw mkdirErr;
-      } else {
-        fs.copyFile(source, dest, (copyErr) => {
-          if (copyErr) throw copyErr;
-        });
-      }
-    });
-  } else {
-    throw new Error(`No file found at ${source}`);
+  try {
+    if (fs.existsSync(source)) {
+      mkdirp.sync(nodePath.dirname(dest));
+      fs.copyFileSync(source, dest);
+    }
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
 };
-
-function deleteEmptyDirs(path) {
-  if (path !== inputDir) {
-    fs.rmdir(path, (err) => {
-      if (!err) {
-        deleteEmptyDirs(getParentDirectory(path));
-      }
-    });
-  }
-}
 
 const deleteInputFile = (path) => {
-  fs.unlink(path, (err) => {
-    if (err) {
-      console.error(err);
-    } else {
-      deleteEmptyDirs(getParentDirectory(path));
-    }
-  });
+  fs.unlinkSync(path);
+  if (fs.readdirSync(nodePath.dirname(path)).length <= 0) {
+    fs.rmdirSync(nodePath.dirname(path));
+  }
 };
 
-const deleteInputDir = (cb) => {
-  rimraf(inputDir, (err) => {
-    if (!err) {
-      cb();
-    } else {
-      console.error(err);
-    }
-  });
+const deleteInputDir = () => {
+  rimraf.sync(inputDir);
 };
 
 const deleteRootDir = () => {
-  rimraf(settings.rootDir, (err) => {
-    if (err) console.error(err);
-  });
+  rimraf.sync(settings.rootDir);
 };
 
 module.exports = {

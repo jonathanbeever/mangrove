@@ -37,9 +37,10 @@ describe('Jobs', () => {
   });
 
   beforeEach((done) => {
-    Job.deleteMany({}, (err) => {
-      done();
-    });
+    Job.deleteMany({})
+      .then(() => {
+        done();
+      });
   });
 
   describe('/PUT Job', () => {

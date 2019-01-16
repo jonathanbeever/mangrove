@@ -38,9 +38,10 @@ describe('Specs', () => {
   });
 
   beforeEach((done) => {
-    Spec.deleteMany({}, (err) => {
-      done();
-    });
+    Spec.deleteMany({})
+      .then(() => {
+        done();
+      });
   });
 
   describe('/PUT Specs', () => {

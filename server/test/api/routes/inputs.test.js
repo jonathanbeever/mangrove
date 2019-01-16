@@ -1,3 +1,4 @@
+const fs = require('fs');
 const chai = require('chai');
 const chaiFs = require('chai-fs');
 const chaiHttp = require('chai-http');
@@ -39,16 +40,16 @@ describe('Inputs', () => {
   });
 
   after(async () => {
-    await Promise.all([
-      mockDb.teardown(),
-      deleteRootDir(),
-    ]);
+    await mockDb.teardown();
+    deleteRootDir();
   });
 
   beforeEach((done) => {
-    Input.deleteMany({}, (err) => {
-      deleteInputDir(done);
-    });
+    Input.deleteMany({})
+      .then(() => {
+        deleteInputDir();
+        done();
+      });
   });
 
   describe('/PUT Input', () => {
@@ -351,7 +352,9 @@ describe('Inputs', () => {
               });
               done();
             })
-            .catch(err => done(err));
+            .catch((err) => {
+              done(err);
+            });
         })
         .catch((err) => {
           done(err);
@@ -360,7 +363,7 @@ describe('Inputs', () => {
   });
 
   describe('/DELETE Input', () => {
-    it('It should DELETE a Input (not found)', (done) => {
+    it('It should DELETE an Input (not found)', (done) => {
       chai
         .request(app)
         .delete(`/inputs/${nextMockObjectId()}`)
@@ -378,7 +381,7 @@ describe('Inputs', () => {
         });
     });
 
-    it('It should DELETE a Input (found)', (done) => {
+    it('It should DELETE an Input (found)', (done) => {
       const input = nextMockInput();
 
       Input.create(input)

@@ -1,3 +1,5 @@
+const nodePath = require('path');
+
 const { nextMockObjectId } = require('./mockObjectId');
 
 const settings = require('../../util/settings');
@@ -10,7 +12,7 @@ settings.load();
 const inputDir = settings.value('inputDir');
 
 function mockInput(_id, site, series, recordTimeMs, coords) {
-  const path = `${inputDir}/${site}/${series}/test.wav`;
+  const path = nodePath.join(inputDir, site, series, 'test.wav');
 
   storage.copyFile('./test/mock/wav/test.wav', path);
 
@@ -24,6 +26,7 @@ function mockInput(_id, site, series, recordTimeMs, coords) {
   });
 }
 
+// TODO: Support more than one new mocked Input
 const nextMockInput = () => {
   const inputId = nextMockObjectId();
   const site = 'UCF Arboretum';

@@ -1,6 +1,8 @@
+const os = require('os');
+const path = require('path');
+
 const settings = require('settings-store');
 const config = require('config');
-const os = require('os');
 
 const storage = config.get('storage');
 const settingsFile = config.get('settingsFile');
@@ -11,22 +13,22 @@ const settingsFile = config.get('settingsFile');
 const testSettings = [];
 
 const rootDir = config.util.getEnv('NODE_ENV') !== 'test'
-  ? `${os.homedir()}/${storage.root}`
-  : `${os.tmpdir()}/${storage.root}-test`;
+  ? path.join(os.homedir(), storage.root)
+  : path.join(os.tmpdir(), storage.root);
 
 const load = () => {
   if (config.util.getEnv('NODE_ENV') !== 'test') {
     settings.init({
       electronApp: false,
-      filename: `${rootDir}/${settingsFile}`,
+      filename: path.join(rootDir, settingsFile),
     });
 
     // TODO: Check to make sure we have ownership/access for this directory
     if (!settings.value('inputDir')) {
-      settings.setValue('inputDir', `${rootDir}/${storage.inputs}`);
+      settings.setValue('inputDir', path.join(rootDir, storage.inputs));
     }
   } else {
-    testSettings.inputDir = `${rootDir}/${storage.inputs}`;
+    testSettings.inputDir = path.join(rootDir, storage.inputs);
   }
 };
 

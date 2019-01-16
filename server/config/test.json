@@ -1,5 +1,8 @@
 {
   "dbConfig": {
     "dbName": "soundscape-ecology-test"
+  },
+  "storage": {
+    "root": ".sse-server-test"
   }
 }
