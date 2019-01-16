@@ -52,10 +52,30 @@ function getStepContent(step, props) {
 class HorizontalLinearStepper extends React.Component {
   state = {
     activeStep: 0,
+    disabledSubmit: false
   };
+
+  componentDidUpdate = (prevProps) => {
+    console.log(this.props)
+
+    if(prevProps.submitDisabled !== this.props.submitDisabled) {
+      if(this.state.activeStep === getSteps().length - 1)
+        this.setState({ disabledSubmit: this.props.submitDisabled })
+    }
+    if(prevProps.selectedSpec !== this.props.selectedSpec) {
+      if(this.props.selectedSpec.length)
+        this.setState({ disabledSubmit: false })
+      else
+        this.setState({ disabledSubmit: true })
+    }
+  }
 
   handleNext = () => {
     const { activeStep } = this.state;
+
+    if(this.state.activeStep === getSteps().length - 2) {
+      this.setState({ disabledSubmit: true })
+    }
 
     if(this.state.activeStep === getSteps().length - 1) {
       this.props.submitJob()
@@ -119,6 +139,7 @@ class HorizontalLinearStepper extends React.Component {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={this.state.disabledSubmit}
                   onClick={this.handleNext}
                   className={classes.button}
                 >

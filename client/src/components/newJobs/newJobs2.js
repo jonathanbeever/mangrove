@@ -44,7 +44,8 @@ class NewJobs extends Component {
           test: ''
         }
       },
-      selectedSpec: []
+      selectedSpec: [],
+      submitDisabled: false
     };
   }
 
@@ -69,7 +70,6 @@ class NewJobs extends Component {
   }
 
   changeIndex = (value) => {
-    console.log('is this called on click same spec?')
     // Clear specParamsByIndex for current index
     this.setState({ index: value })
   }
@@ -78,11 +78,20 @@ class NewJobs extends Component {
     var tempState = this.state.specParamsByIndex
 
     if(name !== 'shannon')
-      tempState[this.state.index][name] = parseInt(e.target.value)
+      tempState[this.state.index][name] = e.target.value
     else
       tempState[this.state.index][name] = e.target.checked
 
+    var submitDisabled = false
+    // update for shannon adi index
+    Object.keys(tempState[this.state.index]).forEach(param => {
+      if(!tempState[this.state.index][param].length) {
+        submitDisabled = true
+      }
+    })
+    this.setState({ submitDisabled: submitDisabled })
     this.setState({ specParamsByIndex: tempState })
+
     if(this.state.selectedSpec.length)
       this.setState({ selectedSpec: [] })
   }
@@ -97,12 +106,11 @@ class NewJobs extends Component {
         newParams[this.state.index][param] = ''
       })
       this.setState({ specParamsByIndex: newParams })
-      console.log(newParams)
     }
   }
 
   submitJob = () => {
-    console.log('hi')
+
     var inputs= ["5c3cbd27c012052a3c2d1099", "5c3cbd27c012052a3c2d1999", "5c3cbd27c012052a3c2d9999", "5c3cbd27c012052a3c299999"]
 
     // Spec already exists
@@ -114,7 +122,6 @@ class NewJobs extends Component {
           "http://localhost:3000/jobs",  
           {
             type: this.state.index,
-            // Add a document with this id to inputs collection until input api req is set up
             inputId: inputId,
             specId: this.state.selectedSpec[0]
           },
@@ -133,14 +140,13 @@ class NewJobs extends Component {
       // Create spec
       var body = this.state.specParamsByIndex[this.state.index]
       body.type = this.state.index
-      console.log(body)
+
       axios.put(
         "http://localhost:3000/specs",  
         body,
         {headers: {"Content-Type": "application/json"}}
       )
       .then(res => {
-        console.log(res)
         var specId = ''
           // If new spec was create set id
         if(res.status === 201) 
@@ -150,13 +156,11 @@ class NewJobs extends Component {
           specId = res.data.specId
         // Loop through inputs and make requests
         inputs.forEach(inputId => {
-          console.log(this.state.selectedIndex)
           // Request to queue new job
           axios.put(
             "http://localhost:3000/jobs",  
             {
               type: this.state.index,
-              // Add a document with this id to inputs collection until input api req is set up
               inputId: inputId,
               specId: specId
             },
@@ -176,7 +180,6 @@ class NewJobs extends Component {
 
   render() {
     return (
-      // Make this do stuff
       <div>
         <Stepper 
           changeIndex={this.changeIndex}
@@ -187,6 +190,7 @@ class NewJobs extends Component {
           selectedSpec={this.state.selectedSpec}
           specs={this.state.indexedSpecs}
           submitJob={this.submitJob}
+          submitDisabled={this.state.submitDisabled}
         />
       </div>
     );

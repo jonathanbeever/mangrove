@@ -45,29 +45,19 @@ class ChooseSpecs extends Component {
   }
 
   componentDidMount = () => {
-    // this.formatSpecTables()
-    console.log(this.props)
     this.formatSpecInput(this.props.specParams[this.props.index])
   }
-  // todo: mount functions w this
+
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
-    //   this.formatSpecTables()
       this.formatSpecInput(this.props.specParams[this.props.index])
     }
-  }
-
-  
-  onSubmitSpecs = () => {
-    // this.props.onSubmitSpecs(this.props.index)
-    // this.formatChipHtml()
   }
 
   formatSpecInput = (params) => {
     const {classes} = this.props
     // Format text field for each parameter
     var specInputHtml = Object.keys(params).map(param => {
-      console.log(this.props.specParams[this.props.index][param])
       if(param !== 'shannon') {
         return (
           <TextField
@@ -102,37 +92,14 @@ class ChooseSpecs extends Component {
         <h4>Define New Specs</h4>
         {specInputHtml} 
         <div className="row filterSubmit">
-          <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
+          {/* <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
             Apply Spec Choices
-          </Button>
+          </Button> */}
         </div>
       </div>
     )
     this.setState({ specInputHtml: specInputHtml })
   }
-
-//   formatSpecTables = () => {
-//     var expansionPanels = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms'].map(index => {
-//       if(this.props.ChooseedSpecs[index]){
-//         return (
-//           <ExpansionPanel 
-//             key={index}
-//             index={index}
-//             chosen={this.props.index}
-//             expanded={this.props.index === index} 
-//             specs={this.props.ChooseedSpecs[index]}
-//             params={Object.keys(this.props.specParams[index])}
-//             handleChange={this.props.handleIndexChange}
-//             updateSelectedSpecs={this.props.updateSelectedSpecs}
-//             selectedSpecs={this.props.selectedSpecs[index]}            
-//           />
-//         )      
-//       }
-//     })
-//     this.setState({ expansionPanels: <div>{expansionPanels}</div> })
-//   }
-
-
 
   render() {
     const { classes } = this.props;
