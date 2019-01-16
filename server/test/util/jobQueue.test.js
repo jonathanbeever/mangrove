@@ -77,9 +77,6 @@ describe('Scan on Start', () => {
 
   it('Scan Database for already Proccesing and Queued Jobs', (done) => {
     const randomJobs = makeRandomJobs(5);
-
-    printCountsWithNames(Status, randomJobs.statusCounter);
-    printCountsWithNames(Type, randomJobs.typeCounter);
     const countOfStatus = randomJobs.statusCounter;
 
 
@@ -87,11 +84,9 @@ describe('Scan on Start', () => {
       .then(() => {
         jobQueue.init(mockFreezeJob)
           .then((queue) => {
-            setTimeout(() => {
-              expect(queue.workersList().length)
-                .to.be.eql(getAwaitingJobs(countOfStatus, options.cores));
-              done();
-            }, 3000);
+            expect(queue.running() + queue.length())
+              .to.be.eql(getAwaitingJobs(countOfStatus, options.cores));
+            done();
           })
           .catch(err => done(err));
       })

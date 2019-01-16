@@ -76,6 +76,7 @@ function JobQueue() {
             }
           });
         });
+
         resolve({
           job: queuedJob,
           process,
@@ -125,7 +126,7 @@ function JobQueue() {
   this.init = jobProcessFn => new Promise((resolve, reject) => {
     createQueue(jobProcessFn)
       .then(() => {
-        this.queue.drain = () => { console.log('Drained'); };
+        this.queue.drain = () => { };
         queueAwaitingJobs()
           .then(() => { resolve(this.queue); })
           .catch(err => reject(err));
