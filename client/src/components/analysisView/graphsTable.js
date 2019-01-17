@@ -145,7 +145,34 @@ class GraphsTable extends React.Component {
           )
           break;
         case "bio":
-          // passedGraph =
+          if(obj.title === "Bioacoustic Spectrum Values")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                title={obj.title}
+                graph={<BAAreaChart
+                  results={obj.data}
+                  xAxisLabel={obj.xAxisLabel}
+                  yAxisLabel={obj.yAxisLabel}
+                  dataKey1={obj.dataKey1}
+                  dataKey2={obj.dataKey2}
+                />}
+              />
+            )
+          }else{
+            rows.push(
+              <GraphExpansionPanel
+                title={obj.title}
+                graph={<BALineChart
+                  results={obj.data}
+                  xAxisLabel={obj.xAxisLabel}
+                  yAxisLabel={obj.yAxisLabel}
+                  dataKey1={obj.dataKey1}
+                  dataKey2={obj.dataKey2}
+                />}
+              />
+            )
+          }
           break;
       }
     }

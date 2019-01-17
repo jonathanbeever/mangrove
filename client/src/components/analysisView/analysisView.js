@@ -1228,22 +1228,40 @@ function convertBAResults(jobs) {
       data: [],
       xAxisLabel: "File Name",
       yAxisLabel: "Area Value",
-      title: "Bioacoustic Value By File"
+      dataKey1: 'areaL',
+      dataKey2: 'areaR',
+      title: "Bioacoustic Area Value By File"
     },
     graph4:
     {
       data: [],
       xAxisLabel: "Date",
-      yAxisLabel: "Bioacoustic Value",
-      title: "Bioacoustic Value By Date"
+      yAxisLabel: "Area Value",
+      dataKey1: 'areaL',
+      dataKey2: 'areaR',
+      title: "Bioacoustic Area Value By Date"
     },
     graph5:
     {
       data: [],
       xAxisLabel: "Hour of Day",
-      yAxisLabel: "Bioacoustic Value",
-      title: "Bioacoustic Value By Hour"
+      yAxisLabel: "Area Value",
+      dataKey1: 'areaL',
+      dataKey2: 'areaR',
+      title: "Bioacoustic Area Value By Hour"
     }
+  }
+
+  for(var i = 0; i < dummy[0].input.result.freq_vals.length; i++)
+  {
+    let curObject =
+    {
+      name: dummy[0].input.result.freq_vals[i],
+      leftSpectrum: dummy[0].input.result.left_vals[i],
+      rightSpectrum: dummy[0].input.result.right_vals[i]
+    }
+
+    ret.graph1.data.push(curObject);
   }
 
   dummy.forEach(function(job)
@@ -1597,7 +1615,7 @@ class AnalysisView extends Component {
     console.log(this.props)
     console.log(this.props.selectedJobs[0].type)
     let graphs;
-    let dummyVal = "aei";
+    let dummyVal = "bio";
     // this.props.selectedJobs[0].type
     switch(dummyVal)
     {
