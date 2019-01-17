@@ -11,4 +11,6 @@ const setCores = (newCores) => {
 
 const getCores = () => options.cores;
 
-module.exports = { options, setCores, getCores };
+module.exports = {
+  options, setCores, getCores,
+};

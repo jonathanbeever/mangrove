@@ -26,9 +26,9 @@ const printCountsWithNames = (enumType, counts) => {
   console.log(friendlyCounts);
 };
 
-const getAwaitingJobs = (counts, maxInQueue) => {
+const getAwaitingJobs = (counts, maxInQueue = null) => {
   const numJobsAwaiting = counts[0] + counts[1] + counts[2];
-  if (numJobsAwaiting > maxInQueue) {
+  if (maxInQueue && numJobsAwaiting > maxInQueue) {
     return maxInQueue;
   }
   return numJobsAwaiting;
@@ -64,4 +64,6 @@ const makeRandomJobs = (numJobs) => {
 };
 
 
-module.exports = { makeRandomJobs, printCountsWithNames, getAwaitingJobs };
+module.exports = {
+  makeRandomJobs, printCountsWithNames, getAwaitingJobs,
+};

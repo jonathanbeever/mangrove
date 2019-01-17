@@ -41,8 +41,11 @@ const orderBasedonStatus = (jobs) => {
 const getAwaitingJobs = () => Job
   .find({ status: { $in: [Status.QUEUED, Status.PROCESSING, Status.WAITING] } })
   .then((waitingJobs) => {
-    const ordered = orderBasedonStatus(waitingJobs);
-    return ordered;
+    if (waitingJobs.length > 0) {
+      const ordered = orderBasedonStatus(waitingJobs);
+      return ordered;
+    }
+    return [];
   })
   .catch(err => new Error(err));
 
@@ -50,15 +53,21 @@ const getAwaitingJobs = () => Job
 function JobQueue() {
   this.queue = null;
 
-
-  this.enqueue = job => new Promise((resolve, reject) => {
+  const isInit = () => {
     if (!this.queue) {
       throw new Error('JobQueue has not been initialized.');
     }
+  };
+
+  this.enqueue = job => new Promise((resolve, reject) => {
+    isInit();
 
     Object.assign(job, { status: Status.QUEUED });
     updateJob(job)
       .then((queuedJob) => {
+        if (queuedJob === null) {
+          reject(new Error('Job must be made before it is queued'));
+        }
         const process = new Promise((resolveProcess, rejectProcess) => {
           this.queue.push(queuedJob, (err, processedJob) => {
             if (err) {
@@ -76,7 +85,6 @@ function JobQueue() {
             }
           });
         });
-
         resolve({
           job: queuedJob,
           process,
@@ -109,16 +117,20 @@ function JobQueue() {
     getAwaitingJobs()
       .then((awaitingJobs) => {
         let numJobsQueued = 0;
-        awaitingJobs.forEach(
-          (job) => {
-            this.enqueue(job)
-              .then(() => {
-                numJobsQueued += 1;
-                if (numJobsQueued === awaitingJobs.length) { resolve(); }
-              })
-              .catch(err => reject(err));
-          },
-        );
+        if (awaitingJobs.length > 0) {
+          awaitingJobs.forEach(
+            (job) => {
+              this.enqueue(job)
+                .then(() => {
+                  numJobsQueued += 1;
+                  if (numJobsQueued === awaitingJobs.length) { resolve(); }
+                })
+                .catch(err => reject(err));
+            },
+          );
+        } else {
+          resolve();
+        }
       })
       .catch(err => reject(new Error(err)));
   });
@@ -135,15 +147,28 @@ function JobQueue() {
   });
 
   this.uninit = () => {
+    isInit();
+
     this.queue.kill();
+
+    this.queue = null;
   };
 
 
-  // Get number of free slots
+  this.getFreeSlots = () => {
+    isInit();
+    if (this.queue.running() < this.queue.concurrency) {
+      return this.queue.concurrency - this.queue.running();
+    }
 
-  // Get jobs that are running
+    return 0;
+  };
 
-  // Batch Push function
+  this.getRunningJobs = () => {
+    isInit();
+
+    return this.queue.workersList();
+  };
 }
 
 module.exports = new JobQueue();
