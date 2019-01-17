@@ -210,6 +210,8 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
+    console.log(this.props.filteredInputs)
+
     var data = this.props.filteredInputs.map(input => {
       return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
     })
@@ -217,6 +219,8 @@ class EnhancedTable extends React.Component {
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
+    console.log(this.props.filteredInputs)
+
     if(prevProps !== this.props) {
       var data = this.props.filteredInputs.map(input => {
         return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
