@@ -40,7 +40,7 @@ function convertNDSIResults(jobs) {
       type: "ndsi",
       input:
       {
-        fileName: 'zoo1.wav',
+        fileName: 'zoo2.wav',
         siteName: 'Zoo',
         location: [65.01, 40.45],
         setName: 'ndsi-zoo',
@@ -66,7 +66,7 @@ function convertNDSIResults(jobs) {
       type: "ndsi",
       input:
       {
-        fileName: 'zoo1.wav',
+        fileName: 'zoo3.wav',
         siteName: 'Zoo',
         location: [65.01, 40.45],
         setName: 'ndsi-zoo',
@@ -83,7 +83,6 @@ function convertNDSIResults(jobs) {
         }
       }
     }
-
   ]
   let ret;
   let results = jobs[0].input.results;
@@ -161,6 +160,10 @@ function convertNDSIResults(jobs) {
     graph4: {
       data: [],
       title: "NDSI By Date"
+    },
+    graph5: {
+      data: [],
+      title: "NDSI By File"
     }
   }
 
@@ -226,6 +229,18 @@ function convertNDSIResults(jobs) {
 
     ret.graph3.data.push(curObject);
 
+    curObject = {
+      name: job.input.fileName,
+      ndsiL: job.input.result.ndsiL,
+      ndsiR: job.input.result.ndsiR,
+      biophonyL: job.input.result.biophonyL,
+      biophonyR: job.input.result.biophonyR,
+      anthrophonyL: job.input.result.anthrophonyL,
+      anthrophonyR: job.input.result.anthrophonyR
+    }
+
+    ret.graph5.data.push(curObject);
+
     oldDate = date;
   });
 
@@ -286,7 +301,7 @@ function convertACIResults(jobs) {
       type: "aci",
       input:
       {
-        fileName: 'zoo1.wav',
+        fileName: 'zoo2.wav',
         siteName: 'Zoo',
         location: [65.01, 40.45],
         setName: 'aci-zoo',
@@ -318,7 +333,7 @@ function convertACIResults(jobs) {
       type: "aci",
       input:
       {
-        fileName: 'zoo1.wav',
+        fileName: 'zoo3.wav',
         siteName: 'Zoo',
         location: [65.01, 40.45],
         setName: 'aci-zoo',
@@ -414,6 +429,15 @@ function convertACIResults(jobs) {
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight'
+    },
+    graph5:
+    {
+      data: [],
+      title: "ACI By File",
+      xAxisLabel: "File Name",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight'
     }
   }
 
@@ -484,6 +508,14 @@ function convertACIResults(jobs) {
 
     ret.graph3.data.push(curObject);
 
+    curObject =
+    {
+      name: job.input.fileName,
+      aciLeft: job.input.result.aciTotAllByMinL,
+      aciRight: job.input.result.aciTotAllByMinR
+    }
+
+    ret.graph5.data.push(curObject);
 
     oldDate = date;
   });
@@ -496,15 +528,122 @@ function convertACIResults(jobs) {
 }
 
 function convertADIResults(jobs) {
+  let dummy =
+  [
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "adi",
+      input:
+      {
+        fileName: 'zoo1.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'adi-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546256700000,
+        result:
+        {
+          adiL: 0.756939,
+          adiR: 0.880106,
+          ADIbandValsL:
+          [
+            0.892025,0.287221,0.034117,0.007972,0.002025,0.001403,0.002111,0.003300,0.000975,0.000163
+          ],
+          ADIbandValsR:
+          [
+            0.939887,0.461063,0.040144,0.010432,0.004177,0.003579,0.006541,0.008733,0.001916,0.000342
+          ],
+          ADIbandRangeL:
+          [
+            "0-1000 Hz", "1000-2000 Hz", "2000-3000 Hz", "3000-4000 Hz", "4000-5000 Hz", "5000-6000 Hz", "6000-7000 Hz", "7000-8000 Hz", "8000-9000 Hz", "9000-10000 Hz"
+          ]
+        }
+      }
+    },
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "adi",
+      input:
+      {
+        fileName: 'zoo2.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'adi-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546364700000,
+        result:
+        {
+          adiL: 0.422561,
+          adiR: 0.572998,
+          ADIbandValsL:
+          [
+            0.751965,0.100157,0.004404,0.001102,0.000078,0.000226,0.000404,0.001012,0.000533,0.000013
+          ],
+          ADIbandValsR:
+          [
+            0.846473,0.213751,0.006698,0.001828,0.000246,0.000366,0.000724,0.001300,0.000639,0.000021
+          ],
+          ADIbandRangeL:
+          [
+            "0-1000 Hz", "1000-2000 Hz", "2000-3000 Hz", "3000-4000 Hz", "4000-5000 Hz", "5000-6000 Hz", "6000-7000 Hz", "7000-8000 Hz", "8000-9000 Hz", "9000-10000 Hz"
+          ]
+        }
+      }
+    },
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "adi",
+      input:
+      {
+        fileName: 'zoo3.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'adi-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546472700000,
+        result:
+        {
+          adiL: 0.832728,
+          adiR: 1.016012,
+          ADIbandValsL:
+          [
+            0.911332,0.366856,0.046858,0.010224,0.002728,0.001698,0.002985,0.003218,0.001891,0.000315
+          ],
+          ADIbandValsR:
+          [
+            0.956205,0.585596,0.080472,0.017259,0.006842,0.005017,0.010970,0.013122,0.006182,0.000934
+          ],
+          ADIbandRangeL:
+          [
+            "0-1000 Hz", "1000-2000 Hz", "2000-3000 Hz", "3000-4000 Hz", "4000-5000 Hz", "5000-6000 Hz", "6000-7000 Hz", "7000-8000 Hz", "8000-9000 Hz", "9000-10000 Hz"
+          ]
+        }
+      }
+    }
+  ]
+
   let ret;
 
-  let arrLength = jobs[0].input.result.ADIbandValsL.length;
+  let arrLength = dummy[0].input.result.ADIbandValsL.length;
   let adiLTotal = 0;
   let adiRTotal = 0;
   let adiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
   let adiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
 
-  jobs.forEach(function(job){
+  // REMEMBER TO CHANGE DUMMY TO JOBS
+  dummy.forEach(function(job){
     adiLTotal += job.input.result.adiL;
     adiRTotal += job.input.result.adiR;
 
@@ -518,25 +657,47 @@ function convertADIResults(jobs) {
 
   });
 
-  let adiLAvg = adiLTotal / jobs.length;
-  let adiRAvg = adiRTotal / jobs.length;
+  // let adiLAvg = adiLTotal / jobs.length;
+  // let adiRAvg = adiRTotal / jobs.length;
+  //
+  // let adiLBand = adiLBandTemp.map(function(element){
+  //   return element / jobs.length;
+  // });
+  //
+  // let adiRBand = adiRBandTemp.map(function(element){
+  //   return element / jobs.length;
+  // });
+  let adiLAvg = adiLTotal / dummy.length;
+  let adiRAvg = adiRTotal / dummy.length;
 
   let adiLBand = adiLBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / dummy.length;
   });
 
   let adiRBand = adiRBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / dummy.length;
   });
 
   ret = {
     graph1:
     {
       data: [],
+      title: "ADI By Band Range",
+      xAxisLabel: "Hz Range",
+      dataKey1: "leftBandVal",
+      dataKey2: "rightBandVal",
+      refL: adiLAvg,
+      refR: adiRAvg
     },
     graph2:
     {
       data: [],
+      title: "ADI By File",
+      xAxisLabel: "File Name",
+      dataKey1: "leftADIVal",
+      dataKey2: "rightADIVal",
+      refL: adiLAvg,
+      refR: adiRAvg
     },
     // graph3:
     // {
@@ -555,6 +716,22 @@ function convertADIResults(jobs) {
     graph4:
     {
       data: [],
+      title: "ADI By Date",
+      xAxisLabel: "Date",
+      dataKey1: "leftADIVal",
+      dataKey2: "rightADIVal",
+      refL: adiLAvg,
+      refR: adiRAvg
+    },
+    graph5:
+    {
+      data: [],
+      title: "ADI By Hour",
+      xAxisLabel: "Hour of Day",
+      dataKey1: "leftADIVal",
+      dataKey2: "rightADIVal",
+      refL: adiLAvg,
+      refR: adiRAvg
     }
   }
 
@@ -562,7 +739,7 @@ function convertADIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].input.result.ADIbandRangeL[i],
+      name: dummy[0].input.result.ADIbandRangeL[i],
       leftBandVal: adiLBand[i],
       rightBandVal: adiRBand[i]
     }
@@ -570,43 +747,163 @@ function convertADIResults(jobs) {
     ret.graph1.data.push(curObject);
   }
 
-  for(i = 0; i < jobs.length; i++)
-  {
-    let curObject =
-    {
-      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-      leftADIVal: jobs[i].input.result.adiL,
-      rightADIVal: jobs[i].input.result.adiR
+  // for(i = 0; i < dummy.length; i++)
+  // {
+  //   let curObject =
+  //   {
+  //     name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+  //     leftADIVal: jobs[i].input.result.adiL,
+  //     rightADIVal: jobs[i].input.result.adiR
+  //   }
+  //
+  //   ret.graph2.data.push(curObject);
+  // }
+  let dayDate;
+  let oldDate = new Date(18000000);
+  let dateObject;
+  let counter;
+  dummy.forEach(function(job){
+    let date = new Date(job.input.recordTimeMs);
+    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    let curObject;
+    if(oldDateString === dayDate){
+      // we are still on same day
+
+      dateObject.leftADIVal += job.input.result.adiL;
+      dateObject.rightADIVal += job.input.result.adiR;
+      counter += 1;
+
+    }else{
+      // we are on a new day
+      if(oldDateString !== '1/1/1970')
+      {
+        dateObject.leftADIVal /= counter;
+        dateObject.rightADIVal /= counter;
+        ret.graph4.data.push(dateObject);
+      }
+      counter = 0;
+
+      dateObject =
+      {
+        name: dayDate,
+        leftADIVal: job.input.result.adiL,
+        rightADIVal: job.input.result.adiR
+      }
+      counter += 1;
     }
 
-    ret.graph2.data.push(curObject);
-  }
+    curObject =
+    {
+      name: date.getHours() + ':' + date.getMinutes(),
+      leftADIVal: job.input.result.adiL,
+      rightADIVal: job.input.result.adiR
+    }
 
-  jobs.forEach(function(job){
-    let curObject =
+    ret.graph5.data.push(curObject);
+
+    curObject =
     {
       name: job.input.fileName,
       leftADIVal: job.input.result.adiL,
       rightADIVal: job.input.result.adiR
     }
 
-    ret.graph4.data.push(curObject);
+    ret.graph2.data.push(curObject);
+
+    oldDate = date;
   });
 
+  dateObject.leftADIVal /= counter;
+  dateObject.rightADIVal /= counter;
+  ret.graph4.data.push(dateObject);
 
   return ret;
 }
 
 function convertAEIResults(jobs) {
+  let dummy =
+  [
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "aei",
+      input:
+      {
+        fileName: 'zoo1.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'aei-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546256700000,
+        result:
+        {
+          aeiL: 0.871222,
+          aeiR: 0.853358,
+          AEIbandValsL:
+          [
+            0.751965,0.100157,0.004404,0.001102,0.000078,0.000226,0.000404,0.001012,0.000533,0.000013
+          ],
+          AEIbandValsR:
+          [
+            0.846473,0.213751,0.006698,0.001828,0.000246,0.000366,0.000724,0.0013,0.000639,0.000021
+          ],
+          AEIbandRangeL:
+          [
+            "0-1000 Hz", "1000-2000 Hz", "2000-3000 Hz", "3000-4000 Hz", "4000-5000 Hz", "5000-6000 Hz", "6000-7000 Hz", "7000-8000 Hz", "8000-9000 Hz", "9000-10000 Hz"
+          ]
+        }
+      }
+    },
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "aei",
+      input:
+      {
+        fileName: 'zoo2.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'aei-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546364700000,
+        result:
+        {
+          aeiL: 0.829447,
+          aeiR: 0.80401,
+          AEIbandValsL:
+          [
+            0.892025,0.287221,0.034117,0.007972,0.002025,0.001403,0.002111,0.0033,0.000975,0.000163
+          ],
+          AEIbandValsR:
+          [
+            0.939887,0.461063,0.040144,0.010432,0.004177,0.003579,0.006541,0.008733,0.001916,0.000342
+          ],
+          AEIbandRangeL:
+          [
+            "0-1000 Hz", "1000-2000 Hz", "2000-3000 Hz", "3000-4000 Hz", "4000-5000 Hz", "5000-6000 Hz", "6000-7000 Hz", "7000-8000 Hz", "8000-9000 Hz", "9000-10000 Hz"
+          ]
+        }
+      }
+    }
+  ]
+
   let ret;
 
-  let arrLength = jobs[0].input.result.AEIbandValsL.length;
+  let arrLength = dummy[0].input.result.AEIbandValsL.length;
   let aeiLTotal = 0;
   let aeiRTotal = 0;
   let aeiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
   let aeiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
 
-  jobs.forEach(function(job){
+  // REMEMBER TO CHANGE DUMMY TO JOBS
+  dummy.forEach(function(job){
     aeiLTotal += job.input.result.aeiL;
     aeiRTotal += job.input.result.aeiR;
 
@@ -620,40 +917,77 @@ function convertAEIResults(jobs) {
 
   });
 
-  let aeiLAvg = aeiLTotal / jobs.length;
-  let aeiRAvg = aeiRTotal / jobs.length;
+  // let adiLAvg = adiLTotal / jobs.length;
+  // let adiRAvg = adiRTotal / jobs.length;
+  //
+  // let adiLBand = adiLBandTemp.map(function(element){
+  //   return element / jobs.length;
+  // });
+  //
+  // let adiRBand = adiRBandTemp.map(function(element){
+  //   return element / jobs.length;
+  // });
+  let aeiLAvg = aeiLTotal / dummy.length;
+  let aeiRAvg = aeiRTotal / dummy.length;
 
   let aeiLBand = aeiLBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / dummy.length;
   });
 
   let aeiRBand = aeiRBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / dummy.length;
   });
 
   ret = {
     graph1:
     {
       data: [],
+      title: "AEI By Band Range",
+      dataKey1: "leftBandVal",
+      dataKey2: "rightBandVal",
+      refL: aeiLAvg,
+      refR: aeiRAvg
     },
     graph2:
     {
       data: [],
+      title: "AEI By File",
+      dataKey1: "leftAEIVal",
+      dataKey2: "rightAEIVal",
+      refL: aeiLAvg,
+      refR: aeiRAvg
     },
     // graph3:
-    // [
-    //   {
-    //     name: 'AEI Left Channel',
-    //     data: aeiLAvg
-    //   },
-    //   {
-    //     name: 'AEI Right Channel',
-    //     data: aeiRAvg
-    //   }
-    // ],
+    // {
+    //   data:
+    //   [
+    //     {
+    //       name: 'ADI Left Channel',
+    //       data: adiLAvg
+    //     },
+    //     {
+    //       name: 'ADI Right Channel',
+    //       data: adiRAvg
+    //     }
+    //   ]
+    // },
     graph4:
     {
       data: [],
+      title: "AEI By Date",
+      dataKey1: "leftAEIVal",
+      dataKey2: "rightAEIVal",
+      refL: aeiLAvg,
+      refR: aeiRAvg
+    },
+    graph5:
+    {
+      data: [],
+      title: "AEI By Hour",
+      dataKey1: "leftAEIVal",
+      dataKey2: "rightAEIVal",
+      refL: aeiLAvg,
+      refR: aeiRAvg
     }
   }
 
@@ -661,7 +995,7 @@ function convertAEIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].input.result.AEIbandRangeL[i],
+      name: dummy[0].input.result.AEIbandRangeL[i],
       leftBandVal: aeiLBand[i],
       rightBandVal: aeiRBand[i]
     }
@@ -669,19 +1003,71 @@ function convertAEIResults(jobs) {
     ret.graph1.data.push(curObject);
   }
 
-  for(i = 0; i < jobs.length; i++)
-  {
-    let curObject =
-    {
-      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-      leftAEIVal: jobs[i].input.result.aeiL,
-      rightAEIVal: jobs[i].input.result.aeiR
+  // for(i = 0; i < dummy.length; i++)
+  // {
+  //   let curObject =
+  //   {
+  //     name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+  //     leftADIVal: jobs[i].input.result.adiL,
+  //     rightADIVal: jobs[i].input.result.adiR
+  //   }
+  //
+  //   ret.graph2.data.push(curObject);
+  // }
+  let dayDate;
+  let oldDate = new Date(18000000);
+  let dateObject;
+  let counter;
+  dummy.forEach(function(job){
+    let date = new Date(job.input.recordTimeMs);
+    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    let curObject;
+    if(oldDateString === dayDate){
+      // we are still on same day
+
+      dateObject.leftAEIVal += job.input.result.aeiL;
+      dateObject.rightAEIVal += job.input.result.aeiR;
+      counter += 1;
+
+    }else{
+      // we are on a new day
+      if(oldDateString !== '1/1/1970')
+      {
+        dateObject.leftAEIVal /= counter;
+        dateObject.rightAEIVal /= counter;
+        ret.graph4.data.push(dateObject);
+      }
+      counter = 0;
+
+      dateObject =
+      {
+        name: dayDate,
+        leftAEIVal: job.input.result.aeiL,
+        rightAEIVal: job.input.result.aeiR
+      }
+      counter += 1;
     }
 
-    ret.graph2.data.push(curObject);
-  }
+    curObject =
+    {
+      name: date.getHours() + ':' + date.getMinutes(),
+      leftAEIVal: job.input.result.aeiL,
+      rightAEIVal: job.input.result.aeiR
+    }
 
-  jobs.forEach(function(job){
+    ret.graph5.data.push(curObject);
+
+
+    oldDate = date;
+  });
+
+  dateObject.leftAEIVal /= counter;
+  dateObject.rightAEIVal /= counter;
+  ret.graph4.data.push(dateObject);
+
+  // REMEMBER TO CHANGE DUMMY TO JOBS
+  dummy.forEach(function(job){
     let curObject =
     {
       name: job.input.fileName,
@@ -689,20 +1075,126 @@ function convertAEIResults(jobs) {
       rightAEIVal: job.input.result.aeiR
     }
 
-    ret.graph4.data.push(curObject);
+    ret.graph2.data.push(curObject);
   });
 
-  return ret;
 
+  return ret;
 }
 
 function convertBAResults(jobs) {
+  let dummy =
+  [
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "bio",
+      input:
+      {
+        fileName: 'zoo1.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'bio-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546256700000,
+        result:
+        {
+          areaL: 0.6451159,
+          areaR: 0.829507,
+          left_vals:
+          [
+            14.78074,12.50847,11.91942,11.59349,10.01699,8.641622,7.963855,7.214301,6.257604,4.994479,3.341444,1.930505,1.20509,0.8361957,0.8174696,0.8214512,0.583448,0.5013964,0.6543399,0.5639083,0.000496336,0,0.3842849,0.5360441,0.3041442,0.3746912,0.6730928,0.8992846,1.399323,2.4297,2.5339,2.355803,1.922244
+          ],
+          right_vals:
+          [
+            17.15977,14.63606,13.49024,12.25308,9.901856,7.926137,6.735103,6.096593,5.600422,4.736773,3.835962,3.621392,3.193482,2.702707,2.153836,1.502825,0.4134572,0,0.5042202,0.9874997,1.647811,2.876528,2.786058,2.490454,2.28792,2.666435,2.938134,2.998278,3.127742,3.568007,3.988144,3.76443,2.941209
+          ],
+          freq_vals:
+          [
+            2000,2187.5,2375,2562.5,2750,2937.5,3125,3312.5,3500,3687.5,3875,4062.5,4250,4437.5,4625,4812.5,5000,5187.5,5375,5562.5,5750,5937.5,6125,6312.5,6500,6687.5,6875,7062.5,7250,7437.5,7625,7812.5,8000
+          ]
+        }
+      }
+    },
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "bio",
+      input:
+      {
+        fileName: 'zoo2.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'bio-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546364700000,
+        result:
+        {
+          areaL: 0.7770028,
+          areaR: 0.7816827,
+          left_vals:
+          [
+            17.12023,14.42747,12.49359,11.27033,9.918906,9.045644,8.703672,8.036567,7.246185,6.186023,4.37594,2.690196,1.656979,1.1892,0.5869705,0,0.2554187,0.4916753,0.8501944,0.9606614,0.9304718,1.41127,2.091824,2.347197,1.941646,1.696178,1.76195,1.745333,2.089528,2.820946,3.097711,2.975715,3.272411
+          ],
+          right_vals:
+          [
+            19.07617,16.26647,14.09017,12.35827,10.01075,8.207769,7.193133,6.512431,6.14896,5.465525,4.20662,3.438141,2.803433,1.935244,0.8911292,0.06813343,0,0.1188662,0.2249009,0.3607327,0.9806225,1.806688,2.528963,2.46349,2.198422,1.916554,1.76771,1.447198,1.442189,2.113484,2.887051,3.042816,2.593475
+          ],
+          freq_vals:
+          [
+            2000,2187.5,2375,2562.5,2750,2937.5,3125,3312.5,3500,3687.5,3875,4062.5,4250,4437.5,4625,4812.5,5000,5187.5,5375,5562.5,5750,5937.5,6125,6312.5,6500,6687.5,6875,7062.5,7250,7437.5,7625,7812.5,8000
+          ]
+        }
+      }
+    },
+    {
+      author: "Test Author",
+      creationTimeMs: 1547505059899,
+      status: "queued",
+      spec: "5c3d0d73c5f0c52b109deaae",
+      jobId: "5c3d0da3c5f0c52b109deab0",
+      type: "bio",
+      input:
+      {
+        fileName: 'zoo3.wav',
+        siteName: 'Zoo',
+        location: [65.01, 40.45],
+        setName: 'bio-zoo',
+        location: 'UCF Arboretum',
+        recordTimeMs: 1546472700000,
+        result:
+        {
+          areaL: 0.6809801,
+          areaR: 0.8068494,
+          left_vals:
+          [
+            15.01446,12.58321,11.27578,10.90951,10.21692,9.195222,8.353143,7.449305,6.465226,5.382576,3.765176,2.449423,1.525106,1.11982,0.9269903,0.7772411,0.6730212,0.6164985,0.589633,0.5221676,0.1582238,0,0.2052244,0.5149465,1.156213,2.059244,2.168106,1.56367,1.597499,2.08792,2.381519,2.354896,1.625883
+          ],
+          right_vals:
+          [
+            17.57922,14.88695,12.93193,12.17206,11.33019,9.393069,7.075133,6.153808,5.468206,4.410197,3.706467,3.609446,2.957129,2.326746,1.570941,0.9988984,0.3658344,0,0.2392163,0.6159139,1.213047,1.909011,1.623588,1.468395,2.156513,3.002484,2.963285,2.78693,3.215803,3.710337,3.725766,3.232298,2.485453
+          ],
+          freq_vals:
+          [
+            2000,2187.5,2375,2562.5,2750,2937.5,3125,3312.5,3500,3687.5,3875,4062.5,4250,4437.5,4625,4812.5,5000,5187.5,5375,5562.5,5750,5937.5,6125,6312.5,6500,6687.5,6875,7062.5,7250,7437.5,7625,7812.5,8000
+          ]
+        }
+      }
+    }
+  ]
+
   let ret;
 
   let areaLTotal = 0;
   let areaRTotal = 0;
 
-  jobs.forEach(function(job){
+  dummy.forEach(function(job){
     areaLTotal += job.input.result.areaL;
     areaRTotal += job.input.result.areaR;
   });
@@ -714,7 +1206,8 @@ function convertBAResults(jobs) {
       xAxisLabel: "Hz Range",
       yAxisLabel: "Spectrum Value",
       dataKey1: 'leftSpectrum',
-      dataKey2: 'rightSpectrum'
+      dataKey2: 'rightSpectrum',
+      title: "Bioacoustic Spectrum Values"
     },
     // graph2:
     // {
@@ -734,24 +1227,88 @@ function convertBAResults(jobs) {
     {
       data: [],
       xAxisLabel: "File Name",
-      yAxisLabel: "Area Value"
+      yAxisLabel: "Area Value",
+      title: "Bioacoustic Value By File"
+    },
+    graph4:
+    {
+      data: [],
+      xAxisLabel: "Date",
+      yAxisLabel: "Bioacoustic Value",
+      title: "Bioacoustic Value By Date"
+    },
+    graph5:
+    {
+      data: [],
+      xAxisLabel: "Hour of Day",
+      yAxisLabel: "Bioacoustic Value",
+      title: "Bioacoustic Value By Hour"
     }
   }
 
-  for(var i = 0; i < jobs.length; i++)
+  dummy.forEach(function(job)
   {
     let curObject = {
-      name: jobs[i].input.fileName,
-      areaL: jobs[i].input.result.areaL,
-      areaR: jobs[i].input.result.areaR
+      name: job.input.fileName,
+      areaL: job.input.result.areaL,
+      areaR: job.input.result.areaR
+    }
+    ret.graph3.data.push(curObject);
+  });
+
+  let dayDate;
+  let oldDate = new Date(18000000);
+  let dateObject;
+  let counter;
+  dummy.forEach(function(job){
+    let date = new Date(job.input.recordTimeMs);
+    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    let curObject;
+    if(oldDateString === dayDate){
+      // we are still on same day
+
+      dateObject.areaL += job.input.result.areaL;
+      dateObject.areaR += job.input.result.areaR;
+      counter += 1;
+
+    }else{
+      // we are on a new day
+      if(oldDateString !== '1/1/1970')
+      {
+        dateObject.areaL /= counter;
+        dateObject.areaR /= counter;
+        ret.graph4.data.push(dateObject);
+      }
+      counter = 0;
+
+      dateObject =
+      {
+        name: dayDate,
+        areaL: job.input.result.areaL,
+        areaR: job.input.result.areaR
+      }
+      counter += 1;
     }
 
-    ret.graph3.data.push(curObject);
-  }
+    curObject =
+    {
+      name: date.getHours() + ':' + date.getMinutes(),
+      areaL: job.input.result.areaL,
+      areaR: job.input.result.areaR
+    }
 
+    ret.graph5.data.push(curObject);
+
+
+    oldDate = date;
+  });
+
+  dateObject.areaL /= counter;
+  dateObject.areaR /= counter;
+  ret.graph4.data.push(dateObject);
 
   return ret;
-
 }
 
 function convertADIAEICompare(jobs) {
@@ -1040,7 +1597,9 @@ class AnalysisView extends Component {
     console.log(this.props)
     console.log(this.props.selectedJobs[0].type)
     let graphs;
-    switch(this.props.selectedJobs[0].type)
+    let dummyVal = "aei";
+    // this.props.selectedJobs[0].type
+    switch(dummyVal)
     {
       case "aci":
         graphs = convertACIResults(this.props.selectedJobs)
@@ -1073,7 +1632,7 @@ class AnalysisView extends Component {
           {this.props.selectedJobs[0].spec}
         </h4>
         <GraphsTable
-          index={this.props.selectedJobs[0].type}
+          index={dummyVal}
           graphs={graphs}
         />
       </div>

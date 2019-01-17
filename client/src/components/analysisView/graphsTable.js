@@ -118,11 +118,31 @@ class GraphsTable extends React.Component {
           rows.push(
             <GraphExpansionPanel
               title={obj.title}
+              graph={<ADILineChart
+                results={obj.data}
+                xAxisLabel={obj.xAxisLabel}
+                dataKey1={obj.dataKey1}
+                dataKey2={obj.dataKey2}
+                refL={obj.refL}
+                refR={obj.refR}
+              />}
             />
           )
           break;
         case "aei":
-          // passedGraph =
+          rows.push(
+            <GraphExpansionPanel
+              title={obj.title}
+              graph={<AEILineChart
+                results={obj.data}
+                xAxisLabel={obj.xAxisLabel}
+                dataKey1={obj.dataKey1}
+                dataKey2={obj.dataKey2}
+                refL={obj.refL}
+                refR={obj.refR}
+              />}
+            />
+          )
           break;
         case "bio":
           // passedGraph =
