@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
 import { withStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -7,7 +9,10 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GraphExpansionPanel from './graphExpansionPanel';
-import NDSICharts from '../infographs/NDSICharts';
+import NDSIChannelBarChart from '../infographs/NDSIChannelBarChart';
+import NDSIChannelLineChart from '../infographs/NDSIChannelLineChart';
+import NDSIValuesBarChart from '../infographs/NDSIValuesBarChart';
+import NDSIValuesLineChart from '../infographs/NDSIValuesLineChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ADILineChart from '../infographs/ADILineChart';
 import AEILineChart from '../infographs/AEILineChart';
@@ -25,7 +30,7 @@ const styles = theme => ({
     width: '100%',
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(24),
     fontWeight: theme.typography.fontWeightRegular,
   },
 });
@@ -35,7 +40,6 @@ class GraphsTable extends React.Component {
   render()
   {
     let graphs = this.props.graphs;
-    console.log(graphs)
     const rows = [];
 
     for (var key in this.props.graphs) {
@@ -43,52 +47,93 @@ class GraphsTable extends React.Component {
       if (!this.props.graphs.hasOwnProperty(key)) continue;
 
       var obj = this.props.graphs[key];
-      for (var prop in obj) {
-        // skip loop if the property is from prototype
-        if(!obj.hasOwnProperty(prop)) continue;
+      if(obj.title === "ACI By Date"){
+        console.log(obj)
+      }
+      switch(this.props.index)
+      {
+        case "aci":
+          rows.push(
+            <GraphExpansionPanel
+              title={obj.title}
+              graph={<ACILineChart
+                results={obj.data}
+                xAxisLabel={obj.xAxisLabel}
+                yAxisLabel={obj.yAxisLabel}
+                dataKey1={obj.dataKey1}
+                dataKey2={obj.dataKey2}
+              />}
+            />
+          )
+          break;
+        case "ndsi":
+          switch(obj.title)
+          {
+            case "NDSI By Channel":
+              rows.push(
+                <GraphExpansionPanel
+                  title={obj.title}
+                  graph={<NDSIChannelBarChart
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
+            case "NDSI Values":
+              rows.push(
+                <GraphExpansionPanel
+                  title={obj.title}
+                  graph={<NDSIValuesBarChart
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
+            case "NDSI By Hour":
+              rows.push(
+                <GraphExpansionPanel
+                  title={obj.title}
+                  graph={<NDSIValuesLineChart
+                    results={obj.data}
+                    xAxisLabel={"Hour of Day"}
+                  />}
+                />
+              )
+              break;
+            case "NDSI By Date":
+              rows.push(
+                <GraphExpansionPanel
+                  title={obj.title}
+                  graph={<NDSIValuesLineChart
+                    results={obj.data}
+                    xAxisLabel={"Date"}
+                  />}
+                />
+              )
+              break;
+          }
 
-        let xLabel = this.props.xAxisLabel;
-        let yLabel = this.props.yAxisLabel;
-
-        let firstDataKey = this.props.dataKey1;
-        let secondDataKey = this.props.dataKey2;
-
-        switch(this.props.index)
-        {
-          case "aci":
-            const passedGraph = ({}) => (
-              <ACILineChart
-                results={obj}
-                xAxisLabel="ACI Val"
-                yAxisLabel="ACI Val"
-              />
-            )
-            break;
-          case "ndsi":
-            passedGraph =
-            break;
-          case "adi":
-            passedGraph =
-            break;
-          case "aei":
-            passedGraph =
-            break;
-          case "bio":
-            passedGraph =
-            break;
-        }
-
-        rows.push(
-          // <GraphExpansionPanel
-          //   title={obj.title}
-          //   graph={passedGraph}
-          // />
-        )
+          break;
+        case "adi":
+          rows.push(
+            <GraphExpansionPanel
+              title={obj.title}
+            />
+          )
+          break;
+        case "aei":
+          // passedGraph =
+          break;
+        case "bio":
+          // passedGraph =
+          break;
       }
     }
 
     return(
-      {rows}
+      <Table>
+        <TableBody>{rows}</TableBody>
+      </Table>
     )
 
     // <div className={classes.root}>

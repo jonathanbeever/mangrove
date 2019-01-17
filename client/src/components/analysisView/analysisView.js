@@ -17,9 +17,9 @@ function convertNDSIResults(jobs) {
         fileName: 'zoo1.wav',
         siteName: 'Zoo',
         location: [65.01, 40.45],
-        setName: 'aci-zoo',
+        setName: 'ndsi-zoo',
         location: 'UCF Arboretum',
-        recordTimeMs: 1547505059899,
+        recordTimeMs: 1546256700000,
         result:
         {
           ndsiL:-0.3034096,
@@ -43,9 +43,9 @@ function convertNDSIResults(jobs) {
         fileName: 'zoo1.wav',
         siteName: 'Zoo',
         location: [65.01, 40.45],
-        setName: 'aci-zoo',
+        setName: 'ndsi-zoo',
         location: 'UCF Arboretum',
-        recordTimeMs: 1547505059899,
+        recordTimeMs: 1546364700000,
         result:
         {
           ndsiL:-0.6624246	,
@@ -69,9 +69,9 @@ function convertNDSIResults(jobs) {
         fileName: 'zoo1.wav',
         siteName: 'Zoo',
         location: [65.01, 40.45],
-        setName: 'aci-zoo',
+        setName: 'ndsi-zoo',
         location: 'UCF Arboretum',
-        recordTimeMs: 1547505059899,
+        recordTimeMs: 1546472700000,
         result:
         {
           ndsiL:-0.6826328	,
@@ -119,56 +119,104 @@ function convertNDSIResults(jobs) {
   let anthrophonyRAvg = anthrophonyRTotal / dummy.length;
 
   ret = {
-    graph1: [
-      { name: 'Left Channel',
-        ndsi: ndsiLAvg,
-        biophony: biophonyLAvg,
-        anthrophony: anthrophonyLAvg
-      },
-      { name: 'Right Channel',
-        ndsi: ndsiRAvg,
-        biophony: biophonyRAvg,
-        anthrophony: anthrophonyRAvg
-      }
-    ],
-    graph2: [
-      { name: 'NDSI',
-        leftChannel: ndsiLAvg,
-        rightChannel: ndsiRAvg
-      },
-      { name: 'Biophony',
-        leftChannel: biophonyLAvg,
-        rightChannel: biophonyRAvg
-      },
-      {
-        name: 'Anthrophony',
-        leftChannel: anthrophonyLAvg,
-        rightChannel: anthrophonyRAvg
-      }
-    ],
-    graph3: []
+    graph1: {
+      data:
+      [
+        { name: 'Left Channel',
+          ndsi: ndsiLAvg,
+          biophony: biophonyLAvg,
+          anthrophony: anthrophonyLAvg
+        },
+        { name: 'Right Channel',
+          ndsi: ndsiRAvg,
+          biophony: biophonyRAvg,
+          anthrophony: anthrophonyRAvg
+        }
+      ],
+      title: "NDSI Values"
+    },
+    graph2: {
+      data:
+      [
+        { name: 'NDSI',
+          leftChannel: ndsiLAvg,
+          rightChannel: ndsiRAvg
+        },
+        { name: 'Biophony',
+          leftChannel: biophonyLAvg,
+          rightChannel: biophonyRAvg
+        },
+        {
+          name: 'Anthrophony',
+          leftChannel: anthrophonyLAvg,
+          rightChannel: anthrophonyRAvg
+        }
+      ],
+      title: "NDSI By Channel"
+    },
+    graph3: {
+      data: [],
+      title: "NDSI By Hour"
+    },
+    graph4: {
+      data: [],
+      title: "NDSI By Date"
+    }
   }
 
-  // for(var i = 0; i < jobs.length; i++)
-  // {
-  //   let curObject = {
-  //     name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-  //     ndsiL: jobs[i].result.ndsiL,
-  //     ndsiR: jobs[i].result.ndsiR,
-  //     biophonyL: jobs[i].result.biophonyL,
-  //     biophonyR: jobs[i].result.biophonyR,
-  //     anthrophonyL: jobs[i].result.anthrophonyL,
-  //     anthrophonyR: jobs[i].result.anthrophonyR
-  //   }
-  //
-  //   ret.graph3.push(curObject);
-  // }
-
+  let dayDate;
+  let oldDate = new Date(18000000);
+  let dateObject;
+  let counter;
   dummy.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
-    let curObject = {
+    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    let curObject;
+
+    if(oldDateString === dayDate)
+    {
+      // we are still on same day
+      dateObject.ndsiL += job.input.result.ndsiL;
+      dateObject.ndsiR += job.input.result.ndsiR;
+      dateObject.biophonyL += job.input.result.biophonyL;
+      dateObject.biophonyR += job.input.result.biophonyR;
+      dateObject.anthrophonyL += job.input.result.anthrophonyL;
+      dateObject.anthrophonyR += job.input.result.anthrophonyR;
+
+      counter += 1;
+
+    }else{
+      // we are on a new day
+      if(oldDateString !== '1/1/1970'){
+
+        dateObject.ndsiL /= counter;
+        dateObject.ndsiR /= counter;
+        dateObject.biophonyL /= counter;
+        dateObject.biophonyR /= counter;
+        dateObject.anthrophonyL /= counter;
+        dateObject.anthrophonyR /= counter;
+
+        ret.graph4.data.push(dateObject);
+      }
+      counter = 0;
+
+      dateObject = {
+        name: dayDate,
+        ndsiL: job.input.result.ndsiL,
+        ndsiR: job.input.result.ndsiR,
+        biophonyL: job.input.result.biophonyL,
+        biophonyR: job.input.result.biophonyR,
+        anthrophonyL: job.input.result.anthrophonyL,
+        anthrophonyR: job.input.result.anthrophonyR
+      }
+
+      counter += 1;
+    }
+
+    curObject = {
       name: date.getHours() + ':' + date.getMinutes(),
-      ndsiL: job.result.ndsiL,
+      ndsiL: job.input.result.ndsiL,
       ndsiR: job.input.result.ndsiR,
       biophonyL: job.input.result.biophonyL,
       biophonyR: job.input.result.biophonyR,
@@ -176,11 +224,22 @@ function convertNDSIResults(jobs) {
       anthrophonyR: job.input.result.anthrophonyR
     }
 
-    ret.graph3.push(curObject);
+    ret.graph3.data.push(curObject);
+
+    oldDate = date;
   });
 
-  return ret;
+  dateObject.ndsiL /= counter;
+  dateObject.ndsiR /= counter;
+  dateObject.biophonyL /= counter;
+  dateObject.biophonyR /= counter;
+  dateObject.anthrophonyL /= counter;
+  dateObject.anthrophonyR /= counter;
 
+  ret.graph4.data.push(dateObject);
+
+
+  return ret;
 }
 
 function convertACIResults(jobs) {
@@ -192,7 +251,7 @@ function convertACIResults(jobs) {
       status: "queued",
       spec: "5c3d0d73c5f0c52b109deaae",
       jobId: "5c3d0da3c5f0c52b109deab0",
-      type: "ndsi",
+      type: "aci",
       input:
       {
         fileName: 'zoo1.wav',
@@ -200,7 +259,7 @@ function convertACIResults(jobs) {
         location: [65.01, 40.45],
         setName: 'aci-zoo',
         location: 'UCF Arboretum',
-        recordTimeMs: 1547505059899,
+        recordTimeMs: 1546256700000,
         result:
         {
           aciTotAllL: 18565.3,
@@ -224,7 +283,7 @@ function convertACIResults(jobs) {
       status: "queued",
       spec: "5c3d0d73c5f0c52b109deaae",
       jobId: "5c3d0da3c5f0c52b109deab0",
-      type: "ndsi",
+      type: "aci",
       input:
       {
         fileName: 'zoo1.wav',
@@ -232,7 +291,7 @@ function convertACIResults(jobs) {
         location: [65.01, 40.45],
         setName: 'aci-zoo',
         location: 'UCF Arboretum',
-        recordTimeMs: 1547505059899,
+        recordTimeMs: 1546364700000,
         result:
         {
           aciTotAllL: 18791.02,
@@ -256,7 +315,7 @@ function convertACIResults(jobs) {
       status: "queued",
       spec: "5c3d0d73c5f0c52b109deaae",
       jobId: "5c3d0da3c5f0c52b109deab0",
-      type: "ndsi",
+      type: "aci",
       input:
       {
         fileName: 'zoo1.wav',
@@ -264,7 +323,7 @@ function convertACIResults(jobs) {
         location: [65.01, 40.45],
         setName: 'aci-zoo',
         location: 'UCF Arboretum',
-        recordTimeMs: 1547505059899,
+        recordTimeMs: 1546472700000,
         result:
         {
           aciTotAllL: 18639.29,
@@ -285,7 +344,6 @@ function convertACIResults(jobs) {
 
   ]
 
-  console.log(jobs)
   let ret;
 
   let aciTotAllL = 0;
@@ -308,27 +366,55 @@ function convertACIResults(jobs) {
   });
 
   ret = {
-    graph1: [],
-    graph2:
-    [
-      {
-        name: 'ACI Total Left Channel',
-        data: aciTotAllL
-      },
-      {
-        name: 'ACI Total Right Channel',
-        data: aciTotAllR
-      },
-      {
-        name: 'ACI Total By Minutes Left Channel',
-        data: aciTotAllByMinL
-      },
-      {
-        name: 'ACI Total By Minutes Right Channel',
-        data: aciTotAllByMinR
-      }
-    ],
-    graph3: []
+    graph1:
+    {
+      data: [],
+      title: "ACI By Seconds",
+      xAxisLabel: "Time (s)",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight'
+    },
+    // graph2:
+    // {
+    //   data:
+    //   [
+    //     {
+    //       name: 'ACI Total Left Channel',
+    //       data: aciTotAllL
+    //     },
+    //     {
+    //       name: 'ACI Total Right Channel',
+    //       data: aciTotAllR
+    //     },
+    //     {
+    //       name: 'ACI Total By Minutes Left Channel',
+    //       data: aciTotAllByMinL
+    //     },
+    //     {
+    //       name: 'ACI Total By Minutes Right Channel',
+    //       data: aciTotAllByMinR
+    //     }
+    //   ]
+    // },
+    graph3:
+    {
+      data: [],
+      title: "ACI By Hour",
+      xAxisLabel: "Hour of Day",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight'
+    },
+    graph4:
+    {
+      data: [],
+      title: "ACI By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight'
+    }
   }
 
   for(var i = 0; i < aciFlValsL.length; i++)
@@ -340,7 +426,7 @@ function convertACIResults(jobs) {
       aciRight: aciFlValsR[i]
     }
 
-    ret.graph1.push(curObject);
+    ret.graph1.data.push(curObject);
   }
 
   // for(i = 0; i < jobs.length; i++)
@@ -354,20 +440,57 @@ function convertACIResults(jobs) {
   //
   //   ret.graph3.push(curObject);
   // }
-
+  let dayDate;
+  let oldDate = new Date(18000000);
+  let dateObject;
+  let counter;
   dummy.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
-    let curObject =
+    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    let curObject;
+    if(oldDateString === dayDate){
+      // we are still on same day
+
+      dateObject.aciLeft += job.input.result.aciTotAllByMinL;
+      dateObject.aciRight += job.input.result.aciTotAllByMinR;
+      counter += 1;
+
+    }else{
+      // we are on a new day
+      if(oldDateString !== '1/1/1970')
+      {
+        dateObject.aciLeft /= counter;
+        dateObject.aciRight /= counter;
+        ret.graph4.data.push(dateObject);
+      }
+      counter = 0;
+
+      dateObject =
+      {
+        name: dayDate,
+        aciLeft: job.input.result.aciTotAllByMinL,
+        aciRight: job.input.result.aciTotAllByMinR
+      }
+      counter += 1;
+    }
+
+    curObject =
     {
       name: date.getHours() + ':' + date.getMinutes(),
       aciLeft: job.input.result.aciTotAllByMinL,
       aciRight: job.input.result.aciTotAllByMinR
     }
 
-    ret.graph3.push(curObject);
+    ret.graph3.data.push(curObject);
 
+
+    oldDate = date;
   });
 
+  dateObject.aciLeft /= counter;
+  dateObject.aciRight /= counter;
+  ret.graph4.data.push(dateObject);
 
   return ret;
 }
@@ -407,20 +530,32 @@ function convertADIResults(jobs) {
   });
 
   ret = {
-    graph1: [],
-    graph2: [],
-    graph3:
-    [
-      {
-        name: 'ADI Left Channel',
-        data: adiLAvg
-      },
-      {
-        name: 'ADI Right Channel',
-        data: adiRAvg
-      }
-    ],
-    graph4: []
+    graph1:
+    {
+      data: [],
+    },
+    graph2:
+    {
+      data: [],
+    },
+    // graph3:
+    // {
+    //   data:
+    //   [
+    //     {
+    //       name: 'ADI Left Channel',
+    //       data: adiLAvg
+    //     },
+    //     {
+    //       name: 'ADI Right Channel',
+    //       data: adiRAvg
+    //     }
+    //   ]
+    // },
+    graph4:
+    {
+      data: [],
+    }
   }
 
   for(var i = 0; i < adiLBand.length; i++)
@@ -432,7 +567,7 @@ function convertADIResults(jobs) {
       rightBandVal: adiRBand[i]
     }
 
-    ret.graph1.push(curObject);
+    ret.graph1.data.push(curObject);
   }
 
   for(i = 0; i < jobs.length; i++)
@@ -444,7 +579,7 @@ function convertADIResults(jobs) {
       rightADIVal: jobs[i].input.result.adiR
     }
 
-    ret.graph2.push(curObject);
+    ret.graph2.data.push(curObject);
   }
 
   jobs.forEach(function(job){
@@ -455,7 +590,7 @@ function convertADIResults(jobs) {
       rightADIVal: job.input.result.adiR
     }
 
-    ret.graph4.push(curObject);
+    ret.graph4.data.push(curObject);
   });
 
 
@@ -497,20 +632,29 @@ function convertAEIResults(jobs) {
   });
 
   ret = {
-    graph1: [],
-    graph2: [],
-    graph3:
-    [
-      {
-        name: 'AEI Left Channel',
-        data: aeiLAvg
-      },
-      {
-        name: 'AEI Right Channel',
-        data: aeiRAvg
-      }
-    ],
-    graph4: []
+    graph1:
+    {
+      data: [],
+    },
+    graph2:
+    {
+      data: [],
+    },
+    // graph3:
+    // [
+    //   {
+    //     name: 'AEI Left Channel',
+    //     data: aeiLAvg
+    //   },
+    //   {
+    //     name: 'AEI Right Channel',
+    //     data: aeiRAvg
+    //   }
+    // ],
+    graph4:
+    {
+      data: [],
+    }
   }
 
   for(var i = 0; i < aeiLBand.length; i++)
@@ -522,7 +666,7 @@ function convertAEIResults(jobs) {
       rightBandVal: aeiRBand[i]
     }
 
-    ret.graph1.push(curObject);
+    ret.graph1.data.push(curObject);
   }
 
   for(i = 0; i < jobs.length; i++)
@@ -534,7 +678,7 @@ function convertAEIResults(jobs) {
       rightAEIVal: jobs[i].input.result.aeiR
     }
 
-    ret.graph2.push(curObject);
+    ret.graph2.data.push(curObject);
   }
 
   jobs.forEach(function(job){
@@ -545,7 +689,7 @@ function convertAEIResults(jobs) {
       rightAEIVal: job.input.result.aeiR
     }
 
-    ret.graph4.push(curObject);
+    ret.graph4.data.push(curObject);
   });
 
   return ret;
@@ -564,19 +708,34 @@ function convertBAResults(jobs) {
   });
 
   ret = {
-    graph1: [],
-    graph2:
-    [
-      {
-        name: 'Left Channel Area',
-        data: areaLTotal
-      },
-      {
-        name: 'Right Channel Area',
-        data: areaRTotal
-      }
-    ],
-    graph3: []
+    graph1:
+    {
+      data: [],
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "Spectrum Value",
+      dataKey1: 'leftSpectrum',
+      dataKey2: 'rightSpectrum'
+    },
+    // graph2:
+    // {
+    //   data:
+    //   [
+    //     {
+    //       name: 'Left Channel Area',
+    //       data: areaLTotal
+    //     },
+    //     {
+    //       name: 'Right Channel Area',
+    //       data: areaRTotal
+    //     }
+    //   ]
+    // },
+    graph3:
+    {
+      data: [],
+      xAxisLabel: "File Name",
+      yAxisLabel: "Area Value"
+    }
   }
 
   for(var i = 0; i < jobs.length; i++)
@@ -587,7 +746,7 @@ function convertBAResults(jobs) {
       areaR: jobs[i].input.result.areaR
     }
 
-    ret.graph3.push(curObject);
+    ret.graph3.data.push(curObject);
   }
 
 
@@ -874,15 +1033,14 @@ class AnalysisView extends Component {
   }
 
   componentDidMount = () => {
-    // console.log(this.props)
     this.formatJob(this.props.selectedResult)
   }
 
   formatJob = (props) => {
     console.log(this.props)
-    console.log(this.props.selectedJobs)
+    console.log(this.props.selectedJobs[0].type)
     let graphs;
-    switch(this.props.index)
+    switch(this.props.selectedJobs[0].type)
     {
       case "aci":
         graphs = convertACIResults(this.props.selectedJobs)
@@ -915,7 +1073,7 @@ class AnalysisView extends Component {
           {this.props.selectedJobs[0].spec}
         </h4>
         <GraphsTable
-          index={this.props.index}
+          index={this.props.selectedJobs[0].type}
           graphs={graphs}
         />
       </div>
