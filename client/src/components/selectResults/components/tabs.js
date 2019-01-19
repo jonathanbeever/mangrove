@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import FilterInputs from '../inputs/filterInputs';
 import FilterSpecs from '../specs/filterSpecs';
 import SelectJobs from '../jobs/selectJobs';
-// import AnalysisView from '../../analysisView/analysisView';
+import AnalysisView from '../../analysisView/analysisView';
 
 function TabContainer(props) {
   return (
@@ -56,8 +56,8 @@ class SimpleTabs extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange}>
-            <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Specifications</h5></div>} />
+            <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Jobs</h5></div>} />
             <Tab label={<div><h5>Analysis</h5></div>} />
           </Tabs>
@@ -109,12 +109,11 @@ class SimpleTabs extends React.Component {
             onSubmitFiltering={this.props.submitJobFilter}
           />
         </TabContainer>}
-        {/* {value === 3 && <TabContainer>
+        {value === 3 && <TabContainer>
           <AnalysisView
             selectedJobs={this.props.selectedIndexedJobs}          
-            index={this.props.selectedIndex}
           />
-        </TabContainer>} */}
+        </TabContainer>}
       </div>
     );
   }

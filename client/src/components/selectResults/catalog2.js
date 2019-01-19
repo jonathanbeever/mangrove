@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Tabs from './components/tabs';
 import axios from 'axios';
+import createMixins from '@material-ui/core/styles/createMixins';
 var _ = require('lodash');
 
 // TODO fix css
@@ -177,6 +178,7 @@ class Catalog extends Component {
   };
 
   submitIndexFilter = () => {
+    console.log(this.state.filteredInputs)
     var filteredInputs = this.state.filteredInputs.filter(file => {
       var matchingFile = ''
       if(!this.state.inputFiltering.siteName || this.state.inputFiltering.siteName.toLowerCase() === file.siteName.toLowerCase()) {
@@ -209,6 +211,8 @@ class Catalog extends Component {
     this.setState({ inputFiltering : inputFiltering })
 
     this.submitIndexFilter()
+
+    this.updateSelectedSpecs(this.state.selectedSpecs['aci'], 'aci')
   }
 
   // Array of inputIds selected in table
@@ -225,7 +229,7 @@ class Catalog extends Component {
         }
       })
     })
-    
+
     this.setState({ jobsFiltered: filteredJobByInputs })
     this.setState({ selectedInputs: selected })
   }
@@ -393,23 +397,43 @@ class Catalog extends Component {
       this.setState({ selectedInputs: selectedInputs })
       this.updateSelectedInputs(selectedInputs)
     }
+    this.setState({ selectedInputs: [] })
+    this.setState({ selectedJobs: [] })
   }
 
   updateSelectedJobs = (selected) => {
     this.setState({ selectedJobs: selected })
     var jobs = _.cloneDeep(this.state.jobsFiltered)
+    var jobsObj = {
+      'aci': {}, 
+      'ndsi': {}, 
+      'adi': {}, 
+      'aei': {}, 
+      'bi': {}, 
+      'rms': {}
+    }
 
-    var selectedJobs = jobs.filter(job => {
+    jobs.forEach(job => {
+      // If curr job is selected
       if(selected.indexOf(job.jobId) !== -1) {
-        var temp = job
-        temp.input = this.state.indexedFiles[job.input]
-        job = temp
-        
-        return job 
+        var jobSpecsByIndex = Object.keys(jobsObj[job.type])
+        if(jobSpecsByIndex.length) {
+          // if spec is already a property
+          if(jobSpecsByIndex.indexOf(job.spec) !== -1) {
+            jobsObj[job.type][job.spec].push(job)
+          }
+          // Add spec as property and set job in array
+          else {
+            jobsObj[job.type][job.spec] = [job]
+          }
+        }
+        else {
+          jobsObj[job.type][job.spec] = [job]
+        }
       }
-      return null;
     })
-    this.setState({ selectedIndexedJobs: selectedJobs })
+    console.log(jobsObj)
+    this.setState({ selectedIndexedJobs: jobsObj })
   }
 
   deleteSpecChip = (label) => {
@@ -434,6 +458,7 @@ class Catalog extends Component {
   handleSubmitJobFilter = () => {
     var filteredJobs = []
     this.state.allJobs.forEach(job => {
+      // TODO: multiple specs
       if(this.state.selectedSpecs[this.state.selectedIndex].indexOf(job.spec) !== -1) {
         if(this.state.selectedInputs.indexOf(job.input) !== -1) {
           if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {
