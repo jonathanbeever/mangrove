@@ -213,18 +213,20 @@ class Catalog extends Component {
 
   // Array of inputIds selected in table
   updateSelectedInputs = (selected) => {
-    var filteredJobByInputs = []
-    this.state.allJobs.forEach(job => {
-      console.log(job.input)
-    // return jobs if id in array 'selected'
-    // and spec id is in state selectedSpecs or no fitlering of specs has been done
-      if(selected.indexOf(job.input) !== -1) {
-        filteredJobByInputs.push(job)
-      }
-    })
+    const specs = this.state.selectedSpecs
+    const indices = Object.keys(this.state.selectedSpecs)
 
+    var filteredJobByInputs = []
+
+    this.state.allJobs.forEach(job => {
+      indices.forEach(index => {
+        if(selected.indexOf(job.input) !== -1 && specs[index].indexOf(job.spec) !== -1) {
+          filteredJobByInputs.push(job)
+        }
+      })
+    })
+    
     this.setState({ jobsFiltered: filteredJobByInputs })
-    // Set state selectedInputs for filtering
     this.setState({ selectedInputs: selected })
   }
 
@@ -381,6 +383,16 @@ class Catalog extends Component {
       matchingInputs = []
     }
     this.setState({ filteredInputs: matchingInputs})
+
+    if(this.state.selectedInputs.length) {
+      
+      var selectedInputs = this.state.selectedInputs.filter(inputId => {
+        if(inputs.indexOf(inputId) !== -1)
+          return inputId
+      })
+      this.setState({ selectedInputs: selectedInputs })
+      this.updateSelectedInputs(selectedInputs)
+    }
   }
 
   updateSelectedJobs = (selected) => {
