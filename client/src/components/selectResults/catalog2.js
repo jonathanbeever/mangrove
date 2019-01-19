@@ -6,7 +6,7 @@ var _ = require('lodash');
 // TODO fix css
 const inputFiles = [
   {
-    inputId: '5c2547480af83b2bac5133f1',
+    inputId: '5c3cbd27c012052a3c2d1099',
     siteName: 'Zoo',
     setName: 'aci-zoo',
     fileName: 'zoo1.wav',
@@ -49,18 +49,6 @@ const inputFiles = [
   }
 ]
 
-/**
- * filter by spec
- * spec1 spec2
- *  jobswspec1[] jobswspec2[]
- *  job1inputs[] job2inputs[]
- *  bothjobinputs[]
- *  list files, auto select all
- *  
- */
-
-
-
 class Catalog extends Component {
   constructor(props) {
     super(props);
@@ -73,7 +61,7 @@ class Catalog extends Component {
         longitude : ''
       },
       filteredInputs : [],
-      index: '',
+      index: 'aci',
       specParamsByIndex : {
         aci: {
           minFreq: '',
@@ -117,7 +105,16 @@ class Catalog extends Component {
         bi: [],
         rms: []
       },
+      filteredSpecs: {
+        aci: [],
+        ndsi: [],
+        adi: [],
+        aei: [],
+        bi: [],
+        rms: []
+      },
       selectedIndex: '',
+      specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']],
       jobFiltering: {
         author: ''
       },
@@ -217,18 +214,14 @@ class Catalog extends Component {
   // Array of inputIds selected in table
   updateSelectedInputs = (selected) => {
     var filteredJobByInputs = []
-    
-    if(this.state.selectedIndex.length) {
-      this.state.allJobs.forEach(job => {
-      // return jobs if id in array 'selected'
-      // and spec id is in state selectedSpecs or no fitlering of specs has been done
-        if(this.state.selectedSpecs[this.state.selectedIndex].indexOf(job.spec) !== -1) {
-          if(selected.indexOf(job.input) !== -1) {
-            filteredJobByInputs.push(job)
-          }
-        }
-      })
-    }
+    this.state.allJobs.forEach(job => {
+      console.log(job.input)
+    // return jobs if id in array 'selected'
+    // and spec id is in state selectedSpecs or no fitlering of specs has been done
+      if(selected.indexOf(job.input) !== -1) {
+        filteredJobByInputs.push(job)
+      }
+    })
 
     this.setState({ jobsFiltered: filteredJobByInputs })
     // Set state selectedInputs for filtering
@@ -320,13 +313,13 @@ class Catalog extends Component {
     specs[index] = selected
     this.setState({ selectedSpecs: specs})
 
-    console.log(this.state.selectedSpecs)
     var obj = {}
-    var inputs = this.state.matchingInputIds
-    console.log(inputs)
-    // Get inputs used in jobs with selected specs
-    if(selected.length > 0) {
-      selected.forEach(specId => {
+    if(selected.length)
+      var inputs = this.state.matchingInputIds
+
+    var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
+    indices.forEach(index => {
+      specs[index].forEach(specId => {
         obj[specId] = this.state.allJobs.map(job => {
           if(job.spec === specId)
             return job.input
@@ -337,60 +330,57 @@ class Catalog extends Component {
             return id
         })
       })
-
-      // Arr to hold common inputIds
-      var specIds = Object.keys(obj)
-
-      var startIndx = ''
-
-      if(!inputs.length) {
-        console.log('new')
-        obj[specIds[0]].forEach(input => {
-        // first in arr
-          // if(obj[specIds[1]].indexOf(input) !== -1) {
-            inputs.push(input)
-          // }
-        })
-        startIndx = 1
-      }
-      else 
-        startIndx = 0
-
-      const all = inputs.slice(0)
-
-      all.forEach(input => {
-        console.log(input)
-        for(var i = startIndx; i < specIds.length; i++) {
-          if(obj[specIds[i]].indexOf(input) === -1 && inputs.indexOf(input) !== -1) {
-            inputs.splice(inputs.indexOf(input), 1)
-          }
-        }
-      })
-      console.log(inputs)
-      this.setState({ matchingInputIds: inputs })
-    // }
-    // else {
-      // inputs = this.state.allJobs.map(job => {
-      //   if(job.spec === selected[0])
-      //     return job.input
-      //   else
-      //     return null
-      // }).filter(id => {
-      //   if(id !== null)
-      //     return id
-      // })
-      this.setState({ matchingInputIds: inputs })
-      console.log(inputs)
-    // this.setState({ matchingInputIds: inputs })
-    
-    var matchingInputs = inputs.map(input => {
-      return this.state.indexedFiles[input]
     })
 
-    console.log(matchingInputs)
-    this.setState({ filteredInputs: matchingInputs})
+    var specIds = Object.keys(obj)
+
+    if(specIds.length) {
+      var startIndx = ''
+      if(specIds.length > 1) {
+        if(!inputs.length) {
+          obj[specIds[0]].forEach(input => {
+            inputs.push(input)
+          })
+          startIndx = 1
+        }
+        else 
+          startIndx = 0
+          
+        const all = inputs.slice(0)
+          
+        all.forEach(input => {
+          for(var i = startIndx; i < specIds.length; i++) {
+            if(obj[specIds[i]].indexOf(input) === -1 && inputs.indexOf(input) !== -1) {
+              inputs.splice(inputs.indexOf(input), 1)
+            }
+          }
+        })
+      }
+      // One spec selected
+      else {
+        inputs = obj[specIds[0]]
+      }
+    }
+    // No specs selected
+    else {
+      inputs = []
+      this.setState({ matchingInputIds: [] })
     }
     
+    this.setState({ matchingInputIds: inputs })
+
+    if(inputs.length > 1) {
+      var matchingInputs = inputs.map(input => {
+        return this.state.indexedFiles[input]
+      })
+    }
+    else if(inputs.length === 1) {
+      matchingInputs = [this.state.indexedFiles[inputs[0]]]
+    }
+    else {
+      matchingInputs = []
+    }
+    this.setState({ filteredInputs: matchingInputs})
   }
 
   updateSelectedJobs = (selected) => {

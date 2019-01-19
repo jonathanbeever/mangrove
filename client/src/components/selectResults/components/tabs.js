@@ -63,17 +63,6 @@ class SimpleTabs extends React.Component {
           </Tabs>
         </AppBar>
         {value === 0 && <TabContainer>
-          <FilterInputs 
-            inputFiltering={this.props.inputFiltering}
-            onDelete={this.props.onDelete}
-            filteredInputs={this.props.filteredInputs}
-            onChange={this.props.onChange} 
-            onSubmitInput={this.props.onSubmitInput} 
-            updateSelectedInputs={this.props.updateSelectedInputs} 
-            selected={this.props.selectedInputs}
-          />
-        </TabContainer>}
-        {value === 1 && <TabContainer>
           <FilterSpecs 
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
@@ -85,6 +74,17 @@ class SimpleTabs extends React.Component {
             updateSelectedSpecs={this.props.updateSelectedSpecs}
             selectedSpecs={this.props.selectedSpecs}
             onDelete={this.props.deleteSpecChip}
+          />
+        </TabContainer>}
+        {value === 1 && <TabContainer>
+          <FilterInputs 
+            inputFiltering={this.props.inputFiltering}
+            onDelete={this.props.onDelete}
+            filteredInputs={this.props.filteredInputs}
+            onChange={this.props.onChange} 
+            onSubmitInput={this.props.onSubmitInput} 
+            updateSelectedInputs={this.props.updateSelectedInputs} 
+            selected={this.props.selectedInputs}
           />
         </TabContainer>}
         {value === 2 && <TabContainer>

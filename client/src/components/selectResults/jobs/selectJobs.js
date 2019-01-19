@@ -39,6 +39,7 @@ class SelectJobs extends Component {
   }
 
   componentDidMount = () => {
+    console.log(this.props)
     this.formatInputChipHtml()
     this.formatSpecFilterHtml()
   }
@@ -139,7 +140,7 @@ class SelectJobs extends Component {
           </div>
         </div>
         <div className="col-8">
-          {this.props.selectedIndex ? 
+          {/* {this.props.selectedIndex ?  */}
             <div>
               <JobsTable 
                 filteredJobs={this.props.filteredJobs}
@@ -151,9 +152,9 @@ class SelectJobs extends Component {
                 View Results
               </Button>
             </div>
-          :
-            <Paper className={classes.root}><h5>Please Select an Index and Parameter Specifications</h5></Paper>
-          }
+          {/* : */}
+            {/* <Paper className={classes.root}><h5>Please Select an Index and Parameter Specifications</h5></Paper> */}
+          {/* } */}
           
         </div>  
       </div>
