@@ -528,7 +528,6 @@ let dummyData =
 
 function convertNDSIResults(jobs) {
   let ret;
-  let results = jobs[0].input.results;
 
   let ndsiLTotal = 0;
   let ndsiRTotal = 0;
@@ -1606,7 +1605,6 @@ class AnalysisView extends Component {
     const rows = [];
     let specRows = [];
     let graphs;
-    let dummyVal = "bio";
 
     // When ready, change dummyData to whatever is being passed in the same format
     // loop through each input index
@@ -1617,7 +1615,7 @@ class AnalysisView extends Component {
       var obj = dummyData[index];
       specRows = [];
       for(var spec in obj) {
-        console.log(spec + " = " + obj[spec]);
+        // console.log(spec + " = " + obj[spec]);
         switch(index)
         {
           case "aci":
@@ -1642,7 +1640,7 @@ class AnalysisView extends Component {
         specRows.push(
           <ExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              {spec}
+              <p style={{fontSize: 16+'px'}}>{spec}</p>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SpecAnalysisPanel
@@ -1653,20 +1651,18 @@ class AnalysisView extends Component {
           </ExpansionPanel>
         )
 
-        console.log(specRows);
+        // console.log(specRows);
       }
 
       rows.push(
         <Paper>
-          <h3>{index.toUpperCase()}</h3>
+          <h3 style={{padding: 15+'px'}}>{index.toUpperCase()}</h3>
           <IndexAnalysisPanel
             specRows={specRows}
           />
         </Paper>
       )
     }
-
-    // this.props.selectedJobs[0].type
 
     var formattedJob = (
       <div>

@@ -10,10 +10,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    width: '110%',
   },
   heading: {
-    fontSize: theme.typography.pxToRem(15),
+    fontSize: theme.typography.pxToRem(24),
     fontWeight: theme.typography.fontWeightRegular,
   },
 });
@@ -30,7 +30,7 @@ function handleClick(e) {
    * compdidupdate props.expanded
    *  set state expanded
    */
-  console.log(e)
+  // console.log(e)
 }
 
 function SimpleExpansionPanel(props) {

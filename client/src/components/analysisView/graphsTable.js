@@ -30,7 +30,7 @@ const styles = theme => ({
     width: '100%',
   },
   heading: {
-    fontSize: theme.typography.pxToRem(24),
+    fontSize: theme.typography.pxToRem(2),
     fontWeight: theme.typography.fontWeightRegular,
   },
 });
@@ -47,9 +47,6 @@ class GraphsTable extends React.Component {
       if (!this.props.graphs.hasOwnProperty(key)) continue;
 
       var obj = this.props.graphs[key];
-      if(obj.title === "ACI By Date"){
-        console.log(obj)
-      }
       switch(this.props.index)
       {
         case "aci":

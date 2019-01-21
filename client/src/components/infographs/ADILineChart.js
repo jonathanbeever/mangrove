@@ -4,7 +4,7 @@ import Recharts, {LineChart, Line, XAxis, YAxis, ReferenceLine, CartesianGrid, T
 class ADILineChart extends Component {
 
   render(){
-    console.log(this.props);
+    // console.log(this.props);
 
     return(
       <div>

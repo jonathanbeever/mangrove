@@ -7,7 +7,7 @@ class NDSIChannelBarChart extends Component {
   render(){
 
     let data = this.props.results;
-    console.log(data);
+    // console.log(data);
 
     return(
       <div>
