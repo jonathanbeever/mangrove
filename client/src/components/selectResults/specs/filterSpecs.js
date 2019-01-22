@@ -48,6 +48,7 @@ class FilterSpecs extends Component {
   }
 
   componentDidMount = () => {
+    console.log(this.props)
     this.formatSpecTables()
     this.formatSpecInput(this.props.specParamsList)
     this.formatChipHtml()

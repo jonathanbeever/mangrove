@@ -56,24 +56,13 @@ class SimpleTabs extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Tabs value={value} onChange={this.handleChange}>
-            <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Specifications</h5></div>} />
+            <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Jobs</h5></div>} />
             <Tab label={<div><h5>Analysis</h5></div>} />
           </Tabs>
         </AppBar>
         {value === 0 && <TabContainer>
-          <FilterInputs 
-            inputFiltering={this.props.inputFiltering}
-            onDelete={this.props.onDelete}
-            filteredInputs={this.props.filteredInputs}
-            onChange={this.props.onChange} 
-            onSubmitInput={this.props.onSubmitInput} 
-            updateSelectedInputs={this.props.updateSelectedInputs} 
-            selected={this.props.selectedInputs}
-          />
-        </TabContainer>}
-        {value === 1 && <TabContainer>
           <FilterSpecs 
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
@@ -85,6 +74,17 @@ class SimpleTabs extends React.Component {
             updateSelectedSpecs={this.props.updateSelectedSpecs}
             selectedSpecs={this.props.selectedSpecs}
             onDelete={this.props.deleteSpecChip}
+          />
+        </TabContainer>}
+        {value === 1 && <TabContainer>
+          <FilterInputs 
+            inputFiltering={this.props.inputFiltering}
+            onDelete={this.props.onDelete}
+            filteredInputs={this.props.filteredInputs}
+            onChange={this.props.onChange} 
+            onSubmitInput={this.props.onSubmitInput} 
+            updateSelectedInputs={this.props.updateSelectedInputs} 
+            selected={this.props.selectedInputs}
           />
         </TabContainer>}
         {value === 2 && <TabContainer>
@@ -112,7 +112,6 @@ class SimpleTabs extends React.Component {
         {value === 3 && <TabContainer>
           <AnalysisView
             selectedJobs={this.props.selectedIndexedJobs}          
-            index={this.props.selectedIndex}
           />
         </TabContainer>}
       </div>

@@ -74,11 +74,11 @@ class EnhancedTableHead extends React.Component {
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
-            {/* <Checkbox
+            <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount && rowCount !== 0}
               onChange={onSelectAllClick}
-            /> */}
+            />
           </TableCell>
           {rows.map(row => {
             return (
@@ -360,23 +360,19 @@ class EnhancedTable extends React.Component {
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = [id];
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
-      newSelected = []
+      newSelected = newSelected.concat(selected.slice(1));
     } 
-    // if (selectedIndex === -1) {
-    //   newSelected = newSelected.concat(selected, id);
-    // } else if (selectedIndex === 0) {
-    //   newSelected = newSelected.concat(selected.slice(1));
-    // } 
-    // else if (selectedIndex === selected.length - 1) {
-    //   newSelected = newSelected.concat(selected.slice(0, -1));
-    // } else if (selectedIndex > 0) {
-    //   newSelected = newSelected.concat(
-    //     selected.slice(0, selectedIndex),
-    //     selected.slice(selectedIndex + 1),
-    //   );
-    // }
+    else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+    console.log(newSelected)
     // TODO: update for select some?
     this.props.updateSelectedSpecs(newSelected, this.props.index)
     this.setState({ selected: newSelected });
