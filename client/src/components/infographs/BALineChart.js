@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Recharts, {LineChart, Line, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import {LineChart, Line, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 class BALineChart extends Component {
 

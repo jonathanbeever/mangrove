@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Recharts, {AreaChart, Brush, Legend, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import {AreaChart, Brush, Legend, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 class BAAreaChart extends Component {
 

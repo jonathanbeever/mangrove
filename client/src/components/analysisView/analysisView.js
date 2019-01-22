@@ -3,13 +3,9 @@ import Paper from '@material-ui/core/Paper';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import GraphsTable from './graphsTable';
 import IndexAnalysisPanel from './indexAnalysisPanel';
 import SpecAnalysisPanel from './specAnalysisPanel';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 
 let dummyData =
 {
@@ -30,7 +26,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'aci-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546256700000,
           result:
           {
@@ -62,7 +58,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'aci-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546364700000,
           result:
           {
@@ -94,7 +90,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'aci-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546472700000,
           result:
           {
@@ -129,7 +125,7 @@ let dummyData =
         siteName: 'Zoo',
         location: [65.01, 40.45],
         setName: 'aci-zoo',
-        location: 'UCF Arboretum',
+        series: 'UCF Arboretum',
         recordTimeMs: 1546256700000,
         result:
         {
@@ -167,7 +163,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'ndsi-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546256700000,
           result:
           {
@@ -193,7 +189,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'ndsi-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546364700000,
           result:
           {
@@ -219,7 +215,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'ndsi-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546472700000,
           result:
           {
@@ -251,7 +247,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'adi-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546256700000,
           result:
           {
@@ -285,7 +281,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'adi-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546364700000,
           result:
           {
@@ -319,7 +315,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'adi-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546472700000,
           result:
           {
@@ -359,7 +355,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'aei-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546256700000,
           result:
           {
@@ -393,7 +389,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'aei-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546364700000,
           result:
           {
@@ -433,7 +429,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'bio-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546256700000,
           result:
           {
@@ -467,7 +463,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'bio-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546364700000,
           result:
           {
@@ -501,7 +497,7 @@ let dummyData =
           siteName: 'Zoo',
           location: [65.01, 40.45],
           setName: 'bio-zoo',
-          location: 'UCF Arboretum',
+          series: 'UCF Arboretum',
           recordTimeMs: 1546472700000,
           result:
           {
@@ -1638,13 +1634,14 @@ class AnalysisView extends Component {
         }
 
         specRows.push(
-          <ExpansionPanel>
+          <ExpansionPanel key={index + spec}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
               <p style={{fontSize: 16+'px'}}>{spec}</p>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SpecAnalysisPanel
                 index={index}
+                spec={spec}
                 graphs={graphs}
               />
             </ExpansionPanelDetails>
@@ -1655,7 +1652,7 @@ class AnalysisView extends Component {
       }
 
       rows.push(
-        <Paper>
+        <Paper key={index}>
           <h3 style={{padding: 15+'px'}}>{index.toUpperCase()}</h3>
           <IndexAnalysisPanel
             specRows={specRows}
@@ -1666,22 +1663,7 @@ class AnalysisView extends Component {
 
     var formattedJob = (
       <div>
-        {/*<h4>
-          {this.props.selectedJobs[0].input.siteName} - {this.props.index.toUpperCase()}
-        </h4>
-        <h4>
-          By: {this.props.selectedJobs[0].author}
-        </h4>
-        <h4>
-          {this.props.selectedJobs[0].spec}
-        </h4>
-        <GraphsTable
-          index={dummyVal}
-          graphs={graphs}
-        />*/}
-        <Table>
-          <TableBody>{rows}</TableBody>
-        </Table>
+        {rows}
       </div>
     )
     this.setState({ formattedJob: formattedJob })

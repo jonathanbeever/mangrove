@@ -1,27 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import { withStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import GraphExpansionPanel from './graphExpansionPanel';
 import NDSIChannelBarChart from '../infographs/NDSIChannelBarChart';
-import NDSIChannelLineChart from '../infographs/NDSIChannelLineChart';
 import NDSIValuesBarChart from '../infographs/NDSIValuesBarChart';
 import NDSIValuesLineChart from '../infographs/NDSIValuesLineChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ADILineChart from '../infographs/ADILineChart';
 import AEILineChart from '../infographs/AEILineChart';
-import ADIAEICharts from '../infographs/ADIAEICharts';
 import BAAreaChart from '../infographs/BAAreaChart';
-import CompareACIData from '../infographs/CompareACIData';
-import CompareBioData from '../infographs/CompareBioData';
-import OutlierLineChart from '../infographs/OutlierLineChart';
-import CompareNDSIData from '../infographs/CompareNDSIData';
 import BALineChart from '../infographs/BALineChart';
 
 
@@ -39,9 +25,9 @@ class GraphsTable extends React.Component {
 
   render()
   {
-    let graphs = this.props.graphs;
+    // let graphs = this.props.graphs;
     const rows = [];
-
+    let ctr = 1;
     for (var key in this.props.graphs) {
       // skip loop if the property is from prototype
       if (!this.props.graphs.hasOwnProperty(key)) continue;
@@ -52,6 +38,7 @@ class GraphsTable extends React.Component {
         case "aci":
           rows.push(
             <GraphExpansionPanel
+              key={'graph'+ctr}
               title={obj.title}
               graph={<ACILineChart
                 results={obj.data}
@@ -69,6 +56,7 @@ class GraphsTable extends React.Component {
             case "NDSI By Channel":
               rows.push(
                 <GraphExpansionPanel
+                  key={'graph'+ctr}
                   title={obj.title}
                   graph={<NDSIChannelBarChart
                     results={obj.data}
@@ -79,6 +67,7 @@ class GraphsTable extends React.Component {
             case "NDSI Values":
               rows.push(
                 <GraphExpansionPanel
+                  key={'graph'+ctr}
                   title={obj.title}
                   graph={<NDSIValuesBarChart
                     results={obj.data}
@@ -89,6 +78,7 @@ class GraphsTable extends React.Component {
             case "NDSI By Hour":
               rows.push(
                 <GraphExpansionPanel
+                  key={'graph'+ctr}
                   title={obj.title}
                   graph={<NDSIValuesLineChart
                     results={obj.data}
@@ -100,6 +90,7 @@ class GraphsTable extends React.Component {
             case "NDSI By Date":
               rows.push(
                 <GraphExpansionPanel
+                  key={'graph'+ctr}
                   title={obj.title}
                   graph={<NDSIValuesLineChart
                     results={obj.data}
@@ -114,6 +105,7 @@ class GraphsTable extends React.Component {
         case "adi":
           rows.push(
             <GraphExpansionPanel
+              key={'graph'+ctr}
               title={obj.title}
               graph={<ADILineChart
                 results={obj.data}
@@ -129,6 +121,7 @@ class GraphsTable extends React.Component {
         case "aei":
           rows.push(
             <GraphExpansionPanel
+              key={'graph'+ctr}
               title={obj.title}
               graph={<AEILineChart
                 results={obj.data}
@@ -146,6 +139,7 @@ class GraphsTable extends React.Component {
           {
             rows.push(
               <GraphExpansionPanel
+                key={'graph'+ctr}
                 title={obj.title}
                 graph={<BAAreaChart
                   results={obj.data}
@@ -159,6 +153,7 @@ class GraphsTable extends React.Component {
           }else{
             rows.push(
               <GraphExpansionPanel
+                key={'graph'+ctr}
                 title={obj.title}
                 graph={<BALineChart
                   results={obj.data}
@@ -172,12 +167,13 @@ class GraphsTable extends React.Component {
           }
           break;
       }
+      ctr++;
     }
 
     return(
-      <Table>
-        <TableBody>{rows}</TableBody>
-      </Table>
+      <div>
+        {rows}
+      </div>
     )
 
   }

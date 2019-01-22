@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Recharts, {LineChart, Line, Brush, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {LineChart, Line, Brush, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 
 class NDSIValuesLineChart extends Component {
