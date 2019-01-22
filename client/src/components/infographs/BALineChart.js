@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
-import Recharts, {LineChart, Line, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import {LineChart, Line, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 class BALineChart extends Component {
 
   render(){
-    let data = this.props.results;
-
-    let xLabel = this.props.xAxisLabel;
-    let yLabel = this.props.yAxisLabel;
 
     return(
       <div>
-          <LineChart width={900} height={600} data={data} syncId="anyId">
+          <LineChart width={900} height={600} data={this.props.results} syncId="anyId">
             <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey='name' label={xLabel}/>
-            <YAxis label={yLabel}/>
+            <XAxis dataKey='name' label={this.props.xAxisLabel}/>
+            <YAxis label={this.props.yAxisLabel}/>
             <Legend />
             <Tooltip/>
             <Line type='natural' dataKey='areaL' stroke='#8884d8' dot={false} />

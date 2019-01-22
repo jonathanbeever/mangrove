@@ -1,37 +1,5 @@
 import React, { Component } from 'react';
-import Recharts, {LineChart, Line, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
-
-// ret = {
-//   graph1: [
-//           { name: 'Left Channel',
-//             ndsi: results.ndsiL,
-//             biophony: results.biophonyL,
-//             anthrophony: results.anthrophonyL
-//           },
-//           { name: 'Right Channel',
-//             ndsi: results.ndsiR,
-//             biophony: results.biophonyR,
-//             anthrophony: results.anthrophonyR
-//           }
-//         ],
-//   graph2: [
-//           { name: 'NDSI',
-//             leftChannel: results.ndsiL,
-//             rightChannel: results.ndsiR
-//           },
-//           { name: 'Biophony',
-//             leftChannel: results.biophonyL,
-//             rightChannel: results.biophonyR
-//           },
-//           {
-//             name: 'Anthrophony',
-//             leftChannel: results.anthrophonyL,
-//             rightChannel: results.anthrophonyR
-//           }
-//         ]
-//   // graph3: []
-//   ]
-// }
+import {LineChart, Line, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 class ACILineChart extends Component {
 
