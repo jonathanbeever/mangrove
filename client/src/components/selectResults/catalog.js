@@ -517,7 +517,7 @@ class Catalog extends Component {
           selectedIndex={this.state.selectedIndex}
           // Tabs props
           showAnalysis={this.state.showAnalysis}
-          showFiltering={this.state.showFiltering}
+          showFiltering={this.showFiltering}
         />
       </div>
     );
