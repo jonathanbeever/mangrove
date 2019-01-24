@@ -10,7 +10,7 @@ const Type = require('../../api/models/type');
 const Status = require('../../api/models/status');
 
 const { updateJob } = require('../../api/models/job/utils');
-const { makeRandomJobs, getCountOfPendingJobs } = require('./queueHelpers');
+const { makeRandomJobs, getCountOfPendingJobs, testJobs } = require('./queueHelpers');
 const jobQueue = require('../../util/jobQueue');
 const { options } = require('../../util/queue_options');
 
@@ -80,44 +80,7 @@ describe('Job Queue', () => {
       .then(() => {
         Job.insertMany(jobs)
           .then(() => {
-            const firstJob = jobs[0];
-            const restofJobs = jobs.splice(1);
-
-
-            jobQueue.enqueue(firstJob)
-              .then(() => {
-                setTimeout(() => {
-                  expect(jobQueue.getFreeSlots()).to.be.eql(options.cores - 1);
-                  expect(jobQueue.getRunningJobs().length).to.be.eql(1);
-                  let numQueued = 0;
-                  restofJobs.forEach(
-                    (job) => {
-                      jobQueue.enqueue(job)
-                        .then(() => {
-                          numQueued += 1;
-                          if (numQueued === options.cores) {
-                            setTimeout(() => {
-                              expect(jobQueue.getFreeSlots()).to.be.eql(0);
-                              expect(jobQueue.getRunningJobs().length).to.be.eql(options.cores);
-                              expect(jobQueue.getRunningJobs().length + jobQueue.queue.length())
-                                .to.be.be.eql(options.cores + 1);
-                              jobQueue.destroy();
-                              done();
-                            }, 1000);
-                          }
-                        })
-                        .catch((err) => {
-                          jobQueue.destroy();
-                          return done(err);
-                        });
-                    },
-                  );
-                }, 1000);
-              })
-              .catch((err) => {
-                jobQueue.destroy();
-                return done(err);
-              });
+            testJobs(jobQueue, jobs, done);
           })
           .catch((err) => {
             jobQueue.destroy();

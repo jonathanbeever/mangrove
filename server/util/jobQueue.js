@@ -87,7 +87,7 @@ function JobQueue() {
     createQueue(jobProcessFn)
       .then(() => {
         this.queue.drain = () => { };
-        this.queue.empty = () => { console.log('Queue is Empty'); };
+        this.queue.empty = () => { };
         queuePendingJobs()
           .then(() => { resolve(this.queue); })
           .catch(err => reject(err));
