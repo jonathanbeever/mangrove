@@ -9,58 +9,17 @@ const { Job } = require('../../api/models/job');
 const Type = require('../../api/models/type');
 const Status = require('../../api/models/status');
 
-const { makeRandomJobs, getAwaitingJobs } = require('./queueHelpers');
+const { updateJob } = require('../../api/models/job/utils');
+const { makeRandomJobs, getCountOfPendingJobs } = require('./queueHelpers');
 const jobQueue = require('../../util/jobQueue');
 const { options } = require('../../util/queue_options');
 
-const { expect } = chai;
+const { expect, assert } = chai;
 
 chai.use(chaiAsPromised);
 
 describe('Job Queue', () => {
   before(async () => {
-    jobQueue.init(mockProcessJob);
-    await mockDb.setup();
-  });
-
-  after(async () => {
-    jobQueue.uninit();
-    await mockDb.teardown();
-  });
-
-  beforeEach((done) => {
-    Job.deleteMany({}, (err) => {
-      done();
-    });
-  });
-
-  it('Push Job to Queue', (done) => {
-    const job = nextMockJob(Type.ACI);
-    Job.create(job)
-      .then((createResult) => {
-        jobQueue.enqueue(createResult)
-          .then((qJobResult) => {
-            expect(qJobResult).to.have.all.keys('job', 'process');
-            expect(qJobResult.job.status).to.be.string(Status.QUEUED);
-            qJobResult.process
-              .then((processResult) => {
-                expect(processResult.status).to.be.string(Status.FINISHED);
-                expect(processResult.result).to.be.eql(mockResult);
-                done();
-              })
-              .catch((processedErr) => { done(processedErr); });
-          })
-          .catch((err) => { console.log(err); });
-      })
-      .catch((err) => {
-        done(err);
-      });
-  });
-});
-
-
-describe('Auxiliary Queue Functions', () => {
-  before(async () => {
     await mockDb.setup();
   });
 
@@ -74,38 +33,47 @@ describe('Auxiliary Queue Functions', () => {
     });
   });
 
+  it('Fail to Push to Uninitialized Queue', (done) => {
+    const [job] = makeRandomJobs(1).jobs;
+    assert.isRejected(jobQueue.enqueue(job), Error, 'JobQueue has not been initialized.');
+    done();
+  });
 
-  it('Scan Database for already Proccesing and Queued Jobs', (done) => {
+  it('Fail to Enqueue Job, Not In Database', (done) => {
+    const [job] = makeRandomJobs(1).jobs;
+
+    jobQueue.init().then(() => {
+      assert.isRejected(jobQueue.enqueue(job), Error, 'Job must be made before it is queued');
+      jobQueue.destroy();
+      done();
+    });
+  });
+
+  it('Scan Database for Already Proccesing and Queued Jobs', (done) => {
     const randomJobs = makeRandomJobs(50);
     const countOfStatus = randomJobs.statusCounter;
-
 
     Job.insertMany(randomJobs.jobs)
       .then(() => {
         jobQueue.init(mockFreezeJob)
           .then((queue) => {
             expect(queue.running() + queue.length())
-              .to.be.eql(getAwaitingJobs(countOfStatus));
-            jobQueue.uninit();
+              .to.be.eql(getCountOfPendingJobs(countOfStatus));
+            jobQueue.destroy();
             done();
           })
-          .catch(err => done(err));
+          .catch((err) => {
+            jobQueue.destroy();
+            return done(err);
+          });
       })
-      .catch(err => done(err));
+      .catch((err) => {
+        jobQueue.destroy();
+        return done(err);
+      });
   });
 
-  it('Uninitialize the queue', (done) => {
-    jobQueue.init(mockFreezeJob)
-      .then(() => {
-        expect(jobQueue.queue).to.be.not.null;
-        jobQueue.uninit();
-        expect(jobQueue.queue).to.be.null;
-        done();
-      })
-      .catch(err => done(err));
-  });
-
-  it('Get running Jobs and Free slots left', (done) => {
+  it('Get Running Jobs and Free Slots Left', (done) => {
     const { jobs } = makeRandomJobs(options.cores + 1);
 
     jobQueue.init(mockFreezeJob)
@@ -114,6 +82,8 @@ describe('Auxiliary Queue Functions', () => {
           .then(() => {
             const firstJob = jobs[0];
             const restofJobs = jobs.splice(1);
+
+
             jobQueue.enqueue(firstJob)
               .then(() => {
                 setTimeout(() => {
@@ -131,20 +101,63 @@ describe('Auxiliary Queue Functions', () => {
                               expect(jobQueue.getRunningJobs().length).to.be.eql(options.cores);
                               expect(jobQueue.getRunningJobs().length + jobQueue.queue.length())
                                 .to.be.be.eql(options.cores + 1);
-                              jobQueue.uninit();
+                              jobQueue.destroy();
                               done();
                             }, 1000);
                           }
                         })
-                        .catch(err => done(err));
+                        .catch((err) => {
+                          jobQueue.destroy();
+                          return done(err);
+                        });
                     },
                   );
                 }, 1000);
               })
-              .catch(err => done(err));
+              .catch((err) => {
+                jobQueue.destroy();
+                return done(err);
+              });
           })
-          .catch(err => done(err));
+          .catch((err) => {
+            jobQueue.destroy();
+            return done(err);
+          });
       })
-      .catch(err => done(err));
+      .catch((err) => {
+        jobQueue.destroy();
+        return done(err);
+      });
+  });
+
+
+  it('Push Job to Queue', (done) => {
+    const job = nextMockJob(Type.ACI);
+    jobQueue.init(mockProcessJob);
+    Job.create(job)
+      .then((createResult) => {
+        jobQueue.enqueue(createResult)
+          .then((qJobResult) => {
+            expect(qJobResult).to.have.all.keys('job', 'process');
+            expect(qJobResult.job.status).to.be.string(Status.QUEUED);
+            expect(qJobResult.process)
+              .to.eventually.include({ status: Status.FINISHED }, { result: mockResult })
+              .notify(done);
+          });
+      });
+  });
+
+  it('Destroy the Queue', (done) => {
+    jobQueue.init(mockFreezeJob)
+      .then(() => {
+        expect(jobQueue.queue).to.be.not.null;
+        jobQueue.destroy();
+        expect(jobQueue.queue).to.be.null;
+        done();
+      })
+      .catch((err) => {
+        jobQueue.destroy();
+        return done(err);
+      });
   });
 });

@@ -1,54 +1,8 @@
 const async = require('async');
 
 const Status = require('../api/models/status');
-const { getJobModel } = require('../api/models/job/utils');
+const { updateJob, getPendingJobs } = require('../api/models/job/utils');
 const { options } = require('./queue_options');
-const { Job } = require('../api/models/job');
-
-
-const updateJob = (job) => {
-  const JobModel = getJobModel(job.type);
-
-  return JobModel.findByIdAndUpdate(
-    job._id,
-    job,
-    { new: true },
-  )
-    .then(updatedJob => updatedJob)
-    .catch(() => {
-      throw new Error(`Failed to update status to ${job.status}`);
-    });
-};
-
-const orderBasedonStatus = (jobs) => {
-  const proccesingJobs = [];
-  const queuedJobs = [];
-  const waitingJobs = [];
-
-  jobs.forEach((job) => {
-    if (job.status === Status.PROCESSING) {
-      proccesingJobs.push(job);
-    } else if (job.status === Status.QUEUED) {
-      queuedJobs.push(job);
-    } else if (job.status === Status.WAITING) {
-      waitingJobs.push(job);
-    }
-  });
-
-  return proccesingJobs.concat(queuedJobs).concat(waitingJobs);
-};
-
-const getAwaitingJobs = () => Job
-  .find({ status: { $in: [Status.QUEUED, Status.PROCESSING, Status.WAITING] } })
-  .then((waitingJobs) => {
-    if (waitingJobs.length > 0) {
-      const ordered = orderBasedonStatus(waitingJobs);
-      return ordered;
-    }
-    return [];
-  })
-  .catch(err => new Error(err));
-
 
 function JobQueue() {
   this.queue = null;
@@ -62,22 +16,20 @@ function JobQueue() {
   this.enqueue = job => new Promise((resolve, reject) => {
     isInit();
 
-    Object.assign(job, { status: Status.QUEUED });
-    updateJob(job)
+
+    updateJob(job, { status: Status.QUEUED })
       .then((queuedJob) => {
-        if (queuedJob === null) {
-          reject(new Error('Job must be made before it is queued'));
+        if (!queuedJob) {
+          return reject(new Error('Job must be made before it is queued'));
         }
         const process = new Promise((resolveProcess, rejectProcess) => {
           this.queue.push(queuedJob, (err, processedJob) => {
             if (err) {
-              Object.assign(processedJob, { status: Status.FAILED });
-              updateJob(processedJob)
+              updateJob(processedJob, { status: Status.FAILED })
                 .then(rejectProcess(err))
                 .catch(statusFailedErr => rejectProcess(statusFailedErr));
             } else {
-              Object.assign(processedJob, { status: Status.FINISHED });
-              updateJob(processedJob)
+              updateJob(processedJob, { status: Status.FINISHED })
                 .then((finishedJob) => {
                   resolveProcess(finishedJob);
                 })
@@ -93,11 +45,9 @@ function JobQueue() {
       .catch(err => reject(err));
   });
 
-
   const createQueue = jobProcessFn => new Promise((resolve, reject) => {
     this.queue = async.queue((job, callback) => {
-      Object.assign(job, { status: Status.PROCESSING });
-      updateJob(job)
+      updateJob(job, { status: Status.PROCESSING })
         .then((queuedJob) => {
           jobProcessFn(queuedJob)
             .then((processedJob) => {
@@ -105,25 +55,23 @@ function JobQueue() {
             })
             .catch(err => reject(err));
         })
-        .catch((err) => {
-          reject(err);
-        });
+        .catch(err => reject(err));
     }, options.cores);
 
     resolve(this.queue);
   });
 
-  const queueAwaitingJobs = () => new Promise((resolve, reject) => {
-    getAwaitingJobs()
-      .then((awaitingJobs) => {
+  const queuePendingJobs = () => new Promise((resolve, reject) => {
+    getPendingJobs()
+      .then((pendingJobs) => {
         let numJobsQueued = 0;
-        if (awaitingJobs.length > 0) {
-          awaitingJobs.forEach(
+        if (pendingJobs.length > 0) {
+          pendingJobs.forEach(
             (job) => {
               this.enqueue(job)
                 .then(() => {
                   numJobsQueued += 1;
-                  if (numJobsQueued === awaitingJobs.length) { resolve(); }
+                  if (numJobsQueued === pendingJobs.length) { resolve(); }
                 })
                 .catch(err => reject(err));
             },
@@ -132,21 +80,22 @@ function JobQueue() {
           resolve();
         }
       })
-      .catch(err => reject(new Error(err)));
+      .catch(err => reject(err));
   });
 
   this.init = jobProcessFn => new Promise((resolve, reject) => {
     createQueue(jobProcessFn)
       .then(() => {
         this.queue.drain = () => { };
-        queueAwaitingJobs()
+        this.queue.empty = () => { console.log('Queue is Empty'); };
+        queuePendingJobs()
           .then(() => { resolve(this.queue); })
           .catch(err => reject(err));
       })
       .catch(err => reject(err));
   });
 
-  this.uninit = () => {
+  this.destroy = () => {
     isInit();
 
     this.queue.kill();
