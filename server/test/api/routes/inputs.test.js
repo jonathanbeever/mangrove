@@ -242,9 +242,7 @@ describe('Inputs', () => {
           expect(res.body.site).to.equal(input.site);
           expect(res.body.series).to.equal(input.series);
           expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
-          expect(res.body.coords).to.have.all.keys(coordsKeys());
-          expect(res.body.coords.lat).to.equal(input.coords.lat);
-          expect(res.body.coords.long).to.equal(input.coords.long);
+          expect(res.body.coords).to.eql(input.coords);
           expect(res.body.path).to.be.a.file()
             .and.equal('./test/mock/wav/test.wav');
           done();
@@ -289,9 +287,7 @@ describe('Inputs', () => {
               expect(res.body.site).to.equal(input.site);
               expect(res.body.series).to.equal(input.series);
               expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
-              expect(res.body.coords).to.have.all.keys(coordsKeys());
-              expect(res.body.coords.lat).to.equal(input.coords.lat);
-              expect(res.body.coords.long).to.equal(input.coords.long);
+              expect(res.body.coords).to.eql(input.coords);
               done();
             })
             .catch((err) => {
@@ -346,9 +342,7 @@ describe('Inputs', () => {
                 expect(input.site).to.equal(inputs[index].site);
                 expect(input.series).to.equal(inputs[index].series);
                 expect(input.recordTimeMs).to.equal(inputs[index].recordTimeMs);
-                expect(input.coords).to.have.all.keys(coordsKeys());
-                expect(input.coords.lat).to.equal(inputs[index].coords.lat);
-                expect(input.coords.long).to.equal(inputs[index].coords.long);
+                expect(input.coords).to.eql(inputs[index].coords);
               });
               done();
             })

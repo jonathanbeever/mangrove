@@ -354,7 +354,7 @@ describe('Jobs', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.have.all.keys(['count', 'jobs']);
-          expect(res.body.count).to.be.eql(0);
+          expect(res.body.count).to.equal(0);
           expect(res.body.jobs).to.be.an('array');
           expect(res.body.jobs).to.be.empty;
           done();
@@ -381,7 +381,7 @@ describe('Jobs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.have.all.keys(['count', 'jobs']);
-              expect(res.body.count).to.be.eql(jobs.length);
+              expect(res.body.count).to.equal(jobs.length);
               expect(res.body.jobs).to.be.an('array');
               expect(res.body.jobs).to.have.lengthOf(jobs.length);
               res.body.jobs.forEach((job, index) => {
@@ -425,7 +425,7 @@ describe('Jobs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.have.all.keys(['count', 'jobs']);
-              expect(res.body.count).to.be.eql(jobs.length);
+              expect(res.body.count).to.equal(jobs.length);
               expect(res.body.jobs).to.be.an('array');
               expect(res.body.jobs).to.have.lengthOf(jobs.length);
               res.body.jobs.forEach((job, index) => {

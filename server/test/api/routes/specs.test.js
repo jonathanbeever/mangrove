@@ -185,7 +185,7 @@ describe('Specs', () => {
               res.body.specId, // Check whether it's a valid ObjectId
             );
             expect(res.body.type).to.equal(specTypeToType(specs[index].type));
-            expect(getParamsFromSpec(res.body)).to.deep.equal(
+            expect(getParamsFromSpec(res.body)).to.eql(
               getParamsFromSpec(specs[index]),
             );
           })
@@ -213,7 +213,7 @@ describe('Specs', () => {
               expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
               expect(res.body.specId).to.equal(spec.id);
               expect(res.body.type).to.equal(specTypeToType(spec.type));
-              expect(getParamsFromSpec(res.body)).to.deep.equal(
+              expect(getParamsFromSpec(res.body)).to.eql(
                 getParamsFromSpec(spec),
               );
               done();
@@ -249,7 +249,7 @@ describe('Specs', () => {
             expect(res).to.have.status(201);
             expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
             expect(res.body.type).to.equal(specTypeToType(specs[index].type));
-            expect(getParamsFromSpec(res.body)).to.deep.equal(
+            expect(getParamsFromSpec(res.body)).to.eql(
               getParamsFromSpec(specs[index]),
             );
           })
@@ -290,7 +290,7 @@ describe('Specs', () => {
               expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
               expect(res.body.specId).to.equal(spec.id);
               expect(res.body.type).to.equal(specTypeToType(spec.type));
-              expect(getParamsFromSpec(res.body)).to.deep.equal(
+              expect(getParamsFromSpec(res.body)).to.eql(
                 getParamsFromSpec(spec),
               );
               done();
@@ -349,7 +349,7 @@ describe('Specs', () => {
                 expect(spec).to.have.all.keys(getSpecKeys(specs[index].type));
                 expect(spec.specId).to.equal(specs[index].id);
                 expect(spec.type).to.equal(specTypeToType(specs[index].type));
-                expect(getParamsFromSpec(spec)).to.deep.equal(
+                expect(getParamsFromSpec(spec)).to.eql(
                   getParamsFromSpec(specs[index]),
                 );
               });
