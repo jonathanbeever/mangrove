@@ -69,7 +69,7 @@ const sortByStatusByTime = (jobs) => {
 const getPendingJobs = () => Job
   .find({ status: { $in: [Status.QUEUED, Status.PROCESSING, Status.WAITING] } })
   .then(waitingJobs => sortByStatusByTime(waitingJobs))
-  .catch(() => new Error('Failed to get pending jobs'));
+  .catch(() => { throw new Error('Failed to get pending jobs'); });
 
 module.exports = {
   getJobModel,
