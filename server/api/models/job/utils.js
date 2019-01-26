@@ -53,7 +53,7 @@ const updateJob = (job, update) => {
     });
 };
 
-const orderBasedonStatus = (jobs) => {
+const sortByStatusByTime = (jobs) => {
   const statusPriority = Object.values(Status);
 
   jobs.sort((firstJob, secondJob) => {
@@ -68,8 +68,8 @@ const orderBasedonStatus = (jobs) => {
 
 const getPendingJobs = () => Job
   .find({ status: { $in: [Status.QUEUED, Status.PROCESSING, Status.WAITING] } })
-  .then(waitingJobs => orderBasedonStatus(waitingJobs))
-  .catch(err => new Error(err));
+  .then(waitingJobs => sortByStatusByTime(waitingJobs))
+  .catch(() => new Error('Failed to get pending jobs'));
 
 module.exports = {
   getJobModel,

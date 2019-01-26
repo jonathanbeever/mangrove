@@ -2,7 +2,7 @@ const async = require('async');
 
 const Status = require('../api/models/status');
 const { updateJob, getPendingJobs } = require('../api/models/job/utils');
-const { getCores } = require('./storage');
+const settings = require('./settings');
 
 function JobQueue() {
   this.queue = null;
@@ -21,19 +21,8 @@ function JobQueue() {
     this.queue = null;
   };
 
-
-  const lockUntilQueueCreated = () => new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (this.queue) {
-        resolve();
-      } else {
-        lockUntilQueueCreated(resolve, reject);
-      }
-    }, 100);
-  });
-
-  const createQueue = jobProcessFn => new Promise((resolve, reject) => {
-    this.queue = async.queue((job, callback) => {
+  const createQueue = jobProcessFn => new Promise(async (resolve, reject) => {
+    await (this.queue = async.queue((job, callback) => {
       updateJob(job, { status: Status.PROCESSING })
         .then((queuedJob) => {
           jobProcessFn(queuedJob)
@@ -43,11 +32,8 @@ function JobQueue() {
             .catch(err => reject(err));
         })
         .catch(err => reject(err));
-    }, getCores());
-    lockUntilQueueCreated()
-      .then(() => {
-        resolve(this.queue);
-      });
+    }, settings.value('cores')));
+    resolve(this.queue);
   });
 
   const queueHelper = (resolve, reject, pendingJobs) => {
@@ -131,7 +117,6 @@ function JobQueue() {
     if (this.queue.running() < this.queue.concurrency) {
       return this.queue.concurrency - this.queue.running();
     }
-
     return 0;
   };
 

@@ -12,7 +12,8 @@ const Status = require('../../api/models/status');
 
 const { makeRandomJobs, getCountOfPendingJobs } = require('./queueHelpers');
 const jobQueue = require('../../util/jobQueue');
-const { getCores, setCores } = require('../../util/storage');
+const { setCores } = require('../../util/storage');
+const settings = require('../../util/settings');
 
 const { expect } = chai;
 
@@ -32,18 +33,6 @@ function lockUntilSpacesRemain(freeSlotsWanted) {
   return new Promise((resolve) => {
     lock(resolve, freeSlotsWanted);
   });
-}
-
-function queueFirstJob(firstJob) {
-  jobQueue.enqueue(firstJob);
-}
-
-function queueRestOfJobs(restOfJobs) {
-  restOfJobs.forEach(
-    (job) => {
-      jobQueue.enqueue(job);
-    },
-  );
 }
 
 describe('Job Queue', () => {
@@ -76,16 +65,6 @@ describe('Job Queue', () => {
     });
   });
 
-  it('Change number of cores', (done) => {
-    setCores(1);
-    expect(getCores()).to.be.equal(1);
-    setCores(-1);
-    expect(getCores()).to.be.equal(os.cpus().length);
-    setCores(100);
-    expect(getCores()).to.be.equal(os.cpus().length);
-    done();
-  });
-
   it('Scan Database for Already Proccesing and Queued Jobs', (done) => {
     const randomJobs = makeRandomJobs(50);
     const countOfStatus = randomJobs.statusCounter;
@@ -101,51 +80,56 @@ describe('Job Queue', () => {
           })
           .catch((err) => {
             jobQueue.destroy();
+            console.log(err);
             done(err);
           });
       })
       .catch((err) => {
         jobQueue.destroy();
+        console.log(err);
         done(err);
       });
   });
 
   it('Get Running Jobs and Free Slots Left', (done) => {
-    const { jobs } = makeRandomJobs(getCores() + 1);
+    const { jobs } = makeRandomJobs(settings.value('cores') + 1);
 
     jobQueue.init(mockFreezeJob)
       .then(() => {
         Job.insertMany(jobs)
           .then(async () => {
-            const firstJob = jobs[0];
+            const [firstJob] = jobs;
             const restOfJobs = jobs.splice(1);
             try {
-              await queueFirstJob(firstJob);
-              await lockUntilSpacesRemain(getCores() - 1);
+              await jobQueue.enqueue(firstJob);
+              await lockUntilSpacesRemain(settings.value('cores') - 1);
 
-              expect(jobQueue.getFreeSlots()).to.be.equal(getCores() - 1);
+              expect(jobQueue.getFreeSlots()).to.be.equal(settings.value('cores') - 1);
               expect(jobQueue.getRunningJobs().length).to.be.equal(1);
 
-              await queueRestOfJobs(restOfJobs);
+              restOfJobs.forEach(async job => jobQueue.enqueue(job));
               await lockUntilSpacesRemain(0);
 
               expect(jobQueue.getFreeSlots()).to.be.equal(0);
-              expect(jobQueue.getRunningJobs().length).to.be.equal(getCores());
+              expect(jobQueue.getRunningJobs().length).to.be.equal(settings.value('cores'));
 
               jobQueue.destroy();
               done();
             } catch (err) {
+              console.log(err);
               done(err);
             }
           })
           .catch((err) => {
             jobQueue.destroy();
-            return done(err);
+            console.log(err);
+            done(err);
           });
       })
       .catch((err) => {
         jobQueue.destroy();
-        return done(err);
+        console.log(err);
+        done(err);
       });
   });
 
@@ -166,7 +150,10 @@ describe('Job Queue', () => {
               });
           });
       })
-      .catch(err => done(err));
+      .catch((err) => {
+        console.log(err);
+        done(err);
+      });
   });
 
   it('Destroy the Queue', (done) => {
@@ -179,7 +166,8 @@ describe('Job Queue', () => {
       })
       .catch((err) => {
         jobQueue.destroy();
-        return done(err);
+        console.log(err);
+        done(err);
       });
   });
 });
