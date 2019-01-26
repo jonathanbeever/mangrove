@@ -63,6 +63,7 @@ function JobQueue() {
         .catch(err => reject(err));
     }
   };
+
   const queueJobs = pendingJobs => new Promise((resolve, reject) => {
     queueHelper(resolve, reject, pendingJobs);
   });

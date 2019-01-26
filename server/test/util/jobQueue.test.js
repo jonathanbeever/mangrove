@@ -121,7 +121,7 @@ describe('Job Queue', () => {
             const restOfJobs = jobs.splice(1);
             try {
               await queueFirstJob(firstJob);
-              await lockUntilSpacesRemain(7);
+              await lockUntilSpacesRemain(getCores() - 1);
 
               expect(jobQueue.getFreeSlots()).to.be.equal(getCores() - 1);
               expect(jobQueue.getRunningJobs().length).to.be.equal(1);
