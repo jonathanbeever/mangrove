@@ -1,12 +1,22 @@
 const fs = require('fs');
 const nodePath = require('path');
 
+const os = require('os');
+
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 
 const settings = require('./settings');
 
 settings.load();
+
+const getCores = () => settings.value('cores');
+
+const setCores = (newCores) => {
+  if (newCores <= os.cpus().length && newCores > 0) { settings.setValue('cores', newCores); } else {
+    settings.setValue('cores', os.cpus().length);
+  }
+};
 
 const inputDir = settings.value('inputDir');
 
@@ -41,6 +51,8 @@ const deleteRootDir = () => {
 
 module.exports = {
   getUploadPath,
+  getCores,
+  setCores,
   copyFile,
   deleteInputFile,
   deleteInputDir,

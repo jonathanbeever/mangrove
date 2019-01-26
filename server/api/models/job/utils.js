@@ -22,15 +22,6 @@ const getJobModel = (type) => {
   }
 };
 
-const statusPriority = Object.freeze({
-  waiting: 3,
-  queued: 2,
-  processing: 1,
-  finished: 6,
-  failed: 4,
-  cancelled: 5,
-});
-
 
 const getJobKeys = (type, finished = true) => {
   const JobModel = getJobModel(type);
@@ -63,14 +54,15 @@ const updateJob = (job, update) => {
 };
 
 const orderBasedonStatus = (jobs) => {
+  const statusPriority = Object.values(Status);
+
   jobs.sort((firstJob, secondJob) => {
     if (firstJob.status === secondJob.status) {
       return firstJob.creationTimeMs - secondJob.creationTimeMs;
     }
-
-    return statusPriority[firstJob.status] - statusPriority[secondJob.status];
+    return statusPriority.indexOf(secondJob.status)
+      - statusPriority.indexOf(firstJob.status);
   });
-
   return jobs;
 };
 
@@ -78,7 +70,6 @@ const getPendingJobs = () => Job
   .find({ status: { $in: [Status.QUEUED, Status.PROCESSING, Status.WAITING] } })
   .then(waitingJobs => orderBasedonStatus(waitingJobs))
   .catch(err => new Error(err));
-
 
 module.exports = {
   getJobModel,

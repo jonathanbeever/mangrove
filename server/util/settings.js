@@ -24,10 +24,15 @@ const load = () => {
     });
 
     // TODO: Check to make sure we have ownership/access for this directory
+    // TODO: Make sure inputDir is Valid.
     if (!settings.value('inputDir')) {
       settings.setValue('inputDir', path.join(rootDir, storage.inputs));
     }
+    if (!settings.value('cores')) {
+      settings.setValue('cores', os.cpus().length);
+    }
   } else {
+    testSettings.cores = os.cpus().length;
     testSettings.inputDir = path.join(rootDir, storage.inputs);
   }
 };
@@ -36,8 +41,17 @@ const value = key => (config.util.getEnv('NODE_ENV') !== 'test'
   ? settings.value(key)
   : testSettings[key]);
 
+const setValue = (key, newValue) => {
+  if (config.util.getEnv('NODE_ENV') !== 'test') {
+    settings.setValue(key, newValue);
+  } else {
+    testSettings[key] = newValue;
+  }
+};
+
 module.exports = {
   rootDir,
   load,
   value,
+  setValue,
 };
