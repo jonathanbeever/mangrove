@@ -1,5 +1,6 @@
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const os = require('os');
 
 const mockDb = require('../../test/mock/mockDb');
 const { nextMockJob } = require('../../test/mock/mockJob');
