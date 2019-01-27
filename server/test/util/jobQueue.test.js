@@ -65,6 +65,31 @@ describe('Job Queue', () => {
     });
   });
 
+  it('Change Number of Cores', (done) => {
+    setCores(1);
+    expect(settings.value('cores')).to.be.equal(1);
+    setCores(-1);
+    expect(settings.value('cores')).to.be.equal(1);
+    setCores(100);
+    expect(settings.value('cores')).to.be.equal(os.cpus().length);
+
+    jobQueue.init()
+      .then(async () => {
+        await setCores(1, jobQueue.queue);
+        expect(settings.value('cores')).to.be.equal(1);
+        await setCores(-1, jobQueue.queue);
+        expect(settings.value('cores')).to.be.equal(1);
+        await setCores(100, jobQueue.queue);
+        expect(settings.value('cores')).to.be.equal(os.cpus().length);
+
+        await jobQueue.destroy();
+
+        done();
+      }).catch(
+        err => done(err),
+      );
+  });
+
   it('Scan Database for Already Proccesing and Queued Jobs', (done) => {
     const randomJobs = makeRandomJobs(50);
     const countOfStatus = randomJobs.statusCounter;
