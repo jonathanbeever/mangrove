@@ -9,7 +9,7 @@ import { NavLink } from 'react-router-dom';
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
+    <Typography component="div" style={{}}>
       {props.children}
     </Typography>
   );
@@ -47,19 +47,19 @@ class NavBarTabs extends React.Component {
                 onChange={this.handleChange}
                 centered>
             <Tab value={0}
-                label="Catalog"
+                label={<div><h5>Catalog</h5></div>}
                 to="/catalog"
                 style={{color: 'white', textDecoration: 'none'}}
                 activeStyle={{color: 'white', textDecoration: 'none'}}
                 component={NavLink} />
             <Tab value={1}
-                label="Create Jobs"
+                label={<div><h5>Create Jobs</h5></div>}
                 to="/newJobs"
                 style={{color: 'white', textDecoration: 'none'}}
                 activeStyle={{color: 'white', textDecoration: 'none'}}
                 component={NavLink} />
             <Tab value={2}
-                label="Settings"
+                label={<div><h5>Settings</h5></div>}
                 to="/settings"
                 style={{color: 'white', textDecoration: 'none'}}
                 activeStyle={{color: 'white', textDecoration: 'none'}}
