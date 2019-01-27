@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import NavBar from './components/navbar';
+import NavBarTabs from './components/NavBarTabs';
 import NewJobs from './components/newJobs/newJobs';
 import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
@@ -526,7 +526,7 @@ class App extends Component {
       <Router>
         <div>
           <div className="App">
-            <NavBar />
+            <NavBarTabs />
           </div>
           <Switch>
             {/* Add login */}

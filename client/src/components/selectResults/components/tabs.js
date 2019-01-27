@@ -35,13 +35,13 @@ class SimpleTabs extends React.Component {
 
   handleChange = (event, value) => {
     this.setState({ value });
-    if(this.props.showAnalysis === true && value !== 3) 
+    if(this.props.showAnalysis === true && value !== 3)
       this.props.showFiltering()
   };
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps.showAnalysis !== this.props.showAnalysis) {
-      if(this.props.showAnalysis === true) 
+      if(this.props.showAnalysis === true)
         this.setState({ value : 3 })
       else
         this.setState({ value: 0 })
@@ -54,8 +54,8 @@ class SimpleTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
-          <Tabs value={value} onChange={this.handleChange}>
+        <AppBar position="static" >
+          <Tabs value={value} onChange={this.handleChange} centered>
             <Tab label={<div><h5>Specifications</h5></div>} />
             <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Jobs</h5></div>} />
@@ -63,7 +63,7 @@ class SimpleTabs extends React.Component {
           </Tabs>
         </AppBar>
         {value === 0 && <TabContainer>
-          <FilterSpecs 
+          <FilterSpecs
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
             specParamsList={this.props.specParamsList}
@@ -77,18 +77,18 @@ class SimpleTabs extends React.Component {
           />
         </TabContainer>}
         {value === 1 && <TabContainer>
-          <FilterInputs 
+          <FilterInputs
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
             filteredInputs={this.props.filteredInputs}
-            onChange={this.props.onChange} 
-            onSubmitInput={this.props.onSubmitInput} 
-            updateSelectedInputs={this.props.updateSelectedInputs} 
+            onChange={this.props.onChange}
+            onSubmitInput={this.props.onSubmitInput}
+            updateSelectedInputs={this.props.updateSelectedInputs}
             selected={this.props.selectedInputs}
           />
         </TabContainer>}
         {value === 2 && <TabContainer>
-          <SelectJobs 
+          <SelectJobs
             filteredJobs={this.props.filteredJobs}
             // Input filtering
             indexedFiles={this.props.indexedFiles}
@@ -111,7 +111,7 @@ class SimpleTabs extends React.Component {
         </TabContainer>}
         {value === 3 && <TabContainer>
           <AnalysisView
-            selectedJobs={this.props.selectedIndexedJobs}          
+            selectedJobs={this.props.selectedIndexedJobs}
           />
         </TabContainer>}
       </div>
