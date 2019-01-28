@@ -9,6 +9,7 @@ const { mockProcessJob, mockResult, mockFreezeJob } = require('../mock/mockProce
 const { Job } = require('../../api/models/job');
 const Type = require('../../api/models/type');
 const Status = require('../../api/models/status');
+const { getJobKeys } = require('../../api/models/job/utils');
 
 const { makeRandomJobs, getCountOfPendingJobs } = require('./queueHelpers');
 const jobQueue = require('../../util/jobQueue');
@@ -169,9 +170,12 @@ describe('Job Queue', () => {
               .then((qJobResult) => {
                 expect(qJobResult).to.have.all.keys('job', 'process');
                 expect(qJobResult.job.status).to.be.string(Status.QUEUED);
-                expect(qJobResult.process)
-                  .to.eventually.include({ status: Status.FINISHED }, { result: mockResult })
-                  .notify(done);
+                qJobResult.process
+                  .then((finishedJob) => {
+                    expect(finishedJob.status).to.be.equal(Status.FINISHED);
+                    expect(finishedJob.result).to.be.eql(mockResult);
+                    done();
+                  });
               });
           });
       })

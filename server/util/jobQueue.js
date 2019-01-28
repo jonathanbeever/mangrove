@@ -1,7 +1,11 @@
 const async = require('async');
 
 const Status = require('../api/models/status');
-const { updateJob, getPendingJobs } = require('../api/models/job/utils');
+const {
+  updateJob,
+  getPendingJobs,
+  updateAndPopulateJob,
+} = require('../api/models/job/utils');
 const settings = require('./settings');
 
 function JobQueue() {
@@ -23,13 +27,13 @@ function JobQueue() {
 
   const createQueue = jobProcessFn => new Promise(async (resolve, reject) => {
     await (this.queue = async.queue((job, callback) => {
-      updateJob(job, { status: Status.PROCESSING })
+      updateAndPopulateJob(job, { status: Status.PROCESSING })
         .then((queuedJob) => {
           jobProcessFn(queuedJob)
-            .then((processedJob) => {
-              callback(null, processedJob);
+            .then((result) => {
+              callback(null, result);
             })
-            .catch(err => reject(err));
+            .catch(err => callback(err, null));
         })
         .catch(err => reject(err));
     }, settings.value('cores')));
@@ -90,13 +94,13 @@ function JobQueue() {
           return reject(new Error('Job must be made before it is queued'));
         }
         const process = new Promise((resolveProcess, rejectProcess) => {
-          this.queue.push(queuedJob, (err, processedJob) => {
+          this.queue.push(queuedJob, (err, result) => {
             if (err) {
-              updateJob(processedJob, { status: Status.FAILED })
-                .then(rejectProcess(err))
+              updateJob(queuedJob, { status: Status.FAILED })
+                .then(() => rejectProcess(err))
                 .catch(statusFailedErr => rejectProcess(statusFailedErr));
             } else {
-              updateJob(processedJob, { status: Status.FINISHED })
+              updateJob(queuedJob, { status: Status.FINISHED, result })
                 .then((finishedJob) => {
                   resolveProcess(finishedJob);
                 })

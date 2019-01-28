@@ -53,6 +53,22 @@ const updateJob = (job, update) => {
     });
 };
 
+const updateAndPopulateJob = (job, update) => {
+  const newJob = { ...job._doc, ...update };
+  const JobModel = getJobModel(newJob.type);
+  return JobModel.findByIdAndUpdate(
+    newJob._id,
+    newJob,
+    { new: true },
+  )
+    .populate('input')
+    .populate('spec')
+    .then(updatedJob => updatedJob)
+    .catch(() => {
+      throw new Error(`Failed to update job ${job._id}`);
+    });
+};
+
 const sortByStatusByTime = (jobs) => {
   const statusPriority = Object.values(Status);
 
@@ -77,4 +93,5 @@ module.exports = {
   newJobKeys,
   getPendingJobs,
   updateJob,
+  updateAndPopulateJob,
 };

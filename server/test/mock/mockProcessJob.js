@@ -1,8 +1,11 @@
-const mockResult = { test: 'test' };
+const mockResult = {
+  test: 'test', numberField: 1203, boolean: false, object: { testy: 'wow' },
+};
 
-const mockProcessJob = job => new Promise((resolve) => {
-  Object.assign(job, { result: mockResult });
-  resolve(job);
+const mockProcessJob = populatedJob => new Promise((resolve) => {
+  const processedJob = populatedJob;
+  processedJob.result = mockResult;
+  resolve(processedJob.result);
 });
 
 const mockFreezeJob = job => new Promise(() => {
