@@ -38,7 +38,7 @@ function createAeiData(id, maxFreq, dbThreshold, freqStep) {
 function createBiData(id, minFreq, maxFreq, fftW) {
   return { id: id, minFreq, maxFreq, fftW};
 }
-  
+
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -84,16 +84,17 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={row.id}
-                align={row.numeric ? 'right' : 'left'}
+                align='center'
                 padding={row.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === row.id ? order : false}
               >
                 <Tooltip
-                  title="Sort"
-                  placement={row.numeric ? 'bottom-end' : 'bottom-start'}
+                  title={<p style={{fontSize:10+'px'}}>Sort</p>}
+                  placement='top'
                   enterDelay={300}
                 >
                   <TableSortLabel
+                    style={{ fontSize:20+'px' }}
                     active={orderBy === row.id}
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
@@ -155,11 +156,11 @@ let EnhancedTableToolbar = props => {
     >
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="subtitle1">
+          <Typography color="inherit" variant="h5">
             {numSelected} selected
           </Typography>
         ) : (
-          <Typography variant="h6" id="tableTitle">
+          <Typography variant="h5" id="tableTitle">
             Matching specs
           </Typography>
         )}
@@ -208,10 +209,10 @@ class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
     // TODO: by time
-    orderBy: 'calories', 
+    orderBy: 'calories',
     selected: this.props.selectedSpecs,
     data: [
-      
+
     ],
     page: 0,
     rowsPerPage: 5,
@@ -219,14 +220,14 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var rows = []
-    
+
     this.props.params.forEach(param => {
       if(param !== 'shannon')
         rows.push({ id: param, numeric: true, disablePadding: true, label: param })
       else
         rows.push({ id: param, numeric: false, disablePadding: true, label: param })
     })
-    
+
     this.setState({ rows: rows })
 
     switch (this.props.index) {
@@ -274,14 +275,14 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps.params !== this.props.params) {
       var rows = []
-    
+
       this.props.params.forEach(param => {
         if(param !== 'shannon')
           rows.push({ id: param, numeric: true, disablePadding: true, label: param })
         else
-          rows.push({ id: param, numeric: false, disablePadding: true, label: param })      
+          rows.push({ id: param, numeric: false, disablePadding: true, label: param })
       })
-      
+
       this.setState({ rows: rows })
 
       switch (this.props.index) {
@@ -343,11 +344,11 @@ class EnhancedTable extends React.Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      var newSelected = this.state.data.map(n => n.id) 
-      
+      var newSelected = this.state.data.map(n => n.id)
+
       this.setState({ selected: newSelected });
       this.props.updateSelectedSpecs(newSelected, this.props.index)
-      
+
       return;
     }
     this.setState({ selected: [] });
@@ -363,7 +364,7 @@ class EnhancedTable extends React.Component {
       newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
-    } 
+    }
     else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
     } else if (selectedIndex > 0) {
@@ -397,7 +398,7 @@ class EnhancedTable extends React.Component {
       <div className="col-12">
         <EnhancedTableToolbar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
-          {this.state.rows ? 
+          {this.state.rows ?
             <Table className={classes.table} aria-labelledby="tableTitle">
               <EnhancedTableHead
                 rows={this.state.rows}
@@ -427,25 +428,27 @@ class EnhancedTable extends React.Component {
                           <Checkbox checked={isSelected} />
                         </TableCell>
                         {this.state.rows.map((row, i) => {
-                          return (   
-                            <TableCell key={row.id} align="left">{n[row.id]}</TableCell> 
+                          return (
+                            <TableCell style={{ fontSize:15+'px' }} key={row.id} align="left">{n[row.id]}</TableCell>
                           )
                         })}
-                      </TableRow> 
-                    ); 
+                      </TableRow>
+                    );
                   })}
-                {emptyRows > 0 && ( 
-                  <TableRow style={{ height: 49 * emptyRows }}> 
-                    <TableCell colSpan={0} /> 
-                  </TableRow> 
-                )} 
-              </TableBody> 
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={0} />
+                  </TableRow>
+                )}
+              </TableBody>
             </Table>
-          : 
+          :
             ''
           }
         </div>
         <TablePagination
+          labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
+          labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying pages {from}-{to} of total {count} pages</p>}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={data.length}

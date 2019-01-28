@@ -49,7 +49,7 @@ class SelectJobs extends Component {
       this.formatInputChipHtml()
     }
   }
-  
+
   deleteInputChip = (label) => {
     this.props.onDelete(label)
     this.formatInputChipHtml()
@@ -104,7 +104,7 @@ class SelectJobs extends Component {
     return (
       <div className="row">
         <div className="col-4">
-          {this.props.selectedIndex.length ? 
+          {this.props.selectedIndex.length ?
             <Paper className={classes.root}>
               {/* <div className="row"> */}
                 {this.state.specHtml}
@@ -113,7 +113,7 @@ class SelectJobs extends Component {
           :
             ''
           }
-          {this.state.inputChips !== '' ? 
+          {this.state.inputChips !== '' ?
             <Paper className={classes.root}>
               <h5>Input Specifications</h5>
               {this.state.inputChips}
@@ -122,9 +122,10 @@ class SelectJobs extends Component {
             ''
           }
           <Paper className={classes.root}>
+            <h4>Filter By Jobs</h4>
             <div>
               <TextField
-                label="Author"
+                label={<p style={{fontSize:13+'px'}}>Author</p>}
                 value={this.props.jobFiltering.author}
                 className={classes.textField}
                 onChange={this.props.onChangeJobFilter('author')}
@@ -132,19 +133,19 @@ class SelectJobs extends Component {
               {/* TODO */}
               <DateAndTimePickers />
             </div>
+            <div className="row filterSubmit">
+              <Button style={{fontSize:12+'px'}} onClick={this.props.onSubmitFiltering} variant="contained" color="primary">
+                Apply Job Filters
+              </Button>
+            </div>
           </Paper>
-          <div className="row filterSubmit">
-            <Button onClick={this.props.onSubmitFiltering} variant="contained" color="primary">
-              Apply Job Filters
-            </Button>
-          </div>
         </div>
         <div className="col-8">
           {/* {this.props.selectedIndex ?  */}
             <div>
-              <JobsTable 
+              <JobsTable
                 filteredJobs={this.props.filteredJobs}
-                indexedFiles={this.props.indexedFiles}    
+                indexedFiles={this.props.indexedFiles}
                 updateSelectedJobs={this.props.updateSelectedJobs}
                 selectedJobs={this.props.selectedJobs}
               />
@@ -155,8 +156,8 @@ class SelectJobs extends Component {
           {/* : */}
             {/* <Paper className={classes.root}><h5>Please Select an Index and Parameter Specifications</h5></Paper> */}
           {/* } */}
-          
-        </div>  
+
+        </div>
       </div>
     );
   }
