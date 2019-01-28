@@ -24,7 +24,7 @@ const upload = multer({
       cb(new Error(`Invalid keys: ${extraKeys.join(', ')}.`));
     } else if (typeof req.body.json === 'undefined') {
       cb(new Error('Missing required field: json'));
-    } else if (file.mimetype !== 'audio/wave') {
+    } else if (file.mimetype !== 'audio/wav' && file.mimetype !== 'audio/wave') {
       cb(new Error(`Invalid MIME type: ${file.mimetype}. Must be audio/wave`));
     } else {
       cb(null, true);
