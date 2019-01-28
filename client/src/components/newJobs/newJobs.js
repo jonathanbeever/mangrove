@@ -1,200 +1,129 @@
 import React, { Component } from 'react';
-import ChooseIndexButtons from './chooseIndexButtons';
-import ChooseAciParams from './aciParams/chooseAciParams';
-import ChooseNdsiParams from './ndsiParams/chooseNdsiParams';
-import ChooseAdiParams from './adiParams/chooseAdiParams';
-import ChooseBioacousticParams from './bioParams/chooseBioacousticParams';
-import ChooseEvennessParams from './evenParams/chooseEvennessParams';
-import ChooseRmsParams from './rmsParams/chooseRmsParams';
-import FileSelect from './selectFiles';
 import './newJobs.css';
+import Stepper from './stepper';
 import axios from 'axios';
+import { POINT_CONVERSION_HYBRID } from 'constants';
 
 class NewJobs extends Component {
   constructor(props) {
     super(props);
 
-    this.onClickIndex = this.onClickIndex.bind(this);
-    this.handleParamChange = this.handleParamChange.bind(this);
-    this.handleJobSubmit = this.handleJobSubmit.bind(this);
-    this.cancelJob = this.cancelJob.bind(this);
-    this.onChoosePreset = this.onChoosePreset.bind(this)
-
     this.state = {
-        selectedIndex: '',
-        changeIndexWarning: false,
-        params: '',
-        inputs: ["5c2547480af83b2bac5133f7","5c2547480bf83b2bac5133f7","5c2547480cf83b2bac5133f7"]
+      index: 'aci',
+      specParamsByIndex : {
+        aci: {
+          minFreq: '',
+          maxFreq: '',
+          j: '',
+          fftW: ''
+        },
+        ndsi: {
+          anthroMin: '',
+          anthroMax: '',
+          bioMin: '',
+          bioMax: '',
+          fftW: ''
+        },
+        adi: {
+          maxFreq: '',
+          dbThreshold: '',
+          freqStep: '',
+          shannon: false
+        },
+        aei: {
+          maxFreq: '',
+          dbThreshold: '',
+          freqStep: ''
+        },
+        bi: {
+          minFreq: '',
+          maxFreq: '',
+          fftW: ''
+        },
+        rms: {
+          test: ''
+        }
+      },
+      selectedSpec: [],
+      submitDisabled: false
     };
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidMount = () => {
+    axios.get('http://localhost:3000/specs')
+      .then(res => {
+        var specs = {
+          'aci': [],
+          'ndsi': [],
+          'adi': [],
+          'aei': [],
+          'bi': [],
+          'rms': []
+        }
+        res.data.specs.forEach(spec => {
+          specs[spec.type].push(spec)
+        })
+        // Set all specs state
+        this.setState({ allSpecs: res.data.specs })
+        this.setState({ indexedSpecs: specs })
+      })
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  changeIndex = (value) => {
+    // Clear specParamsByIndex for current index
+    this.setState({ index: value })
   }
 
-  onChoosePreset = (e) => {
-    let params = Object.assign({}, this.state.params);
-    let target = e.target.parentElement.parentElement
-    let inputHtml = []
-    // are params and html state needed?
-    while(target.previousSibling != null) {
+  handleSpecChange = name => e => {
+    var tempState = this.state.specParamsByIndex
 
-      let temp = <div key={target.previousSibling.id}>{target.previousSibling.id} : {target.previousSibling.children[1].textContent} </div>
-      inputHtml.push(temp)
-
-      params[target.previousSibling.id] = target.previousSibling.children[1].textContent
-
-      target = target.previousSibling
-    }
-    // this.setState({params: params})    
-    // test ACI spec
-    this.setState({specId: "5c2547480af83b2bac5133f6"})
-
-    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{inputHtml.reverse()}</div>)
- 
-    this.setState({inputHtml: inputHtml})
-  }
-
-  timer = () => {setTimeout(() => {this.setState({changeIndexWarning: false})}, 3000)}
-
-  onClickIndex = (e) => {
-    // If another index is already select and the button clicked is disabled
-    // tell user to start or cancel current job
-    if(e.target.parentElement.className.indexOf('disabled') !== -1) {
-      this.setState({changeIndexWarning: true})
-
-      this.timer()
-    }
-    // Otherwise set state selectedIndex to name of index
-    else {
-      this.setState({selectedIndex: e.target.id})
-
-      switch(e.target.id) {
-        case 'aci': {
-          this.setState({paramComp: <ChooseAciParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
-          break;
-        }
-        case 'ndsi': {
-          this.setState({paramComp: <ChooseNdsiParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
-          break;
-        }
-        case 'adi': {
-          this.setState({paramComp: <ChooseAdiParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
-          break;
-        }
-        case 'bi': {
-          this.setState({paramComp: <ChooseBioacousticParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
-          break;
-        }
-        case 'aei': {
-          this.setState({paramComp: <ChooseEvennessParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
-          break;
-        }
-        case 'rms': {
-          this.setState({paramComp: <ChooseRmsParams params = {this.state.params} onChange={this.handleParamChange} onChoosePreset={this.onChoosePreset} />})
-          break;
-        }
-        default: {
-
-          break;
-        }
-      }
-    }
-  }
-
-  handleParamChange (e) {
-    // To pass to other components
-    let params = Object.assign({}, this.state.params);
-<<<<<<< refs/remotes/origin/master
-<<<<<<< refs/remotes/origin/master
-    // Set specType for new job request
-    params["type"] = this.state.selectedIndex  +'Spec'
-=======
-<<<<<<< HEAD
-
-    params[e.target.id] = e.target.value
-=======
-=======
->>>>>>> HEAD~0
-    // Set specType for new job request
-    params["type"] = this.state.selectedIndex 
->>>>>>> cherry pick new jobs commit
-    // Set author until users are implemented
-    // params["author"] = "Test Author"
-    // Set index parameters
-    if(e.target.id === 'shannon')
-      params[e.target.id] = e.target.checked
-<<<<<<< refs/remotes/origin/master
+    if(name !== 'shannon')
+      tempState[this.state.index][name] = e.target.value
     else
-      params[e.target.id] = e.target.value
-=======
-    else {
-      params[e.target.id] = parseInt(e.target.value)
-    }
-<<<<<<< refs/remotes/origin/master
->>>>>>> 5ec7c66... Material-ui partially added to new jobs page
->>>>>>> cherry pick new jobs commit
-=======
->>>>>>> HEAD~0
+      tempState[this.state.index][name] = e.target.checked
 
-    this.setState({params: params});
-
-    // For rendering to screen, may remove later
-    let keys = Object.keys(params)
-    let inputHtml = ''
-
-    let htmlJob = keys.map(key => {
-      return (<div key={key}> {key} : {params[key]} </div>)
+    var submitDisabled = false
+    // update for shannon adi index
+    Object.keys(tempState[this.state.index]).forEach(param => {
+      if(!tempState[this.state.index][param].length) {
+        submitDisabled = true
+      }
     })
-    inputHtml = (<div><h3>{this.state.selectedIndex}</h3>{htmlJob}</div>)
- 
-    this.setState({inputHtml: inputHtml})
+    this.setState({ submitDisabled: submitDisabled })
+    this.setState({ specParamsByIndex: tempState })
+
+    if(this.state.selectedSpec.length)
+      this.setState({ selectedSpec: [] })
   }
 
-  handleJobSubmit () {
-<<<<<<< refs/remotes/origin/master
-<<<<<<< refs/remotes/origin/master
-=======
-<<<<<<< HEAD
-=======
->>>>>>> cherry pick new jobs commit
-=======
->>>>>>> HEAD~0
-    // Find or create spec
-    axios.put(
-        "http://localhost:3000/specs",  
-        this.state.params,
-        {headers: {"Content-Type": "application/json"}}
-    )
-    .then(res => {
-      console.log(res)
-      // var to hold id of created or found spec
-      var specId = ''
-      // If new spec was create set id
-      if(res.status === 201) 
-<<<<<<< refs/remotes/origin/master
-        specId = res.data.createResult._id
-      // Spec already exists, save id
-      else if(res.status === 200) 
-        specId = res.data.returnSpec[0]._id
-=======
-        specId = res.data.specId
-      // Spec already exists, save id
-      else if(res.status === 200) 
-        specId = res.data.specId
->>>>>>> cherry pick new jobs commit
-      // Loop through inputs and make requests
-      this.state.inputs.forEach(inputId => {
+  updateSelectedSpec = (selected) => {
+    // A spec was checked
+    this.setState({ selectedSpec : selected })
+    if(selected.length) {
+      var newParams = this.state.specParamsByIndex
+      // Override or set specParamsByIndex
+      Object.keys(this.state.specParamsByIndex[this.state.index]).forEach(param => {
+        newParams[this.state.index][param] = ''
+      })
+      this.setState({ specParamsByIndex: newParams })
+    }
+  }
+
+  submitJob = () => {
+
+    var inputs= ["5c3cbd27c012052a3c2d1099", "5c3cbd27c012052a3c2d1999", "5c3cbd27c012052a3c2d9999", "5c3cbd27c012052a3c299999"]
+
+    // Spec already exists
+    if(this.state.selectedSpec.length) {
+      inputs.forEach(inputId => {
+        console.log(inputId, this.state.selectedSpec[0], this.state.index)
         // Request to queue new job
         axios.put(
           "http://localhost:3000/jobs",  
           {
-            type: this.state.selectedIndex,
-            // Add a document with this id to inputs collection until input api req is set up
+            type: this.state.index,
             inputId: inputId,
-            specId: specId
+            specId: this.state.selectedSpec[0]
           },
           {headers: {"Content-Type": "application/json"}}
         )
@@ -204,62 +133,65 @@ class NewJobs extends Component {
           else if(res.status === 200)
             alert('Job already created')
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log(err.message));
       })
-    })
-    .catch(err => console.log(err));
+    }
+    else {
+      // Create spec
+      var body = this.state.specParamsByIndex[this.state.index]
+      body.type = this.state.index
 
-<<<<<<< refs/remotes/origin/master
-<<<<<<< refs/remotes/origin/master
-=======
->>>>>>> 5ec7c66... Material-ui partially added to new jobs page
->>>>>>> cherry pick new jobs commit
-=======
->>>>>>> HEAD~0
-  }
-
-  cancelJob () {
-    this.setState({selectedIndex: '', params: '', inputHtml: ''})
+      axios.put(
+        "http://localhost:3000/specs",  
+        body,
+        {headers: {"Content-Type": "application/json"}}
+      )
+      .then(res => {
+        var specId = ''
+          // If new spec was create set id
+        if(res.status === 201) 
+          specId = res.data.specId
+        // Spec already exists, save id
+        else if(res.status === 200) 
+          specId = res.data.specId
+        // Loop through inputs and make requests
+        inputs.forEach(inputId => {
+          // Request to queue new job
+          axios.put(
+            "http://localhost:3000/jobs",  
+            {
+              type: this.state.index,
+              inputId: inputId,
+              specId: specId
+            },
+            {headers: {"Content-Type": "application/json"}}
+          )
+          .then(res => {
+            if(res.status === 201)
+              alert('Job queued')
+            else if(res.status === 200)
+              alert('Job already created')
+          })
+          .catch(err => console.log(err.message));
+        })
+      })
+    }
   }
 
   render() {
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className='col-4'>
-          </div>
-          <div className='col-4'>
-            <h2>Start New Jobs</h2>
-            <h4>Select an index</h4>
-          </div>
-          <div className="col-4">
-            <button className="btn btn-lg btn-info">Change Working Directory</button>
-          </div>
-        </div>
-        <div className="row">
-          <div className='col-12'>
-            <ChooseIndexButtons selectedIndex = {this.state.selectedIndex} onClickIndex={this.onClickIndex} onCancel={this.cancelJob}/>
-            {/* Show alert if changeIndexWarning is true */}
-            {this.state.changeIndexWarning ?
-              (<div className="alert alert-warning" role="alert">
-                <strong>Warning!</strong> Start or cancel current job before starting a new one.
-              </div>) : ''}
-          </div>
-        </div>
-        <div className="row">
-          <div className="fileSelect col-3">
-            <FileSelect />
-          </div>
-          <div className="col-6 jobInput">
-            {this.state.selectedIndex ? (<div>{this.state.paramComp}</div>) : ''}
-            {/* Put this button where? 
-                Only show after all input info is set as state*/}
-            {/* <button type="submit" className="btn btn-primary">Add Job to Queue</button> */}
-          </div>
-          <div className="col-3 currentJob">
-            {this.state.params ? (<div><h4>Current Job</h4>{this.state.inputHtml}<div className="col-12"><button type="submit" onClick={this.handleJobSubmit} className="startJob btn btn-primary">Add Job to Queue</button></div></div>) : ''}
-          </div>
-        </div>
+      <div>
+        <Stepper 
+          changeIndex={this.changeIndex}
+          index={this.state.index}
+          specParams={this.state.specParamsByIndex}
+          onSpecChange={this.handleSpecChange}
+          updateSelectedSpec={this.updateSelectedSpec}
+          selectedSpec={this.state.selectedSpec}
+          specs={this.state.indexedSpecs}
+          submitJob={this.submitJob}
+          submitDisabled={this.state.submitDisabled}
+        />
       </div>
     );
   }

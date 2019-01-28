@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import ChooseIndex from './chooseIndex';
 import ChooseSpecs from './chooseSpecs';
+import ChooseFiles from './chooseFiles';
 
 const styles = theme => ({
   root: {
@@ -30,7 +31,7 @@ function getSteps() {
 function getStepContent(step, props) {
   switch (step) {
     case 0:
-      return 'Choose Audio Files';
+      return <ChooseFiles />;
     case 1:
       return <ChooseIndex index={props.index} changeIndex={props.changeIndex} />;
     case 2:
@@ -89,6 +90,7 @@ class HorizontalLinearStepper extends React.Component {
   handleBack = () => {
     this.setState(state => ({
       activeStep: state.activeStep - 1,
+      disabledSubmit: false
     }));
   };
 
