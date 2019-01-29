@@ -98,8 +98,8 @@ describe('Job Queue', () => {
     Job.insertMany(randomJobs.jobs)
       .then(() => {
         jobQueue.init(mockFreezeJob)
-          .then((queue) => {
-            expect(queue.running() + queue.length())
+          .then((queueWrapper) => {
+            expect(queueWrapper.queue.running() + queueWrapper.queue.length())
               .to.be.equal(getCountOfPendingJobs(countOfStatus));
             jobQueue.destroy();
             done();

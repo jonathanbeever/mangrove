@@ -18,11 +18,11 @@ function JobQueue() {
   };
 
   this.destroy = () => {
-    isInit();
+    if (this.queue) {
+      this.queue.kill();
 
-    this.queue.kill();
-
-    this.queue = null;
+      this.queue = null;
+    }
   };
 
   const createQueue = jobProcessFn => new Promise(async (resolve, reject) => {
@@ -79,7 +79,7 @@ function JobQueue() {
         this.queue.empty = () => { };
         queuePendingJobs()
           .then(() => {
-            resolve(this.queue);
+            resolve(this);
           })
           .catch(err => reject(err));
       })

@@ -14,6 +14,7 @@ const Type = require('../models/type');
 
 const { arrayDiff } = require('../../util/array');
 
+
 // Create Job
 router.put('/', (req, res) => {
   const missingKeys = arrayDiff(newJobKeys(), Object.keys(req.body));
@@ -69,21 +70,21 @@ router.put('/', (req, res) => {
         });
 
         Job.create(job)
-          .then((createResult) => {
-            res.status(201).json({
-              jobId: createResult._id,
-              type: createResult.type,
-              input: createResult.input,
-              spec: createResult.spec,
-              author: createResult.author,
-              creationTimeMs: createResult.creationTimeMs,
-              status: createResult.status,
-            });
-          })
-          .catch((err) => {
-            res.status(500).json({
-              error: err,
-            });
+          .then(async (createResult) => {
+            try {
+              await global.globalQueue.enqueue(job);
+              res.status(201).json({
+                jobId: createResult._id,
+                type: createResult.type,
+                input: createResult.input,
+                spec: createResult.spec,
+                author: createResult.author,
+                creationTimeMs: createResult.creationTimeMs,
+                status: createResult.status,
+              });
+            } catch (err) {
+              res.status(500).json({ error: err });
+            }
           });
       }
     })
