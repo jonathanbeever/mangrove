@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
 import InputsTable from '../selectResults/inputs/inputsTable';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
     display: 'flex',
   },
   formControl: {
-    margin: theme.spacing.unit * 3,
+    padding: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 3
   },
   group: {
     margin: `${theme.spacing.unit}px 0`,
@@ -19,33 +20,24 @@ const styles = theme => ({
 
 class ChooseFiles extends React.Component {
   state = {
-
+    allFiles: this.props.allFiles
   };
 
   handleChange = e => {
-    const url = 'http://localhost:3000/inputs';
-    var files = e.target.files
-
-    Array.from(files).forEach(file => {
-      const form = new FormData();
-      // Input this for all files or get from name on server?
-      form.append('json', '{ "site": "UCF Arboretum", "series": "Hurricane Irma", "recordTimeMs": 1505016000000, "coords": { "lat": 28.596238, "long": -81.191381 } }')
-      form.append('file', file)
   
-      axios.put(url, form)
-      .then(res => {
-        console.log(res.data);
-        this.props.listDbFiles(res.data)
-      }).catch(err => {
-        console.log(err)
-      });
-    });
   };
 
   componentDidMount = () => {
   }
 
   componentDidUpdate(prevProps) {
+    if(this.state.allFiles !== this.props.allFiles) {
+      this.renderTable()
+    }
+  }
+
+  renderTable = () => {
+    this.setState({allFiles: this.props.allFiles})
   }
 
   render() {
@@ -54,29 +46,29 @@ class ChooseFiles extends React.Component {
     return (
       <div className={classes.root}>
         <div className="row">
-          <div className="col-4">
+          <Paper className={classes.formControl}>
             <input
               accept="audio/wave"
               className={classes.input}
               style={{ display: 'none' }}
-              onChange={this.handleChange}
+              onChange={this.props.handleInputUpload}
               id="selectFiles"
               multiple
               type="file"
             />
             <label htmlFor="selectFiles">
-              <Button variant="raised" component="span" className={classes.button}>
-                Choose Files
-              </Button>
+                <h5>Select New Files</h5>
+                <Button variant="contained" component="span" className={classes.button}>
+                  Choose Files
+                </Button>
             </label> 
-          </div>
-          <div className="col-8">
-            <InputsTable
+            {this.state.allFiles ? 
+            (<InputsTable
               updateSelectedInputs={this.props.updateSelectedInputs} 
-              filteredInputs={this.props.allFiles} 
+              filteredInputs={this.state.allFiles} 
               selected={this.props.selectedFiles}          
-            />
-          </div>
+            />) : ''}
+          </Paper>
         </div>
       </div>
     );

@@ -9,6 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import ChooseIndex from './chooseIndex';
 import ChooseSpecs from './chooseSpecs';
 import ChooseFiles from './chooseFiles';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
 const styles = theme => ({
   root: {
@@ -33,15 +39,20 @@ function getStepContent(step, props) {
     case 0:
       return (
         <ChooseFiles 
-          listDbFiles={props.listDbFiles} 
           selectedFiles={props.selectedFiles}
           updateSelectedInputs={props.updateSelectedFiles}
           allFiles={props.allFiles}
           newFiles={props.newFiles}
+          handleInputUpload={props.handleInputUpload}
         />
       )
     case 1:
-      return <ChooseIndex index={props.index} changeIndex={props.changeIndex} />;
+      return (
+        <ChooseIndex 
+          index={props.index} 
+          changeIndex={props.changeIndex} 
+        />
+      )
     case 2:
       return (
         <ChooseSpecs 
@@ -58,22 +69,37 @@ function getStepContent(step, props) {
   }
 }
 
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
+
+
 class HorizontalLinearStepper extends React.Component {
   state = {
     activeStep: 0,
-    disabledSubmit: false
+    disabledSubmit: false,
+    open: this.props.dialog
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+    this.props.closeDialog()
+    this.setState({ disabledSubmit: false })
   };
 
   componentDidUpdate = (prevProps) => {
-    if(prevProps.submitDisabled !== this.props.submitDisabled) {
-      if(this.state.activeStep === getSteps().length - 1)
-        this.setState({ disabledSubmit: this.props.submitDisabled })
-    }
     if(prevProps.selectedSpec !== this.props.selectedSpec) {
-      if(this.props.selectedSpec.length)
-        this.setState({ disabledSubmit: false })
-      else
-        this.setState({ disabledSubmit: true })
+      if(this.state.activeStep === getSteps().length - 1) {
+        if(this.props.selectedSpec.length)
+          this.setState({ disabledSubmit: false })
+        else
+          this.setState({ disabledSubmit: true })
+      }
+    }
+    if(prevProps.submitDisabled !== this.props.submitDisabled) {
+      if(this.state.activeStep === getSteps().length - 1) {
+        this.setState({ disabledSubmit: this.props.submitDisabled })        
+      }
     }
   }
 
@@ -103,7 +129,9 @@ class HorizontalLinearStepper extends React.Component {
   handleReset = () => {
     this.setState({
       activeStep: 0,
+      disabledSubmit: false
     });
+    this.props.closeDialog()
   };
 
   render() {
@@ -126,14 +154,28 @@ class HorizontalLinearStepper extends React.Component {
         </Stepper>
         <div>
           {activeStep === steps.length ? (
-            <div>
-              <Typography className={classes.instructions}>
-                Jobs Started
-              </Typography>
-              <Button onClick={this.handleReset} className={classes.button}>
-                Create More Jobs
-              </Button>
-            </div>
+            <Dialog
+              open={this.props.dialog}
+              TransitionComponent={Transition}
+              keepMounted
+              onClose={this.handleClose}
+              aria-labelledby="alert-dialog-slide-title"
+              aria-describedby="alert-dialog-slide-description"
+            >
+              <DialogContent>
+                <DialogContentText id="alert-dialog-slide-description">
+                  {this.props.message}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleReset} color="primary">
+                  Start More Jobs
+                </Button>
+                <Button onClick={this.handleClose} color="primary">
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
           ) : (
             <div>
               <div>
@@ -154,8 +196,6 @@ class HorizontalLinearStepper extends React.Component {
                   {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                 </Button>
                 {getStepContent(activeStep, this.props)}
-
-               
               </div>
             </div>
           )}

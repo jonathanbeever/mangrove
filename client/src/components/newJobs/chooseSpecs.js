@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Button from '@material-ui/core/Button';
 import '../selectResults/selectResults.css';
 import SpecsTable from '../selectResults/specs/specsTable';
 
@@ -55,7 +53,6 @@ class ChooseSpecs extends Component {
   }
 
   formatSpecInput = (params) => {
-    const {classes} = this.props
     // Format text field for each parameter
     var specInputHtml = Object.keys(params).map(param => {
       if(param !== 'shannon') {

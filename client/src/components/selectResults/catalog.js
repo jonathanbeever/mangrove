@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Tabs from './components/tabs';
 import axios from 'axios';
-import createMixins from '@material-ui/core/styles/createMixins';
 var _ = require('lodash');
 
 // TODO fix css
@@ -329,8 +328,7 @@ class Catalog extends Component {
         obj[specId] = this.state.allJobs.map(job => {
           if(job.spec === specId)
             return job.input
-          else
-            return null
+          return null
         }).filter(id => {
           if(id !== null)
             return id

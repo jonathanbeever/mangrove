@@ -219,14 +219,12 @@ class EnhancedTable extends React.Component {
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
-      if(prevProps.filteredInputs !== this.props.filteredInputs) {
-        var data = this.props.filteredInputs.map(input => {
-          console.log(input)
-          return createData(input.inputId, input.site, input.series, input.path, input.coords.lat, input.coords.long)
-        })
+      var data = this.props.filteredInputs.map(input => {
+        return createData(input.inputId, input.site, input.series, input.path, input.coords.lat, input.coords.long)
+      })
+      if(data !== this.state.data)
         this.setState({data: data})
-      }
-      if(prevProps.selected !== this.props.selected)
+      if(this.props.selected !== this.state.selected)
         this.setState({selected: this.props.selected})
     }
   }
@@ -270,7 +268,6 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
-    console.log(id, selected)
     this.props.updateSelectedInputs(newSelected)
     this.setState({ selected: newSelected });
   };

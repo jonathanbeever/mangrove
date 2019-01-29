@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './newJobs.css';
 import Stepper from './stepper';
 import axios from 'axios';
-import { POINT_CONVERSION_HYBRID } from 'constants';
 
 class NewJobs extends Component {
   constructor(props) {
@@ -48,7 +47,8 @@ class NewJobs extends Component {
       submitDisabled: false,
       allFiles: [],
       newFiles: [],
-      selectedFiles: []
+      selectedFiles: [],
+      dialog: false
     };
   }
 
@@ -73,6 +73,11 @@ class NewJobs extends Component {
 
     axios.get('http://localhost:3000/inputs')
     .then(res => {
+      res.data.inputs.map(input => {
+        var path = input.path.split('\\')
+        input.path = path[path.length - 1]
+        return input
+      })
       this.setState({ allFiles: res.data.inputs })
     })
   }
@@ -119,12 +124,11 @@ class NewJobs extends Component {
 
   submitJob = () => {
 
-    var inputs= ["5c3cbd27c012052a3c2d1099", "5c3cbd27c012052a3c2d1999", "5c3cbd27c012052a3c2d9999", "5c3cbd27c012052a3c299999"]
+    var inputs = this.state.selectedFiles
 
     // Spec already exists
     if(this.state.selectedSpec.length) {
       inputs.forEach(inputId => {
-        console.log(inputId, this.state.selectedSpec[0], this.state.index)
         // Request to queue new job
         axios.put(
           "http://localhost:3000/jobs",  
@@ -136,10 +140,14 @@ class NewJobs extends Component {
           {headers: {"Content-Type": "application/json"}}
         )
         .then(res => {
-          if(res.status === 201)
-            alert('Job queued')
-          else if(res.status === 200)
-            alert('Job already created')
+          if(res.status === 201) {
+            this.setState({message: 'Jobs Started. View progress in the job queue.'})
+            this.setState({dialog: true})
+          }
+          else if(res.status === 200) {
+            this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
+            this.setState({dialog: true})
+          }
         })
         .catch(err => console.log(err.message));
       })
@@ -175,10 +183,14 @@ class NewJobs extends Component {
             {headers: {"Content-Type": "application/json"}}
           )
           .then(res => {
-            if(res.status === 201)
-              alert('Job queued')
-            else if(res.status === 200)
-              alert('Job already created')
+            if(res.status === 201) {
+              this.setState({message: 'Jobs Started. View progress in the job queue.'})
+              this.setState({dialog: true})
+            }
+            else if(res.status === 200) {
+              this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
+              this.setState({dialog: true})
+            }
           })
           .catch(err => console.log(err.message));
         })
@@ -187,20 +199,44 @@ class NewJobs extends Component {
   }
 
   listDbFiles = (file) => {
-    var newFiles = this.state.newFiles
     var allFiles = this.state.allFiles
 
-    newFiles.push(file)
-    if(allFiles.indexOf(file) === -1)
+    if(allFiles.indexOf(file) === -1) {
+      var path = file.path.split('\\')
+      file.path = path[path.length - 1]
       allFiles.push(file)
-
-    this.setState({ newFiles: newFiles })
+    }
     this.setState({ allFiles: allFiles })
   }
 
   updateSelectedFiles = (selected) => {
-    console.log(selected)
     this.setState({ selectedFiles: selected })
+  }
+
+  handleInputUpload = (e) => {
+    const url = 'http://localhost:3000/inputs';
+    var files = e.target.files
+
+    Array.from(files).forEach(file => {
+      const form = new FormData();
+      // Input this for all files or get from name on server?
+      form.append('json', '{ "site": "UCF Arboretum", "series": "Hurricane Irma", "recordTimeMs": 1505016000000, "coords": { "lat": 28.596238, "long": -81.191381 } }')
+      form.append('file', file)
+  
+      axios.put(url, form)
+      .then(res => {
+        this.listDbFiles(res.data)
+      }).catch(err => {
+        console.log(err)
+      });
+    });
+  }
+
+  closeDialog = () => {
+    this.setState({ dialog: false })
+    this.setState({ selectedSpec: [] })
+    this.setState({ selectedFiles: [] })
+    this.setState({ submitDisabled: false })
   }
 
   render() {
@@ -216,12 +252,15 @@ class NewJobs extends Component {
           specs={this.state.indexedSpecs}
           submitJob={this.submitJob}
           submitDisabled={this.state.submitDisabled}
-          listDbFiles={this.listDbFiles}
-          newFiles={this.state.newFiles}
           allFiles={this.state.allFiles}
           selectedFiles={this.state.selectedFiles}
           updateSelectedFiles={this.updateSelectedFiles}
+          handleInputUpload={this.handleInputUpload}
+          dialog={this.state.dialog}
+          message={this.state.message}
+          closeDialog={this.closeDialog}
         />
+        {this.state.dialog.length ? this.state.dialog : ''}
       </div>
     );
   }
