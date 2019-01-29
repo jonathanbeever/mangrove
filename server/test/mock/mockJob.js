@@ -1,9 +1,14 @@
+const { nextMockInput } = require('./mockInput');
+const { mockSpec } = require('./mockSpec');
 const { nextMockObjectId } = require('./mockObjectId');
 
+const Input = require('../../api/models/input');
+const { Spec } = require('../../api/models/spec');
+const { Job } = require('../../api/models/job');
+const { specTypeToType } = require('../../api/models/spec/utils');
 const { getJobModel } = require('../../api/models/job/utils');
 const Status = require('../../api/models/status');
 
-// TODO: Allow for the creation of a mockJob using a mockSpec.
 const mockJob = (_id, type, input, spec, author, creationTimeMs, status) => {
   const JobModel = getJobModel(type);
   if (!JobModel) {
@@ -30,6 +35,47 @@ const nextMockJob = (type, status = Status.WAITING) => {
   return mockJob(jobId, type, input, spec, author, creationTimeMs, status);
 };
 
+const nextMockPopulatedJob = (
+  type,
+  mockedInput = null,
+  mockedSpec = null,
+) => new Promise((resolve, reject) => {
+  if (mockedSpec && type !== specTypeToType(mockedSpec.type)) {
+    throw new Error('`type` does not correspond to `mockedSpec.type`');
+  }
+
+  const input = mockedInput || nextMockInput();
+  const spec = mockedSpec || mockSpec(nextMockObjectId(), type, {});
+  const jobId = nextMockObjectId();
+  const author = 'Test Author';
+  const creationTimeMs = 0;
+  const status = Status.QUEUED;
+
+  const job = mockJob(
+    jobId,
+    type,
+    input.id,
+    spec.id,
+    author,
+    creationTimeMs,
+    status,
+  );
+
+  return Promise.all([
+    Input.create(input),
+    Spec.create(spec),
+    Job.create(job),
+  ])
+    .then((createResults) => {
+      Job.findOne(createResults[2])
+        .populate('input')
+        .populate('spec')
+        .then(populatedJob => resolve(populatedJob))
+        .catch(err => reject(err));
+    })
+    .catch(err => reject(err));
+});
+
 const mockJobCreateJson = (type, inputId, specId) => JSON.stringify({
   type,
   inputId,
@@ -51,6 +97,7 @@ const getJsonFromMockJob = (job) => {
 
 module.exports = {
   nextMockJob,
+  nextMockPopulatedJob,
   nextMockJobCreateJson,
   getJsonFromMockJob,
 };
