@@ -45,28 +45,36 @@ class NewJobs extends Component {
         }
       },
       selectedSpec: [],
-      submitDisabled: false
+      submitDisabled: false,
+      allFiles: [],
+      newFiles: [],
+      selectedFiles: []
     };
   }
 
   componentDidMount = () => {
     axios.get('http://localhost:3000/specs')
-      .then(res => {
-        var specs = {
-          'aci': [],
-          'ndsi': [],
-          'adi': [],
-          'aei': [],
-          'bi': [],
-          'rms': []
-        }
-        res.data.specs.forEach(spec => {
-          specs[spec.type].push(spec)
-        })
-        // Set all specs state
-        this.setState({ allSpecs: res.data.specs })
-        this.setState({ indexedSpecs: specs })
+    .then(res => {
+      var specs = {
+        'aci': [],
+        'ndsi': [],
+        'adi': [],
+        'aei': [],
+        'bi': [],
+        'rms': []
+      }
+      res.data.specs.forEach(spec => {
+        specs[spec.type].push(spec)
       })
+      // Set all specs state
+      this.setState({ allSpecs: res.data.specs })
+      this.setState({ indexedSpecs: specs })
+    })
+
+    axios.get('http://localhost:3000/inputs')
+    .then(res => {
+      this.setState({ allFiles: res.data.inputs })
+    })
   }
 
   changeIndex = (value) => {
@@ -178,6 +186,23 @@ class NewJobs extends Component {
     }
   }
 
+  listDbFiles = (file) => {
+    var newFiles = this.state.newFiles
+    var allFiles = this.state.allFiles
+
+    newFiles.push(file)
+    if(allFiles.indexOf(file) === -1)
+      allFiles.push(file)
+
+    this.setState({ newFiles: newFiles })
+    this.setState({ allFiles: allFiles })
+  }
+
+  updateSelectedFiles = (selected) => {
+    console.log(selected)
+    this.setState({ selectedFiles: selected })
+  }
+
   render() {
     return (
       <div>
@@ -191,6 +216,11 @@ class NewJobs extends Component {
           specs={this.state.indexedSpecs}
           submitJob={this.submitJob}
           submitDisabled={this.state.submitDisabled}
+          listDbFiles={this.listDbFiles}
+          newFiles={this.state.newFiles}
+          allFiles={this.state.allFiles}
+          selectedFiles={this.state.selectedFiles}
+          updateSelectedFiles={this.updateSelectedFiles}
         />
       </div>
     );

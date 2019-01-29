@@ -31,7 +31,15 @@ function getSteps() {
 function getStepContent(step, props) {
   switch (step) {
     case 0:
-      return <ChooseFiles />;
+      return (
+        <ChooseFiles 
+          listDbFiles={props.listDbFiles} 
+          selectedFiles={props.selectedFiles}
+          updateSelectedInputs={props.updateSelectedFiles}
+          allFiles={props.allFiles}
+          newFiles={props.newFiles}
+        />
+      )
     case 1:
       return <ChooseIndex index={props.index} changeIndex={props.changeIndex} />;
     case 2:
@@ -57,8 +65,6 @@ class HorizontalLinearStepper extends React.Component {
   };
 
   componentDidUpdate = (prevProps) => {
-    console.log(this.props)
-
     if(prevProps.submitDisabled !== this.props.submitDisabled) {
       if(this.state.activeStep === getSteps().length - 1)
         this.setState({ disabledSubmit: this.props.submitDisabled })
