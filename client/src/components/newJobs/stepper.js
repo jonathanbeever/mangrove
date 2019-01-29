@@ -19,7 +19,7 @@ import Slide from '@material-ui/core/Slide';
 const styles = theme => ({
   root: {
     width: '70%',
-    margin: '0 auto'
+    margin: '0 auto',
   },
   button: {
     marginRight: theme.spacing.unit,
@@ -28,6 +28,9 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
   },
+  stepper: {
+    backgroundColor: '#fafafa'
+  }
 });
 
 function getSteps() {
@@ -79,12 +82,6 @@ class HorizontalLinearStepper extends React.Component {
     activeStep: 0,
     disabledSubmit: true,
     open: this.props.dialog
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-    this.props.closeDialog()
-    this.setState({ disabledSubmit: false })
   };
 
   componentDidUpdate = (prevProps) => {
@@ -142,6 +139,12 @@ class HorizontalLinearStepper extends React.Component {
     this.props.closeDialog()
   };
 
+  handleClose = () => {
+    this.setState({ open: false });
+    this.props.closeDialog()
+    this.setState({ disabledSubmit: false })
+  };
+
   render() {
     const { classes } = this.props;
     const steps = getSteps();
@@ -149,7 +152,7 @@ class HorizontalLinearStepper extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Stepper activeStep={activeStep}>
+        <Stepper className={classes.stepper} activeStep={activeStep}>
           {steps.map((label, index) => {
             const props = {};
             const labelProps = {};
