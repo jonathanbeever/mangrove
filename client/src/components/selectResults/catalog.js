@@ -3,62 +3,16 @@ import Tabs from './components/tabs';
 import axios from 'axios';
 var _ = require('lodash');
 
-// TODO fix css
-const inputFiles = [
-  {
-    inputId: '5c3cbd27c012052a3c2d1099',
-    siteName: 'Zoo',
-    setName: 'aci-zoo',
-    fileName: 'zoo1.wav',
-    location: [65.01, 40.45]
-  },
-  {
-    inputId: '5c2547480af83b2bac5133f2',
-    siteName: 'Zoo',
-    setName: 'aci-zoo',
-    fileName: 'zoo2.wav',
-    location: [65.01, 40.45]
-  },
-  {
-    inputId: '5c2547480af83b2bac5133f3',
-    siteName: 'Zoo',
-    setName: 'aci-zoo',
-    fileName: 'zoo3.wav',
-    location: [67.01, 40.45]
-  },
-  {
-    inputId: '5c2547480af83b2bac5133f4',
-    siteName: 'Zoo',
-    setName: 'aci-zoo',
-    fileName: 'zoo4.wav',
-    location: [67.01, 40.45]
-  },
-  {
-    inputId: '5c2547480af83b2bac5133f5',
-    siteName: 'UCF',
-    setName: 'aci-ucf',
-    fileName: 'ucf1.wav',
-    location: [65.71, 40.25]
-  },
-  {
-    inputId: '5c2547480af83b2bac5133f6',
-    siteName: 'UCF',
-    setName: 'aci-ucf',
-    fileName: 'ucf2.wav',
-    location: [65.71, 40.25]
-  }
-]
-
 class Catalog extends Component {
   constructor(props) {
     super(props);
     this.state = {
       inputFiltering: {
-        siteName : '',
-        setName : '',
+        site : '',
+        series : '',
         fileDate : '',
-        latitude : '',
-        longitude : ''
+        lat : '',
+        long : ''
       },
       filteredInputs : [],
       index: 'aci',
@@ -189,13 +143,12 @@ class Catalog extends Component {
   };
 
   submitIndexFilter = () => {
-    console.log(this.state.filteredInputs)
     var filteredInputs = this.state.filteredInputs.filter(file => {
       var matchingFile = ''
-      if(!this.state.inputFiltering.siteName || this.state.inputFiltering.siteName.toLowerCase() === file.siteName.toLowerCase()) {
-        if(!this.state.inputFiltering.setName || this.state.inputFiltering.setName.toLowerCase() === file.setName.toLowerCase()) {
-          if(!this.state.inputFiltering.latitude || Number(this.state.inputFiltering.latitude) === file.location[0]) {
-            if(!this.state.inputFiltering.longitude || Number(this.state.inputFiltering.longitude) === file.location[1]) {
+      if(!this.state.inputFiltering.site || this.state.inputFiltering.site.toLowerCase() === file.site.toLowerCase()) {
+        if(!this.state.inputFiltering.series || this.state.inputFiltering.series.toLowerCase() === file.series.toLowerCase()) {
+          if(!this.state.inputFiltering.lat || Number(this.state.inputFiltering.lat) === file.coords.lat) {
+            if(!this.state.inputFiltering.long || Number(this.state.inputFiltering.long) === file.coords.long) {
               matchingFile = file
             }
           }
@@ -397,7 +350,6 @@ class Catalog extends Component {
     else {
       matchingInputs = []
     }
-    console.log(this.state.indexedFiles)
     this.setState({ filteredInputs: matchingInputs})
 
     if(this.state.selectedInputs.length) {

@@ -128,28 +128,31 @@ class NewJobs extends Component {
 
     // Spec already exists
     if(this.state.selectedSpec.length) {
-      inputs.forEach(inputId => {
-        // Request to queue new job
-        axios.put(
-          "http://localhost:3000/jobs",  
-          {
-            type: this.state.index,
-            inputId: inputId,
-            specId: this.state.selectedSpec[0]
-          },
-          {headers: {"Content-Type": "application/json"}}
-        )
-        .then(res => {
-          if(res.status === 201) {
-            this.setState({message: 'Jobs Started. View progress in the job queue.'})
-            this.setState({dialog: true})
-          }
-          else if(res.status === 200) {
-            this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
-            this.setState({dialog: true})
-          }
+      this.state.selectedSpec.forEach(spec => {
+
+        inputs.forEach(inputId => {
+          // Request to queue new job
+          axios.put(
+            "http://localhost:3000/jobs",  
+            {
+              type: this.state.index,
+              inputId: inputId,
+              specId: spec
+            },
+            {headers: {"Content-Type": "application/json"}}
+          )
+          .then(res => {
+            if(res.status === 201) {
+              this.setState({message: 'Jobs Started. View progress in the job queue.'})
+              this.setState({dialog: true})
+            }
+            else if(res.status === 200) {
+              this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
+              this.setState({dialog: true})
+            }
+          })
+          .catch(err => console.log(err.message));
         })
-        .catch(err => console.log(err.message));
       })
     }
     else {

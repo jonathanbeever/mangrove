@@ -80,13 +80,13 @@ class FilterInputs extends Component {
               label={<p style={{fontSize:13+'px'}}>Site Name</p>}
               value={this.props.inputFiltering.siteName}
               className={classes.textField}
-              onChange={this.props.onChange('siteName')}
+              onChange={this.props.onChange('site')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>File Set Name</p>}
               value={this.props.inputFiltering.setName}
               className={classes.textField}
-              onChange={this.props.onChange('setName')}
+              onChange={this.props.onChange('series')}
             />
             {/* TODO */}
             <DateAndTimePickers/>
@@ -94,13 +94,13 @@ class FilterInputs extends Component {
               label={<p style={{fontSize:13+'px'}}>Latitude</p>}
               value={this.props.inputFiltering.latitude}
               className={classes.textField}
-              onChange={this.props.onChange('latitude')}
+              onChange={this.props.onChange('lat')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>Longitude</p>}
               value={this.props.inputFiltering.longitude}
               className={classes.textField}
-              onChange={this.props.onChange('longitude')}
+              onChange={this.props.onChange('long')}
             />
             <div className="row filterSubmit">
               <Button style={{fontSize:12+'px'}} onClick={this.onSubmit} variant="contained" color="primary">
