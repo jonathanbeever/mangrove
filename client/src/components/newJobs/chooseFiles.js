@@ -11,11 +11,12 @@ const styles = theme => ({
   },
   formControl: {
     padding: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 3
   },
   group: {
     margin: `${theme.spacing.unit}px 0`,
-  },
+  }
 });
 
 class ChooseFiles extends React.Component {
@@ -45,7 +46,7 @@ class ChooseFiles extends React.Component {
 
     return (
       <div className={classes.root}>
-        <div className="row">
+        <div className="col-12">
           <Paper className={classes.formControl}>
             <input
               accept="audio/wave"
@@ -63,11 +64,13 @@ class ChooseFiles extends React.Component {
                 </Button>
             </label> 
             {this.state.allFiles ? 
-            (<InputsTable
-              updateSelectedInputs={this.props.updateSelectedInputs} 
-              filteredInputs={this.state.allFiles} 
-              selected={this.props.selectedFiles}          
-            />) : ''}
+            (<div>
+              <InputsTable
+                updateSelectedInputs={this.props.updateSelectedInputs} 
+                filteredInputs={this.state.allFiles} 
+                selected={this.props.selectedFiles}          
+              />
+            </div>) : ''}
           </Paper>
         </div>
       </div>

@@ -77,7 +77,7 @@ function Transition(props) {
 class HorizontalLinearStepper extends React.Component {
   state = {
     activeStep: 0,
-    disabledSubmit: false,
+    disabledSubmit: true,
     open: this.props.dialog
   };
 
@@ -88,6 +88,14 @@ class HorizontalLinearStepper extends React.Component {
   };
 
   componentDidUpdate = (prevProps) => {
+    if(prevProps.selectedFiles !== this.props.selectedFiles) {
+      if(this.state.activeStep === 0) {
+        if(this.props.selectedFiles.length)
+          this.setState({ disabledSubmit: false })
+        else
+          this.setState({ disabledSubmit: true })
+      }
+    }
     if(prevProps.selectedSpec !== this.props.selectedSpec) {
       if(this.state.activeStep === getSteps().length - 1) {
         if(this.props.selectedSpec.length)
