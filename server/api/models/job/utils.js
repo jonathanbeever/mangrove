@@ -18,7 +18,7 @@ const getJobModel = (type) => {
     case Type.BI: return BiJob;
     case Type.NDSI: return NdsiJob;
     case Type.RMS: return RmsJob;
-    default: return null;
+    default: throw new Error(`Error: Invalid 'type' parameter (${type}).`);
   }
 };
 
