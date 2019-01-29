@@ -127,17 +127,10 @@ class Catalog extends Component {
   componentDidMount = () => {
     this.handleIndexChange('aci')
     // make indexed object of inputs
-    var indexedFiles = {}
     var selected = []
-
-    inputFiles.forEach(file => {
-      // selected.push(file.inputId)
-      indexedFiles[file.inputId] = file
-    })
-
+    
     this.setState({ selectedInputs : selected })
 
-    this.setState({ indexedFiles : indexedFiles})
     // get all db specs
     axios.get('http://localhost:3000/specs')
       .then(res => {
@@ -157,6 +150,25 @@ class Catalog extends Component {
         this.setState({ indexedSpecs: specs })
         // Set filtered specs with all initially
         this.setState({ filteredSpecs: specs })
+      })
+
+      var indexedFiles = {}
+
+      axios.get('http://localhost:3000/inputs')
+      .then(res => {
+        var inputs = res.data.inputs.map(input => {
+          var path = input.path.split('\\')
+          input.path = path[path.length - 1]
+          return input
+        })
+
+        inputs.forEach(file => {
+          // selected.push(file.inputId)
+          indexedFiles[file.inputId] = file
+        })
+
+        this.setState({ indexedFiles : indexedFiles})
+        this.setState({ allFiles: inputs })
       })
 
       axios.get('http://localhost:3000/jobs')
@@ -328,7 +340,8 @@ class Catalog extends Component {
         obj[specId] = this.state.allJobs.map(job => {
           if(job.spec === specId)
             return job.input
-          return null
+          else
+            return null
         }).filter(id => {
           if(id !== null)
             return id
@@ -384,6 +397,7 @@ class Catalog extends Component {
     else {
       matchingInputs = []
     }
+    console.log(this.state.indexedFiles)
     this.setState({ filteredInputs: matchingInputs})
 
     if(this.state.selectedInputs.length) {
@@ -430,7 +444,6 @@ class Catalog extends Component {
         }
       }
     })
-    console.log(jobsObj)
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 
@@ -447,7 +460,6 @@ class Catalog extends Component {
   }
 
   handleJobFilter = label => e => {
-    console.log(label, e.target.value)
     var filter = this.state.jobFiltering
     filter[label] = e.target.value
     this.setState({ jobFiltering : filter })
@@ -466,7 +478,6 @@ class Catalog extends Component {
       }
     })
    
-    console.log(filteredJobs)
     this.setState({ jobsFiltered: filteredJobs })
   }
 

@@ -153,7 +153,7 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">
-            Matching Inputs
+            Input Files
           </Typography>
         )}
       </div>
