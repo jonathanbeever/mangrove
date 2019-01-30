@@ -61,7 +61,7 @@ class FilterInputs extends Component {
     this.formatChipHtml()
     this.props.onSubmitInput()
   }
-  
+
   deleteChip = (label) => {
     this.props.onDelete(label)
     this.formatChipHtml()
@@ -75,45 +75,45 @@ class FilterInputs extends Component {
         <div className="col-4">
           <Paper className={classes.root}>
             {this.state.chips}
-            <h5>Filter By Input Files</h5>
+            <h4>Filter By Input Files</h4>
             <TextField
-              label="Site Name"
+              label={<p style={{fontSize:13+'px'}}>Site Name</p>}
               value={this.props.inputFiltering.siteName}
               className={classes.textField}
               onChange={this.props.onChange('siteName')}
             />
             <TextField
-              label="File Set Name"
+              label={<p style={{fontSize:13+'px'}}>File Set Name</p>}
               value={this.props.inputFiltering.setName}
               className={classes.textField}
               onChange={this.props.onChange('setName')}
             />
             {/* TODO */}
-            <DateAndTimePickers />
+            <DateAndTimePickers/>
             <TextField
-              label="Latitude"
+              label={<p style={{fontSize:13+'px'}}>Latitude</p>}
               value={this.props.inputFiltering.latitude}
               className={classes.textField}
               onChange={this.props.onChange('latitude')}
             />
             <TextField
-              label="Longitude"
+              label={<p style={{fontSize:13+'px'}}>Longitude</p>}
               value={this.props.inputFiltering.longitude}
               className={classes.textField}
               onChange={this.props.onChange('longitude')}
             />
             <div className="row filterSubmit">
-              <Button onClick={this.onSubmit} variant="contained" color="primary">
+              <Button style={{fontSize:12+'px'}} onClick={this.onSubmit} variant="contained" color="primary">
                 Apply Input Filters
               </Button>
             </div>
           </Paper>
         </div>
         <div className="col-8">
-          <InputsTable 
-            updateSelectedInputs={this.props.updateSelectedInputs} 
-            filteredInputs={this.props.filteredInputs} 
-            selected={this.props.selected}          
+          <InputsTable
+            updateSelectedInputs={this.props.updateSelectedInputs}
+            filteredInputs={this.props.filteredInputs}
+            selected={this.props.selected}
           />
         </div>
       </div>

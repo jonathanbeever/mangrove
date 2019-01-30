@@ -22,7 +22,7 @@
 //   console.log(props)
 //   /**
 //    * props.expanded = true if index is selected
-//    * if clicked when false, 
+//    * if clicked when false,
 //    *  change index function
 //    *  set expanded state true
 //    * if props.expanded = true, set state to true
@@ -44,7 +44,7 @@
 //           <Typography className={classes.heading}>{props.index.toUpperCase() + ' Parameters'}</Typography>
 //         </ExpansionPanelSummary>
 //         <ExpansionPanelDetails>
-//           <SpecsTable 
+//           <SpecsTable
 //             index={props.index}
 //             specs={props.specs}
 //             params={props.params}
@@ -77,6 +77,10 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
+  heading: {
+    fontSize: theme.typography.pxToRem(24),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
 });
 
 class Expansion extends React.Component {
@@ -108,7 +112,7 @@ class Expansion extends React.Component {
             <Typography className={classes.heading}>{this.props.index.toUpperCase() + ' Parameters'}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <SpecsTable 
+            <SpecsTable
               index={this.props.index}
               specs={this.props.specs}
               params={this.props.params}

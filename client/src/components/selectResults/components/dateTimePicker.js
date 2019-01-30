@@ -15,7 +15,7 @@ const styles = theme => ({
     marginTop: 0,
     paddingTop: 20,
     paddingBottom: 0,
-    fontWeight: 500
+    fontWeight: 500,
   }
 });
 
@@ -27,7 +27,7 @@ function DateAndTimePickers(props) {
     <form noValidate>
       <TextField
         id="datetime-local"
-        label="Date/Time of Recording"
+        label={<p style={{fontSize:13+'px'}}>Date/Time of Recording</p>}
         type="datetime-local"
         defaultValue=""
         className={classes.textField}

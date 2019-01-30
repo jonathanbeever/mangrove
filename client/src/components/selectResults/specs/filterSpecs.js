@@ -96,7 +96,7 @@ class FilterSpecs extends Component {
         return (
           <TextField
             key={param[0]}
-            label={param[1]}
+            label={<p style={{fontSize:13+'px'}}>{param[1]}</p>}
             value={this.props.specParamsByIndex[this.props.index][param[0]]}
             className={classes.textField}
             onChange={this.props.handleSpecChange(param[0])}
@@ -115,7 +115,7 @@ class FilterSpecs extends Component {
                 color="primary"
               />
             }
-            label="Shannon Diversity Index"
+            label={<p style={{fontSize:11+'px', marginTop:12}}>Shannon Diversity Index</p>}
           />
         )
       }
@@ -126,7 +126,7 @@ class FilterSpecs extends Component {
         <h4>Choose Specs</h4>
         {specInputHtml}
         <div className="row filterSubmit">
-          <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
+          <Button style={{fontSize:12+'px'}} onClick={this.onSubmitSpecs} variant="contained" color="primary">
             Apply Spec Filters
           </Button>
         </div>
@@ -168,18 +168,19 @@ class FilterSpecs extends Component {
         <div className="col-4">
           <Paper className={classes.root}>
             {this.state.chips}
-            <h5>Filter By Index Specifications</h5>
+            <h4>Filter By Index Specifications</h4>
             <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="indexSelect">Index</InputLabel>
-                <Select
-                  value={this.props.index}
-                  onChange={this.props.handleIndexChange}
-                  className={classes.textField}
-                  inputProps={{
-                    name: 'index',
-                    id: 'indexSelect',
-                  }}
-                >
+              <InputLabel style={{fontSize:15+'px'}} htmlFor="indexSelect">Index</InputLabel>
+              <Select
+                style={{marginBottom:10+'px', fontSize:15+'px'}}
+                value={this.props.index}
+                onChange={this.props.handleIndexChange}
+                className={classes.textField}
+                inputProps={{
+                  name: 'index',
+                  id: 'indexSelect',
+                }}
+              >
                 <MenuItem value='aci'>ACI</MenuItem>
                 <MenuItem value='ndsi'>NDSI</MenuItem>
                 <MenuItem value='adi'>ADI</MenuItem>
@@ -193,8 +194,8 @@ class FilterSpecs extends Component {
           </Paper>
         </div>
         <div className="col-8">
-        <Paper className={classes.root}>
-          {this.state.expansionPanels ? this.state.expansionPanels : ''}
+          <Paper className={classes.root}>
+            {this.state.expansionPanels ? this.state.expansionPanels : ''}
           </Paper>
         </div>
       </div>

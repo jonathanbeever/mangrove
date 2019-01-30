@@ -77,16 +77,17 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={row.id}
-                align={row.numeric ? 'right' : 'left'}
+                align='center'
                 padding={row.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === row.id ? order : false}
               >
                 <Tooltip
-                  title="Sort"
-                  placement={row.numeric ? 'bottom-end' : 'bottom-start'}
+                  title={<p style={{fontSize:10+'px'}}>Sort</p>}
+                  placement='top'
                   enterDelay={300}
                 >
                   <TableSortLabel
+                    style={{ fontSize:15+'px' }}
                     active={orderBy === row.id}
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
@@ -159,14 +160,14 @@ let EnhancedTableToolbar = props => {
       <div className={classes.spacer} />
       <div className={classes.actions}>
         {numSelected > 0 ? (
-          <Tooltip title="Delete">
+          <Tooltip title={<p style={{fontSize:10+'px'}}>Delete</p>} placement='top'>
             <IconButton aria-label="Delete">
               <DeleteIcon />
             </IconButton>
           </Tooltip>
         ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
+          <Tooltip title={<p style={{fontSize:10+'px'}}>Filter List</p>} placement='top'>
+            <IconButton aria-label="Filter List">
               <FilterListIcon />
             </IconButton>
           </Tooltip>
@@ -203,7 +204,7 @@ class EnhancedTable extends React.Component {
     // send prop form filtering?
     selected: this.props.selected,
     data: [
-      
+
     ],
     page: 0,
     rowsPerPage: 5,
@@ -239,9 +240,9 @@ class EnhancedTable extends React.Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      var list = this.state.data.map(n => n.id) 
+      var list = this.state.data.map(n => n.id)
       this.setState({ selected: list });
-      this.props.updateSelectedInputs(list)      
+      this.props.updateSelectedInputs(list)
       return;
     }
     this.setState({ selected: [] });
@@ -335,6 +336,8 @@ class EnhancedTable extends React.Component {
           </Table>
         </div>
         <TablePagination
+          labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
+          labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying pages {from}-{to} of total {count} pages</p>}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={data.length}
