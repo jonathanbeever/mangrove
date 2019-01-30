@@ -5,7 +5,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import ChooseIndex from './chooseIndex';
 import ChooseSpecs from './chooseSpecs';
 import ChooseFiles from './chooseFiles';
@@ -13,7 +12,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
 const styles = theme => ({
@@ -29,7 +27,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit,
   },
   stepper: {
-    backgroundColor: '#fafafa'
+    backgroundColor: '#fff'
   }
 });
 
