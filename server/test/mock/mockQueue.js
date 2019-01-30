@@ -1,5 +1,6 @@
 const Status = require('../../api/models/status');
 const { getJobModel } = require('../../api/models/job/utils');
+const { value } = require('../../util/settings');
 
 
 const moveJobFromWorkToFinish = (index) => {
@@ -7,21 +8,53 @@ const moveJobFromWorkToFinish = (index) => {
   this.workersList[index].splice(index, 1);
 };
 
-function MockQueue(concurrency, proccessFunction) {
+function MockQueue(processFunction, concurrency = value('cores')) {
   this.queue = null;
   this.workersList = null;
   this.finishedJobs = null;
   this.concurrency = concurrency;
-  this.proccessFunction = proccessFunction;
+  this.process = processFunction;
 
 
-  this.init = () => {
+  this.init = process => new Promise((resolve) => {
     this.queue = [];
     this.workersList = [];
     this.finishedJobs = [];
+    this.process = process;
+    resolve(this);
+  });
+
+
+  this.destroy = () => {
+    if (this.queue) {
+      this.queue = null;
+      this.workersList = null;
+      this.finishedJobs = null;
+    }
   };
 
-  this.enqueue = (job) => {
+
+  this.enqueue = job => new Promise((resolve, reject) => {
+    const JobModel = getJobModel(job.type);
+    JobModel.findByIdAndUpdate(
+      job._id,
+      { status: Status.QUEUED },
+      { new: true },
+    ).then(async (foundJob) => {
+      if (foundJob) {
+        const processedResult = await this.process(job);
+        const processedJob = { ...foundJob._doc, ...{ result: processedResult } };
+        resolve({
+          job: processedJob,
+          ...(processedJob.process || { process: 'Mocked enqueue does not contain promise' }),
+        });
+      }
+    }).catch((err) => {
+      reject(err);
+    });
+  });
+
+  this.pushToQueue = (job) => {
     const JobModel = getJobModel(job.type);
     JobModel.findById(
       job.jobId,
@@ -49,7 +82,7 @@ function MockQueue(concurrency, proccessFunction) {
     this.workersList.push(this.queue[indexOfJob]);
   };
 
-  this.finishWork = (populatedJob, status) => {
+  this.finishWork = (populatedJob, status, proccess = this.processFunction) => {
     const indexOfJob = this.workersList.map(workingJob => workingJob.jobId)
       .indexOf(populatedJob.jobId);
     const jobInWork = this.workersList[indexOfJob];
@@ -64,7 +97,7 @@ function MockQueue(concurrency, proccessFunction) {
       moveJobFromWorkToFinish(indexOfJob);
     } else if (status === Status.FINISHED) {
       jobInWork.status = Status.FINISHED;
-      jobInWork.result = this.proccessFunction(jobInWork);
+      jobInWork.result = proccess(jobInWork);
       moveJobFromWorkToFinish(indexOfJob);
     } else {
       throw new Error(`Cannot Finish Job With Status ${status}`);

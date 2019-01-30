@@ -16,7 +16,7 @@ conn
     // TODO: Replace mockProcess with real Process
     jobQueue.init(mockProcessJob)
       .then((initQueue) => {
-        global.globalQueue = initQueue;
+        global.jobQueue = initQueue;
         server.listen(port, () => {
           // OK!
         });
