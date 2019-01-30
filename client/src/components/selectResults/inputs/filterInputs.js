@@ -78,13 +78,13 @@ class FilterInputs extends Component {
             <h4>Filter By Input Files</h4>
             <TextField
               label={<p style={{fontSize:13+'px'}}>Site Name</p>}
-              value={this.props.inputFiltering.siteName}
+              value={this.props.inputFiltering.site}
               className={classes.textField}
               onChange={this.props.onChange('site')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>File Set Name</p>}
-              value={this.props.inputFiltering.setName}
+              value={this.props.inputFiltering.series}
               className={classes.textField}
               onChange={this.props.onChange('series')}
             />
@@ -92,13 +92,13 @@ class FilterInputs extends Component {
             <DateAndTimePickers/>
             <TextField
               label={<p style={{fontSize:13+'px'}}>Latitude</p>}
-              value={this.props.inputFiltering.latitude}
+              value={this.props.inputFiltering.lat}
               className={classes.textField}
               onChange={this.props.onChange('lat')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>Longitude</p>}
-              value={this.props.inputFiltering.longitude}
+              value={this.props.inputFiltering.long}
               className={classes.textField}
               onChange={this.props.onChange('long')}
             />
