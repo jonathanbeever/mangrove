@@ -4,7 +4,6 @@ const Status = require('../api/models/status');
 const {
   updateJob,
   getPendingJobs,
-  updateAndPopulateJob,
 } = require('../api/models/job/utils');
 const settings = require('./settings');
 
@@ -27,7 +26,7 @@ function JobQueue() {
 
   const createQueue = jobProcessFn => new Promise(async (resolve, reject) => {
     await (this.queue = async.queue((job, callback) => {
-      updateAndPopulateJob(job, { status: Status.PROCESSING })
+      updateJob(job, { status: Status.PROCESSING }, true)
         .then((queuedJob) => {
           jobProcessFn(queuedJob)
             .then((result) => {

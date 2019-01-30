@@ -38,34 +38,20 @@ const getJobKeys = (type, finished = true) => {
 
 const newJobKeys = () => ['type', 'inputId', 'specId'];
 
-const updateJob = (job, update) => {
+const updateJob = (job, update, populate = false) => {
   const newJob = { ...job._doc, ...update };
   const JobModel = getJobModel(newJob.type);
-  return JobModel.findByIdAndUpdate(
+  const updatedJob = JobModel.findByIdAndUpdate(
     newJob._id,
     newJob,
     { new: true },
-  )
-    .then(updatedJob => updatedJob)
-    .catch(() => {
-      throw new Error(`Failed to update job ${job._id}`);
-    });
-};
-
-const updateAndPopulateJob = (job, update) => {
-  const newJob = { ...job._doc, ...update };
-  const JobModel = getJobModel(newJob.type);
-  return JobModel.findByIdAndUpdate(
-    newJob._id,
-    newJob,
-    { new: true },
-  )
-    .populate('input')
-    .populate('spec')
-    .then(updatedJob => updatedJob)
-    .catch(() => {
-      throw new Error(`Failed to update job ${job._id}`);
-    });
+  );
+  if (populate) {
+    updatedJob
+      .populate('input')
+      .populate('spec');
+  }
+  return updatedJob;
 };
 
 const sortByStatusByTime = (jobs) => {
@@ -92,5 +78,4 @@ module.exports = {
   newJobKeys,
   getPendingJobs,
   updateJob,
-  updateAndPopulateJob,
 };
