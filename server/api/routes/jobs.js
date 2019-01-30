@@ -19,7 +19,6 @@ const { arrayDiff } = require('../../util/array');
 router.put('/', (req, res) => {
   const missingKeys = arrayDiff(newJobKeys(), Object.keys(req.body));
   if (missingKeys.length > 0) {
-    console.log(missingKeys)
     return res.status(400).json({
       message: `Missing required keys: ${missingKeys.join(', ')}.`,
     });

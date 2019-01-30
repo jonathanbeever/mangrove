@@ -27,7 +27,6 @@ class App extends Component {
             <Route path="/newJobs" component={NewJobs} />
             <Route path="/settings" component={Settings} />
             <Redirect from="/" to="/catalog" />
-
           </Switch>
         </div>
       </Router>
