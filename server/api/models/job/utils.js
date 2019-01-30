@@ -22,7 +22,6 @@ const getJobModel = (type) => {
   }
 };
 
-
 const getJobKeys = (type, finished = true) => {
   const JobModel = getJobModel(type);
   if (!JobModel) {
