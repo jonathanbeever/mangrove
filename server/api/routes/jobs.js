@@ -14,6 +14,7 @@ const Type = require('../models/type');
 
 const { arrayDiff } = require('../../util/array');
 
+
 // Create Job
 router.put('/', (req, res) => {
   const missingKeys = arrayDiff(newJobKeys(), Object.keys(req.body));
@@ -65,25 +66,27 @@ router.put('/', (req, res) => {
           spec: req.body.specId,
           author: 'Test Author', // TODO: Implement user authentication
           creationTimeMs: moment().valueOf(),
-          status: Status.QUEUED, // TODO: Implement job queueing
+          status: Status.WAITING, // TODO: Implement job queueing
         });
 
         Job.create(job)
-          .then((createResult) => {
-            res.status(201).json({
-              jobId: createResult._id,
-              type: createResult.type,
-              input: createResult.input,
-              spec: createResult.spec,
-              author: createResult.author,
-              creationTimeMs: createResult.creationTimeMs,
-              status: createResult.status,
-            });
-          })
-          .catch((err) => {
-            res.status(500).json({
-              error: err,
-            });
+          .then(async (createResult) => {
+            try {
+              const enqueueReturn = await global.jobQueue.enqueue(createResult);
+              const updatedJob = enqueueReturn.job;
+              res.status(201).json({
+                jobId: updatedJob._id,
+                type: updatedJob.type,
+                input: updatedJob.input,
+                spec: updatedJob.spec,
+                author: updatedJob.author,
+                creationTimeMs: updatedJob.creationTimeMs,
+                status: updatedJob.status,
+              });
+            } catch (err) {
+              console.log('Error in Job Put Route');
+              res.status(500).json({ error: err });
+            }
           });
       }
     })

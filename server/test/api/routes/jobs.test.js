@@ -9,7 +9,9 @@ const {
   nextMockJobCreateJson,
   getJsonFromMockJob,
 } = require('../../mock/mockJob');
+const { mockProcessJob } = require('../../mock/mockProcessJob');
 const { nextMockObjectId } = require('../../mock/mockObjectId');
+const mockQueue = require('../../mock/mockQueue');
 
 const app = require('../../../app');
 
@@ -113,37 +115,40 @@ describe('Jobs', () => {
       const jobJsons = [];
       jobs.forEach(job => jobJsons.push(getJsonFromMockJob(job)));
 
-      jobJsons.forEach((json, index) => {
-        chai
-          .request(app)
-          .put('/jobs')
-          .set('Content-Type', 'application/json')
-          .send(json)
-          .then((res) => {
-            expect(res).to.have.status(201);
-            expect(res.body).to.have.all.keys(
-              getJobKeys(types[index % types.length], false),
-            );
-            expect(ObjectId(res.body.jobId).toString()).to.equal(
-              res.body.jobId, // Check whether it's a valid ObjectId
-            );
-            expect(res.body.type).to.equal(types[index % types.length]);
-            expect(res.body.input).to.equal(
-              ObjectId(jobs[index].input).toString(),
-            );
-            expect(res.body.spec).to.equal(
-              ObjectId(jobs[index].spec).toString(),
-            );
-            expect(res.body.author).to.equal(jobs[index].author);
-            expect(res.body.creationTimeMs).to.be.a('number');
-            expect(res.body.status).to.equal(Status.QUEUED);
-          })
-          .catch((err) => {
-            done(err);
-          });
-      });
+      mockQueue.init(mockProcessJob)
+        .then((mockQ) => {
+          global.jobQueue = mockQ;
 
-      done();
+          const jobPromises = jobJsons.map(json => chai
+            .request(app)
+            .put('/jobs')
+            .set('Content-Type', 'application/json')
+            .send(json));
+
+          Promise.all(jobPromises)
+            .then((responses) => {
+              responses.forEach((res, index) => {
+                expect(res).to.have.status(201);
+                expect(res.body).to.have.all.keys(
+                  getJobKeys(types[index % types.length], false),
+                );
+                expect(ObjectId(res.body.jobId).toString()).to.equal(
+                  res.body.jobId, // Check whether it's a valid ObjectId
+                );
+                expect(res.body.type).to.equal(types[index % types.length]);
+                expect(res.body.input).to.equal(
+                  ObjectId(jobs[index].input).toString(),
+                );
+                expect(res.body.spec).to.equal(
+                  ObjectId(jobs[index].spec).toString(),
+                );
+                expect(res.body.author).to.equal(jobs[index].author);
+                expect(res.body.creationTimeMs).to.be.a('number');
+                expect(res.body.status).to.equal(Status.QUEUED);
+              });
+              done();
+            });
+        });
     });
 
     it('It should PUT a Job (existing, unfinished)', (done) => {
@@ -354,7 +359,7 @@ describe('Jobs', () => {
         .then((res) => {
           expect(res).to.have.status(200);
           expect(res.body).to.have.all.keys(['count', 'jobs']);
-          expect(res.body.count).to.be.eql(0);
+          expect(res.body.count).to.equal(0);
           expect(res.body.jobs).to.be.an('array');
           expect(res.body.jobs).to.be.empty;
           done();
@@ -381,7 +386,7 @@ describe('Jobs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.have.all.keys(['count', 'jobs']);
-              expect(res.body.count).to.be.eql(jobs.length);
+              expect(res.body.count).to.equal(jobs.length);
               expect(res.body.jobs).to.be.an('array');
               expect(res.body.jobs).to.have.lengthOf(jobs.length);
               res.body.jobs.forEach((job, index) => {
@@ -425,7 +430,7 @@ describe('Jobs', () => {
             .then((res) => {
               expect(res).to.have.status(200);
               expect(res.body).to.have.all.keys(['count', 'jobs']);
-              expect(res.body.count).to.be.eql(jobs.length);
+              expect(res.body.count).to.equal(jobs.length);
               expect(res.body.jobs).to.be.an('array');
               expect(res.body.jobs).to.have.lengthOf(jobs.length);
               res.body.jobs.forEach((job, index) => {

@@ -16,28 +16,41 @@ const rootDir = config.util.getEnv('NODE_ENV') !== 'test'
   ? path.join(os.homedir(), storage.root)
   : path.join(os.tmpdir(), storage.root);
 
+
+const value = key => (config.util.getEnv('NODE_ENV') !== 'test'
+  ? settings.value(key)
+  : testSettings[key]);
+
+const setValue = (key, newValue) => {
+  if (config.util.getEnv('NODE_ENV') !== 'test') {
+    settings.setValue(key, newValue);
+  } else {
+    testSettings[key] = newValue;
+  }
+};
+
 const load = () => {
   if (config.util.getEnv('NODE_ENV') !== 'test') {
     settings.init({
       electronApp: false,
       filename: path.join(rootDir, settingsFile),
     });
+  }
 
-    // TODO: Check to make sure we have ownership/access for this directory
-    if (!settings.value('inputDir')) {
-      settings.setValue('inputDir', path.join(rootDir, storage.inputs));
-    }
-  } else {
-    testSettings.inputDir = path.join(rootDir, storage.inputs);
+  // TODO: Check to make sure we have ownership/access for this directory
+  // TODO: Make sure inputDir is Valid.
+  if (!value('inputDir')) {
+    setValue('inputDir', path.join(rootDir, storage.inputs));
+  }
+  if (!value('cores')) {
+    setValue('cores', os.cpus().length);
   }
 };
 
-const value = key => (config.util.getEnv('NODE_ENV') !== 'test'
-  ? settings.value(key)
-  : testSettings[key]);
 
 module.exports = {
   rootDir,
   load,
   value,
+  setValue,
 };

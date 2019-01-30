@@ -1,4 +1,5 @@
 const Status = Object.freeze({
+  WAITING: 'waiting',
   QUEUED: 'queued',
   PROCESSING: 'processing',
   FINISHED: 'finished',

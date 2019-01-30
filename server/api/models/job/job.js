@@ -12,6 +12,7 @@ const jobSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: [
+      Status.WAITING,
       Status.QUEUED,
       Status.PROCESSING,
       Status.FINISHED,

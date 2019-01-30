@@ -4,6 +4,9 @@ const AeiJob = require('./aei');
 const BiJob = require('./bi');
 const NdsiJob = require('./ndsi');
 const RmsJob = require('./rms');
+const Job = require('./job');
+
+const Status = require('../status');
 
 const Type = require('../type');
 
@@ -35,8 +38,59 @@ const getJobKeys = (type, finished = true) => {
 
 const newJobKeys = () => ['type', 'inputId', 'specId'];
 
+const updateJob = (job, update) => {
+  const newJob = { ...job._doc, ...update };
+  const JobModel = getJobModel(newJob.type);
+  return JobModel.findByIdAndUpdate(
+    newJob._id,
+    newJob,
+    { new: true },
+  )
+    .then(updatedJob => updatedJob)
+    .catch(() => {
+      throw new Error(`Failed to update job ${job._id}`);
+    });
+};
+
+const updateAndPopulateJob = (job, update) => {
+  const newJob = { ...job._doc, ...update };
+  const JobModel = getJobModel(newJob.type);
+  return JobModel.findByIdAndUpdate(
+    newJob._id,
+    newJob,
+    { new: true },
+  )
+    .populate('input')
+    .populate('spec')
+    .then(updatedJob => updatedJob)
+    .catch(() => {
+      throw new Error(`Failed to update job ${job._id}`);
+    });
+};
+
+const sortByStatusByTime = (jobs) => {
+  const statusPriority = Object.values(Status);
+
+  jobs.sort((firstJob, secondJob) => {
+    if (firstJob.status === secondJob.status) {
+      return firstJob.creationTimeMs - secondJob.creationTimeMs;
+    }
+    return statusPriority.indexOf(secondJob.status)
+      - statusPriority.indexOf(firstJob.status);
+  });
+  return jobs;
+};
+
+const getPendingJobs = () => Job
+  .find({ status: { $in: [Status.QUEUED, Status.PROCESSING, Status.WAITING] } })
+  .then(waitingJobs => sortByStatusByTime(waitingJobs))
+  .catch(() => { throw new Error('Failed to get pending jobs'); });
+
 module.exports = {
   getJobModel,
   getJobKeys,
   newJobKeys,
+  getPendingJobs,
+  updateJob,
+  updateAndPopulateJob,
 };
