@@ -18,7 +18,7 @@ const getJobModel = (type) => {
     case Type.BI: return BiJob;
     case Type.NDSI: return NdsiJob;
     case Type.RMS: return RmsJob;
-    default: return null;
+    default: throw new Error(`Error: Invalid 'type' parameter (${type}).`);
   }
 };
 
@@ -72,10 +72,61 @@ const getPendingJobs = () => Job
   .then(waitingJobs => sortByStatusByTime(waitingJobs))
   .catch(() => { throw new Error('Failed to get pending jobs'); });
 
+const getResultKeys = (type) => {
+  switch (type) {
+    case Type.ACI:
+      return [
+        'aciTotAllL',
+        'aciTotAllR',
+        'aciTotAllByMinL',
+        'aciTotAllByMinR',
+        'aciFlValsL',
+        'aciFlValsR',
+        'aciMatrixL',
+        'aciMatrixR',
+      ];
+    case Type.ADI:
+      return [
+        'adiL',
+        'adiR',
+        'bandL',
+        'bandR',
+        'bandRangeL',
+        'bandRangeR',
+      ];
+    case Type.AEI:
+      return [
+        'aeiL',
+        'aeiR',
+      ];
+    case Type.BI:
+      return [
+        'areaL',
+        'areaR',
+      ];
+    case Type.NDSI:
+      return [
+        'ndsiL',
+        'ndsiR',
+        'biophonyL',
+        'anthrophonyL',
+        'biophonyR',
+        'anthrophonyR',
+      ];
+    case Type.RMS:
+      return [
+        // TODO
+      ];
+    default:
+      throw new Error(`Error: Invalid 'type' parameter (${type}).`);
+  }
+};
+
 module.exports = {
   getJobModel,
   getJobKeys,
   newJobKeys,
   getPendingJobs,
   updateJob,
+  getResultKeys,
 };

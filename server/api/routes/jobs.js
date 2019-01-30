@@ -31,8 +31,10 @@ router.put('/', (req, res) => {
     });
   }
 
-  const JobModel = getJobModel(req.body.type);
-  if (!JobModel) {
+  let JobModel;
+  try {
+    JobModel = getJobModel(req.body.type);
+  } catch (err) {
     const types = Object.values(Type).join(', ');
     return res.status(400).json({
       message: `Invalid type: ${req.body.type}. Must be one of: ${types}.`,
