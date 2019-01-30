@@ -8,13 +8,12 @@ const port = config.get('port') || 3000;
 const server = http.createServer(app);
 
 const jobQueue = require('./util/jobQueue');
-const { mockProcessJob } = require('./test/mock/mockProcessJob');
+const jobProcessor = require('./util/jobProcessor');
 
 conn
   .open()
   .then(() => {
-    // TODO: Replace mockProcess with real Process
-    jobQueue.init(mockProcessJob)
+    jobQueue.init(jobProcessor.process)
       .then((initQueue) => {
         global.jobQueue = initQueue;
         server.listen(port, () => {
