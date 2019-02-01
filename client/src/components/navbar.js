@@ -149,6 +149,11 @@ class NavBar extends Component {
               </Link>
             </ListItem>
             <ListItem>
+              <Link to="/jobQueue">
+                <ListItemText primary='Job Queue' />
+              </Link>
+            </ListItem>
+            <ListItem>
               <Link to="/settings">
                 <ListItemText primary='Settings' />
               </Link>

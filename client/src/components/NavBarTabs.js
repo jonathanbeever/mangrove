@@ -69,6 +69,13 @@ class NavBarTabs extends React.Component {
                     activeStyle={{color: 'white', textDecoration: 'none'}}
                     component={NavLink} />
                 <Tab value={2}
+                    label={<div><h5>Job Queue</h5></div>}
+                    classes={{root: classes.fullHeight }}
+                    to="/jobQueue"
+                    style={{color: 'white', textDecoration: 'none'}}
+                    activeStyle={{color: 'white', textDecoration: 'none'}}
+                    component={NavLink} />
+                <Tab value={3}
                     label={<div><h5>Settings</h5></div>}
                     classes={{root: classes.fullHeight }}
                     to="/settings"

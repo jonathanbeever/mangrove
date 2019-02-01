@@ -5,6 +5,7 @@ import NewJobs from './components/newJobs/newJobs';
 import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Catalog from './components/selectResults/catalog';
+import JobQueue from './components/jobQueue/jobQueue';
 
 class App extends Component {
 
@@ -26,6 +27,7 @@ class App extends Component {
             <Route path="/catalog" component={Catalog} />
             <Route path="/newJobs" component={NewJobs} />
             <Route path="/settings" component={Settings} />
+            <Route path="/jobQueue" component={JobQueue} />
             <Redirect from="/" to="/catalog" />
           </Switch>
         </div>
