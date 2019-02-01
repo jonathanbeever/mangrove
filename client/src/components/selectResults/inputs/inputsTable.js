@@ -337,7 +337,7 @@ class EnhancedTable extends React.Component {
         </div>
         <TablePagination
           labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
-          labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying pages {from}-{to} of total {count} pages</p>}
+          labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={data.length}
