@@ -153,7 +153,7 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">
-            Matching Inputs
+            Input Files
           </Typography>
         )}
       </div>
@@ -212,7 +212,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredInputs.map(input => {
-      return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
+      return createData(input.inputId, input.site, input.series, input.path, input.coords.lat, input.coords.long)
     })
     this.setState({data: data})
   }
@@ -220,10 +220,12 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredInputs.map(input => {
-        return createData(input.inputId, input.siteName, input.setName, input.fileName, input.location[0], input.location[1])
+        return createData(input.inputId, input.site, input.series, input.path, input.coords.lat, input.coords.long)
       })
-      this.setState({selected: this.props.selected})
-      this.setState({data: data})
+      if(data !== this.state.data)
+        this.setState({data: data})
+      if(this.props.selected !== this.state.selected)
+        this.setState({selected: this.props.selected})
     }
   }
 
@@ -266,7 +268,6 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
-
     this.props.updateSelectedInputs(newSelected)
     this.setState({ selected: newSelected });
   };

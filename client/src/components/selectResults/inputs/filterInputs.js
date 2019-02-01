@@ -78,29 +78,29 @@ class FilterInputs extends Component {
             <h4>Filter By Input Files</h4>
             <TextField
               label={<p style={{fontSize:13+'px'}}>Site Name</p>}
-              value={this.props.inputFiltering.siteName}
+              value={this.props.inputFiltering.site}
               className={classes.textField}
-              onChange={this.props.onChange('siteName')}
+              onChange={this.props.onChange('site')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>File Set Name</p>}
-              value={this.props.inputFiltering.setName}
+              value={this.props.inputFiltering.series}
               className={classes.textField}
-              onChange={this.props.onChange('setName')}
+              onChange={this.props.onChange('series')}
             />
             {/* TODO */}
             <DateAndTimePickers/>
             <TextField
               label={<p style={{fontSize:13+'px'}}>Latitude</p>}
-              value={this.props.inputFiltering.latitude}
+              value={this.props.inputFiltering.lat}
               className={classes.textField}
-              onChange={this.props.onChange('latitude')}
+              onChange={this.props.onChange('lat')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>Longitude</p>}
-              value={this.props.inputFiltering.longitude}
+              value={this.props.inputFiltering.long}
               className={classes.textField}
-              onChange={this.props.onChange('longitude')}
+              onChange={this.props.onChange('long')}
             />
             <div className="row filterSubmit">
               <Button style={{fontSize:12+'px'}} onClick={this.onSubmit} variant="contained" color="primary">

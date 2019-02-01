@@ -534,12 +534,12 @@ function convertNDSIResults(jobs) {
 
   // REMEMBER TO CHANGE DUMMY TO JOBS
   jobs.forEach(function(job){
-    ndsiLTotal += job.input.result.ndsiL;
-    ndsiRTotal += job.input.result.ndsiR;
-    biophonyLTotal += job.input.result.biophonyL;
-    biophonyRTotal += job.input.result.biophonyR;
-    anthrophonyLTotal += job.input.result.anthrophonyL;
-    anthrophonyRTotal += job.input.result.anthrophonyR;
+    ndsiLTotal += job.result.ndsiL;
+    ndsiRTotal += job.result.ndsiR;
+    biophonyLTotal += job.result.biophonyL;
+    biophonyRTotal += job.result.biophonyR;
+    anthrophonyLTotal += job.result.anthrophonyL;
+    anthrophonyRTotal += job.result.anthrophonyR;
   });
 
   let ndsiLAvg = ndsiLTotal / jobs.length;
@@ -612,12 +612,12 @@ function convertNDSIResults(jobs) {
     if(oldDateString === dayDate)
     {
       // we are still on same day
-      dateObject.ndsiL += job.input.result.ndsiL;
-      dateObject.ndsiR += job.input.result.ndsiR;
-      dateObject.biophonyL += job.input.result.biophonyL;
-      dateObject.biophonyR += job.input.result.biophonyR;
-      dateObject.anthrophonyL += job.input.result.anthrophonyL;
-      dateObject.anthrophonyR += job.input.result.anthrophonyR;
+      dateObject.ndsiL += job.result.ndsiL;
+      dateObject.ndsiR += job.result.ndsiR;
+      dateObject.biophonyL += job.result.biophonyL;
+      dateObject.biophonyR += job.result.biophonyR;
+      dateObject.anthrophonyL += job.result.anthrophonyL;
+      dateObject.anthrophonyR += job.result.anthrophonyR;
 
       counter += 1;
 
@@ -638,12 +638,12 @@ function convertNDSIResults(jobs) {
 
       dateObject = {
         name: dayDate,
-        ndsiL: job.input.result.ndsiL,
-        ndsiR: job.input.result.ndsiR,
-        biophonyL: job.input.result.biophonyL,
-        biophonyR: job.input.result.biophonyR,
-        anthrophonyL: job.input.result.anthrophonyL,
-        anthrophonyR: job.input.result.anthrophonyR
+        ndsiL: job.result.ndsiL,
+        ndsiR: job.result.ndsiR,
+        biophonyL: job.result.biophonyL,
+        biophonyR: job.result.biophonyR,
+        anthrophonyL: job.result.anthrophonyL,
+        anthrophonyR: job.result.anthrophonyR
       }
 
       counter += 1;
@@ -651,24 +651,24 @@ function convertNDSIResults(jobs) {
 
     curObject = {
       name: date.getHours() + ':' + date.getMinutes(),
-      ndsiL: job.input.result.ndsiL,
-      ndsiR: job.input.result.ndsiR,
-      biophonyL: job.input.result.biophonyL,
-      biophonyR: job.input.result.biophonyR,
-      anthrophonyL: job.input.result.anthrophonyL,
-      anthrophonyR: job.input.result.anthrophonyR
+      ndsiL: job.result.ndsiL,
+      ndsiR: job.result.ndsiR,
+      biophonyL: job.result.biophonyL,
+      biophonyR: job.result.biophonyR,
+      anthrophonyL: job.result.anthrophonyL,
+      anthrophonyR: job.result.anthrophonyR
     }
 
     ret.graph3.data.push(curObject);
 
     curObject = {
-      name: job.input.fileName,
-      ndsiL: job.input.result.ndsiL,
-      ndsiR: job.input.result.ndsiR,
-      biophonyL: job.input.result.biophonyL,
-      biophonyR: job.input.result.biophonyR,
-      anthrophonyL: job.input.result.anthrophonyL,
-      anthrophonyR: job.input.result.anthrophonyR
+      name: job.fileName,
+      ndsiL: job.result.ndsiL,
+      ndsiR: job.result.ndsiR,
+      biophonyL: job.result.biophonyL,
+      biophonyR: job.result.biophonyR,
+      anthrophonyL: job.result.anthrophonyL,
+      anthrophonyR: job.result.anthrophonyR
     }
 
     ret.graph5.data.push(curObject);
@@ -701,13 +701,13 @@ function convertACIResults(jobs) {
 
   // REMEMBER TO CHANGE DUMMY TO JOBS
   jobs.forEach(function(job){
-    aciTotAllL += job.input.result.aciTotAllL;
-    aciTotAllR += job.input.result.aciTotAllR;
-    aciTotAllByMinL += job.input.result.aciTotAllByMinL;
-    aciTotAllByMinR += job.input.result.aciTotAllByMinR;
+    aciTotAllL += job.result.aciTotAllL;
+    aciTotAllR += job.result.aciTotAllR;
+    aciTotAllByMinL += job.result.aciTotAllByMinL;
+    aciTotAllByMinR += job.result.aciTotAllByMinR;
 
-    aciFlValsL.push.apply(aciFlValsL, job.input.result.aciFlValsL);
-    aciFlValsR.push.apply(aciFlValsR, job.input.result.aciFlValsR);
+    aciFlValsL.push.apply(aciFlValsL, job.result.aciFlValsL);
+    aciFlValsR.push.apply(aciFlValsR, job.result.aciFlValsR);
   });
 
   ret = {
@@ -795,8 +795,8 @@ function convertACIResults(jobs) {
     if(oldDateString === dayDate){
       // we are still on same day
 
-      dateObject.aciLeft += job.input.result.aciTotAllByMinL;
-      dateObject.aciRight += job.input.result.aciTotAllByMinR;
+      dateObject.aciLeft += job.result.aciTotAllByMinL;
+      dateObject.aciRight += job.result.aciTotAllByMinR;
       counter += 1;
 
     }else{
@@ -812,8 +812,8 @@ function convertACIResults(jobs) {
       dateObject =
       {
         name: dayDate,
-        aciLeft: job.input.result.aciTotAllByMinL,
-        aciRight: job.input.result.aciTotAllByMinR
+        aciLeft: job.result.aciTotAllByMinL,
+        aciRight: job.result.aciTotAllByMinR
       }
       counter += 1;
     }
@@ -821,8 +821,8 @@ function convertACIResults(jobs) {
     curObject =
     {
       name: date.getHours() + ':' + date.getMinutes(),
-      aciLeft: job.input.result.aciTotAllByMinL,
-      aciRight: job.input.result.aciTotAllByMinR
+      aciLeft: job.result.aciTotAllByMinL,
+      aciRight: job.result.aciTotAllByMinR
     }
 
     ret.graph3.data.push(curObject);
@@ -830,8 +830,8 @@ function convertACIResults(jobs) {
     curObject =
     {
       name: job.input.fileName,
-      aciLeft: job.input.result.aciTotAllByMinL,
-      aciRight: job.input.result.aciTotAllByMinR
+      aciLeft: job.result.aciTotAllByMinL,
+      aciRight: job.result.aciTotAllByMinR
     }
 
     ret.graph5.data.push(curObject);
@@ -858,15 +858,15 @@ function convertADIResults(jobs) {
 
   // REMEMBER TO CHANGE DUMMY TO JOBS
   jobs.forEach(function(job){
-    adiLTotal += job.input.result.adiL;
-    adiRTotal += job.input.result.adiR;
+    adiLTotal += job.result.adiL;
+    adiRTotal += job.result.adiR;
 
     adiLBandTemp = adiLBandTemp.map(function(num, idx){
-      return num + job.input.result.ADIbandValsL[idx];
+      return num + job.result.ADIbandValsL[idx];
     });
 
     adiRBandTemp = adiRBandTemp.map(function(num, idx){
-      return num + job.input.result.ADIbandValsR[idx];
+      return num + job.result.ADIbandValsR[idx];
     });
 
   });
@@ -963,8 +963,8 @@ function convertADIResults(jobs) {
     if(oldDateString === dayDate){
       // we are still on same day
 
-      dateObject.leftADIVal += job.input.result.adiL;
-      dateObject.rightADIVal += job.input.result.adiR;
+      dateObject.leftADIVal += job.result.adiL;
+      dateObject.rightADIVal += job.result.adiR;
       counter += 1;
 
     }else{
@@ -980,8 +980,8 @@ function convertADIResults(jobs) {
       dateObject =
       {
         name: dayDate,
-        leftADIVal: job.input.result.adiL,
-        rightADIVal: job.input.result.adiR
+        leftADIVal: job.result.adiL,
+        rightADIVal: job.result.adiR
       }
       counter += 1;
     }
@@ -989,8 +989,8 @@ function convertADIResults(jobs) {
     curObject =
     {
       name: date.getHours() + ':' + date.getMinutes(),
-      leftADIVal: job.input.result.adiL,
-      rightADIVal: job.input.result.adiR
+      leftADIVal: job.result.adiL,
+      rightADIVal: job.result.adiR
     }
 
     ret.graph5.data.push(curObject);
@@ -998,8 +998,8 @@ function convertADIResults(jobs) {
     curObject =
     {
       name: job.input.fileName,
-      leftADIVal: job.input.result.adiL,
-      rightADIVal: job.input.result.adiR
+      leftADIVal: job.result.adiL,
+      rightADIVal: job.result.adiR
     }
 
     ret.graph2.data.push(curObject);
@@ -1025,15 +1025,15 @@ function convertAEIResults(jobs) {
 
   // REMEMBER TO CHANGE DUMMY TO JOBS
   jobs.forEach(function(job){
-    aeiLTotal += job.input.result.aeiL;
-    aeiRTotal += job.input.result.aeiR;
+    aeiLTotal += job.result.aeiL;
+    aeiRTotal += job.result.aeiR;
 
     aeiLBandTemp = aeiLBandTemp.map(function(num, idx){
-      return num + job.input.result.AEIbandValsL[idx];
+      return num + job.result.AEIbandValsL[idx];
     });
 
     aeiRBandTemp = aeiRBandTemp.map(function(num, idx){
-      return num + job.input.result.AEIbandValsR[idx];
+      return num + job.result.AEIbandValsR[idx];
     });
 
   });
@@ -1126,8 +1126,8 @@ function convertAEIResults(jobs) {
     if(oldDateString === dayDate){
       // we are still on same day
 
-      dateObject.leftAEIVal += job.input.result.aeiL;
-      dateObject.rightAEIVal += job.input.result.aeiR;
+      dateObject.leftAEIVal += job.result.aeiL;
+      dateObject.rightAEIVal += job.result.aeiR;
       counter += 1;
 
     }else{
@@ -1143,8 +1143,8 @@ function convertAEIResults(jobs) {
       dateObject =
       {
         name: dayDate,
-        leftAEIVal: job.input.result.aeiL,
-        rightAEIVal: job.input.result.aeiR
+        leftAEIVal: job.result.aeiL,
+        rightAEIVal: job.result.aeiR
       }
       counter += 1;
     }
@@ -1152,8 +1152,8 @@ function convertAEIResults(jobs) {
     curObject =
     {
       name: date.getHours() + ':' + date.getMinutes(),
-      leftAEIVal: job.input.result.aeiL,
-      rightAEIVal: job.input.result.aeiR
+      leftAEIVal: job.result.aeiL,
+      rightAEIVal: job.result.aeiR
     }
 
     ret.graph5.data.push(curObject);
@@ -1161,8 +1161,8 @@ function convertAEIResults(jobs) {
     curObject =
     {
       name: job.input.fileName,
-      leftAEIVal: job.input.result.aeiL,
-      rightAEIVal: job.input.result.aeiR
+      leftAEIVal: job.result.aeiL,
+      rightAEIVal: job.result.aeiR
     }
 
     ret.graph2.data.push(curObject);
@@ -1184,8 +1184,8 @@ function convertBAResults(jobs) {
   let areaRTotal = 0;
 
   jobs.forEach(function(job){
-    areaLTotal += job.input.result.areaL;
-    areaRTotal += job.input.result.areaR;
+    areaLTotal += job.result.areaL;
+    areaRTotal += job.result.areaR;
   });
 
   ret = {
@@ -1265,8 +1265,8 @@ function convertBAResults(jobs) {
     if(oldDateString === dayDate){
       // we are still on same day
 
-      dateObject.areaL += job.input.result.areaL;
-      dateObject.areaR += job.input.result.areaR;
+      dateObject.areaL += job.result.areaL;
+      dateObject.areaR += job.result.areaR;
       counter += 1;
 
     }else{
@@ -1282,8 +1282,8 @@ function convertBAResults(jobs) {
       dateObject =
       {
         name: dayDate,
-        areaL: job.input.result.areaL,
-        areaR: job.input.result.areaR
+        areaL: job.result.areaL,
+        areaR: job.result.areaR
       }
       counter += 1;
     }
@@ -1291,16 +1291,16 @@ function convertBAResults(jobs) {
     curObject =
     {
       name: date.getHours() + ':' + date.getMinutes(),
-      areaL: job.input.result.areaL,
-      areaR: job.input.result.areaR
+      areaL: job.result.areaL,
+      areaR: job.result.areaR
     }
 
     ret.graph5.data.push(curObject);
 
     curObject = {
       name: job.input.fileName,
-      areaL: job.input.result.areaL,
-      areaR: job.input.result.areaR
+      areaL: job.result.areaL,
+      areaR: job.result.areaR
     }
     ret.graph3.data.push(curObject);
 
@@ -1341,11 +1341,11 @@ function convertADIAEICompare(jobs) {
   jobs.forEach(function(job){
     let curObject =
     {
-      name: job.input.fileName,
-      leftADIVal: job.input.result.adiL,
-      rightADIVal: job.input.result.adiR,
-      leftAEIVal: job.input.result.aeiL,
-      rightAEIVal: job.input.result.aeiR
+      name: job.fileName,
+      leftADIVal: job.result.adiL,
+      rightADIVal: job.result.adiR,
+      leftAEIVal: job.result.aeiL,
+      rightAEIVal: job.result.aeiR
     }
 
     ret.graph2.push(curObject);
@@ -1594,6 +1594,7 @@ class AnalysisView extends Component {
   }
 
   componentDidMount = () => {
+    console.log(this.props.selectedResult)
     this.formatJob(this.props.selectedResult)
   }
 
@@ -1604,11 +1605,12 @@ class AnalysisView extends Component {
 
     // When ready, change dummyData to whatever is being passed in the same format
     // loop through each input index
-    for (var index in dummyData) {
+    for (var index in this.props.selectedJobs) {
       // skip loop if the property is from prototype
-      if (!dummyData.hasOwnProperty(index)) continue;
+      // if (!dummyData.hasOwnProperty(index)) continue;
 
-      var obj = dummyData[index];
+      var obj = this.props.selectedJobs[index];
+      console.log(obj)
       specRows = [];
       for(var spec in obj) {
         // console.log(spec + " = " + obj[spec]);
