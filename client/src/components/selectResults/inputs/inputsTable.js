@@ -318,13 +318,13 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
+                      <TableCell style={{ fontSize:15+'px' }} component="th" scope="row" padding="none">
                         {n.siteName}
                       </TableCell>
-                      <TableCell align="right">{n.setName}</TableCell>
-                      <TableCell align="right">{n.fileName}</TableCell>
-                      <TableCell align="right">{n.latitude}</TableCell>
-                      <TableCell align="right">{n.longitude}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.setName}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.fileName}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.latitude}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.longitude}</TableCell>
                     </TableRow>
                   );
                 })}
