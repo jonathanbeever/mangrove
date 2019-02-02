@@ -1080,12 +1080,12 @@ class AnalysisView extends Component {
   }
 
   componentDidMount = () => {
-    if(!this.props.selectedResult)
+    if(!this.props.selectedJobs)
     {
       this.setState({ errorMode: true });
     }else
     {
-      this.formatJob(this.props.selectedResult);
+      this.formatJob(this.props.selectedJobs);
     }
   }
 
@@ -1103,7 +1103,6 @@ class AnalysisView extends Component {
       // if (!dummyData.hasOwnProperty(index)) continue;
 
       var obj = selectedJobs[index];
-      console.log(obj)
       specRows = [];
       for(var spec in obj) {
         // console.log(spec + " = " + obj[spec]);
@@ -1142,8 +1141,6 @@ class AnalysisView extends Component {
             </ExpansionPanelDetails>
           </ExpansionPanel>
         )
-
-        // console.log(specRows);
       }
 
       rows.push(

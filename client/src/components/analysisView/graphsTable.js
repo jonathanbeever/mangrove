@@ -25,14 +25,14 @@ class GraphsTable extends React.Component {
 
   render()
   {
-    // let graphs = this.props.graphs;
+    let { graphs } = this.props;
     const rows = [];
     let ctr = 1;
-    for (var key in this.props.graphs) {
+    for (var key in graphs) {
       // skip loop if the property is from prototype
-      if (!this.props.graphs.hasOwnProperty(key)) continue;
+      if (!graphs.hasOwnProperty(key)) continue;
 
-      var obj = this.props.graphs[key];
+      var obj = graphs[key];
       switch(this.props.index)
       {
         case "aci":
@@ -40,6 +40,7 @@ class GraphsTable extends React.Component {
             <GraphExpansionPanel
               key={'graph'+ctr}
               title={obj.title}
+              data={obj.data}
               graph={<ACILineChart
                 results={obj.data}
                 xAxisLabel={obj.xAxisLabel}
@@ -58,6 +59,7 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
+                  data={obj.data}
                   graph={<NDSIChannelBarChart
                     results={obj.data}
                   />}
@@ -69,6 +71,7 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
+                  data={obj.data}
                   graph={<NDSIValuesBarChart
                     results={obj.data}
                   />}
@@ -80,6 +83,7 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
+                  data={obj.data}
                   graph={<NDSIValuesLineChart
                     results={obj.data}
                     xAxisLabel={"Hour of Day"}
@@ -92,6 +96,7 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
+                  data={obj.data}
                   graph={<NDSIValuesLineChart
                     results={obj.data}
                     xAxisLabel={"Date"}
@@ -107,6 +112,7 @@ class GraphsTable extends React.Component {
             <GraphExpansionPanel
               key={'graph'+ctr}
               title={obj.title}
+              data={obj.data}
               graph={<ADILineChart
                 results={obj.data}
                 xAxisLabel={obj.xAxisLabel}
@@ -123,6 +129,7 @@ class GraphsTable extends React.Component {
             <GraphExpansionPanel
               key={'graph'+ctr}
               title={obj.title}
+              data={obj.data}
               graph={<AEILineChart
                 results={obj.data}
                 xAxisLabel={obj.xAxisLabel}
@@ -141,6 +148,7 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
+                data={obj.data}
                 graph={<BAAreaChart
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -155,6 +163,7 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
+                data={obj.data}
                 graph={<BALineChart
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
