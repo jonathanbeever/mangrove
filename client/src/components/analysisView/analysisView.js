@@ -6,6 +6,15 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import IndexAnalysisPanel from './indexAnalysisPanel';
 import SpecAnalysisPanel from './specAnalysisPanel';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import axios from 'axios';
+import { withStyles } from '@material-ui/core/styles';
 
 function convertNDSIResults(jobs) {
   let ret;
@@ -1062,6 +1071,17 @@ function convertOutlierResults(job) {
   // return ret;
 }
 
+// TODO:
+// Have to split by site name as well
+// Create graphs to natively compare values by site
+// Create graphs to natively compare values by site over time
+
+const styles = theme => ({
+  selectEmpty: {
+    marginTop: theme.spacing.unit * 2,
+  },
+});
+
 class AnalysisView extends Component {
   constructor() {
     super();
@@ -1085,7 +1105,33 @@ class AnalysisView extends Component {
       this.setState({ errorMode: true });
     }else
     {
-      this.formatJob(this.props.selectedJobs);
+      // this.formatJob(this.props.selectedJobs);
+      const requests = [
+        axios.get('http://localhost:3000/inputs')
+      ];
+
+      Promise.all(requests)
+        .then(responses => {
+          const inputs = responses[0].data.inputs;
+          const siteNames = inputs.map(input => input.site );
+          const seriesNames = inputs.map(input => input.series );
+
+          const cleanSiteNames = siteNames.filter((item, index) => {
+            return siteNames.indexOf(item) >= index;
+          });
+          const cleanSeriesNames = seriesNames.filter((item, index) => {
+            return seriesNames.indexOf(item) >= index;
+          });
+
+          this.setState({ siteNames: cleanSiteNames });
+          this.setState({ chosenSite: cleanSiteNames[0] });
+          this.setState({ seriesNames: cleanSeriesNames });
+          this.setState({ chosenSeries: cleanSeriesNames[0] });
+        });
+
+      this.setState({ formattedJob: null });
+      console.log(this.props.selectedJobs);
+
     }
   }
 
@@ -1158,7 +1204,78 @@ class AnalysisView extends Component {
         {rows}
       </div>
     )
+
     this.setState({ formattedJob: formattedJob })
+  }
+
+  showGraphs = () => {
+    console.log("Show Graphs");
+  }
+
+  handleSiteChange = event => {
+    this.setState({ chosenSite: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSiteCompareChange = event => {
+    this.setState({ chosenCompareSite: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSeriesChange = event => {
+    this.setState({ chosenSeries: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSeriesCompareChange = event => {
+    this.setState({ chosenCompareSeries: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  siteMenuItems = (siteNames) => {
+    const menuItems = siteNames.map(site => {
+      return <MenuItem value={site}>{site}</MenuItem>
+    });
+    return menuItems;
+  }
+
+  siteMenuCompareItems = (siteNames) => {
+    let { chosenSite } = this.state;
+    const siteNamesWithoutChosen = siteNames.filter(site => site !== chosenSite);
+    const menuItems = siteNamesWithoutChosen.map(site => {
+      return <MenuItem value={site}>{site}</MenuItem>
+    });
+
+    if(menuItems.length > 0)
+    {
+      return menuItems;
+    }else
+    {
+      return <MenuItem value=""><em>None</em></MenuItem>
+    }
+  }
+
+  seriesMenuItems = (seriesNames) => {
+    const menuItems = seriesNames.map(series => {
+      return <MenuItem value={series}>{series}</MenuItem>
+    });
+    return menuItems;
+  }
+
+  seriesMenuCompareItems = (seriesNames) => {
+    let { chosenSeries } = this.state;
+    const seriesNamesWithoutChosen = seriesNames.filter(series => series !== chosenSeries);
+    const menuItems = seriesNamesWithoutChosen.map(series => {
+      return <MenuItem value={series}>{series}</MenuItem>
+    });
+
+    if(menuItems.length > 0)
+    {
+      return menuItems;
+    }else
+    {
+      return <MenuItem value=""><em>None</em></MenuItem>
+    }
   }
 
   // formatCompare = (props) => {
@@ -1178,22 +1295,102 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, formattedJob } = this.state;
+    let { errorMode, formattedJob, siteNames, seriesNames, chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
+    const { classes } = this.props;
 
     return (
       <div>
-        { errorMode ?
-          <div>
-            <p style={{ fontSize:24+'px', marginTop:10 }}>An error occurred, passed results are null</p>
+        <Paper style={{ marginTop:10+'px' }}>
+          <div className="row">
+            <div className="col-8">
+              <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
+                <InputLabel shrink htmlFor="site-helper"><h4>Site</h4></InputLabel>
+                <Select
+                  value={chosenSite ? chosenSite : ''}
+                  onChange={this.handleSiteChange}
+                  input={<Input name="site" id="site-helper" />}
+                  displayEmpty
+                  name="site"
+                  className={classes.selectEmpty}
+                >
+                  {siteNames ?
+                    this.siteMenuItems(siteNames)
+                  :
+                    ''}
+                </Select>
+                <FormHelperText style={{ fontSize:12+'px' }}>Select site to view graphs</FormHelperText>
+              </FormControl>
+              <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
+                <InputLabel shrink htmlFor="site-compare-helper"><h4>Site to compare</h4></InputLabel>
+                <Select
+                  value={chosenCompareSite ? chosenCompareSite : ''}
+                  onChange={this.handleSiteCompareChange}
+                  input={<Input name="site-compare" id="site-compare-helper" />}
+                  displayEmpty
+                  name="site-compare"
+                  className={classes.selectEmpty}
+                >
+                  {siteNames ?
+                    this.siteMenuCompareItems(siteNames)
+                  :
+                    ''}
+                </Select>
+                <FormHelperText style={{ fontSize:12+'px' }}>Select a site to compare to</FormHelperText>
+              </FormControl>
+              <FormControl style={{ marginLeft:20+'px', marginBottom:10+'px' }}>
+                <InputLabel shrink htmlFor="series-helper"><h4>Series</h4></InputLabel>
+                <Select
+                  value={chosenSeries ? chosenSeries : ''}
+                  onChange={this.handleSeriesChange}
+                  input={<Input name="series" id="series-helper" />}
+                  displayEmpty
+                  name="series"
+                  className={classes.selectEmpty}
+                >
+                  {seriesNames ?
+                    this.seriesMenuItems(seriesNames)
+                  :
+                    ''}
+                </Select>
+                <FormHelperText style={{ fontSize:12+'px' }}>Select series to view graphs</FormHelperText>
+              </FormControl>
+              <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
+                <InputLabel shrink htmlFor="series-compare-helper"><h4>Series to compare</h4></InputLabel>
+                <Select
+                  value={chosenCompareSeries ? chosenCompareSeries : ''}
+                  onChange={this.handleSeriesCompareChange}
+                  input={<Input name="series-compare" id="series-compare-helper" />}
+                  displayEmpty
+                  name="series-compare"
+                  className={classes.selectEmpty}
+                >
+                  {seriesNames ?
+                    this.seriesMenuCompareItems(seriesNames)
+                  :
+                    ''}
+                </Select>
+                <FormHelperText style={{ fontSize:12+'px' }}>Select a series to compare to</FormHelperText>
+              </FormControl>
+            </div>
+            <div className="col-4 text-right">
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginTop:10+'px', marginRight:10+'px' }}
+                onClick={this.displayGraphs}
+                >
+                <p style={{ fontSize:14+'px', margin:4 }}>Show Graphs</p>
+              </Button>
+            </div>
           </div>
+        </Paper>
+        { formattedJob ?
+          formattedJob
           :
-          <div>
-            {formattedJob}
-          </div>
-        }
+          'null formatted job'}
       </div>
     );
   }
 }
 
-export default AnalysisView;
+export default withStyles(styles)(AnalysisView);
