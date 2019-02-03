@@ -112,6 +112,7 @@ class SimpleTabs extends React.Component {
         {value === 3 && <TabContainer>
           <AnalysisView
             selectedJobs={this.props.selectedIndexedJobs}
+            indexedSpecs={this.props.indexedSpecs}
           />
         </TabContainer>}
       </div>

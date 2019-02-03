@@ -26,7 +26,6 @@ function convertNDSIResults(jobs) {
   let anthrophonyLTotal = 0;
   let anthrophonyRTotal = 0;
 
-  // REMEMBER TO CHANGE DUMMY TO JOBS
   jobs.forEach(function(job){
     ndsiLTotal += job.result.ndsiL;
     ndsiRTotal += job.result.ndsiR;
@@ -156,7 +155,7 @@ function convertNDSIResults(jobs) {
     ret.graph3.data.push(curObject);
 
     curObject = {
-      name: job.fileName,
+      name: job.path,
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -193,7 +192,6 @@ function convertACIResults(jobs) {
   let aciFlValsL = [];
   let aciFlValsR = [];
 
-  // REMEMBER TO CHANGE DUMMY TO JOBS
   jobs.forEach(function(job){
     aciTotAllL += job.result.aciTotAllL;
     aciTotAllR += job.result.aciTotAllR;
@@ -323,7 +321,7 @@ function convertACIResults(jobs) {
 
     curObject =
     {
-      name: job.input.fileName,
+      name: job.path,
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR
     }
@@ -491,7 +489,7 @@ function convertADIResults(jobs) {
 
     curObject =
     {
-      name: job.input.fileName,
+      name: job.path,
       leftADIVal: job.result.adiL,
       rightADIVal: job.result.adiR
     }
@@ -654,7 +652,7 @@ function convertAEIResults(jobs) {
 
     curObject =
     {
-      name: job.input.fileName,
+      name: job.path,
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR
     }
@@ -792,7 +790,7 @@ function convertBAResults(jobs) {
     ret.graph5.data.push(curObject);
 
     curObject = {
-      name: job.input.fileName,
+      name: job.path,
       areaL: job.result.areaL,
       areaR: job.result.areaR
     }
@@ -1091,21 +1089,22 @@ class AnalysisView extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.formatJob(nextProps.chosenResult);
-    // if(nextProps.resultToCompare)
-    //   this.formatCompare(nextProps.resultToCompare);
-    // else
-    //   this.setState({ formattedJobToCompare: null });
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   this.formatJob(nextProps.chosenResult);
+  //   // if(nextProps.resultToCompare)
+  //   //   this.formatCompare(nextProps.resultToCompare);
+  //   // else
+  //   //   this.setState({ formattedJobToCompare: null });
+  // }
 
   componentDidMount = () => {
-    if(!this.props.selectedJobs)
+    let { selectedJobs } = this.props;
+
+    if(!selectedJobs)
     {
       this.setState({ errorMode: true });
     }else
     {
-      // this.formatJob(this.props.selectedJobs);
       const requests = [
         axios.get('http://localhost:3000/inputs')
       ];
@@ -1113,6 +1112,7 @@ class AnalysisView extends Component {
       Promise.all(requests)
         .then(responses => {
           const inputs = responses[0].data.inputs;
+
           const siteNames = inputs.map(input => input.site );
           const seriesNames = inputs.map(input => input.series );
 
@@ -1123,6 +1123,21 @@ class AnalysisView extends Component {
             return seriesNames.indexOf(item) >= index;
           });
 
+          for(var index in selectedJobs)
+          {
+            var index = selectedJobs[index];
+            for(var specId in index)
+            {
+              var jobs = index[specId];
+              jobs.forEach(job => {
+                let match = inputs.find(x => x.inputId === job.input.inputId);
+                job.site = match.site;
+                job.series = match.series;
+                job.path = match.path.substring(match.path.lastIndexOf('\\')+1);
+              });
+            }
+          }
+
           this.setState({ siteNames: cleanSiteNames });
           this.setState({ chosenSite: cleanSiteNames[0] });
           this.setState({ seriesNames: cleanSeriesNames });
@@ -1130,28 +1145,26 @@ class AnalysisView extends Component {
         });
 
       this.setState({ formattedJob: null });
-      console.log(this.props.selectedJobs);
-
+      console.log(selectedJobs);
     }
   }
 
-  formatJob = (props) => {
+  formatJob = (data) => {
     const rows = [];
     let specRows = [];
     let graphs;
 
-    let { selectedJobs } = this.props;
+    let { indexedSpecs } = this.props;
 
-    // When ready, change dummyData to this.props.selectedJobs
     // loop through each input index
-    for (var index in selectedJobs) {
-      // skip loop if the property is from prototype
-      // if (!dummyData.hasOwnProperty(index)) continue;
+    for (var index in data) {
+      var obj = data[index];
 
-      var obj = selectedJobs[index];
+      // don't make a Paper if the index is empty
+      if(this.isEmpty(obj)) continue;
+
       specRows = [];
       for(var spec in obj) {
-        // console.log(spec + " = " + obj[spec]);
         switch(index)
         {
           case "aci":
@@ -1173,10 +1186,25 @@ class AnalysisView extends Component {
             graphs = null
         }
 
+        var params = Object.keys(indexedSpecs[spec]);
+        params.splice(params.indexOf('specId'), 1);
+        params.splice(params.indexOf('type'), 1);
+        var specTitle = '';
+
+        params.forEach((param, i) => {
+          if(i === params.length - 1)
+          {
+            specTitle = specTitle + param + ' - ' + indexedSpecs[spec][param];
+          }else
+          {
+            specTitle = specTitle + param + ' - ' + indexedSpecs[spec][param] + ', ';
+          }
+        });
+
         specRows.push(
           <ExpansionPanel key={index + spec}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-              <p style={{fontSize: 16+'px'}}>{spec}</p>
+              <p style={{fontSize: 16+'px'}}>{specTitle}</p>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SpecAnalysisPanel
@@ -1208,8 +1236,34 @@ class AnalysisView extends Component {
     this.setState({ formattedJob: formattedJob })
   }
 
-  showGraphs = () => {
+  isEmpty = (obj) => {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+  }
+
+  displayGraphs = () => {
     console.log("Show Graphs");
+    let { chosenSite, chosenSeries } = this.state;
+    let { selectedJobs } = this.props;
+
+    // 1) get jobs from selectedJobs where the site and series match
+    // const filteredSelectedJobs = selectedJobs.filter(x => x.series === chosenSeries && x.site === chosenSite);
+    let filteredSelectedJobs = selectedJobs;
+    for(var index in filteredSelectedJobs)
+    {
+      var index = filteredSelectedJobs[index];
+      for(var specId in index)
+      {
+        var jobs = index[specId];
+        index[specId] = jobs.filter(x => x.series === chosenSeries && x.site === chosenSite);
+      }
+    }
+
+    console.log(filteredSelectedJobs);
+    this.formatJob(filteredSelectedJobs);
   }
 
   handleSiteChange = event => {
@@ -1277,21 +1331,6 @@ class AnalysisView extends Component {
       return <MenuItem value=""><em>None</em></MenuItem>
     }
   }
-
-  // formatCompare = (props) => {
-  //   var formattedJobToCompare = (
-  //     <div>
-  //       <h4>
-  //         {props.input.sitename}
-  //       </h4>
-  //
-  //       {/*<p>{job.type.toUpperCase()}&nbsp;&nbsp;&nbsp;&nbsp;{job.input}&nbsp;&nbsp;&nbsp;&nbsp;{job.status}</p>*/}
-  //       <p>{props.type.toUpperCase()}</p>
-  //       <p>{props.spec.alias}</p>
-  //     </div>
-  //   )
-  //   this.setState({ formattedJobToCompare: formattedJobToCompare })
-  // }
 
   render() {
 
@@ -1387,7 +1426,7 @@ class AnalysisView extends Component {
         { formattedJob ?
           formattedJob
           :
-          'null formatted job'}
+          ''}
       </div>
     );
   }
