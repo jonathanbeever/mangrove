@@ -42,9 +42,16 @@ function getStepContent(step, props) {
         <ChooseFiles 
           selectedFiles={props.selectedFiles}
           updateSelectedInputs={props.updateSelectedFiles}
-          allFiles={props.allFiles}
+          allFiles={props.filteredInputs}
           newFiles={props.newFiles}
           handleInputUpload={props.handleInputUpload}
+          searchInputs={props.searchInputs}
+          site={props.site}
+          series={props.series}
+          lat={props.lat}
+          long={props.long}
+          submitInputFilter={props.submitInputFilter}
+          
         />
       )
     case 1:

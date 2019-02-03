@@ -34,6 +34,9 @@ class FullWidthTabs extends React.Component {
     value: 0,
   };
 
+  componentDidMount = () => {
+  }
+
   handleChange = (event, value) => {
     this.setState({ value });
   };
@@ -61,7 +64,14 @@ class FullWidthTabs extends React.Component {
           {this.state.value === 0 && <TabContainer dir={theme.direction}>
             <div className="row">
               <div className="col-3">
-                <SearchInputs onChange={this.props.searchInputs} />
+                <SearchInputs 
+                  onChange={this.props.searchInputs} 
+                  submitInputFilter={this.props.submitInputFilter}
+                  site={this.props.site}
+                  series={this.props.series}
+                  lat={this.props.lat}
+                  long={this.props.long}
+                />
               </div>
               <div className="col-9">
                 <InputsTable

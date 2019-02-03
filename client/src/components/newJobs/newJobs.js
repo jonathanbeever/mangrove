@@ -47,8 +47,13 @@ class NewJobs extends Component {
       submitDisabled: false,
       allFiles: [],
       newFiles: [],
+      filteredInputs: [],
       selectedFiles: [],
-      dialog: false
+      dialog: false,
+      site: '',
+      series: '',
+      lat: '',
+      long: ''
     };
   }
 
@@ -79,6 +84,7 @@ class NewJobs extends Component {
         return input
       })
       this.setState({ allFiles: res.data.inputs })
+      this.setState({ filteredInputs: res.data.inputs })
     })
   }
 
@@ -241,6 +247,27 @@ class NewJobs extends Component {
     this.setState({ selectedFiles: [] })
     this.setState({ submitDisabled: false })
   }
+  
+  submitInputFilter = () => {
+    var filteredInputs = this.state.allFiles.filter(file => {
+      var matchingFile = ''
+      if(!this.state.site || this.state.site.toLowerCase() === file.site.toLowerCase()) {
+        if(!this.state.series || this.state.series.toLowerCase() === file.series.toLowerCase()) {
+          if(!this.state.lat || Number(this.state.lat) === file.coords.lat) {
+            if(!this.state.long || Number(this.state.long) === file.coords.long) {
+              matchingFile = file
+            }
+          }
+        }
+      }
+      return matchingFile
+    })
+    this.setState({ filteredInputs: filteredInputs })
+  }
+
+  searchInputs = name => e => {
+    this.setState({ [name] : e.target.value })
+  }
 
   render() {
     return (
@@ -262,6 +289,13 @@ class NewJobs extends Component {
           dialog={this.state.dialog}
           message={this.state.message}
           closeDialog={this.closeDialog}
+          filteredInputs={this.state.filteredInputs}
+          searchInputs={this.searchInputs}
+          site={this.state.site}
+          series={this.state.series}
+          lat={this.state.lat}
+          long={this.state.long}
+          submitInputFilter={this.submitInputFilter}
         />
         {this.state.dialog.length ? this.state.dialog : ''}
       </div>

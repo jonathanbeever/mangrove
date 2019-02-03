@@ -56,6 +56,7 @@ class FilterInputs extends Component {
   // }
 
   onSubmit = () => {
+    this.props.submitInputFilter()
   }
 
   deleteChip = (label) => {
@@ -69,13 +70,13 @@ class FilterInputs extends Component {
             <h4>Filter By Input Files</h4>
             <TextField
               label={<p style={{fontSize:13+'px'}}>Site Name</p>}
-              value={0}
+              value={this.props.site}
               className={classes.textField}
               onChange={this.props.onChange('site')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>File Set Name</p>}
-              value={0}
+              value={this.props.series}
               className={classes.textField}
               onChange={this.props.onChange('series')}
             />
@@ -83,13 +84,13 @@ class FilterInputs extends Component {
             {/* <DateAndTimePickers/> */}
             <TextField
               label={<p style={{fontSize:13+'px'}}>Latitude</p>}
-              value={0}
+              value={this.props.lat}
               className={classes.textField}
               onChange={this.props.onChange('lat')}
             />
             <TextField
               label={<p style={{fontSize:13+'px'}}>Longitude</p>}
-              value={0}
+              value={this.props.long}
               className={classes.textField}
               onChange={this.props.onChange('long')}
             />
