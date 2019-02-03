@@ -863,8 +863,8 @@ function convertCompareACIResultsOverTime(jobs) {
     let curObject =
     {
       name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-      leftData: jobs[i].input.result.aciTotAllByMinL,
-      rightData: jobs[i].input.result.aciTotAllByMinR
+      leftData: jobs[i].result.aciTotAllByMinL,
+      rightData: jobs[i].result.aciTotAllByMinR
     }
 
     ret.push(curObject);
@@ -880,9 +880,9 @@ function convertCompareACIResultsOverSite(jobs) {
   {
     let curObject =
     {
-      name: jobs[i].input.siteName,
-      leftData: jobs[i].input.result.aciTotAllByMinL,
-      rightData: jobs[i].input.result.aciTotAllByMinR
+      name: jobs[i].site,
+      leftData: jobs[i].result.aciTotAllByMinL,
+      rightData: jobs[i].result.aciTotAllByMinR
     }
 
     ret.push(curObject);
@@ -1069,11 +1069,6 @@ function convertOutlierResults(job) {
   // return ret;
 }
 
-// TODO:
-// Have to split by site name as well
-// Create graphs to natively compare values by site
-// Create graphs to natively compare values by site over time
-
 const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
@@ -1088,14 +1083,6 @@ class AnalysisView extends Component {
       errorMode: false,
     };
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   this.formatJob(nextProps.chosenResult);
-  //   // if(nextProps.resultToCompare)
-  //   //   this.formatCompare(nextProps.resultToCompare);
-  //   // else
-  //   //   this.setState({ formattedJobToCompare: null });
-  // }
 
   componentDidMount = () => {
     let { selectedJobs } = this.props;
@@ -1149,6 +1136,9 @@ class AnalysisView extends Component {
     }
   }
 
+  // Formats the data passed into it into a model usable by recharts.
+  // Then, it creates the Paper and ExpansionPanel components used
+  // for displaying the graphs themselves.
   formatJob = (data) => {
     const rows = [];
     let specRows = [];
@@ -1236,6 +1226,7 @@ class AnalysisView extends Component {
     this.setState({ formattedJob: formattedJob })
   }
 
+  // Checks if a passed object is empty
   isEmpty = (obj) => {
     for(var key in obj) {
         if(obj.hasOwnProperty(key))
@@ -1244,6 +1235,7 @@ class AnalysisView extends Component {
     return true;
   }
 
+  // Handler for the Show Graphs button
   displayGraphs = () => {
     console.log("Show Graphs");
     let { chosenSite, chosenSeries } = this.state;
@@ -1266,26 +1258,31 @@ class AnalysisView extends Component {
     this.formatJob(filteredSelectedJobs);
   }
 
+  // Handler for the site Select
   handleSiteChange = event => {
     this.setState({ chosenSite: event.target.value });
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  // Handler for the site-compare Select
   handleSiteCompareChange = event => {
     this.setState({ chosenCompareSite: event.target.value });
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  // Handler for the series Select
   handleSeriesChange = event => {
     this.setState({ chosenSeries: event.target.value });
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  // Handler for the series-compare Select
   handleSeriesCompareChange = event => {
     this.setState({ chosenCompareSeries: event.target.value });
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  // Creates the items seen in the site menu
   siteMenuItems = (siteNames) => {
     const menuItems = siteNames.map(site => {
       return <MenuItem value={site}>{site}</MenuItem>
@@ -1293,6 +1290,7 @@ class AnalysisView extends Component {
     return menuItems;
   }
 
+  // Creates the items seen in the compare site menu
   siteMenuCompareItems = (siteNames) => {
     let { chosenSite } = this.state;
     const siteNamesWithoutChosen = siteNames.filter(site => site !== chosenSite);
@@ -1309,6 +1307,7 @@ class AnalysisView extends Component {
     }
   }
 
+  // Creates the items seen in the series menu
   seriesMenuItems = (seriesNames) => {
     const menuItems = seriesNames.map(series => {
       return <MenuItem value={series}>{series}</MenuItem>
@@ -1316,6 +1315,7 @@ class AnalysisView extends Component {
     return menuItems;
   }
 
+  // Creates the items seen in the compare site menu
   seriesMenuCompareItems = (seriesNames) => {
     let { chosenSeries } = this.state;
     const seriesNamesWithoutChosen = seriesNames.filter(series => series !== chosenSeries);
@@ -1334,7 +1334,7 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, formattedJob, siteNames, seriesNames, chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
+    let { errorMode, formattedJob, comparedJobs, siteNames, seriesNames, chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     const { classes } = this.props;
 
     return (
@@ -1425,6 +1425,10 @@ class AnalysisView extends Component {
         </Paper>
         { formattedJob ?
           formattedJob
+          :
+          ''}
+        { comparedJobs ?
+          comparedJobs
           :
           ''}
       </div>

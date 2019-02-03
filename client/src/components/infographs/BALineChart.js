@@ -5,12 +5,14 @@ class BALineChart extends Component {
 
   render(){
 
+    let { results, xAxisLabel, yAxisLabel } = this.props;
+
     return(
       <div>
-          <LineChart width={900} height={600} data={this.props.results} syncId="anyId">
+          <LineChart width={900} height={600} data={results}>
             <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey='name' label={this.props.xAxisLabel}/>
-            <YAxis label={this.props.yAxisLabel}/>
+            <XAxis dataKey='name' label={xAxisLabel}/>
+            <YAxis label={yAxisLabel}/>
             <Legend />
             <Tooltip/>
             <Line type='natural' dataKey='areaL' stroke='#8884d8' dot={false} />

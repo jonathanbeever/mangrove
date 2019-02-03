@@ -10,7 +10,7 @@ class NDSIChannelLineChart extends Component {
 
     return(
       <div>
-        <LineChart width={900} height={600} data={data} syncId="1">
+        <LineChart width={900} height={600} data={data}>
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey='name' label='Hour of Day'/>
           <YAxis label='Value'/>

@@ -7,8 +7,7 @@ class NDSIValuesBarChart extends Component {
   render(){
 
     let data = this.props.results;
-    // console.log(data);
-
+    
     return(
       <div>
         <BarChart width={900} height={600} data={data}>

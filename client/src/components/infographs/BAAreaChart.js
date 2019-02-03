@@ -5,24 +5,26 @@ class BAAreaChart extends Component {
 
   render(){
 
+    let { results, xAxisLabel, yAxisLabel, dataKey1, dataKey2 } = this.props;
+
     return(
       <div>
-        <AreaChart width={900} height={600} data={this.props.results} >
+        <AreaChart width={900} height={600} data={results} >
           <CartesianGrid strokeDasharray="3 3"/>
-          <XAxis dataKey="name" label={this.props.xAxisLabel}/>
+          <XAxis dataKey="name" label={xAxisLabel}/>
           <Legend />
-          <YAxis label={this.props.yAxisLabel} domain={['dataMin', 'dataMax']} />
+          <YAxis label={yAxisLabel} domain={['dataMin', 'dataMax']} />
           <Tooltip/>
-          <Area type='monotone' dataKey={this.props.dataKey1} stackId="1" stroke='#8884d8' fill='#8884d8' />
+          <Area type='monotone' dataKey={dataKey1} stackId="1" stroke='#8884d8' fill='#8884d8' />
           <Brush />
         </AreaChart>
-        <AreaChart width={900} height={600} data={this.props.results} >
+        <AreaChart width={900} height={600} data={results} >
           <CartesianGrid strokeDasharray="3 3"/>
-          <XAxis dataKey="name" label={this.props.xAxisLabel}/>
+          <XAxis dataKey="name" label={xAxisLabel}/>
           <Legend />
-          <YAxis label={this.props.yAxisLabel} domain={['dataMin', 'dataMax']} />
+          <YAxis label={yAxisLabel} domain={['dataMin', 'dataMax']} />
           <Tooltip/>
-          <Area type='monotone' dataKey={this.props.dataKey2} stackId="1" stroke='#82ca9d' fill='#82ca9d' />
+          <Area type='monotone' dataKey={dataKey2} stackId="1" stroke='#82ca9d' fill='#82ca9d' />
           <Brush />
         </AreaChart>
       </div>

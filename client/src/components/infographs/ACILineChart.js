@@ -14,7 +14,7 @@ class ACILineChart extends Component {
 
     return(
       <div>
-          <LineChart width={900} height={600} data={data} syncId="anyId">
+          <LineChart width={900} height={600} data={data}>
             <CartesianGrid strokeDasharray="3 3"/>
             <XAxis dataKey="name" label={xLabel}/>
             <YAxis label={yLabel}/>

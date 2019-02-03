@@ -6,13 +6,13 @@ class NDSIValuesLineChart extends Component {
 
   render(){
 
-    let data = this.props.results;
+    let { results, xAxisLabel } = this.props;
 
     return(
       <div>
-        <LineChart width={900} height={600} data={data} syncId="2">
+        <LineChart width={900} height={600} data={results}>
           <CartesianGrid strokeDasharray="3 3"/>
-          <XAxis dataKey='name' label={this.props.xAxisLabel}/>
+          <XAxis dataKey='name' label={xAxisLabel}/>
           <YAxis label='Value'/>
           <Legend />
           <Tooltip/>

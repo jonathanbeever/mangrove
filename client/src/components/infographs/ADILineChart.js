@@ -4,20 +4,21 @@ import {LineChart, Line, XAxis, YAxis, ReferenceLine, CartesianGrid, Tooltip, Le
 class ADILineChart extends Component {
 
   render(){
-    // console.log(this.props);
+    
+    let { results, xAxisLabel, refL, refR, dataKey1, dataKey2 } = this.props;
 
     return(
       <div>
-        <LineChart width={900} height={600} data={this.props.results} >
+        <LineChart width={900} height={600} data={results} >
          <CartesianGrid strokeDasharray="3 3"/>
-         <XAxis dataKey="name" label={this.props.xAxisLabel}/>
+         <XAxis dataKey="name" label={xAxisLabel}/>
          <YAxis label="ADI Value"/>
          <Tooltip/>
          <Legend />
-         <ReferenceLine y={this.props.refL} label="ADI Left" stroke="#433eaf"/>
-         <ReferenceLine y={this.props.refR} label="ADI Right" stroke="#187139"/>
-         <Line type="monotone" dataKey={this.props.dataKey1} stroke="#8884d8" dot={false}/>
-         <Line type="monotone" dataKey={this.props.dataKey2} stroke="#82ca9d" dot={false}/>
+         <ReferenceLine y={refL} label="ADI Left" stroke="#433eaf"/>
+         <ReferenceLine y={refR} label="ADI Right" stroke="#187139"/>
+         <Line type="monotone" dataKey={dataKey1} stroke="#8884d8" dot={false}/>
+         <Line type="monotone" dataKey={dataKey2} stroke="#82ca9d" dot={false}/>
         </LineChart>
       </div>
     );
