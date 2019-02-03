@@ -53,7 +53,15 @@ class NewJobs extends Component {
       site: '',
       series: '',
       lat: '',
-      long: ''
+      long: '',
+      filesToUpload: [],
+      selectedToEdit: [],
+      upload: {
+        site: '',
+        series: '',
+        lat: '',
+        long: ''
+      }
     };
   }
 
@@ -222,21 +230,62 @@ class NewJobs extends Component {
     this.setState({ selectedFiles: selected })
   }
 
-  handleInputUpload = (e) => {
-    const url = 'http://localhost:3000/inputs';
+  addFilesToUpload = (e) => {
+    var fileInfo = this.state.filesToUpload
     var files = e.target.files
-
+    console.log(files)
     Array.from(files).forEach(file => {
+      fileInfo[file.name] = {
+        json: {
+          site: '',
+          series: '',
+          coords: {
+            lat: '',
+            long: ''
+          },
+          recordTimeMs: file.lastModified
+        },
+        file: file
+      }
+    });
+    console.log(fileInfo)
+    this.setState({ filesToUpload: fileInfo })
+  }
+
+  submitInputProperties = () => {
+    var fileInfo = this.state.filesToUpload
+
+    this.state.selectedToEdit.forEach(file => {
+      if(this.state.upload.site.length)
+        fileInfo[file].json.site = this.state.upload.site
+      if(this.state.upload.series.length)
+        fileInfo[file].json.series = this.state.upload.series
+      if(this.state.upload.lat.length)
+        fileInfo[file].json.coords.lat = parseInt(this.state.upload.lat)
+      if(this.state.upload.long.length)
+        fileInfo[file].json.coords.long = parseInt(this.state.upload.long)
+    })
+    this.setState({ filesToUpload: fileInfo })
+  }
+
+  uploadFiles = () => {
+    const url = 'http://localhost:3000/inputs';
+    var fileNames = Object.keys(this.state.filesToUpload)
+    var files = this.state.filesToUpload
+
+    fileNames.forEach(fileName => {
       const form = new FormData();
-      // Input this for all files or get from name on server?
-      form.append('json', '{ "site": "UCF Arboretum", "series": "Hurricane Irma", "recordTimeMs": 1505016000000, "coords": { "lat": 28.596238, "long": -81.191381 } }')
-      form.append('file', file)
+
+      form.append('json', JSON.stringify(files[fileName].json))
+      form.append('file', files[fileName].file)
   
       axios.put(url, form)
       .then(res => {
         this.listDbFiles(res.data)
       }).catch(err => {
-        console.log(err)
+        // Validaton error
+        // Alert required fields
+        console.log(err.message)
       });
     });
   }
@@ -269,6 +318,18 @@ class NewJobs extends Component {
     this.setState({ [name] : e.target.value })
   }
 
+  updateInputProperties = name => e => {
+    var upload = this.state.upload
+    upload[name] = e.target.value
+
+    this.setState({ upload: upload })
+  }
+
+  updateSelectedUploads = (selected) => {
+    console.log(selected)
+    this.setState({ selectedToEdit: selected })
+  }
+
   render() {
     return (
       <div>
@@ -296,6 +357,14 @@ class NewJobs extends Component {
           lat={this.state.lat}
           long={this.state.long}
           submitInputFilter={this.submitInputFilter}
+          addFilesToUpload={this.addFilesToUpload}
+          filesToUpload={this.state.filesToUpload}
+          updateSelectedUploads={this.updateSelectedUploads} 
+          selectedToEdit={this.state.selectedToEdit} 
+          updateInputProperties={this.updateInputProperties}
+          submitInputProperties={this.submitInputProperties}
+          upload={this.state.upload}
+          uploadFiles={this.uploadFiles}
         />
         {this.state.dialog.length ? this.state.dialog : ''}
       </div>

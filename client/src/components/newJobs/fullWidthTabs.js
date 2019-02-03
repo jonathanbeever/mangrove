@@ -6,6 +6,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import InputsTable from '../selectResults/inputs/inputsTable';
+import UploadsTable from './uploadInputsTable';
 import Button from '@material-ui/core/Button';
 import SearchInputs from './searchInputs';
 
@@ -83,22 +84,42 @@ class FullWidthTabs extends React.Component {
             </div>
           </TabContainer>}
           {this.state.value === 1 && <TabContainer dir={theme.direction}>
-            <div>
-              <input
-                accept="audio/wave"
-                className={this.props.classes.input}
-                style={{ display: 'none' }}
-                onChange={this.props.handleInputUpload}
-                id="selectFiles"
-                multiple
-                type="file"
-              />
-              <label htmlFor="selectFiles">
-                <h5>Select New Files</h5>
-                <Button variant="contained" component="span" >
-                  Choose Files
+            <div className="row">
+              <div className="col-3">
+                <input
+                  accept="audio/wave"
+                  className={this.props.classes.input}
+                  style={{ display: 'none' }}
+                  onChange={this.props.addFilesToUpload}
+                  id="selectFiles"
+                  multiple
+                  type="file"
+                />
+                <label htmlFor="selectFiles">
+                  <h5>Select New Files</h5>
+                  <Button variant="contained" component="span" >
+                    Choose Files
+                  </Button>
+                </label> 
+                <SearchInputs 
+                  onChange={this.props.updateInputProperties}
+                  submitInputFilter={this.props.submitInputProperties}
+                  site={this.props.upload.site}
+                  series={this.props.upload.series}
+                  lat={this.props.upload.lat}
+                  long={this.props.upload.long}
+                />
+                <Button variant="contained" component="span" onClick={this.props.uploadFiles} >
+                  Upload Files
                 </Button>
-              </label> 
+              </div>
+              <div className="col-9">
+                <UploadsTable
+                  filteredInputs={this.props.filesToUpload}
+                  updateSelectedInputs={this.props.updateSelectedUploads} 
+                  selected={this.props.selectedToEdit}          
+                />
+              </div>
             </div>
           </TabContainer>}
         </AppBar>

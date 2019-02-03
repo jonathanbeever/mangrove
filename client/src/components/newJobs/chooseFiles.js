@@ -42,7 +42,7 @@ class ChooseFiles extends React.Component {
     this.setState({allFiles: this.props.allFiles})
   }
 
-  
+
   render() {
     const { classes } = this.props;
 
@@ -61,7 +61,14 @@ class ChooseFiles extends React.Component {
             lat={this.props.lat}
             long={this.props.long}
             submitInputFilter={this.props.submitInputFilter}
-
+            addFilesToUpload={this.props.addFilesToUpload}
+            filesToUpload={this.props.filesToUpload}
+            updateSelectedUploads={this.props.updateSelectedUploads} 
+            selectedToEdit={this.props.selectedToEdit} 
+            updateInputProperties={this.props.updateInputProperties}
+            submitInputProperties={this.props.submitInputProperties}
+            upload={this.props.upload}
+            uploadFiles={this.props.uploadFiles}
           />
         </div>
       </div>

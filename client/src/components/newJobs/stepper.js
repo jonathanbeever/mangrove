@@ -51,7 +51,14 @@ function getStepContent(step, props) {
           lat={props.lat}
           long={props.long}
           submitInputFilter={props.submitInputFilter}
-          
+          addFilesToUpload={props.addFilesToUpload}
+          filesToUpload={props.filesToUpload}
+          updateSelectedUploads={props.updateSelectedUploads} 
+          selectedToEdit={props.selectedToEdit} 
+          updateInputProperties={props.updateInputProperties}
+          submitInputProperties={props.submitInputProperties}
+          upload={props.upload}
+          uploadFiles={props.uploadFiles}
         />
       )
     case 1:
