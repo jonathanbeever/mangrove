@@ -859,26 +859,118 @@ function convertBAResults(jobs) {
 // }
 
 /********** Comparison graph data modeling functions **********/
-function convertACIResultsBySite(jobs) {
-  let ret = {
-    graph: null
-  }
+function convertACIResultsBySite(jobs, sites) {
+  
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
 
-  let data = [];
+  let chosenResults = convertACIResults(chosenSiteJobs);
+  let compareResults = convertACIResults(compareSiteJobs);
 
-  for(var i = 0; i < jobs.length; i++)
+  let chosenBySeconds = chosenResults.graph1;
+  let chosenByHour = chosenResults.graph3;
+  let chosenByDate = chosenResults.graph4;
+
+  let compareBySeconds = compareResults.graph1;
+  let compareByHour = compareResults.graph3;
+  let compareByDate = compareResults.graph4;
+
+  // rename keys in compare data
+  compareBySeconds.data.forEach(item => {
+    item['aciLeftC'] = item['aciLeft'];
+    item['aciRightC'] = item['aciRight'];
+    delete(item['aciLeft']);
+    delete(item['aciRight']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['aciLeftC'] = item['aciLeft'];
+    item['aciRightC'] = item['aciRight'];
+    delete(item['aciLeft']);
+    delete(item['aciRight']);
+  });
+
+  compareByDate.data.forEach(item => {
+    item['aciLeftC'] = item['aciLeft'];
+    item['aciRightC'] = item['aciRight'];
+    delete(item['aciLeft']);
+    delete(item['aciRight']);
+  });
+
+  let secondsData = chosenBySeconds.data.concat(compareBySeconds.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
+
+  secondsData = sortByKey(secondsData, 'name');
+  hourData = sortByKey(hourData, 'name');
+  dateData = sortByKey(dateData, 'name');
+
+  let compressedSecondsData = [];
+  let compressedHourData = [];
+  let compressedDateData = [];
+
+  for(let i = 0; i < secondsData.length - 1; i++)
   {
-    let curObject =
+    if(i > 0 && secondsData[i].name === secondsData[i - 1].name) continue;
+    if(secondsData[i].name === secondsData[i + 1].name)
     {
-      name: jobs[i].site,
-      leftData: jobs[i].result.aciTotAllByMinL,
-      rightData: jobs[i].result.aciTotAllByMinR
-    }
-
-    data.push(curObject);
+      // we can merge the next two
+      compressedSecondsData.push(extend(secondsData[i], secondsData[i + 1]));
+    }else compressedSecondsData.push(secondsData[i]);
   }
 
-  ret.graph = data;
+  for(let i = 0; i < hourData.length - 1; i++)
+  {
+    if(i > 0 && hourData[i].name === hourData[i - 1].name) continue;
+    if(hourData[i].name === hourData[i + 1].name)
+    {
+      // we can merge the next two
+      compressedHourData.push(extend(hourData[i], hourData[i + 1]));
+    }else compressedHourData.push(hourData[i]);
+  }
+
+  for(let i = 0; i < dateData.length - 1; i++)
+  {
+    if(i > 0 && dateData[i].name === dateData[i - 1].name) continue;
+    if(dateData[i].name === dateData[i + 1].name)
+    {
+      // we can merge the next two
+      compressedDateData.push(extend(dateData[i], dateData[i + 1]));
+    }else compressedDateData.push(dateData[i]);
+  }
+
+  let ret = {
+    graph1: {
+      data: compressedSecondsData,
+      title: "Series Compared Over Seconds",
+      xAxisLabel: "Time (s)",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight',
+      dataKey3: 'aciLeftC',
+      dataKey4: 'aciRightC'
+    },
+    graph2: {
+      data: compressedHourData,
+      title: "Series Compared Over Hours",
+      xAxisLabel: "Hour",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight',
+      dataKey3: 'aciLeftC',
+      dataKey4: 'aciRightC'
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Series Compared Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight',
+      dataKey3: 'aciLeftC',
+      dataKey4: 'aciRightC'
+    }
+  }
 
   return ret;
 }
@@ -887,7 +979,6 @@ function convertACIResultsBySeries(jobs, series) {
 
   const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
   const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
-
 
   let chosenResults = convertACIResults(chosenSeriesJobs);
   let compareResults = convertACIResults(compareSeriesJobs);
