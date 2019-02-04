@@ -59,7 +59,7 @@ class SimpleTabs extends React.Component {
             <Tab label={<div><h5>Specifications</h5></div>} />
             <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Jobs</h5></div>} />
-            <Tab label={<div><h5>Analysis</h5></div>} />
+            <Tab label={<div><h5>Analysis</h5></div>} disabled={!this.props.selectedJobs.length}/>
           </Tabs>
         </AppBar>
         {value === 0 && <TabContainer>
