@@ -20,7 +20,7 @@ class NDSIValuesLineChart extends Component {
           <Line type='natural' dataKey='biophonyR' stroke='#5551a2' dot={false} />
           <Line type='natural' dataKey='anthrophonyL' stroke='#257142' dot={false} />
           <Line type='natural' dataKey='anthrophonyR' stroke='#82ca9d' dot={false} />
-          <Brush syncId="2"/>
+          <Brush />
         </LineChart>
       </div>
     )

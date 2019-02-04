@@ -5,6 +5,7 @@ import NDSIChannelBarChart from '../infographs/NDSIChannelBarChart';
 import NDSIValuesBarChart from '../infographs/NDSIValuesBarChart';
 import NDSIValuesLineChart from '../infographs/NDSIValuesLineChart';
 import ACILineChart from '../infographs/ACILineChart';
+import ACIDualLineChart from '../infographs/ACIDualLineChart';
 import ADILineChart from '../infographs/ADILineChart';
 import AEILineChart from '../infographs/AEILineChart';
 import BAAreaChart from '../infographs/BAAreaChart';
@@ -47,6 +48,24 @@ class GraphsTable extends React.Component {
                 yAxisLabel={obj.yAxisLabel}
                 dataKey1={obj.dataKey1}
                 dataKey2={obj.dataKey2}
+              />}
+            />
+          )
+          break;
+        case "aci-compare":
+          rows.push(
+            <GraphExpansionPanel
+              key={'graph'+ctr}
+              title={obj.title}
+              data={obj.data}
+              graph={<ACIDualLineChart
+                results={obj.data}
+                xAxisLabel={obj.xAxisLabel}
+                yAxisLabel={obj.yAxisLabel}
+                dataKey1={obj.dataKey1}
+                dataKey2={obj.dataKey2}
+                dataKey3={obj.dataKey3}
+                dataKey4={obj.dataKey4}
               />}
             />
           )

@@ -18,7 +18,7 @@ class NDSIChannelLineChart extends Component {
           <Tooltip/>
           <Line type='natural' dataKey='ndsiL' stroke='#8884d8' dot={false} />
           <Line type='natural' dataKey='ndsiR' stroke='#82ca9d' dot={false} />
-          <Brush syncId = "1"/>
+          <Brush />
         </LineChart>
       </div>
     )

@@ -17,7 +17,7 @@ class ACILineChart extends Component {
           <LineChart width={900} height={600} data={data}>
             <CartesianGrid strokeDasharray="3 3"/>
             <XAxis dataKey="name" label={xLabel}/>
-            <YAxis label={yLabel}/>
+            <YAxis label={yLabel} domain={['dataMin-10', 'dataMax+10']}/>
             <Legend />
             <Tooltip/>
             <Line type='natural' dataKey={firstDataKey} stroke='#8884d8' dot={false} />

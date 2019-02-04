@@ -15,7 +15,23 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider';
 
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+
+function extend(obj, src) {
+    for (var key in src) {
+        if (src.hasOwnProperty(key)) obj[key] = src[key];
+    }
+    return obj;
+}
+
+/********** Base graph data modeling functions **********/
 function convertNDSIResults(jobs) {
   let ret;
 
@@ -212,28 +228,6 @@ function convertACIResults(jobs) {
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight'
     },
-    // graph2:
-    // {
-    //   data:
-    //   [
-    //     {
-    //       name: 'ACI Total Left Channel',
-    //       data: aciTotAllL
-    //     },
-    //     {
-    //       name: 'ACI Total Right Channel',
-    //       data: aciTotAllR
-    //     },
-    //     {
-    //       name: 'ACI Total By Minutes Left Channel',
-    //       data: aciTotAllByMinL
-    //     },
-    //     {
-    //       name: 'ACI Total By Minutes Right Channel',
-    //       data: aciTotAllByMinR
-    //     }
-    //   ]
-    // },
     graph3:
     {
       data: [],
@@ -281,8 +275,8 @@ function convertACIResults(jobs) {
   let counter;
   jobs.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
-    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear();
+    let oldDateString = ("0" + (oldDate.getMonth() + 1)).slice(-2) + '/' + ("0" + oldDate.getDate()).slice(-2) + '/' + oldDate.getFullYear();
     let curObject;
     if(oldDateString === dayDate){
       // we are still on same day
@@ -293,7 +287,7 @@ function convertACIResults(jobs) {
 
     }else{
       // we are on a new day
-      if(oldDateString !== '1/1/1970')
+      if(oldDateString !== '01/01/1970')
       {
         dateObject.aciLeft /= counter;
         dateObject.aciRight /= counter;
@@ -312,7 +306,7 @@ function convertACIResults(jobs) {
 
     curObject =
     {
-      name: date.getHours() + ':' + date.getMinutes(),
+      name: ("0" + date.getHours()).slice(-2) + ':' + date.getMinutes(),
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR
     }
@@ -807,74 +801,70 @@ function convertBAResults(jobs) {
   return ret;
 }
 
-function convertADIAEICompare(jobs) {
-  let ret;
+// function convertADIAEICompare(jobs) {
+//   let ret;
+//
+//   ret =
+//   {
+//     graph1: [], // compare aei and adi by time
+//     graph2: []  // compare aei and adi by file
+//   }
+//
+//   for(var i = 0; i < jobs.length; i++)
+//   {
+//     let curObject =
+//     {
+//       name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+//       leftADIVal: jobs[i].input.result.adiL,
+//       rightADIVal: jobs[i].input.result.adiR,
+//       leftAEIVal: jobs[i].input.result.aeiL,
+//       rightAEIVal: jobs[i].input.result.aeiR
+//     }
+//
+//     ret.graph1.push(curObject);
+//   }
+//
+//   jobs.forEach(function(job){
+//     let curObject =
+//     {
+//       name: job.fileName,
+//       leftADIVal: job.result.adiL,
+//       rightADIVal: job.result.adiR,
+//       leftAEIVal: job.result.aeiL,
+//       rightAEIVal: job.result.aeiR
+//     }
+//
+//     ret.graph2.push(curObject);
+//   });
+//
+//   return ret;
+// }
 
-  ret =
-  {
-    graph1: [], // compare aei and adi by time
-    graph2: []  // compare aei and adi by file
-  }
+// function convertCompareACIResultsOverTime(jobs) {
+//   let ret = [];
+//
+//   for(var i = 0; i < jobs.length; i++)
+//   {
+//     let curObject =
+//     {
+//       name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+//       leftData: jobs[i].result.aciTotAllByMinL,
+//       rightData: jobs[i].result.aciTotAllByMinR
+//     }
+//
+//     ret.push(curObject);
+//   }
+//
+//   return ret;
+// }
 
-  for(var i = 0; i < jobs.length; i++)
-  {
-    let curObject =
-    {
-      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-      leftADIVal: jobs[i].input.result.adiL,
-      rightADIVal: jobs[i].input.result.adiR,
-      leftAEIVal: jobs[i].input.result.aeiL,
-      rightAEIVal: jobs[i].input.result.aeiR
-    }
-
-    ret.graph1.push(curObject);
-  }
-
-  jobs.forEach(function(job){
-    let curObject =
-    {
-      name: job.fileName,
-      leftADIVal: job.result.adiL,
-      rightADIVal: job.result.adiR,
-      leftAEIVal: job.result.aeiL,
-      rightAEIVal: job.result.aeiR
-    }
-
-    ret.graph2.push(curObject);
-  });
-
-  return ret;
-}
-
-function convertCompareACIResults(jobs) {
+/********** Comparison graph data modeling functions **********/
+function convertACIResultsBySite(jobs) {
   let ret = {
-    graph1: convertCompareACIResultsOverTime(jobs),
-    graph2: convertCompareACIResultsOverSite(jobs)
+    graph: null
   }
 
-  return ret;
-}
-
-function convertCompareACIResultsOverTime(jobs) {
-  let ret = [];
-
-  for(var i = 0; i < jobs.length; i++)
-  {
-    let curObject =
-    {
-      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-      leftData: jobs[i].result.aciTotAllByMinL,
-      rightData: jobs[i].result.aciTotAllByMinR
-    }
-
-    ret.push(curObject);
-  }
-
-  return ret;
-}
-
-function convertCompareACIResultsOverSite(jobs) {
-  let ret = [];
+  let data = [];
 
   for(var i = 0; i < jobs.length; i++)
   {
@@ -885,189 +875,330 @@ function convertCompareACIResultsOverSite(jobs) {
       rightData: jobs[i].result.aciTotAllByMinR
     }
 
-    ret.push(curObject);
+    data.push(curObject);
   }
+
+  ret.graph = data;
 
   return ret;
 }
 
-function convertCompareBioResults(jobs) {
+function convertACIResultsBySeries(jobs, series) {
+
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+
+
+  let chosenResults = convertACIResults(chosenSeriesJobs);
+  let compareResults = convertACIResults(compareSeriesJobs);
+
+  let chosenBySeconds = chosenResults.graph1;
+  let chosenByHour = chosenResults.graph3;
+  let chosenByDate = chosenResults.graph4;
+
+  let compareBySeconds = compareResults.graph1;
+  let compareByHour = compareResults.graph3;
+  let compareByDate = compareResults.graph4;
+
+  // rename keys in compare data
+  compareBySeconds.data.forEach(item => {
+    item['aciLeftC'] = item['aciLeft'];
+    item['aciRightC'] = item['aciRight'];
+    delete(item['aciLeft']);
+    delete(item['aciRight']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['aciLeftC'] = item['aciLeft'];
+    item['aciRightC'] = item['aciRight'];
+    delete(item['aciLeft']);
+    delete(item['aciRight']);
+  });
+
+  compareByDate.data.forEach(item => {
+    item['aciLeftC'] = item['aciLeft'];
+    item['aciRightC'] = item['aciRight'];
+    delete(item['aciLeft']);
+    delete(item['aciRight']);
+  });
+
+  let secondsData = chosenBySeconds.data.concat(compareBySeconds.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
+
+  secondsData = sortByKey(secondsData, 'name');
+  hourData = sortByKey(hourData, 'name');
+  dateData = sortByKey(dateData, 'name');
+
+
+  let compressedSecondsData = [];
+  let compressedHourData = [];
+  let compressedDateData = [];
+
+  for(let i = 0; i < secondsData.length - 1; i++)
+  {
+    if(i > 0 && secondsData[i].name === secondsData[i - 1].name) continue;
+    if(secondsData[i].name === secondsData[i + 1].name)
+    {
+      // we can merge the next two
+      compressedSecondsData.push(extend(secondsData[i], secondsData[i + 1]));
+    }else compressedSecondsData.push(secondsData[i]);
+  }
+
+  for(let i = 0; i < hourData.length - 1; i++)
+  {
+    if(i > 0 && hourData[i].name === hourData[i - 1].name) continue;
+    if(hourData[i].name === hourData[i + 1].name)
+    {
+      // we can merge the next two
+      compressedHourData.push(extend(hourData[i], hourData[i + 1]));
+    }else compressedHourData.push(hourData[i]);
+  }
+
+  for(let i = 0; i < dateData.length - 1; i++)
+  {
+    if(i > 0 && dateData[i].name === dateData[i - 1].name) continue;
+    if(dateData[i].name === dateData[i + 1].name)
+    {
+      // we can merge the next two
+      compressedDateData.push(extend(dateData[i], dateData[i + 1]));
+    }else compressedDateData.push(dateData[i]);
+  }
+
   let ret = {
-    graph1: convertCompareBioResultsOverTime(jobs),
-    graph2: convertCompareBioResultsOverSite(jobs)
+    graph1: {
+      data: compressedSecondsData,
+      title: "Series Compared Over Seconds",
+      xAxisLabel: "Time (s)",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight',
+      dataKey3: 'aciLeftC',
+      dataKey4: 'aciRightC'
+    },
+    graph2: {
+      data: compressedHourData,
+      title: "Series Compared Over Hours",
+      xAxisLabel: "Hour",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight',
+      dataKey3: 'aciLeftC',
+      dataKey4: 'aciRightC'
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Series Compared Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "ACI Value",
+      dataKey1: 'aciLeft',
+      dataKey2: 'aciRight',
+      dataKey3: 'aciLeftC',
+      dataKey4: 'aciRightC'
+    }
   }
 
   return ret;
 }
 
-function convertCompareBioResultsOverTime(jobs) {
-  let ret = [];
+function convertNDSIResultsBySite(jobs) {
+  let ret = {
+    graph: null
+  }
+
+  let data = [];
+
+  for(var i = 0; i < jobs.length; i++)
+  {
+
+    let curObject = {
+      name: jobs[i].site,
+      ndsiL: jobs[i].result.ndsiL,
+      ndsiR: jobs[i].result.ndsiR,
+      biophonyL: jobs[i].result.biophonyL,
+      biophonyR: jobs[i].result.biophonyR,
+      anthrophonyL: jobs[i].result.anthrophonyL,
+      anthrophonyR: jobs[i].result.anthrophonyR
+    }
+
+    data.push(curObject);
+  }
+
+  ret.graph = data;
+
+  return ret;
+}
+
+function convertNDSIResultsBySeries(jobs, series) {
+  let ret = {
+    graph: null
+  }
+
+  let data = [];
+
+  for(var i = 0; i < jobs.length; i++)
+  {
+
+    let curObject = {
+      name: jobs[i].series,
+      ndsiL: jobs[i].result.ndsiL,
+      ndsiR: jobs[i].result.ndsiR,
+      biophonyL: jobs[i].result.biophonyL,
+      biophonyR: jobs[i].result.biophonyR,
+      anthrophonyL: jobs[i].result.anthrophonyL,
+      anthrophonyR: jobs[i].result.anthrophonyR
+    }
+
+    data.push(curObject);
+  }
+
+  ret.graph = data;
+
+  return ret;
+}
+
+function convertBAResultsBySite(jobs) {
+  let ret = {
+    graph: null
+  }
+  let data = [];
 
   for(var i = 0; i < jobs.length; i++)
   {
     let curObject =
     {
-      name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-      areaL: jobs[i].input.result.areaL,
-      areaR: jobs[i].input.result.areaR
+      name: jobs[i].site,
+      areaL: jobs[i].result.areaL,
+      areaR: jobs[i].result.areaR
     }
 
-    ret.push(curObject);
+    data.push(curObject);
   }
+
+  ret.graph = data;
 
   return ret;
 }
 
-function convertCompareBioResultsOverSite(jobs) {
-  let ret = [];
+function convertBAResultsBySeries(jobs, series) {
+  let ret = {
+    graph: null
+  }
+  let data = [];
 
   for(var i = 0; i < jobs.length; i++)
   {
     let curObject =
     {
-      name: jobs[i].input.siteName,
-      areaL: jobs[i].input.result.areaL,
-      areaR: jobs[i].input.result.areaR
+      name: jobs[i].series,
+      areaL: jobs[i].result.areaL,
+      areaR: jobs[i].result.areaR
     }
 
-    ret.push(curObject);
+    data.push(curObject);
   }
+
+  ret.graph = data;
 
   return ret;
 }
 
-function convertCompareNDSIResults(jobs) {
-  let ret = {
-    graph1: convertCompareNDSIResultsOverTime(jobs, 'ndsi'),
-    graph2: convertCompareNDSIResultsOverSite(jobs, 'ndsi'),
-    graph3: convertCompareNDSIResultsOverTime(jobs, 'biophony'),
-    graph4: convertCompareNDSIResultsOverSite(jobs, 'biophony'),
-    graph5: convertCompareNDSIResultsOverTime(jobs, 'anthrophony'),
-    graph6: convertCompareNDSIResultsOverSite(jobs, 'anthrophony')
-  }
+// function convertCompareNDSIResults(jobs) {
+//   let ret = {
+//     graph1: convertCompareNDSIResultsOverTime(jobs, 'ndsi'),
+//     graph2: convertCompareNDSIResultsOverSite(jobs, 'ndsi'),
+//     graph3: convertCompareNDSIResultsOverTime(jobs, 'biophony'),
+//     graph4: convertCompareNDSIResultsOverSite(jobs, 'biophony'),
+//     graph5: convertCompareNDSIResultsOverTime(jobs, 'anthrophony'),
+//     graph6: convertCompareNDSIResultsOverSite(jobs, 'anthrophony')
+//   }
+//
+//   return ret;
+// }
 
-  return ret;
-}
+// function convertCompareNDSIResultsOverTime(jobs, value) {
+//   let ret = [];
+//
+//   for(var i = 0; i < jobs.length; i++)
+//   {
+//     let curObject;
+//
+//     if(value === 'ndsi')
+//     {
+//       curObject = {
+//         name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+//         ndsiL: jobs[i].input.result.ndsiL,
+//         ndsiR: jobs[i].input.result.ndsiR
+//       }
+//     }else if(value === 'biophony')
+//     {
+//       curObject = {
+//         name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+//         biophonyL: jobs[i].input.result.biophonyL,
+//         biophonyR: jobs[i].input.result.biophonyR
+//       }
+//     }else if(value === 'anthrophony')
+//     {
+//       curObject = {
+//         name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
+//         anthrophonyL: jobs[i].input.result.anthrophonyL,
+//         anthrophonyR: jobs[i].input.result.anthrophonyR
+//       }
+//     }
+//
+//     ret.push(curObject);
+//   }
+//
+//   return ret;
+// }
 
-function convertCompareNDSIResultsOverTime(jobs, value) {
-  let ret = [];
-
-  for(var i = 0; i < jobs.length; i++)
-  {
-    let curObject;
-
-    if(value === 'ndsi')
-    {
-      curObject = {
-        name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-        ndsiL: jobs[i].input.result.ndsiL,
-        ndsiR: jobs[i].input.result.ndsiR
-      }
-    }else if(value === 'biophony')
-    {
-      curObject = {
-        name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-        biophonyL: jobs[i].input.result.biophonyL,
-        biophonyR: jobs[i].input.result.biophonyR
-      }
-    }else if(value === 'anthrophony')
-    {
-      curObject = {
-        name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-        anthrophonyL: jobs[i].input.result.anthrophonyL,
-        anthrophonyR: jobs[i].input.result.anthrophonyR
-      }
-    }
-
-    ret.push(curObject);
-  }
-
-  return ret;
-}
-
-function convertCompareNDSIResultsOverSite(jobs, value) {
-  let ret = [];
-
-  for(var i = 0; i < jobs.length; i++)
-  {
-    let curObject;
-
-    if(value === 'ndsi')
-    {
-      curObject = {
-        name: jobs[i].input.siteName,
-        ndsiL: jobs[i].input.result.ndsiL,
-        ndsiR: jobs[i].input.result.ndsiR
-      }
-    }else if(value === 'biophony')
-    {
-      curObject = {
-        name: jobs[i].input.siteName,
-        biophonyL: jobs[i].input.result.biophonyL,
-        biophonyR: jobs[i].input.result.biophonyR
-      }
-    }else if(value === 'anthrophony')
-    {
-      curObject = {
-        name: jobs[i].input.siteName,
-        anthrophonyL: jobs[i].input.result.anthrophonyL,
-        anthrophonyR: jobs[i].input.result.anthrophonyR
-      }
-    }
-
-    ret.push(curObject);
-  }
-
-  return ret;
-}
-
-function convertOutlierResults(job) {
-  // let ret = {
-  //   graph1: [],
-  //   index: job.type
-  // }
-  //
-  // let curObject = {
-  //   name: jobs[i].name,
-  //   leftData: 0,
-  //   rightData: 0
-  // }
-  //
-  // if(ret.index === 'aci')
-  // {
-  //   curObject.leftData = job.result.aciTotAllByMinL;
-  //   curObject.rightData = job.result.aciTotAllByMinR;
-  // }else if(ret.index === 'bio')
-  // {
-  //   curObject.leftData = jobs.result.areaL;
-  //   curObject.rightData = jobs.result.areaR;
-  // }
-  //
-  // ret.graph1.push(curObject);
-
-  // for(var i = 0; i < jobs.length; i++)
-  // {
-  //   let curObject = {
-  //     name: jobs[i].name,
-  //     leftData: 0,
-  //     rightData: 0
-  //   }
-  //
-  //   if(ret.index === 'aci')
-  //   {
-  //     curObject.leftData = jobs[i].results.aciTotAllByMinL;
-  //     curObject.rightData = jobs[i].results.aciTotAllByMinR;
-  //   }else if(ret.index === 'bio')
-  //   {
-  //     curObject.leftData = jobs[i].results.areaL;
-  //     curObject.rightData = jobs[i].results.areaR;
-  //   }
-  //
-  //   ret.graph1.push(curObject);
-  // }
-
-  // return ret;
-}
+// function convertOutlierResults(job) {
+//   let ret = {
+//     graph1: [],
+//     index: job.type
+//   }
+//
+//   let curObject = {
+//     name: jobs[i].name,
+//     leftData: 0,
+//     rightData: 0
+//   }
+//
+//   if(ret.index === 'aci')
+//   {
+//     curObject.leftData = job.result.aciTotAllByMinL;
+//     curObject.rightData = job.result.aciTotAllByMinR;
+//   }else if(ret.index === 'bio')
+//   {
+//     curObject.leftData = jobs.result.areaL;
+//     curObject.rightData = jobs.result.areaR;
+//   }
+//
+//   ret.graph1.push(curObject);
+//
+//   for(var i = 0; i < jobs.length; i++)
+//   {
+//     let curObject = {
+//       name: jobs[i].name,
+//       leftData: 0,
+//       rightData: 0
+//     }
+//
+//     if(ret.index === 'aci')
+//     {
+//       curObject.leftData = jobs[i].results.aciTotAllByMinL;
+//       curObject.rightData = jobs[i].results.aciTotAllByMinR;
+//     }else if(ret.index === 'bio')
+//     {
+//       curObject.leftData = jobs[i].results.areaL;
+//       curObject.rightData = jobs[i].results.areaR;
+//     }
+//
+//     ret.graph1.push(curObject);
+//   }
+//
+//   return ret;
+// }
 
 const styles = theme => ({
   selectEmpty: {
@@ -1110,29 +1241,12 @@ class AnalysisView extends Component {
             return seriesNames.indexOf(item) >= index;
           });
 
-          for(var index in selectedJobs)
-          {
-            var index = selectedJobs[index];
-            for(var specId in index)
-            {
-              var jobs = index[specId];
-              jobs.forEach(job => {
-                let match = inputs.find(x => x.inputId === job.input.inputId);
-                job.site = match.site;
-                job.series = match.series;
-                job.path = match.path.substring(match.path.lastIndexOf('\\')+1);
-              });
-            }
-          }
-
           this.setState({ siteNames: cleanSiteNames });
           this.setState({ chosenSite: cleanSiteNames[0] });
           this.setState({ seriesNames: cleanSeriesNames });
           this.setState({ chosenSeries: cleanSeriesNames[0] });
+          this.setState({ formattedJob: null });
         });
-
-      this.setState({ formattedJob: null });
-      console.log(selectedJobs);
     }
   }
 
@@ -1145,6 +1259,7 @@ class AnalysisView extends Component {
     let graphs;
 
     let { indexedSpecs } = this.props;
+    let { chosenSite, chosenSeries } = this.state;
 
     // loop through each input index
     for (var index in data) {
@@ -1209,7 +1324,8 @@ class AnalysisView extends Component {
 
       rows.push(
         <Paper key={index}>
-          <h3 style={{padding: 15+'px'}}>{index.toUpperCase()}</h3>
+          <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for { chosenSite } - { chosenSeries }</p>
           <IndexAnalysisPanel
             specRows={specRows}
           />
@@ -1226,6 +1342,194 @@ class AnalysisView extends Component {
     this.setState({ formattedJob: formattedJob })
   }
 
+  // Formats the data passed into it into a model usable by recharts.
+  // Then, it creates the Paper and ExpansionPanel components used
+  // for displaying the graphs for comparing jobs across sites.
+  formatJobSite = (data) => {
+    const rows = [];
+    let specRows = [];
+    let graphs;
+
+    let { indexedSpecs } = this.props;
+    let { chosenSite, chosenCompareSite } = this.state;
+
+    // loop through each input index
+    for (var index in data) {
+      var obj = data[index];
+
+      // don't make a Paper if the index is empty
+      if(this.isEmpty(obj)) continue;
+
+      specRows = [];
+      for(var spec in obj) {
+        switch(index)
+        {
+          case "aci":
+            graphs = convertACIResultsBySite(obj[spec])
+            break;
+          case "ndsi":
+            graphs = convertNDSIResultsBySite(obj[spec])
+            break;
+          // case "adi":
+          //   graphs = convertADIResultsBySite(obj[spec])
+          //   break;
+          // case "aei":
+          //   graphs = convertAEIResultsBySite(obj[spec])
+          //   break;
+          case "bio":
+            graphs = convertBAResultsBySite(obj[spec])
+            break;
+          default:
+            graphs = null
+        }
+
+        var params = Object.keys(indexedSpecs[spec]);
+        params.splice(params.indexOf('specId'), 1);
+        params.splice(params.indexOf('type'), 1);
+        var specTitle = '';
+
+        params.forEach((param, i) => {
+          if(i === params.length - 1)
+          {
+            specTitle = specTitle + param + ' - ' + indexedSpecs[spec][param];
+          }else
+          {
+            specTitle = specTitle + param + ' - ' + indexedSpecs[spec][param] + ', ';
+          }
+        });
+
+        specRows.push(
+          <ExpansionPanel key={index + spec}>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <p style={{fontSize: 16+'px'}}>{specTitle}</p>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <SpecAnalysisPanel
+                index={index}
+                spec={spec}
+                graphs={graphs}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        )
+      }
+
+      rows.push(
+        <Paper key={index}>
+          <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Site</h3>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSite } and { chosenCompareSite }</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The lines denoted by aciLeftC and aciRightC are the site you chose to compare</p>
+          <IndexAnalysisPanel
+            specRows={specRows}
+          />
+        </Paper>
+      )
+    }
+
+    var comparedJobsSite = (
+      <div>
+        {rows}
+      </div>
+    );
+
+    this.setState({ comparedJobsSite: comparedJobsSite });
+
+  }
+
+  // Formats the data passed into it into a model usable by recharts.
+  // Then, it creates the Paper and ExpansionPanel components used
+  // for displaying the graphs for comparing jobs across series.
+  formatJobSeries = (data) => {
+    const rows = [];
+    let specRows = [];
+    let graphs;
+
+    let { indexedSpecs } = this.props;
+    let { chosenSeries, chosenCompareSeries } = this.state;
+
+    // loop through each input index
+    for (var index in data) {
+      var obj = data[index];
+
+      // don't make a Paper if the index is empty
+      if(this.isEmpty(obj)) continue;
+
+      specRows = [];
+      for(var spec in obj) {
+        switch(index)
+        {
+          case "aci":
+            graphs = convertACIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            break;
+          case "ndsi":
+            graphs = convertNDSIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            break;
+          // case "adi":
+          //   graphs = convertADIResultsBySeries(obj[spec])
+          //   break;
+          // case "aei":
+          //   graphs = convertAEIResultsBySeries(obj[spec])
+          //   break;
+          case "bio":
+            graphs = convertBAResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            break;
+          default:
+            graphs = null
+        }
+
+        var params = Object.keys(indexedSpecs[spec]);
+        params.splice(params.indexOf('specId'), 1);
+        params.splice(params.indexOf('type'), 1);
+        var specTitle = '';
+
+        params.forEach((param, i) => {
+          if(i === params.length - 1)
+          {
+            specTitle = specTitle + param + ' - ' + indexedSpecs[spec][param];
+          }else
+          {
+            specTitle = specTitle + param + ' - ' + indexedSpecs[spec][param] + ', ';
+          }
+        });
+
+        specRows.push(
+          <ExpansionPanel key={index + spec}>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+              <p style={{fontSize: 16+'px'}}>{specTitle}</p>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <SpecAnalysisPanel
+                index={index+'-compare'}
+                spec={spec}
+                graphs={graphs}
+              />
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        )
+      }
+
+      rows.push(
+        <Paper key={index}>
+          <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Series</h3>
+                    <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSeries } and { chosenCompareSeries }</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The lines denoted by aciLeftC and aciRightC are the series you chose to compare</p>
+          <IndexAnalysisPanel
+            specRows={specRows}
+          />
+        </Paper>
+      )
+    }
+
+    var comparedJobsSeries = (
+      <div>
+        {rows}
+      </div>
+    )
+
+    this.setState({ comparedJobsSeries: comparedJobsSeries });
+
+  }
+
   // Checks if a passed object is empty
   isEmpty = (obj) => {
     for(var key in obj) {
@@ -1237,12 +1541,11 @@ class AnalysisView extends Component {
 
   // Handler for the Show Graphs button
   displayGraphs = () => {
-    console.log("Show Graphs");
-    let { chosenSite, chosenSeries } = this.state;
+
+    let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.props;
 
-    // 1) get jobs from selectedJobs where the site and series match
-    // const filteredSelectedJobs = selectedJobs.filter(x => x.series === chosenSeries && x.site === chosenSite);
+    // get jobs from fullJobs where the site and series match
     let filteredSelectedJobs = selectedJobs;
     for(var index in filteredSelectedJobs)
     {
@@ -1250,12 +1553,36 @@ class AnalysisView extends Component {
       for(var specId in index)
       {
         var jobs = index[specId];
-        index[specId] = jobs.filter(x => x.series === chosenSeries && x.site === chosenSite);
+        if(chosenCompareSite && chosenCompareSeries)
+        {
+          index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && (x.input.site === chosenSite || x.input.site === chosenCompareSite));
+        }else if(chosenCompareSite)
+        {
+          index[specId] = jobs.filter(x => x.input.series === chosenSeries && (x.input.site === chosenSite || x.input.site === chosenCompareSite));
+        }else if(chosenCompareSeries)
+        {
+          index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
+        }else
+        {
+          index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
+        }
       }
     }
 
-    console.log(filteredSelectedJobs);
+    // turn into base graphs
     this.formatJob(filteredSelectedJobs);
+
+    // check if user has selected a site to compare
+    if(chosenCompareSite)
+    {
+      this.formatJobSite(filteredSelectedJobs);
+    }
+
+    //  check if user has selected a series to compare
+    if(chosenCompareSeries)
+    {
+      this.formatJobSeries(filteredSelectedJobs);
+    }
   }
 
   // Handler for the site Select
@@ -1334,7 +1661,9 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, formattedJob, comparedJobs, siteNames, seriesNames, chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
+    let { errorMode, formattedJob, comparedJobs, comparedJobsSite,
+          comparedJobsSeries, siteNames, seriesNames, chosenSite,
+          chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     const { classes } = this.props;
 
     return (
@@ -1427,8 +1756,12 @@ class AnalysisView extends Component {
           formattedJob
           :
           ''}
-        { comparedJobs ?
-          comparedJobs
+        { comparedJobsSite ?
+          comparedJobsSite
+          :
+          ''}
+        { comparedJobsSeries ?
+          comparedJobsSeries
           :
           ''}
       </div>

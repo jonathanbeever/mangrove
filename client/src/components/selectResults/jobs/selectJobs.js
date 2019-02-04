@@ -39,7 +39,6 @@ class SelectJobs extends Component {
   }
 
   componentDidMount = () => {
-    console.log(this.props)
     this.formatInputChipHtml()
     this.formatSpecFilterHtml()
   }

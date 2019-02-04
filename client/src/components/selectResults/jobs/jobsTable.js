@@ -216,7 +216,6 @@ class EnhancedTable extends React.Component {
       return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].path)
     })
     this.setState({data: data})
-    console.log(this.state.data);
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {

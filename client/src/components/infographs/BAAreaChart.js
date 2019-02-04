@@ -9,7 +9,7 @@ class BAAreaChart extends Component {
 
     return(
       <div>
-        <AreaChart width={900} height={600} data={results} >
+        <AreaChart width={900} height={600} data={results} syncId="bi">
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey="name" label={xAxisLabel}/>
           <Legend />
@@ -18,7 +18,7 @@ class BAAreaChart extends Component {
           <Area type='monotone' dataKey={dataKey1} stackId="1" stroke='#8884d8' fill='#8884d8' />
           <Brush />
         </AreaChart>
-        <AreaChart width={900} height={600} data={results} >
+        <AreaChart width={900} height={600} data={results} syncId="bi">
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey="name" label={xAxisLabel}/>
           <Legend />
