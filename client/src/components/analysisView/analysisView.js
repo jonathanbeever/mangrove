@@ -31,6 +31,29 @@ function extend(obj, src) {
     return obj;
 }
 
+function mergeLikeNames(inputArray)
+{
+  let ret = [];
+  let len = inputArray.length;
+  for(let i = 0; i < len; i++)
+  {
+    if(i > 0 && inputArray[i].name === inputArray[i - 1].name) continue;
+    if(i === len - 1)
+    {
+      ret.push(inputArray[i]);
+      continue;
+    }
+
+    if(inputArray[i].name === inputArray[i + 1].name)
+    {
+      // we can merge the next two
+      ret.push(extend(inputArray[i], inputArray[i + 1]));
+    }else ret.push(inputArray[i]);
+  }
+
+  return ret;
+}
+
 /********** Base graph data modeling functions **********/
 function convertNDSIResults(jobs) {
   let ret;
@@ -159,7 +182,7 @@ function convertNDSIResults(jobs) {
     }
 
     curObject = {
-      name: date.getHours() + ':' + date.getMinutes(),
+      name: ("0" + date.getHours()).slice(-2) + ':' + date.getMinutes(),
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -194,11 +217,15 @@ function convertNDSIResults(jobs) {
 
   ret.graph4.data.push(dateObject);
 
+  ret.graph3.data = sortByKey(ret.graph3.data, 'name');
+  ret.graph4.data = sortByKey(ret.graph4.data, 'name');
+  ret.graph5.data = sortByKey(ret.graph5.data, 'name');
 
   return ret;
 }
 
 function convertACIResults(jobs) {
+  // console.log(jobs);
   let ret;
   let aciTotAllL = 0;
   let aciTotAllR = 0;
@@ -315,7 +342,7 @@ function convertACIResults(jobs) {
 
     curObject =
     {
-      name: job.path,
+      name: job.input.path,
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR
     }
@@ -328,6 +355,9 @@ function convertACIResults(jobs) {
   dateObject.aciLeft /= counter;
   dateObject.aciRight /= counter;
   ret.graph4.data.push(dateObject);
+
+  ret.graph3.data = sortByKey(ret.graph3.data, 'name');
+  ret.graph4.data = sortByKey(ret.graph4.data, 'name');
 
   return ret;
 }
@@ -497,6 +527,9 @@ function convertADIResults(jobs) {
   dateObject.rightADIVal /= counter;
   ret.graph4.data.push(dateObject);
 
+  ret.graph4.data = sortByKey(ret.graph4.data, 'name');
+  ret.graph5.data = sortByKey(ret.graph5.data, 'name');
+
   return ret;
 }
 
@@ -660,6 +693,9 @@ function convertAEIResults(jobs) {
   dateObject.rightAEIVal /= counter;
   ret.graph4.data.push(dateObject);
 
+  ret.graph4.data = sortByKey(ret.graph4.data, 'name');
+  ret.graph5.data = sortByKey(ret.graph5.data, 'name');
+
   return ret;
 }
 
@@ -798,69 +834,15 @@ function convertBAResults(jobs) {
   dateObject.areaR /= counter;
   ret.graph4.data.push(dateObject);
 
+  ret.graph4.data = sortByKey(ret.graph4.data, 'name');
+  ret.graph5.data = sortByKey(ret.graph5.data, 'name');
+
   return ret;
 }
 
-// function convertADIAEICompare(jobs) {
-//   let ret;
-//
-//   ret =
-//   {
-//     graph1: [], // compare aei and adi by time
-//     graph2: []  // compare aei and adi by file
-//   }
-//
-//   for(var i = 0; i < jobs.length; i++)
-//   {
-//     let curObject =
-//     {
-//       name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-//       leftADIVal: jobs[i].input.result.adiL,
-//       rightADIVal: jobs[i].input.result.adiR,
-//       leftAEIVal: jobs[i].input.result.aeiL,
-//       rightAEIVal: jobs[i].input.result.aeiR
-//     }
-//
-//     ret.graph1.push(curObject);
-//   }
-//
-//   jobs.forEach(function(job){
-//     let curObject =
-//     {
-//       name: job.fileName,
-//       leftADIVal: job.result.adiL,
-//       rightADIVal: job.result.adiR,
-//       leftAEIVal: job.result.aeiL,
-//       rightAEIVal: job.result.aeiR
-//     }
-//
-//     ret.graph2.push(curObject);
-//   });
-//
-//   return ret;
-// }
-
-// function convertCompareACIResultsOverTime(jobs) {
-//   let ret = [];
-//
-//   for(var i = 0; i < jobs.length; i++)
-//   {
-//     let curObject =
-//     {
-//       name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-//       leftData: jobs[i].result.aciTotAllByMinL,
-//       rightData: jobs[i].result.aciTotAllByMinR
-//     }
-//
-//     ret.push(curObject);
-//   }
-//
-//   return ret;
-// }
-
 /********** Comparison graph data modeling functions **********/
 function convertACIResultsBySite(jobs, sites) {
-  
+
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
   const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
 
@@ -905,39 +887,9 @@ function convertACIResultsBySite(jobs, sites) {
   hourData = sortByKey(hourData, 'name');
   dateData = sortByKey(dateData, 'name');
 
-  let compressedSecondsData = [];
-  let compressedHourData = [];
-  let compressedDateData = [];
-
-  for(let i = 0; i < secondsData.length - 1; i++)
-  {
-    if(i > 0 && secondsData[i].name === secondsData[i - 1].name) continue;
-    if(secondsData[i].name === secondsData[i + 1].name)
-    {
-      // we can merge the next two
-      compressedSecondsData.push(extend(secondsData[i], secondsData[i + 1]));
-    }else compressedSecondsData.push(secondsData[i]);
-  }
-
-  for(let i = 0; i < hourData.length - 1; i++)
-  {
-    if(i > 0 && hourData[i].name === hourData[i - 1].name) continue;
-    if(hourData[i].name === hourData[i + 1].name)
-    {
-      // we can merge the next two
-      compressedHourData.push(extend(hourData[i], hourData[i + 1]));
-    }else compressedHourData.push(hourData[i]);
-  }
-
-  for(let i = 0; i < dateData.length - 1; i++)
-  {
-    if(i > 0 && dateData[i].name === dateData[i - 1].name) continue;
-    if(dateData[i].name === dateData[i + 1].name)
-    {
-      // we can merge the next two
-      compressedDateData.push(extend(dateData[i], dateData[i + 1]));
-    }else compressedDateData.push(dateData[i]);
-  }
+  let compressedSecondsData = mergeLikeNames(secondsData);
+  let compressedHourData = mergeLikeNames(hourData);
+  let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
     graph1: {
@@ -1021,40 +973,9 @@ function convertACIResultsBySeries(jobs, series) {
   hourData = sortByKey(hourData, 'name');
   dateData = sortByKey(dateData, 'name');
 
-
-  let compressedSecondsData = [];
-  let compressedHourData = [];
-  let compressedDateData = [];
-
-  for(let i = 0; i < secondsData.length - 1; i++)
-  {
-    if(i > 0 && secondsData[i].name === secondsData[i - 1].name) continue;
-    if(secondsData[i].name === secondsData[i + 1].name)
-    {
-      // we can merge the next two
-      compressedSecondsData.push(extend(secondsData[i], secondsData[i + 1]));
-    }else compressedSecondsData.push(secondsData[i]);
-  }
-
-  for(let i = 0; i < hourData.length - 1; i++)
-  {
-    if(i > 0 && hourData[i].name === hourData[i - 1].name) continue;
-    if(hourData[i].name === hourData[i + 1].name)
-    {
-      // we can merge the next two
-      compressedHourData.push(extend(hourData[i], hourData[i + 1]));
-    }else compressedHourData.push(hourData[i]);
-  }
-
-  for(let i = 0; i < dateData.length - 1; i++)
-  {
-    if(i > 0 && dateData[i].name === dateData[i - 1].name) continue;
-    if(dateData[i].name === dateData[i + 1].name)
-    {
-      // we can merge the next two
-      compressedDateData.push(extend(dateData[i], dateData[i + 1]));
-    }else compressedDateData.push(dateData[i]);
-  }
+  let compressedSecondsData = mergeLikeNames(secondsData);
+  let compressedHourData = mergeLikeNames(hourData);
+  let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
     graph1: {
@@ -1079,7 +1000,7 @@ function convertACIResultsBySeries(jobs, series) {
     },
     graph3: {
       data: compressedDateData,
-      title: "Series Compared Date",
+      title: "Series Compared By Date",
       xAxisLabel: "Date",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
@@ -1092,58 +1013,175 @@ function convertACIResultsBySeries(jobs, series) {
   return ret;
 }
 
-function convertNDSIResultsBySite(jobs) {
+function convertNDSIResultsBySite(jobs, sites) {
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+
+  let chosenResults = convertNDSIResults(chosenSiteJobs);
+  let compareResults = convertNDSIResults(compareSiteJobs);
+
+  let chosenChannels = chosenResults.graph1;
+  let chosenValues = chosenResults.graph2;
+  let chosenByHour = chosenResults.graph3;
+
+  let compareChannels = compareResults.graph1;
+  let compareValues = compareResults.graph2;
+  let compareByHour = compareResults.graph3;
+
+  // rename keys in compare data
+  compareChannels.data.forEach(item => {
+    item['anthrophonyC'] = item['anthrophony'];
+    item['biophonyC'] = item['biophony'];
+    item['ndsiC'] = item['ndsi'];
+    delete(item['anthrophony']);
+    delete(item['biophony']);
+    delete(item['ndsi']);
+  });
+
+  compareValues.data.forEach(item => {
+    item['leftChannelC'] = item['leftChannel'];
+    item['rightChannelC'] = item['rightChannel'];
+    delete(item['leftChannel']);
+    delete(item['rightChannel']);
+  });
+
+  chosenByHour.data.forEach(item => {
+    item['anthrophony'] = (item['anthrophonyL'] + item['anthrophonyR']) / 2.0;
+    item['biophony'] = (item['biophonyL'] + item['biophonyR']) / 2.0;
+    item['ndsi'] = (item['ndsiL'] + item['ndsiR']) / 2.0;
+    delete(item['anthrophonyL']);
+    delete(item['anthrophonyR']);
+    delete(item['biophonyL']);
+    delete(item['biophonyR']);
+    delete(item['ndsiL']);
+    delete(item['ndsiR']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['anthrophonyC'] = (item['anthrophonyL'] + item['anthrophonyR']) / 2.0;
+    item['biophonyC'] = (item['biophonyL'] + item['biophonyR']) / 2.0;
+    item['ndsiC'] = (item['ndsiL'] + item['ndsiR']) / 2.0;
+    delete(item['anthrophonyL']);
+    delete(item['anthrophonyR']);
+    delete(item['biophonyL']);
+    delete(item['biophonyR']);
+    delete(item['ndsiL']);
+    delete(item['ndsiR']);
+  });
+
+  let channelsData = chosenChannels.data.concat(compareChannels.data);
+  let valuesData = chosenValues.data.concat(compareValues.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+
+  channelsData = sortByKey(channelsData, 'name');
+  valuesData = sortByKey(valuesData, 'name');
+  hourData = sortByKey(hourData, 'name');
+
+  let compressedChannelsData = mergeLikeNames(channelsData);
+  let compressedValuesData = mergeLikeNames(valuesData);
+  let compressedHourData = mergeLikeNames(hourData);
+
   let ret = {
-    graph: null
-  }
-
-  let data = [];
-
-  for(var i = 0; i < jobs.length; i++)
-  {
-
-    let curObject = {
-      name: jobs[i].site,
-      ndsiL: jobs[i].result.ndsiL,
-      ndsiR: jobs[i].result.ndsiR,
-      biophonyL: jobs[i].result.biophonyL,
-      biophonyR: jobs[i].result.biophonyR,
-      anthrophonyL: jobs[i].result.anthrophonyL,
-      anthrophonyR: jobs[i].result.anthrophonyR
+    graph1: {
+      data: compressedChannelsData,
+      title: "Sites Compared By Channels",
+    },
+    graph2: {
+      data: compressedValuesData,
+      title: "Sites Compared By Values",
+    },
+    graph3: {
+      data: compressedHourData,
+      title: "Sites Compared By Hour",
     }
-
-    data.push(curObject);
   }
-
-  ret.graph = data;
 
   return ret;
 }
 
 function convertNDSIResultsBySeries(jobs, series) {
+
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+
+  let chosenResults = convertNDSIResults(chosenSeriesJobs);
+  let compareResults = convertNDSIResults(compareSeriesJobs);
+
+  let chosenChannels = chosenResults.graph1;
+  let chosenValues = chosenResults.graph2;
+  let chosenByHour = chosenResults.graph3;
+
+  let compareChannels = compareResults.graph1;
+  let compareValues = compareResults.graph2;
+  let compareByHour = compareResults.graph3;
+
+  // rename keys in compare data
+  compareChannels.data.forEach(item => {
+    item['anthrophonyC'] = item['anthrophony'];
+    item['biophonyC'] = item['biophony'];
+    item['ndsiC'] = item['ndsi'];
+    delete(item['anthrophony']);
+    delete(item['biophony']);
+    delete(item['ndsi']);
+  });
+
+  compareValues.data.forEach(item => {
+    item['leftChannelC'] = item['leftChannel'];
+    item['rightChannelC'] = item['rightChannel'];
+    delete(item['leftChannel']);
+    delete(item['rightChannel']);
+  });
+
+  chosenByHour.data.forEach(item => {
+    item['anthrophony'] = (item['anthrophonyL'] + item['anthrophonyR']) / 2.0;
+    item['biophony'] = (item['biophonyL'] + item['biophonyR']) / 2.0;
+    item['ndsi'] = (item['ndsiL'] + item['ndsiR']) / 2.0;
+    delete(item['anthrophonyL']);
+    delete(item['anthrophonyR']);
+    delete(item['biophonyL']);
+    delete(item['biophonyR']);
+    delete(item['ndsiL']);
+    delete(item['ndsiR']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['anthrophonyC'] = (item['anthrophonyL'] + item['anthrophonyR']) / 2.0;
+    item['biophonyC'] = (item['biophonyL'] + item['biophonyR']) / 2.0;
+    item['ndsiC'] = (item['ndsiL'] + item['ndsiR']) / 2.0;
+    delete(item['anthrophonyL']);
+    delete(item['anthrophonyR']);
+    delete(item['biophonyL']);
+    delete(item['biophonyR']);
+    delete(item['ndsiL']);
+    delete(item['ndsiR']);
+  });
+
+  let channelsData = chosenChannels.data.concat(compareChannels.data);
+  let valuesData = chosenValues.data.concat(compareValues.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+
+  channelsData = sortByKey(channelsData, 'name');
+  valuesData = sortByKey(valuesData, 'name');
+  hourData = sortByKey(hourData, 'name');
+
+  let compressedChannelsData = mergeLikeNames(channelsData);
+  let compressedValuesData = mergeLikeNames(valuesData);
+  let compressedHourData = mergeLikeNames(hourData);
+
   let ret = {
-    graph: null
-  }
-
-  let data = [];
-
-  for(var i = 0; i < jobs.length; i++)
-  {
-
-    let curObject = {
-      name: jobs[i].series,
-      ndsiL: jobs[i].result.ndsiL,
-      ndsiR: jobs[i].result.ndsiR,
-      biophonyL: jobs[i].result.biophonyL,
-      biophonyR: jobs[i].result.biophonyR,
-      anthrophonyL: jobs[i].result.anthrophonyL,
-      anthrophonyR: jobs[i].result.anthrophonyR
+    graph1: {
+      data: compressedChannelsData,
+      title: "Series Compared By Channels",
+    },
+    graph2: {
+      data: compressedValuesData,
+      title: "Series Compared By Values",
+    },
+    graph3: {
+      data: compressedHourData,
+      title: "Series Compared By Hour",
     }
-
-    data.push(curObject);
   }
-
-  ret.graph = data;
 
   return ret;
 }
@@ -1193,103 +1231,6 @@ function convertBAResultsBySeries(jobs, series) {
 
   return ret;
 }
-
-// function convertCompareNDSIResults(jobs) {
-//   let ret = {
-//     graph1: convertCompareNDSIResultsOverTime(jobs, 'ndsi'),
-//     graph2: convertCompareNDSIResultsOverSite(jobs, 'ndsi'),
-//     graph3: convertCompareNDSIResultsOverTime(jobs, 'biophony'),
-//     graph4: convertCompareNDSIResultsOverSite(jobs, 'biophony'),
-//     graph5: convertCompareNDSIResultsOverTime(jobs, 'anthrophony'),
-//     graph6: convertCompareNDSIResultsOverSite(jobs, 'anthrophony')
-//   }
-//
-//   return ret;
-// }
-
-// function convertCompareNDSIResultsOverTime(jobs, value) {
-//   let ret = [];
-//
-//   for(var i = 0; i < jobs.length; i++)
-//   {
-//     let curObject;
-//
-//     if(value === 'ndsi')
-//     {
-//       curObject = {
-//         name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-//         ndsiL: jobs[i].input.result.ndsiL,
-//         ndsiR: jobs[i].input.result.ndsiR
-//       }
-//     }else if(value === 'biophony')
-//     {
-//       curObject = {
-//         name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-//         biophonyL: jobs[i].input.result.biophonyL,
-//         biophonyR: jobs[i].input.result.biophonyR
-//       }
-//     }else if(value === 'anthrophony')
-//     {
-//       curObject = {
-//         name: new Date(new Date(jobs[i].input.recordTimeMs).getTime()).toString(),
-//         anthrophonyL: jobs[i].input.result.anthrophonyL,
-//         anthrophonyR: jobs[i].input.result.anthrophonyR
-//       }
-//     }
-//
-//     ret.push(curObject);
-//   }
-//
-//   return ret;
-// }
-
-// function convertOutlierResults(job) {
-//   let ret = {
-//     graph1: [],
-//     index: job.type
-//   }
-//
-//   let curObject = {
-//     name: jobs[i].name,
-//     leftData: 0,
-//     rightData: 0
-//   }
-//
-//   if(ret.index === 'aci')
-//   {
-//     curObject.leftData = job.result.aciTotAllByMinL;
-//     curObject.rightData = job.result.aciTotAllByMinR;
-//   }else if(ret.index === 'bio')
-//   {
-//     curObject.leftData = jobs.result.areaL;
-//     curObject.rightData = jobs.result.areaR;
-//   }
-//
-//   ret.graph1.push(curObject);
-//
-//   for(var i = 0; i < jobs.length; i++)
-//   {
-//     let curObject = {
-//       name: jobs[i].name,
-//       leftData: 0,
-//       rightData: 0
-//     }
-//
-//     if(ret.index === 'aci')
-//     {
-//       curObject.leftData = jobs[i].results.aciTotAllByMinL;
-//       curObject.rightData = jobs[i].results.aciTotAllByMinR;
-//     }else if(ret.index === 'bio')
-//     {
-//       curObject.leftData = jobs[i].results.areaL;
-//       curObject.rightData = jobs[i].results.areaR;
-//     }
-//
-//     ret.graph1.push(curObject);
-//   }
-//
-//   return ret;
-// }
 
 const styles = theme => ({
   selectEmpty: {
@@ -1603,7 +1544,7 @@ class AnalysisView extends Component {
         <Paper key={index}>
           <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Series</h3>
                     <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSeries } and { chosenCompareSeries }</p>
-          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The lines denoted by aciLeftC and aciRightC are the series you chose to compare</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are the series you chose to compare</p>
           <IndexAnalysisPanel
             specRows={specRows}
           />
@@ -1636,42 +1577,52 @@ class AnalysisView extends Component {
     let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.props;
 
-    // get jobs from fullJobs where the site and series match
-    let filteredSelectedJobs = selectedJobs;
-    for(var index in filteredSelectedJobs)
+    // get jobs for only the chosen site and series
+    let filteredChosenJobs = JSON.parse(JSON.stringify(selectedJobs));
+    for(var index in filteredChosenJobs)
     {
-      var index = filteredSelectedJobs[index];
+      var index = filteredChosenJobs[index];
       for(var specId in index)
       {
         var jobs = index[specId];
-        if(chosenCompareSite && chosenCompareSeries)
-        {
-          index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && (x.input.site === chosenSite || x.input.site === chosenCompareSite));
-        }else if(chosenCompareSite)
-        {
-          index[specId] = jobs.filter(x => x.input.series === chosenSeries && (x.input.site === chosenSite || x.input.site === chosenCompareSite));
-        }else if(chosenCompareSeries)
-        {
-          index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
-        }else
-        {
-          index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
-        }
+        index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
       }
     }
 
-    // turn into base graphs
-    this.formatJob(filteredSelectedJobs);
+    // create base graphs
+    this.formatJob(filteredChosenJobs);
 
     // check if user has selected a site to compare
     if(chosenCompareSite)
     {
+      // get jobs from fullJobs where the site and series match
+      let filteredSelectedJobs = JSON.parse(JSON.stringify(selectedJobs));;
+      for(var index in filteredSelectedJobs)
+      {
+        var index = filteredSelectedJobs[index];
+        for(var specId in index)
+        {
+          var jobs = index[specId];
+          index[specId] = jobs.filter(x => x.input.series === chosenSeries && (x.input.site === chosenSite || x.input.site === chosenCompareSite));
+        }
+      }
       this.formatJobSite(filteredSelectedJobs);
     }
 
     //  check if user has selected a series to compare
     if(chosenCompareSeries)
     {
+      // get jobs from fullJobs where the site and series match
+      let filteredSelectedJobs = JSON.parse(JSON.stringify(selectedJobs));;
+      for(var index in filteredSelectedJobs)
+      {
+        var index = filteredSelectedJobs[index];
+        for(var specId in index)
+        {
+          var jobs = index[specId];
+          index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
+        }
+      }
       this.formatJobSeries(filteredSelectedJobs);
     }
   }
@@ -1711,18 +1662,13 @@ class AnalysisView extends Component {
   // Creates the items seen in the compare site menu
   siteMenuCompareItems = (siteNames) => {
     let { chosenSite } = this.state;
-    const siteNamesWithoutChosen = siteNames.filter(site => site !== chosenSite);
-    const menuItems = siteNamesWithoutChosen.map(site => {
-      return <MenuItem value={site}>{site}</MenuItem>
-    });
 
-    if(menuItems.length > 0)
-    {
-      return menuItems;
-    }else
-    {
-      return <MenuItem value=""><em>None</em></MenuItem>
-    }
+    const siteNamesWithoutChosen = siteNames.filter(site => site !== chosenSite);
+    const menuItems = [<MenuItem value=""><em>None</em></MenuItem>].concat(siteNamesWithoutChosen.map(site => {
+      return <MenuItem value={site}>{site}</MenuItem>
+    }));
+
+    return menuItems;
   }
 
   // Creates the items seen in the series menu
@@ -1733,21 +1679,16 @@ class AnalysisView extends Component {
     return menuItems;
   }
 
-  // Creates the items seen in the compare site menu
+  // Creates the items seen in the compare series menu
   seriesMenuCompareItems = (seriesNames) => {
     let { chosenSeries } = this.state;
-    const seriesNamesWithoutChosen = seriesNames.filter(series => series !== chosenSeries);
-    const menuItems = seriesNamesWithoutChosen.map(series => {
-      return <MenuItem value={series}>{series}</MenuItem>
-    });
 
-    if(menuItems.length > 0)
-    {
-      return menuItems;
-    }else
-    {
-      return <MenuItem value=""><em>None</em></MenuItem>
-    }
+    const seriesNamesWithoutChosen = seriesNames.filter(site => site !== chosenSeries);
+    const menuItems = [<MenuItem value=""><em>None</em></MenuItem>].concat(seriesNamesWithoutChosen.map(series => {
+      return <MenuItem value={series}>{series}</MenuItem>
+    }));
+
+    return menuItems;
   }
 
   render() {
@@ -1758,7 +1699,7 @@ class AnalysisView extends Component {
     const { classes } = this.props;
 
     return (
-      <div>
+      <div style={{ marginBottom:25+'px' }}>
         <Paper style={{ marginTop:10+'px' }}>
           <div className="row">
             <div className="col-8">

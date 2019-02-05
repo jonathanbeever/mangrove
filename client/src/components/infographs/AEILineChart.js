@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {LineChart, Line, XAxis, YAxis, ReferenceLine, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {LineChart, Line, Label, XAxis, YAxis, ReferenceLine, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 class AEILineChart extends Component {
 
@@ -11,7 +11,9 @@ class AEILineChart extends Component {
       <div>
         <LineChart width={900} height={600} data={results} >
          <CartesianGrid strokeDasharray="3 3"/>
-         <XAxis dataKey="name" label={xAxisLabel}/>
+         <XAxis dataKey="name">
+           <Label value={xAxisLabel} position="insideBottom" offset={2} />
+         </XAxis>
          <YAxis label="AEI Value"/>
          <Tooltip/>
          <Legend />

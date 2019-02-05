@@ -10,6 +10,9 @@ import ADILineChart from '../infographs/ADILineChart';
 import AEILineChart from '../infographs/AEILineChart';
 import BAAreaChart from '../infographs/BAAreaChart';
 import BALineChart from '../infographs/BALineChart';
+import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart';
+import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
+import NDSIDualLineChart from '../infographs/NDSIDualLineChart';
 
 
 const styles = theme => ({
@@ -124,7 +127,47 @@ class GraphsTable extends React.Component {
               )
               break;
           }
-
+          break;
+        case "ndsi-compare":
+          switch(obj.title)
+          {
+            case "Series Compared By Channels":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  data={obj.data}
+                  graph={<NDSIChannelCompareBarChart
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
+            case "Series Compared By Values":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  data={obj.data}
+                  graph={<NDSIValuesCompareBarChart
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
+            case "Series Compared By Hour":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  data={obj.data}
+                  graph={<NDSIDualLineChart
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
+          }
           break;
         case "adi":
           rows.push(
