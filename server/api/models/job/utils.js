@@ -38,12 +38,11 @@ const getJobKeys = (type, finished = true) => {
 
 const newJobKeys = () => ['type', 'inputId', 'specId'];
 
-const updateJob = (job, update, populate = false) => {
-  const newJob = { ...job._doc, ...update };
-  const JobModel = getJobModel(newJob.type);
+const updateJob = async (job, update, populate = false) => {
+  const JobModel = getJobModel(job.type);
   const updatedJob = JobModel.findByIdAndUpdate(
-    newJob._id,
-    newJob,
+    job._id,
+    update,
     { new: true },
   );
   if (populate) {
