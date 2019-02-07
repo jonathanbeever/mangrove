@@ -24,7 +24,7 @@ class NDSIValuesCompareBarChart extends Component {
           <Legend />
           <ReferenceLine y={0} stroke='#000' />
           <Bar dataKey="leftChannel" fill="#8884d8" />
-          <Bar dataKey="rightChannelC" fill="#1910d4" />
+          <Bar dataKey="leftChannelC" fill="#1910d4" />
           <Bar dataKey="rightChannel" fill="#82ca9d" />
           <Bar dataKey="rightChannelC" fill="#108f3f" />
         </BarChart>

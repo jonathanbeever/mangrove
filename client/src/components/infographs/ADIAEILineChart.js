@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import {LineChart, Line, Label, XAxis, YAxis, ReferenceLine, CartesianGrid, Tooltip, Legend} from 'recharts';
 
-class AEILineChart extends Component {
+class ADIAEILineChart extends Component {
 
   render(){
 
-    let { results, xAxisLabel, refL, refR, dataKey1, dataKey2 } = this.props;
+    let { reference, results, xAxisLabel, yAxisLabel, refLabel1, refLabel2, refL, refR, dataKey1, dataKey2 } = this.props;
+
+    const referenceLines = [<ReferenceLine y={refL} label={refLabel1} stroke="#8884d8"/>,
+                            <ReferenceLine y={refR} label={refLabel2} stroke="#82ca9d"/>
+                            ];
 
     return(
       <div>
@@ -14,11 +18,14 @@ class AEILineChart extends Component {
          <XAxis dataKey="name">
            <Label value={xAxisLabel} position="insideBottom" offset={2} />
          </XAxis>
-         <YAxis label="AEI Value"/>
+         <YAxis label={yAxisLabel}/>
          <Tooltip/>
          <Legend />
-         <ReferenceLine y={refL} label="AEI Left" stroke="#433eaf"/>
-         <ReferenceLine y={refR} label="AEI Right" stroke="#187139"/>
+         { reference ?
+           referenceLines
+           :
+           ''
+         }
          <Line type="monotone" dataKey={dataKey1} stroke="#8884d8" dot={false}/>
          <Line type="monotone" dataKey={dataKey2} stroke="#82ca9d" dot={false}/>
         </LineChart>
@@ -27,4 +34,4 @@ class AEILineChart extends Component {
   }
 }
 
-export default AEILineChart;
+export default ADIAEILineChart;

@@ -31,8 +31,7 @@ function extend(obj, src) {
     return obj;
 }
 
-function mergeLikeNames(inputArray)
-{
+function mergeLikeNames(inputArray) {
   let ret = [];
   let len = inputArray.length;
   for(let i = 0; i < len; i++)
@@ -137,8 +136,8 @@ function convertNDSIResults(jobs) {
   let counter;
   jobs.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
-    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear();
+    let oldDateString = ("0" + (oldDate.getMonth() + 1)).slice(-2) + '/' + ("0" + oldDate.getDate()).slice(-2) + '/' + oldDate.getFullYear();
     let curObject;
 
     if(oldDateString === dayDate)
@@ -155,7 +154,7 @@ function convertNDSIResults(jobs) {
 
     }else{
       // we are on a new day
-      if(oldDateString !== '1/1/1970'){
+      if(oldDateString !== '01/01/1970'){
 
         dateObject.ndsiL /= counter;
         dateObject.ndsiR /= counter;
@@ -194,7 +193,7 @@ function convertNDSIResults(jobs) {
     ret.graph3.data.push(curObject);
 
     curObject = {
-      name: job.path,
+      name: job.input.path,
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -366,13 +365,12 @@ function convertADIResults(jobs) {
 
   let ret;
 
-  let arrLength = jobs[0].input.result.ADIbandValsL.length;
+  let arrLength = jobs[0].result.ADIbandValsL.length;
   let adiLTotal = 0;
   let adiRTotal = 0;
   let adiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
   let adiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
 
-  // REMEMBER TO CHANGE DUMMY TO JOBS
   jobs.forEach(function(job){
     adiLTotal += job.result.adiL;
     adiRTotal += job.result.adiR;
@@ -404,20 +402,26 @@ function convertADIResults(jobs) {
       data: [],
       title: "ADI By Band Range",
       xAxisLabel: "Hz Range",
+      yAxisLabel: "ADI Value",
       dataKey1: "leftBandVal",
       dataKey2: "rightBandVal",
       refL: adiLAvg,
-      refR: adiRAvg
+      refR: adiRAvg,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
     },
     graph2:
     {
       data: [],
       title: "ADI By File",
       xAxisLabel: "File Name",
+      yAxisLabel: "ADI Value",
       dataKey1: "leftADIVal",
       dataKey2: "rightADIVal",
       refL: adiLAvg,
-      refR: adiRAvg
+      refR: adiRAvg,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
     },
     // graph3:
     // {
@@ -438,20 +442,26 @@ function convertADIResults(jobs) {
       data: [],
       title: "ADI By Date",
       xAxisLabel: "Date",
+      yAxisLabel: "ADI Value",
       dataKey1: "leftADIVal",
       dataKey2: "rightADIVal",
       refL: adiLAvg,
-      refR: adiRAvg
+      refR: adiRAvg,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
     },
     graph5:
     {
       data: [],
       title: "ADI By Hour",
       xAxisLabel: "Hour of Day",
+      yAxisLabel: "ADI Value",
       dataKey1: "leftADIVal",
       dataKey2: "rightADIVal",
       refL: adiLAvg,
-      refR: adiRAvg
+      refR: adiRAvg,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
     }
   }
 
@@ -459,7 +469,7 @@ function convertADIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].input.result.ADIbandRangeL[i],
+      name: jobs[0].result.ADIbandRangeL[i],
       leftBandVal: adiLBand[i],
       rightBandVal: adiRBand[i]
     }
@@ -473,8 +483,8 @@ function convertADIResults(jobs) {
   let counter;
   jobs.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
-    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear();
+    let oldDateString = ("0" + (oldDate.getMonth() + 1)).slice(-2) + '/' + ("0" + oldDate.getDate()).slice(-2) + '/' + oldDate.getFullYear();
     let curObject;
     if(oldDateString === dayDate){
       // we are still on same day
@@ -485,7 +495,7 @@ function convertADIResults(jobs) {
 
     }else{
       // we are on a new day
-      if(oldDateString !== '1/1/1970')
+      if(oldDateString !== '01/01/1970')
       {
         dateObject.leftADIVal /= counter;
         dateObject.rightADIVal /= counter;
@@ -504,7 +514,7 @@ function convertADIResults(jobs) {
 
     curObject =
     {
-      name: date.getHours() + ':' + date.getMinutes(),
+      name: ("0" + date.getHours()).slice(-2) + ':' + date.getMinutes(),
       leftADIVal: job.result.adiL,
       rightADIVal: job.result.adiR
     }
@@ -513,7 +523,7 @@ function convertADIResults(jobs) {
 
     curObject =
     {
-      name: job.path,
+      name: job.input.path,
       leftADIVal: job.result.adiL,
       rightADIVal: job.result.adiR
     }
@@ -536,7 +546,7 @@ function convertADIResults(jobs) {
 function convertAEIResults(jobs) {
   let ret;
 
-  let arrLength = jobs[0].input.result.AEIbandValsL.length;
+  let arrLength = jobs[0].result.AEIbandValsL.length;
   let aeiLTotal = 0;
   let aeiRTotal = 0;
   let aeiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
@@ -573,19 +583,27 @@ function convertAEIResults(jobs) {
     {
       data: [],
       title: "AEI By Band Range",
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "AEI Level",
       dataKey1: "leftBandVal",
       dataKey2: "rightBandVal",
       refL: aeiLAvg,
-      refR: aeiRAvg
+      refR: aeiRAvg,
+      refLabel1: "AEI Left",
+      refLabel2: "AEI Right"
     },
     graph2:
     {
       data: [],
       title: "AEI By File",
+      xAxisLabel: "File Name",
+      yAxisLabel: "AEI Level",
       dataKey1: "leftAEIVal",
       dataKey2: "rightAEIVal",
       refL: aeiLAvg,
-      refR: aeiRAvg
+      refR: aeiRAvg,
+      refLabel1: "AEI Left",
+      refLabel2: "AEI Right"
     },
     // graph3:
     // {
@@ -605,19 +623,27 @@ function convertAEIResults(jobs) {
     {
       data: [],
       title: "AEI By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "AEI Level",
       dataKey1: "leftAEIVal",
       dataKey2: "rightAEIVal",
       refL: aeiLAvg,
-      refR: aeiRAvg
+      refR: aeiRAvg,
+      refLabel1: "AEI Left",
+      refLabel2: "AEI Right"
     },
     graph5:
     {
       data: [],
       title: "AEI By Hour",
+      xAxisLabel: "Hour",
+      yAxisLabel: "AEI Level",
       dataKey1: "leftAEIVal",
       dataKey2: "rightAEIVal",
       refL: aeiLAvg,
-      refR: aeiRAvg
+      refR: aeiRAvg,
+      refLabel1: "AEI Left",
+      refLabel2: "AEI Right"
     }
   }
 
@@ -625,7 +651,7 @@ function convertAEIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].input.result.AEIbandRangeL[i],
+      name: jobs[0].result.AEIbandRangeL[i],
       leftBandVal: aeiLBand[i],
       rightBandVal: aeiRBand[i]
     }
@@ -639,8 +665,8 @@ function convertAEIResults(jobs) {
   let counter;
   jobs.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
-    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear();
+    let oldDateString = ("0" + (oldDate.getMonth() + 1)).slice(-2) + '/' + ("0" + oldDate.getDate()).slice(-2) + '/' + oldDate.getFullYear();
     let curObject;
     if(oldDateString === dayDate){
       // we are still on same day
@@ -651,7 +677,7 @@ function convertAEIResults(jobs) {
 
     }else{
       // we are on a new day
-      if(oldDateString !== '1/1/1970')
+      if(oldDateString !== '01/01/1970')
       {
         dateObject.leftAEIVal /= counter;
         dateObject.rightAEIVal /= counter;
@@ -670,7 +696,7 @@ function convertAEIResults(jobs) {
 
     curObject =
     {
-      name: date.getHours() + ':' + date.getMinutes(),
+      name: ("0" + date.getHours()).slice(-2) + ':' + date.getMinutes(),
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR
     }
@@ -679,7 +705,7 @@ function convertAEIResults(jobs) {
 
     curObject =
     {
-      name: job.path,
+      name: job.input.path,
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR
     }
@@ -888,7 +914,7 @@ function convertACIResultsBySite(jobs, sites) {
   let ret = {
     graph1: {
       data: compressedSecondsData,
-      title: "Series Compared Over Seconds",
+      title: "Compared Over Seconds",
       xAxisLabel: "Time (s)",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
@@ -898,7 +924,7 @@ function convertACIResultsBySite(jobs, sites) {
     },
     graph2: {
       data: compressedHourData,
-      title: "Series Compared Over Hours",
+      title: "Compared Over Hours",
       xAxisLabel: "Hour",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
@@ -908,7 +934,7 @@ function convertACIResultsBySite(jobs, sites) {
     },
     graph3: {
       data: compressedDateData,
-      title: "Series Compared Date",
+      title: "Compared Date",
       xAxisLabel: "Date",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
@@ -974,7 +1000,7 @@ function convertACIResultsBySeries(jobs, series) {
   let ret = {
     graph1: {
       data: compressedSecondsData,
-      title: "Series Compared Over Seconds",
+      title: "Compared Over Seconds",
       xAxisLabel: "Time (s)",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
@@ -984,7 +1010,7 @@ function convertACIResultsBySeries(jobs, series) {
     },
     graph2: {
       data: compressedHourData,
-      title: "Series Compared Over Hours",
+      title: "Compared Over Hours",
       xAxisLabel: "Hour",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
@@ -994,7 +1020,7 @@ function convertACIResultsBySeries(jobs, series) {
     },
     graph3: {
       data: compressedDateData,
-      title: "Series Compared By Date",
+      title: "Compared By Date",
       xAxisLabel: "Date",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
@@ -1078,15 +1104,15 @@ function convertNDSIResultsBySite(jobs, sites) {
   let ret = {
     graph1: {
       data: compressedChannelsData,
-      title: "Sites Compared By Channels",
+      title: "Compared By Channels",
     },
     graph2: {
       data: compressedValuesData,
-      title: "Sites Compared By Values",
+      title: "Compared By Values",
     },
     graph3: {
       data: compressedHourData,
-      title: "Sites Compared By Hour",
+      title: "Compared By Hour",
     }
   }
 
@@ -1165,15 +1191,15 @@ function convertNDSIResultsBySeries(jobs, series) {
   let ret = {
     graph1: {
       data: compressedChannelsData,
-      title: "Series Compared By Channels",
+      title: "Compared By Channels",
     },
     graph2: {
       data: compressedValuesData,
-      title: "Series Compared By Values",
+      title: "Compared By Values",
     },
     graph3: {
       data: compressedHourData,
-      title: "Series Compared By Hour",
+      title: "Compared By Hour",
     }
   }
 
@@ -1233,7 +1259,7 @@ function convertBIResultsBySite(jobs, sites) {
   let ret = {
     graph1: {
       data: compressedSpectrumData,
-      title: "Sites Compared By Spectrum Values",
+      title: "Compared By Spectrum Values",
       xAxisLabel: "Hz Range",
       yAxisLabel: "Spectrum Value",
       dataKey1: 'leftSpectrum',
@@ -1243,7 +1269,7 @@ function convertBIResultsBySite(jobs, sites) {
     },
     graph2: {
       data: compressedHourData,
-      title: "Sites Compared Over Hours",
+      title: "Compared Over Hours",
       xAxisLabel: "Hour",
       yAxisLabel: "Bioacoustic Area Value",
       dataKey1: 'areaL',
@@ -1253,7 +1279,7 @@ function convertBIResultsBySite(jobs, sites) {
     },
     graph3: {
       data: compressedDateData,
-      title: "Sites Compared By Date",
+      title: "Compared By Date",
       xAxisLabel: "Date",
       yAxisLabel: "Bioacoustic Area Value",
       dataKey1: 'areaL',
@@ -1319,7 +1345,7 @@ function convertBIResultsBySeries(jobs, series) {
   let ret = {
     graph1: {
       data: compressedSpectrumData,
-      title: "Series Compared By Spectrum Values",
+      title: "Compared By Spectrum Values",
       xAxisLabel: "Hz Range",
       yAxisLabel: "Spectrum Value",
       dataKey1: 'leftSpectrum',
@@ -1329,19 +1355,479 @@ function convertBIResultsBySeries(jobs, series) {
     },
     graph2: {
       data: compressedHourData,
-      title: "Series Compared Over Hours",
+      title: "Compared Over Hours",
       xAxisLabel: "Hour",
       yAxisLabel: "Bioacoustic Area Value",
     },
     graph3: {
       data: compressedDateData,
-      title: "Series Compared By Date",
+      title: "Compared By Date",
       xAxisLabel: "Date",
       yAxisLabel: "Bioacoustic Area Value",
     }
   }
 
   return ret;
+}
+
+function convertADIResultsBySite(jobs, sites) {
+
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+
+  let chosenResults = convertADIResults(chosenSiteJobs);
+  let compareResults = convertADIResults(compareSiteJobs);
+
+  let chosenBandValues = chosenResults.graph1;
+  let chosenByHour = chosenResults.graph5;
+  let chosenByDate = chosenResults.graph4;
+
+  let compareBandValues = compareResults.graph1;
+  let compareByHour = compareResults.graph5;
+  let compareByDate = compareResults.graph4;
+
+  let refL = chosenByHour.refL;
+  let refR = chosenByHour.refR;
+  let refLC = compareByHour.refL;
+  let refRC = compareByHour.refR;
+
+  // rename keys in compare data
+  compareBandValues.data.forEach(item => {
+    item['leftBandValC'] = item['leftBandVal'];
+    item['rightBandValC'] = item['rightBandVal'];
+    delete(item['leftBandVal']);
+    delete(item['rightBandVal']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['leftADIValC'] = item['leftADIVal'];
+    item['rightADIValC'] = item['rightADIVal'];
+    delete(item['leftADIVal']);
+    delete(item['rightADIVal']);
+  });
+
+  compareByDate.data.forEach(item => {
+    item['leftADIValC'] = item['leftADIVal'];
+    item['rightADIValC'] = item['rightADIVal'];
+    delete(item['leftADIVal']);
+    delete(item['rightADIVal']);
+  });
+
+  let bandData = chosenBandValues.data.concat(compareBandValues.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
+
+  bandData = sortByKey(bandData, 'name');
+  hourData = sortByKey(hourData, 'name');
+  dateData = sortByKey(dateData, 'name');
+
+  let compressedBandData = mergeLikeNames(bandData);
+  let compressedHourData = mergeLikeNames(hourData);
+  let compressedDateData = mergeLikeNames(dateData);
+
+  let ret = {
+    graph1: {
+      data: compressedBandData,
+      title: "Compared By Band Values",
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "ADI Value",
+      dataKey1: "leftBandVal",
+      dataKey2: "rightBandVal",
+      dataKey3: "leftBandValC",
+      dataKey4: "rightBandValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
+      refLabel3: "ADI Left Compare",
+      refLabel4: "ADI Right Compare"
+    },
+    graph2: {
+      data: compressedHourData,
+      title: "Compared Over Hours",
+      xAxisLabel: "Hour",
+      yAxisLabel: "ADI Value",
+      dataKey1: "leftADIVal",
+      dataKey2: "rightADIVal",
+      dataKey3: "leftADIValC",
+      dataKey4: "rightADIValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
+      refLabel3: "ADI Left Compare",
+      refLabel4: "ADI Right Compare"
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Compared By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "ADI Value",
+      dataKey1: "leftADIVal",
+      dataKey2: "rightADIVal",
+      dataKey3: "leftADIValC",
+      dataKey4: "rightADIValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
+      refLabel3: "ADI Left Compare",
+      refLabel4: "ADI Right Compare"
+    }
+  }
+
+  return ret;
+}
+
+function convertADIResultsBySeries(jobs, series) {
+
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+
+  let chosenResults = convertADIResults(chosenSeriesJobs);
+  let compareResults = convertADIResults(compareSeriesJobs);
+
+  let chosenBandValues = chosenResults.graph1;
+  let chosenByHour = chosenResults.graph5;
+  let chosenByDate = chosenResults.graph4;
+
+  let compareBandValues = compareResults.graph1;
+  let compareByHour = compareResults.graph5;
+  let compareByDate = compareResults.graph4;
+
+  let refL = chosenByHour.refL;
+  let refR = chosenByHour.refR;
+  let refLC = compareByHour.refL;
+  let refRC = compareByHour.refR;
+
+  // rename keys in compare data
+  compareBandValues.data.forEach(item => {
+    item['leftBandValC'] = item['leftBandVal'];
+    item['rightBandValC'] = item['rightBandVal'];
+    delete(item['leftBandVal']);
+    delete(item['rightBandVal']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['leftADIValC'] = item['leftADIVal'];
+    item['rightADIValC'] = item['rightADIVal'];
+    delete(item['leftADIVal']);
+    delete(item['rightADIVal']);
+  });
+
+  compareByDate.data.forEach(item => {
+    item['leftADIValC'] = item['leftADIVal'];
+    item['rightADIValC'] = item['rightADIVal'];
+    delete(item['leftADIVal']);
+    delete(item['rightADIVal']);
+  });
+
+  let bandData = chosenBandValues.data.concat(compareBandValues.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
+
+  bandData = sortByKey(bandData, 'name');
+  hourData = sortByKey(hourData, 'name');
+  dateData = sortByKey(dateData, 'name');
+
+  let compressedBandData = mergeLikeNames(bandData);
+  let compressedHourData = mergeLikeNames(hourData);
+  let compressedDateData = mergeLikeNames(dateData);
+
+  let ret = {
+    graph1: {
+      data: compressedBandData,
+      title: "Compared By Band Values",
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "ADI Value",
+      dataKey1: "leftBandVal",
+      dataKey2: "rightBandVal",
+      dataKey3: "leftBandValC",
+      dataKey4: "rightBandValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
+      refLabel3: "ADI Left Compare",
+      refLabel4: "ADI Right Compare"
+    },
+    graph2: {
+      data: compressedHourData,
+      title: "Compared Over Hours",
+      xAxisLabel: "Hour",
+      yAxisLabel: "ADI Value",
+      dataKey1: "leftADIVal",
+      dataKey2: "rightADIVal",
+      dataKey3: "leftADIValC",
+      dataKey4: "rightADIValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
+      refLabel3: "ADI Left Compare",
+      refLabel4: "ADI Right Compare"
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Compared By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "ADI Value",
+      dataKey1: "leftADIVal",
+      dataKey2: "rightADIVal",
+      dataKey3: "leftADIValC",
+      dataKey4: "rightADIValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "ADI Left",
+      refLabel2: "ADI Right",
+      refLabel3: "ADI Left Compare",
+      refLabel4: "ADI Right Compare"
+    }
+  }
+
+  return ret;
+}
+
+function convertAEIResultsBySite(jobs, sites) {
+
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+
+  let chosenResults = convertAEIResults(chosenSiteJobs);
+  let compareResults = convertAEIResults(compareSiteJobs);
+
+  let chosenBandValues = chosenResults.graph1;
+  let chosenByHour = chosenResults.graph5;
+  let chosenByDate = chosenResults.graph4;
+
+  let compareBandValues = compareResults.graph1;
+  let compareByHour = compareResults.graph5;
+  let compareByDate = compareResults.graph4;
+
+  let refL = chosenByHour.refL;
+  let refR = chosenByHour.refR;
+  let refLC = compareByHour.refL;
+  let refRC = compareByHour.refR;
+
+  // rename keys in compare data
+  compareBandValues.data.forEach(item => {
+    item['leftBandValC'] = item['leftBandVal'];
+    item['rightBandValC'] = item['rightBandVal'];
+    delete(item['leftBandVal']);
+    delete(item['rightBandVal']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['leftAEIValC'] = item['leftAEIVal'];
+    item['rightAEIValC'] = item['rightAEIVal'];
+    delete(item['leftAEIVal']);
+    delete(item['rightAEIVal']);
+  });
+
+  compareByDate.data.forEach(item => {
+    item['leftAEIValC'] = item['leftAEIVal'];
+    item['rightAEIValC'] = item['rightAEIVal'];
+    delete(item['leftAEIVal']);
+    delete(item['rightAEIVal']);
+  });
+
+  let bandData = chosenBandValues.data.concat(compareBandValues.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
+
+  bandData = sortByKey(bandData, 'name');
+  hourData = sortByKey(hourData, 'name');
+  dateData = sortByKey(dateData, 'name');
+
+  let compressedBandData = mergeLikeNames(bandData);
+  let compressedHourData = mergeLikeNames(hourData);
+  let compressedDateData = mergeLikeNames(dateData);
+
+  let ret = {
+    graph1: {
+      data: compressedBandData,
+      title: "Compared By Band Values",
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "AEI Value",
+      dataKey1: "leftBandVal",
+      dataKey2: "rightBandVal",
+      dataKey3: "leftBandValC",
+      dataKey4: "rightBandValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "AEI Left",
+      refLabel2: "AEI Right",
+      refLabel3: "AEI Left Compare",
+      refLabel4: "AEI Right Compare"
+    },
+    graph2: {
+      data: compressedHourData,
+      title: "Compared Over Hours",
+      xAxisLabel: "Hour",
+      yAxisLabel: "AEI Value",
+      dataKey1: "leftAEIVal",
+      dataKey2: "rightAEIVal",
+      dataKey3: "leftAEIValC",
+      dataKey4: "rightAEIValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "AEI Left",
+      refLabel2: "AEI Right",
+      refLabel3: "AEI Left Compare",
+      refLabel4: "AEI Right Compare"
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Compared By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "AEI Value",
+      dataKey1: "leftAEIVal",
+      dataKey2: "rightAEIVal",
+      dataKey3: "leftAEIValC",
+      dataKey4: "rightAEIValC",
+      refL: refL,
+      refR: refR,
+      refLC: refLC,
+      refRC: refRC,
+      refLabel1: "AEI Left",
+      refLabel2: "AEI Right",
+      refLabel3: "AEI Left Compare",
+      refLabel4: "AEI Right Compare"
+    }
+  }
+
+  return ret;
+}
+
+function convertAEIResultsBySeries(jobs, series) {
+
+    const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
+    const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+
+    let chosenResults = convertAEIResults(chosenSeriesJobs);
+    let compareResults = convertAEIResults(compareSeriesJobs);
+
+    let chosenBandValues = chosenResults.graph1;
+    let chosenByHour = chosenResults.graph5;
+    let chosenByDate = chosenResults.graph4;
+
+    let compareBandValues = compareResults.graph1;
+    let compareByHour = compareResults.graph5;
+    let compareByDate = compareResults.graph4;
+
+    let refL = chosenByHour.refL;
+    let refR = chosenByHour.refR;
+    let refLC = compareByHour.refL;
+    let refRC = compareByHour.refR;
+
+    // rename keys in compare data
+    compareBandValues.data.forEach(item => {
+      item['leftBandValC'] = item['leftBandVal'];
+      item['rightBandValC'] = item['rightBandVal'];
+      delete(item['leftBandVal']);
+      delete(item['rightBandVal']);
+    });
+
+    compareByHour.data.forEach(item => {
+      item['leftAEIValC'] = item['leftAEIVal'];
+      item['rightAEIValC'] = item['rightAEIVal'];
+      delete(item['leftAEIVal']);
+      delete(item['rightAEIVal']);
+    });
+
+    compareByDate.data.forEach(item => {
+      item['leftAEIValC'] = item['leftAEIVal'];
+      item['rightAEIValC'] = item['rightAEIVal'];
+      delete(item['leftAEIVal']);
+      delete(item['rightAEIVal']);
+    });
+
+    let bandData = chosenBandValues.data.concat(compareBandValues.data);
+    let hourData = chosenByHour.data.concat(compareByHour.data);
+    let dateData = chosenByDate.data.concat(compareByDate.data);
+
+    bandData = sortByKey(bandData, 'name');
+    hourData = sortByKey(hourData, 'name');
+    dateData = sortByKey(dateData, 'name');
+
+    let compressedBandData = mergeLikeNames(bandData);
+    let compressedHourData = mergeLikeNames(hourData);
+    let compressedDateData = mergeLikeNames(dateData);
+
+    let ret = {
+      graph1: {
+        data: compressedBandData,
+        title: "Compared By Band Values",
+        xAxisLabel: "Hz Range",
+        yAxisLabel: "AEI Value",
+        dataKey1: "leftBandVal",
+        dataKey2: "rightBandVal",
+        dataKey3: "leftBandValC",
+        dataKey4: "rightBandValC",
+        refL: refL,
+        refR: refR,
+        refLC: refLC,
+        refRC: refRC,
+        refLabel1: "AEI Left",
+        refLabel2: "AEI Right",
+        refLabel3: "AEI Left Compare",
+        refLabel4: "AEI Right Compare"
+      },
+      graph2: {
+        data: compressedHourData,
+        title: "Compared Over Hours",
+        xAxisLabel: "Hour",
+        yAxisLabel: "AEI Value",
+        dataKey1: "leftAEIVal",
+        dataKey2: "rightAEIVal",
+        dataKey3: "leftAEIValC",
+        dataKey4: "rightAEIValC",
+        refL: refL,
+        refR: refR,
+        refLC: refLC,
+        refRC: refRC,
+        refLabel1: "AEI Left",
+        refLabel2: "AEI Right",
+        refLabel3: "AEI Left Compare",
+        refLabel4: "AEI Right Compare"
+      },
+      graph3: {
+        data: compressedDateData,
+        title: "Compared By Date",
+        xAxisLabel: "Date",
+        yAxisLabel: "AEI Value",
+        dataKey1: "leftAEIVal",
+        dataKey2: "rightAEIVal",
+        dataKey3: "leftAEIValC",
+        dataKey4: "rightAEIValC",
+        refL: refL,
+        refR: refR,
+        refLC: refLC,
+        refRC: refRC,
+        refLabel1: "AEI Left",
+        refLabel2: "AEI Right",
+        refLabel3: "AEI Left Compare",
+        refLabel4: "AEI Right Compare"
+      }
+    }
+
+    return ret;
 }
 
 const styles = theme => ({
@@ -1509,19 +1995,19 @@ class AnalysisView extends Component {
         switch(index)
         {
           case "aci":
-            graphs = convertACIResultsBySite(obj[spec])
+            graphs = convertACIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             break;
           case "ndsi":
-            graphs = convertNDSIResultsBySite(obj[spec])
+            graphs = convertNDSIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             break;
-          // case "adi":
-          //   graphs = convertADIResultsBySite(obj[spec])
-          //   break;
-          // case "aei":
-          //   graphs = convertAEIResultsBySite(obj[spec])
-          //   break;
-          case "bio":
-            graphs = convertBIResultsBySite(obj[spec])
+          case "adi":
+            graphs = convertADIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
+            break;
+          case "aei":
+            graphs = convertAEIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
+            break;
+          case "bi":
+            graphs = convertBIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             break;
           default:
             graphs = null
@@ -1608,12 +2094,12 @@ class AnalysisView extends Component {
           case "ndsi":
             graphs = convertNDSIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             break;
-          // case "adi":
-          //   graphs = convertADIResultsBySeries(obj[spec])
-          //   break;
-          // case "aei":
-          //   graphs = convertAEIResultsBySeries(obj[spec])
-          //   break;
+          case "adi":
+            graphs = convertADIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            break;
+          case "aei":
+            graphs = convertAEIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            break;
           case "bi":
             graphs = convertBIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             break;
