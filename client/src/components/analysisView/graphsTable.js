@@ -4,16 +4,17 @@ import GraphExpansionPanel from './graphExpansionPanel';
 import NDSIChannelBarChart from '../infographs/NDSIChannelBarChart';
 import NDSIValuesBarChart from '../infographs/NDSIValuesBarChart';
 import NDSIValuesLineChart from '../infographs/NDSIValuesLineChart';
+import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart';
+import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
+import NDSIDualLineChart from '../infographs/NDSIDualLineChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
 import ADILineChart from '../infographs/ADILineChart';
 import AEILineChart from '../infographs/AEILineChart';
 import BAAreaChart from '../infographs/BAAreaChart';
 import BALineChart from '../infographs/BALineChart';
-import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart';
-import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
-import NDSIDualLineChart from '../infographs/NDSIDualLineChart';
-
+import BADualLineChart from '../infographs/BADualLineChart';
+import BACompareAreaChart from '../infographs/BACompareAreaChart';
 
 const styles = theme => ({
   root: {
@@ -29,7 +30,7 @@ class GraphsTable extends React.Component {
 
   render()
   {
-    let { graphs } = this.props;
+    let { graphs, index } = this.props;
     const rows = [];
     let ctr = 1;
     for (var key in graphs) {
@@ -37,7 +38,7 @@ class GraphsTable extends React.Component {
       if (!graphs.hasOwnProperty(key)) continue;
 
       var obj = graphs[key];
-      switch(this.props.index)
+      switch(index)
       {
         case "aci":
           rows.push(
@@ -203,7 +204,7 @@ class GraphsTable extends React.Component {
             />
           )
           break;
-        case "bio":
+        case "bi":
           if(obj.title === "Bioacoustic Spectrum Values")
           {
             rows.push(
@@ -230,8 +231,40 @@ class GraphsTable extends React.Component {
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
                   yAxisLabel={obj.yAxisLabel}
+                />}
+              />
+            )
+          }
+          break;
+        case "bi-compare":
+          if(obj.title === "Series Compared By Spectrum Values")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                data={obj.data}
+                graph={<BACompareAreaChart
+                  results={obj.data}
+                  xAxisLabel={obj.xAxisLabel}
+                  yAxisLabel={obj.yAxisLabel}
                   dataKey1={obj.dataKey1}
                   dataKey2={obj.dataKey2}
+                  dataKey3={obj.dataKey3}
+                  dataKey4={obj.dataKey4}
+                />}
+              />
+            )
+          }else{
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                data={obj.data}
+                graph={<BADualLineChart
+                  results={obj.data}
+                  xAxisLabel={obj.xAxisLabel}
+                  yAxisLabel={obj.yAxisLabel}
                 />}
               />
             )

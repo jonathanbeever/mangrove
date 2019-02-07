@@ -699,13 +699,13 @@ function convertAEIResults(jobs) {
   return ret;
 }
 
-function convertBAResults(jobs) {
+function convertBIResults(jobs) {
   let ret;
 
   let areaLTotal = 0;
   let areaRTotal = 0;
 
-  jobs.forEach(function(job){
+  jobs.forEach(job => {
     areaLTotal += job.result.areaL;
     areaRTotal += job.result.areaR;
   });
@@ -739,8 +739,6 @@ function convertBAResults(jobs) {
       data: [],
       xAxisLabel: "File Name",
       yAxisLabel: "Area Value",
-      dataKey1: 'areaL',
-      dataKey2: 'areaR',
       title: "Bioacoustic Area Value By File"
     },
     graph4:
@@ -748,8 +746,6 @@ function convertBAResults(jobs) {
       data: [],
       xAxisLabel: "Date",
       yAxisLabel: "Area Value",
-      dataKey1: 'areaL',
-      dataKey2: 'areaR',
       title: "Bioacoustic Area Value By Date"
     },
     graph5:
@@ -757,19 +753,17 @@ function convertBAResults(jobs) {
       data: [],
       xAxisLabel: "Hour of Day",
       yAxisLabel: "Area Value",
-      dataKey1: 'areaL',
-      dataKey2: 'areaR',
       title: "Bioacoustic Area Value By Hour"
     }
   }
 
-  for(var i = 0; i < jobs[0].input.result.freq_vals.length; i++)
+  for(var i = 0; i < jobs[0].result.freq_vals.length; i++)
   {
     let curObject =
     {
-      name: jobs[0].input.result.freq_vals[i],
-      leftSpectrum: jobs[0].input.result.left_vals[i],
-      rightSpectrum: jobs[0].input.result.right_vals[i]
+      name: jobs[0].result.freq_vals[i],
+      leftSpectrum: jobs[0].result.left_vals[i],
+      rightSpectrum: jobs[0].result.right_vals[i]
     }
 
     ret.graph1.data.push(curObject);
@@ -781,8 +775,8 @@ function convertBAResults(jobs) {
   let counter;
   jobs.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
-    dayDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-    let oldDateString = (oldDate.getMonth() + 1) + '/' + oldDate.getDate() + '/' + oldDate.getFullYear();
+    dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear();
+    let oldDateString = ("0" + (oldDate.getMonth() + 1)).slice(-2) + '/' + ("0" + oldDate.getDate()).slice(-2) + '/' + oldDate.getFullYear();
     let curObject;
     if(oldDateString === dayDate){
       // we are still on same day
@@ -793,7 +787,7 @@ function convertBAResults(jobs) {
 
     }else{
       // we are on a new day
-      if(oldDateString !== '1/1/1970')
+      if(oldDateString !== '01/01/1970')
       {
         dateObject.areaL /= counter;
         dateObject.areaR /= counter;
@@ -812,7 +806,7 @@ function convertBAResults(jobs) {
 
     curObject =
     {
-      name: date.getHours() + ':' + date.getMinutes(),
+      name: ("0" + date.getHours()).slice(-2) + ':' + date.getMinutes(),
       areaL: job.result.areaL,
       areaR: job.result.areaR
     }
@@ -820,7 +814,7 @@ function convertBAResults(jobs) {
     ret.graph5.data.push(curObject);
 
     curObject = {
-      name: job.path,
+      name: job.input.path,
       areaL: job.result.areaL,
       areaR: job.result.areaR
     }
@@ -1186,48 +1180,166 @@ function convertNDSIResultsBySeries(jobs, series) {
   return ret;
 }
 
-function convertBAResultsBySite(jobs) {
+function convertBIResultsBySite(jobs, sites) {
+
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+
+  let chosenResults = convertBIResults(chosenSiteJobs);
+  let compareResults = convertBIResults(compareSiteJobs);
+
+  let chosenSpectrumValues = chosenResults.graph1;
+  let chosenByHour = chosenResults.graph5;
+  let chosenByDate = chosenResults.graph4;
+
+  let compareSpectrumValues = compareResults.graph1;
+  let compareByHour = compareResults.graph5;
+  let compareByDate = compareResults.graph4;
+
+  // rename keys in compare data
+  compareSpectrumValues.data.forEach(item => {
+    item['leftSpectrumC'] = item['leftSpectrum'];
+    item['rightSpectrumC'] = item['rightSpectrum'];
+    delete(item['leftSpectrum']);
+    delete(item['rightSpectrum']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['areaLC'] = item['areaL'];
+    item['areaRC'] = item['areaR'];
+    delete(item['areaL']);
+    delete(item['areaR']);
+  });
+
+  compareByDate.data.forEach(item => {
+    item['areaLC'] = item['areaL'];
+    item['areaRC'] = item['areaR'];
+    delete(item['areaL']);
+    delete(item['areaR']);
+  });
+
+  let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
+
+  spectrumData = sortByKey(spectrumData, 'name');
+  hourData = sortByKey(hourData, 'name');
+  dateData = sortByKey(dateData, 'name');
+
+  let compressedSpectrumData = mergeLikeNames(spectrumData);
+  let compressedHourData = mergeLikeNames(hourData);
+  let compressedDateData = mergeLikeNames(dateData);
+
   let ret = {
-    graph: null
-  }
-  let data = [];
-
-  for(var i = 0; i < jobs.length; i++)
-  {
-    let curObject =
-    {
-      name: jobs[i].site,
-      areaL: jobs[i].result.areaL,
-      areaR: jobs[i].result.areaR
+    graph1: {
+      data: compressedSpectrumData,
+      title: "Sites Compared By Spectrum Values",
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "Spectrum Value",
+      dataKey1: 'leftSpectrum',
+      dataKey2: 'rightSpectrum',
+      dataKey3: 'leftSpectrumC',
+      dataKey4: 'rightSpectrumC'
+    },
+    graph2: {
+      data: compressedHourData,
+      title: "Sites Compared Over Hours",
+      xAxisLabel: "Hour",
+      yAxisLabel: "Bioacoustic Area Value",
+      dataKey1: 'areaL',
+      dataKey2: 'areaR',
+      dataKey3: 'areaLC',
+      dataKey4: 'areaRC'
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Sites Compared By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "Bioacoustic Area Value",
+      dataKey1: 'areaL',
+      dataKey2: 'areaR',
+      dataKey3: 'areaLC',
+      dataKey4: 'areaRC'
     }
-
-    data.push(curObject);
   }
-
-  ret.graph = data;
 
   return ret;
 }
 
-function convertBAResultsBySeries(jobs, series) {
+function convertBIResultsBySeries(jobs, series) {
+
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+
+  let chosenResults = convertBIResults(chosenSeriesJobs);
+  let compareResults = convertBIResults(compareSeriesJobs);
+
+  let chosenSpectrumValues = chosenResults.graph1;
+  let chosenByHour = chosenResults.graph5;
+  let chosenByDate = chosenResults.graph4;
+
+  let compareSpectrumValues = compareResults.graph1;
+  let compareByHour = compareResults.graph5;
+  let compareByDate = compareResults.graph4;
+
+  // rename keys in compare data
+  compareSpectrumValues.data.forEach(item => {
+    item['leftSpectrumC'] = item['leftSpectrum'];
+    item['rightSpectrumC'] = item['rightSpectrum'];
+    delete(item['leftSpectrum']);
+    delete(item['rightSpectrum']);
+  });
+
+  compareByHour.data.forEach(item => {
+    item['areaLC'] = item['areaL'];
+    item['areaRC'] = item['areaR'];
+    delete(item['areaL']);
+    delete(item['areaR']);
+  });
+
+  compareByDate.data.forEach(item => {
+    item['areaLC'] = item['areaL'];
+    item['areaRC'] = item['areaR'];
+    delete(item['areaL']);
+    delete(item['areaR']);
+  });
+
+  let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
+  let hourData = chosenByHour.data.concat(compareByHour.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
+
+  spectrumData = sortByKey(spectrumData, 'name');
+  hourData = sortByKey(hourData, 'name');
+  dateData = sortByKey(dateData, 'name');
+
+  let compressedSpectrumData = mergeLikeNames(spectrumData);
+  let compressedHourData = mergeLikeNames(hourData);
+  let compressedDateData = mergeLikeNames(dateData);
+
   let ret = {
-    graph: null
-  }
-  let data = [];
-
-  for(var i = 0; i < jobs.length; i++)
-  {
-    let curObject =
-    {
-      name: jobs[i].series,
-      areaL: jobs[i].result.areaL,
-      areaR: jobs[i].result.areaR
+    graph1: {
+      data: compressedSpectrumData,
+      title: "Series Compared By Spectrum Values",
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "Spectrum Value",
+      dataKey1: 'leftSpectrum',
+      dataKey2: 'rightSpectrum',
+      dataKey3: 'leftSpectrumC',
+      dataKey4: 'rightSpectrumC'
+    },
+    graph2: {
+      data: compressedHourData,
+      title: "Series Compared Over Hours",
+      xAxisLabel: "Hour",
+      yAxisLabel: "Bioacoustic Area Value",
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Series Compared By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "Bioacoustic Area Value",
     }
-
-    data.push(curObject);
   }
-
-  ret.graph = data;
 
   return ret;
 }
@@ -1316,8 +1428,8 @@ class AnalysisView extends Component {
           case "aei":
             graphs = convertAEIResults(obj[spec])
             break;
-          case "bio":
-            graphs = convertBAResults(obj[spec])
+          case "bi":
+            graphs = convertBIResults(obj[spec])
             break;
           default:
             graphs = null
@@ -1409,7 +1521,7 @@ class AnalysisView extends Component {
           //   graphs = convertAEIResultsBySite(obj[spec])
           //   break;
           case "bio":
-            graphs = convertBAResultsBySite(obj[spec])
+            graphs = convertBIResultsBySite(obj[spec])
             break;
           default:
             graphs = null
@@ -1450,7 +1562,7 @@ class AnalysisView extends Component {
         <Paper key={index}>
           <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Site</h3>
           <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSite } and { chosenCompareSite }</p>
-          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The lines denoted by aciLeftC and aciRightC are the site you chose to compare</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are the series you chose to compare</p>
           <IndexAnalysisPanel
             specRows={specRows}
           />
@@ -1502,8 +1614,8 @@ class AnalysisView extends Component {
           // case "aei":
           //   graphs = convertAEIResultsBySeries(obj[spec])
           //   break;
-          case "bio":
-            graphs = convertBAResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+          case "bi":
+            graphs = convertBIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             break;
           default:
             graphs = null
@@ -1543,7 +1655,7 @@ class AnalysisView extends Component {
       rows.push(
         <Paper key={index}>
           <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Series</h3>
-                    <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSeries } and { chosenCompareSeries }</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSeries } and { chosenCompareSeries }</p>
           <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are the series you chose to compare</p>
           <IndexAnalysisPanel
             specRows={specRows}

@@ -49,7 +49,7 @@ function getSorting(order, orderBy) {
 
 const rows = [
   { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
-  { id: 'setName', numeric: false, disablePadding: false, label: 'File Set Name' },
+  { id: 'setName', numeric: false, disablePadding: false, label: 'Series Name' },
   { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
   { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
   { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
