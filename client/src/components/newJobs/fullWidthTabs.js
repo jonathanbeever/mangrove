@@ -72,6 +72,7 @@ class FullWidthTabs extends React.Component {
                   series={this.props.series}
                   lat={this.props.lat}
                   long={this.props.long}
+                  message='Filter Input Files'
                 />
               </div>
               <div className="col-9">
@@ -96,9 +97,8 @@ class FullWidthTabs extends React.Component {
                   type="file"
                 />
                 <label htmlFor="selectFiles">
-                  <h5>Select New Files</h5>
                   <Button variant="contained" component="span" >
-                    Choose Files
+                    Choose New Files
                   </Button>
                 </label> 
                 <SearchInputs 
@@ -108,6 +108,7 @@ class FullWidthTabs extends React.Component {
                   series={this.props.upload.series}
                   lat={this.props.upload.lat}
                   long={this.props.upload.long}
+                  message='Update Selected Files'
                 />
                 <Button variant="contained" component="span" onClick={this.props.uploadFiles} >
                   Upload Files

@@ -67,7 +67,7 @@ class FilterInputs extends Component {
 
     return (
           <Paper className={classes.root}>
-            <h4>Filter By Input Files</h4>
+            <h4>{this.props.message}</h4>
             <TextField
               label={<p style={{fontSize:13+'px'}}>Site Name</p>}
               value={this.props.site}
@@ -96,7 +96,7 @@ class FilterInputs extends Component {
             />
             <div className="row filterSubmit">
               <Button style={{fontSize:12+'px'}} onClick={this.onSubmit} variant="contained" color="primary">
-                Apply Input Filters
+                Apply
               </Button>
             </div>
           </Paper>
