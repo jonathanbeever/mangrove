@@ -35,8 +35,6 @@ class AnalysisView extends Component {
   componentDidMount = () => {
     let { selectedJobs } = this.props;
 
-    console.log(selectedJobs);
-
     if(!selectedJobs)
     {
       this.setState({ errorMode: true });
@@ -78,8 +76,6 @@ class AnalysisView extends Component {
   // Then, it creates the Paper and ExpansionPanel components used
   // for displaying the graphs themselves.
   formatJob = (data) => {
-
-    console.log(data);
     const rows = [];
     let specRows = [];
     let graphs;
@@ -99,7 +95,6 @@ class AnalysisView extends Component {
         switch(index)
         {
           case "aci":
-            console.log(obj[spec]);
             graphs = utils.convertACIResults(obj[spec])
             break;
           case "ndsi":

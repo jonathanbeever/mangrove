@@ -177,7 +177,6 @@ export function convertNDSIResults(jobs) {
 }
 
 export function convertACIResults(jobs) {
-  console.log(jobs);
   let ret;
   let aciTotAllL = 0;
   let aciTotAllR = 0;
