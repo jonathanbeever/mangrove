@@ -119,7 +119,7 @@ class NavBar extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>SoundScape</Typography>
+            <Typography variant="h6" color="inherit" noWrap>Mangrove</Typography>
           </Toolbar>
         </AppBar>
         <Drawer

@@ -101,19 +101,6 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
-            case "NDSI By Hour":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  data={obj.data}
-                  graph={<NDSIValuesLineChart
-                    results={obj.data}
-                    xAxisLabel={"Hour of Day"}
-                  />}
-                />
-              )
-              break;
             case "NDSI By Date":
               rows.push(
                 <GraphExpansionPanel
@@ -151,18 +138,6 @@ class GraphsTable extends React.Component {
                   title={obj.title}
                   data={obj.data}
                   graph={<NDSIValuesCompareBarChart
-                    results={obj.data}
-                  />}
-                />
-              )
-              break;
-            case "Compared By Hour":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  data={obj.data}
-                  graph={<NDSIDualLineChart
                     results={obj.data}
                   />}
                 />
