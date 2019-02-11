@@ -53,29 +53,7 @@ class JobQueue extends Component {
     // this.getInputs();
     // this.getSpecs();
 
-    const requests = [
-      axios.get('http://localhost:3000/jobs'),
-      axios.get('http://localhost:3000/inputs'),
-      axios.get('http://localhost:3000/specs')
-    ];
-
-    Promise.all(requests)
-      .then(responses => {
-        const jobs = responses[0].data.jobs;
-        const inputs = responses[1].data.inputs;
-        const specs = responses[2].data.specs;
-
-        const data = jobs.map(job => {
-          job.input = inputs.find(x => x.inputId === job.input);
-          job.spec = specs.find(x => x.specId === job.spec);
-          return job;
-        });
-
-        this.setState({ jobs });
-        this.setState({ inputs });
-        this.setState({ specs });
-        this.setState({ data });
-      });
+    this.refreshJobs();
   };
 
   statusCell = (status) => {
@@ -219,30 +197,20 @@ class JobQueue extends Component {
                       <TableRow
                         key={job.jobId}
                       >
-                        <TableCell component="th" scope="row" padding="checkbox">
-                          <p style={{ fontSize:14+'px' }}>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                             {jobDesc}
-                          </p>
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="checkbox">
-                          <p style={{ fontSize:14+'px' }}>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                             {fileName}
-                          </p>
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="checkbox">
-                          <p style={{ fontSize:14+'px' }}>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                             {specDesc}
-                          </p>
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="checkbox">
-                          <p style={{ fontSize:14+'px' }}>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                             {date}
-                          </p>
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="checkbox">
-                          <p style={{ fontSize:14+'px' }}>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                             {job.author}
-                          </p>
                         </TableCell>
                         {this.statusCell(job.status)}
                       </TableRow>

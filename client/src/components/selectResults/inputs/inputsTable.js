@@ -49,7 +49,7 @@ function getSorting(order, orderBy) {
 
 const rows = [
   { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
-  { id: 'setName', numeric: false, disablePadding: false, label: 'File Set Name' },
+  { id: 'setName', numeric: false, disablePadding: false, label: 'Series Name' },
   { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
   { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
   { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
@@ -318,13 +318,13 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
+                      <TableCell style={{ fontSize:15+'px' }} component="th" scope="row" padding="none">
                         {n.siteName}
                       </TableCell>
-                      <TableCell align="right">{n.setName}</TableCell>
-                      <TableCell align="right">{n.fileName}</TableCell>
-                      <TableCell align="right">{n.latitude}</TableCell>
-                      <TableCell align="right">{n.longitude}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.setName}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.fileName}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.latitude}</TableCell>
+                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.longitude}</TableCell>
                     </TableRow>
                   );
                 })}

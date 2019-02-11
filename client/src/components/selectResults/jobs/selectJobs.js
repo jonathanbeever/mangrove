@@ -39,7 +39,6 @@ class SelectJobs extends Component {
   }
 
   componentDidMount = () => {
-    console.log(this.props)
     this.formatInputChipHtml()
     this.formatSpecFilterHtml()
   }
@@ -149,8 +148,13 @@ class SelectJobs extends Component {
                 updateSelectedJobs={this.props.updateSelectedJobs}
                 selectedJobs={this.props.selectedJobs}
               />
-              <Button  color="primary" disabled={!this.props.selectedJobs.length} onClick={this.props.sendJobs} >
-                View Results
+              <Button
+                variant="contained"
+                color="primary"
+                style={{ marginTop:10+'px'}}
+                disabled={!this.props.selectedJobs.length}
+                onClick={this.props.sendJobs} >
+                <h6>View Results</h6>
               </Button>
             </div>
           {/* : */}

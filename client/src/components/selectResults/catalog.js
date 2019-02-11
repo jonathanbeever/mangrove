@@ -82,7 +82,7 @@ class Catalog extends Component {
     this.handleIndexChange('aci')
     // make indexed object of inputs
     var selected = []
-    
+
     this.setState({ selectedInputs : selected })
 
     // get all db specs
@@ -96,9 +96,12 @@ class Catalog extends Component {
           'bi': [],
           'rms': []
         }
+        var indexedSpecs = {}
         res.data.specs.forEach(spec => {
           specs[spec.type].push(spec)
+          indexedSpecs[spec.specId] = spec
         })
+        this.setState({ indexedSpecsById: indexedSpecs })
         // Set all specs state
         this.setState({ allSpecs: res.data.specs })
         this.setState({ indexedSpecs: specs })
@@ -138,7 +141,7 @@ class Catalog extends Component {
   handleChange = name => e => {
     var inputFiltering = this.state.inputFiltering
     inputFiltering[name] = e.target.value
-    
+
     this.setState({ inputFiltering: inputFiltering })
   };
 
@@ -162,7 +165,7 @@ class Catalog extends Component {
     var selected = filteredInputs.map(input => {
       return input.inputId
     })
-    
+
     this.updateSelectedInputs(selected)
   }
 
@@ -225,15 +228,15 @@ class Catalog extends Component {
       }
       case 'aei': {
         this.setState({ specParamsList: [['maxFreq', 'Max Frequency'], ['dbThreshold', 'db Threshold'], ['freqStep', 'Frequency Step']] })
-        break;      
+        break;
       }
       case 'bi': {
         this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['fftW', 'fft-W']] })
-        break;      
+        break;
       }
       case 'rms': {
         this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
-        break;      
+        break;
       }
       default : {
         break;
@@ -313,11 +316,11 @@ class Catalog extends Component {
           })
           startIndx = 1
         }
-        else 
+        else
           startIndx = 0
-          
+
         const all = inputs.slice(0)
-          
+
         all.forEach(input => {
           for(var i = startIndx; i < specIds.length; i++) {
             if(obj[specIds[i]].indexOf(input) === -1 && inputs.indexOf(input) !== -1) {
@@ -336,7 +339,7 @@ class Catalog extends Component {
       inputs = []
       this.setState({ matchingInputIds: [] })
     }
-    
+
     this.setState({ matchingInputIds: inputs })
 
     if(inputs.length > 1) {
@@ -353,7 +356,7 @@ class Catalog extends Component {
     this.setState({ filteredInputs: matchingInputs})
 
     if(this.state.selectedInputs.length) {
-      
+
       var selectedInputs = this.state.selectedInputs.filter(inputId => {
         if(inputs.indexOf(inputId) !== -1)
           return inputId
@@ -369,16 +372,17 @@ class Catalog extends Component {
     this.setState({ selectedJobs: selected })
     var jobs = _.cloneDeep(this.state.jobsFiltered)
     var jobsObj = {
-      'aci': {}, 
-      'ndsi': {}, 
-      'adi': {}, 
-      'aei': {}, 
-      'bi': {}, 
+      'aci': {},
+      'ndsi': {},
+      'adi': {},
+      'aei': {},
+      'bi': {},
       'rms': {}
     }
 
     jobs.forEach(job => {
       // If curr job is selected
+      job.input = this.state.indexedFiles[job.input]
       if(selected.indexOf(job.jobId) !== -1) {
         var jobSpecsByIndex = Object.keys(jobsObj[job.type])
         if(jobSpecsByIndex.length) {
@@ -429,7 +433,7 @@ class Catalog extends Component {
         }
       }
     })
-   
+
     this.setState({ jobsFiltered: filteredJobs })
   }
 
@@ -444,14 +448,14 @@ class Catalog extends Component {
   render() {
     return (
       <div className="container">
-        <Tabs 
-          // Input select props 
+        <Tabs
+          // Input select props
           inputFiltering = {this.state.inputFiltering}
           filteredInputs={this.state.filteredInputs}
           onDelete={this.handleChipDelete}
-          onChange={this.handleChange} 
+          onChange={this.handleChange}
           onSubmitInput={this.submitIndexFilter}
-          updateSelectedInputs={this.updateSelectedInputs} 
+          updateSelectedInputs={this.updateSelectedInputs}
           // Specs select props
           allSpecs={this.state.indexedSpecs}
           index={this.state.index}
@@ -476,6 +480,7 @@ class Catalog extends Component {
           jobFiltering={this.state.jobFiltering}
           submitJobFilter={this.handleSubmitJobFilter}
           selectedIndex={this.state.selectedIndex}
+          indexedSpecs={this.state.indexedSpecsById}
           // Tabs props
           showAnalysis={this.state.showAnalysis}
           showFiltering={this.showFiltering}

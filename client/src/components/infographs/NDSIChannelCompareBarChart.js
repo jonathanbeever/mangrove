@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import {BarChart, Label, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {BarChart, Bar, Label, ReferenceLine, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 
-class NDSIValuesBarChart extends Component {
+class NDSIChannelCompareBarChart extends Component {
 
   render(){
 
     let data = this.props.results;
+
+    // console.log(this.props);
 
     return(
       <div>
@@ -22,12 +24,15 @@ class NDSIValuesBarChart extends Component {
           <Legend />
           <ReferenceLine y={0} stroke='#000' />
           <Bar dataKey="ndsi" fill="#8884d8" />
+          <Bar dataKey="ndsiC" fill="#1910d4" />
           <Bar dataKey="biophony" fill="#82ca9d" />
+          <Bar dataKey="biophonyC" fill="#108f3f" />
           <Bar dataKey="anthrophony" fill="#e79797" />
+          <Bar dataKey="anthrophonyC" fill="#e73535" />
         </BarChart>
       </div>
     )
   }
 }
 
-export default NDSIValuesBarChart;
+export default NDSIChannelCompareBarChart;

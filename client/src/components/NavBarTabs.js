@@ -48,7 +48,7 @@ class NavBarTabs extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <div className="col-2"><h2>SoundScape</h2></div>
+            <div className="col-2"><h2>Mangrove Toolkit</h2></div>
             <div className="col-8">
               <Tabs value={value}
                     onChange={this.handleChange}

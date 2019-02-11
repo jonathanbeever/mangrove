@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
-class BALineChart extends Component {
+class BADualLineChart extends Component {
 
   render(){
 
@@ -21,6 +21,8 @@ class BALineChart extends Component {
             <Tooltip/>
             <Line type='monotone' dataKey='areaL' stroke='#8884d8' dot={false} />
             <Line type='monotone' dataKey='areaR' stroke='#82ca9d' dot={false} />
+            <Line type='monotone' dataKey='areaLC' stroke='#1910d4' dot={false} />
+            <Line type='monotone' dataKey='areaRC' stroke='#108f3f' dot={false} />
             <Brush />
           </LineChart>
       </div>
@@ -28,6 +30,4 @@ class BALineChart extends Component {
   }
 }
 
-
-
-export default BALineChart;
+export default BADualLineChart;
