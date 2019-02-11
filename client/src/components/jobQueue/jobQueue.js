@@ -43,17 +43,19 @@ class JobQueue extends Component {
     inputs: [],
     specs: [],
     data: [],
+    filtered: false,
     page: 0,
     rowsPerPage: 5,
   };
 
   componentDidMount = () => {
-    // this.getJobs();
-    // this.getInputs();
-    // this.getSpecs();
-
     this.refreshJobs();
+    this.interval = setInterval(() => this.refreshJobs(), 10000);
   };
+
+  componentWillUnmount = () => {
+    clearInterval(this.interval);
+  }
 
   statusCell = (status) => {
     switch(status){
@@ -106,9 +108,13 @@ class JobQueue extends Component {
         data: state.data.filter(x => x.status !== "finished")
       }
     });
+    this.setState({ filtered: Date.now() });
   };
 
   refreshJobs = () => {
+
+    let { filtered } = this.state;
+
     const requests = [
       axios.get('http://localhost:3000/jobs'),
       axios.get('http://localhost:3000/inputs'),
@@ -121,17 +127,25 @@ class JobQueue extends Component {
         const inputs = responses[1].data.inputs;
         const specs = responses[2].data.specs;
 
-        // console.log(jobs);
-        // console.log(inputs);
-        // console.log(specs);
+        let data;
+        if(filtered)
+        {
+          let unfinishedJobs = jobs.filter(job => { return job.creationTimeMs > filtered });
+          data = unfinishedJobs.map(job => {
+            job.input = inputs.find(x => x.inputId === job.input);
+            job.spec = specs.find(x => x.specId === job.spec);
+            return job;
+          });
 
-        const data = jobs.map(job => {
-          job.input = inputs.find(x => x.inputId === job.input);
-          job.spec = specs.find(x => x.specId === job.spec);
-          return job;
-        });
+        }else
+        {
+          data = jobs.map(job => {
+            job.input = inputs.find(x => x.inputId === job.input);
+            job.spec = specs.find(x => x.specId === job.spec);
+            return job;
+          });
 
-        // console.log(data);
+        }
 
         this.setState({ jobs });
         this.setState({ inputs });
@@ -150,7 +164,7 @@ class JobQueue extends Component {
 
   render(){
 
-    const { rowsPerPage, page, jobs, data } = this.state;
+    const { rowsPerPage, page, data } = this.state;
 
     return(
       <div className="container">
@@ -163,16 +177,6 @@ class JobQueue extends Component {
               onClick={this.updateTable}
               >
               <h6>Clear Finished</h6>
-            </Button>
-          </div>
-          <div className="col-6 text-right">
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ marginBottom:10+'px'}}
-              onClick={this.refreshJobs}
-              >
-              <h6>Refresh Jobs</h6>
             </Button>
           </div>
         </div>
@@ -191,46 +195,47 @@ class JobQueue extends Component {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(job =>
-                  {
-                    let date = new Date(job.creationTimeMs);
-                    date = date.getHours() + ":" + date.getMinutes() + " - " + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-                    let jobDesc = job.input.site + " - " + job.input.series;
-                    let fileName = job.input.path.substring(job.input.path.lastIndexOf('\\')+1);
-                    let specDesc = job.spec.type;
-                    return(
-                      <TableRow
-                        key={job.jobId}
-                      >
-                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                            {jobDesc}
-                        </TableCell>
-                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                            {fileName}
-                        </TableCell>
-                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                            {specDesc}
-                        </TableCell>
-                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                            {date}
-                        </TableCell>
-                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                            {job.author}
-                        </TableCell>
-                        {this.statusCell(job.status)}
-                      </TableRow>
-                    )
-                  })
+                {
+                  data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                   .filter(el => { return el != null; }).map(job =>
+                   {
+                     let date = new Date(job.creationTimeMs);
+                     date = date.getHours() + ":" + date.getMinutes() + " - " + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+                     let jobDesc = job.input.site + " - " + job.input.series;
+                     let fileName = job.input.path.substring(job.input.path.lastIndexOf('\\')+1);
+                     let specDesc = job.spec.type;
+                     return(
+                       <TableRow
+                         key={job.jobId}
+                       >
+                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                             {jobDesc}
+                         </TableCell>
+                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                             {fileName}
+                         </TableCell>
+                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                             {specDesc}
+                         </TableCell>
+                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                             {date}
+                         </TableCell>
+                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                             {job.author}
+                         </TableCell>
+                         {this.statusCell(job.status)}
+                       </TableRow>
+                     )
+                   })
                 }
                 </TableBody>
               </Table>
               <TablePagination
                 labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
-                labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
+                labelDisplayedRows={({ from, to, count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={jobs.length}
+                count={data.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 backIconButtonProps={{
