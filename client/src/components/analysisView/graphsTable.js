@@ -6,7 +6,6 @@ import NDSIValuesBarChart from '../infographs/NDSIValuesBarChart';
 import NDSIValuesLineChart from '../infographs/NDSIValuesLineChart';
 import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart';
 import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
-import NDSIDualLineChart from '../infographs/NDSIDualLineChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
 import ADIAEILineChart from '../infographs/ADIAEILineChart';
@@ -114,6 +113,8 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
+            default:
+              break;
           }
           break;
         case "ndsi-compare":
@@ -142,6 +143,8 @@ class GraphsTable extends React.Component {
                   />}
                 />
               )
+              break;
+            default:
               break;
           }
           break;
@@ -414,6 +417,8 @@ class GraphsTable extends React.Component {
               />
             )
           }
+          break;
+        default:
           break;
       }
       ctr++;

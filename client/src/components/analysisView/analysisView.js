@@ -14,7 +14,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import { withStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import * as utils from './dataModeling.js';
 
 const styles = theme => ({
@@ -319,14 +318,20 @@ class AnalysisView extends Component {
     let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.props;
 
+    let index;
+    let item;
+    let specId;
+    let jobs;
+    let filteredSelectedJobs;
+
     // get jobs for only the chosen site and series
     let filteredChosenJobs = JSON.parse(JSON.stringify(selectedJobs));
-    for(var item in filteredChosenJobs)
+    for(item in filteredChosenJobs)
     {
-      var index = filteredChosenJobs[item];
-      for(var specId in index)
+      index = filteredChosenJobs[item];
+      for(specId in index)
       {
-        var jobs = index[specId];
+        jobs = index[specId];
         index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
       }
     }
@@ -338,13 +343,13 @@ class AnalysisView extends Component {
     if(chosenCompareSite)
     {
       // get jobs from fullJobs where the site and series match
-      let filteredSelectedJobs = JSON.parse(JSON.stringify(selectedJobs));;
-      for(var index in filteredSelectedJobs)
+      filteredSelectedJobs = JSON.parse(JSON.stringify(selectedJobs));;
+      for(item in filteredSelectedJobs)
       {
-        var index = filteredSelectedJobs[index];
-        for(var specId in index)
+        index = filteredSelectedJobs[item];
+        for(specId in index)
         {
-          var jobs = index[specId];
+          jobs = index[specId];
           index[specId] = jobs.filter(x => x.input.series === chosenSeries && (x.input.site === chosenSite || x.input.site === chosenCompareSite));
         }
       }
@@ -355,13 +360,13 @@ class AnalysisView extends Component {
     if(chosenCompareSeries)
     {
       // get jobs from fullJobs where the site and series match
-      let filteredSelectedJobs = JSON.parse(JSON.stringify(selectedJobs));;
-      for(var index in filteredSelectedJobs)
+      filteredSelectedJobs = JSON.parse(JSON.stringify(selectedJobs));;
+      for(item in filteredSelectedJobs)
       {
-        var index = filteredSelectedJobs[index];
-        for(var specId in index)
+        index = filteredSelectedJobs[item];
+        for(specId in index)
         {
-          var jobs = index[specId];
+          jobs = index[specId];
           index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
         }
       }
@@ -435,13 +440,16 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, formattedJob, comparedJobs, comparedJobsSite,
+    let { errorMode, formattedJob, comparedJobsSite,
           comparedJobsSeries, siteNames, seriesNames, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     const { classes } = this.props;
 
     return (
       <div style={{ marginBottom:25+'px' }}>
+        {errorMode ?
+        'Error: passed jobs are null'
+        :
         <Paper style={{ marginTop:10+'px' }}>
           <div className="row">
             <div className="col-8">
@@ -526,6 +534,7 @@ class AnalysisView extends Component {
             </div>
           </div>
         </Paper>
+      }
         { formattedJob ?
           formattedJob
           :
