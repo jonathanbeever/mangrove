@@ -178,20 +178,10 @@ export function convertNDSIResults(jobs) {
 
 export function convertACIResults(jobs) {
   let ret;
-  let aciTotAllL = 0;
-  let aciTotAllR = 0;
-  let aciTotAllByMinL = 0;
-  let aciTotAllByMinR = 0;
-
   let aciFlValsL = [];
   let aciFlValsR = [];
 
   jobs.forEach(function(job){
-    aciTotAllL += job.result.aciTotAllL;
-    aciTotAllR += job.result.aciTotAllR;
-    aciTotAllByMinL += job.result.aciTotAllByMinL;
-    aciTotAllByMinR += job.result.aciTotAllByMinR;
-
     aciFlValsL.push.apply(aciFlValsL, job.result.aciFlValsL);
     aciFlValsR.push.apply(aciFlValsR, job.result.aciFlValsR);
   });
@@ -518,14 +508,6 @@ export function convertAEIResults(jobs) {
 
 export function convertBIResults(jobs) {
   let ret;
-
-  let areaLTotal = 0;
-  let areaRTotal = 0;
-
-  jobs.forEach(job => {
-    areaLTotal += job.result.areaL;
-    areaRTotal += job.result.areaR;
-  });
 
   ret = {
     graph1:

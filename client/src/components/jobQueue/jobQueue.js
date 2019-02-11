@@ -43,7 +43,6 @@ class JobQueue extends Component {
     inputs: [],
     specs: [],
     data: [],
-    filtered: false,
     page: 0,
     rowsPerPage: 5,
   };
@@ -87,6 +86,14 @@ class JobQueue extends Component {
           <TableCell className={this.props.classes.failed} component="th" scope="row" padding="checkbox">
             <p>
               Failed
+            </p>
+          </TableCell>
+        );
+      default:
+        return(
+          <TableCell className={this.props.classes.failed} component="th" scope="row" padding="checkbox">
+            <p>
+              Unknown Status
             </p>
           </TableCell>
         );
@@ -143,8 +150,7 @@ class JobQueue extends Component {
 
   render(){
 
-    const { rowsPerPage, page, jobs, filtered, data } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, jobs.length - page * rowsPerPage);
+    const { rowsPerPage, page, jobs, data } = this.state;
 
     return(
       <div className="container">
