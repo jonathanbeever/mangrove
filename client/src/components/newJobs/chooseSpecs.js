@@ -8,6 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import '../selectResults/selectResults.css';
 import SpecsTable from '../selectResults/specs/specsTable';
 import axios from 'axios';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
@@ -138,7 +139,7 @@ class ChooseSpecs extends Component {
     // Add title and submit button to html
     specInputHtml = (
       <div>
-        <h4>Define New Specs</h4>
+        <h5>Define New Specs</h5>
         {specInputHtml} 
         <div className="row filterSubmit">
           {/* <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
@@ -156,15 +157,14 @@ class ChooseSpecs extends Component {
     return (
       <div className="row">
         <div className="col-4">
-          {/* <Paper className={classes.root}> */}
+          <Paper className={classes.root}>
             <FormControl className={classes.formControl}>
               {this.state.specInputHtml}
             </FormControl>
-          {/* </Paper> */}
+          </Paper>
         </div>
         <div className="col-8">
-          {/* <Paper className={classes.root}> */}
-          <h4>Choose From Previous Specs</h4>
+          <Paper className={classes.root}>
           {this.state.indexedSpecs ?
             <SpecsTable 
               index={this.props.index}
@@ -173,7 +173,7 @@ class ChooseSpecs extends Component {
               updateSelectedSpecs={this.props.updateSelectedSpec}
               selectedSpecs={this.props.selectedSpec}
             /> : '' }
-          {/* </Paper> */}
+          </Paper>
         </div>
       </div>
     );

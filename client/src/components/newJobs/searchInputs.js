@@ -9,8 +9,8 @@ import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   root: {
-    // padding: 19,
-    // marginTop: theme.spacing.unit * 3,
+    padding: 19,
+    marginTop: theme.spacing.unit * 3,
   },
   container: {
     display: 'flex',
@@ -30,9 +30,6 @@ class FilterInputs extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      // chips: ''
-    }
   }
 
   componentDidMount = () => {
@@ -66,6 +63,7 @@ class FilterInputs extends Component {
     const { classes } = this.props;
 
     return (
+      <div>
           <Paper className={classes.root}>
             <h4>{this.props.message}</h4>
             <TextField
@@ -100,6 +98,7 @@ class FilterInputs extends Component {
               </Button>
             </div>
           </Paper>
+          </div>
     );
   }
 }

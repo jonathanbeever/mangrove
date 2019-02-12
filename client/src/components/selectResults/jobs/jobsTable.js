@@ -318,13 +318,12 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} component="th" scope="row" padding="none">
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">
                         {n.type}
                       </TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.author}</TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} align="right">{moment(n.time).format('MMM Do YY, h:mm:ss a')}</TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.input}</TableCell>
-                      {/* <TableCell align="right">{n.spec}</TableCell> */}
+                      <TableCell style={{ fontSize:13+'px' }} align="right">{n.author}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} align="right">{moment(n.time).format('MMM Do YY, h:mm:ss a')}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} align="right">{n.input}</TableCell>
                     </TableRow>
                   );
                 })}

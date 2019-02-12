@@ -18,9 +18,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import moment from 'moment';
 
-function createData(id, siteName, setName, fileName, latitude, longitude) {
-  return { id: id, siteName, setName, fileName, latitude, longitude };
+function createData(id, siteName, setName, fileName, recordTime, latitude, longitude) {
+  return { id: id, siteName, setName, fileName, recordTime, latitude, longitude };
 }
 
 function desc(a, b, orderBy) {
@@ -48,9 +49,10 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
+  { id: 'siteName', numeric: false, disablePadding: false, label: 'Site Name' },
   { id: 'setName', numeric: false, disablePadding: false, label: 'Series Name' },
   { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
+  { id: 'recordTime', numeric: false, disablePadding: false, label: 'Recording Date'},
   { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
   { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
 ];
@@ -77,8 +79,8 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={row.id}
-                align='center'
-                padding={row.disablePadding ? 'none' : 'default'}
+                align='left'
+                padding={row.disablePadding ? 'none' : 'none'}
                 sortDirection={orderBy === row.id ? order : false}
               >
                 <Tooltip
@@ -87,7 +89,7 @@ class EnhancedTableHead extends React.Component {
                   enterDelay={300}
                 >
                   <TableSortLabel
-                    style={{ fontSize:15+'px' }}
+                    style={{ fontSize:16+'px' }}
                     active={orderBy === row.id}
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
@@ -115,7 +117,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: '2.5',
   },
   highlight:
     theme.palette.type === 'light'
@@ -152,7 +154,7 @@ let EnhancedTableToolbar = props => {
             {numSelected} selected
           </Typography>
         ) : (
-          <Typography variant="h6" id="tableTitle">
+          <Typography variant="h5" id="tableTitle">
             Input Files
           </Typography>
         )}
@@ -211,8 +213,9 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
+    console.log(this.props.filteredInputs)
     var data = this.props.filteredInputs.map(input => {
-      return createData(input.inputId, input.site, input.series, input.path, input.coords.lat, input.coords.long)
+      return createData(input.inputId, input.site, input.series, input.path, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
     })
     this.setState({data: data})
   }
@@ -220,7 +223,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredInputs.map(input => {
-        return createData(input.inputId, input.site, input.series, input.path, input.coords.lat, input.coords.long)
+        return createData(input.inputId, input.site, input.series, input.path, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
       })
       if(data !== this.state.data)
         this.setState({data: data})
@@ -318,13 +321,14 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} component="th" scope="row" padding="none">
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">
                         {n.siteName}
                       </TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.setName}</TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.fileName}</TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.latitude}</TableCell>
-                      <TableCell style={{ fontSize:15+'px' }} align="right">{n.longitude}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.setName}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.fileName}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.recordTime}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.latitude}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.longitude}</TableCell>
                     </TableRow>
                   );
                 })}

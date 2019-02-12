@@ -175,14 +175,15 @@ class HorizontalLinearStepper extends React.Component {
             {headers: {"Content-Type": "application/json"}}
           )
           .then(res => {
-            if(res.status === 201) {
-              this.setState({message: 'Jobs Started. View progress in the job queue.'})
-              this.setState({open: true})
-            }
-            else if(res.status === 200) {
-              this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
-              this.setState({open: true})
-            }
+            console.log(res)
+            // if(res.status === 201) {
+            //   this.setState({message: 'Jobs Started. View progress in the job queue.'})
+            //   this.setState({open: true})
+            // }
+            // else if(res.status === 200) {
+            //   this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
+            //   this.setState({open: true})
+            // }
           })
           .catch(err => console.log(err.message));
         })

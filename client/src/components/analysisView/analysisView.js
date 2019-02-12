@@ -401,7 +401,7 @@ class AnalysisView extends Component {
   // Creates the items seen in the site menu
   siteMenuItems = (siteNames) => {
     const menuItems = siteNames.map(site => {
-      return <MenuItem value={site}>{site}</MenuItem>
+      return <MenuItem key={site} value={site}>{site}</MenuItem>
     });
     return menuItems;
   }

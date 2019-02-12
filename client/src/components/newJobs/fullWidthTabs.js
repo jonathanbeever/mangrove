@@ -25,8 +25,9 @@ TabContainer.propTypes = {
 
 const styles = theme => ({
   root: {
-    backgroundColor: theme.palette.background.paper,
-    // width: 500,
+    paddingTop: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit
   },
 });
 
@@ -50,8 +51,8 @@ class FullWidthTabs extends React.Component {
     const { classes, theme } = this.props;
 
     return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default">
+      <div className={classes.root} border={0}>
+        <AppBar position="static" color="inherit">
           <Tabs
             value={this.state.value}
             onChange={this.handleChange}
@@ -84,7 +85,7 @@ class FullWidthTabs extends React.Component {
               </div>
             </div>
           </TabContainer>}
-          {this.state.value === 1 && <TabContainer dir={theme.direction}>
+          {this.state.value === 1 && <TabContainer >
             <div className="row">
               <div className="col-3">
                 <input
@@ -96,11 +97,16 @@ class FullWidthTabs extends React.Component {
                   multiple
                   type="file"
                 />
-                <label htmlFor="selectFiles">
-                  <Button variant="contained" component="span" >
-                    Choose New Files
+                <div>
+                  <label htmlFor="selectFiles"className={classes.root}>
+                    <Button variant="contained" component="span" color="primary">
+                      Choose New Files
+                    </Button>
+                  </label> 
+                  <Button variant="contained" component="span" onClick={this.props.uploadFiles} >
+                    Upload Files
                   </Button>
-                </label> 
+                </div>
                 <SearchInputs 
                   onChange={this.props.updateInputProperties}
                   submitInputFilter={this.props.submitInputProperties}
@@ -110,9 +116,6 @@ class FullWidthTabs extends React.Component {
                   long={this.props.upload.long}
                   message='Update Selected Files'
                 />
-                <Button variant="contained" component="span" onClick={this.props.uploadFiles} >
-                  Upload Files
-                </Button>
               </div>
               <div className="col-9">
                 <UploadsTable

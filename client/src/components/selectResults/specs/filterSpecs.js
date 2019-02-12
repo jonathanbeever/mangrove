@@ -73,7 +73,7 @@ class FilterSpecs extends Component {
         chipHtml.push(
           <Chip
             key={param}
-            label={this.props.index + ' : ' + param + ' - ' + this.props.specParamsByIndex[this.props.index][param]}
+            label={<h3>{this.props.index + ' : ' + param + ' - ' + this.props.specParamsByIndex[this.props.index][param]}</h3>}
             onDelete={this.deleteChip}
           />
         )
@@ -122,7 +122,6 @@ class FilterSpecs extends Component {
     // Add title and submit button to html
     specInputHtml = (
       <div>
-        <h4>Choose Specs</h4>
         {specInputHtml}
         <div className="row filterSubmit">
           <Button style={{fontSize:12+'px'}} onClick={this.onSubmitSpecs} variant="contained" color="primary">

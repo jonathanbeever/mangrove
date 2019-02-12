@@ -48,13 +48,13 @@ class FilterInputs extends Component {
         chipHtml.push(
           <Chip
             key={param}
-            label={param + ' : ' + this.props.inputFiltering[param]}
+            label={<h4>{param + ' : ' + this.props.inputFiltering[param]}</h4>}
             onDelete={this.deleteChip}
           />
         )
       }
     })
-    this.setState({ chips: <div>{chipHtml}</div> })
+    this.setState({ chips: <h3>{chipHtml}</h3> })
   }
 
   onSubmit = () => {

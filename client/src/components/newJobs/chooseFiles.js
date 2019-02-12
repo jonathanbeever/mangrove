@@ -177,7 +177,7 @@ class ChooseFiles extends React.Component {
             filteredInputs={this.state.filteredInputs}
             selected={this.props.selectedFiles}    
             onChange={this.handleInputUpload}  
-            classes={classes}
+            // classes={classes}
             searchInputs={this.searchInputs}
             site={this.state.site}
             series={this.state.series}
