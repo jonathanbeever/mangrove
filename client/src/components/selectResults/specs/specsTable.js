@@ -224,7 +224,7 @@ class EnhancedTable extends React.Component {
       if(param !== 'shannon')
         rows.push({ id: param, numeric: true, disablePadding: false, label: param })
       else
-        rows.push({ id: param, numeric: false, disablePadding: true, label: param })
+        rows.push({ id: param, numeric: false, disablePadding: false, label: param })
     })
 
     this.setState({ rows: rows })
@@ -246,7 +246,7 @@ class EnhancedTable extends React.Component {
       }
       case 'adi' : {
         data = this.props.specs.map(spec => {
-          return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+          return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]].toString())
         })
         this.setState({data: data})
         break;
@@ -302,7 +302,7 @@ class EnhancedTable extends React.Component {
         }
         case 'adi' : {
           data = this.props.specs.map(spec => {
-            return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+            return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]].toString())
           })
           this.setState({data: data})
           break;
