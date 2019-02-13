@@ -3,7 +3,6 @@ const { getJobModel } = require('../../api/models/job/utils');
 const { value } = require('../../util/settings');
 const { updateJob } = require('../../api/models/job/utils');
 
-
 const moveJobFromWorkToFinish = (index) => {
   this.finishedJobs.push(this.workersList[index]);
   this.workersList[index].splice(index, 1);
@@ -16,7 +15,6 @@ function MockQueue(processFunction, concurrency = value('cores')) {
   this.concurrency = concurrency;
   this.process = processFunction;
 
-
   this.init = process => new Promise((resolve) => {
     this.queue = [];
     this.workersList = [];
@@ -24,7 +22,6 @@ function MockQueue(processFunction, concurrency = value('cores')) {
     this.process = process;
     resolve(this);
   });
-
 
   this.destroy = () => {
     if (this.queue) {
@@ -34,9 +31,7 @@ function MockQueue(processFunction, concurrency = value('cores')) {
     }
   };
 
-
   this.enqueue = job => updateJob(job, { status: Status.QUEUED });
-
 
   this.pushToQueue = (job) => {
     const JobModel = getJobModel(job.type);

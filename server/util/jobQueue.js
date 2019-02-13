@@ -30,31 +30,26 @@ function JobQueue() {
     }
   });
 
-  const createQueue = () => new Promise((resolve, reject) => {
-    try {
-      this.queue = new Queue('job processing');
-      this.queue.process(value('cores'), `${__dirname}/processor.js`);
+  const createQueue = () => {
+    this.queue = new Queue('job processing');
+    this.queue.process(value('cores'), `${__dirname}/processor.js`);
 
-      this.queue.on('active', (job) => {
-        updateJob(job.data, { status: Status.PROCESSING });
-      });
-      this.queue.on('completed', (job, result) => {
-        this.queue.clean(0, 'completed');
-        updateJob(job.data, { status: Status.FINISHED, result });
-      });
-      this.queue.on('failed', (job, err) => {
-        this.queue.clean(0, 'failed');
-        console.error(err);
-        updateJob(job.data, { status: Status.FAILED });
-      });
-      this.queue.on('stalled', (job) => {
-        throw Error(`${job} has stalled`);
-      });
-      resolve(this.queue);
-    } catch (err) {
-      reject(err);
-    }
-  });
+    this.queue.on('active', (job) => {
+      updateJob(job.data, { status: Status.PROCESSING });
+    });
+    this.queue.on('completed', (job, result) => {
+      this.queue.clean(0, 'completed');
+      updateJob(job.data, { status: Status.FINISHED, result });
+    });
+    this.queue.on('failed', (job, err) => {
+      console.error(err);
+      this.queue.clean(0, 'failed');
+      updateJob(job.data, { status: Status.FAILED });
+    });
+    this.queue.on('stalled', (job) => {
+      throw Error(`${job} has stalled`);
+    });
+  };
 
   const queueHelper = (resolve, reject, pendingJobs) => {
     if (pendingJobs.length === 0) {

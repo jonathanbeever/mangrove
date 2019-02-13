@@ -50,7 +50,7 @@ const updateJob = (job, update, populate = false) => {
       .populate('input')
       .populate('spec');
   }
-  return updatedJob;
+  return updatedJob.exec();
 };
 
 const sortByStatusByTime = (jobs) => {
