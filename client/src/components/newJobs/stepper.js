@@ -29,6 +29,9 @@ const styles = theme => ({
   },
   stepper: {
     backgroundColor: '#fff'
+  },
+  label: {
+    fontSize: '26px'
   }
 });
 
@@ -319,8 +322,8 @@ class HorizontalLinearStepper extends React.Component {
             const props = {};
             const labelProps = {};
             return (
-              <Step key={label} {...props}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
+              <Step key={label} className={classes.label} {...props}>
+                <StepLabel style={{fontSize: '16px'}}{...labelProps}><div style={{fontSize: '16px'}}>{label}</div></StepLabel>
               </Step>
             );
           })}
@@ -362,6 +365,7 @@ class HorizontalLinearStepper extends React.Component {
               <Button
                 disabled={activeStep === 0}
                 onClick={this.handleBack}
+                style={{fontSize: '12px'}}
                 className={classes.button}
               >
                 Back
@@ -369,6 +373,7 @@ class HorizontalLinearStepper extends React.Component {
               <Button
                 variant="contained"
                 color="primary"
+                style={{fontSize: '12px'}}
                 disabled={this.state.disabledSubmit}
                 onClick={this.handleNext}
                 className={classes.button}

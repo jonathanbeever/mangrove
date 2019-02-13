@@ -6,11 +6,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from 'react-router-dom';
-import Toolbar from '@material-ui/core/Toolbar';
+import { Toolbar } from '@material-ui/core';
 
 function TabContainer(props) {
   return (
-    <Typography component="div" style={{}}>
+    <Typography component="div" style={{ padding: 8 * 3 }}>
       {props.children}
     </Typography>
   );
@@ -26,9 +26,10 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     paddingBottom: 15
   },
-  fullHeight: {
-    ...theme.mixins.toolbar,
-  },
+  title: {
+    paddingLeft: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit
+  }
 });
 
 class NavBarTabs extends React.Component {
@@ -48,40 +49,31 @@ class NavBarTabs extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <div className="col-2"><h2>Mangrove Toolkit</h2></div>
+            <div className="col-2">
+              <h2 className={classes.title}>Mangrove</h2>
+            </div>
             <div className="col-8">
               <Tabs value={value}
-                    onChange={this.handleChange}
-                    classes={{root: classes.fullHeight }}
-                    centered>
-                <Tab value={0}
-                    label={<div><h5>Catalog</h5></div>}
-                    classes={{root: classes.fullHeight }}
-                    to="/catalog"
-                    style={{color: 'white', textDecoration: 'none'}}
-                    activeStyle={{color: 'white', textDecoration: 'none'}}
-                    component={NavLink} />
-                <Tab value={1}
-                    label={<div><h5>Create Jobs</h5></div>}
-                    classes={{root: classes.fullHeight }}
-                    to="/newJobs"
-                    style={{color: 'white', textDecoration: 'none'}}
-                    activeStyle={{color: 'white', textDecoration: 'none'}}
-                    component={NavLink} />
-                <Tab value={2}
-                    label={<div><h5>Job Queue</h5></div>}
-                    classes={{root: classes.fullHeight }}
-                    to="/jobQueue"
-                    style={{color: 'white', textDecoration: 'none'}}
-                    activeStyle={{color: 'white', textDecoration: 'none'}}
-                    component={NavLink} />
-                <Tab value={3}
-                    label={<div><h5>Settings</h5></div>}
-                    classes={{root: classes.fullHeight }}
-                    to="/settings"
-                    style={{color: 'white', textDecoration: 'none'}}
-                    activeStyle={{color: 'white', textDecoration: 'none'}}
-                    component={NavLink} />
+                onChange={this.handleChange}
+                centered>
+              <Tab value={0}
+                label="Catalog"
+                to="/catalog"
+                style={{color: 'white', textDecoration: 'none', fontSize: '16px'}}
+                activeStyle={{color: 'white', textDecoration: 'none'}}
+                component={NavLink} />
+              <Tab value={1}
+                label="Create Jobs"
+                to="/newJobs"
+                style={{color: 'white', textDecoration: 'none', fontSize: '16px'}}
+                activeStyle={{color: 'white', textDecoration: 'none'}}
+                component={NavLink} />
+              <Tab value={2}
+                label="Settings"
+                to="/settings"
+                style={{color: 'white', textDecoration: 'none', fontSize: '16px'}}
+                activeStyle={{color: 'white', textDecoration: 'none'}}
+                component={NavLink} />
               </Tabs>
             </div>
           </Toolbar>

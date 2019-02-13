@@ -26,9 +26,27 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     paddingTop: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit
+    paddingBottom: theme.spacing.unit * 2
   },
+  table: {
+    paddingRight: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit * 3
+  },
+  search: {
+    paddingLeft: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit * 3
+  },
+  label: {
+    fontSize: '14px'
+  },
+  buttons: {
+    paddingTop: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unti * 2,
+  },
+  buttonText: {
+    fontSize: '9px'
+  }
 });
 
 class FullWidthTabs extends React.Component {
@@ -60,69 +78,79 @@ class FullWidthTabs extends React.Component {
             textColor="primary"
             variant="fullWidth"
           >
-            <Tab label="Sound Files" />
-            <Tab label="Upload New Files" />
+            <Tab label="Sound Files" className={classes.label} />
+            <Tab label="Upload New Files" className={classes.label} />
           </Tabs>
           {this.state.value === 0 && <TabContainer dir={theme.direction}>
             <div className="row">
               <div className="col-3">
-                <SearchInputs 
-                  onChange={this.props.searchInputs} 
-                  submitInputFilter={this.props.submitInputFilter}
-                  site={this.props.site}
-                  series={this.props.series}
-                  lat={this.props.lat}
-                  long={this.props.long}
-                  message='Filter Input Files'
-                />
+                <div className={classes.search}>
+                  <SearchInputs 
+                    onChange={this.props.searchInputs} 
+                    submitInputFilter={this.props.submitInputFilter}
+                    site={this.props.site}
+                    series={this.props.series}
+                    lat={this.props.lat}
+                    long={this.props.long}
+                    message='Filter Input Files'
+                  />
+                </div>
               </div>
               <div className="col-9">
-                <InputsTable
-                  updateSelectedInputs={this.props.updateSelectedInputs} 
-                  filteredInputs={this.props.filteredInputs} 
-                  selected={this.props.selected}          
-                />
+                <div className={classes.table}>
+                  <InputsTable
+                    updateSelectedInputs={this.props.updateSelectedInputs} 
+                    filteredInputs={this.props.filteredInputs} 
+                    selected={this.props.selected}          
+                  />
+                </div>
               </div>
             </div>
           </TabContainer>}
           {this.state.value === 1 && <TabContainer >
             <div className="row">
               <div className="col-3">
-                <input
-                  accept="audio/wave"
-                  className={this.props.classes.input}
-                  style={{ display: 'none' }}
-                  onChange={this.props.addFilesToUpload}
-                  id="selectFiles"
-                  multiple
-                  type="file"
-                />
-                <div>
-                  <label htmlFor="selectFiles"className={classes.root}>
-                    <Button variant="contained" component="span" color="primary">
-                      Choose New Files
+                <div className={classes.search}>
+                  <input
+                    accept="audio/wave"
+                    className={this.props.classes.input}
+                    style={{ display: 'none' }}
+                    onChange={this.props.addFilesToUpload}
+                    id="selectFiles"
+                    multiple
+                    type="file"
+                  />
+                  <div>
+                    <div >
+                    <label htmlFor="selectFiles" className={classes.buttons}>
+                      <Button variant="contained" component="span" color="primary" className={classes.buttonText}>
+                        Choose New Files
+                      </Button>
+                    </label> 
+                    <Button variant="contained" component="span" onClick={this.props.uploadFiles} className={classes.buttonText} >
+                      Upload Files
                     </Button>
-                  </label> 
-                  <Button variant="contained" component="span" onClick={this.props.uploadFiles} >
-                    Upload Files
-                  </Button>
+                    </div>
+                  </div>
+                  <SearchInputs 
+                    onChange={this.props.updateInputProperties}
+                    submitInputFilter={this.props.submitInputProperties}
+                    site={this.props.upload.site}
+                    series={this.props.upload.series}
+                    lat={this.props.upload.lat}
+                    long={this.props.upload.long}
+                    message='Update Selected Files'
+                  />
                 </div>
-                <SearchInputs 
-                  onChange={this.props.updateInputProperties}
-                  submitInputFilter={this.props.submitInputProperties}
-                  site={this.props.upload.site}
-                  series={this.props.upload.series}
-                  lat={this.props.upload.lat}
-                  long={this.props.upload.long}
-                  message='Update Selected Files'
-                />
               </div>
               <div className="col-9">
-                <UploadsTable
-                  filteredInputs={this.props.filesToUpload}
-                  updateSelectedInputs={this.props.updateSelectedUploads} 
-                  selected={this.props.selectedToEdit}          
-                />
+                <div className={classes.table}>
+                  <UploadsTable
+                    filteredInputs={this.props.filesToUpload}
+                    updateSelectedInputs={this.props.updateSelectedUploads} 
+                    selected={this.props.selectedToEdit}          
+                  />
+                </div>
               </div>
             </div>
           </TabContainer>}

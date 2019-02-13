@@ -112,9 +112,10 @@ class ChooseSpecs extends Component {
         return (
           <TextField
             key={param}
-            label={param}
+            label={<h6>{param}</h6>}
             value={this.props.specParams[this.props.index][param]}
             // className={classes.textField}
+            // style={{fontSize: '20px'}}
             onChange={this.props.onSpecChange(param)}
           />   
         )
@@ -139,7 +140,7 @@ class ChooseSpecs extends Component {
     // Add title and submit button to html
     specInputHtml = (
       <div>
-        <h5>Define New Specs</h5>
+        <h4>Define New Specs</h4>
         {specInputHtml} 
         <div className="row filterSubmit">
           {/* <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
