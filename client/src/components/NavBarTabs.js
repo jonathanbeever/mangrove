@@ -68,12 +68,6 @@ class NavBarTabs extends React.Component {
                 style={{color: 'white', textDecoration: 'none', fontSize: '16px'}}
                 activeStyle={{color: 'white', textDecoration: 'none'}}
                 component={NavLink} />
-              <Tab value={2}
-                label="Settings"
-                to="/settings"
-                style={{color: 'white', textDecoration: 'none', fontSize: '16px'}}
-                activeStyle={{color: 'white', textDecoration: 'none'}}
-                component={NavLink} />
               </Tabs>
             </div>
           </Toolbar>

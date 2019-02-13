@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import NavBarTabs from './components/NavBarTabs';
 import NewJobs from './components/newJobs/stepper';
-import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Catalog from './components/selectResults/catalog';
 import JobQueue from './components/jobQueue/jobQueue';
@@ -26,7 +25,6 @@ class App extends Component {
             {/* Add login */}
             <Route path="/catalog" component={Catalog} />
             <Route path="/newJobs" component={NewJobs} />
-            <Route path="/settings" component={Settings} />
             <Route path="/jobQueue" component={JobQueue} />
             <Redirect from="/" to="/catalog" />
           </Switch>
