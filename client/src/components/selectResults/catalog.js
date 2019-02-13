@@ -170,6 +170,7 @@ class Catalog extends Component {
   }
 
   handleChipDelete = (label) => {
+    label = label.props.children
     label = label.split(' : ')
 
     var inputFiltering = this.state.inputFiltering
@@ -404,7 +405,9 @@ class Catalog extends Component {
   }
 
   deleteSpecChip = (label) => {
+    label = label.props.children
     label = label.split(' : ')
+
     var index = label[0]
     var param = label[1].split(' - ')
 

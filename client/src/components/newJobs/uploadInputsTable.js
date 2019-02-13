@@ -18,10 +18,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import moment from 'moment';
 
-function createData(id, type, author, time, input) {
-  return { id: id, type, author, time, input };
+function createData(id, siteName, setName, fileName, latitude, longitude) {
+  return { id: id, siteName, setName, fileName, latitude, longitude };
 }
 
 function desc(a, b, orderBy) {
@@ -47,12 +46,13 @@ function stableSort(array, cmp) {
 function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
-// id, type, author, time, input, input, spec
+
 const rows = [
-  { id: 'type', numeric: false, disablePadding: true, label: 'Index' },
-  { id: 'author', numeric: false, disablePadding: false, label: 'Author' },
-  { id: 'time', numeric: true, disablePadding: false, label: 'Time Started' },
-  { id: 'input', numeric: false, disablePadding: false, label: 'Input File' }
+  { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
+  { id: 'setName', numeric: false, disablePadding: false, label: 'File Set Name' },
+  { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
+  { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
+  { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -87,7 +87,7 @@ class EnhancedTableHead extends React.Component {
                   enterDelay={300}
                 >
                   <TableSortLabel
-                    style={{ fontSize:16+'px' }}
+                    style={{ fontSize:15+'px' }}
                     active={orderBy === row.id}
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
@@ -140,7 +140,6 @@ const toolbarStyles = theme => ({
 
 let EnhancedTableToolbar = props => {
   const { numSelected, classes } = props;
-
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -154,7 +153,7 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">
-            Matching Jobs
+            Files to Upload
           </Typography>
         )}
       </div>
@@ -201,37 +200,46 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'time',
-    selected: this.props.selectedJobs,
+    orderBy: 'calories',
+    // send prop form filtering?
+    selected: this.props.selected,
     data: [
 
     ],
     page: 0,
     rowsPerPage: 5,
-    rows: []
   };
 
   componentDidMount = () => {
-    var data = this.props.filteredJobs.map(job => {
-      return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].path)
+    var fileNames = Object.keys(this.props.filteredInputs)
+    var files = this.props.filteredInputs
+
+    var data = fileNames.map(fileName => {
+      return createData(files[fileName].file.name, files[fileName].json.site, files[fileName].json.series, files[fileName].file.name, files[fileName].json.coords.lat, files[fileName].json.coords.long)
     })
     this.setState({data: data})
   }
 
   componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if(prevProps !== this.props) {
-      var data = this.props.filteredJobs.map(job => {
-        return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].path)
-      })
-      this.setState({data: data})
+    var fileNames = Object.keys(this.props.filteredInputs)
+    var files = this.props.filteredInputs
 
-      this.setState({ selected: this.props.selectedJobs })
+    if(prevProps !== this.props) {
+      var data = fileNames.map(fileName => {
+        return createData(files[fileName].file.name, files[fileName].json.site, files[fileName].json.series, files[fileName].file.name, files[fileName].json.coords.lat, files[fileName].json.coords.long)
+      })
+
+      if(data !== this.state.data)
+        this.setState({data: data})
+      if(this.props.selected !== this.state.selected)
+        this.setState({selected: this.props.selected})
     }
   }
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
     let order = 'desc';
+
     if (this.state.orderBy === property && this.state.order === 'desc') {
       order = 'asc';
     }
@@ -243,11 +251,11 @@ class EnhancedTable extends React.Component {
     if (event.target.checked) {
       var list = this.state.data.map(n => n.id)
       this.setState({ selected: list });
-      this.props.updateSelectedJobs(list)
+      this.props.updateSelectedInputs(list)
       return;
     }
     this.setState({ selected: [] });
-    this.props.updateSelectedJobs([])
+    this.props.updateSelectedInputs([])
   };
 
   handleClick = (event, id) => {
@@ -267,8 +275,7 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
-
-    this.props.updateSelectedJobs(newSelected)
+    this.props.updateSelectedInputs(newSelected)
     this.setState({ selected: newSelected });
   };
 
@@ -318,12 +325,13 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">
-                        {n.type}
+                      <TableCell component="th" scope="row" padding="none">
+                        {n.siteName}
                       </TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} align="right">{n.author}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} align="right">{moment(n.time).format('MMM Do YY, h:mm:ss a')}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} align="right">{n.input}</TableCell>
+                      <TableCell align="right">{n.setName}</TableCell>
+                      <TableCell align="right">{n.fileName}</TableCell>
+                      <TableCell align="right">{n.latitude}</TableCell>
+                      <TableCell align="right">{n.longitude}</TableCell>
                     </TableRow>
                   );
                 })}

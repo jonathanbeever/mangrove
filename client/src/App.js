@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import NavBarTabs from './components/NavBarTabs';
-import NewJobs from './components/newJobs/newJobs';
+import NewJobs from './components/newJobs/stepper';
 import Settings from './components/settings';
 import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Catalog from './components/selectResults/catalog';

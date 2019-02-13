@@ -7,6 +7,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import '../selectResults/selectResults.css';
 import SpecsTable from '../selectResults/specs/specsTable';
+import axios from 'axios';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
@@ -37,12 +39,63 @@ class ChooseSpecs extends Component {
 
     this.state = {
       specInputHtml: '',
-  
+      specParams: {
+        aci: {
+          minFreq: '',
+          maxFreq: '',
+          j: '',
+          fftW: ''
+        },
+        ndsi: {
+          anthroMin: '',
+          anthroMax: '',
+          bioMin: '',
+          bioMax: '',
+          fftW: ''
+        },
+        adi: {
+          maxFreq: '',
+          dbThreshold: '',
+          freqStep: '',
+          shannon: false
+        },
+        aei: {
+          maxFreq: '',
+          dbThreshold: '',
+          freqStep: ''
+        },
+        bi: {
+          minFreq: '',
+          maxFreq: '',
+          fftW: ''
+        },
+        rms: {
+          test: ''
+        }
+      }
       
     }
   }
 
   componentDidMount = () => {
+    axios.get('http://localhost:3000/specs')
+    .then(res => {
+      var specs = {
+        'aci': [],
+        'ndsi': [],
+        'adi': [],
+        'aei': [],
+        'bi': [],
+        'rms': []
+      }
+      res.data.specs.forEach(spec => {
+        specs[spec.type].push(spec)
+      })
+      // Set all specs state
+      this.setState({ allSpecs: res.data.specs })
+      this.setState({ indexedSpecs: specs })
+    })
+
     this.formatSpecInput(this.props.specParams[this.props.index])
   }
 
@@ -59,9 +112,10 @@ class ChooseSpecs extends Component {
         return (
           <TextField
             key={param}
-            label={param}
+            label={<h6>{param}</h6>}
             value={this.props.specParams[this.props.index][param]}
             // className={classes.textField}
+            // style={{fontSize: '20px'}}
             onChange={this.props.onSpecChange(param)}
           />   
         )
@@ -73,7 +127,7 @@ class ChooseSpecs extends Component {
             control={
               <Checkbox
                 checked={params.shannon}
-                onChange={this.onSpecChange('shannon')}
+                onChange={this.props.onSpecChange('shannon')}
                 value="shannon"
                 color="primary"
               />
@@ -97,30 +151,30 @@ class ChooseSpecs extends Component {
     )
     this.setState({ specInputHtml: specInputHtml })
   }
-
+  
   render() {
     const { classes } = this.props;
 
     return (
       <div className="row">
         <div className="col-4">
-          {/* <Paper className={classes.root}> */}
+          <Paper className={classes.root}>
             <FormControl className={classes.formControl}>
               {this.state.specInputHtml}
             </FormControl>
-          {/* </Paper> */}
+          </Paper>
         </div>
         <div className="col-8">
-          {/* <Paper className={classes.root}> */}
-          <h4>Choose From Previous Specs</h4>
+          <Paper className={classes.root}>
+          {this.state.indexedSpecs ?
             <SpecsTable 
               index={this.props.index}
-              specs={this.props.specs[this.props.index]}
+              specs={this.state.indexedSpecs[this.props.index]}
               params={Object.keys(this.props.specParams[this.props.index])}
               updateSelectedSpecs={this.props.updateSelectedSpec}
               selectedSpecs={this.props.selectedSpec}
-            />
-          {/* </Paper> */}
+            /> : '' }
+          </Paper>
         </div>
       </div>
     );

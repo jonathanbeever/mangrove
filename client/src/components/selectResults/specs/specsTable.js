@@ -17,7 +17,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-// import moment from 'moment';
 
 function createAciData(id, minFreq, maxFreq, j, fftW) {
   return { id: id, minFreq, maxFreq, j, fftW};
@@ -94,7 +93,7 @@ class EnhancedTableHead extends React.Component {
                   enterDelay={300}
                 >
                   <TableSortLabel
-                    style={{ fontSize:20+'px' }}
+                    style={{ fontSize:16+'px' }}
                     active={orderBy === row.id}
                     direction={order}
                     onClick={this.createSortHandler(row.id)}
@@ -161,7 +160,7 @@ let EnhancedTableToolbar = props => {
           </Typography>
         ) : (
           <Typography variant="h5" id="tableTitle">
-            Matching specs
+            Previously Used Specs
           </Typography>
         )}
       </div>
@@ -195,7 +194,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit,
   },
   table: {
     width: '100%',
@@ -223,9 +222,9 @@ class EnhancedTable extends React.Component {
 
     this.props.params.forEach(param => {
       if(param !== 'shannon')
-        rows.push({ id: param, numeric: true, disablePadding: true, label: param })
+        rows.push({ id: param, numeric: true, disablePadding: false, label: param })
       else
-        rows.push({ id: param, numeric: false, disablePadding: true, label: param })
+        rows.push({ id: param, numeric: false, disablePadding: false, label: param })
     })
 
     this.setState({ rows: rows })
@@ -247,13 +246,14 @@ class EnhancedTable extends React.Component {
       }
       case 'adi' : {
         data = this.props.specs.map(spec => {
-          return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+          return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]].toString())
         })
         this.setState({data: data})
         break;
       }
       case 'aei' : {
         data = this.props.specs.map(spec => {
+          console.log(spec)
           return createAeiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]])
         })
         this.setState({data: data})
@@ -276,7 +276,7 @@ class EnhancedTable extends React.Component {
     if(prevProps.params !== this.props.params) {
       var rows = []
 
-      this.props.params.forEach(param => {
+      this.props.params.forEach((param, i) => {
         if(param !== 'shannon')
           rows.push({ id: param, numeric: true, disablePadding: true, label: param })
         else
@@ -302,7 +302,7 @@ class EnhancedTable extends React.Component {
         }
         case 'adi' : {
           data = this.props.specs.map(spec => {
-            return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]])
+            return createAdiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]], spec[this.props.params[3]].toString())
           })
           this.setState({data: data})
           break;
@@ -373,8 +373,6 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
-    console.log(newSelected)
-    // TODO: update for select some?
     this.props.updateSelectedSpecs(newSelected, this.props.index)
     this.setState({ selected: newSelected });
   };
@@ -429,14 +427,14 @@ class EnhancedTable extends React.Component {
                         </TableCell>
                         {this.state.rows.map((row, i) => {
                           return (
-                            <TableCell style={{ fontSize:15+'px' }} key={row.id} align="left">{n[row.id]}</TableCell>
+                            <TableCell style={{ fontSize:14+'px' }} key={row.id} padding={"none"} align="left"><div>{n[row.id]}</div></TableCell>
                           )
                         })}
                       </TableRow>
                     );
                   })}
                 {emptyRows > 0 && (
-                  <TableRow style={{ height: 49 * emptyRows }}>
+                  <TableRow style={{ height: 29 * emptyRows }}>
                     <TableCell colSpan={0} />
                   </TableRow>
                 )}
