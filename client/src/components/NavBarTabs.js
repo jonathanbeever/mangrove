@@ -56,18 +56,24 @@ class NavBarTabs extends React.Component {
               <Tabs value={value}
                 onChange={this.handleChange}
                 centered>
-              <Tab value={0}
-                label="Catalog"
-                to="/catalog"
-                style={{color: 'white', textDecoration: 'none', fontSize: '16px'}}
-                activeStyle={{color: 'white', textDecoration: 'none'}}
-                component={NavLink} />
-              <Tab value={1}
-                label="Create Jobs"
-                to="/newJobs"
-                style={{color: 'white', textDecoration: 'none', fontSize: '16px'}}
-                activeStyle={{color: 'white', textDecoration: 'none'}}
-                component={NavLink} />
+                <Tab value={0}
+                  label="Catalog"
+                  to="/catalog"
+                  style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
+                  activeStyle={{ color: 'white', textDecoration: 'none' }}
+                  component={NavLink} />
+                <Tab value={1}
+                  label="Create Jobs"
+                  to="/newJobs"
+                  style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
+                  activeStyle={{ color: 'white', textDecoration: 'none' }}
+                  component={NavLink} />
+                <Tab value={2}
+                  label="Job Queue"
+                  to="/jobQueue"
+                  style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
+                  activeStyle={{ color: 'white', textDecoration: 'none' }}
+                  component={NavLink} />
               </Tabs>
             </div>
           </Toolbar>
