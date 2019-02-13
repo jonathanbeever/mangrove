@@ -76,16 +76,15 @@ router.put('/', (req, res) => {
           .then(async (createResult) => {
             try {
               const enqueueResult = await global.jobQueue.enqueue(createResult);
-              const enqueuedJob = enqueueResult._doc;
-              console.log('ENQUEUED JOB @ Job Create Route', enqueuedJob);
+
               res.status(201).json({
-                jobId: enqueuedJob._id,
-                type: enqueuedJob.type,
-                input: enqueuedJob.input,
-                spec: enqueuedJob.spec,
-                author: enqueuedJob.author,
-                creationTimeMs: enqueuedJob.creationTimeMs,
-                status: enqueuedJob.status,
+                jobId: enqueueResult._id,
+                type: enqueueResult.type,
+                input: enqueueResult.input,
+                spec: enqueueResult.spec,
+                author: enqueueResult.author,
+                creationTimeMs: enqueueResult.creationTimeMs,
+                status: enqueueResult.status,
               });
             } catch (err) {
               console.log('Error in Job Put Route');

@@ -6,18 +6,20 @@ const { mockProcessJob } = require('../test/mock/mockProcessJob');
 const jobProcessor = require('../util/jobProcessor');
 
 module.exports = async (job) => {
-  const JobModel = getJobModel(job.data.type);
-  const SpecModel = getSpecModel(job.data.spec.type);
-  const populatedJob = JobModel(job.data);
-  populatedJob.input = Input(job.data.input);
-  populatedJob.spec = SpecModel(job.data.spec);
-
+  // TODO: populate correctly from outside(create random jobs with specs).
+  let result;
   let jobProcess;
   if (config.util.getEnv('NODE_ENV') !== 'test') {
+    const JobModel = getJobModel(job.data.type);
+    const SpecModel = getSpecModel(job.data.spec.type);
+    const populatedJob = JobModel(job.data);
+    populatedJob.input = Input(job.data.input);
+    populatedJob.spec = SpecModel(job.data.spec);
     jobProcess = jobProcessor.process;
+    result = await jobProcess(populatedJob);
   } else {
     jobProcess = mockProcessJob;
+    result = await jobProcess(job);
   }
-  const result = await jobProcess(populatedJob);
   return Promise.resolve(result);
 };

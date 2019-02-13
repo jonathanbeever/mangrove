@@ -9,12 +9,26 @@ const { value } = require('./settings');
 function JobQueue() {
   this.queue = null;
 
-  this.destroy = async () => {
+  this.destroy = () => new Promise((resolve) => {
     if (this.queue) {
-      this.queue.pause();
-      this.queue = null;
+      const clean = this.queue.clean.bind(this.queue, 0);
+      this.queue.pause()
+        .then(() => clean('completed'))
+        .then(() => clean('failed'))
+        .then(() => clean('paused'))
+        .then(() => clean('active'))
+        .then(() => clean('delayed'))
+        .then(() => clean('failed'))
+        .then(() => this.queue.empty())
+        .then(() => this.queue.close())
+        .then(() => {
+          this.queue = null;
+          resolve();
+        });
+    } else {
+      resolve();
     }
-  };
+  });
 
   const createQueue = () => new Promise((resolve, reject) => {
     try {
@@ -25,16 +39,17 @@ function JobQueue() {
         updateJob(job.data, { status: Status.PROCESSING });
       });
       this.queue.on('completed', (job, result) => {
+        this.queue.clean(0, 'completed');
         updateJob(job.data, { status: Status.FINISHED, result });
       });
       this.queue.on('failed', (job, err) => {
+        this.queue.clean(0, 'failed');
         console.error(err);
         updateJob(job.data, { status: Status.FAILED });
       });
       this.queue.on('stalled', (job) => {
         throw Error(`${job} has stalled`);
       });
-
       resolve(this.queue);
     } catch (err) {
       reject(err);
@@ -91,7 +106,10 @@ function JobQueue() {
           return reject(new Error('Job must be made before it is queued'));
         }
         this.queue.add(updatedJob);
-        resolve(Object.assign(updatedJob, { input: job.input, spec: job.spec }));
+        resolve({
+          ...updatedJob._doc,
+          ...{ input: job.input, spec: job.spec },
+        });
       } catch (err) {
         reject(err);
       }
@@ -100,17 +118,14 @@ function JobQueue() {
 
   // TODO: Make a remove job function
 
-  this.getFreeSlots = () => {
+  this.getJobCounts = () => {
     if (!this.queue) { return new Error('Queue must be initialized'); }
-    if (this.queue.running() < this.queue.concurrency) {
-      return this.queue.concurrency - this.queue.running();
-    }
-    return 0;
+    return this.queue.getJobCounts().then(jobs => jobs);
   };
 
   this.getRunningJobs = () => {
     if (!this.queue) { return new Error('Queue must be initialized'); }
-    return this.queue.workersList();
+    return this.queue.getJobs().then(jobs => jobs);
   };
 }
 
