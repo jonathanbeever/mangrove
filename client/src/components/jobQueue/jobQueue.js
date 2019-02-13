@@ -91,6 +91,14 @@ class JobQueue extends Component {
             </p>
           </TableCell>
         );
+      case "queued":
+        return(
+          <TableCell className={this.props.classes.queued} component="th" scope="row" padding="checkbox">
+            <p>
+              Queued
+            </p>
+          </TableCell>
+        );
       default:
         return(
           <TableCell className={this.props.classes.failed} component="th" scope="row" padding="checkbox">
