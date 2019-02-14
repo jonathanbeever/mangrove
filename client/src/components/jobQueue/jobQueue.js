@@ -39,24 +39,22 @@ const styles = {
 
 class JobQueue extends Component {
   state = {
-    jobs: [],
-    inputs: [],
-    specs: [],
-    data: [],
-    filtered: false,
+    jobs: null,
+    inputs: null,
     page: 0,
     rowsPerPage: 5,
   };
 
   componentDidMount = () => {
     this.refreshJobs();
-    this.interval = setInterval(() => this.refreshJobs(), 10000);
+    this.interval = setInterval(() => this.refreshJobs(), 5000);
   };
 
   componentWillUnmount = () => {
     clearInterval(this.interval);
   }
 
+  // creates a cell given a status code
   statusCell = (status) => {
     switch(status){
       case "finished":
@@ -111,54 +109,63 @@ class JobQueue extends Component {
   };
 
   updateTable = () => {
-    this.setState(state => {
-      return {
-        data: state.data.filter(x => x.status !== "finished")
-      }
+
+    let jobRequests = [];
+    let queueJobIds = JSON.parse(localStorage.getItem("jobs"));
+    if(!queueJobIds) queueJobIds = [];
+
+    // create requests for getting each job
+    queueJobIds.forEach(job => {
+      jobRequests.push(axios.get('http://localhost:3000/jobs/'+job));
     });
-    this.setState({ filtered: Date.now() });
+
+    Promise.all(jobRequests)
+      .then(responses => {
+
+        // filter out jobs that are finished
+        let filteredQueuedJobs = responses.filter(resp => { return resp.data.status !== "finished" });
+        localStorage.setItem("jobs", JSON.stringify(filteredQueuedJobs));
+        this.refreshJobs();
+
+      });
   };
 
   refreshJobs = () => {
 
-    let { filtered } = this.state;
+    // load in stored queue job id's
+    let jobRequests = [];
+    let queueJobIds = JSON.parse(localStorage.getItem("jobs"));
+    if(!queueJobIds) queueJobIds = [];
 
-    const requests = [
-      axios.get('http://localhost:3000/jobs'),
-      axios.get('http://localhost:3000/inputs'),
-      axios.get('http://localhost:3000/specs')
-    ];
+    // create requests for getting each job
+    queueJobIds.forEach(job => {
+      jobRequests.push(axios.get('http://localhost:3000/jobs/'+job));
+    });
 
-    Promise.all(requests)
+    // execute requests for jobs
+    Promise.all(jobRequests)
       .then(responses => {
-        const jobs = responses[0].data.jobs;
-        const inputs = responses[1].data.inputs;
-        const specs = responses[2].data.specs;
 
-        let data;
-        if(filtered)
-        {
-          let unfinishedJobs = jobs.filter(job => { return job.creationTimeMs > filtered });
-          data = unfinishedJobs.map(job => {
-            job.input = inputs.find(x => x.inputId === job.input);
-            job.spec = specs.find(x => x.specId === job.spec);
-            return job;
+        // create requests for getting each input for each job
+        let jobData = [];
+        let inputRequests = [];
+        responses.forEach(response => {
+          let inputId = response.data.input;
+          inputRequests.push(axios.get('http://localhost:3000/inputs/'+inputId));
+          jobData.push(response.data);
+        });
+
+        // execute requests for inputs
+        Promise.all(inputRequests)
+          .then(responses => {
+            let inputData = [];
+            responses.forEach(response => {
+              inputData.push(response.data);
+            });
+
+            this.setState({ jobs: jobData });
+            this.setState({ inputs: inputData });
           });
-
-        }else
-        {
-          data = jobs.map(job => {
-            job.input = inputs.find(x => x.inputId === job.input);
-            job.spec = specs.find(x => x.specId === job.spec);
-            return job;
-          });
-
-        }
-
-        this.setState({ jobs });
-        this.setState({ inputs });
-        this.setState({ specs });
-        this.setState({ data });
       });
   };
 
@@ -172,7 +179,22 @@ class JobQueue extends Component {
 
   render(){
 
-    const { rowsPerPage, page, data } = this.state;
+    const { rowsPerPage, page } = this.state;
+
+    let data = [];
+    let jobs = this.state.jobs;
+    let inputs = this.state.inputs;
+
+    // if we've gotten the information from the server
+    if(jobs && inputs)
+    {
+      // fill in jobs with their input information
+      for(let i = 0; i < jobs.length; i++)
+      {
+        jobs[i]["input"] = inputs[i];
+      }
+      data = jobs;
+    }
 
     return(
       <div className="container">
@@ -196,7 +218,7 @@ class JobQueue extends Component {
                   <TableRow>
                     <TableCell><h4>Job Description</h4></TableCell>
                     <TableCell><h4>File Name</h4></TableCell>
-                    <TableCell><h4>Spec Used</h4></TableCell>
+                    <TableCell><h4>Index Used</h4></TableCell>
                     <TableCell><h4>Time Started</h4></TableCell>
                     <TableCell><h4>Author</h4></TableCell>
                     <TableCell><h4>Status</h4></TableCell>
@@ -208,10 +230,10 @@ class JobQueue extends Component {
                    .filter(el => { return el != null; }).map(job =>
                    {
                      let date = new Date(job.creationTimeMs);
-                     date = date.getHours() + ":" + date.getMinutes() + " - " + (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+                     date = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
                      let jobDesc = job.input.site + " - " + job.input.series;
                      let fileName = job.input.path.substring(job.input.path.lastIndexOf('\\')+1);
-                     let specDesc = job.spec.type;
+                     let specDesc = job.type.toUpperCase();
                      return(
                        <TableRow
                          key={job.jobId}

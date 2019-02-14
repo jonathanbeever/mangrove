@@ -43,7 +43,7 @@ function getStepContent(step, $this) {
   switch (step) {
     case 0:
       return (
-        <ChooseFiles 
+        <ChooseFiles
           selectedFiles={$this.state.selectedFiles}
           updateSelectedInputs={$this.updateSelectedFiles}
           openDialog={$this.openDialog}
@@ -51,17 +51,17 @@ function getStepContent(step, $this) {
       )
     case 1:
       return (
-        <ChooseIndex 
-          index={$this.state.index} 
-          changeIndex={$this.changeIndex} 
+        <ChooseIndex
+          index={$this.state.index}
+          changeIndex={$this.changeIndex}
         />
       )
     case 2:
       return (
-        <ChooseSpecs 
-          index={$this.state.index} 
-          specParams={$this.state.specParams} 
-          onSpecChange={$this.handleSpecChange} 
+        <ChooseSpecs
+          index={$this.state.index}
+          specParams={$this.state.specParams}
+          onSpecChange={$this.handleSpecChange}
           updateSelectedSpec={$this.updateSpecs}
           selectedSpec={$this.state.selectedSpec}
         />
@@ -135,7 +135,7 @@ class HorizontalLinearStepper extends React.Component {
         tempState[this.state.index][name] = parseInt(e.target.value)
 
     }
-    else 
+    else
       tempState[this.state.index][name] = e.target.checked
 
     var submitDisabled = false
@@ -169,7 +169,7 @@ class HorizontalLinearStepper extends React.Component {
         inputs.forEach(inputId => {
           // Request to queue new job
           axios.put(
-            "http://localhost:3000/jobs",  
+            "http://localhost:3000/jobs",
             {
               type: this.state.index,
               inputId: inputId,
@@ -179,10 +179,15 @@ class HorizontalLinearStepper extends React.Component {
           )
           .then(res => {
             console.log(res)
-            // if(res.status === 201) {
-            //   this.setState({message: 'Jobs Started. View progress in the job queue.'})
-            //   this.setState({open: true})
-            // }
+            if(res.status === 200) {
+              // use this clear() for dev purposes
+              // localStorage.clear();
+              let storedQueueJobs = JSON.parse(localStorage.getItem("jobs"));
+              if(!storedQueueJobs) storedQueueJobs = [];
+              let newQueueJobs = storedQueueJobs.concat([res.data.jobId]);
+              console.log(newQueueJobs);
+              localStorage.setItem("jobs", JSON.stringify(newQueueJobs));
+            }
             // else if(res.status === 200) {
             //   this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
             //   this.setState({open: true})
@@ -198,23 +203,23 @@ class HorizontalLinearStepper extends React.Component {
       body.type = this.state.index
 
       axios.put(
-        "http://localhost:3000/specs",  
+        "http://localhost:3000/specs",
         body,
         {headers: {"Content-Type": "application/json"}}
       )
       .then(res => {
         var specId = ''
           // If new spec was create set id
-        if(res.status === 201) 
+        if(res.status === 201)
           specId = res.data.specId
         // Spec already exists, save id
-        else if(res.status === 200) 
+        else if(res.status === 200)
           specId = res.data.specId
         // Loop through inputs and make requests
         inputs.forEach(inputId => {
           // Request to queue new job
           axios.put(
-            "http://localhost:3000/jobs",  
+            "http://localhost:3000/jobs",
             {
               type: this.state.index,
               inputId: inputId,
@@ -262,7 +267,7 @@ class HorizontalLinearStepper extends React.Component {
     this.setState({ selectedFiles: [] })
     this.setState({ disabledSubmit: false })
   }
-  
+
   handleNext = () => {
     const { activeStep } = this.state;
 
@@ -357,7 +362,7 @@ class HorizontalLinearStepper extends React.Component {
                   Close
                 </Button>
               }
-              
+
             </DialogActions>
           </Dialog>
           <div>
