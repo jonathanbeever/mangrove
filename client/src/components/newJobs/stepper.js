@@ -182,6 +182,8 @@ class HorizontalLinearStepper extends React.Component {
             if(res.status === 200) {
               // use this clear() for dev purposes
               // localStorage.clear();
+
+              // saves the newly added job into the job queue persistent storage
               let storedQueueJobs = JSON.parse(localStorage.getItem("jobs"));
               if(!storedQueueJobs) storedQueueJobs = [];
               let newQueueJobs = storedQueueJobs.concat([res.data.jobId]);
