@@ -71,25 +71,16 @@ function JobQueue() {
     queueHelper(resolve, reject, pendingJobs);
   });
 
-  const queuePendingJobs = () => new Promise(async (resolve, reject) => {
-    try {
-      const pendingJobs = await getPendingJobs();
-      await queueJobs(pendingJobs);
-      resolve();
-    } catch (err) {
-      reject(err);
-    }
-  });
+  const queuePendingJobs = async () => {
+    const pendingJobs = await getPendingJobs();
+    await queueJobs(pendingJobs);
+  };
 
-  this.init = () => new Promise(async (resolve, reject) => {
-    try {
-      await createQueue();
-      await queuePendingJobs();
-      resolve(this);
-    } catch (err) {
-      reject(err);
-    }
-  });
+  this.init = async () => {
+    await createQueue();
+    await queuePendingJobs();
+    return this;
+  };
 
   this.enqueue = job => new Promise(async (resolve, reject) => {
     if (!this.queue) {
@@ -98,7 +89,7 @@ function JobQueue() {
       try {
         const updatedJob = await updateJob(job, { status: Status.QUEUED }, true);
         if (!updatedJob) {
-          return reject(new Error('Job must be made before it is queued'));
+          throw reject(new Error('Job must be made before it is queued'));
         }
         this.queue.add(updatedJob);
         resolve({
@@ -114,13 +105,13 @@ function JobQueue() {
   // TODO: Make a remove job function
 
   this.getJobCounts = () => {
-    if (!this.queue) { return new Error('Queue must be initialized'); }
-    return this.queue.getJobCounts().then(jobs => jobs);
+    if (!this.queue) { throw new Error('Queue must be initialized'); }
+    return this.queue.getJobCounts();
   };
 
   this.getRunningJobs = () => {
-    if (!this.queue) { return new Error('Queue must be initialized'); }
-    return this.queue.getJobs().then(jobs => jobs);
+    if (!this.queue) { throw new Error('Queue must be initialized'); }
+    return this.queue.getJobs();
   };
 }
 

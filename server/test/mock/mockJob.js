@@ -37,7 +37,7 @@ const nextMockJob = (type, status = Status.WAITING) => {
 
 const nextMockPopulatedJob = (
   type,
-  passedStatus = null,
+  status = Status.QUEUED,
   mockedInput = null,
   mockedSpec = null,
 ) => new Promise((resolve, reject) => {
@@ -50,7 +50,6 @@ const nextMockPopulatedJob = (
   const jobId = nextMockObjectId();
   const author = 'Test Author';
   const creationTimeMs = 0;
-  const status = passedStatus || Status.QUEUED;
 
   const job = mockJob(
     jobId,

@@ -43,29 +43,30 @@ describe('Job Queue', () => {
     jobQueue.init()
       .then(() => {
         expect(jobQueue.enqueue(job)).to.be.rejectedWith(Error).notify(done);
-      });
+      })
+      .catch(() => { done(); });
   });
 
-  it('Scan Database for Already Proccesing and Queued Jobs', (done) => {
+  it('Scan Database for Already Procesing and Queued Jobs', (done) => {
     const randomJobs = makeRandomJobs(50);
     const countOfStatus = randomJobs.tallyOfStatus;
 
     Promise.all(randomJobs.jobs)
       .then(() => {
         jobQueue.init()
-          .then(() => {
-            jobQueue.getRunningJobs()
-              .then((jobs) => {
-                jobQueue.getJobCounts().then((jobCounts) => {
-                  const pendingCount = jobCounts.waiting + jobCounts.active + jobCounts.completed;
-                  expect(pendingCount).to.be.eql(getCountOfPendingJobs(countOfStatus));
-                  done();
-                });
-              });
+          .then(() => jobQueue.getRunningJobs())
+          .then((jobs) => {
+            expect(jobs).to.be.an('array');
+            expect(jobs[0]).to.be.an('Object');
+            expect(jobs.length).to.eql(26);
+          })
+          .then(() => jobQueue.getJobCounts())
+          .then((jobCounts) => {
+            const pendingCount = jobCounts.waiting + jobCounts.active + jobCounts.completed;
+            expect(pendingCount).to.be.eql(getCountOfPendingJobs(countOfStatus));
+            done();
           })
           .catch((err) => {
-            jobQueue.destroy();
-            console.log(err);
             done(err);
           });
       });

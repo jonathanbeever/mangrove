@@ -46,10 +46,10 @@ const makeRandomJobs = (numJobs) => {
   for (let i = 0; i < numJobs; i += 1) {
     tallyOfStatus[statusCounter] += 1;
     tallyOfTypes[typeCounter] += 1;
-    nextMockPopulatedJob(
+    jobs.push(nextMockPopulatedJob(
       Object.values(Type)[typeCounter],
       Object.values(Status)[statusCounter],
-    );
+    ));
     statusCounter = (statusCounter + 1) % numOfStatus;
     typeCounter = (typeCounter + 1) % numOfTypes;
   }

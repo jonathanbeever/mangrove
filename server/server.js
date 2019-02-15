@@ -13,8 +13,7 @@ conn
   .open()
   .then(async () => {
     try {
-      const initQueue = await jobQueue.init();
-      global.jobQueue = initQueue;
+      global.jobQueue = await jobQueue.init();
       server.listen(port, () => {
         // OK
       });
