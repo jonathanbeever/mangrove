@@ -1,7 +1,7 @@
 const Status = require('../../api/models/status');
 const { getJobModel } = require('../../api/models/job/utils');
 const { value } = require('../../util/settings');
-
+const { updateJob } = require('../../api/models/job/utils');
 
 const moveJobFromWorkToFinish = (index) => {
   this.finishedJobs.push(this.workersList[index]);
@@ -15,7 +15,6 @@ function MockQueue(processFunction, concurrency = value('cores')) {
   this.concurrency = concurrency;
   this.process = processFunction;
 
-
   this.init = process => new Promise((resolve) => {
     this.queue = [];
     this.workersList = [];
@@ -23,7 +22,6 @@ function MockQueue(processFunction, concurrency = value('cores')) {
     this.process = process;
     resolve(this);
   });
-
 
   this.destroy = () => {
     if (this.queue) {
@@ -33,26 +31,7 @@ function MockQueue(processFunction, concurrency = value('cores')) {
     }
   };
 
-
-  this.enqueue = job => new Promise((resolve, reject) => {
-    const JobModel = getJobModel(job.type);
-    JobModel.findByIdAndUpdate(
-      job._id,
-      { status: Status.QUEUED },
-      { new: true },
-    ).then(async (foundJob) => {
-      if (foundJob) {
-        const processedResult = await this.process(job);
-        const processedJob = { ...foundJob._doc, ...{ result: processedResult } };
-        resolve({
-          job: processedJob,
-          ...(processedJob.process || { process: 'Mocked enqueue does not contain promise' }),
-        });
-      }
-    }).catch((err) => {
-      reject(err);
-    });
-  });
+  this.enqueue = job => updateJob(job, { status: Status.QUEUED });
 
   this.pushToQueue = (job) => {
     const JobModel = getJobModel(job.type);

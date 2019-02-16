@@ -12,7 +12,8 @@ module.exports = {
       {
         allow: ['_id', '__v', '_doc']
       }
-    ]
+    ],
+    "no-unused-expressions": ["error", { "allowTernary": true }]
   },
   overrides: [
     {

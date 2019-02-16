@@ -1,10 +1,10 @@
-const { nextMockJob } = require('../../test/mock/mockJob');
+const { nextMockPopulatedJob } = require('../../test/mock/mockJob');
 
 const Type = require('../../api/models/type');
 const Status = require('../../api/models/status');
 
 
-const getCounter = (enumType) => {
+const initCounter = (enumType) => {
   const counter = [];
   Object.keys(enumType).forEach(() => {
     counter.push(0);
@@ -34,33 +34,27 @@ const getCountOfPendingJobs = (counts, maxInQueue = null) => {
   return numJobsPending;
 };
 
-const getRandomNumber = (min, max) => {
-  const minRounded = Math.ceil(min);
-  const maxRounded = Math.floor(max);
-  return Math.floor(Math.random() * (maxRounded - minRounded + 1)) + minRounded;
-};
-
-const getRandomKey = (enumType) => {
-  const numOptions = Object.keys(enumType).length - 1;
-  return (Object.keys(enumType)[getRandomNumber(0, numOptions)]);
-};
-
 const makeRandomJobs = (numJobs) => {
-  const statusCounter = getCounter(Status);
-  const typeCounter = getCounter(Type);
+  const tallyOfStatus = initCounter(Status);
+  const tallyOfTypes = initCounter(Type);
+  const numOfStatus = tallyOfStatus.length;
+  const numOfTypes = tallyOfTypes.length;
   const jobs = [];
-  let statusKey;
-  let typeKey;
+  let statusCounter = 0;
+  let typeCounter = 0;
 
   for (let i = 0; i < numJobs; i += 1) {
-    statusKey = getRandomKey(Status);
-    typeKey = getRandomKey(Type);
-    statusCounter[Object.keys(Status).indexOf(statusKey)] += 1;
-    typeCounter[Object.keys(Type).indexOf(typeKey)] += 1;
-    jobs.push(nextMockJob(Type[typeKey], Status[statusKey]));
+    tallyOfStatus[statusCounter] += 1;
+    tallyOfTypes[typeCounter] += 1;
+    jobs.push(nextMockPopulatedJob(
+      Object.values(Type)[typeCounter],
+      Object.values(Status)[statusCounter],
+    ));
+    statusCounter = (statusCounter + 1) % numOfStatus;
+    typeCounter = (typeCounter + 1) % numOfTypes;
   }
 
-  return { jobs, statusCounter, typeCounter };
+  return { jobs, tallyOfStatus, tallyOfTypes };
 };
 
 

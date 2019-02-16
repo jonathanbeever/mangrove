@@ -1,43 +1,55 @@
-const async = require('async');
-
+const Queue = require('bull');
 const Status = require('../api/models/status');
 const {
   updateJob,
   getPendingJobs,
 } = require('../api/models/job/utils');
-const settings = require('./settings');
+const { value } = require('./settings');
 
 function JobQueue() {
   this.queue = null;
 
-  const isInit = () => {
-    if (!this.queue) {
-      throw new Error('JobQueue has not been initialized.');
-    }
-  };
-
-  this.destroy = () => {
+  this.destroy = () => new Promise((resolve) => {
     if (this.queue) {
-      this.queue.kill();
-
-      this.queue = null;
+      const clean = this.queue.clean.bind(this.queue, 0);
+      this.queue.pause()
+        .then(() => clean('completed'))
+        .then(() => clean('failed'))
+        .then(() => clean('paused'))
+        .then(() => clean('active'))
+        .then(() => clean('delayed'))
+        .then(() => clean('failed'))
+        .then(() => this.queue.empty())
+        .then(() => this.queue.close())
+        .then(() => {
+          this.queue = null;
+          resolve();
+        });
+    } else {
+      resolve();
     }
-  };
-
-  const createQueue = jobProcessFn => new Promise(async (resolve, reject) => {
-    await (this.queue = async.queue((job, callback) => {
-      updateJob(job, { status: Status.PROCESSING }, true)
-        .then((queuedJob) => {
-          jobProcessFn(queuedJob)
-            .then((result) => {
-              callback(null, result);
-            })
-            .catch(err => callback(err, null));
-        })
-        .catch(err => reject(err));
-    }, settings.value('cores')));
-    resolve(this.queue);
   });
+
+  const createQueue = () => {
+    this.queue = new Queue('job processing');
+    this.queue.process(value('cores'), `${__dirname}/processor.js`);
+
+    this.queue.on('active', (job) => {
+      updateJob(job.data, { status: Status.PROCESSING });
+    });
+    this.queue.on('completed', (job, result) => {
+      this.queue.clean(0, 'completed');
+      updateJob(job.data, { status: Status.FINISHED, result });
+    });
+    this.queue.on('failed', (job, err) => {
+      console.error(err);
+      this.queue.clean(0, 'failed');
+      updateJob(job.data, { status: Status.FAILED });
+    });
+    this.queue.on('stalled', (job) => {
+      throw Error(`${job} has stalled`);
+    });
+  };
 
   const queueHelper = (resolve, reject, pendingJobs) => {
     if (pendingJobs.length === 0) {
@@ -45,11 +57,13 @@ function JobQueue() {
     } else {
       const [job] = pendingJobs;
       const nextJobs = pendingJobs.splice(1);
-      this.enqueue(job)
+      // Allows update job to use spread operator without extracting whole mongo document
+      const { _doc } = { ...job };
+      this.enqueue(_doc)
         .then(() => {
           queueHelper(resolve, reject, nextJobs);
         })
-        .catch(err => reject(err));
+        .catch((err) => { reject(err); });
     }
   };
 
@@ -57,76 +71,47 @@ function JobQueue() {
     queueHelper(resolve, reject, pendingJobs);
   });
 
-  const queuePendingJobs = () => new Promise((resolve, reject) => {
-    getPendingJobs()
-      .then((pendingJobs) => {
-        if (pendingJobs.length > 0) {
-          queueJobs(pendingJobs)
-            .then(() => resolve())
-            .catch(err => reject(err));
-        } else {
-          resolve();
-        }
-      })
-      .catch(err => reject(err));
-  });
+  const queuePendingJobs = async () => {
+    const pendingJobs = await getPendingJobs();
+    await queueJobs(pendingJobs);
+  };
 
-  this.init = jobProcessFn => new Promise((resolve, reject) => {
-    createQueue(jobProcessFn)
-      .then(() => {
-        this.queue.drain = () => { };
-        this.queue.empty = () => { };
-        queuePendingJobs()
-          .then(() => {
-            resolve(this);
-          })
-          .catch(err => reject(err));
-      })
-      .catch(err => reject(err));
-  });
+  this.init = async () => {
+    await createQueue();
+    await queuePendingJobs();
+    return this;
+  };
 
-  this.enqueue = job => new Promise((resolve, reject) => {
-    isInit();
-    updateJob(job, { status: Status.QUEUED })
-      .then((queuedJob) => {
-        if (!queuedJob) {
-          return reject(new Error('Job must be made before it is queued'));
+  this.enqueue = job => new Promise(async (resolve, reject) => {
+    if (!this.queue) {
+      reject(new Error('Queue must be initialized'));
+    } else {
+      try {
+        const updatedJob = await updateJob(job, { status: Status.QUEUED }, true);
+        if (!updatedJob) {
+          throw reject(new Error('Job must be made before it is queued'));
         }
-        const process = new Promise((resolveProcess, rejectProcess) => {
-          this.queue.push(queuedJob, (err, result) => {
-            if (err) {
-              updateJob(queuedJob, { status: Status.FAILED })
-                .then(() => rejectProcess(err))
-                .catch(statusFailedErr => rejectProcess(statusFailedErr));
-            } else {
-              updateJob(queuedJob, { status: Status.FINISHED, result })
-                .then((finishedJob) => {
-                  resolveProcess(finishedJob);
-                })
-                .catch(finishedJobErr => rejectProcess(finishedJobErr));
-            }
-          });
-        });
+        this.queue.add(updatedJob);
         resolve({
-          job: queuedJob,
-          process,
+          ...updatedJob._doc,
+          ...{ input: job.input, spec: job.spec },
         });
-      })
-      .catch(err => reject(err));
+      } catch (err) {
+        reject(err);
+      }
+    }
   });
 
-  this.getFreeSlots = () => {
-    isInit();
-    if (this.queue.running() < this.queue.concurrency) {
-      return this.queue.concurrency - this.queue.running();
-    }
-    return 0;
+  // TODO: Make a remove job function
+
+  this.getJobCounts = () => {
+    if (!this.queue) { throw new Error('Queue must be initialized'); }
+    return this.queue.getJobCounts();
   };
 
   this.getRunningJobs = () => {
-    isInit();
-
-    return this.queue.workersList();
+    if (!this.queue) { throw new Error('Queue must be initialized'); }
+    return this.queue.getJobs();
   };
 }
 

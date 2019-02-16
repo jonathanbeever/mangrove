@@ -19,7 +19,7 @@
     "start": "node server.js"
   },
   "contributors": [
-    "Ot Galbadon",
+    "Ot Gabaldon",
     "Keith Guske",
     "David Palumbo",
     "Josh Pollmann",
@@ -42,6 +42,7 @@
   "dependencies": {
     "async": "2.6.1",
     "body-parser": "1.18.3",
+    "bull": "3.6.0",
     "config": "2.0.1",
     "cors": "2.8.5",
     "express": "4.16.4",
