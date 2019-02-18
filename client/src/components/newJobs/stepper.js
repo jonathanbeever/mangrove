@@ -161,6 +161,7 @@ class HorizontalLinearStepper extends React.Component {
   submitJob = () => {
 
     var inputs = this.state.selectedFiles
+    // localStorage.clear();
 
     // Spec already exists
     if(this.state.selectedSpec.length) {
@@ -179,9 +180,8 @@ class HorizontalLinearStepper extends React.Component {
           )
           .then(res => {
             console.log(res)
-            if(res.status === 200) {
+            if(res.status === 201) {
               // use this clear() for dev purposes
-              // localStorage.clear();
 
               // saves the newly added job into the job queue persistent storage
               let storedQueueJobs = JSON.parse(localStorage.getItem("jobs"));

@@ -123,7 +123,7 @@ class JobQueue extends Component {
       .then(responses => {
 
         // filter out jobs that are finished
-        let filteredQueuedJobs = responses.filter(resp => { return resp.data.status !== "finished" });
+        let filteredQueuedJobs = responses.filter(resp => { return resp.data.status !== "finished" }).map(resp => resp.data.jobId)
         localStorage.setItem("jobs", JSON.stringify(filteredQueuedJobs));
         this.refreshJobs();
 
