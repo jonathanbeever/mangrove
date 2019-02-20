@@ -14,6 +14,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import axios from 'axios';
+import LinearIntermediate from './linearIntermediate';
 
 const styles = theme => ({
   root: {
@@ -121,7 +122,16 @@ class HorizontalLinearStepper extends React.Component {
   };
 
   changeIndex = (value) => {
-    // Clear specParamsByIndex for current index
+    // Clear specParams for prev index
+    var params = Object.keys(this.state.specParams[this.state.index])
+    var specs = this.state.specParams
+
+    params.forEach(param => {
+      specs[this.state.index][param] = ''
+    })
+
+    this.setState({ specParams: specs })
+
     this.setState({ index: value })
   }
 
@@ -133,7 +143,6 @@ class HorizontalLinearStepper extends React.Component {
         tempState[this.state.index][name] = ''
       else
         tempState[this.state.index][name] = parseInt(e.target.value)
-
     }
     else
       tempState[this.state.index][name] = e.target.checked
@@ -141,7 +150,7 @@ class HorizontalLinearStepper extends React.Component {
     var submitDisabled = false
     // update for shannon adi index
     Object.keys(tempState[this.state.index]).forEach(param => {
-      if(tempState[this.state.index][param] === '') {
+      if(tempState[this.state.index][param] === '' && param !== 'shannon') {
         submitDisabled = true
       }
     })
@@ -152,6 +161,7 @@ class HorizontalLinearStepper extends React.Component {
 
   updateSpecs = (selected) => {
     this.setState({ selectedSpec : selected })
+
     if(selected.length && this.state.selectedFiles.length)
       this.setState({ disabledSubmit: false})
     else
@@ -159,15 +169,23 @@ class HorizontalLinearStepper extends React.Component {
   }
 
   submitJob = () => {
+    var message = (
+      <div><LinearIntermediate /></div>
+    );
+
+    this.setState({message: message})
+    this.setState({open: true})
 
     var inputs = this.state.selectedFiles
+
+    // use this clear() for dev purposes
     // localStorage.clear();
 
     // Spec already exists
     if(this.state.selectedSpec.length) {
-      this.state.selectedSpec.forEach(spec => {
+      this.state.selectedSpec.forEach((spec, specIdx) => {
 
-        inputs.forEach(inputId => {
+        inputs.forEach((inputId, inputIdx) => {
           // Request to queue new job
           axios.put(
             "http://localhost:3000/jobs",
@@ -179,21 +197,20 @@ class HorizontalLinearStepper extends React.Component {
             {headers: {"Content-Type": "application/json"}}
           )
           .then(res => {
-            console.log(res)
             if(res.status === 201) {
-              // use this clear() for dev purposes
-
+              if(specIdx === this.state.selectedSpec.length - 1 && inputIdx === inputs.length - 1) {
+                this.setState({message: 'Jobs started. View progress in the job queue.'})
+              }
               // saves the newly added job into the job queue persistent storage
               let storedQueueJobs = JSON.parse(localStorage.getItem("jobs"));
               if(!storedQueueJobs) storedQueueJobs = [];
               let newQueueJobs = storedQueueJobs.concat([res.data.jobId]);
-              console.log(newQueueJobs);
+
               localStorage.setItem("jobs", JSON.stringify(newQueueJobs));
             }
-            // else if(res.status === 200) {
-            //   this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
-            //   this.setState({open: true})
-            // }
+            else if(res.status === 200) {
+              this.setState({message: 'This job has already been started. View progress in the job queue.'})
+            }
           })
           .catch(err => console.log(err.message));
         })
@@ -210,15 +227,9 @@ class HorizontalLinearStepper extends React.Component {
         {headers: {"Content-Type": "application/json"}}
       )
       .then(res => {
-        var specId = ''
-          // If new spec was create set id
-        if(res.status === 201)
-          specId = res.data.specId
-        // Spec already exists, save id
-        else if(res.status === 200)
-          specId = res.data.specId
+        var specId = res.data.specId
         // Loop through inputs and make requests
-        inputs.forEach(inputId => {
+        inputs.forEach((inputId, inputIdx) => {
           // Request to queue new job
           axios.put(
             "http://localhost:3000/jobs",
@@ -231,12 +242,18 @@ class HorizontalLinearStepper extends React.Component {
           )
           .then(res => {
             if(res.status === 201) {
-              this.setState({message: 'Jobs Started. View progress in the job queue.'})
-              this.setState({open: true})
+              if(inputIdx === inputs.length - 1) {
+                this.setState({message: 'Jobs started. View progress in the job queue.'})
+              }
+              // saves the newly added job into the job queue persistent storage
+              let storedQueueJobs = JSON.parse(localStorage.getItem("jobs"));
+              if(!storedQueueJobs) storedQueueJobs = [];
+              let newQueueJobs = storedQueueJobs.concat([res.data.jobId]);
+
+              localStorage.setItem("jobs", JSON.stringify(newQueueJobs));
             }
             else if(res.status === 200) {
-              this.setState({message: 'This jobs has already been started. View progress in the job queue.'})
-              this.setState({open: true})
+              this.setState({message: 'This job has already been started. View in the job queue or catalog.'})
             }
           })
           .catch(err => console.log(err.message));
@@ -246,7 +263,6 @@ class HorizontalLinearStepper extends React.Component {
   }
 
   updateSelectedFiles = (selected) => {
-    console.log(selected.length)
     if(selected.length)
       this.setState({ disabledSubmit: false })
     else
@@ -256,7 +272,6 @@ class HorizontalLinearStepper extends React.Component {
   }
 
   openDialog = (message) => {
-    console.log(message)
     this.setState({
       message: message,
       open: true

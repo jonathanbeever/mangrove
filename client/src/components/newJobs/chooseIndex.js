@@ -140,7 +140,7 @@ avifauna" Boelman, et al. 2007.
       <div className={classes.root}>
         <div className="row">
           <div className="col-4">
-            <RadioButtons changeIndex={this.props.changeIndex} />          
+            <RadioButtons index={this.props.index} changeIndex={this.props.changeIndex} />          
           </div>
           <div className="col-8">
             {this.state.indexInfo}

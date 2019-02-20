@@ -30,11 +30,15 @@ const styles = theme => ({
 
 class RadioButtonsGroup extends React.Component {
   state = {
-    value: 'aci',
+    value: this.props.index,
   };
 
+  componentDidUpdate = (prevProps) => {
+    if(prevProps.index !== this.props.index)
+      this.setState({ value: this.props.index })
+  }
+
   handleChange = event => {
-    this.setState({ value: event.target.value });
     this.props.changeIndex(event.target.value)
   };
 
