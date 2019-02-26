@@ -1,8 +1,6 @@
-# Soundscape Ecology Analysis Software
+# Mangrove ‒ Design Documentation
 
-## Design Documentation
-
-### Installation
+## Installation
 Install either [TeX Live](https://www.tug.org/texlive/) or [MiKTeX](https://miktex.org).
 
 You may also need to install one or more of the following:
@@ -12,7 +10,7 @@ You may also need to install one or more of the following:
 
 Make sure that these are accessible via the terminal.
 
-### Compilation
+## Compilation
 To compile this LaTeX document, run the `docs-compile` script:
 ```
 $ ./docs-compile

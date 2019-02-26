@@ -1,4 +1,4 @@
-# Soundscape Ecology Server
+# Mangrove ‒ Server
 
 ## Production
 To run the server for a production environment, get a MongoDB daemon/service going and run:

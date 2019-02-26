@@ -1,4 +1,4 @@
-# Soundscape Ecology Client
+# Mangrove ‒ Client
 
 ## Development
 To install all dependencies for the application run:
