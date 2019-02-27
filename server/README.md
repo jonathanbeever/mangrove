@@ -14,7 +14,7 @@ $ mongod
 $ redis-server
 ```
 
-Assuming you've cloned this repository, you can install the server:
+Assuming you've cloned this repository and have a terminal open to this directory, you can install the server:
 ```
 $ npm install
 ```
@@ -33,6 +33,13 @@ During development, always run the server in a development environment. This all
 To run the server in a development environment, get your instances of MongoDB and Redis going and run:
 ```
 $ npm run dev
+```
+
+### Updating packages
+This application requires manual dependency updates. The easiest way to do this is to globally install the `npm-check-updates` package to your system and to periodically run `ncu` in this directory to find packages that are ready to be updated. Do not install this package to the project.
+```
+$ npm install -g npm-check-update
+$ ncu
 ```
 
 ### Testing

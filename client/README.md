@@ -1,12 +1,20 @@
 # Mangrove ‒ Client
 
-## Development
-To install all dependencies for the application run:
+## Prerequisites
+Assuming you've cloned this repository and have a terminal open to this directory, you can install the client:
 ```
 $ npm install
 ```
+
+## Development
 To run the client application in Electron with hot reloading run:
 ```
 $ npm run electron-dev
 ```
-If new npm packages are installed, remove the `^` before the version number of the new dependency listed in `package.json`
+
+### Updating packages
+This application requires manual dependency updates. The easiest way to do this is to globally install the `npm-check-updates` package to your system and to periodically run `ncu` in this directory to find packages that are ready to be updated. Do not install this package to the project.
+```
+$ npm install -g npm-check-update
+$ ncu
+```
