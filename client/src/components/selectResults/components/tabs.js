@@ -24,8 +24,14 @@ TabContainer.propTypes = {
 
 const styles = theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
+  background: {
+    backgroundColor: '#fafafa',
+    color: '#031603',
+    marginTop: 19,
+    borderRadius: 2
+  }
 });
 
 class SimpleTabs extends React.Component {
@@ -54,8 +60,8 @@ class SimpleTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" >
-          <Tabs value={value} onChange={this.handleChange} centered>
+        <AppBar position="static" className={classes.background}>
+          <Tabs value={value} onChange={this.handleChange} TabIndicatorProps={{style: {backgroundColor: "#212121"}}} centered>
             <Tab label={<div><h5>Specifications</h5></div>} />
             <Tab label={<div><h5>Inputs</h5></div>} />
             <Tab label={<div><h5>Jobs</h5></div>} />

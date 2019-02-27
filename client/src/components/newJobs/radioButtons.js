@@ -16,12 +16,10 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit * 3,
     fontSize: '20px'
-
   },
   group: {
     margin: `${theme.spacing.unit}px 0`,
     fontSize: '20px'
-
   },
   label: {
     fontSize: '20px'
@@ -30,11 +28,15 @@ const styles = theme => ({
 
 class RadioButtonsGroup extends React.Component {
   state = {
-    value: 'aci',
+    value: this.props.index,
   };
 
+  componentDidUpdate = (prevProps) => {
+    if(prevProps.index !== this.props.index)
+      this.setState({ value: this.props.index })
+  }
+
   handleChange = event => {
-    this.setState({ value: event.target.value });
     this.props.changeIndex(event.target.value)
   };
 
@@ -52,12 +54,12 @@ class RadioButtonsGroup extends React.Component {
             value={this.state.value}
             onChange={this.handleChange}
           >
-            <FormControlLabel value="aci" control={<Radio />} label={<h5>ACI</h5>} />
-            <FormControlLabel value="ndsi" control={<Radio />} label={<h5>NDSI</h5>} />
-            <FormControlLabel value="aei" control={<Radio />} label={<h5>AEI</h5>} />
-            <FormControlLabel value="adi" control={<Radio />} label={<h5>ADI</h5>} />
-            <FormControlLabel value="bi" control={<Radio />} label={<h5>BIO</h5>} />
-            <FormControlLabel value="rms" control={<Radio />} label={<h5>RMS</h5>} />
+            <FormControlLabel value="aci" control={<Radio color="primary" />} label={<h5>ACI</h5>} />
+            <FormControlLabel value="ndsi" control={<Radio/>} label={<h5>NDSI</h5>} />
+            <FormControlLabel value="aei" control={<Radio color="primary" />} label={<h5>AEI</h5>} />
+            <FormControlLabel value="adi" control={<Radio color="primary" />} label={<h5>ADI</h5>} />
+            <FormControlLabel value="bi" control={<Radio color="primary" />} label={<h5>BIO</h5>} />
+            <FormControlLabel value="rms" control={<Radio color="primary" />} label={<h5>RMS</h5>} />
           </RadioGroup>
         </FormControl>
       </div>

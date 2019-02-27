@@ -524,12 +524,10 @@ class AnalysisView extends Component {
             </div>
             <div className="col-4 text-right">
               <Button
-                variant="contained"
-                color="primary"
-                style={{ marginTop:10+'px', marginRight:10+'px' }}
+                style={{margin: 20}}
                 onClick={this.displayGraphs}
                 >
-                <p style={{ fontSize:14+'px', margin:4 }}>Show Graphs</p>
+                <h6>Show Graphs</h6>
               </Button>
             </div>
           </div>

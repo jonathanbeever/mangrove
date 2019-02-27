@@ -18,6 +18,9 @@ const styles = theme => ({
   root: {
     padding: 19,
     marginTop: theme.spacing.unit * 3,
+    backgroundColor: '#fafafa',
+    // opacity: 0.8,
+    borderRadius: 2
   },
   container: {
     display: 'flex',
@@ -31,9 +34,9 @@ const styles = theme => ({
     marginTop: 0,
     fontWeight: 500
   },
-  formControl: {
-    // margin: theme.spacing.unit,
-    // minWidth: 120,
+  panels: {
+    marginTop: theme.spacing.unit * 3,
+    marginBottom: 19
   }
 });
 
@@ -52,7 +55,7 @@ class FilterSpecs extends Component {
     this.formatSpecInput(this.props.specParamsList)
     this.formatChipHtml()
   }
-  // todo: mount functions w this
+
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       this.formatSpecTables()
@@ -124,8 +127,8 @@ class FilterSpecs extends Component {
       <div>
         {specInputHtml}
         <div className="row filterSubmit">
-          <Button style={{fontSize:12+'px'}} onClick={this.onSubmitSpecs} variant="contained" color="primary">
-            Apply Spec Filters
+          <Button style={{margin: "0 auto", marginTop: 7}} onClick={this.onSubmitSpecs}>
+            <h6>Apply Filters</h6>
           </Button>
         </div>
       </div>
@@ -192,9 +195,9 @@ class FilterSpecs extends Component {
           </Paper>
         </div>
         <div className="col-8">
-          <Paper className={classes.root}>
+          <div className={classes.panels}>
             {this.state.expansionPanels ? this.state.expansionPanels : ''}
-          </Paper>
+          </div>
         </div>
       </div>
     );

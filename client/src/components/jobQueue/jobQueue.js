@@ -201,9 +201,7 @@ class JobQueue extends Component {
         <div className="row">
           <div className="col-6">
             <Button
-              variant="contained"
-              color="primary"
-              style={{ marginBottom:10+'px'}}
+              style={{ marginBottom:10+'px', marginTop:10+'px'}}
               onClick={this.updateTable}
               >
               <h6>Clear Finished</h6>

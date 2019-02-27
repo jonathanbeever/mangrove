@@ -23,12 +23,16 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    paddingBottom: 15
+    backgroundColor: '#fafafa',
   },
   title: {
     paddingLeft: theme.spacing.unit,
     paddingBottom: theme.spacing.unit
+  },
+  background: {
+    backgroundColor: "#031603",
+    color: "#fdc907",
+    textShadow: "1px 1px 2px #757575"
   }
 });
 
@@ -47,7 +51,7 @@ class NavBarTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" className={classes.background}>
           <Toolbar>
             <div className="col-2">
               <h2 className={classes.title}>Mangrove</h2>
@@ -55,24 +59,25 @@ class NavBarTabs extends React.Component {
             <div className="col-8">
               <Tabs value={value}
                 onChange={this.handleChange}
+                TabIndicatorProps={{style: {backgroundColor: "#fdc907"}}}
                 centered>
                 <Tab value={0}
                   label="Catalog"
                   to="/catalog"
                   style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
-                  activeStyle={{ color: 'white', textDecoration: 'none' }}
+                  activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
                   component={NavLink} />
                 <Tab value={1}
                   label="Create Jobs"
                   to="/newJobs"
                   style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
-                  activeStyle={{ color: 'white', textDecoration: 'none' }}
+                  activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
                   component={NavLink} />
                 <Tab value={2}
                   label="Job Queue"
                   to="/jobQueue"
                   style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
-                  activeStyle={{ color: 'white', textDecoration: 'none' }}
+                  activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
                   component={NavLink} />
               </Tabs>
             </div>
