@@ -29,10 +29,10 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit,
   },
   stepper: {
-    backgroundColor: '#fff'
+    backgroundColor: 'rgba(54, 25, 25, .00004)'
   },
   label: {
-    fontSize: '26px'
+    fontSize: '26px',
   }
 });
 
@@ -345,7 +345,7 @@ class HorizontalLinearStepper extends React.Component {
             const labelProps = {};
             return (
               <Step key={label} className={classes.label} {...props}>
-                <StepLabel style={{fontSize: '16px'}}{...labelProps}><div style={{fontSize: '16px'}}>{label}</div></StepLabel>
+                <StepLabel style={{fontSize: 16}}{...labelProps}><div style={{fontSize: '16px'}}>{label}</div></StepLabel>
               </Step>
             );
           })}
@@ -367,19 +367,18 @@ class HorizontalLinearStepper extends React.Component {
             <DialogActions>
               {activeStep === steps.length - 1 ?
                 <div>
-                  <Button onClick={this.handleReset} color="primary">
-                    Start More Jobs
+                  <Button onClick={this.handleReset} style={{margin: 7}}>
+                    <h6>Start More Jobs</h6>
                   </Button>
-                  <Button onClick={this.handleClose} color="primary">
-                    Close
+                  <Button onClick={this.handleClose} style={{margin: 7}}>
+                    <h6>Close</h6>
                   </Button>
                 </div>
                 :
-                <Button onClick={this.handleClose} color="primary">
-                  Close
+                <Button onClick={this.handleClose} style={{margin: 7}}>
+                  <h6>Close</h6>
                 </Button>
               }
-
             </DialogActions>
           </Dialog>
           <div>
@@ -387,15 +386,13 @@ class HorizontalLinearStepper extends React.Component {
               <Button
                 disabled={activeStep === 0}
                 onClick={this.handleBack}
-                style={{fontSize: '12px'}}
+                style={{backgroundColor:"#b6cd26", margin: 7, marginLeft: 17}}
                 className={classes.button}
               >
                 Back
               </Button>
               <Button
-                variant="contained"
-                color="primary"
-                style={{fontSize: '12px'}}
+                style={{backgroundColor:"#b6cd26", margin: 7}}
                 disabled={this.state.disabledSubmit}
                 onClick={this.handleNext}
                 className={classes.button}

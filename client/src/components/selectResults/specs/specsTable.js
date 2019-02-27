@@ -74,6 +74,7 @@ class EnhancedTableHead extends React.Component {
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
+              style={{color: '#b6cd26'}}
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected === rowCount && rowCount !== 0}
               onChange={onSelectAllClick}
@@ -127,7 +128,7 @@ const toolbarStyles = theme => ({
     theme.palette.type === 'light'
       ? {
           color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+          backgroundColor: '#b6cd26',
         }
       : {
           color: theme.palette.text.primary,
@@ -137,7 +138,7 @@ const toolbarStyles = theme => ({
     flex: '1 1 100%',
   },
   actions: {
-    color: theme.palette.text.secondary,
+    color: '#FE4A49',
   },
   title: {
     flex: '0 0 auto',
@@ -155,7 +156,7 @@ let EnhancedTableToolbar = props => {
     >
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="h5">
+          <Typography style={{backgroundColor: '#b6cd26'}} variant="h5">
             {numSelected} selected
           </Typography>
         ) : (
@@ -222,9 +223,9 @@ class EnhancedTable extends React.Component {
 
     this.props.params.forEach(param => {
       if(param !== 'shannon')
-        rows.push({ id: param, numeric: true, disablePadding: false, label: param })
+        rows.push({ id: param, numeric: true, disablePadding: true, label: param })
       else
-        rows.push({ id: param, numeric: false, disablePadding: false, label: param })
+        rows.push({ id: param, numeric: false, disablePadding: true, label: param })
     })
 
     this.setState({ rows: rows })
@@ -423,7 +424,10 @@ class EnhancedTable extends React.Component {
                         selected={isSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} />
+                          <Checkbox 
+                            checked={isSelected}
+                            style={{color: '#b6cd26'}}
+                          />
                         </TableCell>
                         {this.state.rows.map((row, i) => {
                           return (

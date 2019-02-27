@@ -36,16 +36,10 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 3,
     paddingBottom: theme.spacing.unit * 3
   },
-  label: {
-    fontSize: '14px'
-  },
   buttons: {
     paddingTop: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unti * 2,
-  },
-  buttonText: {
-    fontSize: '9px'
   }
 });
 
@@ -72,14 +66,23 @@ class FullWidthTabs extends React.Component {
       <div className={classes.root} border={0}>
         <AppBar position="static" color="inherit">
           <Tabs
+            TabIndicatorProps={{style: {backgroundColor: "#fdc907"}}}
             value={this.state.value}
             onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
             variant="fullWidth"
           >
-            <Tab label="Sound Files" className={classes.label} />
-            <Tab label="Upload New Files" className={classes.label} />
+            <Tab 
+              label="Sound Files"
+              style={{ color: 'black', textDecoration: 'none', fontSize: '16px' }}
+              activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
+              className={classes.label} 
+            />
+            <Tab
+              label="Upload New Files"
+              style={{ color: 'black', textDecoration: 'none', fontSize: '16px' }}
+              activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
+              className={classes.label}
+            />
           </Tabs>
           {this.state.value === 0 && <TabContainer dir={theme.direction}>
             <div className="row">
@@ -122,12 +125,13 @@ class FullWidthTabs extends React.Component {
                   />
                   <div>
                     <div >
+                    {/* TODO: fix disabling button */}
                     <label htmlFor="selectFiles" className={classes.buttons}>
-                      <Button variant="contained" component="span" color="primary" className={classes.buttonText}>
+                      <Button component="span">
                         Choose New Files
                       </Button>
                     </label> 
-                    <Button variant="contained" component="span" onClick={this.props.uploadFiles} className={classes.buttonText} >
+                    <Button component="span" onClick={this.props.uploadFiles}>
                       Upload Files
                     </Button>
                     </div>

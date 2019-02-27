@@ -105,9 +105,7 @@ class SelectJobs extends Component {
         <div className="col-4">
           {this.props.selectedIndex.length ?
             <Paper className={classes.root}>
-              {/* <div className="row"> */}
-                {this.state.specHtml}
-              {/* </div> */}
+              {this.state.specHtml}
             </Paper>
           :
             ''
@@ -133,34 +131,27 @@ class SelectJobs extends Component {
               <DateAndTimePickers />
             </div>
             <div className="row filterSubmit">
-              <Button style={{fontSize:12+'px'}} onClick={this.props.onSubmitFiltering} variant="contained" color="primary">
-                Apply Job Filters
+              <Button onClick={this.props.onSubmitFiltering} style={{margin: "0 auto"}}>
+                <h6>Apply Filters</h6>
               </Button>
             </div>
           </Paper>
         </div>
         <div className="col-8">
-          {/* {this.props.selectedIndex ?  */}
-            <div>
-              <JobsTable
-                filteredJobs={this.props.filteredJobs}
-                indexedFiles={this.props.indexedFiles}
-                updateSelectedJobs={this.props.updateSelectedJobs}
-                selectedJobs={this.props.selectedJobs}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ marginTop:10+'px'}}
-                disabled={!this.props.selectedJobs.length}
-                onClick={this.props.sendJobs} >
-                <h6>View Results</h6>
-              </Button>
-            </div>
-          {/* : */}
-            {/* <Paper className={classes.root}><h5>Please Select an Index and Parameter Specifications</h5></Paper> */}
-          {/* } */}
-
+          <div>
+            <JobsTable
+              filteredJobs={this.props.filteredJobs}
+              indexedFiles={this.props.indexedFiles}
+              updateSelectedJobs={this.props.updateSelectedJobs}
+              selectedJobs={this.props.selectedJobs}
+            />
+            <Button
+              style={{marginTop: 7}}
+              disabled={!this.props.selectedJobs.length}
+              onClick={this.props.sendJobs} >
+              <h6>View Results</h6>
+            </Button>
+          </div>
         </div>
       </div>
     );

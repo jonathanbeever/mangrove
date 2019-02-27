@@ -103,8 +103,8 @@ class FilterInputs extends Component {
               onChange={this.props.onChange('long')}
             />
             <div className="row filterSubmit">
-              <Button style={{fontSize:12+'px'}} onClick={this.onSubmit} variant="contained" color="primary">
-                Apply Input Filters
+              <Button onClick={this.onSubmit} style={{margin: "0 auto"}}>
+                <h6>Apply Filters</h6>
               </Button>
             </div>
           </Paper>
