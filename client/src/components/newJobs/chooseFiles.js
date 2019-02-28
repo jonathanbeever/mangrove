@@ -52,28 +52,24 @@ class ChooseFiles extends React.Component {
     })
   }
 
-  componentDidUpdate(prevProps) {
-    // if(this.state.filteredInputs !== this.props.allFiles) {
-      // this.renderTable()
-    // }
-  }
-
-  
-  listDbFiles = (file) => {
+  // Format path for new files uploaded and push to 
+  listDbFiles = (resp) => {
     var allFiles = this.state.allFiles
 
-    if(allFiles.indexOf(file) === -1) {
-      var path = file.path.split('\\')
-      file.path = path[path.length - 1]
-      allFiles.push(file)
-    }
-    this.setState({ uploadFiles: allFiles })
+    resp.forEach(file => {
+      if(allFiles.indexOf(file.data) === -1) {
+        var path = file.data.path.split('\\')
+        file.data.path = path[path.length - 1]
+        allFiles.push(file.data)
+      }
+    })
+    this.setState({ allFiles: allFiles })
   }
 
   addFilesToUpload = (e) => {
     var fileInfo = this.state.filesToUpload
     var files = e.target.files
-    console.log(files)
+
     Array.from(files).forEach(file => {
       fileInfo[file.name] = {
         json: {
@@ -108,28 +104,28 @@ class ChooseFiles extends React.Component {
   }
 
   uploadFiles = () => {
-    const url = 'http://localhost:3000/inputs';
     var fileNames = Object.keys(this.state.filesToUpload)
     var files = this.state.filesToUpload
+    var uploadRequests = []
+
+    const url = 'http://localhost:3000/inputs';
 
     fileNames.forEach(fileName => {
       const form = new FormData();
 
       form.append('json', JSON.stringify(files[fileName].json))
       form.append('file', files[fileName].file)
-  
-      axios.put(url, form)
-      .then(res => {
-        this.listDbFiles(res.data)
-        this.props.openDialog('File(s) successfully added')
-      }).catch(err => {
-        // Validaton error
-        // Alert required fields
-        console.log(err.message)
-        // specify
-        this.props.openDialog(err.message)
-      });
-    });
+      
+      uploadRequests.push(axios.put(url, form))
+    })
+
+    Promise.all(uploadRequests)
+    .then(responses => {
+      this.listDbFiles(responses)
+      this.props.openDialog(responses.length + ' files successfully added')
+    }).catch(err => {
+      this.props.openDialog(err.message + '. Please make sure to add a site and series name to all files.')
+    })
   }
   
   submitInputFilter = () => {

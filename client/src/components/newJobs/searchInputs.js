@@ -28,35 +28,8 @@ const styles = theme => ({
 
 class FilterInputs extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount = () => {
-    // this.formatChipHtml()
-  }
-
-  // formatChipHtml = () => {
-  //   var chipHtml = []
-  //   Object.keys(this.props.inputFiltering).forEach(param => {
-  //     if(this.props.inputFiltering[param].length) {
-  //       chipHtml.push(
-  //         <Chip
-  //           key={param}
-  //           label={param + ' : ' + this.props.inputFiltering[param]}
-  //           onDelete={this.deleteChip}
-  //         />
-  //       )
-  //     }
-  //   })
-  //   this.setState({ chips: <div>{chipHtml}</div> })
-  // }
-
   onSubmit = () => {
     this.props.submitInputFilter()
-  }
-
-  deleteChip = (label) => {
   }
 
   render() {

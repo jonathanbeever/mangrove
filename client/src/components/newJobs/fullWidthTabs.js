@@ -46,9 +46,14 @@ const styles = theme => ({
 class FullWidthTabs extends React.Component {
   state = {
     value: 0,
+    filesToUpload: this.props.filesToUpload
   };
 
   componentDidMount = () => {
+  }
+
+  componentDidUpdate = (prevProps) => {
+    
   }
 
   handleChange = (event, value) => {
@@ -124,17 +129,24 @@ class FullWidthTabs extends React.Component {
                     type="file"
                   />
                   <div>
-                    <div >
                     {/* TODO: fix disabling button */}
                     <label htmlFor="selectFiles" className={classes.buttons}>
                       <Button component="span">
                         Choose New Files
                       </Button>
                     </label> 
-                    <Button component="span" onClick={this.props.uploadFiles}>
-                      Upload Files
-                    </Button>
-                    </div>
+                    
+                      <Button 
+                        component="span" 
+                        onClick={this.props.uploadFiles}
+                        disabled={!Object.keys(this.props.filesToUpload).length}
+                      >
+                        Upload Files
+                      </Button>
+                      
+                  
+                    
+                   
                   </div>
                   <SearchInputs 
                     onChange={this.props.updateInputProperties}
