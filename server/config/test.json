@@ -1,8 +1,8 @@
 {
   "dbConfig": {
-    "dbName": "soundscape-ecology-test"
+    "dbName": "mangrove-test"
   },
   "storage": {
-    "root": ".sse-server-test"
+    "root": ".mangrove-server-test"
   }
 }

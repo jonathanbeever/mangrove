@@ -4,10 +4,10 @@
   "dbConfig": {
     "host": "127.0.0.1",
     "port": 27017,
-    "dbName": "soundscape-ecology"
+    "dbName": "mangrove"
   },
   "storage": {
-    "root": ".sse-server",
+    "root": ".mangrove",
     "inputs": "inputs"
   },
   "error": {
