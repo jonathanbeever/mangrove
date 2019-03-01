@@ -34,12 +34,10 @@ const styles = theme => ({
   },
   search: {
     paddingLeft: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit * 3,
   },
   buttons: {
-    paddingTop: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unti * 2,
+    textAlign: 'center'
   }
 });
 
@@ -48,13 +46,6 @@ class FullWidthTabs extends React.Component {
     value: 0,
     filesToUpload: this.props.filesToUpload
   };
-
-  componentDidMount = () => {
-  }
-
-  componentDidUpdate = (prevProps) => {
-    
-  }
 
   handleChange = (event, value) => {
     this.setState({ value });
@@ -128,25 +119,12 @@ class FullWidthTabs extends React.Component {
                     multiple
                     type="file"
                   />
-                  <div>
-                    {/* TODO: fix disabling button */}
-                    <label htmlFor="selectFiles" className={classes.buttons}>
+                  <div className={classes.buttons}>
+                    <label htmlFor="selectFiles">
                       <Button component="span">
                         Choose New Files
                       </Button>
                     </label> 
-                    
-                      <Button 
-                        component="span" 
-                        onClick={this.props.uploadFiles}
-                        disabled={!Object.keys(this.props.filesToUpload).length}
-                      >
-                        Upload Files
-                      </Button>
-                      
-                  
-                    
-                   
                   </div>
                   <SearchInputs 
                     onChange={this.props.updateInputProperties}
@@ -157,6 +135,15 @@ class FullWidthTabs extends React.Component {
                     long={this.props.upload.long}
                     message='Update Selected Files'
                   />
+                  <div className={classes.buttons}>
+                    <Button 
+                      component="span" 
+                      onClick={this.props.uploadFiles}
+                      disabled={!Object.keys(this.props.filesToUpload).length}
+                    >
+                      Upload Files
+                    </Button>
+                  </div>
                 </div>
               </div>
               <div className="col-9">
