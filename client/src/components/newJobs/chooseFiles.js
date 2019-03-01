@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import FileTabs from './fullWidthTabs';
 import axios from 'axios';
+import LinearIntermediate from './linearIntermediate';
 
 const styles = theme => ({
   root: {
@@ -104,6 +105,8 @@ class ChooseFiles extends React.Component {
   }
 
   uploadFiles = () => {
+    this.props.openDialog(<div><LinearIntermediate /></div>)
+
     var fileNames = Object.keys(this.state.filesToUpload)
     var files = this.state.filesToUpload
     var uploadRequests = []
