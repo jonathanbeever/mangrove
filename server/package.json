@@ -1,5 +1,5 @@
 {
-  "name": "soundscape-ecology-server",
+  "name": "mangrove-server",
   "version": "1.0.0",
   "description": "Data processing and visualization software for soundscape ecology research",
   "main": "server.js",

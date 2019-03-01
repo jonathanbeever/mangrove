@@ -1,5 +1,5 @@
 {
-  "name": "SoundScape",
+  "name": "mangrove-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
