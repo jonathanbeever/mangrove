@@ -213,7 +213,6 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props.filteredInputs)
     var data = this.props.filteredInputs.map(input => {
       return createData(input.inputId, input.site, input.series, input.path, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
     })

@@ -70,13 +70,13 @@ class FullWidthTabs extends React.Component {
             <Tab 
               label="Sound Files"
               style={{ color: 'black', textDecoration: 'none', fontSize: '16px' }}
-              activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
+              activestyle={{ color: '#fdc907', textDecoration: 'none' }}
               className={classes.label} 
             />
             <Tab
               label="Upload New Files"
               style={{ color: 'black', textDecoration: 'none', fontSize: '16px' }}
-              activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
+              activestyle={{ color: '#fdc907', textDecoration: 'none' }}
               className={classes.label}
             />
           </Tabs>
@@ -85,12 +85,16 @@ class FullWidthTabs extends React.Component {
               <div className="col-3">
                 <div className={classes.search}>
                   <SearchInputs 
-                    onChange={this.props.searchInputs} 
+                    // onChange={this.props.searchInputs} 
+                    onChange={this.props.updateProperties}
+                    value='filter'
                     submitInputFilter={this.props.submitInputFilter}
                     site={this.props.site}
                     series={this.props.series}
-                    lat={this.props.lat}
-                    long={this.props.long}
+                    lat={this.props.filter.lat}
+                    long={this.props.filter.long}
+                    date={this.props.filter.recordTimeMs.date}
+                    time={this.props.filter.recordTimeMs.time}
                     message='Filter Input Files'
                   />
                 </div>
@@ -106,7 +110,7 @@ class FullWidthTabs extends React.Component {
               </div>
             </div>
           </TabContainer>}
-          {this.state.value === 1 && <TabContainer >
+          {this.state.value === 1 && <TabContainer dir={theme.direction}>
             <div className="row">
               <div className="col-3">
                 <div className={classes.search}>
@@ -127,15 +131,18 @@ class FullWidthTabs extends React.Component {
                     </label> 
                   </div>
                   <SearchInputs 
-                    onChange={this.props.updateInputProperties}
+                    onChange={this.props.updateProperties}
+                    value='upload'
                     submitInputFilter={this.props.submitInputProperties}
                     site={this.props.upload.site}
                     series={this.props.upload.series}
                     lat={this.props.upload.lat}
                     long={this.props.upload.long}
+                    date={this.props.upload.recordTimeMs.date}
+                    time={this.props.upload.recordTimeMs.time}
                     message='Update Selected Files'
                   />
-                  <div className={classes.buttons}>
+                  <div className={classes.buttons} style={{marginBottom: 10}}>
                     <Button 
                       component="span" 
                       onClick={this.props.uploadFiles}

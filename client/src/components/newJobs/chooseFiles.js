@@ -4,6 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import FileTabs from './fullWidthTabs';
 import axios from 'axios';
 import LinearIntermediate from './linearIntermediate';
+import moment from 'moment';
+var _ = require('lodash');
 
 const styles = theme => ({
   root: {
@@ -26,17 +28,27 @@ class ChooseFiles extends React.Component {
     newFiles: [],
     filteredInputs: [],
     selectedFiles: [],
-    site: '',
-    series: '',
-    lat: '',
-    long: '',
+    filter: {
+      site: '',
+      series: '',
+      lat: '',
+      long: '',
+      recordTimeMs: {
+        date: '',
+        time: ''
+      }
+    },
     filesToUpload: [],
     selectedToEdit: [],
     upload: {
       site: '',
       series: '',
       lat: '',
-      long: ''
+      long: '',
+      recordTimeMs: {
+        date: '',
+        time: ''
+      }
     }
   };
 
@@ -80,7 +92,7 @@ class ChooseFiles extends React.Component {
             lat: '',
             long: ''
           },
-          recordTimeMs: file.lastModified
+          recordTimeMs: ['', '']
         },
         file: file
       }
@@ -100,6 +112,10 @@ class ChooseFiles extends React.Component {
         fileInfo[file].json.coords.lat = parseInt(this.state.upload.lat)
       if(this.state.upload.long.length)
         fileInfo[file].json.coords.long = parseInt(this.state.upload.long)
+      if(this.state.upload.recordTimeMs.date.length)
+        fileInfo[file].json.recordTimeMs[0] = this.state.upload.recordTimeMs.date
+      if(this.state.upload.recordTimeMs.time.length)
+        fileInfo[file].json.recordTimeMs[1] = this.state.upload.recordTimeMs.time
     })
     this.setState({ filesToUpload: fileInfo })
   }
@@ -114,11 +130,14 @@ class ChooseFiles extends React.Component {
     const url = 'http://localhost:3000/inputs';
 
     fileNames.forEach(fileName => {
+      var file = _.cloneDeep(files[fileName].json)
+      file.recordTimeMs = new Date(file.recordTimeMs[0]+'T'+file.recordTimeMs[1]+':00').getTime()
+
       const form = new FormData();
 
-      form.append('json', JSON.stringify(files[fileName].json))
+      form.append('json', JSON.stringify(file))
       form.append('file', files[fileName].file)
-      
+  
       uploadRequests.push(axios.put(url, form))
     })
 
@@ -131,13 +150,14 @@ class ChooseFiles extends React.Component {
     })
   }
   
+  // add filter by datetime
   submitInputFilter = () => {
     var filteredInputs = this.state.allFiles.filter(file => {
       var matchingFile = ''
-      if(!this.state.site || this.state.site.toLowerCase() === file.site.toLowerCase()) {
-        if(!this.state.series || this.state.series.toLowerCase() === file.series.toLowerCase()) {
-          if(!this.state.lat || Number(this.state.lat) === file.coords.lat) {
-            if(!this.state.long || Number(this.state.long) === file.coords.long) {
+      if(!this.state.filter.site || this.state.filter.site.toLowerCase() === file.site.toLowerCase()) {
+        if(!this.state.filter.series || this.state.filter.series.toLowerCase() === file.series.toLowerCase()) {
+          if(!this.state.filter.lat || Number(this.state.filter.lat) === file.coords.lat) {
+            if(!this.state.filter.long || Number(this.state.filter.long) === file.coords.long) {
               matchingFile = file
             }
           }
@@ -148,19 +168,18 @@ class ChooseFiles extends React.Component {
     this.setState({ filteredInputs: filteredInputs })
   }
 
-  searchInputs = name => e => {
-    this.setState({ [name] : e.target.value })
-  }
+  updateInputProperties = (name, value) => e => {
+    var properties = this.state[value]
 
-  updateInputProperties = name => e => {
-    var upload = this.state.upload
-    upload[name] = e.target.value
+    if(name === 'date' || name === 'time')
+      properties['recordTimeMs'][name] = e.target.value
+    else
+      properties[name] = e.target.value
 
-    this.setState({ upload: upload })
+    this.setState({ [value]: properties })
   }
 
   updateSelectedUploads = (selected) => {
-    console.log(selected)
     this.setState({ selectedToEdit: selected })
   }
 
@@ -176,18 +195,13 @@ class ChooseFiles extends React.Component {
             filteredInputs={this.state.filteredInputs}
             selected={this.props.selectedFiles}    
             onChange={this.handleInputUpload}  
-            // classes={classes}
-            searchInputs={this.searchInputs}
-            site={this.state.site}
-            series={this.state.series}
-            lat={this.state.lat}
-            long={this.state.long}
+            filter={this.state.filter}
             submitInputFilter={this.submitInputFilter}
             addFilesToUpload={this.addFilesToUpload}
             filesToUpload={this.state.filesToUpload}
             updateSelectedUploads={this.updateSelectedUploads} 
             selectedToEdit={this.state.selectedToEdit} 
-            updateInputProperties={this.updateInputProperties}
+            updateProperties={this.updateInputProperties}
             submitInputProperties={this.submitInputProperties}
             upload={this.state.upload}
             uploadFiles={this.uploadFiles}
