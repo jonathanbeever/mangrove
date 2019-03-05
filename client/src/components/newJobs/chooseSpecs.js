@@ -39,41 +39,7 @@ class ChooseSpecs extends Component {
 
     this.state = {
       specInputHtml: '',
-      specParams: {
-        aci: {
-          minFreq: '',
-          maxFreq: '',
-          j: '',
-          fftW: ''
-        },
-        ndsi: {
-          anthroMin: '',
-          anthroMax: '',
-          bioMin: '',
-          bioMax: '',
-          fftW: ''
-        },
-        adi: {
-          maxFreq: '',
-          dbThreshold: '',
-          freqStep: '',
-          shannon: false
-        },
-        aei: {
-          maxFreq: '',
-          dbThreshold: '',
-          freqStep: ''
-        },
-        bi: {
-          minFreq: '',
-          maxFreq: '',
-          fftW: ''
-        },
-        rms: {
-          test: ''
-        }
-      }
-      
+      useDefualts: false
     }
   }
 
@@ -113,9 +79,8 @@ class ChooseSpecs extends Component {
           <TextField
             key={param}
             label={<h6>{param}</h6>}
+            style={{width: '100%'}}
             value={this.props.specParams[this.props.index][param]}
-            // className={classes.textField}
-            // style={{fontSize: '20px'}}
             onChange={this.props.onSpecChange(param)}
           />   
         )
@@ -140,18 +105,13 @@ class ChooseSpecs extends Component {
     // Add title and submit button to html
     specInputHtml = (
       <div>
-        <h4>Define New Specs</h4>
+        <h4>Use New Specs</h4>
         {specInputHtml} 
-        <div className="row filterSubmit">
-          {/* <Button onClick={this.onSubmitSpecs} variant="contained" color="primary">
-            Apply Spec Choices
-          </Button> */}
-        </div>
       </div>
     )
     this.setState({ specInputHtml: specInputHtml })
   }
-  
+
   render() {
     const { classes } = this.props;
 
@@ -161,6 +121,17 @@ class ChooseSpecs extends Component {
           <Paper className={classes.root}>
             <FormControl className={classes.formControl}>
               {this.state.specInputHtml}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={this.props.useDefualts}
+                    onChange={this.props.useDefaultSpecs}
+                    value="default"
+                    color="primary"
+                  />
+                }
+                label="Use default parameters"
+              />
             </FormControl>
           </Paper>
         </div>

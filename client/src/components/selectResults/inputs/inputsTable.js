@@ -17,7 +17,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
 import moment from 'moment';
 
 function createData(id, siteName, setName, fileName, recordTime, latitude, longitude) {
@@ -214,7 +213,6 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
-    console.log(this.props.filteredInputs)
     var data = this.props.filteredInputs.map(input => {
       return createData(input.inputId, input.site, input.series, input.path, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
     })

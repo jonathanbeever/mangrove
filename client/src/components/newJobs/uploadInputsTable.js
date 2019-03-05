@@ -17,10 +17,21 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
+import moment from 'moment';
 
-function createData(id, siteName, setName, fileName, latitude, longitude) {
-  return { id: id, siteName, setName, fileName, latitude, longitude };
+function createData(id, siteName, setName, fileName, recordTimeMs, latitude, longitude) {
+  var recordTime = ''
+
+  if(recordTimeMs[0].length && recordTimeMs[1].length)
+    recordTime = moment(recordTimeMs[0] + ' ' + recordTimeMs[1]).format('MMM Do YY, h:mm a')
+  else if(recordTimeMs[0].length)
+    recordTime = moment(recordTimeMs[0]).format('MMM Do YY')
+  else if(recordTimeMs[1].length) {
+    recordTime = moment('2000-01-01 ' + recordTimeMs[1]).format('MMM Do YY, h:mm a')
+    recordTime = 'Date Needed' + recordTime.substring(recordTime.indexOf(', '), recordTime.length)
+  }
+
+  return { id: id, siteName, setName, fileName, recordTime, latitude, longitude };
 }
 
 function desc(a, b, orderBy) {
@@ -49,10 +60,11 @@ function getSorting(order, orderBy) {
 
 const rows = [
   { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
-  { id: 'setName', numeric: false, disablePadding: false, label: 'File Set Name' },
-  { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
-  { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
-  { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
+  { id: 'setName', numeric: false, disablePadding: true, label: 'File Set Name' },
+  { id: 'fileName', numeric: false, disablePadding: true, label: 'File Name' },
+  { id: 'recordTime', numeric: false, disablePadding: true, label: 'Time Recorded' },
+  { id: 'latitude', numeric: true, disablePadding: true, label: 'Latitude' },
+  { id: 'longitude', numeric: true, disablePadding: true, label: 'Longitude' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -216,8 +228,9 @@ class EnhancedTable extends React.Component {
     var files = this.props.filteredInputs
 
     var data = fileNames.map(fileName => {
-      return createData(files[fileName].file.name, files[fileName].json.site, files[fileName].json.series, files[fileName].file.name, files[fileName].json.coords.lat, files[fileName].json.coords.long)
+      return createData(files[fileName].file.name, files[fileName].json.site, files[fileName].json.series, files[fileName].file.name, files[fileName].json.recordTimeMs, files[fileName].json.coords.lat, files[fileName].json.coords.long)
     })
+    
     this.setState({data: data})
   }
 
@@ -227,7 +240,7 @@ class EnhancedTable extends React.Component {
 
     if(prevProps !== this.props) {
       var data = fileNames.map(fileName => {
-        return createData(files[fileName].file.name, files[fileName].json.site, files[fileName].json.series, files[fileName].file.name, files[fileName].json.coords.lat, files[fileName].json.coords.long)
+        return createData(files[fileName].file.name, files[fileName].json.site, files[fileName].json.series, files[fileName].file.name, files[fileName].json.recordTimeMs, files[fileName].json.coords.lat, files[fileName].json.coords.long)
       })
 
       if(data !== this.state.data)
@@ -329,13 +342,14 @@ class EnhancedTable extends React.Component {
                           style={{color: '#b6cd26'}}
                         />
                       </TableCell>
-                      <TableCell component="th" scope="row" padding="none">
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">
                         {n.siteName}
                       </TableCell>
-                      <TableCell align="right">{n.setName}</TableCell>
-                      <TableCell align="right">{n.fileName}</TableCell>
-                      <TableCell align="right">{n.latitude}</TableCell>
-                      <TableCell align="right">{n.longitude}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.setName}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.fileName}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.recordTime}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.latitude}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.longitude}</TableCell>
                     </TableRow>
                   );
                 })}

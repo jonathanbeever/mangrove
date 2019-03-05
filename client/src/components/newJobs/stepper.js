@@ -15,6 +15,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import axios from 'axios';
 import LinearIntermediate from './linearIntermediate';
+var _ = require('lodash');
 
 const styles = theme => ({
   root: {
@@ -65,6 +66,8 @@ function getStepContent(step, $this) {
           onSpecChange={$this.handleSpecChange}
           updateSelectedSpec={$this.updateSpecs}
           selectedSpec={$this.state.selectedSpec}
+          useDefaultSpecs={$this.useDefaultSpecs}
+          useDefaults={$this.state.useDefaults}
         />
       )
     default:
@@ -117,8 +120,8 @@ class HorizontalLinearStepper extends React.Component {
       }
     },
     selectedSpec: [],
-    submitDisabled: false,
     selectedFiles: [],
+    useDefaults: false
   };
 
   changeIndex = (value) => {
@@ -127,7 +130,10 @@ class HorizontalLinearStepper extends React.Component {
     var specs = this.state.specParams
 
     params.forEach(param => {
-      specs[this.state.index][param] = ''
+      if(param === 'shannon')
+        specs[this.state.index][param] = false
+      else
+        specs[this.state.index][param] = ''
     })
 
     this.setState({ specParams: specs })
@@ -166,6 +172,77 @@ class HorizontalLinearStepper extends React.Component {
       this.setState({ disabledSubmit: false})
     else
       this.setState({ disabledSubmit: true })
+  }
+
+  useDefaultSpecs = (e) => {
+    if(!e.target.checked) {
+      var params = this.state.specParams
+      var keys = Object.keys(params[this.state.index])
+
+      keys.forEach(key => {
+        if(key === 'shannon') 
+          params[this.state.index][key] = false
+        else
+          params[this.state.index][key] = ''
+      })
+      
+      this.setState({ specParams: params })
+      this.setState({ disabledSubmit: true })
+    }
+    else
+      this.setDefaultSpecs()
+  }
+  
+  setDefaultSpecs = () => {
+    var params = this.state.specParams
+
+    switch(this.state.index) {
+      case 'aci': {
+        params['aci']['minFreq'] = 0
+        params['aci']['maxFreq'] = 16000
+        params['aci']['fftW'] = 10
+        params['aci']['j'] = 30
+
+        break;
+      }
+      case 'adi': {
+        params['adi']['maxFreq'] = 16000
+        params['adi']['dbThreshold'] = 32
+        params['adi']['freqStep'] = 512
+        params['adi']['shannon'] = true
+
+        break;
+      }
+      case 'aei': {
+        params['aei']['maxFreq'] = 16000
+        params['aei']['dbThreshold'] = 32
+        params['aei']['freqStep'] = 512
+
+        break;
+      }
+      case 'bi': {
+        params['aci']['minFreq'] = 0
+        params['aci']['maxFreq'] = 16000
+        params['aci']['fftW'] = 10
+
+        break;
+      }
+      case 'ndsi': {
+        params['ndsi']['fftW'] = 10
+        params['ndsi']['anthroMin'] = 5001
+        params['ndsi']['anthroMax'] = 20000
+        params['ndsi']['bioMin'] = 0
+        params['ndsi']['bioMax'] = 5000
+
+        break;
+      }
+      case 'rms': {
+        break;
+      }
+    }
+
+    this.setState({ specParams: params })
+    this.setState({ disabledSubmit: false })
   }
 
   submitJob = () => {
@@ -218,7 +295,7 @@ class HorizontalLinearStepper extends React.Component {
     }
     else {
       // Create spec
-      var body = this.state.specParams[this.state.index]
+      var body = _.cloneDeep(this.state.specParams[this.state.index])
       body.type = this.state.index
 
       axios.put(
@@ -360,9 +437,7 @@ class HorizontalLinearStepper extends React.Component {
             aria-describedby="alert-dialog-slide-description"
           >
             <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
-                {this.state.message}
-              </DialogContentText>
+              {this.state.message}
             </DialogContent>
             <DialogActions>
               {activeStep === steps.length - 1 ?
@@ -383,23 +458,25 @@ class HorizontalLinearStepper extends React.Component {
           </Dialog>
           <div>
             <div>
+              {getStepContent(activeStep, this)}
+              <div style={{float: 'right'}}>
               <Button
                 disabled={activeStep === 0}
                 onClick={this.handleBack}
-                style={{backgroundColor:"#b6cd26", margin: 7, marginLeft: 17}}
+                style={{backgroundColor:"#b6cd26", margin: 7}}
                 className={classes.button}
               >
                 Back
               </Button>
               <Button
-                style={{backgroundColor:"#b6cd26", margin: 7}}
+                style={{backgroundColor:"#b6cd26", margin: 7, marginRight: 17}}
                 disabled={this.state.disabledSubmit}
                 onClick={this.handleNext}
                 className={classes.button}
               >
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
-              {getStepContent(activeStep, this)}
+              </div>
             </div>
           </div>
         </div>
