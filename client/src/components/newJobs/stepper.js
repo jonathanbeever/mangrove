@@ -25,12 +25,15 @@ const styles = theme => ({
   button: {
     marginRight: theme.spacing.unit,
   },
+  buttonTop: {
+    marginTop: theme.spacing.unit,
+  },
   instructions: {
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
   },
   stepper: {
-    backgroundColor: 'rgba(54, 25, 25, .00004)'
+    backgroundColor: 'rgba(54, 25, 25, .00004)',
   },
   label: {
     fontSize: '26px',
@@ -416,17 +419,41 @@ class HorizontalLinearStepper extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Stepper className={classes.stepper} activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const props = {};
-            const labelProps = {};
-            return (
-              <Step key={label} className={classes.label} {...props}>
-                <StepLabel style={{fontSize: 16}}{...labelProps}><div style={{fontSize: '16px'}}>{label}</div></StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
+        <div className="row" style={{paddingBottom: 0}}>
+          <div className="col-9">
+            <Stepper className={classes.stepper} activeStep={activeStep}>
+              {steps.map((label, index) => {
+                const props = {};
+                const labelProps = {};
+                return (
+                  <Step key={label} className={classes.label} {...props}>
+                    <StepLabel style={{fontSize: 16}}{...labelProps}><div style={{fontSize: '16px'}}>{label}</div></StepLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>
+          </div>
+          <div className='col-3'>
+            <div className={classes.buttonTop} style={{float:'right'}}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={this.handleBack}
+                style={{backgroundColor:"#b6cd26", margin: 7}}
+                className={classes.button}
+              >
+                Back
+              </Button>
+              <Button
+                style={{backgroundColor:"#b6cd26", margin: 7, marginRight: 17}}
+                disabled={this.state.disabledSubmit}
+                onClick={this.handleNext}
+                className={classes.button}
+              >
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              </Button>
+            </div>
+          </div>
+        </div>
         <div>
           <Dialog
             open={this.state.open}
@@ -457,47 +484,25 @@ class HorizontalLinearStepper extends React.Component {
             </DialogActions>
           </Dialog>
           <div>
-              <div className="row">
-                <div className='col-12'>
-                  <div style={{float:'right'}}>
-                    <Button
-                      disabled={activeStep === 0}
-                      onClick={this.handleBack}
-                      style={{backgroundColor:"#b6cd26", margin: 7}}
-                      className={classes.button}
-                    >
-                      Back
-                    </Button>
-                    <Button
-                      style={{backgroundColor:"#b6cd26", margin: 7, marginRight: 17}}
-                      disabled={this.state.disabledSubmit}
-                      onClick={this.handleNext}
-                      className={classes.button}
-                    >
-                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              {getStepContent(activeStep, this)}
-              <div style={{float: 'right'}}>
-                <Button
-                  disabled={activeStep === 0}
-                  onClick={this.handleBack}
-                  style={{backgroundColor:"#b6cd26", margin: 7}}
-                  className={classes.button}
-                >
-                  Back
-                </Button>
-                <Button
-                  style={{backgroundColor:"#b6cd26", margin: 7, marginRight: 17}}
-                  disabled={this.state.disabledSubmit}
-                  onClick={this.handleNext}
-                  className={classes.button}
-                >
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
-              </div>
+            {getStepContent(activeStep, this)}
+            <div style={{float: 'right'}}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={this.handleBack}
+                style={{backgroundColor:"#b6cd26", margin: 7}}
+                className={classes.button}
+              >
+                Back
+              </Button>
+              <Button
+                style={{backgroundColor:"#b6cd26", margin: 7, marginRight: 17}}
+                disabled={this.state.disabledSubmit}
+                onClick={this.handleNext}
+                className={classes.button}
+              >
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
