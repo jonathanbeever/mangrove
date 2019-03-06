@@ -6,6 +6,7 @@ import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import Catalog from './components/selectResults/catalog';
 import JobQueue from './components/jobQueue/jobQueue';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Login from './components/login';
 
 const theme = createMuiTheme({
   overrides: {
@@ -41,23 +42,30 @@ class App extends Component {
     return (
       <Router>
         <MuiThemeProvider theme={theme}>
-          <div className="App">
-            <style>{'html { height: 100%;}'}</style>
-            {/* Uncomment for gradient background */}
-            {/* <style>{'body { background-color:#fafafa; background-image: linear-gradient(to bottom right, #4d9574, #b6cd26); background-repeat: no-repeat; height: 100%; background-attachment: fixed;}'}</style> */}
-            <NavBarTabs />
-          </div>
           <Switch>
-            {/* Add login */}
-            <Route path="/catalog" component={Catalog} />
-            <Route path="/newJobs" component={NewJobs} />
-            <Route path="/jobQueue" component={JobQueue} />
-            <Redirect from="/" to="/catalog" />
+            <Route path="/login" component={Login} />
+			<Route path="/catalog" render={() => <div><NavBarWrapper/><Catalog/></div>} />
+	        <Route path="/newJobs" render={() => <div><NavBarWrapper/><NewJobs/></div>} />
+            <Route path="/jobQueue" render={() => <div><NavBarWrapper/><JobQueue/></div>} />
+            <Redirect from="/" to="/login" />
           </Switch>
         </MuiThemeProvider>
       </Router>
     );
   }
+}
+
+class NavBarWrapper extends Component {
+	render() {
+		return (
+			<div className="App">
+				<style>{'html { height: 100%;}'}</style>
+				{/* Uncomment for gradient background */}
+	            {/* <style>{'body { background-color:#fafafa; background-image: linear-gradient(to bottom right, #4d9574, #b6cd26); background-repeat: no-repeat; height: 100%; background-attachment: fixed;}'}</style> */}
+				<NavBarTabs />
+			</div>
+		);
+	}
 }
 
 export default App;
