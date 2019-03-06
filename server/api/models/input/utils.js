@@ -57,9 +57,24 @@ const parseInputJson = (json) => {
   return input;
 };
 
+const getExtensionFromMimetype = (mimetype) => {
+  switch (mimetype) {
+    case 'audio/wave':
+      return 'wav';
+    case 'audio/wav':
+      return 'wav';
+    default:
+      throw new Error(`Invalid mimetype: ${mimetype}`);
+  }
+};
+
+const getNewFilename = (recordTimeMs, mimetype) => `${recordTimeMs}.${getExtensionFromMimetype(mimetype)}`;
+
 module.exports = {
   getInputKeys,
   newInputKeys,
   coordsKeys,
   parseInputJson,
+  getExtensionFromMimetype,
+  getNewFilename,
 };

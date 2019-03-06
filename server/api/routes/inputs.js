@@ -14,7 +14,10 @@ const {
 const { getAudioMetadata } = require('../../util/audioMetadata');
 
 const Input = require('../models/input');
-const { parseInputJson } = require('../models/input/utils');
+const {
+  parseInputJson,
+  getNewFilename,
+} = require('../models/input/utils');
 
 const error = config.get('error');
 
@@ -50,7 +53,13 @@ const upload = multer({
       }
     },
     filename(req, file, cb) {
-      cb(null, file.originalname); // Rename to `${json.recordTimeMs}.wav`?
+      try {
+        const parsedJson = parseInputJson(req.body.json);
+        const filename = getNewFilename(parsedJson.recordTimeMs, file.mimetype);
+        cb(null, filename);
+      } catch (err) {
+        cb(err);
+      }
     },
   }),
   // limits: { fileSize: 1024 * 1024 * 1024 }, // 1 GB
