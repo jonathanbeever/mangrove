@@ -13,6 +13,7 @@ const inputDir = settings.value('inputDir');
 
 function mockInput(
   _id,
+  path,
   site,
   series,
   recordTimeMs,
@@ -21,10 +22,6 @@ function mockInput(
   sizeBytes,
   coords,
 ) {
-  const path = nodePath.join(inputDir, site, series, 'test.wav');
-
-  storage.copyFile('./test/mock/wav/test.wav', path);
-
   return new Input({
     _id,
     path,
@@ -52,8 +49,12 @@ const nextMockInput = () => {
     long: -81.191381,
   };
 
+  const path = nodePath.join(inputDir, site, series, 'test.wav');
+  storage.copyFile('./test/mock/wav/test.wav', path);
+
   return mockInput(
     inputId,
+    path,
     site,
     series,
     recordTimeMs,
