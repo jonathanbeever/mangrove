@@ -108,7 +108,6 @@ router.put('/', (req, res) => {
           .then((createResult) => {
             res.status(201).json({
               inputId: createResult._id,
-              path: createResult.path,
               site: createResult.site,
               series: createResult.series,
               recordTimeMs: createResult.recordTimeMs,
@@ -141,7 +140,6 @@ router.get('/:inputId', (req, res) => {
       if (searchResult) {
         res.status(200).json({
           inputId: searchResult._id,
-          path: searchResult.path,
           site: searchResult.site,
           series: searchResult.series,
           recordTimeMs: searchResult.recordTimeMs,
@@ -176,7 +174,6 @@ router.get('/', (req, res) => {
         count: searchResult.length,
         inputs: searchResult.map(input => ({
           inputId: input._id,
-          path: input.path,
           site: input.site,
           series: input.series,
           recordTimeMs: input.recordTimeMs,

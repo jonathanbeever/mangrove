@@ -5,15 +5,17 @@ const Input = require('./index');
 const getInputKeys = () => {
   const keys = Object.keys(Input.schema.paths);
   keys[keys.indexOf('_id')] = 'inputId';
+  // The following keys are never shown to users
   keys.splice(keys.indexOf('__v'), 1);
+  keys.splice(keys.indexOf('path'), 1);
 
   return keys;
 };
 
 const newInputKeys = () => {
   const keys = getInputKeys();
+  // The following keys are instantiated upon upload, not provided by the user
   keys.splice(keys.indexOf('inputId'), 1);
-  keys.splice(keys.indexOf('path'), 1);
   keys.splice(keys.indexOf('durationMs'), 1);
   keys.splice(keys.indexOf('sampleRateHz'), 1);
   keys.splice(keys.indexOf('sizeBytes'), 1);
