@@ -29,7 +29,7 @@
   margin-bottom: 30px;
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
   padding: 6px;
   font-size: 17px;
 }
