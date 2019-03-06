@@ -14,6 +14,9 @@ const newInputKeys = () => {
   const keys = getInputKeys();
   keys.splice(keys.indexOf('inputId'), 1);
   keys.splice(keys.indexOf('path'), 1);
+  keys.splice(keys.indexOf('durationMs'), 1);
+  keys.splice(keys.indexOf('sampleRateHz'), 1);
+  keys.splice(keys.indexOf('sizeBytes'), 1);
 
   return keys;
 };

@@ -6,6 +6,9 @@ const inputSchema = new mongoose.Schema({
   site: { type: String, required: true },
   series: { type: String, required: true },
   recordTimeMs: { type: Number, required: true },
+  durationMs: { type: Number, required: true },
+  sampleRateHz: { type: Number, required: true },
+  sizeBytes: { type: Number, required: true },
   coords: {
     type: {
       lat: Number,

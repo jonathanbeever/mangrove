@@ -242,6 +242,9 @@ describe('Inputs', () => {
           expect(res.body.site).to.equal(input.site);
           expect(res.body.series).to.equal(input.series);
           expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
+          expect(res.body.durationMs).to.equal(input.durationMs);
+          expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
+          expect(res.body.sizeBytes).to.equal(input.sizeBytes);
           expect(res.body.coords).to.eql(input.coords);
           expect(res.body.path).to.be.a.file()
             .and.equal('./test/mock/wav/test.wav');
@@ -287,6 +290,9 @@ describe('Inputs', () => {
               expect(res.body.site).to.equal(input.site);
               expect(res.body.series).to.equal(input.series);
               expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
+              expect(res.body.durationMs).to.equal(input.durationMs);
+              expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
+              expect(res.body.sizeBytes).to.equal(input.sizeBytes);
               expect(res.body.coords).to.eql(input.coords);
               done();
             })
@@ -342,6 +348,9 @@ describe('Inputs', () => {
                 expect(input.site).to.equal(inputs[index].site);
                 expect(input.series).to.equal(inputs[index].series);
                 expect(input.recordTimeMs).to.equal(inputs[index].recordTimeMs);
+                expect(input.durationMs).to.equal(inputs[index].durationMs);
+                expect(input.sampleRateHz).to.equal(inputs[index].sampleRateHz);
+                expect(input.sizeBytes).to.equal(inputs[index].sizeBytes);
                 expect(input.coords).to.eql(inputs[index].coords);
               });
               done();

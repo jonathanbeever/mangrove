@@ -11,7 +11,16 @@ settings.load();
 
 const inputDir = settings.value('inputDir');
 
-function mockInput(_id, site, series, recordTimeMs, coords) {
+function mockInput(
+  _id,
+  site,
+  series,
+  recordTimeMs,
+  durationMs,
+  sampleRateHz,
+  sizeBytes,
+  coords,
+) {
   const path = nodePath.join(inputDir, site, series, 'test.wav');
 
   storage.copyFile('./test/mock/wav/test.wav', path);
@@ -22,6 +31,9 @@ function mockInput(_id, site, series, recordTimeMs, coords) {
     site,
     series,
     recordTimeMs,
+    durationMs,
+    sampleRateHz,
+    sizeBytes,
     coords,
   });
 }
@@ -32,11 +44,24 @@ const nextMockInput = () => {
   const site = 'UCF Arboretum';
   const series = 'Hurricane Irma';
   const recordTimeMs = 1505016000000;
+  const durationMs = 30000;
+  const sampleRateHz = 44100;
+  const sizeBytes = 5292044;
   const coords = {
     lat: 28.596238,
     long: -81.191381,
   };
-  return mockInput(inputId, site, series, recordTimeMs, coords);
+
+  return mockInput(
+    inputId,
+    site,
+    series,
+    recordTimeMs,
+    durationMs,
+    sampleRateHz,
+    sizeBytes,
+    coords,
+  );
 };
 
 function mockInputCreateJson(site, series, recordTimeMs, coords) {
