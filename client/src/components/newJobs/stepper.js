@@ -199,40 +199,40 @@ class HorizontalLinearStepper extends React.Component {
     switch(this.state.index) {
       case 'aci': {
         params['aci']['minFreq'] = 0
-        params['aci']['maxFreq'] = 16000
-        params['aci']['fftW'] = 10
-        params['aci']['j'] = 30
+        params['aci']['maxFreq'] = 96000
+        params['aci']['fftW'] = 512
+        params['aci']['j'] = 5
 
         break;
       }
       case 'adi': {
-        params['adi']['maxFreq'] = 16000
-        params['adi']['dbThreshold'] = 32
-        params['adi']['freqStep'] = 512
+        params['adi']['maxFreq'] = 10000
+        params['adi']['dbThreshold'] = -50
+        params['adi']['freqStep'] = 1000
         params['adi']['shannon'] = true
 
         break;
       }
       case 'aei': {
-        params['aei']['maxFreq'] = 16000
-        params['aei']['dbThreshold'] = 32
-        params['aei']['freqStep'] = 512
+        params['aei']['maxFreq'] = 10000
+        params['aei']['dbThreshold'] = -50
+        params['aei']['freqStep'] = 1000
 
         break;
       }
       case 'bi': {
-        params['aci']['minFreq'] = 0
-        params['aci']['maxFreq'] = 16000
-        params['aci']['fftW'] = 10
+        params['aci']['minFreq'] = 2000
+        params['aci']['maxFreq'] = 8000
+        params['aci']['fftW'] = 512
 
         break;
       }
       case 'ndsi': {
-        params['ndsi']['fftW'] = 10
-        params['ndsi']['anthroMin'] = 5001
-        params['ndsi']['anthroMax'] = 20000
-        params['ndsi']['bioMin'] = 0
-        params['ndsi']['bioMax'] = 5000
+        params['ndsi']['fftW'] = 1024
+        params['ndsi']['anthroMin'] = 1000
+        params['ndsi']['anthroMax'] = 2000
+        params['ndsi']['bioMin'] = 2000
+        params['ndsi']['bioMax'] = 11000
 
         break;
       }
