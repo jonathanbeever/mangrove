@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
 import Popover from '@material-ui/core/Popover';
 import { Redirect } from 'react-router-dom';
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
@@ -21,7 +24,8 @@ class Login extends Component {
 		this.state = {
 			passopen: false,
 			messageAnchor: null,
-			verifyopen: false
+			verifyopen: false,
+			step: 0,
 		}
 
 		this.login = this.login.bind(this);
@@ -30,7 +34,6 @@ class Login extends Component {
 		this.confirmRegistration = this.confirmRegistration.bind(this);
 
 		this.logo = React.createRef();
-		this.code = React.createRef();
 		// this.entrance = React.createRef();
 	}
 
@@ -109,6 +112,60 @@ class Login extends Component {
 		}
 	}
 
+
+
+	getStepContent() {
+		const buttonStyle = {
+			fontSize: '13px',
+			margin: '.5em'
+		};
+
+		const stepStyle = {
+			textAlign: 'center'
+		}
+
+		console.log("Awaken, my Love");
+
+		switch(this.state.step) {
+			case 0:
+				return (
+					<div style={stepStyle}>
+						<h3>Create an Account</h3>
+						<TextField
+							type="text"
+							placeholder="Email Address"
+							className="tfield"
+							value={this.state.userField}
+							onChange={this._handleUserChange}  />
+						<TextField
+							type="password"
+							placeholder="Password"
+							className="tfield"
+							value={this.state.passField}
+							onChange={this._handlePassChange}  />
+						<Button onClick={this.register} style={buttonStyle} >Create Account</Button>
+					</div>
+				);
+			case 1:
+				return (
+					<div style={stepStyle}>
+						<h3>Verify your email</h3>
+						<p>A verification code has been sent to your email address.</p>
+						<p>Please enter it here to verify your account.</p>
+						<TextField
+							type="text"
+							placeholder="e.g. 123456"
+							className="tfield"
+							value={this.state.codeField}
+							onChange={this._handleCodeChange} />
+						<Button onClick={this.confirmRegistration} style={buttonStyle} >Confirm Registration</Button>
+					</div>
+				);
+			default:
+				return "Segmentation Fault (core dumped)";
+		}
+	}
+
 	login() {
 		var authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
 			Username: this.state.userField,
@@ -142,10 +199,12 @@ class Login extends Component {
 			}
 			var cognitoUser = result.user;
 			console.log(cognitoUser.getUsername() + ' has been registered!');
-			this.code.current.disabled = false;
 		});
 
-		this.setState({verifyopen: true});
+		this.setState({
+			codeField: "",
+			step: 1
+		});
 	}
 
 	confirmRegistration() {
@@ -162,6 +221,10 @@ class Login extends Component {
 			}
 
 			console.log('Verified');
+			this.setState({
+				registrationopen: false,
+				step: 0
+			});
 		});
 	}
 
@@ -207,9 +270,9 @@ class Login extends Component {
 	render() {
 		const modalStyle = {
 			backgroundColor: 'white',
-			margin: '0 25%',
-			marginTop: '5em',
-			padding: '1em'
+			margin: "5em 10%",
+			padding: "3em 12%",
+			borderRadius: '1em'
 		};
 
 		const buttonStyle = {
@@ -226,6 +289,7 @@ class Login extends Component {
 		const image = require('./logo.svg');
 		const {messageAnchor} = this.state;
 		const open = Boolean(messageAnchor);
+		const steps = ["Register Account", "Verify Registration"];
 
 		if(this.state.redirect) {
 			return <Redirect push to="/catalog" />;
@@ -269,8 +333,8 @@ class Login extends Component {
 					value={this.state.passField}
 					onKeyDown={this.handleEnter}
 					onChange={this._handlePassChange}  />
-				<Button onClick={this.login} style={buttonStyle} color="primary">Login</Button>
-				<Button onClick={this.handleRegistrationOpen} style={buttonStyle} color="primary">Create an Account</Button>
+				<Button onClick={this.login} style={buttonStyle} >Login</Button>
+				<Button onClick={this.handleRegistrationOpen} style={buttonStyle} >Create an Account</Button>
 
 
 				<Modal open={this.state.passopen} onClose={this.handleNewPassClose}>
@@ -288,37 +352,26 @@ class Login extends Component {
 							className="tfield"
 							value={this.state.newPassField}
 							onChange={this._handleNewPassChange}  />
-						<Button onClick={this.changePassword} style={buttonStyle} color="primary">Create New Password</Button>
+						<Button onClick={this.changePassword} style={buttonStyle} >Create New Password</Button>
 					</div>
 				</Modal>
 
 				<Modal open={this.state.registrationopen} onClose={this.handleRegistrationClose}>
 					<div style={modalStyle}>
-						<h3>Create an Account</h3>
-						<TextField
-							type="text"
-							placeholder="Email Address"
-							className="tfield"
-							value={this.state.userField}
-							onChange={this._handleUserChange}  />
-						<TextField
-							type="password"
-							placeholder="Password"
-							className="tfield"
-							value={this.state.passField}
-							onChange={this._handlePassChange}  />
-						<Button onClick={this.register} style={buttonStyle} color="primary">Create Account</Button>
+						<style>{"#stepper * {font-size:16px;}"}</style>
+						<Stepper activeStep={this.state.step} id="stepper">
+							{steps.map((label, index) => {
+								const props = {};
+								const labelProps = {};
+								return (
+									<Step key={label} {...props} style={{fontSize: "26px"}}>
+										<StepLabel style={{fontSize: 16}} {...labelProps}>{label}</StepLabel>
+									</Step>
+								);
+							})}
+						</Stepper>
 						<div>
-							<h3>Verify your email</h3>
-							<p>Upon registration, a verification code will be sent to your email address. Please enter it here to verify your account</p>
-							<TextField
-								type="text"
-								placeholder="e.g. 123456"
-								className="tfield"
-								ref={this.code}
-								value={this.state.codeField}
-								onChange={this._handleCodeChange} />
-							<Button onClick={this.confirmRegistration} style={buttonStyle} color="primary">Confirm Registration</Button>
+							{this.getStepContent()}
 						</div>
 					</div>
 				</Modal>
