@@ -20,6 +20,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
 
 function createData(id, type, author, time, input) {
+  input = input.site + ' - ' + input.series + ' - ' + moment(input.recordTimeMs).format("MM/DD/YY, hh:mm:ss")
   return { id: id, type, author, time, input };
 }
 
@@ -213,7 +214,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredJobs.map(job => {
-      return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].path)
+      return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
     })
     this.setState({data: data})
   }
@@ -221,7 +222,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredJobs.map(job => {
-        return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].path)
+        return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
       })
       this.setState({data: data})
 

@@ -55,11 +55,6 @@ class ChooseFiles extends React.Component {
   componentDidMount = () => {
     axios.get('http://localhost:3000/inputs')
     .then(res => {
-      res.data.inputs.map(input => {
-        var path = input.path.split('\\')
-        input.path = path[path.length - 1]
-        return input
-      })
       this.setState({ allFiles: res.data.inputs })
       this.setState({ filteredInputs: res.data.inputs })
     })
@@ -71,8 +66,6 @@ class ChooseFiles extends React.Component {
 
     resp.forEach(file => {
       if(allFiles.indexOf(file.data) === -1) {
-        var path = file.data.path.split('\\')
-        file.data.path = path[path.length - 1]
         allFiles.push(file.data)
       }
     })
