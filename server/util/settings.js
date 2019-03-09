@@ -16,7 +16,6 @@ const rootDir = config.util.getEnv('NODE_ENV') !== 'test'
   ? path.join(os.homedir(), storage.root)
   : path.join(os.tmpdir(), storage.root);
 
-
 const value = key => (config.util.getEnv('NODE_ENV') !== 'test'
   ? settings.value(key)
   : testSettings[key]);
@@ -27,6 +26,21 @@ const setValue = (key, newValue) => {
   } else {
     testSettings[key] = newValue;
   }
+};
+
+// TODO: Integrate this into the setValue() function
+const setCores = async (numCores) => {
+  if (global.jobQueue.queue !== null) await global.jobQueue.queue.pause();
+
+  if (numCores > os.cpus().length) {
+    settings.setValue('cores', os.cpus().length);
+  } else if (numCores <= 0) {
+    settings.setValue('cores', 1);
+  } else {
+    settings.setValue('cores', numCores);
+  }
+
+  if (global.jobQueue.queue !== null) await global.jobQueue.queue.pause();
 };
 
 const load = () => {
@@ -47,10 +61,10 @@ const load = () => {
   }
 };
 
-
 module.exports = {
   rootDir,
   load,
   value,
   setValue,
+  setCores,
 };

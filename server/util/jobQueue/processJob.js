@@ -1,9 +1,10 @@
 const config = require('config');
-const { getJobModel } = require('../api/models/job/utils');
-const Input = require('../api/models/input');
-const { getSpecModel } = require('../api/models/spec/utils');
-const { mockProcessJob } = require('../test/mock/mockProcessJob');
-const jobProcessor = require('../util/jobProcessor');
+
+const { getJobModel } = require('../../api/models/job/utils');
+const Input = require('../../api/models/input');
+const { getSpecModel } = require('../../api/models/spec/utils');
+const { mockProcessJob } = require('../../test/mock/mockProcessJob');
+const jobProcessor = require('../../util/jobProcessor');
 
 module.exports = async (job) => {
   const JobModel = getJobModel(job.data.type);
@@ -18,5 +19,5 @@ module.exports = async (job) => {
     : jobProcess = mockProcessJob;
 
   const result = await jobProcess(populatedJob);
-  return Promise.resolve(result);
+  return result;
 };

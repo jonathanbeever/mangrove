@@ -1,10 +1,12 @@
 const Queue = require('bull');
-const Status = require('../api/models/status');
+const Status = require('../../api/models/status');
 const {
   updateJob,
   getPendingJobs,
-} = require('../api/models/job/utils');
-const { value } = require('./settings');
+} = require('../../api/models/job/utils');
+const settings = require('../settings');
+
+const cores = settings.value('cores');
 
 function JobQueue() {
   this.queue = null;
@@ -32,7 +34,7 @@ function JobQueue() {
 
   const createQueue = () => {
     this.queue = new Queue('job processing');
-    this.queue.process(value('cores'), `${__dirname}/processor.js`);
+    this.queue.process(cores, `${__dirname}/processJob.js`);
 
     this.queue.on('active', (job) => {
       updateJob(job.data, { status: Status.PROCESSING });
