@@ -238,12 +238,14 @@ describe('Inputs', () => {
           expect(ObjectId(res.body.inputId).toString()).to.equal(
             res.body.inputId, // Checks whether it's a valid ObjectId
           );
-          expect(res.body.path).to.equal(input.path);
           expect(res.body.site).to.equal(input.site);
           expect(res.body.series).to.equal(input.series);
           expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
+          expect(res.body.durationMs).to.equal(input.durationMs);
+          expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
+          expect(res.body.sizeBytes).to.equal(input.sizeBytes);
           expect(res.body.coords).to.eql(input.coords);
-          expect(res.body.path).to.be.a.file()
+          expect(input.path).to.be.a.file()
             .and.equal('./test/mock/wav/test.wav');
           done();
         })
@@ -283,11 +285,15 @@ describe('Inputs', () => {
               expect(res).to.have.status(200);
               expect(res.body).to.have.all.keys(getInputKeys());
               expect(res.body.inputId).to.equal(input.id);
-              expect(res.body.path).to.equal(input.path);
               expect(res.body.site).to.equal(input.site);
               expect(res.body.series).to.equal(input.series);
               expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
+              expect(res.body.durationMs).to.equal(input.durationMs);
+              expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
+              expect(res.body.sizeBytes).to.equal(input.sizeBytes);
               expect(res.body.coords).to.eql(input.coords);
+              expect(input.path).to.be.a.file()
+                .and.equal('./test/mock/wav/test.wav');
               done();
             })
             .catch((err) => {
@@ -338,11 +344,15 @@ describe('Inputs', () => {
               res.body.inputs.forEach((input, index) => {
                 expect(input).to.have.all.keys(getInputKeys());
                 expect(input.inputId).to.equal(inputs[index].id);
-                expect(input.path).to.equal(inputs[index].path);
                 expect(input.site).to.equal(inputs[index].site);
                 expect(input.series).to.equal(inputs[index].series);
                 expect(input.recordTimeMs).to.equal(inputs[index].recordTimeMs);
+                expect(input.durationMs).to.equal(inputs[index].durationMs);
+                expect(input.sampleRateHz).to.equal(inputs[index].sampleRateHz);
+                expect(input.sizeBytes).to.equal(inputs[index].sizeBytes);
                 expect(input.coords).to.eql(inputs[index].coords);
+                expect(inputs[index].path).to.be.a.file()
+                  .and.equal('./test/mock/wav/test.wav');
               });
               done();
             })

@@ -11,9 +11,13 @@ const {
   getUploadPath,
   deleteInputFile,
 } = require('../../util/storage');
+const { getAudioMetadata } = require('../../util/audioMetadata');
 
 const Input = require('../models/input');
-const { parseInputJson } = require('../models/input/utils');
+const {
+  parseInputJson,
+  getNewFilename,
+} = require('../models/input/utils');
 
 const error = config.get('error');
 
@@ -49,7 +53,13 @@ const upload = multer({
       }
     },
     filename(req, file, cb) {
-      cb(null, file.originalname); // Rename to `${json.recordTimeMs}.wav`?
+      try {
+        const parsedJson = parseInputJson(req.body.json);
+        const filename = getNewFilename(parsedJson.recordTimeMs, file.mimetype);
+        cb(null, filename);
+      } catch (err) {
+        cb(err);
+      }
     },
   }),
   // limits: { fileSize: 1024 * 1024 * 1024 }, // 1 GB
@@ -86,37 +96,45 @@ router.put('/', (req, res) => {
     }
 
     const parsedJson = parseInputJson(req.body.json);
-    const input = new Input({
-      _id: new mongoose.Types.ObjectId(),
-      path: req.file.path,
-      site: parsedJson.site,
-      series: parsedJson.series,
-      recordTimeMs: parsedJson.recordTimeMs,
-      coords: {
-        lat: parsedJson.coords.lat,
-        long: parsedJson.coords.long,
-      },
-    });
-
-    Input.create(input)
-      .then((createResult) => {
-        res.status(201).json({
-          inputId: createResult._id,
-          path: createResult.path,
-          site: createResult.site,
-          series: createResult.series,
-          recordTimeMs: createResult.recordTimeMs,
+    getAudioMetadata(req.file.path)
+      .then((audioMetadata) => {
+        const input = new Input({
+          _id: new mongoose.Types.ObjectId(),
+          path: req.file.path,
+          site: parsedJson.site,
+          series: parsedJson.series,
+          recordTimeMs: parsedJson.recordTimeMs,
+          durationMs: audioMetadata.durationMs,
+          sampleRateHz: audioMetadata.sampleRateHz,
+          sizeBytes: audioMetadata.sizeBytes,
           coords: {
-            lat: createResult.coords.lat,
-            long: createResult.coords.long,
+            lat: parsedJson.coords.lat,
+            long: parsedJson.coords.long,
           },
         });
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).json({
-          error: error.internal,
-        });
+
+        Input.create(input)
+          .then((createResult) => {
+            res.status(201).json({
+              inputId: createResult._id,
+              site: createResult.site,
+              series: createResult.series,
+              recordTimeMs: createResult.recordTimeMs,
+              durationMs: createResult.durationMs,
+              sampleRateHz: createResult.sampleRateHz,
+              sizeBytes: createResult.sizeBytes,
+              coords: {
+                lat: createResult.coords.lat,
+                long: createResult.coords.long,
+              },
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+            res.status(500).json({
+              error: error.internal,
+            });
+          });
       });
   });
 });
@@ -131,10 +149,12 @@ router.get('/:inputId', (req, res) => {
       if (searchResult) {
         res.status(200).json({
           inputId: searchResult._id,
-          path: searchResult.path,
           site: searchResult.site,
           series: searchResult.series,
           recordTimeMs: searchResult.recordTimeMs,
+          durationMs: searchResult.durationMs,
+          sampleRateHz: searchResult.sampleRateHz,
+          sizeBytes: searchResult.sizeBytes,
           coords: {
             lat: searchResult.coords.lat,
             long: searchResult.coords.long,
@@ -163,10 +183,12 @@ router.get('/', (req, res) => {
         count: searchResult.length,
         inputs: searchResult.map(input => ({
           inputId: input._id,
-          path: input.path,
           site: input.site,
           series: input.series,
           recordTimeMs: input.recordTimeMs,
+          durationMs: input.durationMs,
+          sampleRateHz: input.sampleRateHz,
+          sizeBytes: input.sizeBytes,
           coords: {
             lat: input.coords.lat,
             long: input.coords.long,
