@@ -10,17 +10,10 @@ mongoose.Promise = global.Promise;
 // https://github.com/Automattic/mongoose/issues/6880
 mongoose.set('useFindAndModify', false);
 
-function open() {
-  return new Promise((resolve, reject) => {
-    mongoose.connect(uri, { useNewUrlParser: true }, (err) => {
-      if (err) return reject(err);
-      resolve();
-    });
-  });
-}
+const open = async () => {
+  await mongoose.connect(uri, { useNewUrlParser: true });
+};
 
-function close() {
-  return mongoose.disconnect();
-}
+const close = () => mongoose.disconnect();
 
 module.exports = { uri, open, close };
