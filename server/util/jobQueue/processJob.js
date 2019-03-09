@@ -12,8 +12,8 @@ module.exports = async (job) => {
   const populatedJob = JobModel(job.data);
   populatedJob.input = Input(job.data.input);
   populatedJob.spec = SpecModel(job.data.spec);
-  let jobProcess;
 
+  let jobProcess;
   config.util.getEnv('NODE_ENV') !== 'test'
     ? jobProcess = jobProcessor.process
     : jobProcess = mockProcessJob;
