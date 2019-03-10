@@ -194,16 +194,16 @@ class Login extends Component {
 	register() {
 		this.userPool.signUp(this.state.userField, this.state.passField, [], null, (err, result) => {
 			if(err) {
-				console.log(err);
+				alert(err.message);
 				return;
 			}
 			var cognitoUser = result.user;
 			console.log(cognitoUser.getUsername() + ' has been registered!');
-		});
 
-		this.setState({
-			codeField: "",
-			step: 1
+			this.setState({
+				codeField: "",
+				step: 1
+			});
 		});
 	}
 
@@ -213,6 +213,9 @@ class Login extends Component {
 			Pool: this.userPool
 		};
 
+		// Passing functions as paramaters is illegal in several states
+		var literally_this = this;
+
 		var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 		cognitoUser.confirmRegistration(this.state.codeField, true, function(err, result) {
 			if(err) {
@@ -221,8 +224,10 @@ class Login extends Component {
 			}
 
 			console.log('Verified');
-			this.setState({
+			literally_this.setState({
 				registrationopen: false,
+				popoverText: "Your account has been created!",
+				messageAnchor: literally_this.logo.current,
 				step: 0
 			});
 		});
@@ -270,8 +275,9 @@ class Login extends Component {
 	render() {
 		const modalStyle = {
 			backgroundColor: 'white',
-			margin: "5em 10%",
-			padding: "3em 12%",
+			margin: "15vh 25vw",
+			padding: "26vh 5vw",
+			paddingTop: '2vh',
 			borderRadius: '1em'
 		};
 
@@ -284,12 +290,10 @@ class Login extends Component {
 			margin: '1em'
 		};
 
-		// var logoStyle =
-
 		const image = require('./logo.svg');
 		const {messageAnchor} = this.state;
 		const open = Boolean(messageAnchor);
-		const steps = ["Register Account", "Verify Registration"];
+		const steps = ["Register Account", "Verify Email Address"];
 
 		if(this.state.redirect) {
 			return <Redirect push to="/catalog" />;
@@ -359,7 +363,7 @@ class Login extends Component {
 				<Modal open={this.state.registrationopen} onClose={this.handleRegistrationClose}>
 					<div style={modalStyle}>
 						<style>{"#stepper * {font-size:16px;}"}</style>
-						<Stepper activeStep={this.state.step} id="stepper">
+						<Stepper activeStep={this.state.step} id="stepper" style={{marginBottom: '5vh'}}>
 							{steps.map((label, index) => {
 								const props = {};
 								const labelProps = {};
