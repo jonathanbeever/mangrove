@@ -35,12 +35,12 @@ const nextMockJob = (type, status = Status.WAITING) => {
   return mockJob(jobId, type, input, spec, author, creationTimeMs, status);
 };
 
-const nextMockPopulatedJob = (
+const nextMockPopulatedJob = async (
   type,
   status = Status.QUEUED,
   mockedInput = null,
   mockedSpec = null,
-) => new Promise((resolve, reject) => {
+) => {
   if (mockedSpec && type !== specTypeToType(mockedSpec.type)) {
     throw new Error('`type` does not correspond to `mockedSpec.type`');
   }
@@ -61,20 +61,15 @@ const nextMockPopulatedJob = (
     status,
   );
 
-  return Promise.all([
-    Input.create(input),
-    Spec.create(spec),
-    Job.create(job),
-  ])
-    .then((createResults) => {
-      Job.findOne(createResults[2])
-        .populate('input')
-        .populate('spec')
-        .then(populatedJob => resolve(populatedJob))
-        .catch(err => reject(err));
-    })
-    .catch(err => reject(err));
-});
+  await Input.create(input);
+  await Spec.create(spec);
+  const createdJob = await Job.create(job);
+
+  const searchResult = await Job.findOne(createdJob)
+    .populate('input')
+    .populate('spec');
+  return searchResult;
+};
 
 const mockJobCreateJson = (type, inputId, specId) => JSON.stringify({
   type,

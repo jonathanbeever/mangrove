@@ -44,134 +44,95 @@ describe('Inputs', () => {
     deleteRootDir();
   });
 
-  beforeEach((done) => {
-    Input.deleteMany({})
-      .then(() => {
-        deleteInputDir();
-        done();
-      });
+  beforeEach(async () => {
+    await Input.deleteMany();
+    deleteInputDir();
   });
 
   describe('/PUT Input', () => {
     // TODO: Deal with error "Multipart: Boundary not found"
-    it('It should fail to PUT an Input (missing both keys)', (done) => {
-      chai
-        .request(app)
-        .put('/inputs')
-        // .set('Content-Type', 'multipart/form-data')
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+    it('It should fail to PUT an Input (missing both keys)', async () => {
+      const res = await chai.request(app)
+        .put('/inputs');
+        // .set('Content-Type', 'multipart/form-data');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
     });
 
-    it('It should fail to PUT an Input (missing file)', (done) => {
+    it('It should fail to PUT an Input (missing file)', async () => {
       const inputJson = nextMockInputCreateJson();
 
-      chai
-        .request(app)
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
-        .field('json', inputJson)
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .field('json', inputJson);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
     });
 
-    it('It should fail to PUT an Input (missing JSON)', (done) => {
-      chai
-        .request(app)
+    it('It should fail to PUT an Input (missing JSON)', async () => {
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
-        .attach('file', './test/mock/wav/test.wav')
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          expect(inputDir).to.not.be.a.path();
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .attach('file', './test/mock/wav/test.wav');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+      expect(inputDir).to.not.be.a.path();
     });
 
-    it('It should fail to PUT an Input (invalid keys in request)', (done) => {
+    it('It should fail to PUT an Input (invalid keys in request)', async () => {
       const inputJson = nextMockInputCreateJson();
 
-      chai
-        .request(app)
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
         .field('json', inputJson)
         .field('extra', true)
-        .attach('file', './test/mock/wav/test.wav')
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          expect(inputDir).to.not.be.a.path();
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .attach('file', './test/mock/wav/test.wav');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+      expect(inputDir).to.not.be.a.path();
     });
 
-    it('It should fail to PUT an Input (invalid JSON)', (done) => {
+    it('It should fail to PUT an Input (invalid JSON)', async () => {
       const inputJson = '';
 
-      chai
-        .request(app)
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
         .field('json', inputJson)
-        .attach('file', './test/mock/wav/test.wav')
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          expect(inputDir).to.not.be.a.path();
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .attach('file', './test/mock/wav/test.wav');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+      expect(inputDir).to.not.be.a.path();
     });
 
-    it('It should fail to PUT an Input (missing keys in JSON)', (done) => {
+    it('It should fail to PUT an Input (missing keys in JSON)', async () => {
       const inputJson = '{}';
 
-      chai
-        .request(app)
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
         .field('json', inputJson)
-        .attach('file', './test/mock/wav/test.wav')
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          expect(inputDir).to.not.be.a.path();
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .attach('file', './test/mock/wav/test.wav');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+      expect(inputDir).to.not.be.a.path();
     });
 
-    it('It should fail to PUT an Input (invalid keys in JSON)', (done) => {
+    it('It should fail to PUT an Input (invalid keys in JSON)', async () => {
       const inputJson = JSON.stringify({
         site: 'UCF Arboretum',
         series: 'Hurricane Irma',
@@ -183,233 +144,167 @@ describe('Inputs', () => {
         extra: true,
       });
 
-      chai
-        .request(app)
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
         .field('json', inputJson)
-        .attach('file', './test/mock/wav/test.wav')
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          expect(inputDir).to.not.be.a.path();
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .attach('file', './test/mock/wav/test.wav');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+      expect(inputDir).to.not.be.a.path();
     });
 
-    it('It should fail to PUT an Input (file not a WAV)', (done) => {
+    it('It should fail to PUT an Input (file not a WAV)', async () => {
       const inputJson = nextMockInputCreateJson();
 
-      chai
-        .request(app)
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
         .field('json', inputJson)
-        .attach('file', './README.md')
-        .then((res) => {
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          expect(inputDir).to.not.be.a.path();
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .attach('file', './README.md');
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+      expect(inputDir).to.not.be.a.path();
     });
 
-    it('It should PUT an Input (new)', (done) => {
+    it('It should PUT an Input (new)', async () => {
       const input = nextMockInput();
       const inputJson = getJsonFromMockInput(input);
 
-      chai
-        .request(app)
+      const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
         .field('json', inputJson)
-        .attach('file', './test/mock/wav/test.wav')
-        .then((res) => {
-          expect(res).to.have.status(201);
-          expect(res.body).to.have.all.keys(getInputKeys());
-          expect(ObjectId(res.body.inputId).toString()).to.equal(
-            res.body.inputId, // Checks whether it's a valid ObjectId
-          );
-          expect(res.body.site).to.equal(input.site);
-          expect(res.body.series).to.equal(input.series);
-          expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
-          expect(res.body.durationMs).to.equal(input.durationMs);
-          expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
-          expect(res.body.sizeBytes).to.equal(input.sizeBytes);
-          expect(res.body.coords).to.eql(input.coords);
-          expect(input.path).to.be.a.file()
-            .and.equal('./test/mock/wav/test.wav');
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+        .attach('file', './test/mock/wav/test.wav');
+
+      expect(res).to.have.status(201);
+      expect(res.body).to.have.all.keys(getInputKeys());
+      expect(ObjectId(res.body.inputId).toString()).to.equal(
+        res.body.inputId, // Checks whether it's a valid ObjectId
+      );
+      expect(res.body.site).to.equal(input.site);
+      expect(res.body.series).to.equal(input.series);
+      expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
+      expect(res.body.durationMs).to.equal(input.durationMs);
+      expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
+      expect(res.body.sizeBytes).to.equal(input.sizeBytes);
+      expect(res.body.coords).to.eql(input.coords);
+      expect(input.path).to.be.a.file()
+        .and.equal('./test/mock/wav/test.wav');
     });
 
     // TODO: Input already exists
   });
 
   describe('/GET Input', () => {
-    it('It should fail to GET an Input (not found)', (done) => {
-      chai
-        .request(app)
-        .get(`/inputs/${nextMockObjectId()}`)
-        .then((res) => {
-          expect(res).to.have.status(404);
-          expect(res.body).to.have.all.keys('message');
-          expect(res.body.message).to.be.a('string');
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+    it('It should fail to GET an Input (not found)', async () => {
+      const res = await chai.request(app)
+        .get(`/inputs/${nextMockObjectId()}`);
+
+      expect(res).to.have.status(404);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
     });
 
-    it('It should GET an Input (found)', (done) => {
+    it('It should GET an Input (found)', async () => {
       const input = nextMockInput();
 
-      Input.create(input)
-        .then(() => {
-          chai
-            .request(app)
-            .get(`/inputs/${input.id}`)
-            .then((res) => {
-              expect(res).to.have.status(200);
-              expect(res.body).to.have.all.keys(getInputKeys());
-              expect(res.body.inputId).to.equal(input.id);
-              expect(res.body.site).to.equal(input.site);
-              expect(res.body.series).to.equal(input.series);
-              expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
-              expect(res.body.durationMs).to.equal(input.durationMs);
-              expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
-              expect(res.body.sizeBytes).to.equal(input.sizeBytes);
-              expect(res.body.coords).to.eql(input.coords);
-              expect(input.path).to.be.a.file()
-                .and.equal('./test/mock/wav/test.wav');
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        })
-        .catch((err) => {
-          done(err);
-        });
+      await Input.create(input);
+
+      const res = await chai.request(app)
+        .get(`/inputs/${input.id}`);
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.have.all.keys(getInputKeys());
+      expect(res.body.inputId).to.equal(input.id);
+      expect(res.body.site).to.equal(input.site);
+      expect(res.body.series).to.equal(input.series);
+      expect(res.body.recordTimeMs).to.equal(input.recordTimeMs);
+      expect(res.body.durationMs).to.equal(input.durationMs);
+      expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
+      expect(res.body.sizeBytes).to.equal(input.sizeBytes);
+      expect(res.body.coords).to.eql(input.coords);
+      expect(input.path).to.be.a.file()
+        .and.equal('./test/mock/wav/test.wav');
     });
   });
 
   describe('/GET all Inputs', () => {
-    it('It should GET all the Inputs (none)', (done) => {
-      chai
-        .request(app)
-        .get('/inputs')
-        .then((res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.be.an('object');
-          expect(res.body).to.have.all.keys(['count', 'inputs']);
-          expect(res.body.count).to.be.equal(0);
-          expect(res.body.inputs).to.be.an('array');
-          expect(res.body.inputs).to.be.empty;
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+    it('It should GET all the Inputs (none)', async () => {
+      const res = await chai.request(app)
+        .get('/inputs');
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.all.keys(['count', 'inputs']);
+      expect(res.body.count).to.be.equal(0);
+      expect(res.body.inputs).to.be.an('array');
+      expect(res.body.inputs).to.be.empty;
     });
 
-    it('It should GET all the Inputs (many)', (done) => {
+    it('It should GET all the Inputs (many)', async () => {
       const inputs = [];
       inputs.push(nextMockInput());
 
-      Input.insertMany(inputs)
-        .then(() => {
-          chai
-            .request(app)
-            .get('/inputs')
-            .then((res) => {
-              expect(res).to.have.status(200);
-              expect(res.body).to.be.an('object');
-              expect(res.body).to.have.all.keys(['count', 'inputs']);
-              expect(res.body.count).to.be.equal(inputs.length);
-              expect(res.body.inputs).to.be.an('array');
-              expect(res.body.inputs).to.have.lengthOf(inputs.length);
-              res.body.inputs.forEach((input, index) => {
-                expect(input).to.have.all.keys(getInputKeys());
-                expect(input.inputId).to.equal(inputs[index].id);
-                expect(input.site).to.equal(inputs[index].site);
-                expect(input.series).to.equal(inputs[index].series);
-                expect(input.recordTimeMs).to.equal(inputs[index].recordTimeMs);
-                expect(input.durationMs).to.equal(inputs[index].durationMs);
-                expect(input.sampleRateHz).to.equal(inputs[index].sampleRateHz);
-                expect(input.sizeBytes).to.equal(inputs[index].sizeBytes);
-                expect(input.coords).to.eql(inputs[index].coords);
-                expect(inputs[index].path).to.be.a.file()
-                  .and.equal('./test/mock/wav/test.wav');
-              });
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        })
-        .catch((err) => {
-          done(err);
-        });
+      await Input.insertMany(inputs);
+
+      const res = await chai.request(app)
+        .get('/inputs');
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.all.keys(['count', 'inputs']);
+      expect(res.body.count).to.be.equal(inputs.length);
+      expect(res.body.inputs).to.be.an('array');
+      expect(res.body.inputs).to.have.lengthOf(inputs.length);
+      res.body.inputs.forEach((input, index) => {
+        expect(input).to.have.all.keys(getInputKeys());
+        expect(input.inputId).to.equal(inputs[index].id);
+        expect(input.site).to.equal(inputs[index].site);
+        expect(input.series).to.equal(inputs[index].series);
+        expect(input.recordTimeMs).to.equal(inputs[index].recordTimeMs);
+        expect(input.durationMs).to.equal(inputs[index].durationMs);
+        expect(input.sampleRateHz).to.equal(inputs[index].sampleRateHz);
+        expect(input.sizeBytes).to.equal(inputs[index].sizeBytes);
+        expect(input.coords).to.eql(inputs[index].coords);
+        expect(inputs[index].path).to.be.a.file()
+          .and.equal('./test/mock/wav/test.wav');
+      });
     });
   });
 
   describe('/DELETE Input', () => {
-    it('It should DELETE an Input (not found)', (done) => {
-      chai
-        .request(app)
-        .delete(`/inputs/${nextMockObjectId()}`)
-        .then((res) => {
-          expect(res).to.have.status(200);
-          expect(res.body).to.be.an('object');
-          expect(res.body).to.have.all.keys('success', 'message');
-          expect(res.body.success).to.be.a('boolean');
-          expect(res.body.success).to.be.true;
-          expect(res.body.message).to.be.a('string');
-          done();
-        })
-        .catch((err) => {
-          done(err);
-        });
+    it('It should DELETE an Input (not found)', async () => {
+      const res = await chai.request(app)
+        .delete(`/inputs/${nextMockObjectId()}`);
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.all.keys('success', 'message');
+      expect(res.body.success).to.be.a('boolean');
+      expect(res.body.success).to.be.true;
+      expect(res.body.message).to.be.a('string');
     });
 
-    it('It should DELETE an Input (found)', (done) => {
+    it('It should DELETE an Input (found)', async () => {
       const input = nextMockInput();
 
-      Input.create(input)
-        .then(() => {
-          chai
-            .request(app)
-            .delete(`/inputs/${input.id}`)
-            .then((res) => {
-              expect(res).to.have.status(200);
-              expect(res.body).to.be.an('object');
-              expect(res.body).to.have.all.keys('success', 'message');
-              expect(res.body.success).to.be.a('boolean');
-              expect(res.body.success).to.be.true;
-              expect(res.body.message).to.be.a('string');
-              expect(input.path).to.not.be.a.path();
-              done();
-            })
-            .catch((err) => {
-              done(err);
-            });
-        })
-        .catch((err) => {
-          done(err);
-        });
+      await Input.create(input);
+
+      const res = await chai.request(app)
+        .delete(`/inputs/${input.id}`);
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.all.keys('success', 'message');
+      expect(res.body.success).to.be.a('boolean');
+      expect(res.body.success).to.be.true;
+      expect(res.body.message).to.be.a('string');
+      expect(input.path).to.not.be.a.path();
     });
   });
 });

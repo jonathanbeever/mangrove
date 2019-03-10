@@ -71,13 +71,11 @@ const upload = multer({
 // path information from req.body.json by the time we're storing the file. This
 // is a limitation of the Multer package. See the 'upload' variable above.
 router.put('/', (req, res) => {
-  upload.single('file')(req, res, (uploadErr) => {
+  upload.single('file')(req, res, async (uploadErr) => {
     if (uploadErr) {
       if (uploadErr instanceof multer.MulterError) {
         console.error(uploadErr);
-        return res.status(500).json({
-          error: error.internal,
-        });
+        return res.status(500).json({ error: error.internal });
       }
       return res.status(400).json({
         message: uploadErr.message,
@@ -95,150 +93,129 @@ router.put('/', (req, res) => {
       });
     }
 
-    const parsedJson = parseInputJson(req.body.json);
-    getAudioMetadata(req.file.path)
-      .then((audioMetadata) => {
-        const input = new Input({
-          _id: new mongoose.Types.ObjectId(),
-          path: req.file.path,
-          site: parsedJson.site,
-          series: parsedJson.series,
-          recordTimeMs: parsedJson.recordTimeMs,
-          durationMs: audioMetadata.durationMs,
-          sampleRateHz: audioMetadata.sampleRateHz,
-          sizeBytes: audioMetadata.sizeBytes,
-          coords: {
-            lat: parsedJson.coords.lat,
-            long: parsedJson.coords.long,
-          },
-        });
+    try {
+      const parsedJson = parseInputJson(req.body.json);
+      const audioMetadata = await getAudioMetadata(req.file.path);
 
-        Input.create(input)
-          .then((createResult) => {
-            res.status(201).json({
-              inputId: createResult._id,
-              site: createResult.site,
-              series: createResult.series,
-              recordTimeMs: createResult.recordTimeMs,
-              durationMs: createResult.durationMs,
-              sampleRateHz: createResult.sampleRateHz,
-              sizeBytes: createResult.sizeBytes,
-              coords: {
-                lat: createResult.coords.lat,
-                long: createResult.coords.long,
-              },
-            });
-          })
-          .catch((err) => {
-            console.error(err);
-            res.status(500).json({
-              error: error.internal,
-            });
-          });
+      const input = new Input({
+        _id: new mongoose.Types.ObjectId(),
+        path: req.file.path,
+        site: parsedJson.site,
+        series: parsedJson.series,
+        recordTimeMs: parsedJson.recordTimeMs,
+        durationMs: audioMetadata.durationMs,
+        sampleRateHz: audioMetadata.sampleRateHz,
+        sizeBytes: audioMetadata.sizeBytes,
+        coords: {
+          lat: parsedJson.coords.lat,
+          long: parsedJson.coords.long,
+        },
       });
+
+      const createResult = await Input.create(input);
+
+      return res.status(201).json({
+        inputId: createResult._id,
+        site: createResult.site,
+        series: createResult.series,
+        recordTimeMs: createResult.recordTimeMs,
+        durationMs: createResult.durationMs,
+        sampleRateHz: createResult.sampleRateHz,
+        sizeBytes: createResult.sizeBytes,
+        coords: {
+          lat: createResult.coords.lat,
+          long: createResult.coords.long,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: error.internal });
+    }
   });
 });
 
 // Get Input
-router.get('/:inputId', (req, res) => {
+router.get('/:inputId', async (req, res) => {
   const { inputId } = req.params;
 
-  Input.findById(inputId)
-    .exec()
-    .then((searchResult) => {
-      if (searchResult) {
-        res.status(200).json({
-          inputId: searchResult._id,
-          site: searchResult.site,
-          series: searchResult.series,
-          recordTimeMs: searchResult.recordTimeMs,
-          durationMs: searchResult.durationMs,
-          sampleRateHz: searchResult.sampleRateHz,
-          sizeBytes: searchResult.sizeBytes,
-          coords: {
-            lat: searchResult.coords.lat,
-            long: searchResult.coords.long,
-          },
-        });
-      } else {
-        res.status(404).json({
-          message: `No valid entry found for inputId: ${inputId}.`,
-        });
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({
-        error: error.internal,
+  try {
+    const searchResult = await Input.findById(inputId).exec();
+
+    if (!searchResult) {
+      return res.status(404).json({
+        message: `No valid entry found for inputId: ${inputId}.`,
       });
+    }
+
+    return res.status(200).json({
+      inputId: searchResult._id,
+      site: searchResult.site,
+      series: searchResult.series,
+      recordTimeMs: searchResult.recordTimeMs,
+      durationMs: searchResult.durationMs,
+      sampleRateHz: searchResult.sampleRateHz,
+      sizeBytes: searchResult.sizeBytes,
+      coords: {
+        lat: searchResult.coords.lat,
+        long: searchResult.coords.long,
+      },
     });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: error.internal });
+  }
 });
 
 // Get All Inputs
-router.get('/', (req, res) => {
-  Input.find()
-    .exec()
-    .then((searchResult) => {
-      res.status(200).json({
-        count: searchResult.length,
-        inputs: searchResult.map(input => ({
-          inputId: input._id,
-          site: input.site,
-          series: input.series,
-          recordTimeMs: input.recordTimeMs,
-          durationMs: input.durationMs,
-          sampleRateHz: input.sampleRateHz,
-          sizeBytes: input.sizeBytes,
-          coords: {
-            lat: input.coords.lat,
-            long: input.coords.long,
-          },
-        })),
-      });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({
-        error: error.internal,
-      });
+router.get('/', async (req, res) => {
+  try {
+    const searchResult = await Input.find().exec();
+
+    return res.status(200).json({
+      count: searchResult.length,
+      inputs: searchResult.map(input => ({
+        inputId: input._id,
+        site: input.site,
+        series: input.series,
+        recordTimeMs: input.recordTimeMs,
+        durationMs: input.durationMs,
+        sampleRateHz: input.sampleRateHz,
+        sizeBytes: input.sizeBytes,
+        coords: {
+          lat: input.coords.lat,
+          long: input.coords.long,
+        },
+      })),
     });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: error.internal });
+  }
 });
 
 // Delete Input
 // TODO: Delete Jobs associated with the Input
-router.delete('/:inputId', (req, res) => {
+router.delete('/:inputId', async (req, res) => {
   const { inputId } = req.params;
 
-  Input.findById(inputId)
-    .exec()
-    .then((searchResult) => {
-      Input.deleteOne({ _id: inputId })
-        .exec()
-        .then((deleteResult) => {
-          if (searchResult) deleteInputFile(searchResult.path);
+  try {
+    const searchResult = await Input.findById(inputId).exec();
+    const deleteResult = await Input.deleteOne({ _id: inputId }).exec();
 
-          res.status(200).json({
-            success: true,
-            message: (
-              deleteResult.n > 0
-                ? `Successfully deleted Input with inputId: ${inputId}.`
-                : `No valid entry found for inputId: ${inputId}.`
-            ),
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).json({
-            error: error.internal,
-          });
-        });
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).json({
-        error: error.internal,
-      });
+    if (searchResult) deleteInputFile(searchResult.path);
+
+    return res.status(200).json({
+      success: true,
+      message: (
+        deleteResult.n > 0
+          ? `Successfully deleted Input with inputId: ${inputId}.`
+          : `No valid entry found for inputId: ${inputId}.`
+      ),
     });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: error.internal });
+  }
 });
 
 module.exports = router;
