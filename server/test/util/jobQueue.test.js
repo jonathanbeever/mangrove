@@ -1,5 +1,4 @@
 const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
 
 const mockDb = require('../../test/mock/mockDb');
 const { nextMockJob } = require('../../test/mock/mockJob');
@@ -12,8 +11,6 @@ const jobQueue = require('../../util/jobQueue');
 
 const { expect } = chai;
 
-chai.use(chaiAsPromised);
-
 describe('Job Queue', () => {
   before(async () => {
     await mockDb.setup();
@@ -23,52 +20,49 @@ describe('Job Queue', () => {
     await mockDb.teardown();
   });
 
-  beforeEach((done) => {
-    Job.deleteMany({}, (err) => {
-      done();
-    });
+  beforeEach(async () => {
+    await Job.deleteMany();
   });
 
   afterEach(async () => {
     await jobQueue.destroy();
   });
 
-  it('Fail to Push to Uninitialized Queue', (done) => {
+  it('Fail to Push to Uninitialized Queue', async () => {
     const job = {};
-    expect(jobQueue.enqueue(job)).to.be.rejectedWith(Error).notify(done);
+    try {
+      await jobQueue.enqueue(job);
+      expect.fail();
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(Error);
+    }
   });
 
-  it('Fail to Enqueue Job, Not In Database', (done) => {
-    const job = nextMockJob(Type.ACI)._doc;
-    jobQueue.init()
-      .then(() => {
-        expect(jobQueue.enqueue(job)).to.be.rejectedWith(Error).notify(done);
-      })
-      .catch(() => { done(); });
+  it('Fail to Enqueue Job, Not In Database', async () => {
+    const job = nextMockJob(Type.ACI);
+    await jobQueue.init();
+    try {
+      await jobQueue.enqueue(job);
+      expect.fail();
+    } catch (err) {
+      expect(err).to.be.an.instanceOf(Error);
+    }
   });
 
-  it('Scan Database for Already Procesing and Queued Jobs', (done) => {
+  it('Scan Database for Already Processing and Queued Jobs', async () => {
     const randomJobs = makeRandomJobs(50);
     const countOfStatus = randomJobs.tallyOfStatus;
 
-    Promise.all(randomJobs.jobs)
-      .then(() => {
-        jobQueue.init()
-          .then(() => jobQueue.getRunningJobs())
-          .then((jobs) => {
-            expect(jobs).to.be.an('array');
-            expect(jobs[0]).to.be.an('Object');
-            expect(jobs.length).to.eql(26);
-          })
-          .then(() => jobQueue.getJobCounts())
-          .then((jobCounts) => {
-            const pendingCount = jobCounts.waiting + jobCounts.active + jobCounts.completed;
-            expect(pendingCount).to.be.eql(getCountOfPendingJobs(countOfStatus));
-            done();
-          })
-          .catch((err) => {
-            done(err);
-          });
-      });
+    await Promise.all(randomJobs.jobs);
+    await jobQueue.init();
+
+    const runningJobs = await jobQueue.getRunningJobs();
+    const { waiting, active, completed } = await jobQueue.getJobCounts();
+    const pendingCount = waiting + active + completed;
+
+    expect(runningJobs).to.be.an('array');
+    expect(runningJobs[0]).to.be.an('Object');
+    expect(runningJobs.length).to.eql(26);
+    expect(pendingCount).to.be.eql(getCountOfPendingJobs(countOfStatus));
   });
 });
