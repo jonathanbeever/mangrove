@@ -39,7 +39,7 @@ describe('Job Queue', () => {
     await jobQueue.destroy();
   });
 
-  it('Fail to Push to Uninitialized Queue', async () => {
+  it('Fail to push Job to uninitialized JobQueue', async () => {
     const job = {};
     try {
       await jobQueue.enqueue(job);
@@ -49,7 +49,7 @@ describe('Job Queue', () => {
     }
   });
 
-  it('Fail to Enqueue Job, Not In Database', async () => {
+  it('Fail to enqueue Job (not found)', async () => {
     const job = await nextMockJob(Type.ACI);
     await jobQueue.init();
     try {
@@ -60,7 +60,7 @@ describe('Job Queue', () => {
     }
   });
 
-  it('Scan Database for Already Processing and Queued Jobs', async () => {
+  it('Scan database for pending jobs', async () => {
     const randomJobs = makeRandomJobs(50);
     const countOfStatus = randomJobs.tallyOfStatus;
 
