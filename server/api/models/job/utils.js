@@ -63,7 +63,7 @@ const getJobKeys = (type, finished = true) => {
   return keys;
 };
 
-const newJobKeys = () => ['inputId', 'specId'];
+const newJobKeys = () => ['input', 'spec'];
 
 const updateJob = (job, update, populate = false) => {
   const JobModel = getJobModel(jobTypeToType(job.type));

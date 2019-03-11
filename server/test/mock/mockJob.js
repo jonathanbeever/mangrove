@@ -85,8 +85,8 @@ const nextMockPopulatedJob = async (
 };
 
 const mockJobCreateJson = (inputId, specId) => JSON.stringify({
-  inputId,
-  specId,
+  input: inputId,
+  spec: specId,
 });
 
 const getJsonFromMockJob = (job) => {

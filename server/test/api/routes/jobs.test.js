@@ -70,9 +70,8 @@ describe('Jobs', () => {
 
     it('It should fail to PUT a Job (invalid keys)', async () => {
       const jobJson = JSON.stringify({
-        type: Type.ACI,
-        inputId: nextMockObjectId(),
-        specId: nextMockObjectId(),
+        input: nextMockObjectId(),
+        spec: nextMockObjectId(),
         extra: true,
       });
 
