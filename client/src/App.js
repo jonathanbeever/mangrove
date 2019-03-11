@@ -134,7 +134,6 @@ class NavBarWrapper extends Component {
 
 	render() {
 		if(window.refreshToken === null || window.refreshToken === '' || !this.validateToken()) {
-			console.log(window.refreshToken, window.validLogin);
 			return <Redirect push to="/" />;
 		}
 

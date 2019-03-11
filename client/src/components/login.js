@@ -71,7 +71,6 @@ class Login extends Component {
 		var resultText;
 		if(success) {
 			resultText = "Login Successful";
-			// console.log(JSON.stringify(result, null, 4));
 
 			window.idToken = result.idToken.jwtToken;
 			window.accessToken = result.accessToken.jwtToken;
@@ -125,8 +124,6 @@ class Login extends Component {
 			textAlign: 'center'
 		}
 
-		console.log("Awaken, my Love");
-
 		switch(this.state.step) {
 			case 0:
 				return (
@@ -179,17 +176,13 @@ class Login extends Component {
 			Pool: this.userPool
 		};
 
-		console.log(userData);
 		var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-
-
 
 		cognitoUser.authenticateUser(authenticationDetails, {
 			onSuccess: (result) => this.handlePopoverOpen(true, result),
 			newPasswordRequired: this.handleNewPassOpen,
 			onFailure: () => this.handlePopoverOpen(false, null)
 		});
-		console.log(this.state);
 	}
 
 	register() {
@@ -199,7 +192,6 @@ class Login extends Component {
 				return;
 			}
 			var cognitoUser = result.user;
-			console.log(cognitoUser.getUsername() + ' has been registered!');
 
 			this.setState({
 				codeField: "",
@@ -224,7 +216,6 @@ class Login extends Component {
 				return;
 			}
 
-			console.log('Verified');
 			literally_this.setState({
 				registrationopen: false,
 				popoverText: "Your account has been created!",
@@ -249,7 +240,6 @@ class Login extends Component {
 		const curr = this.state.passField, next = this.state.newPassField;
 		var cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
 
-		console.log(curr, next);
 		cognitoUser.authenticateUser(authenticationDetails, {
 			onSuccess: function(result) {
 				cognitoUser.changePassword(curr, next, (err, result) => {
