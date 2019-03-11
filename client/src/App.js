@@ -73,8 +73,33 @@ class NavBarWrapper extends Component {
 
 		this.userPool = new AmazonCognitoIdentity.CognitoUserPool(this.poolData);
 		this.validateToken = this.validateToken.bind(this);
+		this.renew = this.renew.bind(this);
 	}
 
+	// Renews Cognito Tokens with every page load (since they expire every hour) 
+	renew() {
+		const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({RefreshToken: window.refreshToken});
+
+		const userData = {
+			Username: window.email,
+			Pool: this.userPool
+		};
+
+		const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+		cognitoUser.refreshSession(refreshToken, (err, session) => {
+			if(err) {
+				console.log(err);
+			} else {
+				window.idToken = session.idToken.jwtToken;
+				window.accessToken = session.accessToken.jwtToken;
+				window.refreshToken = session.refreshToken.token;
+			}
+		});
+
+	}
+
+	// Checks if the client has a valid login token
 	validateToken() {
 		request({
 			url: `https://cognito-idp.${this.pool_region}.amazonaws.com/${this.poolData.UserPoolId}/.well-known/jwks.json`,
@@ -119,7 +144,6 @@ class NavBarWrapper extends Component {
 						console.log("Invalid token");
 						window.validLogin = false;
 					} else {
-						console.log("Valid Token");
 						window.validLogin = true;
 					}
 				});
@@ -133,6 +157,8 @@ class NavBarWrapper extends Component {
 	}
 
 	render() {
+		this.renew();
+
 		if(window.refreshToken === null || window.refreshToken === '' || !this.validateToken()) {
 			return <Redirect push to="/" />;
 		}
