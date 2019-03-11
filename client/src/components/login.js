@@ -191,7 +191,6 @@ class Login extends Component {
 				alert(err.message);
 				return;
 			}
-			var cognitoUser = result.user;
 
 			this.setState({
 				codeField: "",
