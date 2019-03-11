@@ -76,7 +76,8 @@ class Login extends Component {
 			window.idToken = result.idToken.jwtToken;
 			window.accessToken = result.accessToken.jwtToken;
 			window.refreshToken = result.refreshToken.token;
-
+			window.email = this.state.userField;
+			window.validLogin = true;
 		}
 		else {
 			resultText = "Incorrect Username/Password";

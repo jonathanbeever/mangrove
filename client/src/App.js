@@ -8,6 +8,11 @@ import JobQueue from './components/jobQueue/jobQueue';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Login from './components/login';
 
+const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+const request = require('request');
+const jwkToPem = require('jwk-to-pem');
+const jwt = require('jsonwebtoken');
+
 const theme = createMuiTheme({
   overrides: {
     MuiButton: {
@@ -56,7 +61,83 @@ class App extends Component {
 }
 
 class NavBarWrapper extends Component {
+
+	constructor() {
+		super();
+
+		this.poolData = {
+			UserPoolId: "us-east-2_GP7h1WmOF",
+			ClientId: "36gfihuqugs2r3j2u1qm1uknna"
+		};
+		this.pool_region = 'us-east-2';
+
+		this.userPool = new AmazonCognitoIdentity.CognitoUserPool(this.poolData);
+		this.validateToken = this.validateToken.bind(this);
+	}
+
+	validateToken() {
+		request({
+			url: `https://cognito-idp.${this.pool_region}.amazonaws.com/${this.poolData.UserPoolId}/.well-known/jwks.json`,
+			json: true
+		}, function(error, response, body) {
+			if(!error && response.statusCode === 200) {
+				var pems = {};
+				var keys = body['keys'];
+
+				for(var i = 0; i < keys.length; i++) {
+					var key_id = keys[i].kid;
+					var modulus = keys[i].n;
+					var exponent = keys[i].e;
+					var key_type = keys[i].kty;
+					var jwk = {
+						kty: key_type,
+						n: modulus,
+						e: exponent
+					};
+
+					pems[key_id] = jwkToPem(jwk);
+				}
+
+				var decodedJwt = jwt.decode(window.idToken, {complete: true});
+				if(!decodedJwt) {
+					console.log("Not a valid JWT");
+					window.validLogin = false;
+					return;
+				}
+
+				var kid = decodedJwt.header.kid;
+				var pem = pems[kid];
+
+				if(!pem) {
+					console.log("Key not found");
+					window.validLogin = false;
+					return;
+				}
+
+				jwt.verify(window.idToken, pem, function(err, payload) {
+					if(err) {
+						console.log("Invalid token");
+						window.validLogin = false;
+					} else {
+						console.log("Valid Token");
+						window.validLogin = true;
+					}
+				});
+			} else {
+				console.log("Download failed");
+				window.validLogin = false;
+			}
+		});
+
+		return window.validLogin;
+	}
+
 	render() {
+		if(window.refreshToken === null || window.refreshToken === '' || !this.validateToken()) {
+			console.log(window.refreshToken, window.validLogin);
+			return <Redirect push to="/" />;
+		}
+
 		return (
 			<div className="App">
 				<style>{'html { height: 100%;}'}</style>
