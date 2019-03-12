@@ -87,6 +87,43 @@ class ChooseFiles extends React.Component {
     // match curr to indexed info
   }
 
+  setNamingConvention = (value, separator) => {
+    var order = value.split(',')
+    var filesInfo = this.state.filesToUpload
+    var files = Object.keys(filesInfo)
+    console.log(filesInfo, files)
+    files.forEach(file => {
+      file = file.substring(0, file.length - 4)
+      var fileSplit = file.split(separator)
+      console.log(filesInfo)
+      if(order.indexOf('DATE') !== -1) {
+        console.log(file)
+        filesInfo[file+'.wav']['json'].recordTimeMs[0] = fileSplit[order.indexOf('DATE')]
+      }
+      if(order.indexOf('TIME') !== -1) {
+        console.log(file)
+        filesInfo[file+'.wav']['json'].recordTimeMs[1] = fileSplit[order.indexOf('TIME')]
+      }
+      if(order.indexOf('LAT') !== -1) {
+        console.log(file)
+        filesInfo[file+'.wav']['json'].coords.lat = fileSplit[order.indexOf('LAT')]
+      }
+      if(order.indexOf('LONG') !== -1) {
+        console.log(file)
+        filesInfo[file+'.wav']['json'].coords.long = fileSplit[order.indexOf('LONG')]
+      }
+      if(order.indexOf('SITE') !== -1) {
+        console.log(file)
+        filesInfo[file+'.wav']['json'].site = fileSplit[order.indexOf('SITE')]
+      }
+      if(order.indexOf('SERIES') !== -1) {
+        console.log(file)
+        filesInfo[file+'.wav']['json'].series = fileSplit[order.indexOf('SERIES')]
+      }
+    })
+    this.setState({ filesToUpload: filesInfo })
+  }
+
   readSummaryFile = (lines) => {
     var titles = lines.splice(0, 1)[0].split(',')
     /**
@@ -246,6 +283,7 @@ class ChooseFiles extends React.Component {
             upload={this.state.upload}
             uploadFiles={this.uploadFiles}
             addSummaryFile={this.addSummaryFile}
+            setNamingConvention={this.setNamingConvention}
           /> : ''}
         </div>
       </div>

@@ -113,19 +113,19 @@ class Catalog extends Component {
 
       axios.get('http://localhost:3000/inputs')
       .then(res => {
-        var inputs = res.data.inputs.map(input => {
-          var path = input.path.split('\\')
-          input.path = path[path.length - 1]
-          return input
-        })
+        // var inputs = res.data.inputs.map(input => {
+        //   var path = input.path.split('\\')
+        //   input.path = path[path.length - 1]
+        //   return input
+        // })
 
-        inputs.forEach(file => {
+        res.data.inputs.forEach(file => {
           // selected.push(file.inputId)
           indexedFiles[file.inputId] = file
         })
 
         this.setState({ indexedFiles : indexedFiles})
-        this.setState({ allFiles: inputs })
+        this.setState({ allFiles: res.data.inputs })
       })
 
       axios.get('http://localhost:3000/jobs')
@@ -401,6 +401,7 @@ class Catalog extends Component {
         }
       }
     })
+    console.log(jobsObj)
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 
