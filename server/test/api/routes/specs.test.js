@@ -11,11 +11,15 @@ const {
   nextMockSpecCreateJson,
   getJsonFromMockSpec,
 } = require('../../mock/mockSpec');
+const { nextMockPopulatedJob } = require('../../mock/mockJob');
 const { nextMockObjectId } = require('../../mock/mockObjectId');
 
 const app = require('../../../app');
+const { deleteInputDir } = require('../../../util/storage');
 
+const Input = require('../../../api/models/input');
 const { Spec } = require('../../../api/models/spec');
+const { Job } = require('../../../api/models/job');
 const {
   getSpecKeys,
   getParamsFromSpec,
@@ -37,7 +41,10 @@ describe('Specs', () => {
   });
 
   beforeEach(async () => {
+    await Input.deleteMany();
+    deleteInputDir();
     await Spec.deleteMany();
+    await Job.deleteMany();
   });
 
   describe('/PUT Specs', () => {
@@ -290,25 +297,51 @@ describe('Specs', () => {
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
-      expect(res.body).to.have.all.keys('success', 'message');
+      expect(res.body).to.have.all.keys('success', 'message', 'jobs');
       expect(res.body.success).to.be.a('boolean');
       expect(res.body.success).to.be.true;
       expect(res.body.message).to.be.a('string');
+      expect(res.body.jobs).to.be.an('array');
+      expect(res.body.jobs).to.be.empty;
     });
 
-    it('It should DELETE a Spec (found)', async () => {
+    it('It should DELETE a Spec (found without Jobs)', async () => {
       const spec = nextMockSpec(Type.AEI);
-      Spec.create(spec);
+
+      await Spec.create(spec);
 
       const res = await chai.request(app)
         .delete(`/specs/${spec.id}`);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
-      expect(res.body).to.have.all.keys('success', 'message');
+      expect(res.body).to.have.all.keys('success', 'message', 'jobs');
       expect(res.body.success).to.be.a('boolean');
       expect(res.body.success).to.be.true;
       expect(res.body.message).to.be.a('string');
+      expect(res.body.jobs).to.be.an('array');
+      expect(res.body.jobs).to.be.empty;
+    });
+
+    it('It should DELETE a Spec (found with Jobs)', async () => {
+      const job = await nextMockPopulatedJob(Type.ACI);
+
+      const res = await chai.request(app)
+        .delete(`/specs/${job.spec.id}`);
+
+      const remainingJobs = await Job.find({ spec: job.spec.id });
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.all.keys('success', 'message', 'jobs');
+      expect(res.body.success).to.be.a('boolean');
+      expect(res.body.success).to.be.true;
+      expect(res.body.message).to.be.a('string');
+      expect(res.body.jobs).to.be.an('array');
+      expect(res.body.jobs).to.have.lengthOf(1);
+      expect(res.body.jobs[0]).to.be.a('string');
+      expect(res.body.jobs[0]).to.equal(job.id);
+      expect(remainingJobs).to.be.empty;
     });
   });
 });

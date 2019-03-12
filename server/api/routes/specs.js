@@ -12,6 +12,7 @@ const {
   validateParams,
   fillDefaultParams,
 } = require('../models/spec/utils');
+const { getJobModel } = require('../models/job/utils');
 const Type = require('../models/type');
 
 const { arrayDiff } = require('../../util/array');
@@ -129,14 +130,21 @@ router.delete('/:specId', async (req, res) => {
   const { specId } = req.params;
 
   try {
-    const deleteResult = await Spec.deleteOne({ _id: specId }).exec();
+    const deleteResult = await Spec.findOneAndDelete({ _id: specId }).exec();
+
+    let jobsWithSpec = [];
+    if (deleteResult) {
+      const JobModel = getJobModel(deleteResult.type);
+      jobsWithSpec = await JobModel.find({ spec: specId });
+      await JobModel.deleteMany({ spec: specId });
+    }
 
     return res.status(200).json({
       success: true,
-      message:
-      deleteResult.n > 0
-        ? `Succesfully deleted Spec with specId: ${specId}`
+      message: deleteResult
+        ? `Successfully deleted Spec with specId: ${specId}`
         : `No valid entry found for specId: ${specId}.`,
+      jobs: jobsWithSpec.map(job => job.id),
     });
   } catch (err) {
     console.error(err);

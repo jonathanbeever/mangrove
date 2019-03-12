@@ -14,6 +14,7 @@ const {
 const { getAudioMetadata } = require('../../util/audioMetadata');
 
 const Input = require('../models/input');
+const { Job } = require('../models/job');
 const {
   parseInputJson,
   getNewFilename,
@@ -194,23 +195,25 @@ router.get('/', async (req, res) => {
 });
 
 // Delete Input
-// TODO: Delete Jobs associated with the Input
 router.delete('/:inputId', async (req, res) => {
   const { inputId } = req.params;
 
   try {
-    const searchResult = await Input.findById(inputId).exec();
-    const deleteResult = await Input.deleteOne({ _id: inputId }).exec();
+    const deleteResult = await Input.findOneAndDelete({ _id: inputId }).exec();
+    if (deleteResult) deleteInputFile(deleteResult.path);
 
-    if (searchResult) deleteInputFile(searchResult.path);
+    let jobsWithInput = [];
+    if (deleteResult) {
+      jobsWithInput = await Job.find({ input: inputId });
+      await Job.deleteMany({ input: inputId });
+    }
 
     return res.status(200).json({
       success: true,
-      message: (
-        deleteResult.n > 0
-          ? `Successfully deleted Input with inputId: ${inputId}.`
-          : `No valid entry found for inputId: ${inputId}.`
-      ),
+      message: deleteResult
+        ? `Successfully deleted Input with inputId: ${inputId}.`
+        : `No valid entry found for inputId: ${inputId}.`,
+      jobs: jobsWithInput.map(job => job.id),
     });
   } catch (err) {
     console.error(err);

@@ -11,6 +11,7 @@ const {
   nextMockInputCreateJson,
   getJsonFromMockInput,
 } = require('../../mock/mockInput');
+const { nextMockPopulatedJob } = require('../../mock/mockJob');
 const { nextMockObjectId } = require('../../mock/mockObjectId');
 
 const app = require('../../../app');
@@ -21,11 +22,14 @@ const {
 } = require('../../../util/storage');
 
 const Input = require('../../../api/models/input');
+const { Spec } = require('../../../api/models/spec');
+const { Job } = require('../../../api/models/job');
 const {
   getInputKeys,
   newInputKeys,
   coordsKeys,
 } = require('../../../api/models/input/utils');
+const Type = require('../../../api/models/type');
 
 const { expect } = chai;
 
@@ -47,6 +51,8 @@ describe('Inputs', () => {
   beforeEach(async () => {
     await Input.deleteMany();
     deleteInputDir();
+    await Spec.deleteMany();
+    await Job.deleteMany();
   });
 
   describe('/PUT Input', () => {
@@ -284,13 +290,15 @@ describe('Inputs', () => {
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
-      expect(res.body).to.have.all.keys('success', 'message');
+      expect(res.body).to.have.all.keys('success', 'message', 'jobs');
       expect(res.body.success).to.be.a('boolean');
       expect(res.body.success).to.be.true;
       expect(res.body.message).to.be.a('string');
+      expect(res.body.jobs).to.be.an('array');
+      expect(res.body.jobs).to.be.empty;
     });
 
-    it('It should DELETE an Input (found)', async () => {
+    it('It should DELETE an Input (found without Jobs)', async () => {
       const input = nextMockInput();
 
       await Input.create(input);
@@ -300,11 +308,35 @@ describe('Inputs', () => {
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
-      expect(res.body).to.have.all.keys('success', 'message');
+      expect(res.body).to.have.all.keys('success', 'message', 'jobs');
       expect(res.body.success).to.be.a('boolean');
       expect(res.body.success).to.be.true;
       expect(res.body.message).to.be.a('string');
+      expect(res.body.jobs).to.be.an('array');
+      expect(res.body.jobs).to.be.empty;
       expect(input.path).to.not.be.a.path();
+    });
+
+    it('It should DELETE an Input (found with Jobs)', async () => {
+      const job = await nextMockPopulatedJob(Type.ACI);
+
+      const res = await chai.request(app)
+        .delete(`/inputs/${job.input.id}`);
+
+      const remainingJobs = await Job.find({ input: job.input.id });
+
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.an('object');
+      expect(res.body).to.have.all.keys('success', 'message', 'jobs');
+      expect(res.body.success).to.be.a('boolean');
+      expect(res.body.success).to.be.true;
+      expect(res.body.message).to.be.a('string');
+      expect(res.body.jobs).to.be.an('array');
+      expect(res.body.jobs).to.have.lengthOf(1);
+      expect(res.body.jobs[0]).to.be.a('string');
+      expect(res.body.jobs[0]).to.equal(job.id);
+      expect(job.input.path).to.not.be.a.path();
+      expect(remainingJobs).to.be.empty;
     });
   });
 });
