@@ -23,6 +23,12 @@ const styles = theme => ({
 });
 
 class ChooseFiles extends React.Component {
+  constructor() {
+    super()
+
+    this.readSummaryFile = this.readSummaryFile.bind(this)
+  }
+
   state = {
     allFiles: [],
     newFiles: [],
@@ -60,7 +66,48 @@ class ChooseFiles extends React.Component {
     })
   }
 
-  // Format path for new files uploaded and push to 
+  addSummaryFile = (e) => {
+    var file = e.target.files[0]
+    var reader = new FileReader();
+
+    reader.onload = (reader =>
+    {
+      return () =>
+      {
+        var contents = reader.result;
+        var lines = contents.split('\n');
+        this.readSummaryFile(lines)
+      }
+    })(reader);
+
+    reader.readAsText(file);
+      // check if good titles
+      // no, err
+    // loop upload files
+    // match curr to indexed info
+  }
+
+  readSummaryFile = (lines) => {
+    var titles = lines.splice(0, 1)[0].split(',')
+    /**
+     * loop titles, if not one off good, err, show good
+     */
+    var fileInfo = {}
+
+    lines.forEach(line => {
+      var lineInfo = {}
+
+      line = line.split(',')
+      line.forEach((property, i) => {
+        if(titles[i] !== 'NAME')
+          lineInfo[titles[i]] = property
+      })
+
+      fileInfo[line[titles.indexOf('NAME')]] = lineInfo
+    })
+    console.log(fileInfo)
+  }
+
   listDbFiles = (resp) => {
     var allFiles = this.state.allFiles
 
@@ -198,6 +245,7 @@ class ChooseFiles extends React.Component {
             submitInputProperties={this.submitInputProperties}
             upload={this.state.upload}
             uploadFiles={this.uploadFiles}
+            addSummaryFile={this.addSummaryFile}
           /> : ''}
         </div>
       </div>

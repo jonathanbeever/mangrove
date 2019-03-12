@@ -85,7 +85,6 @@ class FullWidthTabs extends React.Component {
               <div className="col-3">
                 <div className={classes.search}>
                   <SearchInputs 
-                    // onChange={this.props.searchInputs} 
                     onChange={this.props.updateProperties}
                     value='filter'
                     submitInputFilter={this.props.submitInputFilter}
@@ -129,6 +128,26 @@ class FullWidthTabs extends React.Component {
                         Choose New Files
                       </Button>
                     </label> 
+                  </div>
+                  <input
+                    accept=".txt"
+                    style={{ display: 'none' }}
+                    onChange={this.props.addSummaryFile}
+                    id="selectFiles"
+                    type="file"
+                  />
+                  <div>
+                    {Object.keys(this.props.filesToUpload).length ?
+                      <div className={classes.buttons}>
+                        <label htmlFor="selectFiles">
+                          <Button component="span">
+                            Upload Summary File
+                          </Button>
+                        </label> 
+                      </div>
+                      :
+                      ''
+                    }
                   </div>
                   <SearchInputs 
                     onChange={this.props.updateProperties}
