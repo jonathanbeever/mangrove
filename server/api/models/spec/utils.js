@@ -6,120 +6,94 @@ const NdsiSpec = require('./ndsi');
 const RmsSpec = require('./rms');
 
 const Type = require('../type');
-const SpecType = require('../specType');
 const Param = require('./param');
 
-const typeToSpecType = (type) => {
+const getSpecModel = (type) => {
   switch (type) {
-    case Type.ACI: return SpecType.ACI;
-    case Type.ADI: return SpecType.ADI;
-    case Type.AEI: return SpecType.AEI;
-    case Type.BI: return SpecType.BI;
-    case Type.NDSI: return SpecType.NDSI;
-    case Type.RMS: return SpecType.RMS;
-    default: return null;
+    case Type.ACI: return AciSpec;
+    case Type.ADI: return AdiSpec;
+    case Type.AEI: return AeiSpec;
+    case Type.BI: return BiSpec;
+    case Type.NDSI: return NdsiSpec;
+    case Type.RMS: return RmsSpec;
+    default: throw new Error(`Invalid \`type\` parameter (${type}).`);
   }
 };
 
-const specTypeToType = (specType) => {
-  switch (specType) {
-    case SpecType.ACI: return Type.ACI;
-    case SpecType.ADI: return Type.ADI;
-    case SpecType.AEI: return Type.AEI;
-    case SpecType.BI: return Type.BI;
-    case SpecType.NDSI: return Type.NDSI;
-    case SpecType.RMS: return Type.RMS;
-    default: return null;
-  }
-};
-
-const getSpecModel = (specType) => {
-  switch (specType) {
-    case SpecType.ACI: return AciSpec;
-    case SpecType.ADI: return AdiSpec;
-    case SpecType.AEI: return AeiSpec;
-    case SpecType.BI: return BiSpec;
-    case SpecType.NDSI: return NdsiSpec;
-    case SpecType.RMS: return RmsSpec;
-    default: return null;
-  }
-};
-
-const getSpecKeys = (specType) => {
-  const SpecModel = getSpecModel(specType);
-  if (!SpecModel) {
-    return `Error: Invalid \`specType\` parameter (${specType}).`;
-  }
-
+const getSpecKeys = (type) => {
+  const SpecModel = getSpecModel(type);
   const keys = Object.keys(SpecModel.schema.paths);
   keys[keys.indexOf('_id')] = 'specId';
+  // The following keys are never shown to users
   keys.splice(keys.indexOf('__v'), 1);
 
   return keys;
 };
 
-const newSpecKeys = (specType, includeOptional = false) => {
+const newSpecKeys = (type, includeOptional = false) => {
   if (includeOptional) {
-    const keys = getSpecKeys(specType);
+    const keys = getSpecKeys(type);
     keys.splice(keys.indexOf('specId'), 1);
     return keys;
   }
   return ['type'];
 };
 
-const getSpecParams = (specType) => {
-  const keys = getSpecKeys(specType);
+const getSpecParams = (type) => {
+  const keys = getSpecKeys(type);
   keys.splice(keys.indexOf('specId'), 1);
   keys.splice(keys.indexOf('type'), 1);
   return keys;
 };
 
 const getParamsFromSpec = (spec) => {
-  if (spec.type === SpecType.ACI || spec.type === Type.ACI) {
-    return {
-      ...(typeof spec.minFreq !== 'undefined' && { minFreq: spec.minFreq }),
-      ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
-      ...(typeof spec.j !== 'undefined' && { j: spec.j }),
-      ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
-    };
-  } if (spec.type === SpecType.ADI || spec.type === Type.ADI) {
-    return {
-      ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
-      ...(typeof spec.dbThreshold !== 'undefined' && { dbThreshold: spec.dbThreshold }),
-      ...(typeof spec.freqStep !== 'undefined' && { freqStep: spec.freqStep }),
-      ...(typeof spec.shannon !== 'undefined' && { shannon: spec.shannon }),
-    };
-  } if (spec.type === SpecType.AEI || spec.type === Type.AEI) {
-    return {
-      ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
-      ...(typeof spec.dbThreshold !== 'undefined' && { dbThreshold: spec.dbThreshold }),
-      ...(typeof spec.freqStep !== 'undefined' && { freqStep: spec.freqStep }),
-    };
-  } if (spec.type === SpecType.BI || spec.type === Type.BI) {
-    return {
-      ...(typeof spec.minFreq !== 'undefined' && { minFreq: spec.minFreq }),
-      ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
-      ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
-    };
-  } if (spec.type === SpecType.NDSI || spec.type === Type.NDSI) {
-    return {
-      ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
-      ...(typeof spec.anthroMin !== 'undefined' && { anthroMin: spec.anthroMin }),
-      ...(typeof spec.anthroMax !== 'undefined' && { anthroMax: spec.anthroMax }),
-      ...(typeof spec.bioMin !== 'undefined' && { bioMin: spec.bioMin }),
-      ...(typeof spec.bioMax !== 'undefined' && { bioMax: spec.bioMax }),
-    };
-  } if (spec.type === SpecType.RMS || spec.type === Type.RMS) {
-    return {
-      // TODO
-    };
+  switch (spec.type) {
+    case Type.ACI:
+      return {
+        ...(typeof spec.minFreq !== 'undefined' && { minFreq: spec.minFreq }),
+        ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
+        ...(typeof spec.j !== 'undefined' && { j: spec.j }),
+        ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
+      };
+    case Type.ADI:
+      return {
+        ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
+        ...(typeof spec.dbThreshold !== 'undefined' && { dbThreshold: spec.dbThreshold }),
+        ...(typeof spec.freqStep !== 'undefined' && { freqStep: spec.freqStep }),
+        ...(typeof spec.shannon !== 'undefined' && { shannon: spec.shannon }),
+      };
+    case Type.AEI:
+      return {
+        ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
+        ...(typeof spec.dbThreshold !== 'undefined' && { dbThreshold: spec.dbThreshold }),
+        ...(typeof spec.freqStep !== 'undefined' && { freqStep: spec.freqStep }),
+      };
+    case Type.BI:
+      return {
+        ...(typeof spec.minFreq !== 'undefined' && { minFreq: spec.minFreq }),
+        ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
+        ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
+      };
+    case Type.NDSI:
+      return {
+        ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
+        ...(typeof spec.anthroMin !== 'undefined' && { anthroMin: spec.anthroMin }),
+        ...(typeof spec.anthroMax !== 'undefined' && { anthroMax: spec.anthroMax }),
+        ...(typeof spec.bioMin !== 'undefined' && { bioMin: spec.bioMin }),
+        ...(typeof spec.bioMax !== 'undefined' && { bioMax: spec.bioMax }),
+      };
+    case Type.RMS:
+      return {
+        // TODO
+      };
+    default:
+      throw new Error(`Invalid \`type\` parameter (${spec.type}).`);
   }
-  return null;
 };
 
 // FIXME: Find a cleaner way to extract the type from a Mongoose model's key
 const getParamVarType = (type, param) => {
-  const SpecModel = getSpecModel(typeToSpecType(type));
+  const SpecModel = getSpecModel(type);
   if (SpecModel.schema.obj[param].type.toString().includes('Number')) {
     return 'number';
   }
@@ -176,8 +150,6 @@ const fillDefaultParams = (type, params) => {
 };
 
 module.exports = {
-  typeToSpecType,
-  specTypeToType,
   getSpecModel,
   getSpecKeys,
   newSpecKeys,

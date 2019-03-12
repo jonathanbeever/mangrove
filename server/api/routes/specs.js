@@ -6,8 +6,6 @@ const config = require('config');
 
 const { Spec } = require('../models/spec');
 const {
-  typeToSpecType,
-  specTypeToType,
   getSpecModel,
   newSpecKeys,
   getParamsFromSpec,
@@ -29,16 +27,17 @@ router.put('/', async (req, res) => {
     });
   }
 
-  const specType = typeToSpecType(req.body.type);
-  const SpecModel = getSpecModel(specType);
-  if (!SpecModel) {
+  let SpecModel;
+  try {
+    SpecModel = getSpecModel(req.body.type);
+  } catch (err) {
     const types = Object.values(Type).join(', ');
     return res.status(400).json({
       message: `Invalid type: ${req.body.type}. Must be one of: ${types}.`,
     });
   }
 
-  const extraKeys = arrayDiff(Object.keys(req.body), newSpecKeys(specType, true));
+  const extraKeys = arrayDiff(Object.keys(req.body), newSpecKeys(req.body.type, true));
   if (extraKeys.length > 0) {
     return res.status(400).json({
       message: `Invalid keys for type (${req.body.type}): ${extraKeys.join(', ')}.`,
@@ -59,14 +58,13 @@ router.put('/', async (req, res) => {
     if (searchResult.length /* === 1 */) {
       return res.status(200).json({
         specId: searchResult[0]._id,
-        type: specTypeToType(searchResult[0].type),
+        type: searchResult[0].type,
         ...getParamsFromSpec(searchResult[0]),
       });
     }
 
     const spec = new SpecModel({
       _id: new mongoose.Types.ObjectId(),
-      type: specType,
       ...params,
     });
 
@@ -74,7 +72,7 @@ router.put('/', async (req, res) => {
 
     return res.status(201).json({
       specId: createResult._id,
-      type: specTypeToType(createResult.type),
+      type: createResult.type,
       ...getParamsFromSpec(createResult),
     });
   } catch (err) {
@@ -98,7 +96,7 @@ router.get('/:specId', async (req, res) => {
 
     return res.status(200).json({
       specId: searchResult._id,
-      type: specTypeToType(searchResult.type),
+      type: searchResult.type,
       ...getParamsFromSpec(searchResult),
     });
   } catch (err) {
@@ -116,7 +114,7 @@ router.get('/', async (req, res) => {
       count: searchResult.length,
       specs: searchResult.map(spec => ({
         specId: spec._id,
-        type: specTypeToType(spec.type),
+        type: spec.type,
         ...getParamsFromSpec(spec),
       })),
     });

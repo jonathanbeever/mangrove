@@ -4,7 +4,7 @@ const Status = require('../status');
 
 const options = { discriminatorKey: 'type' };
 
-const jobSchema = new mongoose.Schema({
+module.exports = mongoose.model('Job', new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   input: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,6 +25,4 @@ const jobSchema = new mongoose.Schema({
     ],
     required: true,
   },
-}, options);
-
-module.exports = mongoose.model('Job', jobSchema);
+}, options));

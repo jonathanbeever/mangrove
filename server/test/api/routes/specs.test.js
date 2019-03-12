@@ -17,7 +17,6 @@ const app = require('../../../app');
 
 const { Spec } = require('../../../api/models/spec');
 const {
-  specTypeToType,
   getSpecKeys,
   getParamsFromSpec,
 } = require('../../../api/models/spec/utils');
@@ -157,7 +156,7 @@ describe('Specs', () => {
         expect(ObjectId(res.body.specId).toString()).to.equal(
           res.body.specId, // Check whether it's a valid ObjectId
         );
-        expect(res.body.type).to.equal(specTypeToType(specs[index].type));
+        expect(res.body.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(res.body)).to.eql(
           getParamsFromSpec(specs[index]),
         );
@@ -178,7 +177,7 @@ describe('Specs', () => {
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
       expect(res.body.specId).to.equal(spec.id);
-      expect(res.body.type).to.equal(specTypeToType(spec.type));
+      expect(res.body.type).to.equal(spec.type);
       expect(getParamsFromSpec(res.body)).to.eql(
         getParamsFromSpec(spec),
       );
@@ -204,7 +203,7 @@ describe('Specs', () => {
       responses.forEach((res, index) => {
         expect(res).to.have.status(201);
         expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
-        expect(res.body.type).to.equal(specTypeToType(specs[index].type));
+        expect(res.body.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(res.body)).to.eql(
           getParamsFromSpec(specs[index]),
         );
@@ -233,7 +232,7 @@ describe('Specs', () => {
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
       expect(res.body.specId).to.equal(spec.id);
-      expect(res.body.type).to.equal(specTypeToType(spec.type));
+      expect(res.body.type).to.equal(spec.type);
       expect(getParamsFromSpec(res.body)).to.eql(
         getParamsFromSpec(spec),
       );
@@ -276,7 +275,7 @@ describe('Specs', () => {
       res.body.specs.forEach((spec, index) => {
         expect(spec).to.have.all.keys(getSpecKeys(specs[index].type));
         expect(spec.specId).to.equal(specs[index].id);
-        expect(spec.type).to.equal(specTypeToType(specs[index].type));
+        expect(spec.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(spec)).to.eql(
           getParamsFromSpec(specs[index]),
         );

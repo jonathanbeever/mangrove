@@ -3,6 +3,13 @@ const chai = require('chai');
 const mockDb = require('../../test/mock/mockDb');
 const { nextMockJob } = require('../../test/mock/mockJob');
 
+const {
+  deleteInputDir,
+  deleteRootDir,
+} = require('../../util/storage');
+
+const Input = require('../../api/models/input');
+const { Spec } = require('../../api/models/spec');
 const { Job } = require('../../api/models/job');
 const Type = require('../../api/models/type');
 
@@ -18,9 +25,13 @@ describe('Job Queue', () => {
 
   after(async () => {
     await mockDb.teardown();
+    deleteRootDir();
   });
 
   beforeEach(async () => {
+    await Input.deleteMany();
+    deleteInputDir();
+    await Spec.deleteMany();
     await Job.deleteMany();
   });
 
@@ -39,7 +50,7 @@ describe('Job Queue', () => {
   });
 
   it('Fail to Enqueue Job, Not In Database', async () => {
-    const job = nextMockJob(Type.ACI);
+    const job = await nextMockJob(Type.ACI);
     await jobQueue.init();
     try {
       await jobQueue.enqueue(job);

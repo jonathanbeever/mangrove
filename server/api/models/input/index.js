@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const inputSchema = new mongoose.Schema({
+module.exports = mongoose.model('Input', new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   path: { type: String, required: true },
   site: { type: String, required: true },
@@ -16,6 +16,4 @@ const inputSchema = new mongoose.Schema({
     },
     required: true,
   },
-});
-
-module.exports = mongoose.model('Input', inputSchema);
+}));

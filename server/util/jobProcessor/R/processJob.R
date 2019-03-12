@@ -5,7 +5,7 @@ job <- input[[1]]
 
 soundfile <- readWave(job$input$path)
 
-if (job$type == "aci") {
+if (job$spec$type == "aci") {
   result <- acoustic_complexity(soundfile,
                                 min_freq = job$spec$minFreq,
                                 max_freq = job$spec$maxFreq,
@@ -22,7 +22,7 @@ if (job$type == "aci") {
   result$aciMatrixL <- as.matrix(sapply(result$aciMatrixL, as.numeric))
   result$aciMatrixR <- as.matrix(sapply(result$aciMatrixR, as.numeric))
 }
-if (job$type == "adi") {
+if (job$spec$type == "adi") {
   result <- acoustic_diversity(soundfile,
                                max_freq = job$spec$maxFreq,
                                db_threshold = job$spec$dbThreshold,
@@ -35,7 +35,7 @@ if (job$type == "adi") {
                      "bandRangeL",
                      "bandRangeR")
 }
-if (job$type == "aei") {
+if (job$spec$type == "aei") {
   result <- acoustic_evenness(soundfile,
                               max_freq = job$spec$maxFreq,
                               db_threshold = job$spec$dbThreshold,
@@ -43,7 +43,7 @@ if (job$type == "aei") {
   names(result) <- c("aeiL",
                      "aeiR")
 }
-if (job$type == "bi") {
+if (job$spec$type == "bi") {
   result <- bioacoustic_index(soundfile,
                               min_freq = job$spec$minFreq,
                               max_freq = job$spec$maxFreq,
@@ -51,7 +51,7 @@ if (job$type == "bi") {
   names(result) <- c("areaL",
                      "areaR")
 }
-if (job$type == "ndsi") {
+if (job$spec$type == "ndsi") {
   result <- ndsi(soundfile,
                  fft_w = 1024,
                  anthro_min = 1000,

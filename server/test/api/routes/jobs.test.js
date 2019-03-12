@@ -15,6 +15,13 @@ const mockQueue = require('../../mock/mockQueue');
 
 const app = require('../../../app');
 
+const {
+  deleteInputDir,
+  deleteRootDir,
+} = require('../../../util/storage');
+
+const Input = require('../../../api/models/input');
+const { Spec } = require('../../../api/models/spec');
 const { Job } = require('../../../api/models/job');
 const { getJobKeys } = require('../../../api/models/job/utils');
 const Type = require('../../../api/models/type');
@@ -37,9 +44,13 @@ describe('Jobs', () => {
 
   after(async () => {
     await mockDb.teardown();
+    deleteRootDir();
   });
 
   beforeEach(async () => {
+    await Input.deleteMany();
+    deleteInputDir();
+    await Spec.deleteMany();
     await Job.deleteMany();
   });
 
@@ -75,21 +86,41 @@ describe('Jobs', () => {
       expect(res.body.message).to.be.a('string');
     });
 
-    it('It should fail to PUT a Job (invalid type)', async () => {
-      const jobJson = nextMockJobCreateJson('invalid');
+    it('It should fail to PUT a Job (Input not found)', async () => {
+      const job = await nextMockJob(Type.ACI);
+      const jobJson = getJsonFromMockJob(job);
+
+      await Input.deleteOne({ _id: job.input }).exec();
 
       const res = await chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
         .send(jobJson);
 
-      expect(res).to.have.status(400);
+      expect(res).to.have.status(404);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+    });
+
+    it('It should fail to PUT a Job (Spec not found)', async () => {
+      const job = await nextMockJob(Type.ACI);
+      const jobJson = getJsonFromMockJob(job);
+
+      await Spec.deleteOne({ _id: job.spec }).exec();
+
+      const res = await chai.request(app)
+        .put('/jobs')
+        .set('Content-Type', 'application/json')
+        .send(jobJson);
+
+      expect(res).to.have.status(404);
       expect(res.body).to.have.all.keys('message');
       expect(res.body.message).to.be.a('string');
     });
 
     it('It should PUT a Job (new)', async () => {
-      const jobs = types.map(type => nextMockJob(type));
+      const mockedJobs = types.map(type => nextMockJob(type));
+      const jobs = await Promise.all(mockedJobs);
       const jobJsons = jobs.map(job => getJsonFromMockJob(job));
 
       const requests = jobJsons.map(json => chai.request(app)
@@ -106,7 +137,6 @@ describe('Jobs', () => {
         expect(ObjectId(res.body.jobId).toString()).to.equal(
           res.body.jobId, // Check whether it's a valid ObjectId
         );
-        expect(res.body.type).to.equal(types[index % types.length]);
         expect(res.body.input).to.equal(
           ObjectId(jobs[index].input).toString(),
         );
@@ -120,13 +150,14 @@ describe('Jobs', () => {
     });
 
     it('It should PUT a Job (existing, unfinished)', async () => {
-      const jobs = [];
+      const mockedJobs = [];
       types.forEach((type, index) => {
-        jobs.push(nextMockJob(
+        mockedJobs.push(nextMockJob(
           type,
           statusesNotFinished[index % (statusesNotFinished.length)],
         ));
       });
+      const jobs = await Promise.all(mockedJobs);
 
       const jobJsons = jobs.map(job => getJsonFromMockJob(job));
 
@@ -144,7 +175,6 @@ describe('Jobs', () => {
           getJobKeys(types[index % types.length], false),
         );
         expect(res.body.jobId).to.equal(jobs[index].id);
-        expect(res.body.type).to.equal(types[index % types.length]);
         expect(res.body.input).to.equal(
           ObjectId(jobs[index].input).toString(),
         );
@@ -160,7 +190,8 @@ describe('Jobs', () => {
     });
 
     it('It should PUT a Job (existing, finished)', async () => {
-      const jobs = types.map(type => nextMockJob(type, Status.FINISHED));
+      const mockedJobs = types.map(type => nextMockJob(type, Status.FINISHED));
+      const jobs = await Promise.all(mockedJobs);
       const jobJsons = jobs.map(job => getJsonFromMockJob(job));
 
       await Job.insertMany(jobs);
@@ -177,7 +208,6 @@ describe('Jobs', () => {
           getJobKeys(types[index % types.length]),
         );
         expect(res.body.jobId).to.equal(jobs[index].id);
-        expect(res.body.type).to.equal(types[index % types.length]);
         expect(res.body.input).to.equal(
           ObjectId(jobs[index].input).toString(),
         );
@@ -203,13 +233,14 @@ describe('Jobs', () => {
     });
 
     it('It should GET a Job (found, unfinished)', async () => {
-      const jobs = [];
+      const mockedJobs = [];
       types.forEach((type, index) => {
-        jobs.push(nextMockJob(
+        mockedJobs.push(nextMockJob(
           type,
           statusesNotFinished[index % (statusesNotFinished.length)],
         ));
       });
+      const jobs = await Promise.all(mockedJobs);
 
       await Job.insertMany(jobs);
 
@@ -223,7 +254,6 @@ describe('Jobs', () => {
           getJobKeys(types[index % types.length], false),
         );
         expect(res.body.jobId).to.equal(jobs[index].id);
-        expect(res.body.type).to.equal(types[index % types.length]);
         expect(res.body.input).to.equal(
           ObjectId(jobs[index].input).toString(),
         );
@@ -239,7 +269,8 @@ describe('Jobs', () => {
     });
 
     it('It should GET a Job (found, finished)', async () => {
-      const jobs = types.map(type => nextMockJob(type, Status.FINISHED));
+      const mockedJobs = types.map(type => nextMockJob(type, Status.FINISHED));
+      const jobs = await Promise.all(mockedJobs);
 
       await Job.insertMany(jobs);
 
@@ -253,7 +284,6 @@ describe('Jobs', () => {
           getJobKeys(types[index % types.length]),
         );
         expect(res.body.jobId).to.equal(jobs[index].id);
-        expect(res.body.type).to.equal(types[index % types.length]);
         expect(res.body.input).to.equal(
           ObjectId(jobs[index].input).toString(),
         );
@@ -281,13 +311,14 @@ describe('Jobs', () => {
     });
 
     it('It should GET all Jobs (many, unfinished)', async () => {
-      const jobs = [];
+      const mockedJobs = [];
       types.forEach((type, index) => {
-        jobs.push(nextMockJob(
+        mockedJobs.push(nextMockJob(
           type,
           statusesNotFinished[index % (statusesNotFinished.length)],
         ));
       });
+      const jobs = await Promise.all(mockedJobs);
 
       await Job.insertMany(jobs);
 
@@ -304,7 +335,6 @@ describe('Jobs', () => {
           getJobKeys(types[index % types.length], false),
         );
         expect(job.jobId).to.equal(jobs[index].id);
-        expect(job.type).to.equal(types[index % types.length]);
         expect(job.input).to.equal(
           ObjectId(jobs[index].input).toString(),
         );
@@ -320,7 +350,8 @@ describe('Jobs', () => {
     });
 
     it('It should GET all Jobs (many, finished)', async () => {
-      const jobs = types.map(type => nextMockJob(type, Status.FINISHED));
+      const mockedJobs = types.map(type => nextMockJob(type, Status.FINISHED));
+      const jobs = await Promise.all(mockedJobs);
 
       await Job.insertMany(jobs);
 
@@ -337,7 +368,6 @@ describe('Jobs', () => {
           getJobKeys(types[index % types.length]),
         );
         expect(job.jobId).to.equal(jobs[index].id);
-        expect(job.type).to.equal(types[index % types.length]);
         expect(job.input).to.equal(
           ObjectId(jobs[index].input).toString(),
         );
@@ -364,7 +394,7 @@ describe('Jobs', () => {
     });
 
     it('It should DELETE a Job (found)', async () => {
-      const job = nextMockJob(Type.ACI);
+      const job = await nextMockJob(Type.ACI);
 
       await Job.create(job);
 
