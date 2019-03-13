@@ -84,7 +84,7 @@ const getParamsFromSpec = (spec) => {
       };
     case Type.RMS:
       return {
-        // TODO
+        // N/A
       };
     default:
       throw new Error(`Invalid \`type\` parameter (${spec.type}).`);

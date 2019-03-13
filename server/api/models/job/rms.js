@@ -11,7 +11,8 @@ module.exports = Job.discriminator(JobType.RMS, new mongoose.Schema({
   },
   result: {
     type: {
-      // TODO: Determine the correct result for RMS jobs
+      rmsL: Number,
+      rmsR: Number,
     },
     default: null,
   },

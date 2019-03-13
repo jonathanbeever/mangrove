@@ -36,7 +36,9 @@ const currParam = {
     bioMin: Param.ndsi.bioMin.min,
     bioMax: Param.ndsi.bioMax.min,
   },
-  rms: {},
+  rms: {
+    // N/A
+  },
 };
 
 const nextMockParam = (type, param) => {

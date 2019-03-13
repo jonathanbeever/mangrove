@@ -30,7 +30,9 @@ const Param = Object.freeze({
     bioMin: { default: 2000, min: 0, max: MAX_NUM_R },
     bioMax: { default: 11000, min: 0, max: MAX_NUM_R },
   },
-  rms: {},
+  rms: {
+    // N/A
+  },
 });
 
 module.exports = Param;

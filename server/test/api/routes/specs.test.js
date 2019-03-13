@@ -123,9 +123,7 @@ describe('Specs', () => {
         bioMin: Param.ndsi.bioMin.min - 1,
         bioMax: Param.ndsi.bioMax.max + 1,
       }));
-      // specJsons.push(mockSpecCreateJson(Type.RMS, {
-      //   // TODO
-      // }));
+      // RMS not applicable, since it currently has no parameters
 
       const requests = specJsons.map(json => chai.request(app)
         .put('/specs')
@@ -147,7 +145,7 @@ describe('Specs', () => {
       specs.push(nextMockSpec(Type.AEI));
       specs.push(nextMockSpec(Type.BI));
       specs.push(nextMockSpec(Type.NDSI));
-      // specs.push(nextMockSpec(Type.RMS)); // TODO
+      specs.push(nextMockSpec(Type.RMS));
 
       const specJsons = specs.map(spec => getJsonFromMockSpec(spec));
 
@@ -197,7 +195,7 @@ describe('Specs', () => {
       specs.push(mockSpec(nextMockObjectId(), Type.AEI, {}));
       specs.push(mockSpec(nextMockObjectId(), Type.BI, {}));
       specs.push(mockSpec(nextMockObjectId(), Type.NDSI, {}));
-      // specs.push(mockSpec(nextMockObjectId(), Type.RMS, {})); // TODO
+      specs.push(mockSpec(nextMockObjectId(), Type.RMS, {}));
 
       const specJsons = specs.map(spec => getJsonFromMockSpec(spec));
 
@@ -266,7 +264,7 @@ describe('Specs', () => {
       specs.push(nextMockSpec(Type.AEI));
       specs.push(nextMockSpec(Type.BI));
       specs.push(nextMockSpec(Type.NDSI));
-      // specs.push(nextMockSpec(Type.RMS)); // TODO
+      specs.push(nextMockSpec(Type.RMS));
 
       await Spec.insertMany(specs);
 

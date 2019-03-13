@@ -115,10 +115,12 @@ describe('Job Processor', () => {
     expect(result.anthrophonyR).to.be.a('number');
   });
 
-  // it('It should process an RMS Job', async () => {
-  //   const populatedJob = await nextMockPopulatedJob(Type.RMS)
-  //   const result = await jobProcessor.process(populatedJob)
-  //
-  //   // TODO
-  // });
+  it('It should process an RMS Job', async () => {
+    const populatedJob = await nextMockPopulatedJob(Type.RMS);
+    const result = await jobProcessor.process(populatedJob);
+
+    expect(result).to.have.all.keys(getResultKeys(Type.RMS));
+    expect(result.rmsL).to.be.a('number');
+    expect(result.rmsR).to.be.a('number');
+  });
 });
