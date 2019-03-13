@@ -114,10 +114,10 @@ class SimpleModal extends React.Component {
                 </div> 
               </div> */}
               {/* <div className='col-8'> */}
-                <Typography variant="h5" id="simple-modal-description">
+                <Typography variant="h4" id="simple-modal-description">
                   Input properties contained in file names<br/><br/>
                 </Typography>
-                <Typography variant="subtitle1" id="simple-modal-description">
+                <Typography variant="h5" id="simple-modal-description">
                   Use any of the key words <strong>DATE, TIME, LAT, LONG, SITE, SERIES</strong> to represent the location of these properties in your file naming convention, separated by a comma.
                   Use keyword <strong>STRING</strong> for parts of the file names not correlating to one of these keywords.
                   Define the character separating these fields, such as underscores and slashes.

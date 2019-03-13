@@ -230,7 +230,6 @@ class JobQueue extends Component {
                      let date = new Date(job.creationTimeMs);
                      date = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
                      let jobDesc = job.input.site + " - " + job.input.series;
-                     let fileName = job.input.path.substring(job.input.path.lastIndexOf('\\')+1);
                      let specDesc = job.type.toUpperCase();
                      return(
                        <TableRow
@@ -238,9 +237,6 @@ class JobQueue extends Component {
                        >
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                              {jobDesc}
-                         </TableCell>
-                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                             {fileName}
                          </TableCell>
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                              {specDesc}

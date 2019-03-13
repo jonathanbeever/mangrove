@@ -91,35 +91,26 @@ class ChooseFiles extends React.Component {
     var order = value.split(',')
     var filesInfo = this.state.filesToUpload
     var files = Object.keys(filesInfo)
-    console.log(filesInfo, files)
+
     files.forEach(file => {
       file = file.substring(0, file.length - 4)
       var fileSplit = file.split(separator)
-      console.log(filesInfo)
-      if(order.indexOf('DATE') !== -1) {
-        console.log(file)
-        filesInfo[file+'.wav']['json'].recordTimeMs[0] = fileSplit[order.indexOf('DATE')]
-      }
+
+      if(order.indexOf('DATE') !== -1)
+        filesInfo[file+'.wav']['json'].recordTimeMs[0] = moment(fileSplit[order.indexOf('DATE')]).format('YYYY-MM-DD')
       if(order.indexOf('TIME') !== -1) {
-        console.log(file)
-        filesInfo[file+'.wav']['json'].recordTimeMs[1] = fileSplit[order.indexOf('TIME')]
+        let time = fileSplit[order.indexOf('TIME')]
+        time = time.substring(0, 2) + ':' + time.substring(2, 4) + ':' + time.substring(4, 6)
+        filesInfo[file+'.wav']['json'].recordTimeMs[1] = time
       }
-      if(order.indexOf('LAT') !== -1) {
-        console.log(file)
+      if(order.indexOf('LAT') !== -1)
         filesInfo[file+'.wav']['json'].coords.lat = fileSplit[order.indexOf('LAT')]
-      }
-      if(order.indexOf('LONG') !== -1) {
-        console.log(file)
+      if(order.indexOf('LONG') !== -1)
         filesInfo[file+'.wav']['json'].coords.long = fileSplit[order.indexOf('LONG')]
-      }
-      if(order.indexOf('SITE') !== -1) {
-        console.log(file)
+      if(order.indexOf('SITE') !== -1)
         filesInfo[file+'.wav']['json'].site = fileSplit[order.indexOf('SITE')]
-      }
-      if(order.indexOf('SERIES') !== -1) {
-        console.log(file)
+      if(order.indexOf('SERIES') !== -1)
         filesInfo[file+'.wav']['json'].series = fileSplit[order.indexOf('SERIES')]
-      }
     })
     this.setState({ filesToUpload: filesInfo })
   }
@@ -142,7 +133,6 @@ class ChooseFiles extends React.Component {
 
       fileInfo[line[titles.indexOf('NAME')]] = lineInfo
     })
-    console.log(fileInfo)
   }
 
   listDbFiles = (resp) => {
@@ -208,7 +198,10 @@ class ChooseFiles extends React.Component {
 
     fileNames.forEach(fileName => {
       var file = _.cloneDeep(files[fileName].json)
-      file.recordTimeMs = new Date(file.recordTimeMs[0]+'T'+file.recordTimeMs[1]+':00').getTime()
+      if(file.recordTimeMs[1].length === 5)
+        file.recordTimeMs = new Date(file.recordTimeMs[0]+'T'+file.recordTimeMs[1]+':00').getTime()
+      else if(file.recordTimeMs[1].length === 8)
+        file.recordTimeMs = new Date(file.recordTimeMs[0]+'T'+file.recordTimeMs[1]).getTime()
 
       const form = new FormData();
 

@@ -157,7 +157,7 @@ export function convertNDSIResults(jobs) {
     ret.graph4.data.push(curObject);
 
     curObject = {
-      name: job.input.path,
+      name: dayDate,
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -254,7 +254,7 @@ export function convertACIResults(jobs) {
 
     curObject =
     {
-      name: job.input.path,
+      name: dayDate,
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR
     }
@@ -373,7 +373,7 @@ export function convertADIResults(jobs) {
 
     curObject =
     {
-      name: job.input.path,
+      name: dayDate,
       leftADIVal: job.result.adiL,
       rightADIVal: job.result.adiR
     }
@@ -492,7 +492,7 @@ export function convertAEIResults(jobs) {
 
     curObject =
     {
-      name: job.input.path,
+      name: dayDate,
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR
     }
@@ -563,7 +563,7 @@ export function convertBIResults(jobs) {
     ret.graph5.data.push(curObject);
 
     curObject = {
-      name: job.input.path,
+      name: dayDate,
       areaL: job.result.areaL,
       areaR: job.result.areaR
     }
