@@ -5,6 +5,7 @@ module.exports = mongoose.model('Input', new mongoose.Schema({
   path: { type: String, required: true },
   site: { type: String, required: true },
   series: { type: String, required: true },
+  name: { type: String, required: true },
   recordTimeMs: { type: Number, required: true },
   durationMs: { type: Number, required: true },
   sampleRateHz: { type: Number, required: true },

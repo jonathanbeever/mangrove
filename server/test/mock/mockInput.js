@@ -16,6 +16,7 @@ function mockInput(
   path,
   site,
   series,
+  name,
   recordTimeMs,
   durationMs,
   sampleRateHz,
@@ -27,6 +28,7 @@ function mockInput(
     path,
     site,
     series,
+    name,
     recordTimeMs,
     durationMs,
     sampleRateHz,
@@ -40,6 +42,7 @@ const nextMockInput = () => {
   const inputId = nextMockObjectId();
   const site = 'UCF Arboretum';
   const series = 'Hurricane Irma';
+  const name = 'Test Input';
   const recordTimeMs = 1505016000000;
   const durationMs = 30000;
   const sampleRateHz = 44100;
@@ -57,6 +60,7 @@ const nextMockInput = () => {
     path,
     site,
     series,
+    name,
     recordTimeMs,
     durationMs,
     sampleRateHz,
@@ -65,31 +69,55 @@ const nextMockInput = () => {
   );
 };
 
-function mockInputCreateJson(site, series, recordTimeMs, coords) {
+function mockInputCreateJson(
+  site,
+  series,
+  name = undefined,
+  recordTimeMs,
+  coords,
+) {
   return JSON.stringify({
     site,
     series,
+    ...(name ? { name } : undefined),
     recordTimeMs,
     coords,
   });
 }
 
-const nextMockInputCreateJson = () => {
+const nextMockInputCreateJson = (includeName = false) => {
   const site = 'UCF Arboretum';
   const series = 'Hurricane Irma';
+  const name = includeName ? 'Test Input' : undefined;
   const recordTimeMs = 1505016000000;
   const coords = {
     lat: 28.596238,
     long: -81.191381,
   };
-  return mockInputCreateJson(site, series, recordTimeMs, coords);
+  return mockInputCreateJson(
+    site,
+    series,
+    name,
+    recordTimeMs,
+    coords,
+  );
 };
 
-const getJsonFromMockInput = (input) => {
+const getJsonFromMockInput = (input, includeName = false) => {
   const {
-    site, series, recordTimeMs, coords,
+    site,
+    series,
+    name,
+    recordTimeMs,
+    coords,
   } = input;
-  return mockInputCreateJson(site, series, recordTimeMs, coords);
+  return mockInputCreateJson(
+    site,
+    series,
+    (includeName ? name : undefined),
+    recordTimeMs,
+    coords,
+  );
 };
 
 module.exports = {

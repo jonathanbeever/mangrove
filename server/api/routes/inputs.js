@@ -18,6 +18,7 @@ const { Job } = require('../models/job');
 const {
   parseInputJson,
   getNewFilename,
+  getExtensionlessFilename,
 } = require('../models/input/utils');
 
 const error = config.get('error');
@@ -97,12 +98,16 @@ router.put('/', (req, res) => {
     try {
       const parsedJson = parseInputJson(req.body.json);
       const audioMetadata = await getAudioMetadata(req.file.path);
+      const name = 'name' in parsedJson
+        ? parsedJson.name
+        : getExtensionlessFilename(req.file.originalname);
 
       const input = new Input({
         _id: new mongoose.Types.ObjectId(),
         path: req.file.path,
         site: parsedJson.site,
         series: parsedJson.series,
+        name,
         recordTimeMs: parsedJson.recordTimeMs,
         durationMs: audioMetadata.durationMs,
         sampleRateHz: audioMetadata.sampleRateHz,
@@ -119,6 +124,7 @@ router.put('/', (req, res) => {
         inputId: createResult._id,
         site: createResult.site,
         series: createResult.series,
+        name: createResult.name,
         recordTimeMs: createResult.recordTimeMs,
         durationMs: createResult.durationMs,
         sampleRateHz: createResult.sampleRateHz,
@@ -152,6 +158,7 @@ router.get('/:inputId', async (req, res) => {
       inputId: searchResult._id,
       site: searchResult.site,
       series: searchResult.series,
+      name: searchResult.name,
       recordTimeMs: searchResult.recordTimeMs,
       durationMs: searchResult.durationMs,
       sampleRateHz: searchResult.sampleRateHz,
@@ -178,6 +185,7 @@ router.get('/', async (req, res) => {
         inputId: input._id,
         site: input.site,
         series: input.series,
+        name: input.name,
         recordTimeMs: input.recordTimeMs,
         durationMs: input.durationMs,
         sampleRateHz: input.sampleRateHz,
