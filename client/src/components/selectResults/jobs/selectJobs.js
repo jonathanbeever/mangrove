@@ -144,6 +144,7 @@ class SelectJobs extends Component {
               indexedFiles={this.props.indexedFiles}
               updateSelectedJobs={this.props.updateSelectedJobs}
               selectedJobs={this.props.selectedJobs}
+              indexedSpecsById={this.props.indexedSpecsById}
             />
             <Button
               style={{marginTop: 7}}

@@ -214,7 +214,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredJobs.map(job => {
-      return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
+      return createData(job.jobId, this.props.indexedSpecsById[job.spec].type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
     })
     this.setState({data: data})
   }
@@ -222,7 +222,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredJobs.map(job => {
-        return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
+        return createData(job.jobId, this.props.indexedSpecsById[job.spec].type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
       })
       this.setState({data: data})
 

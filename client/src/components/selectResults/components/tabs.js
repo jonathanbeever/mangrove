@@ -104,6 +104,7 @@ class SimpleTabs extends React.Component {
             selectedIndex={this.props.selectedIndex}
             selectedSpecs={this.props.selectedSpecs}
             filteredSpecs={this.props.filteredSpecs}
+            indexedSpecsById={this.props.indexedSpecs}
             // Results for AnalysisView
             updateSelectedJobs={this.props.updateSelectedJobs}
             selectedJobs={this.props.selectedJobs}

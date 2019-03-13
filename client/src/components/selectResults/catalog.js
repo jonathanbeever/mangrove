@@ -104,6 +104,7 @@ class Catalog extends Component {
         this.setState({ indexedSpecsById: indexedSpecs })
         // Set all specs state
         this.setState({ allSpecs: res.data.specs })
+        // Specs indexed by type
         this.setState({ indexedSpecs: specs })
         // Set filtered specs with all initially
         this.setState({ filteredSpecs: specs })
@@ -113,14 +114,7 @@ class Catalog extends Component {
 
       axios.get('http://localhost:3000/inputs')
       .then(res => {
-        // var inputs = res.data.inputs.map(input => {
-        //   var path = input.path.split('\\')
-        //   input.path = path[path.length - 1]
-        //   return input
-        // })
-
         res.data.inputs.forEach(file => {
-          // selected.push(file.inputId)
           indexedFiles[file.inputId] = file
         })
 
@@ -384,24 +378,25 @@ class Catalog extends Component {
     jobs.forEach(job => {
       // If curr job is selected
       job.input = this.state.indexedFiles[job.input]
+      job.spec = this.state.indexedSpecsById[job.spec]
+
       if(selected.indexOf(job.jobId) !== -1) {
-        var jobSpecsByIndex = Object.keys(jobsObj[job.type])
+        var jobSpecsByIndex = Object.keys(jobsObj[job.spec.type])
         if(jobSpecsByIndex.length) {
           // if spec is already a property
           if(jobSpecsByIndex.indexOf(job.spec) !== -1) {
-            jobsObj[job.type][job.spec].push(job)
+            jobsObj[job.spec.type][job.spec.specId].push(job)
           }
           // Add spec as property and set job in array
           else {
-            jobsObj[job.type][job.spec] = [job]
+            jobsObj[job.spec.type][job.spec.specId] = [job]
           }
         }
         else {
-          jobsObj[job.type][job.spec] = [job]
+          jobsObj[job.spec.type][job.spec.specId] = [job]
         }
       }
     })
-    console.log(jobsObj)
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 
@@ -425,10 +420,10 @@ class Catalog extends Component {
     this.setState({ jobFiltering : filter })
   }
 
+  // TODO
   handleSubmitJobFilter = () => {
     var filteredJobs = []
     this.state.allJobs.forEach(job => {
-      // TODO: multiple specs
       if(this.state.selectedSpecs[this.state.selectedIndex].indexOf(job.spec) !== -1) {
         if(this.state.selectedInputs.indexOf(job.input) !== -1) {
           if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {

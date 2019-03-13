@@ -270,9 +270,8 @@ class HorizontalLinearStepper extends React.Component {
           axios.put(
             "http://localhost:3000/jobs",
             {
-              type: this.state.index,
-              inputId: inputId,
-              specId: spec
+              input: inputId,
+              spec: spec
             },
             {headers: {"Content-Type": "application/json"}}
           )
@@ -314,9 +313,8 @@ class HorizontalLinearStepper extends React.Component {
           axios.put(
             "http://localhost:3000/jobs",
             {
-              type: this.state.index,
-              inputId: inputId,
-              specId: specId
+              input: inputId,
+              spec: specId
             },
             {headers: {"Content-Type": "application/json"}}
           )
