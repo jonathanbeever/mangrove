@@ -14,9 +14,11 @@ const {
 const { getAudioMetadata } = require('../../util/audioMetadata');
 
 const Input = require('../models/input');
+const { Job } = require('../models/job');
 const {
   parseInputJson,
   getNewFilename,
+  getExtensionlessFilename,
 } = require('../models/input/utils');
 
 const error = config.get('error');
@@ -96,12 +98,16 @@ router.put('/', (req, res) => {
     try {
       const parsedJson = parseInputJson(req.body.json);
       const audioMetadata = await getAudioMetadata(req.file.path);
+      const name = 'name' in parsedJson
+        ? parsedJson.name
+        : getExtensionlessFilename(req.file.originalname);
 
       const input = new Input({
         _id: new mongoose.Types.ObjectId(),
         path: req.file.path,
         site: parsedJson.site,
         series: parsedJson.series,
+        name,
         recordTimeMs: parsedJson.recordTimeMs,
         durationMs: audioMetadata.durationMs,
         sampleRateHz: audioMetadata.sampleRateHz,
@@ -118,6 +124,7 @@ router.put('/', (req, res) => {
         inputId: createResult._id,
         site: createResult.site,
         series: createResult.series,
+        name: createResult.name,
         recordTimeMs: createResult.recordTimeMs,
         durationMs: createResult.durationMs,
         sampleRateHz: createResult.sampleRateHz,
@@ -151,6 +158,7 @@ router.get('/:inputId', async (req, res) => {
       inputId: searchResult._id,
       site: searchResult.site,
       series: searchResult.series,
+      name: searchResult.name,
       recordTimeMs: searchResult.recordTimeMs,
       durationMs: searchResult.durationMs,
       sampleRateHz: searchResult.sampleRateHz,
@@ -177,6 +185,7 @@ router.get('/', async (req, res) => {
         inputId: input._id,
         site: input.site,
         series: input.series,
+        name: input.name,
         recordTimeMs: input.recordTimeMs,
         durationMs: input.durationMs,
         sampleRateHz: input.sampleRateHz,
@@ -194,23 +203,25 @@ router.get('/', async (req, res) => {
 });
 
 // Delete Input
-// TODO: Delete Jobs associated with the Input
 router.delete('/:inputId', async (req, res) => {
   const { inputId } = req.params;
 
   try {
-    const searchResult = await Input.findById(inputId).exec();
-    const deleteResult = await Input.deleteOne({ _id: inputId }).exec();
+    const deleteResult = await Input.findOneAndDelete({ _id: inputId }).exec();
+    if (deleteResult) deleteInputFile(deleteResult.path);
 
-    if (searchResult) deleteInputFile(searchResult.path);
+    let jobsWithInput = [];
+    if (deleteResult) {
+      jobsWithInput = await Job.find({ input: inputId });
+      await Job.deleteMany({ input: inputId });
+    }
 
     return res.status(200).json({
       success: true,
-      message: (
-        deleteResult.n > 0
-          ? `Successfully deleted Input with inputId: ${inputId}.`
-          : `No valid entry found for inputId: ${inputId}.`
-      ),
+      message: deleteResult
+        ? `Successfully deleted Input with inputId: ${inputId}.`
+        : `No valid entry found for inputId: ${inputId}.`,
+      jobs: jobsWithInput.map(job => job.id),
     });
   } catch (err) {
     console.error(err);

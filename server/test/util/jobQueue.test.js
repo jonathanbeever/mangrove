@@ -3,6 +3,13 @@ const chai = require('chai');
 const mockDb = require('../../test/mock/mockDb');
 const { nextMockJob } = require('../../test/mock/mockJob');
 
+const {
+  deleteInputDir,
+  deleteRootDir,
+} = require('../../util/storage');
+
+const Input = require('../../api/models/input');
+const { Spec } = require('../../api/models/spec');
 const { Job } = require('../../api/models/job');
 const Type = require('../../api/models/type');
 
@@ -18,9 +25,13 @@ describe('Job Queue', () => {
 
   after(async () => {
     await mockDb.teardown();
+    deleteRootDir();
   });
 
   beforeEach(async () => {
+    await Input.deleteMany();
+    deleteInputDir();
+    await Spec.deleteMany();
     await Job.deleteMany();
   });
 
@@ -28,7 +39,7 @@ describe('Job Queue', () => {
     await jobQueue.destroy();
   });
 
-  it('Fail to Push to Uninitialized Queue', async () => {
+  it('Fail to push Job to uninitialized JobQueue', async () => {
     const job = {};
     try {
       await jobQueue.enqueue(job);
@@ -38,8 +49,8 @@ describe('Job Queue', () => {
     }
   });
 
-  it('Fail to Enqueue Job, Not In Database', async () => {
-    const job = nextMockJob(Type.ACI);
+  it('Fail to enqueue Job (not found)', async () => {
+    const job = await nextMockJob(Type.ACI);
     await jobQueue.init();
     try {
       await jobQueue.enqueue(job);
@@ -49,7 +60,7 @@ describe('Job Queue', () => {
     }
   });
 
-  it('Scan Database for Already Processing and Queued Jobs', async () => {
+  it('Scan database for pending jobs', async () => {
     const randomJobs = makeRandomJobs(50);
     const countOfStatus = randomJobs.tallyOfStatus;
 

@@ -1,3 +1,5 @@
+const nodePath = require('path');
+
 const { arrayDiff } = require('../../../util/array');
 
 const Input = require('./index');
@@ -12,8 +14,11 @@ const getInputKeys = () => {
   return keys;
 };
 
-const newInputKeys = () => {
+const newInputKeys = (includeOptional = false) => {
   const keys = getInputKeys();
+  if (!includeOptional) {
+    keys.splice(keys.indexOf('name'), 1);
+  }
   // The following keys are instantiated upon upload, not provided by the user
   keys.splice(keys.indexOf('inputId'), 1);
   keys.splice(keys.indexOf('durationMs'), 1);
@@ -45,7 +50,7 @@ const parseInputJson = (json) => {
     throw new Error(`JSON missing required keys: ${missingKeys.join(', ')}.`);
   }
 
-  const extraKeys = arrayDiff(Object.keys(input), newInputKeys())
+  const extraKeys = arrayDiff(Object.keys(input), newInputKeys(true))
     .concat(
       arrayDiff(Object.keys(coords) || [], coordsKeys())
         .map(key => `coords.${key}`),
@@ -70,6 +75,8 @@ const getExtensionFromMimetype = (mimetype) => {
 
 const getNewFilename = (recordTimeMs, mimetype) => `${recordTimeMs}.${getExtensionFromMimetype(mimetype)}`;
 
+const getExtensionlessFilename = path => nodePath.parse(path).name;
+
 module.exports = {
   getInputKeys,
   newInputKeys,
@@ -77,4 +84,5 @@ module.exports = {
   parseInputJson,
   getExtensionFromMimetype,
   getNewFilename,
+  getExtensionlessFilename,
 };
