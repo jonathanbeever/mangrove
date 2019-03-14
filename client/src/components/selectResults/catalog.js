@@ -375,8 +375,13 @@ class Catalog extends Component {
       'rms': {}
     }
 
+    // these are the inputs selected as an object
+    console.log(this.state.indexedFiles);
+    // these are the jobs selected as an array
+    console.log(selected);
     jobs.forEach(job => {
       // If curr job is selected
+      console.log(job);
       job.input = this.state.indexedFiles[job.input]
       job.spec = this.state.indexedSpecsById[job.spec]
 
@@ -392,9 +397,24 @@ class Catalog extends Component {
             jobsObj[job.spec.type][job.spec.specId] = [job]
           }
         }
+        // Add spec as property and set job in array
         else {
           jobsObj[job.spec.type][job.spec.specId] = [job]
         }
+        // if(jobSpecsByIndex.length) {
+        //   // if spec is already a property
+        //   if(jobSpecsByIndex.indexOf(job.spec) !== -1) {
+        //     jobsObj[job.spec.type][job.spec.specId].push(job)
+        //   }
+        //   // Add spec as property and set job in array
+        //   else {
+        //     jobsObj[job.spec.type][job.spec.specId] = [job]
+        //   }
+        // }
+        // else {
+        //   // add spec as property and set job in array
+        //   jobsObj[job.spec.type][job.spec.specId] = [job]
+        // }
       }
     })
     this.setState({ selectedIndexedJobs: jobsObj })

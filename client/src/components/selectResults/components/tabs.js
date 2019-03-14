@@ -67,6 +67,9 @@ class SimpleTabs extends React.Component {
     const { classes } = this.props;
     const { value } = this.state;
 
+    // console.log(this.props.selectedIndexedJobs);
+    // console.log(this.props.selectedJobs);
+
     return (
       <div className={classes.root}>
         <AppBar position="static" className={classes.background}>

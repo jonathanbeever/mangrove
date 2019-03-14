@@ -157,7 +157,7 @@ export function convertNDSIResults(jobs) {
     ret.graph4.data.push(curObject);
 
     curObject = {
-      name: job.input.fileName,
+      name: job.input.name,
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -177,6 +177,7 @@ export function convertNDSIResults(jobs) {
 }
 
 export function convertACIResults(jobs) {
+  console.log(jobs);
   let ret;
   let aciFlValsL = [];
   let aciFlValsR = [];
@@ -254,7 +255,7 @@ export function convertACIResults(jobs) {
 
     curObject =
     {
-      name: job.input.fileName,
+      name: job.input.name,
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR
     }
@@ -373,7 +374,7 @@ export function convertADIResults(jobs) {
 
     curObject =
     {
-      name: job.input.fileName,
+      name: job.input.name,
       leftADIVal: job.result.adiL,
       rightADIVal: job.result.adiR
     }
@@ -492,7 +493,7 @@ export function convertAEIResults(jobs) {
 
     curObject =
     {
-      name: job.input.fileName,
+      name: job.input.name,
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR
     }
@@ -563,7 +564,7 @@ export function convertBIResults(jobs) {
     ret.graph5.data.push(curObject);
 
     curObject = {
-      name: job.input.fileName,
+      name: job.input.name,
       areaL: job.result.areaL,
       areaR: job.result.areaR
     }

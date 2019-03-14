@@ -42,11 +42,10 @@ class AnalysisView extends Component {
 
   componentDidMount = () => {
     let fromStorage = sessionStorage.getItem('analysisViewSave');
-    console.log(fromStorage);
     let selectedJobs;
     if(fromStorage === "undefined" || fromStorage === null || fromStorage === undefined) selectedJobs = this.props.selectedJobs;
     else selectedJobs = JSON.parse(fromStorage);
-
+    console.log(selectedJobs);
     this.formatState(selectedJobs);
   }
 
