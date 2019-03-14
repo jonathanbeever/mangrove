@@ -192,6 +192,12 @@ class Catalog extends Component {
       })
     })
 
+    var selectedJobs = this.state.selectedJobs.filter(job => {
+      if(selected.indexOf(job.input) !== -1)
+        return job
+    })
+    console.log(selectedJobs)
+    this.updateSelectedJobs(selectedJobs)
     this.setState({ jobsFiltered: filteredJobByInputs })
     this.setState({ selectedInputs: selected })
   }
@@ -401,20 +407,6 @@ class Catalog extends Component {
         else {
           jobsObj[job.spec.type][job.spec.specId] = [job]
         }
-        // if(jobSpecsByIndex.length) {
-        //   // if spec is already a property
-        //   if(jobSpecsByIndex.indexOf(job.spec) !== -1) {
-        //     jobsObj[job.spec.type][job.spec.specId].push(job)
-        //   }
-        //   // Add spec as property and set job in array
-        //   else {
-        //     jobsObj[job.spec.type][job.spec.specId] = [job]
-        //   }
-        // }
-        // else {
-        //   // add spec as property and set job in array
-        //   jobsObj[job.spec.type][job.spec.specId] = [job]
-        // }
       }
     })
     this.setState({ selectedIndexedJobs: jobsObj })
