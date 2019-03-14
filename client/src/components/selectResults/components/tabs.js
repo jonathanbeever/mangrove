@@ -54,6 +54,15 @@ class SimpleTabs extends React.Component {
     }
   }
 
+  componentWillMount = () => {
+    if(sessionStorage.getItem('catalogPageSave')) this.setState({value: 3});
+  }
+
+  componentWillUnmount = () => {
+    if(this.state.value === 3) sessionStorage.setItem('catalogPageSave', 3);
+    else sessionStorage.removeItem('catalogPageSave');
+  }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;

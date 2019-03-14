@@ -48,7 +48,11 @@ class JobQueue extends Component {
   componentDidMount = () => {
     this.refreshJobs();
     this.interval = setInterval(() => this.refreshJobs(), 5000);
-  };
+  }
+
+  clearSavedJobs = () => {
+    localStorage.removeItem("jobs");
+  }
 
   componentWillUnmount = () => {
     clearInterval(this.interval);
@@ -220,6 +224,14 @@ class JobQueue extends Component {
               onClick={this.updateTable}
               >
               <h6>Clear Finished</h6>
+            </Button>
+          </div>
+          <div className="col-6 text-right">
+            <Button
+              style={{ marginBottom:10+'px', marginTop:10+'px'}}
+              onClick={this.clearSavedJobs}
+              >
+              <h6>Delete Caching</h6>
             </Button>
           </div>
         </div>

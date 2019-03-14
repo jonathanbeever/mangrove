@@ -38,6 +38,7 @@ class FilterInputs extends Component {
   }
 
   componentDidMount = () => {
+    sessionStorage.removeItem('analysisViewSave');
     this.formatChipHtml()
   }
 

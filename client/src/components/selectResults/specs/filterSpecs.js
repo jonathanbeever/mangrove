@@ -51,6 +51,7 @@ class FilterSpecs extends Component {
   }
 
   componentDidMount = () => {
+    sessionStorage.removeItem('analysisViewSave');
     this.formatSpecTables()
     this.formatSpecInput(this.props.specParamsList)
     this.formatChipHtml()

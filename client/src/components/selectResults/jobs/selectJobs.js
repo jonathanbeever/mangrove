@@ -39,6 +39,7 @@ class SelectJobs extends Component {
   }
 
   componentDidMount = () => {
+    sessionStorage.removeItem('analysisViewSave');
     this.formatInputChipHtml()
     this.formatSpecFilterHtml()
   }
