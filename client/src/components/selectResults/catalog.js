@@ -384,7 +384,7 @@ class Catalog extends Component {
         var jobSpecsByIndex = Object.keys(jobsObj[job.spec.type])
         if(jobSpecsByIndex.length) {
           // if spec is already a property
-          if(jobSpecsByIndex.indexOf(job.spec) !== -1) {
+          if(jobSpecsByIndex.indexOf(job.spec.specId) !== -1) {
             jobsObj[job.spec.type][job.spec.specId].push(job)
           }
           // Add spec as property and set job in array
