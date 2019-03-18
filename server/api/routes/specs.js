@@ -13,6 +13,7 @@ const {
 } = require('../models/spec/utils');
 const { getJobModel } = require('../models/job/utils');
 const Type = require('../models/type');
+const Nyquist = require('../models/spec/nyquist');
 
 const { arrayDiff } = require('../../util/array');
 
@@ -45,7 +46,7 @@ router.put('/', async (req, res) => {
   }
 
   try {
-    const params = getParamsFromSpec(req.body);
+    const params = getParamsFromSpec(req.body, Nyquist.db.type);
     const spec = new SpecModel({
       _id: new mongoose.Types.ObjectId(),
       ...params,
@@ -65,7 +66,7 @@ router.put('/', async (req, res) => {
       return res.status(200).json({
         specId: searchResult[0]._id,
         type: searchResult[0].type,
-        ...getParamsFromSpec(searchResult[0]),
+        ...getParamsFromSpec(searchResult[0], Nyquist.user.type),
       });
     }
 
@@ -74,7 +75,7 @@ router.put('/', async (req, res) => {
     return res.status(201).json({
       specId: createResult._id,
       type: createResult.type,
-      ...getParamsFromSpec(createResult),
+      ...getParamsFromSpec(createResult, Nyquist.user.type),
     });
   } catch (err) {
     console.error(err);
@@ -98,7 +99,7 @@ router.get('/:specId', async (req, res) => {
     return res.status(200).json({
       specId: searchResult._id,
       type: searchResult.type,
-      ...getParamsFromSpec(searchResult),
+      ...getParamsFromSpec(searchResult, Nyquist.user.type),
     });
   } catch (err) {
     console.error(err);
@@ -116,7 +117,7 @@ router.get('/', async (req, res) => {
       specs: searchResult.map(spec => ({
         specId: spec._id,
         type: spec.type,
-        ...getParamsFromSpec(spec),
+        ...getParamsFromSpec(spec, Nyquist.user.type),
       })),
     });
   } catch (err) {

@@ -7,6 +7,7 @@ const RmsSpec = require('./rms');
 
 const Type = require('../type');
 const Param = require('./param');
+const Nyquist = require('./nyquist');
 
 const getSpecModel = (type) => {
   switch (type) {
@@ -46,12 +47,25 @@ const getSpecParams = (type) => {
   return keys;
 };
 
-const getParamsFromSpec = (spec) => {
+function showNyquistAs(nyquistType = undefined, aciMaxFreq) {
+  switch (nyquistType) {
+    case Nyquist.db.type:
+      return aciMaxFreq === Nyquist.user.value ? Nyquist.db.value : aciMaxFreq;
+    case Nyquist.user.type:
+      return aciMaxFreq === Nyquist.db.value ? Nyquist.user.value : aciMaxFreq;
+    default:
+      return aciMaxFreq;
+  }
+}
+
+const getParamsFromSpec = (spec, nyquistType = undefined) => {
   switch (spec.type) {
     case Type.ACI:
       return {
         ...(typeof spec.minFreq !== 'undefined' && { minFreq: spec.minFreq }),
-        ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
+        ...(typeof spec.maxFreq !== 'undefined' && {
+          maxFreq: showNyquistAs(nyquistType, spec.maxFreq),
+        }),
         ...(typeof spec.j !== 'undefined' && { j: spec.j }),
         ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
       };

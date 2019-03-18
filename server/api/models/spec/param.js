@@ -1,9 +1,10 @@
 const { MAX_NUM_R } = require('../../../util/rConstants');
+const Nyquist = require('./nyquist');
 
 const Param = Object.freeze({
   aci: {
     minFreq: { default: 0, min: 0, max: MAX_NUM_R },
-    maxFreq: { default: 96000, min: 0, max: MAX_NUM_R },
+    maxFreq: { default: Nyquist.db.value, min: Nyquist.db.value, max: MAX_NUM_R },
     j: { default: 5, min: 1, max: MAX_NUM_R },
     fftW: { default: 512, min: 1, max: MAX_NUM_R },
   },

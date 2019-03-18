@@ -26,6 +26,7 @@ const {
 } = require('../../../api/models/spec/utils');
 const Type = require('../../../api/models/type');
 const Param = require('../../../api/models/spec/param');
+const Nyquist = require('../../../api/models/spec/nyquist');
 
 const { expect } = chai;
 
@@ -163,7 +164,7 @@ describe('Specs', () => {
         );
         expect(res.body.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(res.body)).to.eql(
-          getParamsFromSpec(specs[index]),
+          getParamsFromSpec(specs[index], Nyquist.user.type),
         );
       });
     });
@@ -184,7 +185,7 @@ describe('Specs', () => {
       expect(res.body.specId).to.equal(spec.id);
       expect(res.body.type).to.equal(spec.type);
       expect(getParamsFromSpec(res.body)).to.eql(
-        getParamsFromSpec(spec),
+        getParamsFromSpec(spec, Nyquist.user.type),
       );
     });
 
@@ -210,7 +211,7 @@ describe('Specs', () => {
         expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
         expect(res.body.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(res.body)).to.eql(
-          getParamsFromSpec(specs[index]),
+          getParamsFromSpec(specs[index], Nyquist.user.type),
         );
       });
     });
@@ -239,7 +240,7 @@ describe('Specs', () => {
       expect(res.body.specId).to.equal(spec.id);
       expect(res.body.type).to.equal(spec.type);
       expect(getParamsFromSpec(res.body)).to.eql(
-        getParamsFromSpec(spec),
+        getParamsFromSpec(spec, Nyquist.user.type),
       );
     });
   });
@@ -282,7 +283,7 @@ describe('Specs', () => {
         expect(spec.specId).to.equal(specs[index].id);
         expect(spec.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(spec)).to.eql(
-          getParamsFromSpec(specs[index]),
+          getParamsFromSpec(specs[index], Nyquist.user.type),
         );
       });
     });

@@ -3,6 +3,8 @@ job <- input[[1]]
 needs("tuneR")
 if (job$spec$type %in% list("aci", "adi", "aei", "bi", "ndsi")) {
   needs("soundecology")
+  if (job$spec$type == 'aci')
+    source("./util/jobProcessor/R/nyquist.R")
 } else if (job$spec$type %in% list("rms")) {
   source("./util/jobProcessor/R/rootMeanSquare.R")
 } else
@@ -12,9 +14,11 @@ source("./util/jobProcessor/R/sanitizeResult.R")
 soundfile <- readWave(job$input$path)
 
 if (job$spec$type == "aci") {
+  maxFreq <- if (job$spec$maxFreq >= 0) job$spec$maxFreq
+             else getNyquistFrequency(job)
   result <- acoustic_complexity(soundfile,
                                 min_freq = job$spec$minFreq,
-                                max_freq = job$spec$maxFreq,
+                                max_freq = maxFreq,
                                 j = job$spec$j,
                                 fft_w = job$spec$fftW)
 } else if (job$spec$type == "adi") {
