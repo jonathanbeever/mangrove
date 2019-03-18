@@ -201,7 +201,7 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'calories',
+    orderBy: 'recordTime',
     // send prop form filtering?
     selected: this.props.selected,
     data: [

@@ -170,7 +170,7 @@ class FilterSpecs extends Component {
         <div className="col-4">
           <Paper className={classes.root}>
             {this.state.chips}
-            <h4>Filter By Index Specifications</h4>
+            <h4>Filter Index Specifications</h4>
             <FormControl className={classes.formControl}>
               <InputLabel style={{fontSize:15+'px'}} htmlFor="indexSelect">Index</InputLabel>
               <Select

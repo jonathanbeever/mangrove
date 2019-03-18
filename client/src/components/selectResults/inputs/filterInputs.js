@@ -76,7 +76,7 @@ class FilterInputs extends Component {
         <div className="col-4">
           <Paper className={classes.root}>
             {this.state.chips}
-            <h4>Filter By Input Files</h4>
+            <h4>Filter Input Files</h4>
             <TextField
               label={<p style={{fontSize:13+'px'}}>Site Name</p>}
               value={this.props.inputFiltering.site}
@@ -90,7 +90,7 @@ class FilterInputs extends Component {
               onChange={this.props.onChange('series')}
             />
             {/* TODO */}
-            <DateAndTimePickers/>
+            {/* <DateAndTimePickers/> */}
             <TextField
               label={<p style={{fontSize:13+'px'}}>Latitude</p>}
               value={this.props.inputFiltering.lat}

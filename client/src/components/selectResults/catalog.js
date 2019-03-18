@@ -409,6 +409,7 @@ class Catalog extends Component {
         }
       }
     })
+    console.log(jobsObj)
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 
@@ -436,13 +437,15 @@ class Catalog extends Component {
   handleSubmitJobFilter = () => {
     var filteredJobs = []
     this.state.allJobs.forEach(job => {
-      if(this.state.selectedSpecs[this.state.selectedIndex].indexOf(job.spec) !== -1) {
-        if(this.state.selectedInputs.indexOf(job.input) !== -1) {
-          if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {
-            filteredJobs.push(job)
+      ['aci', 'ndsi', 'aei', 'adi', 'bi', 'rms'].forEach(index => {
+        if(this.state.selectedSpecs[index].indexOf(job.spec) !== -1) {
+          if(this.state.selectedInputs.indexOf(job.input) !== -1) {
+            if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {
+              filteredJobs.push(job)
+            }
           }
         }
-      }
+      })
     })
 
     this.setState({ jobsFiltered: filteredJobs })

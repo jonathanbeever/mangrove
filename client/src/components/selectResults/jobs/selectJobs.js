@@ -120,7 +120,7 @@ class SelectJobs extends Component {
             ''
           }
           <Paper className={classes.root}>
-            <h4>Filter By Jobs</h4>
+            <h4>Filter Jobs</h4>
             <div>
               <TextField
                 label={<p style={{fontSize:13+'px'}}>Author</p>}
@@ -129,7 +129,7 @@ class SelectJobs extends Component {
                 onChange={this.props.onChangeJobFilter('author')}
               />
               {/* TODO */}
-              <DateAndTimePickers />
+              {/* <DateAndTimePickers /> */}
             </div>
             <div className="row filterSubmit">
               <Button onClick={this.props.onSubmitFiltering} style={{margin: "0 auto"}}>
