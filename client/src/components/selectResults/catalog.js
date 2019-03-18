@@ -208,7 +208,7 @@ class Catalog extends Component {
       if(selected.indexOf(job.input) !== -1)
         return job
     })
-    console.log(selectedJobs)
+    // console.log(selectedJobs)
     this.updateSelectedJobs(selectedJobs)
     this.setState({ jobsFiltered: filteredJobByInputs })
     this.setState({ selectedInputs: selected })
@@ -295,6 +295,7 @@ class Catalog extends Component {
   }
 
   updateSelectedSpecs = (selected, index) => {
+    if(this.state.allJobs === undefined) return;
     var specs = this.state.selectedSpecs
     specs[index] = selected
     this.setState({ selectedSpecs: specs})
@@ -394,12 +395,12 @@ class Catalog extends Component {
     }
 
     // these are the inputs selected as an object
-    console.log(this.state.indexedFiles);
+    // console.log(this.state.indexedFiles);
     // these are the jobs selected as an array
-    console.log(selected);
+    // console.log(selected);
     jobs.forEach(job => {
       // If curr job is selected
-      console.log(job);
+      // console.log(job);
       job.input = this.state.indexedFiles[job.input]
       job.spec = this.state.indexedSpecsById[job.spec]
 
@@ -421,7 +422,11 @@ class Catalog extends Component {
         }
       }
     })
+<<<<<<< HEAD
     console.log(jobsObj)
+=======
+    // console.log(jobsObj);
+>>>>>>> Add live updating graphs
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 

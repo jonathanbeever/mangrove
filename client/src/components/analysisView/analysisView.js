@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import { withStyles } from '@material-ui/core/styles';
 import * as utils from './dataModeling.js';
+import axios from 'axios';
 
 const styles = theme => ({
   selectEmpty: {
@@ -32,6 +33,7 @@ class AnalysisView extends Component {
   }
 
   componentWillUnmount = () => {
+    clearInterval(this.interval);
     let fromStorage = sessionStorage.getItem('analysisViewSave');
     if(fromStorage === "undefined" || fromStorage === null || fromStorage === undefined) sessionStorage.setItem('analysisViewSave', JSON.stringify(this.props.selectedJobs));
   }
@@ -45,8 +47,75 @@ class AnalysisView extends Component {
     let selectedJobs;
     if(fromStorage === "undefined" || fromStorage === null || fromStorage === undefined) selectedJobs = this.props.selectedJobs;
     else selectedJobs = JSON.parse(fromStorage);
-    console.log(selectedJobs);
+    console.log(this.props.selectedJobs);
     this.formatState(selectedJobs);
+  }
+
+  refreshJobs = () => {
+
+    let { selectedJobs, unfinished } = this.state;
+
+    if(selectedJobs === undefined || unfinished === undefined) return;
+
+    if(unfinished.length === 0){
+      clearInterval(this.interval);
+      return;
+    }
+
+    let jobRequests = [];
+
+    unfinished.forEach(job => {
+      jobRequests.push(axios.get('http://localhost:3000/jobs/'+job));
+    });
+
+    Promise.all(jobRequests)
+      .then(responses => {
+        // get jobs that have become finished
+        let finished = responses.filter(resp => { return resp.data.status === "finished" }).map(resp => resp.data);
+        let finishedId = finished.map(x => x.jobId);
+        // get unfinished jobs
+        let stillUnfinished = unfinished.filter(x => !finishedId.includes(x));
+        if(finished.length)
+        {
+          for(var item in selectedJobs)
+          {
+            var index = selectedJobs[item];
+            if(utils.isEmpty(index)) continue;
+            for(var specId in index)
+            {
+              var jobs = index[specId];
+              for(let i = 0; i < jobs.length; i++)
+              {
+                if(finishedId.includes(jobs[i].jobId))
+                {
+                  console.log(finished[finishedId.indexOf(jobs[i].jobId)].result);
+                  jobs[i].result = finished[finishedId.indexOf(jobs[i].jobId)].result;
+                  jobs[i].status = "finished";
+                }
+              }
+            }
+          }
+        }
+
+        this.setState({ unfinished: stillUnfinished });
+        this.setState({ selectedJobs: selectedJobs });
+        this.displayGraphs();
+      });
+  }
+
+  hasUnfinished = (selectedJobs) => {
+    let ret = [];
+    for(var item in selectedJobs)
+    {
+      var index = selectedJobs[item];
+      if(utils.isEmpty(index)) continue;
+      for(var specId in index)
+      {
+        var jobs = index[specId];
+        ret = ret.concat(jobs.filter(x => x.status !== "finished" && x.status !== "failed" && x.status !== "cancelled").map(x => x.jobId));
+      }
+    }
+    return ret;
   }
 
   formatState = (selectedJobs) => {
@@ -72,6 +141,12 @@ class AnalysisView extends Component {
           }
         });
       }
+    }
+
+    let unfinished = this.hasUnfinished(selectedJobs);
+    if(unfinished.length > 0){
+      this.setState({ unfinished: unfinished });
+      this.interval = setInterval(() => this.refreshJobs(), 2000);
     }
 
     this.setState({ siteNames: sites });
@@ -389,6 +464,8 @@ class AnalysisView extends Component {
     let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.state;
 
+    console.log(selectedJobs);
+
     let index;
     let item;
     let specId;
@@ -511,10 +588,12 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, formattedJob, comparedJobsSite,
+    let { errorMode, unfinished, formattedJob, comparedJobsSite,
           comparedJobsSeries, siteNames, seriesNames, chosenSite,
-          chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
+          chosenSeries, chosenCompareSite, chosenCompareSeries, selectedJobs } = this.state;
     const { classes } = this.props;
+
+    console.log(selectedJobs);
 
     return (
       <div style={{ marginBottom:25+'px' }}>
