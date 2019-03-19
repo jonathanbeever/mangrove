@@ -79,6 +79,10 @@ class Catalog extends Component {
   }
 
   componentDidMount = () => {
+    this.getData()
+  }
+
+  getData = () => {
     this.handleIndexChange('aci')
     // make indexed object of inputs
     var selected = []
@@ -96,6 +100,14 @@ class Catalog extends Component {
           'bi': [],
           'rms': []
         }
+
+        var indices = Object.keys(this.state.selectedSpecs)
+        var selectedSpecs = this.state.selectedSpecs
+        indices.forEach(index => {
+          selectedSpecs[index] = []
+        })
+        this.setState({ selectedSpecs: selectedSpecs })
+
         var indexedSpecs = {}
         res.data.specs.forEach(spec => {
           specs[spec.type].push(spec)
@@ -117,11 +129,9 @@ class Catalog extends Component {
         res.data.inputs.forEach(file => {
           indexedFiles[file.inputId] = file
         })
-
         this.setState({ indexedFiles : indexedFiles})
         this.setState({ allFiles: res.data.inputs })
       })
-
       axios.get('http://localhost:3000/jobs')
       .then(res => {
         // Set all specs state
@@ -498,6 +508,8 @@ class Catalog extends Component {
           // Tabs props
           showAnalysis={this.state.showAnalysis}
           showFiltering={this.showFiltering}
+          // Specs and inputs
+          getData={this.getData}
         />
       </div>
     );

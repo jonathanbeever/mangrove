@@ -45,6 +45,11 @@ class SimpleTabs extends React.Component {
       this.props.showFiltering()
   };
 
+  changeTab = (value) => {
+    this.setState({value: value})
+    this.props.getData()
+  }
+
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps.showAnalysis !== this.props.showAnalysis) {
       if(this.props.showAnalysis === true)
@@ -96,6 +101,8 @@ class SimpleTabs extends React.Component {
         </TabContainer>}
         {value === 1 && <TabContainer>
           <FilterInputs
+            changeTab={this.changeTab}
+            filteredJobs={this.props.filteredJobs}
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
             filteredInputs={this.props.filteredInputs}

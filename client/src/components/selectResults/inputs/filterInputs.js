@@ -8,6 +8,25 @@ import Button from '@material-ui/core/Button';
 import '../selectResults.css';
 import InputsTable from './inputsTable';
 import Chip from '../components/chip'
+import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
+
+// TODO: fixed position
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
+
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 const styles = theme => ({
   root: {
@@ -25,7 +44,15 @@ const styles = theme => ({
     paddingBottom: 0,
     marginTop: 0,
     fontWeight: 500
-  }
+  },
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    outline: 'none',
+  },
 });
 
 class FilterInputs extends Component {
@@ -33,7 +60,9 @@ class FilterInputs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chips: ''
+      chips: '',
+      open: false,
+      buttons: []
     }
   }
 
@@ -68,12 +97,85 @@ class FilterInputs extends Component {
     this.formatChipHtml()
   }
 
+  confirmDelete = (selected) => {
+    this.handleOpen(selected)
+    this.setState({ selected: selected })
+  }
+
+  handleOpen = (selected) => {
+    this.setState({ message: 'Are you sure you want to delete ' + selected.length + ' input file(s)?'})
+    this.setState({ buttons: ['No', 'Yes']})
+    this.setState({ open: true });
+  };
+
+  handleClose = (deleteInputs) => {
+    this.setState({ open: false });
+
+    if(deleteInputs === 'delete') {
+      this.deleteFiles()
+    }
+    else if(deleteInputs === 'deleted') {
+      // Change back to select specs tab, make request for inputs/specs/jobs again
+      // TODO: better solution to update after delete
+      this.props.changeTab(0)
+    }
+  };
+
+  deleteFiles = () => {
+    let requests = [];
+    let jobRequests = []
+
+    this.props.filteredJobs.forEach(job => {
+      if(this.state.selected.indexOf(job.input) !== -1) {
+        jobRequests.push(axios.delete('http://localhost:3000/jobs/'+job.jobId))
+      }
+    })
+
+    this.state.selected.forEach(inputId => {
+      requests.push(axios.delete('http://localhost:3000/inputs/'+inputId));
+    });
+
+    Promise.all(requests)
+      .then(responses => {
+        // TODO: notify based on response status
+        console.log(responses)
+        this.setState({ message: this.state.selected.length + ' files deleted and ' + jobRequests.length + ' corresponding jobs deleted.' })
+        this.setState({ buttons: ['Close'] })
+        this.setState({ open: true })
+      });
+  }
+
   render() {
     const { classes } = this.props;
 
     return (
       <div className="row">
         <div className="col-4">
+          {this.state.open ?
+            <div>
+              <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.open}
+              >
+                <div style={getModalStyle()} className={classes.paper}>
+                  <Typography variant="h6" id="modal-title">
+                    {this.state.message}
+                  </Typography>
+                  {this.state.buttons.length > 1 ?
+                    (<div>
+                      <Button onClick={() => {this.handleClose('delete')}}>{this.state.buttons[1]}</Button>
+                      <Button onClick={() => {this.handleClose('close')}}>{this.state.buttons[0]}</Button>
+                    </div>)
+                    :
+                    (<Button onClick={() => {this.handleClose('deleted')}}>{this.state.buttons[0]}</Button>)
+                  }
+                </div>
+              </Modal>
+            </div>
+            :
+            ''
+          }
           <Paper className={classes.root}>
             {this.state.chips}
             <h4>Filter Input Files</h4>
@@ -115,6 +217,7 @@ class FilterInputs extends Component {
             updateSelectedInputs={this.props.updateSelectedInputs}
             filteredInputs={this.props.filteredInputs}
             selected={this.props.selected}
+            deleteInputs={this.confirmDelete}
           />
         </div>
       </div>
