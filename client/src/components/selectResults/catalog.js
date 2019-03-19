@@ -421,12 +421,8 @@ class Catalog extends Component {
           jobsObj[job.spec.type][job.spec.specId] = [job]
         }
       }
-    })
-<<<<<<< HEAD
-    console.log(jobsObj)
-=======
-    // console.log(jobsObj);
->>>>>>> Add live updating graphs
+    });
+    
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 

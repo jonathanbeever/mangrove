@@ -4,19 +4,25 @@ import {BarChart, Bar, Label, ReferenceLine, XAxis, YAxis, CartesianGrid, Toolti
 
 class NDSIChannelBarChart extends Component {
 
+  formatYAxis = (tickItem) => {
+    let asF = parseFloat(tickItem);
+    return (asF).toFixed(2);
+  }
+
   render(){
 
     let data = this.props.results;
 
     return(
       <div>
-        <BarChart width={900} height={600} data={data}>
+        <BarChart width={900} height={600} data={data}
+          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name">
             <Label value="Channel" position="insideBottom" offset={2} />
           </XAxis>
           <YAxis>
-            <Label value="Variable" position="insideLeft" offset={0} />
+            <Label value="Variable" position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
           </YAxis>
           <Tooltip />
           <Legend />

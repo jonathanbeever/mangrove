@@ -4,17 +4,25 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Slide from '@material-ui/core/Slide';
 import IndexAnalysisPanel from './indexAnalysisPanel';
 import SpecAnalysisPanel from './specAnalysisPanel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import { withStyles } from '@material-ui/core/styles';
 import * as utils from './dataModeling.js';
+import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 
 const styles = theme => ({
@@ -23,12 +31,19 @@ const styles = theme => ({
   },
 });
 
+function Transition(props) {
+  return <Slide direction="up" {...props} />;
+}
+
 class AnalysisView extends Component {
   constructor() {
     super();
 
     this.state = {
       errorMode: false,
+      open: false,
+      opened: false,
+      checked: false,
     };
   }
 
@@ -47,8 +62,18 @@ class AnalysisView extends Component {
     let selectedJobs;
     if(fromStorage === "undefined" || fromStorage === null || fromStorage === undefined) selectedJobs = this.props.selectedJobs;
     else selectedJobs = JSON.parse(fromStorage);
-    console.log(this.props.selectedJobs);
+    if(localStorage.getItem('analysisViewAlert') === null){
+      localStorage.setItem('analysisViewAlert', true);
+    }
     this.formatState(selectedJobs);
+  }
+
+  analysisViewAlertCallback = () => {
+    if(!this.state.opened)
+    {
+      this.setState({ open: true });
+      this.setState({ opened: true });
+    }
   }
 
   refreshJobs = () => {
@@ -88,7 +113,6 @@ class AnalysisView extends Component {
               {
                 if(finishedId.includes(jobs[i].jobId))
                 {
-                  console.log(finished[finishedId.indexOf(jobs[i].jobId)].result);
                   jobs[i].result = finished[finishedId.indexOf(jobs[i].jobId)].result;
                   jobs[i].status = "finished";
                 }
@@ -102,6 +126,19 @@ class AnalysisView extends Component {
         this.displayGraphs();
       });
   }
+
+  handleDoNotShowAgain = () => {
+    console.log("hello?");
+    this.setState({ checked: true });
+  }
+
+  handleClose = () => {
+    let { checked } = this.state;
+    console.log("In handleclose");
+    console.log(checked);
+    if(checked) localStorage.setItem('analysisViewAlert', false);
+    this.setState({ open: false });
+  };
 
   hasUnfinished = (selectedJobs) => {
     let ret = [];
@@ -230,6 +267,7 @@ class AnalysisView extends Component {
                 index={index}
                 spec={spec}
                 graphs={graphs}
+                callback={this.analysisViewAlertCallback}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -329,6 +367,7 @@ class AnalysisView extends Component {
                 index={index}
                 spec={spec}
                 graphs={graphs}
+                callback={this.analysisViewAlertCallback}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -430,6 +469,7 @@ class AnalysisView extends Component {
                 index={index+'-compare'}
                 spec={spec}
                 graphs={graphs}
+                callback={this.analysisViewAlertCallback}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -463,8 +503,6 @@ class AnalysisView extends Component {
 
     let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.state;
-
-    console.log(selectedJobs);
 
     let index;
     let item;
@@ -593,8 +631,6 @@ class AnalysisView extends Component {
           chosenSeries, chosenCompareSite, chosenCompareSeries, selectedJobs } = this.state;
     const { classes } = this.props;
 
-    console.log(selectedJobs);
-
     return (
       <div style={{ marginBottom:25+'px' }}>
         {errorMode ?
@@ -681,6 +717,32 @@ class AnalysisView extends Component {
                   <h6>Show Graphs</h6>
                 </Button>
               </div>
+              <Dialog
+                open={this.state.open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={this.handleClose}
+                aria-labelledby="alert-dialog-slide-title"
+                aria-describedby="alert-dialog-slide-description"
+              >
+                <DialogTitle id="alert-dialog-title">{"Performance Warning"}</DialogTitle>
+                <DialogContent>
+                  <h5>Warning: Increasing the scale of a graph this large may cause client performance issues. It is recommended that you stay at lower ranges for best performance.</h5>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} style={{backgroundColor:"#b6cd26", margin: 7+'px'}}>
+                    <h6>Ok</h6>
+                  </Button>
+                  <FormControlLabel
+                  control={
+                    <Checkbox value="donotshow"
+                      style={{color: '#b6cd26', margin: 7+'px', marginLeft: 7+'px'}}
+                      onChange={this.handleDoNotShowAgain}/>
+                  }
+                  label="Do not show this message again"
+                  />
+                </DialogActions>
+              </Dialog>
             </div>
           </Paper>
           { formattedJob ?

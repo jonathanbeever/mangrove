@@ -3,6 +3,11 @@ import {LineChart, Line, Label, XAxis, YAxis, ReferenceLine, CartesianGrid, Tool
 
 class ADIAEILineChart extends Component {
 
+  formatYAxis = (tickItem) => {
+    let asF = parseFloat(tickItem);
+    return (asF).toFixed(2);
+  }
+
   render(){
 
     let { reference, results, xAxisLabel, yAxisLabel, refLabel1, refLabel2, refL, refR, dataKey1, dataKey2 } = this.props;
@@ -13,12 +18,13 @@ class ADIAEILineChart extends Component {
 
     return(
       <div>
-        <LineChart width={900} height={600} data={results} >
+        <LineChart width={900} height={600} data={results}
+          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
          <CartesianGrid strokeDasharray="3 3"/>
          <XAxis dataKey="name">
            <Label value={xAxisLabel} position="insideBottom" offset={2} />
          </XAxis>
-         <YAxis label={yAxisLabel}/>
+         <YAxis label={yAxisLabel} tickFormatter={this.formatYAxis}/>
          <Tooltip/>
          <Legend />
          { reference ?

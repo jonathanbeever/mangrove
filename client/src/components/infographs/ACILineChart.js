@@ -3,6 +3,22 @@ import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tool
 
 class ACILineChart extends Component {
 
+  formatYAxis = (tickItem) => {
+    let asF = parseFloat(tickItem);
+    return (asF).toFixed(2);
+  }
+
+  alertBrush = (indices) => {
+    let start = indices.startIndex;
+    let end = indices.endIndex;
+    if(end - start > 1500){
+      if(localStorage.getItem('analysisViewAlert') === true)
+      {
+        this.props.callback();
+      }
+    }
+  }
+
   render(){
     let data = this.props.results;
 
@@ -12,21 +28,32 @@ class ACILineChart extends Component {
     let firstDataKey = this.props.dataKey1;
     let secondDataKey = this.props.dataKey2;
 
+    let endOfBrush;
+    let len = data.length;
+    if(len > 1500) endOfBrush = 1500;
+    else endOfBrush = len;
+
     return(
       <div>
-          <LineChart width={900} height={600} data={data}>
+          <LineChart width={900} height={600} data={data}
+            margin={{top: 10, right: 30, left: 0, bottom: 0}}>
             <CartesianGrid strokeDasharray="3 3"/>
             <XAxis dataKey="name">
               <Label value={xLabel} position="insideBottom" offset={2} />
             </XAxis>
-            <YAxis domain={['dataMin-10', 'dataMax+10']}>
+            <YAxis domain={['dataMin-10', 'dataMax+10']} tickFormatter={this.formatYAxis}>
               <Label value={yLabel} position="insideLeft" offset={0} />
             </YAxis>
             <Legend />
             <Tooltip/>
             <Line type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={false} />
             <Line type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={false} />
-            <Brush />
+            <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush}>
+              <LineChart>
+              <Line type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={false} />
+              <Line type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={false} />
+              </LineChart>
+            </Brush>
           </LineChart>
       </div>
     );
