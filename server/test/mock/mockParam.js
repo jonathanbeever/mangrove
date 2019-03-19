@@ -1,11 +1,5 @@
 const Param = require('../../api/models/spec/param');
 
-const {
-  getParamVarType,
-  validateParam,
-  validateParams,
-} = require('../../api/models/spec/utils');
-
 const currParam = {
   aci: {
     minFreq: Param.aci.minFreq.min,
@@ -42,7 +36,7 @@ const currParam = {
 };
 
 const nextMockParam = (type, param) => {
-  const varType = getParamVarType(type, param);
+  const varType = typeof Param[type][param].default;
   if (varType === 'number') {
     currParam[type][param] = currParam[type][param] + 1 > Param[type][param].max
       ? Param[type][param].min
@@ -50,14 +44,14 @@ const nextMockParam = (type, param) => {
   } else if (varType === 'boolean') {
     currParam[type][param] = !currParam[type][param];
   }
-  return validateParam(type, param, currParam[type][param]);
+  return currParam[type][param];
 };
 
 const nextMockParams = (type) => {
   Object.keys(currParam[type]).forEach((param) => {
     nextMockParam(type, param);
   });
-  return validateParams(type, currParam[type]);
+  return currParam[type];
 };
 
 module.exports = {

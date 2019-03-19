@@ -9,7 +9,6 @@ const {
   getSpecModel,
   newSpecKeys,
   getParamsFromSpec,
-  validateParams,
   fillDefaultParams,
 } = require('../models/spec/utils');
 const { getJobModel } = require('../models/job/utils');
@@ -45,15 +44,21 @@ router.put('/', async (req, res) => {
     });
   }
 
-  const params = getParamsFromSpec(req.body);
   try {
-    validateParams(req.body.type, params);
-  } catch (err) {
-    return res.status(400).json({ message: err.message });
-  }
-  const paramsFilled = fillDefaultParams(req.body.type, params);
+    const params = getParamsFromSpec(req.body);
+    const spec = new SpecModel({
+      _id: new mongoose.Types.ObjectId(),
+      ...params,
+    });
 
-  try {
+    const validationErr = spec.validateSync();
+    if (validationErr) {
+      return res.status(400).json({
+        message: Object.values(validationErr.errors).map(e => e.message).join(' '),
+      });
+    }
+
+    const paramsFilled = fillDefaultParams(req.body.type, params);
     const searchResult = await SpecModel.find(paramsFilled).exec();
 
     if (searchResult.length /* === 1 */) {
@@ -63,11 +68,6 @@ router.put('/', async (req, res) => {
         ...getParamsFromSpec(searchResult[0]),
       });
     }
-
-    const spec = new SpecModel({
-      _id: new mongoose.Types.ObjectId(),
-      ...params,
-    });
 
     const createResult = await Spec.create(spec);
 

@@ -90,6 +90,10 @@ router.put('/', async (req, res) => {
       status: enqueueResult.status,
     });
   } catch (err) {
+    if (err.name === 'CastError') {
+      return res.status(400).json({ message: err.message });
+    }
+
     console.error(err);
     return res.status(500).json({ error: error.internal });
   }

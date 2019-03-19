@@ -91,53 +91,6 @@ const getParamsFromSpec = (spec) => {
   }
 };
 
-// FIXME: Find a cleaner way to extract the type from a Mongoose model's key
-const getParamVarType = (type, param) => {
-  const SpecModel = getSpecModel(type);
-  if (SpecModel.schema.obj[param].type.toString().includes('Number')) {
-    return 'number';
-  }
-  if (SpecModel.schema.obj[param].type.toString().includes('Boolean')) {
-    return 'boolean';
-  }
-  return null;
-};
-
-const validateParam = (type, param, value) => {
-  const varType = getParamVarType(type, param);
-  if (varType === 'number') {
-    if (typeof value !== 'number') {
-      throw new Error(`Unexpected value type: ${typeof value}. Expected number.`);
-    } else if (value < Param[type][param].min) {
-      throw new Error(`Value ${value} too low to create ${param} (${type}).`);
-    } else if (value > Param[type][param].max) {
-      throw new Error(`Value ${value} too high to create ${param} (${type}).`);
-    }
-  } else if (varType === 'boolean') {
-    if (typeof value !== 'boolean') {
-      throw new Error(`Unexpected value type: ${typeof value}. Expected boolean.`);
-    }
-  }
-  return value;
-};
-
-const validateParams = (type, params) => {
-  const invalid = [];
-  Object.entries(params).forEach(([key, value]) => {
-    try {
-      validateParam(type, key, value);
-    } catch (err) {
-      invalid.push(key);
-    }
-  });
-
-  if (invalid.length > 0) {
-    throw new Error(`Invalid values for keys: ${invalid.join(', ')} (type: ${type})`);
-  }
-
-  return params;
-};
-
 const fillDefaultParams = (type, params) => {
   const filledParams = params;
   Object.keys(Param[type]).forEach((key) => {
@@ -155,8 +108,5 @@ module.exports = {
   newSpecKeys,
   getSpecParams,
   getParamsFromSpec,
-  getParamVarType,
-  validateParam,
-  validateParams,
   fillDefaultParams,
 };
