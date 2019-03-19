@@ -215,6 +215,8 @@ class ChooseFiles extends React.Component {
     .then(responses => {
       this.listDbFiles(responses)
       this.props.openDialog(responses.length + ' files successfully added')
+      this.setState({ filesToUpload: [] })
+      this.setState({ selectedToEdit: [] })
     }).catch(err => {
       this.props.openDialog(err.message + '. Please make sure to add a site and series name to all files.')
     })

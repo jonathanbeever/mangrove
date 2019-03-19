@@ -10,10 +10,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField';
 
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
   const top = 30
   const left = 40

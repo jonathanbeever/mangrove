@@ -79,16 +79,24 @@ class Catalog extends Component {
   }
 
   componentDidMount = () => {
+    // Set index to aci when component mounts
+    this.handleIndexChange('aci')
     this.getData()
   }
 
   getData = () => {
-    this.handleIndexChange('aci')
-    // make indexed object of inputs
+    // selected inputs
     var selected = []
-
     this.setState({ selectedInputs : selected })
 
+    // clear selected specs
+    var indices = Object.keys(this.state.selectedSpecs)
+    var selectedSpecs = this.state.selectedSpecs
+    indices.forEach(index => {
+      selectedSpecs[index] = []
+    })
+    this.setState({ selectedSpecs: selectedSpecs })
+    
     // get all db specs
     axios.get('http://localhost:3000/specs')
       .then(res => {
@@ -100,24 +108,17 @@ class Catalog extends Component {
           'bi': [],
           'rms': []
         }
-
-        var indices = Object.keys(this.state.selectedSpecs)
-        var selectedSpecs = this.state.selectedSpecs
-        indices.forEach(index => {
-          selectedSpecs[index] = []
-        })
-        this.setState({ selectedSpecs: selectedSpecs })
-
-        var indexedSpecs = {}
+        var indexedSpecsById = {}
         res.data.specs.forEach(spec => {
+          // Save specs indexed by type, indexedSpecs
           specs[spec.type].push(spec)
-          indexedSpecs[spec.specId] = spec
+          // same all specs indexed by id, indexedSpecsById
+          indexedSpecsById[spec.specId] = spec
         })
-        this.setState({ indexedSpecsById: indexedSpecs })
+        this.setState({ indexedSpecs: specs })
+        this.setState({ indexedSpecsById: indexedSpecsById })
         // Set all specs state
         this.setState({ allSpecs: res.data.specs })
-        // Specs indexed by type
-        this.setState({ indexedSpecs: specs })
         // Set filtered specs with all initially
         this.setState({ filteredSpecs: specs })
       })
@@ -132,6 +133,7 @@ class Catalog extends Component {
         this.setState({ indexedFiles : indexedFiles})
         this.setState({ allFiles: res.data.inputs })
       })
+
       axios.get('http://localhost:3000/jobs')
       .then(res => {
         // Set all specs state
@@ -510,6 +512,7 @@ class Catalog extends Component {
           showFiltering={this.showFiltering}
           // Specs and inputs
           getData={this.getData}
+          allJobs={this.state.allJobs}
         />
       </div>
     );

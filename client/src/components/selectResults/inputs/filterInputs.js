@@ -3,7 +3,6 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import DateAndTimePickers from '../components/dateTimePicker';
 import Button from '@material-ui/core/Button';
 import '../selectResults.css';
 import InputsTable from './inputsTable';
@@ -12,14 +11,9 @@ import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 
-// TODO: fixed position
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
-
 function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+  const top = 50;
+  const left = 50;
 
   return {
     top: `${top}%`,
@@ -53,6 +47,9 @@ const styles = theme => ({
     padding: theme.spacing.unit * 4,
     outline: 'none',
   },
+  buttons: {
+    margin: theme.spacing.unit
+  }
 });
 
 class FilterInputs extends Component {
@@ -139,7 +136,7 @@ class FilterInputs extends Component {
       .then(responses => {
         // TODO: notify based on response status
         console.log(responses)
-        this.setState({ message: this.state.selected.length + ' files deleted and ' + jobRequests.length + ' corresponding jobs deleted.' })
+        this.setState({ message: this.state.selected.length + ' file(s) deleted and ' + jobRequests.length + ' corresponding job(s) deleted.' })
         this.setState({ buttons: ['Close'] })
         this.setState({ open: true })
       });
@@ -162,14 +159,16 @@ class FilterInputs extends Component {
                   <Typography variant="h6" id="modal-title">
                     {this.state.message}
                   </Typography>
+                  <div style={{textAlign: 'center'}}>
                   {this.state.buttons.length > 1 ?
                     (<div>
-                      <Button onClick={() => {this.handleClose('delete')}}>{this.state.buttons[1]}</Button>
-                      <Button onClick={() => {this.handleClose('close')}}>{this.state.buttons[0]}</Button>
+                      <Button className={classes.buttons} onClick={() => {this.handleClose('delete')}}>{this.state.buttons[1]}</Button>
+                      <Button className={classes.buttons} onClick={() => {this.handleClose('close')}}>{this.state.buttons[0]}</Button>
                     </div>)
                     :
-                    (<Button onClick={() => {this.handleClose('deleted')}}>{this.state.buttons[0]}</Button>)
+                    (<Button className={classes.buttons} onClick={() => {this.handleClose('deleted')}}>{this.state.buttons[0]}</Button>)
                   }
+                  </div>
                 </div>
               </Modal>
             </div>
@@ -191,8 +190,6 @@ class FilterInputs extends Component {
               className={classes.textField}
               onChange={this.props.onChange('series')}
             />
-            {/* TODO */}
-            {/* <DateAndTimePickers/> */}
             <TextField
               label={<p style={{fontSize:13+'px'}}>Latitude</p>}
               value={this.props.inputFiltering.lat}

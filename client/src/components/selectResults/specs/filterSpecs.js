@@ -13,6 +13,20 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import ExpansionPanel from '../components/expansionPanel';
 import Chip from '../components/chip'
+import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
+import axios from 'axios';
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 const styles = theme => ({
   root: {
@@ -37,6 +51,17 @@ const styles = theme => ({
   panels: {
     marginTop: theme.spacing.unit * 3,
     marginBottom: 19
+  },
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+    outline: 'none',
+  },
+  buttons: {
+    margin: theme.spacing.unit
   }
 });
 
@@ -46,7 +71,9 @@ class FilterSpecs extends Component {
 
     this.state = {
       specInputHtml: '',
-      chips: ''
+      chips: '',
+      open: false,
+      buttons: []
     }
   }
 
@@ -152,6 +179,7 @@ class FilterSpecs extends Component {
             handleChange={this.props.handleIndexChange}
             updateSelectedSpecs={this.props.updateSelectedSpecs}
             selectedSpecs={this.props.selectedSpecs[index]}
+            deleteSpecs={this.confirmDelete}
           />
         )
       }
@@ -160,6 +188,54 @@ class FilterSpecs extends Component {
     this.setState({ expansionPanels: <div>{expansionPanels}</div> })
   }
 
+  confirmDelete = (selected) => {
+    this.handleOpen(selected)
+    this.setState({ selected: selected })
+  }
+
+  handleOpen = (selected) => {
+    this.setState({ message: 'Are you sure you want to delete ' + selected.length + ' input specification(s)?'})
+    this.setState({ buttons: ['No', 'Yes']})
+    this.setState({ open: true });
+  };
+
+  handleClose = (deleteSpecs) => {
+    this.setState({ open: false });
+
+    if(deleteSpecs === 'delete') {
+      this.deleteSpecs()
+    }
+    else if(deleteSpecs === 'deleted') {
+      // Change back to select specs tab, make request for inputs/specs/jobs again
+      // TODO: better solution to update after delete
+      this.props.changeTab(0)
+    }
+  };
+
+  deleteSpecs = () => {
+    let requests = [];
+    let jobRequests = []
+    console.log(this.props.filteredJobs)
+    this.props.filteredJobs.forEach(job => {
+      console.log(job)
+      if(this.state.selected.indexOf(job.spec) !== -1) {
+        jobRequests.push(axios.delete('http://localhost:3000/jobs/'+job.jobId))
+      }
+    })
+
+    this.state.selected.forEach(specId => {
+      requests.push(axios.delete('http://localhost:3000/specs/'+specId));
+    });
+
+    Promise.all(requests)
+      .then(responses => {
+        // TODO: notify based on response status
+        console.log(responses)
+        this.setState({ message: this.state.selected.length + ' spec(s) deleted and ' + jobRequests.length + ' corresponding job(s) deleted.' })
+        this.setState({ buttons: ['Close'] })
+        this.setState({ open: true })
+      });
+  }
 
 
   render() {
@@ -168,6 +244,33 @@ class FilterSpecs extends Component {
     return (
       <div className="row">
         <div className="col-4">
+        {this.state.open ?
+            <div>
+              <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={this.state.open}
+              >
+                <div style={getModalStyle()} className={classes.paper}>
+                  <Typography variant="h6" id="modal-title">
+                    {this.state.message}
+                  </Typography>
+                  <div style={{textAlign: 'center'}}>
+                  {this.state.buttons.length > 1 ?
+                    (<div>
+                      <Button className={classes.buttons} onClick={() => {this.handleClose('delete')}}>{this.state.buttons[1]}</Button>
+                      <Button className={classes.buttons} onClick={() => {this.handleClose('close')}}>{this.state.buttons[0]}</Button>
+                    </div>)
+                    :
+                    (<Button className={classes.buttons} onClick={() => {this.handleClose('deleted')}}>{this.state.buttons[0]}</Button>)
+                  }
+                  </div>
+                </div>
+              </Modal>
+            </div>
+            :
+            ''
+          }
           <Paper className={classes.root}>
             {this.state.chips}
             <h4>Filter Index Specifications</h4>

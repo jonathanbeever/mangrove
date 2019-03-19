@@ -58,6 +58,7 @@ class Expansion extends React.Component {
               params={this.props.params}
               updateSelectedSpecs={this.props.updateSelectedSpecs}
               selectedSpecs={this.state.selected}
+              deleteSpecs={this.props.deleteSpecs}
             />
           </ExpansionPanelDetails>
         </ExpansionPanel>

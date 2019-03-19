@@ -46,7 +46,8 @@ class SimpleTabs extends React.Component {
   };
 
   changeTab = (value) => {
-    this.setState({value: value})
+    if(this.state.value !== value)
+      this.setState({value: value})
     this.props.getData()
   }
 
@@ -87,6 +88,8 @@ class SimpleTabs extends React.Component {
         </AppBar>
         {value === 0 && <TabContainer>
           <FilterSpecs
+            changeTab={this.changeTab}
+            filteredJobs={this.props.allJobs}
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
             specParamsList={this.props.specParamsList}
@@ -102,7 +105,7 @@ class SimpleTabs extends React.Component {
         {value === 1 && <TabContainer>
           <FilterInputs
             changeTab={this.changeTab}
-            filteredJobs={this.props.filteredJobs}
+            filteredJobs={this.props.allJobs}
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
             filteredInputs={this.props.filteredInputs}

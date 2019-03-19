@@ -164,7 +164,7 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Tooltip title={<p style={{fontSize:10+'px'}}>Delete</p>} placement='top'>
             <IconButton aria-label="Delete">
-              <DeleteIcon />
+              {/* <DeleteIcon /> */}
             </IconButton>
           </Tooltip>
         ) : (
