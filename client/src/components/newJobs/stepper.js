@@ -223,9 +223,9 @@ class HorizontalLinearStepper extends React.Component {
         break;
       }
       case 'bi': {
-        params['aci']['minFreq'] = 2000
-        params['aci']['maxFreq'] = 8000
-        params['aci']['fftW'] = 512
+        params['bi']['minFreq'] = 2000
+        params['bi']['maxFreq'] = 8000
+        params['bi']['fftW'] = 512
 
         break;
       }
