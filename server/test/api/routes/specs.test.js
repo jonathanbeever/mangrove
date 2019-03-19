@@ -93,7 +93,7 @@ describe('Specs', () => {
       expect(res.body.message).to.be.a('string');
     });
 
-    it('It should fail to PUT a Spec (invalid param values)', async () => {
+    it('It should fail to PUT a Spec (validation error)', async () => {
       const specJsons = [];
       specJsons.push(mockSpecCreateJson(Type.ACI, {
         minFreq: -1,

@@ -117,6 +117,22 @@ describe('Jobs', () => {
       expect(res.body.message).to.be.a('string');
     });
 
+    it('It should fail to PUT a Job (casting error)', async () => {
+      const jobJson = getJsonFromMockJob({
+        input: true,
+        spec: 123,
+      });
+
+      const res = await chai.request(app)
+        .put('/jobs')
+        .set('Content-Type', 'application/json')
+        .send(jobJson);
+
+      expect(res).to.have.status(400);
+      expect(res.body).to.have.all.keys('message');
+      expect(res.body.message).to.be.a('string');
+    });
+
     it('It should PUT a Job (new)', async () => {
       const mockedJobs = types.map(type => nextMockJob(type));
       const jobs = await Promise.all(mockedJobs);
