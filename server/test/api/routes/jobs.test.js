@@ -117,7 +117,7 @@ describe('Jobs', () => {
       expect(res.body.message).to.be.a('string');
     });
 
-    it('It should fail to PUT a Job (casting error)', async () => {
+    it('It should fail to PUT a Job (casting/validation error)', async () => {
       const jobJson = getJsonFromMockJob({
         input: true,
         spec: 123,
