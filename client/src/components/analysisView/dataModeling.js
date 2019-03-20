@@ -66,6 +66,7 @@ export function isEmpty(obj) {
 
 /********** Base graph data modeling functions **********/
 export function convertNDSIResults(jobs) {
+  let finished = jobs.filter(x => x.status === "finished");
   let ret;
 
   let ndsiLTotal = 0;
@@ -75,7 +76,7 @@ export function convertNDSIResults(jobs) {
   let anthrophonyLTotal = 0;
   let anthrophonyRTotal = 0;
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     ndsiLTotal += job.result.ndsiL;
     ndsiRTotal += job.result.ndsiR;
     biophonyLTotal += job.result.biophonyL;
@@ -84,12 +85,12 @@ export function convertNDSIResults(jobs) {
     anthrophonyRTotal += job.result.anthrophonyR;
   });
 
-  let ndsiLAvg = ndsiLTotal / jobs.length;
-  let ndsiRAvg = ndsiRTotal / jobs.length;
-  let biophonyLAvg = biophonyLTotal / jobs.length;
-  let biophonyRAvg = biophonyRTotal / jobs.length;
-  let anthrophonyLAvg = anthrophonyLTotal / jobs.length;
-  let anthrophonyRAvg = anthrophonyRTotal / jobs.length;
+  let ndsiLAvg = ndsiLTotal / finished.length;
+  let ndsiRAvg = ndsiRTotal / finished.length;
+  let biophonyLAvg = biophonyLTotal / finished.length;
+  let biophonyRAvg = biophonyRTotal / finished.length;
+  let anthrophonyLAvg = anthrophonyLTotal / finished.length;
+  let anthrophonyRAvg = anthrophonyRTotal / finished.length;
 
   ret = {
     graph1: {
@@ -137,7 +138,7 @@ export function convertNDSIResults(jobs) {
     }
   }
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
@@ -157,7 +158,7 @@ export function convertNDSIResults(jobs) {
     ret.graph4.data.push(curObject);
 
     curObject = {
-      name: job.input.path,
+      name: job.input.name,
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -177,11 +178,12 @@ export function convertNDSIResults(jobs) {
 }
 
 export function convertACIResults(jobs) {
+  let finished = jobs.filter(x => x.status === "finished");
   let ret;
   let aciFlValsL = [];
   let aciFlValsR = [];
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     aciFlValsL.push.apply(aciFlValsL, job.result.aciFlValsL);
     aciFlValsR.push.apply(aciFlValsR, job.result.aciFlValsR);
   });
@@ -196,15 +198,6 @@ export function convertACIResults(jobs) {
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight'
     },
-    // graph3:
-    // {
-    //   data: [],
-    //   title: "ACI By Hour",
-    //   xAxisLabel: "Hour of Day",
-    //   yAxisLabel: "ACI Value",
-    //   dataKey1: 'aciLeft',
-    //   dataKey2: 'aciRight'
-    // },
     graph4:
     {
       data: [],
@@ -237,7 +230,7 @@ export function convertACIResults(jobs) {
     ret.graph1.data.push(curObject);
   }
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
@@ -254,7 +247,7 @@ export function convertACIResults(jobs) {
 
     curObject =
     {
-      name: job.input.path,
+      name: job.input.name,
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR
     }
@@ -268,16 +261,16 @@ export function convertACIResults(jobs) {
 }
 
 export function convertADIResults(jobs) {
-
+  let finished = jobs.filter(x => x.status === "finished");
   let ret;
 
-  let arrLength = jobs[0].result.ADIbandValsL.length;
+  let arrLength = finished[0].result.ADIbandValsL.length;
   let adiLTotal = 0;
   let adiRTotal = 0;
   let adiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
   let adiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     adiLTotal += job.result.adiL;
     adiRTotal += job.result.adiR;
 
@@ -291,15 +284,15 @@ export function convertADIResults(jobs) {
 
   });
 
-  let adiLAvg = adiLTotal / jobs.length;
-  let adiRAvg = adiRTotal / jobs.length;
+  let adiLAvg = adiLTotal / finished.length;
+  let adiRAvg = adiRTotal / finished.length;
 
   let adiLBand = adiLBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / finished.length;
   });
 
   let adiRBand = adiRBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / finished.length;
   });
 
   ret = {
@@ -348,7 +341,7 @@ export function convertADIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].result.ADIbandRangeL[i],
+      name: finished[0].result.ADIbandRangeL[i],
       leftBandVal: adiLBand[i],
       rightBandVal: adiRBand[i]
     }
@@ -356,7 +349,7 @@ export function convertADIResults(jobs) {
     ret.graph1.data.push(curObject);
   }
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
@@ -373,7 +366,7 @@ export function convertADIResults(jobs) {
 
     curObject =
     {
-      name: job.input.path,
+      name: job.input.name,
       leftADIVal: job.result.adiL,
       rightADIVal: job.result.adiR
     }
@@ -388,15 +381,16 @@ export function convertADIResults(jobs) {
 }
 
 export function convertAEIResults(jobs) {
+  let finished = jobs.filter(x => x.status === "finished");
   let ret;
 
-  let arrLength = jobs[0].result.AEIbandValsL.length;
+  let arrLength = finished[0].result.AEIbandValsL.length;
   let aeiLTotal = 0;
   let aeiRTotal = 0;
   let aeiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
   let aeiRBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     aeiLTotal += job.result.aeiL;
     aeiRTotal += job.result.aeiR;
 
@@ -410,15 +404,15 @@ export function convertAEIResults(jobs) {
 
   });
 
-  let aeiLAvg = aeiLTotal / jobs.length;
-  let aeiRAvg = aeiRTotal / jobs.length;
+  let aeiLAvg = aeiLTotal / finished.length;
+  let aeiRAvg = aeiRTotal / finished.length;
 
   let aeiLBand = aeiLBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / finished.length;
   });
 
   let aeiRBand = aeiRBandTemp.map(function(element){
-    return element / jobs.length;
+    return element / finished.length;
   });
 
   ret = {
@@ -467,7 +461,7 @@ export function convertAEIResults(jobs) {
   {
     let curObject =
     {
-      name: jobs[0].result.AEIbandRangeL[i],
+      name: finished[0].result.AEIbandRangeL[i],
       leftBandVal: aeiLBand[i],
       rightBandVal: aeiRBand[i]
     }
@@ -475,7 +469,7 @@ export function convertAEIResults(jobs) {
     ret.graph1.data.push(curObject);
   }
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
@@ -492,7 +486,7 @@ export function convertAEIResults(jobs) {
 
     curObject =
     {
-      name: job.input.path,
+      name: job.input.name,
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR
     }
@@ -507,6 +501,7 @@ export function convertAEIResults(jobs) {
 }
 
 export function convertBIResults(jobs) {
+  let finished = jobs.filter(x => x.status === "finished");
   let ret;
 
   ret = {
@@ -535,19 +530,19 @@ export function convertBIResults(jobs) {
     }
   }
 
-  for(var i = 0; i < jobs[0].result.freq_vals.length; i++)
+  for(var i = 0; i < finished[0].result.freq_vals.length; i++)
   {
     let curObject =
     {
-      name: jobs[0].result.freq_vals[i],
-      leftSpectrum: jobs[0].result.left_vals[i],
-      rightSpectrum: jobs[0].result.right_vals[i]
+      name: finished[0].result.freq_vals[i],
+      leftSpectrum: finished[0].result.left_vals[i],
+      rightSpectrum: finished[0].result.right_vals[i]
     }
 
     ret.graph1.data.push(curObject);
   }
 
-  jobs.forEach(function(job){
+  finished.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
@@ -563,7 +558,7 @@ export function convertBIResults(jobs) {
     ret.graph5.data.push(curObject);
 
     curObject = {
-      name: job.input.path,
+      name: job.input.name,
       areaL: job.result.areaL,
       areaR: job.result.areaR
     }
@@ -579,8 +574,8 @@ export function convertBIResults(jobs) {
 /********** Comparison graph data modeling functions **********/
 export function convertACIResultsBySite(jobs, sites) {
 
-  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
-  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
 
   let chosenResults = convertACIResults(chosenSiteJobs);
   let compareResults = convertACIResults(compareSiteJobs);
@@ -643,8 +638,8 @@ export function convertACIResultsBySite(jobs, sites) {
 
 export function convertACIResultsBySeries(jobs, series) {
 
-  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
-  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 
   let chosenResults = convertACIResults(chosenSeriesJobs);
   let compareResults = convertACIResults(compareSeriesJobs);
@@ -760,8 +755,8 @@ export function convertNDSIResultsBySite(jobs, sites) {
 
 export function convertNDSIResultsBySeries(jobs, series) {
 
-  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
-  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 
   let chosenResults = convertNDSIResults(chosenSeriesJobs);
   let compareResults = convertNDSIResults(compareSeriesJobs);
@@ -814,8 +809,8 @@ export function convertNDSIResultsBySeries(jobs, series) {
 
 export function convertBIResultsBySite(jobs, sites) {
 
-  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
-  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
 
   let chosenResults = convertBIResults(chosenSiteJobs);
   let compareResults = convertBIResults(compareSiteJobs);
@@ -878,8 +873,8 @@ export function convertBIResultsBySite(jobs, sites) {
 
 export function convertBIResultsBySeries(jobs, series) {
 
-  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
-  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 
   let chosenResults = convertBIResults(chosenSeriesJobs);
   let compareResults = convertBIResults(compareSeriesJobs);
@@ -938,8 +933,8 @@ export function convertBIResultsBySeries(jobs, series) {
 
 export function convertADIResultsBySite(jobs, sites) {
 
-  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
-  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
 
   let chosenResults = convertADIResults(chosenSiteJobs);
   let compareResults = convertADIResults(compareSiteJobs);
@@ -1023,8 +1018,8 @@ export function convertADIResultsBySite(jobs, sites) {
 
 export function convertADIResultsBySeries(jobs, series) {
 
-  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
-  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 
   let chosenResults = convertADIResults(chosenSeriesJobs);
   let compareResults = convertADIResults(compareSeriesJobs);
@@ -1108,8 +1103,8 @@ export function convertADIResultsBySeries(jobs, series) {
 
 export function convertAEIResultsBySite(jobs, sites) {
 
-  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
-  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
 
   let chosenResults = convertAEIResults(chosenSiteJobs);
   let compareResults = convertAEIResults(compareSiteJobs);
@@ -1193,8 +1188,8 @@ export function convertAEIResultsBySite(jobs, sites) {
 
 export function convertAEIResultsBySeries(jobs, series) {
 
-    const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0]);
-    const compareSeriesJobs = jobs.filter(x => x.input.series === series[1]);
+    const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+    const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 
     let chosenResults = convertAEIResults(chosenSeriesJobs);
     let compareResults = convertAEIResults(compareSeriesJobs);

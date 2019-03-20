@@ -9,6 +9,7 @@ import InputsTable from '../selectResults/inputs/inputsTable';
 import UploadsTable from './uploadInputsTable';
 import Button from '@material-ui/core/Button';
 import SearchInputs from './searchInputs';
+import AutomateInputProperties from './automateInputProperties';
 
 function TabContainer({ children, dir }) {
   return (
@@ -44,7 +45,8 @@ const styles = theme => ({
 class FullWidthTabs extends React.Component {
   state = {
     value: 0,
-    filesToUpload: this.props.filesToUpload
+    filesToUpload: this.props.filesToUpload,
+    modal: false
   };
 
   handleChange = (event, value) => {
@@ -54,6 +56,10 @@ class FullWidthTabs extends React.Component {
   handleChangeIndex = index => {
     this.setState({ value: index });
   };
+
+  openModal = () => {this.setState({ modal: true })}
+
+  closeModal = () => {this.setState({ modal: false })}
 
   render() {
     const { classes, theme } = this.props;
@@ -85,7 +91,6 @@ class FullWidthTabs extends React.Component {
               <div className="col-3">
                 <div className={classes.search}>
                   <SearchInputs 
-                    // onChange={this.props.searchInputs} 
                     onChange={this.props.updateProperties}
                     value='filter'
                     submitInputFilter={this.props.submitInputFilter}
@@ -130,6 +135,16 @@ class FullWidthTabs extends React.Component {
                       </Button>
                     </label> 
                   </div>
+                  {Object.keys(this.props.filesToUpload).length ?
+                    <div className={classes.buttons}>
+                      <Button component="span" onClick={this.openModal}>
+                        Import Properties
+                      </Button>
+                    </div>
+                    :
+                    ''
+                  }
+                  {this.state.modal ? <AutomateInputProperties modal={this.state.modal} closeModal={this.closeModal} addSummaryFile={this.props.addSummaryFile} setNamingConvention={this.props.setNamingConvention}/> : ''}
                   <SearchInputs 
                     onChange={this.props.updateProperties}
                     value='upload'

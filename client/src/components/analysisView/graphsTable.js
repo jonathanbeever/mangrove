@@ -46,6 +46,7 @@ class GraphsTable extends React.Component {
               title={obj.title}
               data={obj.data}
               graph={<ACILineChart
+                callback={this.props.callback}
                 results={obj.data}
                 xAxisLabel={obj.xAxisLabel}
                 yAxisLabel={obj.yAxisLabel}
@@ -62,6 +63,7 @@ class GraphsTable extends React.Component {
               title={obj.title}
               data={obj.data}
               graph={<ACIDualLineChart
+                callback={this.props.callback}
                 results={obj.data}
                 xAxisLabel={obj.xAxisLabel}
                 yAxisLabel={obj.yAxisLabel}
@@ -83,6 +85,7 @@ class GraphsTable extends React.Component {
                   title={obj.title}
                   data={obj.data}
                   graph={<NDSIChannelBarChart
+                    callback={this.props.callback}
                     results={obj.data}
                   />}
                 />
@@ -95,6 +98,7 @@ class GraphsTable extends React.Component {
                   title={obj.title}
                   data={obj.data}
                   graph={<NDSIValuesBarChart
+                    callback={this.props.callback}
                     results={obj.data}
                   />}
                 />
@@ -107,6 +111,7 @@ class GraphsTable extends React.Component {
                   title={obj.title}
                   data={obj.data}
                   graph={<NDSIValuesLineChart
+                    callback={this.props.callback}
                     results={obj.data}
                     xAxisLabel={"Date"}
                   />}
@@ -127,6 +132,7 @@ class GraphsTable extends React.Component {
                   title={obj.title}
                   data={obj.data}
                   graph={<NDSIChannelCompareBarChart
+                    callback={this.props.callback}
                     results={obj.data}
                   />}
                 />
@@ -139,6 +145,7 @@ class GraphsTable extends React.Component {
                   title={obj.title}
                   data={obj.data}
                   graph={<NDSIValuesCompareBarChart
+                    callback={this.props.callback}
                     results={obj.data}
                   />}
                 />
@@ -157,6 +164,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEILineChart
+                  callback={this.props.callback}
                   reference={true}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -178,6 +186,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEILineChart
+                  callback={this.props.callback}
                   reference={false}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -202,6 +211,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEICompareLineChart
+                  callback={this.props.callback}
                   reference={true}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -229,6 +239,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEICompareLineChart
+                  callback={this.props.callback}
                   reference={false}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -259,6 +270,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEILineChart
+                  callback={this.props.callback}
                   reference={true}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -280,6 +292,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEILineChart
+                  callback={this.props.callback}
                   reference={false}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -304,6 +317,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEICompareLineChart
+                  callback={this.props.callback}
                   reference={true}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -331,6 +345,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<ADIAEICompareLineChart
+                  callback={this.props.callback}
                   reference={false}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
@@ -361,6 +376,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<BAAreaChart
+                  callback={this.props.callback}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
                   yAxisLabel={obj.yAxisLabel}
@@ -376,6 +392,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<BALineChart
+                  callback={this.props.callback}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
                   yAxisLabel={obj.yAxisLabel}
@@ -393,6 +410,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<BACompareAreaChart
+                  callback={this.props.callback}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
                   yAxisLabel={obj.yAxisLabel}
@@ -410,6 +428,7 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 data={obj.data}
                 graph={<BADualLineChart
+                  callback={this.props.callback}
                   results={obj.data}
                   xAxisLabel={obj.xAxisLabel}
                   yAxisLabel={obj.yAxisLabel}

@@ -3,7 +3,6 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import DateAndTimePickers from '../components/dateTimePicker';
 import Button from '@material-ui/core/Button';
 import '../selectResults.css';
 import Chip from '../components/chip';
@@ -39,6 +38,7 @@ class SelectJobs extends Component {
   }
 
   componentDidMount = () => {
+    sessionStorage.removeItem('analysisViewSave');
     this.formatInputChipHtml()
     this.formatSpecFilterHtml()
   }
@@ -119,7 +119,7 @@ class SelectJobs extends Component {
             ''
           }
           <Paper className={classes.root}>
-            <h4>Filter By Jobs</h4>
+            <h4>Filter Jobs</h4>
             <div>
               <TextField
                 label={<p style={{fontSize:13+'px'}}>Author</p>}
@@ -128,7 +128,7 @@ class SelectJobs extends Component {
                 onChange={this.props.onChangeJobFilter('author')}
               />
               {/* TODO */}
-              <DateAndTimePickers />
+              {/* <DateAndTimePickers /> */}
             </div>
             <div className="row filterSubmit">
               <Button onClick={this.props.onSubmitFiltering} style={{margin: "0 auto"}}>
@@ -144,6 +144,7 @@ class SelectJobs extends Component {
               indexedFiles={this.props.indexedFiles}
               updateSelectedJobs={this.props.updateSelectedJobs}
               selectedJobs={this.props.selectedJobs}
+              indexedSpecsById={this.props.indexedSpecsById}
             />
             <Button
               style={{marginTop: 7}}

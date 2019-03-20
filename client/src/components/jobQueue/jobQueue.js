@@ -48,7 +48,11 @@ class JobQueue extends Component {
   componentDidMount = () => {
     this.refreshJobs();
     this.interval = setInterval(() => this.refreshJobs(), 5000);
-  };
+  }
+
+  clearSavedJobs = () => {
+    localStorage.removeItem("jobs");
+  }
 
   componentWillUnmount = () => {
     clearInterval(this.interval);
@@ -123,7 +127,7 @@ class JobQueue extends Component {
       .then(responses => {
 
         // filter out jobs that are finished
-        let filteredQueuedJobs = responses.filter(resp => { return resp.data.status !== "finished" }).map(resp => resp.data.jobId)
+        let filteredQueuedJobs = responses.filter(resp => { return resp.data.status !== "finished" }).map(resp => resp.data._id)
         localStorage.setItem("jobs", JSON.stringify(filteredQueuedJobs));
         this.refreshJobs();
 
@@ -149,9 +153,12 @@ class JobQueue extends Component {
         // create requests for getting each input for each job
         let jobData = [];
         let inputRequests = [];
+        let specRequests = [];
         responses.forEach(response => {
           let inputId = response.data.input;
+          let specId = response.data.spec
           inputRequests.push(axios.get('http://localhost:3000/inputs/'+inputId));
+          specRequests.push(axios.get('http://localhost:3000/specs/'+specId))
           jobData.push(response.data);
         });
 
@@ -166,6 +173,16 @@ class JobQueue extends Component {
             this.setState({ jobs: jobData });
             this.setState({ inputs: inputData });
           });
+
+        Promise.all(specRequests)
+          .then(responses => {
+            let specData = [];
+            responses.forEach(response => {
+              specData.push(response.data)
+            });
+
+            this.setState({ specs: specData })
+          })
       });
   };
 
@@ -184,14 +201,16 @@ class JobQueue extends Component {
     let data = [];
     let jobs = this.state.jobs;
     let inputs = this.state.inputs;
+    let specs = this.state.specs;
 
     // if we've gotten the information from the server
-    if(jobs && inputs)
+    if(jobs && inputs && specs)
     {
       // fill in jobs with their input information
       for(let i = 0; i < jobs.length; i++)
       {
         jobs[i]["input"] = inputs[i];
+        jobs[i]["spec"] = specs[i]
       }
       data = jobs;
     }
@@ -205,6 +224,14 @@ class JobQueue extends Component {
               onClick={this.updateTable}
               >
               <h6>Clear Finished</h6>
+            </Button>
+          </div>
+          <div className="col-6 text-right">
+            <Button
+              style={{ marginBottom:10+'px', marginTop:10+'px'}}
+              onClick={this.clearSavedJobs}
+              >
+              <h6>Delete Caching</h6>
             </Button>
           </div>
         </div>
@@ -230,8 +257,7 @@ class JobQueue extends Component {
                      let date = new Date(job.creationTimeMs);
                      date = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
                      let jobDesc = job.input.site + " - " + job.input.series;
-                     let fileName = job.input.path.substring(job.input.path.lastIndexOf('\\')+1);
-                     let specDesc = job.type.toUpperCase();
+                     let specDesc = job.spec.type.toUpperCase();
                      return(
                        <TableRow
                          key={job.jobId}
@@ -240,7 +266,7 @@ class JobQueue extends Component {
                              {jobDesc}
                          </TableCell>
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                             {fileName}
+                             {job.input.name}
                          </TableCell>
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
                              {specDesc}

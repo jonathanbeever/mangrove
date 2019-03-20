@@ -23,6 +23,12 @@ const styles = theme => ({
 });
 
 class ChooseFiles extends React.Component {
+  constructor() {
+    super()
+
+    this.readSummaryFile = this.readSummaryFile.bind(this)
+  }
+
   state = {
     allFiles: [],
     newFiles: [],
@@ -55,24 +61,85 @@ class ChooseFiles extends React.Component {
   componentDidMount = () => {
     axios.get('http://localhost:3000/inputs')
     .then(res => {
-      res.data.inputs.map(input => {
-        var path = input.path.split('\\')
-        input.path = path[path.length - 1]
-        return input
-      })
       this.setState({ allFiles: res.data.inputs })
       this.setState({ filteredInputs: res.data.inputs })
     })
   }
 
-  // Format path for new files uploaded and push to 
+  addSummaryFile = (e) => {
+    var file = e.target.files[0]
+    var reader = new FileReader();
+
+    reader.onload = (reader =>
+    {
+      return () =>
+      {
+        var contents = reader.result;
+        var lines = contents.split('\n');
+        this.readSummaryFile(lines)
+      }
+    })(reader);
+
+    reader.readAsText(file);
+      // check if good titles
+      // no, err
+    // loop upload files
+    // match curr to indexed info
+  }
+
+  setNamingConvention = (value, separator) => {
+    var order = value.split(',')
+    var filesInfo = this.state.filesToUpload
+    var files = Object.keys(filesInfo)
+
+    files.forEach(file => {
+      file = file.substring(0, file.length - 4)
+      var fileSplit = file.split(separator)
+
+      if(order.indexOf('DATE') !== -1)
+        filesInfo[file+'.wav']['json'].recordTimeMs[0] = moment(fileSplit[order.indexOf('DATE')]).format('YYYY-MM-DD')
+      if(order.indexOf('TIME') !== -1) {
+        let time = fileSplit[order.indexOf('TIME')]
+        time = time.substring(0, 2) + ':' + time.substring(2, 4) + ':' + time.substring(4, 6)
+        filesInfo[file+'.wav']['json'].recordTimeMs[1] = time
+      }
+      if(order.indexOf('LAT') !== -1)
+        filesInfo[file+'.wav']['json'].coords.lat = fileSplit[order.indexOf('LAT')]
+      if(order.indexOf('LONG') !== -1)
+        filesInfo[file+'.wav']['json'].coords.long = fileSplit[order.indexOf('LONG')]
+      if(order.indexOf('SITE') !== -1)
+        filesInfo[file+'.wav']['json'].site = fileSplit[order.indexOf('SITE')]
+      if(order.indexOf('SERIES') !== -1)
+        filesInfo[file+'.wav']['json'].series = fileSplit[order.indexOf('SERIES')]
+    })
+    this.setState({ filesToUpload: filesInfo })
+  }
+
+  readSummaryFile = (lines) => {
+    var titles = lines.splice(0, 1)[0].split(',')
+    /**
+     * loop titles, if not one off good, err, show good
+     */
+    var fileInfo = {}
+
+    lines.forEach(line => {
+      var lineInfo = {}
+
+      line = line.split(',')
+      line.forEach((property, i) => {
+        if(titles[i] !== 'NAME')
+          lineInfo[titles[i]] = property
+      })
+
+      fileInfo[line[titles.indexOf('NAME')]] = lineInfo
+    })
+  }
+
   listDbFiles = (resp) => {
     var allFiles = this.state.allFiles
 
     resp.forEach(file => {
       if(allFiles.indexOf(file.data) === -1) {
-        var path = file.data.path.split('\\')
-        file.data.path = path[path.length - 1]
         allFiles.push(file.data)
       }
     })
@@ -131,7 +198,10 @@ class ChooseFiles extends React.Component {
 
     fileNames.forEach(fileName => {
       var file = _.cloneDeep(files[fileName].json)
-      file.recordTimeMs = new Date(file.recordTimeMs[0]+'T'+file.recordTimeMs[1]+':00').getTime()
+      if(file.recordTimeMs[1].length === 5)
+        file.recordTimeMs = new Date(file.recordTimeMs[0]+'T'+file.recordTimeMs[1]+':00').getTime()
+      else if(file.recordTimeMs[1].length === 8)
+        file.recordTimeMs = new Date(file.recordTimeMs[0]+'T'+file.recordTimeMs[1]).getTime()
 
       const form = new FormData();
 
@@ -145,6 +215,8 @@ class ChooseFiles extends React.Component {
     .then(responses => {
       this.listDbFiles(responses)
       this.props.openDialog(responses.length + ' files successfully added')
+      this.setState({ filesToUpload: [] })
+      this.setState({ selectedToEdit: [] })
     }).catch(err => {
       this.props.openDialog(err.message + '. Please make sure to add a site and series name to all files.')
     })
@@ -205,6 +277,8 @@ class ChooseFiles extends React.Component {
             submitInputProperties={this.submitInputProperties}
             upload={this.state.upload}
             uploadFiles={this.uploadFiles}
+            addSummaryFile={this.addSummaryFile}
+            setNamingConvention={this.setNamingConvention}
           /> : ''}
         </div>
       </div>

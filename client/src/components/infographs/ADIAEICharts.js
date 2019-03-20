@@ -3,6 +3,11 @@ import Recharts, {LineChart, ReferenceLine, Line, Legend, Brush, XAxis, YAxis, C
 
 class ADIAEICharts extends Component {
 
+  formatYAxis = (tickItem) => {
+    let asF = parseFloat(tickItem);
+    return (asF).toFixed(2);
+  }
+
   render(){
     let graphs = this.props.results;
     let graph1 = graphs.graph1;
@@ -19,16 +24,13 @@ class ADIAEICharts extends Component {
     return(
       <div>
         <h4>Comparing AEI and ADI</h4>
-        <LineChart width={900} height={600} data={graph1} syncId="1">
+        <LineChart width={900} height={600} data={graph1} syncId="1"
+          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey="name" label="Time of Day"/>
-          <YAxis label="Index Value"/>
+          <YAxis label="Index Value" tickFormatter={this.formatYAxis}/>
           <Legend />
           <Tooltip/>
-          {/*<ReferenceLine y={aeiLeft} label="AEI Left" stroke="#82ca9d"/>
-          <ReferenceLine y={aeiRight} label="AEI Right" stroke="#257142"/>
-          <ReferenceLine y={adiLeft} label="ADI Left" stroke="#8884d8"/>
-          <ReferenceLine y={adiRight} label="ADI Right" stroke="#5551a2"/>*/}
           <Line type='natural' dataKey='leftADIVal' stroke='#8884d8' dot={false} />
           <Line type='natural' dataKey='rightADIVal' stroke='#5551a2' dot={false} />
           <Line type='natural' dataKey='leftAEIVal' stroke='#82ca9d' dot={false} />
@@ -39,13 +41,9 @@ class ADIAEICharts extends Component {
         <LineChart width={900} height={600} data={graph2} syncId="2">
           <CartesianGrid strokeDasharray="3 3"/>
           <XAxis dataKey="name" label="File"/>
-          <YAxis label="Index Value"/>
+          <YAxis label="Index Value" tickFormatter={this.formatYAxis}/>
           <Legend />
           <Tooltip/>
-          {/*<ReferenceLine y={aeiLeft} label="AEI Left" stroke="#82ca9d"/>
-          <ReferenceLine y={aeiRight} label="AEI Right" stroke="#257142"/>
-          <ReferenceLine y={adiLeft} label="ADI Left" stroke="#8884d8"/>
-          <ReferenceLine y={adiRight} label="ADI Right" stroke="#5551a2"/>*/}
           <Line type='natural' dataKey='leftADIVal' stroke='#8884d8' dot={false} />
           <Line type='natural' dataKey='rightADIVal' stroke='#5551a2' dot={false} />
           <Line type='natural' dataKey='leftAEIVal' stroke='#82ca9d' dot={false} />

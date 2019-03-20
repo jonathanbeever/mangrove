@@ -19,8 +19,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
 
-function createData(id, siteName, setName, fileName, recordTime, latitude, longitude) {
-  return { id: id, siteName, setName, fileName, recordTime, latitude, longitude };
+function createData(id, siteName, setName, recordTime, latitude, longitude) {
+  return { id: id, siteName, setName, recordTime, latitude, longitude };
 }
 
 function desc(a, b, orderBy) {
@@ -50,7 +50,6 @@ function getSorting(order, orderBy) {
 const rows = [
   { id: 'siteName', numeric: false, disablePadding: false, label: 'Site Name' },
   { id: 'setName', numeric: false, disablePadding: false, label: 'Series Name' },
-  { id: 'fileName', numeric: false, disablePadding: false, label: 'File Name' },
   { id: 'recordTime', numeric: false, disablePadding: false, label: 'Recording Date'},
   { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
   { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },
@@ -141,7 +140,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
+  const { numSelected, selected, deleteInputs, classes } = props;
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -164,7 +163,7 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Tooltip title={<p style={{fontSize:10+'px'}}>Delete</p>} placement='top'>
             <IconButton aria-label="Delete">
-              <DeleteIcon />
+              <DeleteIcon onClick={() => {deleteInputs(selected)}}/>
             </IconButton>
           </Tooltip>
         ) : (
@@ -202,7 +201,7 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'calories',
+    orderBy: 'recordTime',
     // send prop form filtering?
     selected: this.props.selected,
     data: [
@@ -214,7 +213,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredInputs.map(input => {
-      return createData(input.inputId, input.site, input.series, input.path, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
+      return createData(input.inputId, input.site, input.series, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
     })
     this.setState({data: data})
   }
@@ -222,7 +221,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredInputs.map(input => {
-        return createData(input.inputId, input.site, input.series, input.path, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
+        return createData(input.inputId, input.site, input.series, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
       })
       if(data !== this.state.data)
         this.setState({data: data})
@@ -291,7 +290,7 @@ class EnhancedTable extends React.Component {
 
     return (
       <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} selected={selected} deleteInputs={this.props.deleteInputs}/>
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -327,7 +326,6 @@ class EnhancedTable extends React.Component {
                         {n.siteName}
                       </TableCell>
                       <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.setName}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.fileName}</TableCell>
                       <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.recordTime}</TableCell>
                       <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.latitude}</TableCell>
                       <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.longitude}</TableCell>
@@ -345,7 +343,7 @@ class EnhancedTable extends React.Component {
         <TablePagination
           labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
           labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}

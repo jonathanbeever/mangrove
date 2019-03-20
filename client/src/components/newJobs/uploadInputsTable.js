@@ -18,6 +18,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 function createData(id, siteName, setName, fileName, recordTimeMs, latitude, longitude) {
   var recordTime = ''
@@ -148,7 +149,7 @@ const toolbarStyles = theme => ({
   },
   title: {
     flex: '0 0 auto',
-  },
+  }
 });
 
 let EnhancedTableToolbar = props => {
@@ -208,14 +209,17 @@ const styles = theme => ({
   tableWrapper: {
     overflowX: 'auto',
   },
+  selectPage: {
+    marginLeft: theme.spacing.unit * 3
+  }
 });
 
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'calories',
-    // send prop form filtering?
+    orderBy: 'fileName',
     selected: this.props.selected,
+    selectedPage: false,
     data: [
 
     ],
@@ -293,6 +297,22 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
+  handleSelectPage = (event, page, rowsPerPage) => {
+    if (event.target.checked) {
+      var sortedData = stableSort(this.state.data, getSorting(this.state.order, this.state.orderBy))
+      var startInx = page * rowsPerPage
+      var list = sortedData.map(n => n.id).slice(startInx, startInx + rowsPerPage)
+      
+      this.setState({ selected: list });
+      this.setState({ selectedPage: true });
+      this.props.updateSelectedInputs(list)
+      return;
+    }
+    this.setState({ selected: [] });
+    this.setState({ selectedPage: false });
+    this.props.updateSelectedInputs([])
+  }
+
   handleChangePage = (event, page) => {
     this.setState({ page });
   };
@@ -305,80 +325,100 @@ class EnhancedTable extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { data, order, orderBy, selected, rowsPerPage, page, selectedPage } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
-      <Paper className={classes.root}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleClick(event, n.id)}
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox 
-                          checked={isSelected} 
-                          style={{color: '#b6cd26'}}
-                        />
-                      </TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">
-                        {n.siteName}
-                      </TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.setName}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.fileName}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.recordTime}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.latitude}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.longitude}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+      <div>
+        <Paper className={classes.root}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {stableSort(data, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(n => {
+                    const isSelected = this.isSelected(n.id);
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleClick(event, n.id)}
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n.id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox 
+                            checked={isSelected} 
+                            style={{color: '#b6cd26'}}
+                          />
+                        </TableCell>
+                        <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">
+                          {n.siteName}
+                        </TableCell>
+                        <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.setName}</TableCell>
+                        <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.fileName}</TableCell>
+                        <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.recordTime}</TableCell>
+                        <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.latitude}</TableCell>
+                        <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.longitude}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            labelRowsPerPage={
+              <div>
+              
+              <p style={{padding: 0, fontSize:13+'px'}}>Rows per page:</p>
+              </div>
+            }
+            labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+            component="div"
+            spacer={{flex: '0 0 auto'}}
+            count={data.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            backIconButtonProps={{
+              'aria-label': 'Previous Page',
+            }}
+            nextIconButtonProps={{
+              'aria-label': 'Next Page',
+            }}
+            onChangePage={this.handleChangePage}
+            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+          />
+        </Paper>
+        <div className={classes.selectPage}>
+          <FormControlLabel
+            control={
+              <Checkbox 
+                checked={selectedPage}
+                onChange={event => this.handleSelectPage(event, page, rowsPerPage)}
+                style={{color: '#b6cd26', float: 'left', clear: 'none'}}
+              />
+            }
+            label={<p style={{fontSize: '13px', margin: 0}}>Select Page</p>}
+          />
         </div>
-        <TablePagination
-          labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
-          labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          backIconButtonProps={{
-            'aria-label': 'Previous Page',
-          }}
-          nextIconButtonProps={{
-            'aria-label': 'Next Page',
-          }}
-          onChangePage={this.handleChangePage}
-          onChangeRowsPerPage={this.handleChangeRowsPerPage}
-        />
-      </Paper>
+      </div>
     );
   }
 }

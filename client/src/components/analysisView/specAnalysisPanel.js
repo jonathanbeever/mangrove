@@ -10,6 +10,7 @@ class SpecAnalysisPanel extends Component {
         <GraphsTable
           index={this.props.index}
           graphs={this.props.graphs}
+          callback={this.props.callback}
         />
       </div>
     )

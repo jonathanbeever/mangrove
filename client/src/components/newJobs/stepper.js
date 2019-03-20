@@ -11,7 +11,6 @@ import ChooseFiles from './chooseFiles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
 import axios from 'axios';
 import LinearIntermediate from './linearIntermediate';
@@ -25,12 +24,15 @@ const styles = theme => ({
   button: {
     marginRight: theme.spacing.unit,
   },
+  buttonTop: {
+    marginTop: theme.spacing.unit,
+  },
   instructions: {
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
   },
   stepper: {
-    backgroundColor: 'rgba(54, 25, 25, .00004)'
+    backgroundColor: 'rgba(54, 25, 25, .00004)',
   },
   label: {
     fontSize: '26px',
@@ -221,9 +223,9 @@ class HorizontalLinearStepper extends React.Component {
         break;
       }
       case 'bi': {
-        params['aci']['minFreq'] = 2000
-        params['aci']['maxFreq'] = 8000
-        params['aci']['fftW'] = 512
+        params['bi']['minFreq'] = 2000
+        params['bi']['maxFreq'] = 8000
+        params['bi']['fftW'] = 512
 
         break;
       }
@@ -267,9 +269,8 @@ class HorizontalLinearStepper extends React.Component {
           axios.put(
             "http://localhost:3000/jobs",
             {
-              type: this.state.index,
-              inputId: inputId,
-              specId: spec
+              input: inputId,
+              spec: spec
             },
             {headers: {"Content-Type": "application/json"}}
           )
@@ -311,9 +312,8 @@ class HorizontalLinearStepper extends React.Component {
           axios.put(
             "http://localhost:3000/jobs",
             {
-              type: this.state.index,
-              inputId: inputId,
-              specId: specId
+              input: inputId,
+              spec: specId
             },
             {headers: {"Content-Type": "application/json"}}
           )
@@ -409,6 +409,11 @@ class HorizontalLinearStepper extends React.Component {
       this.closeDialog()
   };
 
+  redirectJobQueue = () => {
+    var path = '/jobQueue'
+    this.props.history.push(path)
+  }
+
   render() {
     const { classes } = this.props;
     const steps = getSteps();
@@ -416,17 +421,41 @@ class HorizontalLinearStepper extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Stepper className={classes.stepper} activeStep={activeStep}>
-          {steps.map((label, index) => {
-            const props = {};
-            const labelProps = {};
-            return (
-              <Step key={label} className={classes.label} {...props}>
-                <StepLabel style={{fontSize: 16}}{...labelProps}><div style={{fontSize: '16px'}}>{label}</div></StepLabel>
-              </Step>
-            );
-          })}
-        </Stepper>
+        <div className="row" style={{paddingBottom: 0}}>
+          <div className="col-9">
+            <Stepper className={classes.stepper} activeStep={activeStep}>
+              {steps.map((label, index) => {
+                const props = {};
+                const labelProps = {};
+                return (
+                  <Step key={label} className={classes.label} {...props}>
+                    <StepLabel style={{fontSize: 16}}{...labelProps}><div style={{fontSize: '16px'}}>{label}</div></StepLabel>
+                  </Step>
+                );
+              })}
+            </Stepper>
+          </div>
+          <div className='col-3'>
+            <div className={classes.buttonTop} style={{float:'right'}}>
+              <Button
+                disabled={activeStep === 0}
+                onClick={this.handleBack}
+                style={{backgroundColor:"#b6cd26", margin: 7}}
+                className={classes.button}
+              >
+                Back
+              </Button>
+              <Button
+                style={{backgroundColor:"#b6cd26", margin: 7, marginRight: 17}}
+                disabled={this.state.disabledSubmit}
+                onClick={this.handleNext}
+                className={classes.button}
+              >
+                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              </Button>
+            </div>
+          </div>
+        </div>
         <div>
           <Dialog
             open={this.state.open}
@@ -445,6 +474,9 @@ class HorizontalLinearStepper extends React.Component {
                   <Button onClick={this.handleReset} style={{margin: 7}}>
                     <h6>Start More Jobs</h6>
                   </Button>
+                  <Button onClick={this.redirectJobQueue} style={{margin: 7}}>
+                    <h6>View Job Queue</h6>
+                  </Button>
                   <Button onClick={this.handleClose} style={{margin: 7}}>
                     <h6>Close</h6>
                   </Button>
@@ -457,9 +489,8 @@ class HorizontalLinearStepper extends React.Component {
             </DialogActions>
           </Dialog>
           <div>
-            <div>
-              {getStepContent(activeStep, this)}
-              <div style={{float: 'right'}}>
+            {getStepContent(activeStep, this)}
+            <div style={{float: 'right'}}>
               <Button
                 disabled={activeStep === 0}
                 onClick={this.handleBack}
@@ -476,7 +507,6 @@ class HorizontalLinearStepper extends React.Component {
               >
                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
               </Button>
-              </div>
             </div>
           </div>
         </div>

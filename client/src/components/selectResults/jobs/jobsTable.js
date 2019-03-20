@@ -20,6 +20,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
 
 function createData(id, type, author, time, input) {
+  input = input.site + ' - ' + input.series + ' - ' + moment(input.recordTimeMs).format("MM/DD/YY, hh:mm:ss")
   return { id: id, type, author, time, input };
 }
 
@@ -163,7 +164,7 @@ let EnhancedTableToolbar = props => {
         {numSelected > 0 ? (
           <Tooltip title={<p style={{fontSize:10+'px'}}>Delete</p>} placement='top'>
             <IconButton aria-label="Delete">
-              <DeleteIcon />
+              {/* <DeleteIcon /> */}
             </IconButton>
           </Tooltip>
         ) : (
@@ -213,7 +214,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredJobs.map(job => {
-      return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].path)
+      return createData(job.jobId, this.props.indexedSpecsById[job.spec].type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
     })
     this.setState({data: data})
   }
@@ -221,7 +222,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredJobs.map(job => {
-        return createData(job.jobId, job.type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input].path)
+        return createData(job.jobId, this.props.indexedSpecsById[job.spec].type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
       })
       this.setState({data: data})
 
@@ -341,7 +342,7 @@ class EnhancedTable extends React.Component {
         <TablePagination
           labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
           labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}

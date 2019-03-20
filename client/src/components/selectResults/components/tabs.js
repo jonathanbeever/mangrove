@@ -45,6 +45,12 @@ class SimpleTabs extends React.Component {
       this.props.showFiltering()
   };
 
+  changeTab = (value) => {
+    if(this.state.value !== value)
+      this.setState({value: value})
+    this.props.getData()
+  }
+
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps.showAnalysis !== this.props.showAnalysis) {
       if(this.props.showAnalysis === true)
@@ -54,9 +60,21 @@ class SimpleTabs extends React.Component {
     }
   }
 
+  componentWillMount = () => {
+    if(sessionStorage.getItem('catalogPageSave')) this.setState({value: 3});
+  }
+
+  componentWillUnmount = () => {
+    if(this.state.value === 3) sessionStorage.setItem('catalogPageSave', 3);
+    else sessionStorage.removeItem('catalogPageSave');
+  }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;
+
+    // console.log(this.props.selectedIndexedJobs);
+    // console.log(this.props.selectedJobs);
 
     return (
       <div className={classes.root}>
@@ -70,6 +88,8 @@ class SimpleTabs extends React.Component {
         </AppBar>
         {value === 0 && <TabContainer>
           <FilterSpecs
+            changeTab={this.changeTab}
+            filteredJobs={this.props.allJobs}
             index={this.props.index}
             handleIndexChange={this.props.handleIndexChange}
             specParamsList={this.props.specParamsList}
@@ -84,6 +104,8 @@ class SimpleTabs extends React.Component {
         </TabContainer>}
         {value === 1 && <TabContainer>
           <FilterInputs
+            changeTab={this.changeTab}
+            filteredJobs={this.props.allJobs}
             inputFiltering={this.props.inputFiltering}
             onDelete={this.props.onDelete}
             filteredInputs={this.props.filteredInputs}
@@ -104,6 +126,7 @@ class SimpleTabs extends React.Component {
             selectedIndex={this.props.selectedIndex}
             selectedSpecs={this.props.selectedSpecs}
             filteredSpecs={this.props.filteredSpecs}
+            indexedSpecsById={this.props.indexedSpecs}
             // Results for AnalysisView
             updateSelectedJobs={this.props.updateSelectedJobs}
             selectedJobs={this.props.selectedJobs}

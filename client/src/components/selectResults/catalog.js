@@ -79,12 +79,24 @@ class Catalog extends Component {
   }
 
   componentDidMount = () => {
+    // Set index to aci when component mounts
     this.handleIndexChange('aci')
-    // make indexed object of inputs
-    var selected = []
+    this.getData()
+  }
 
+  getData = () => {
+    // selected inputs
+    var selected = []
     this.setState({ selectedInputs : selected })
 
+    // clear selected specs
+    var indices = Object.keys(this.state.selectedSpecs)
+    var selectedSpecs = this.state.selectedSpecs
+    indices.forEach(index => {
+      selectedSpecs[index] = []
+    })
+    this.setState({ selectedSpecs: selectedSpecs })
+    
     // get all db specs
     axios.get('http://localhost:3000/specs')
       .then(res => {
@@ -96,15 +108,17 @@ class Catalog extends Component {
           'bi': [],
           'rms': []
         }
-        var indexedSpecs = {}
+        var indexedSpecsById = {}
         res.data.specs.forEach(spec => {
+          // Save specs indexed by type, indexedSpecs
           specs[spec.type].push(spec)
-          indexedSpecs[spec.specId] = spec
+          // same all specs indexed by id, indexedSpecsById
+          indexedSpecsById[spec.specId] = spec
         })
-        this.setState({ indexedSpecsById: indexedSpecs })
+        this.setState({ indexedSpecs: specs })
+        this.setState({ indexedSpecsById: indexedSpecsById })
         // Set all specs state
         this.setState({ allSpecs: res.data.specs })
-        this.setState({ indexedSpecs: specs })
         // Set filtered specs with all initially
         this.setState({ filteredSpecs: specs })
       })
@@ -113,19 +127,11 @@ class Catalog extends Component {
 
       axios.get('http://localhost:3000/inputs')
       .then(res => {
-        var inputs = res.data.inputs.map(input => {
-          var path = input.path.split('\\')
-          input.path = path[path.length - 1]
-          return input
-        })
-
-        inputs.forEach(file => {
-          // selected.push(file.inputId)
+        res.data.inputs.forEach(file => {
           indexedFiles[file.inputId] = file
         })
-
         this.setState({ indexedFiles : indexedFiles})
-        this.setState({ allFiles: inputs })
+        this.setState({ allFiles: res.data.inputs })
       })
 
       axios.get('http://localhost:3000/jobs')
@@ -198,6 +204,12 @@ class Catalog extends Component {
       })
     })
 
+    var selectedJobs = this.state.selectedJobs.filter(job => {
+      if(selected.indexOf(job.input) !== -1)
+        return job
+    })
+    // console.log(selectedJobs)
+    this.updateSelectedJobs(selectedJobs)
     this.setState({ jobsFiltered: filteredJobByInputs })
     this.setState({ selectedInputs: selected })
   }
@@ -283,6 +295,7 @@ class Catalog extends Component {
   }
 
   updateSelectedSpecs = (selected, index) => {
+    if(this.state.allJobs === undefined) return;
     var specs = this.state.selectedSpecs
     specs[index] = selected
     this.setState({ selectedSpecs: specs})
@@ -381,26 +394,35 @@ class Catalog extends Component {
       'rms': {}
     }
 
+    // these are the inputs selected as an object
+    // console.log(this.state.indexedFiles);
+    // these are the jobs selected as an array
+    // console.log(selected);
     jobs.forEach(job => {
       // If curr job is selected
+      // console.log(job);
       job.input = this.state.indexedFiles[job.input]
+      job.spec = this.state.indexedSpecsById[job.spec]
+
       if(selected.indexOf(job.jobId) !== -1) {
-        var jobSpecsByIndex = Object.keys(jobsObj[job.type])
+        var jobSpecsByIndex = Object.keys(jobsObj[job.spec.type])
         if(jobSpecsByIndex.length) {
           // if spec is already a property
-          if(jobSpecsByIndex.indexOf(job.spec) !== -1) {
-            jobsObj[job.type][job.spec].push(job)
+          if(jobSpecsByIndex.indexOf(job.spec.specId) !== -1) {
+            jobsObj[job.spec.type][job.spec.specId].push(job)
           }
           // Add spec as property and set job in array
           else {
-            jobsObj[job.type][job.spec] = [job]
+            jobsObj[job.spec.type][job.spec.specId] = [job]
           }
         }
+        // Add spec as property and set job in array
         else {
-          jobsObj[job.type][job.spec] = [job]
+          jobsObj[job.spec.type][job.spec.specId] = [job]
         }
       }
-    })
+    });
+    
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 
@@ -424,17 +446,19 @@ class Catalog extends Component {
     this.setState({ jobFiltering : filter })
   }
 
+  // TODO
   handleSubmitJobFilter = () => {
     var filteredJobs = []
     this.state.allJobs.forEach(job => {
-      // TODO: multiple specs
-      if(this.state.selectedSpecs[this.state.selectedIndex].indexOf(job.spec) !== -1) {
-        if(this.state.selectedInputs.indexOf(job.input) !== -1) {
-          if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {
-            filteredJobs.push(job)
+      ['aci', 'ndsi', 'aei', 'adi', 'bi', 'rms'].forEach(index => {
+        if(this.state.selectedSpecs[index].indexOf(job.spec) !== -1) {
+          if(this.state.selectedInputs.indexOf(job.input) !== -1) {
+            if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {
+              filteredJobs.push(job)
+            }
           }
         }
-      }
+      })
     })
 
     this.setState({ jobsFiltered: filteredJobs })
@@ -487,6 +511,9 @@ class Catalog extends Component {
           // Tabs props
           showAnalysis={this.state.showAnalysis}
           showFiltering={this.showFiltering}
+          // Specs and inputs
+          getData={this.getData}
+          allJobs={this.state.allJobs}
         />
       </div>
     );
