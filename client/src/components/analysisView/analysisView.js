@@ -180,12 +180,6 @@ class AnalysisView extends Component {
       }
     }
 
-    let unfinished = this.hasUnfinished(selectedJobs);
-    if(unfinished.length > 0){
-      this.setState({ unfinished: unfinished });
-      this.interval = setInterval(() => this.refreshJobs(), 2000);
-    }
-
     this.setState({ siteNames: sites });
     this.setState({ chosenSite: sites[0] });
     this.setState({ seriesNames: series });
@@ -509,6 +503,12 @@ class AnalysisView extends Component {
     let specId;
     let jobs;
     let filteredSelectedJobs;
+
+    let unfinished = this.hasUnfinished(selectedJobs);
+    if(unfinished.length > 0){
+      this.setState({ unfinished: unfinished });
+      this.interval = setInterval(() => this.refreshJobs(), 2000);
+    }
 
     // get jobs for only the chosen site and series
     let filteredChosenJobs = selectedJobs;
