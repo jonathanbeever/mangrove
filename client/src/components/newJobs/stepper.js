@@ -146,10 +146,12 @@ class HorizontalLinearStepper extends React.Component {
     var tempState = this.state.specParams
 
     if(name !== 'shannon') {
-      if(e.target.value === '')
-        tempState[this.state.index][name] = ''
-      else
+      if(e.target.checked || e.target.value === 'nyquist')
+        tempState[this.state.index][name] = 'nyquist'
+      else if(e.target.value !== '' && !isNaN(e.target.value))
         tempState[this.state.index][name] = parseInt(e.target.value)
+      else
+        tempState[this.state.index][name] = ''
     }
     else
       tempState[this.state.index][name] = e.target.checked
@@ -200,7 +202,7 @@ class HorizontalLinearStepper extends React.Component {
     switch(this.state.index) {
       case 'aci': {
         params['aci']['minFreq'] = 0
-        params['aci']['maxFreq'] = 96000
+        params['aci']['maxFreq'] = 'nyquist'
         params['aci']['fftW'] = 512
         params['aci']['j'] = 5
 
