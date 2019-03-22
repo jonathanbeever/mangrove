@@ -47,7 +47,6 @@ class Catalog extends Component {
           fftW: ''
         },
         rms: {
-          test: ''
         }
       },
       selectedInputs : [],
@@ -248,7 +247,7 @@ class Catalog extends Component {
         break;
       }
       case 'rms': {
-        this.setState({ specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']] })
+        this.setState({ specParamsList: [] })
         break;
       }
       default : {
@@ -422,7 +421,7 @@ class Catalog extends Component {
         }
       }
     });
-    
+    console.log(jobsObj)
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 

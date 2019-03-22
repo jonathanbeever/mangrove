@@ -118,7 +118,6 @@ class HorizontalLinearStepper extends React.Component {
         fftW: ''
       },
       rms: {
-        test: ''
       }
     },
     selectedSpec: [],
