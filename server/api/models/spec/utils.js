@@ -7,6 +7,7 @@ const RmsSpec = require('./rms');
 
 const Type = require('../type');
 const Param = require('./param');
+const Nyquist = require('./nyquist');
 
 const getSpecModel = (type) => {
   switch (type) {
@@ -46,12 +47,25 @@ const getSpecParams = (type) => {
   return keys;
 };
 
-const getParamsFromSpec = (spec) => {
+function showNyquistAs(nyquistType = undefined, aciMaxFreq) {
+  switch (nyquistType) {
+    case Nyquist.db.type:
+      return aciMaxFreq === Nyquist.user.value ? Nyquist.db.value : aciMaxFreq;
+    case Nyquist.user.type:
+      return aciMaxFreq === Nyquist.db.value ? Nyquist.user.value : aciMaxFreq;
+    default:
+      return aciMaxFreq;
+  }
+}
+
+const getParamsFromSpec = (spec, nyquistType = undefined) => {
   switch (spec.type) {
     case Type.ACI:
       return {
         ...(typeof spec.minFreq !== 'undefined' && { minFreq: spec.minFreq }),
-        ...(typeof spec.maxFreq !== 'undefined' && { maxFreq: spec.maxFreq }),
+        ...(typeof spec.maxFreq !== 'undefined' && {
+          maxFreq: showNyquistAs(nyquistType, spec.maxFreq),
+        }),
         ...(typeof spec.j !== 'undefined' && { j: spec.j }),
         ...(typeof spec.fftW !== 'undefined' && { fftW: spec.fftW }),
       };
@@ -84,58 +98,11 @@ const getParamsFromSpec = (spec) => {
       };
     case Type.RMS:
       return {
-        // TODO
+        // N/A
       };
     default:
       throw new Error(`Invalid \`type\` parameter (${spec.type}).`);
   }
-};
-
-// FIXME: Find a cleaner way to extract the type from a Mongoose model's key
-const getParamVarType = (type, param) => {
-  const SpecModel = getSpecModel(type);
-  if (SpecModel.schema.obj[param].type.toString().includes('Number')) {
-    return 'number';
-  }
-  if (SpecModel.schema.obj[param].type.toString().includes('Boolean')) {
-    return 'boolean';
-  }
-  return null;
-};
-
-const validateParam = (type, param, value) => {
-  const varType = getParamVarType(type, param);
-  if (varType === 'number') {
-    if (typeof value !== 'number') {
-      throw new Error(`Unexpected value type: ${typeof value}. Expected number.`);
-    } else if (value < Param[type][param].min) {
-      throw new Error(`Value ${value} too low to create ${param} (${type}).`);
-    } else if (value > Param[type][param].max) {
-      throw new Error(`Value ${value} too high to create ${param} (${type}).`);
-    }
-  } else if (varType === 'boolean') {
-    if (typeof value !== 'boolean') {
-      throw new Error(`Unexpected value type: ${typeof value}. Expected boolean.`);
-    }
-  }
-  return value;
-};
-
-const validateParams = (type, params) => {
-  const invalid = [];
-  Object.entries(params).forEach(([key, value]) => {
-    try {
-      validateParam(type, key, value);
-    } catch (err) {
-      invalid.push(key);
-    }
-  });
-
-  if (invalid.length > 0) {
-    throw new Error(`Invalid values for keys: ${invalid.join(', ')} (type: ${type})`);
-  }
-
-  return params;
 };
 
 const fillDefaultParams = (type, params) => {
@@ -155,8 +122,5 @@ module.exports = {
   newSpecKeys,
   getSpecParams,
   getParamsFromSpec,
-  getParamVarType,
-  validateParam,
-  validateParams,
   fillDefaultParams,
 };

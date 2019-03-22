@@ -26,6 +26,7 @@ const {
 } = require('../../../api/models/spec/utils');
 const Type = require('../../../api/models/type');
 const Param = require('../../../api/models/spec/param');
+const Nyquist = require('../../../api/models/spec/nyquist');
 
 const { expect } = chai;
 
@@ -92,7 +93,7 @@ describe('Specs', () => {
       expect(res.body.message).to.be.a('string');
     });
 
-    it('It should fail to PUT a Spec (invalid param values)', async () => {
+    it('It should fail to PUT a Spec (validation error)', async () => {
       const specJsons = [];
       specJsons.push(mockSpecCreateJson(Type.ACI, {
         minFreq: -1,
@@ -123,9 +124,7 @@ describe('Specs', () => {
         bioMin: Param.ndsi.bioMin.min - 1,
         bioMax: Param.ndsi.bioMax.max + 1,
       }));
-      // specJsons.push(mockSpecCreateJson(Type.RMS, {
-      //   // TODO
-      // }));
+      // RMS not applicable, since it currently has no parameters
 
       const requests = specJsons.map(json => chai.request(app)
         .put('/specs')
@@ -147,7 +146,7 @@ describe('Specs', () => {
       specs.push(nextMockSpec(Type.AEI));
       specs.push(nextMockSpec(Type.BI));
       specs.push(nextMockSpec(Type.NDSI));
-      // specs.push(nextMockSpec(Type.RMS)); // TODO
+      specs.push(nextMockSpec(Type.RMS));
 
       const specJsons = specs.map(spec => getJsonFromMockSpec(spec));
 
@@ -165,7 +164,7 @@ describe('Specs', () => {
         );
         expect(res.body.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(res.body)).to.eql(
-          getParamsFromSpec(specs[index]),
+          getParamsFromSpec(specs[index], Nyquist.user.type),
         );
       });
     });
@@ -186,7 +185,7 @@ describe('Specs', () => {
       expect(res.body.specId).to.equal(spec.id);
       expect(res.body.type).to.equal(spec.type);
       expect(getParamsFromSpec(res.body)).to.eql(
-        getParamsFromSpec(spec),
+        getParamsFromSpec(spec, Nyquist.user.type),
       );
     });
 
@@ -197,7 +196,7 @@ describe('Specs', () => {
       specs.push(mockSpec(nextMockObjectId(), Type.AEI, {}));
       specs.push(mockSpec(nextMockObjectId(), Type.BI, {}));
       specs.push(mockSpec(nextMockObjectId(), Type.NDSI, {}));
-      // specs.push(mockSpec(nextMockObjectId(), Type.RMS, {})); // TODO
+      specs.push(mockSpec(nextMockObjectId(), Type.RMS, {}));
 
       const specJsons = specs.map(spec => getJsonFromMockSpec(spec));
 
@@ -212,7 +211,7 @@ describe('Specs', () => {
         expect(res.body).to.have.all.keys(getSpecKeys(specs[index].type));
         expect(res.body.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(res.body)).to.eql(
-          getParamsFromSpec(specs[index]),
+          getParamsFromSpec(specs[index], Nyquist.user.type),
         );
       });
     });
@@ -241,7 +240,7 @@ describe('Specs', () => {
       expect(res.body.specId).to.equal(spec.id);
       expect(res.body.type).to.equal(spec.type);
       expect(getParamsFromSpec(res.body)).to.eql(
-        getParamsFromSpec(spec),
+        getParamsFromSpec(spec, Nyquist.user.type),
       );
     });
   });
@@ -266,7 +265,7 @@ describe('Specs', () => {
       specs.push(nextMockSpec(Type.AEI));
       specs.push(nextMockSpec(Type.BI));
       specs.push(nextMockSpec(Type.NDSI));
-      // specs.push(nextMockSpec(Type.RMS)); // TODO
+      specs.push(nextMockSpec(Type.RMS));
 
       await Spec.insertMany(specs);
 
@@ -284,7 +283,7 @@ describe('Specs', () => {
         expect(spec.specId).to.equal(specs[index].id);
         expect(spec.type).to.equal(specs[index].type);
         expect(getParamsFromSpec(spec)).to.eql(
-          getParamsFromSpec(specs[index]),
+          getParamsFromSpec(specs[index], Nyquist.user.type),
         );
       });
     });

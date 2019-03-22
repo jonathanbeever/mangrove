@@ -33,6 +33,7 @@ const upload = multer({
     } else if (file.mimetype !== 'audio/wav' && file.mimetype !== 'audio/wave') {
       cb(new Error(`Invalid MIME type: ${file.mimetype}. Must be audio/wave`));
     } else {
+      // TODO: More validation, potentially using Mongoose
       cb(null, true);
     }
   },

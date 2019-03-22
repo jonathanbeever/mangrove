@@ -12,7 +12,7 @@ module.exports = mongoose.model('Job', new mongoose.Schema({
     required: true,
   },
   author: { type: String, required: true },
-  creationTimeMs: { type: Number, required: true },
+  creationTimeMs: { type: Number, min: 0, required: true },
   status: {
     type: String,
     enum: [
@@ -23,6 +23,6 @@ module.exports = mongoose.model('Job', new mongoose.Schema({
       Status.FAILED,
       Status.CANCELLED,
     ],
-    required: true,
+    default: Status.WAITING,
   },
 }, options));

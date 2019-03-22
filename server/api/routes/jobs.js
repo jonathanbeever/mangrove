@@ -34,21 +34,27 @@ router.put('/', async (req, res) => {
     });
   }
 
+  let input;
+  let spec;
   try {
-    const input = await Input.findById(req.body.input).exec();
+    input = await Input.findById(req.body.input).exec();
     if (!input) {
       return res.status(404).json({
         message: `Unable to find Input with ID ${req.body.input}`,
       });
     }
 
-    const spec = await Spec.findById(req.body.spec).exec();
+    spec = await Spec.findById(req.body.spec).exec();
     if (!spec) {
       return res.status(404).json({
         message: `Unable to find Spec with ID ${req.body.spec}`,
       });
     }
+  } catch (err) {
+    return res.status(400).json({ message: 'Invalid spec and/or input' });
+  }
 
+  try {
     const JobModel = getJobModel(spec.type);
     const searchResult = await JobModel.find({
       input: req.body.input,

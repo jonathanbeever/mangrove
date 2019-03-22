@@ -145,7 +145,8 @@ const getResultKeys = (type) => {
       ];
     case Type.RMS:
       return [
-        // TODO
+        'rmsL',
+        'rmsR',
       ];
     default:
       throw new Error(`Invalid 'type' parameter: ${type}`);
