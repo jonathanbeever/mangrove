@@ -507,7 +507,7 @@ class AnalysisView extends Component {
     let unfinished = this.hasUnfinished(selectedJobs);
     if(unfinished.length > 0){
       this.setState({ unfinished: unfinished });
-      this.interval = setInterval(() => this.refreshJobs(), 2000);
+      if(this.interval === undefined) this.interval = setInterval(() => this.refreshJobs(), 10000);
     }
 
     // get jobs for only the chosen site and series

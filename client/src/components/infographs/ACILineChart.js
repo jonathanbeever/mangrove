@@ -41,7 +41,7 @@ class ACILineChart extends Component {
             <XAxis dataKey="name">
               <Label value={xLabel} position="insideBottom" offset={2} />
             </XAxis>
-            <YAxis domain={['dataMin-10', 'dataMax+10']} tickFormatter={this.formatYAxis}>
+            <YAxis domain={['dataMin-1', 'dataMax+1']} tickFormatter={this.formatYAxis}>
               <Label value={yLabel} position="insideLeft" offset={0} />
             </YAxis>
             <Legend />
