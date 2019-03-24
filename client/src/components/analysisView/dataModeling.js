@@ -65,6 +65,27 @@ export function isEmpty(obj) {
 }
 
 /********** Base graph data modeling functions **********/
+export function convertRMSResults(jobs) {
+  let finished = jobs.filter(x => x.status === "finished");
+  let ret = {
+    data: [],
+    title: "RMS By File"
+  }
+
+  let curObject = {};
+  finished.forEach(job => {
+    curObject = {
+      name: job.input.name,
+      rmsL: job.result.rmsL,
+      rmsR: job.result.rmsR
+    }
+
+    ret.data.push(curObject);
+  });
+
+  return ret;
+}
+
 export function convertNDSIResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
   let ret;
@@ -587,6 +608,46 @@ export function convertBIResults(jobs) {
 }
 
 /********** Comparison graph data modeling functions **********/
+export function convertRMSResultsBySite(jobs, sites) {
+
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
+
+  let chosenResults = convertRMSResults(chosenSiteJobs);
+  let compareResults = convertRMSResults(compareSiteJobs);
+
+  compareResults.data.forEach(item => {
+    item['rmsLC'] = item['rmsL'];
+    item['rmsRC'] = item['rmsR'];
+    delete(item['rmsL']);
+    delete(item['rmsR']);
+  });
+
+  chosenResults.data.concat(compareResults);
+
+  return chosenResults;
+}
+
+export function convertRMSResultsBySeries(jobs, series) {
+
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
+
+  let chosenResults = convertRMSResults(chosenSeriesJobs);
+  let compareResults = convertRMSResults(compareSeriesJobs);
+
+  compareResults.data.forEach(item => {
+    item['rmsLC'] = item['rmsL'];
+    item['rmsRC'] = item['rmsR'];
+    delete(item['rmsL']);
+    delete(item['rmsR']);
+  });
+
+  chosenResults.data.concat(compareResults);
+
+  return chosenResults;
+}
+
 export function convertACIResultsBySite(jobs, sites) {
 
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");

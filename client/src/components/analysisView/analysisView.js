@@ -215,6 +215,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertACIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -222,6 +223,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertNDSIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -229,6 +231,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertADIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -236,6 +239,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertAEIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -243,9 +247,17 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertBIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
+          case "rms":
+            try{
+              graphs = utils.convertRMSResults(obj[spec]);
+            }catch(error){
+              this.setState({ errorMessage: error });
+              this.setState({ errorMode: true });
+            }
           default:
             graphs = null
         }
@@ -315,6 +327,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertACIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -322,6 +335,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertNDSIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -329,6 +343,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertADIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -336,6 +351,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertAEIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -343,9 +359,17 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertBIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
+          case "rms":
+            try{
+              graphs = utils.convertRMSResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
+            }catch(error){
+              this.setState({ errorMessage: error });
+              this.setState({ errorMode: true });
+            }
           default:
             graphs = null
         }
@@ -418,6 +442,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertACIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -425,6 +450,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertNDSIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -432,6 +458,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertADIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -439,6 +466,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertAEIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -446,9 +474,17 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertBIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
+          case "rms":
+            try{
+              graphs = utils.convertRMSResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            }catch(error){
+              this.setState({ errorMessage: error });
+              this.setState({ errorMode: true });
+            }
           default:
             graphs = null
         }
@@ -639,7 +675,7 @@ class AnalysisView extends Component {
     return (
       <div style={{ marginBottom:25+'px' }}>
         {errorMode ?
-        'An error occurred. This is likely due to an error in job processing'
+        'An error occurred. ' + this.state.errorMessage
         :
         <div>
           <Paper style={{ marginTop:10+'px' }}>
