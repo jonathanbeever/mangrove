@@ -65,6 +65,7 @@ class AnalysisView extends Component {
     if(localStorage.getItem('analysisViewAlert') === null){
       localStorage.setItem('analysisViewAlert', true);
     }
+    console.log(selectedJobs);
     this.formatState(selectedJobs);
   }
 
@@ -410,6 +411,7 @@ class AnalysisView extends Component {
 
       specRows = [];
       for(var spec in obj) {
+        console.log(obj[spec]);
         switch(index)
         {
           case "aci":
@@ -498,6 +500,8 @@ class AnalysisView extends Component {
     let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.state;
 
+    console.log(selectedJobs);
+
     let index;
     let item;
     let specId;
@@ -556,6 +560,7 @@ class AnalysisView extends Component {
           index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
         }
       }
+      console.log(filteredSelectedJobs);
       this.formatJobSeries(filteredSelectedJobs);
     }
   }

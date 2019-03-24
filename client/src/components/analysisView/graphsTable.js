@@ -14,6 +14,8 @@ import BAAreaChart from '../infographs/BAAreaChart';
 import BALineChart from '../infographs/BALineChart';
 import BADualLineChart from '../infographs/BADualLineChart';
 import BACompareAreaChart from '../infographs/BACompareAreaChart';
+import ACIBarChart from '../infographs/ACIBarChart';
+import ACICompareBarChart from '../infographs/ACICompareBarChart';
 
 const styles = theme => ({
   root: {
@@ -40,40 +42,90 @@ class GraphsTable extends React.Component {
       switch(index)
       {
         case "aci":
-          rows.push(
-            <GraphExpansionPanel
-              key={'graph'+ctr}
-              title={obj.title}
-              data={obj.data}
-              graph={<ACILineChart
-                callback={this.props.callback}
-                results={obj.data}
-                xAxisLabel={obj.xAxisLabel}
-                yAxisLabel={obj.yAxisLabel}
-                dataKey1={obj.dataKey1}
-                dataKey2={obj.dataKey2}
-              />}
-            />
-          )
+          if(obj.title === "ACI Total Value Divided By Minutes")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                data={obj.data}
+                graph={<ACIBarChart
+                  results={obj.data}
+                />}
+              />
+            )
+          }else
+          {
+            if(obj.title === "ACI By Seconds Per File")
+            {
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  data={obj.data}
+                  graph={<ACILineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    custom={true}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                  />}
+                />
+              )
+            }else{
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  data={obj.data}
+                  graph={<ACILineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    custom={false}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                  />}
+                />
+              )
+            }
+          }
           break;
         case "aci-compare":
-          rows.push(
-            <GraphExpansionPanel
-              key={'graph'+ctr}
-              title={obj.title}
-              data={obj.data}
-              graph={<ACIDualLineChart
-                callback={this.props.callback}
-                results={obj.data}
-                xAxisLabel={obj.xAxisLabel}
-                yAxisLabel={obj.yAxisLabel}
-                dataKey1={obj.dataKey1}
-                dataKey2={obj.dataKey2}
-                dataKey3={obj.dataKey3}
-                dataKey4={obj.dataKey4}
-              />}
-            />
-          )
+          if(obj.title === "Compared By File")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                data={obj.data}
+                graph={<ACICompareBarChart
+                  results={obj.data}
+                />}
+              />
+            )
+          }else{
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                data={obj.data}
+                graph={<ACIDualLineChart
+                  callback={this.props.callback}
+                  results={obj.data}
+                  xAxisLabel={obj.xAxisLabel}
+                  yAxisLabel={obj.yAxisLabel}
+                  dataKey1={obj.dataKey1}
+                  dataKey2={obj.dataKey2}
+                  dataKey3={obj.dataKey3}
+                  dataKey4={obj.dataKey4}
+                />}
+              />
+            )
+          }
           break;
         case "ndsi":
           switch(obj.title)

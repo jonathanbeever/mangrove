@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import CustomTooltip from './CustomTooltip';
 
 class ACILineChart extends Component {
 
@@ -28,6 +29,8 @@ class ACILineChart extends Component {
     let firstDataKey = this.props.dataKey1;
     let secondDataKey = this.props.dataKey2;
 
+    let customTooltip = this.props.custom;
+
     let endOfBrush;
     let len = data.length;
     if(len > 1500) endOfBrush = 1500;
@@ -45,7 +48,10 @@ class ACILineChart extends Component {
               <Label value={yLabel} position="insideLeft" offset={0} />
             </YAxis>
             <Legend />
-            <Tooltip/>
+            { customTooltip ?
+              <Tooltip content={<CustomTooltip/>}/>
+              :
+              <Tooltip/>}
             <Line type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={false} />
             <Line type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={false} />
             <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush}>
@@ -59,7 +65,5 @@ class ACILineChart extends Component {
     );
   }
 }
-
-
 
 export default ACILineChart;

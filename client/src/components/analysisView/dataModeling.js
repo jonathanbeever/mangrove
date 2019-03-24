@@ -180,23 +180,21 @@ export function convertNDSIResults(jobs) {
 export function convertACIResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
   let ret;
-  let aciFlValsL = [];
-  let aciFlValsR = [];
-
-  finished.forEach(function(job){
-    aciFlValsL.push.apply(aciFlValsL, job.result.aciFlValsL);
-    aciFlValsR.push.apply(aciFlValsR, job.result.aciFlValsR);
-  });
 
   ret = {
     graph1:
     {
       data: [],
-      title: "ACI By Seconds",
-      xAxisLabel: "Time (s)",
+      title: "ACI By Seconds Per File",
+      xAxisLabel: "File Name",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight'
+    },
+    graph2:
+    {
+      data: [],
+      title: "ACI Total Value Divided By Minutes",
     },
     graph4:
     {
@@ -218,23 +216,40 @@ export function convertACIResults(jobs) {
     }
   }
 
-  for(var i = 0; i < aciFlValsL.length; i++)
-  {
-    let curObject =
-    {
-      name: ((i + 1) * 5).toString(),
-      aciLeft: aciFlValsL[i],
-      aciRight: aciFlValsR[i]
-    }
-
-    ret.graph1.data.push(curObject);
-  }
-
   finished.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
     let curObject;
+    let inputLen = job.input.durationMs;
+    let len = job.result.aciFlValsL.length;
+    let interval = (inputLen / len) / 1000;
+    let stamp = interval;
+    let fftW = job.spec.fftW;
+    for(var i = 0; i < len; i++)
+    {
+      let asF = parseFloat(stamp);
+      let formatted = (asF).toFixed(2);
+      let curObject =
+      {
+        name: job.input.name,
+        stamp: formatted.toString(),
+        aciLeft: job.result.aciFlValsL[i],
+        aciRight: job.result.aciFlValsR[i]
+      }
+
+      ret.graph1.data.push(curObject);
+      stamp += interval;
+    }
+
+    curObject =
+    {
+      name: job.input.name,
+      aciTotAllByMinL: job.result.aciTotAllByMinL,
+      aciTotAllByMinR: job.result.aciTotAllByMinR
+    }
+
+    ret.graph2.data.push(curObject);
 
     curObject =
     {
@@ -581,9 +596,11 @@ export function convertACIResultsBySite(jobs, sites) {
   let compareResults = convertACIResults(compareSiteJobs);
 
   let chosenBySeconds = chosenResults.graph1;
+  let chosenByFile = chosenResults.graph2;
   let chosenByDate = chosenResults.graph4;
 
   let compareBySeconds = compareResults.graph1;
+  let compareByFile = compareResults.graph2;
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
@@ -594,6 +611,13 @@ export function convertACIResultsBySite(jobs, sites) {
     delete(item['aciRight']);
   });
 
+  compareByFile.data.forEach(item => {
+    item['aciTotAllByMinLC'] = item['aciTotAllByMinL'];
+    item['aciTotAllByMinRC'] = item['aciTotAllByMinR'];
+    delete(item['aciTotAllByMinL']);
+    delete(item['aciTotAllByMinR']);
+  });
+
   compareByDate.data.forEach(item => {
     item['aciLeftC'] = item['aciLeft'];
     item['aciRightC'] = item['aciRight'];
@@ -602,9 +626,11 @@ export function convertACIResultsBySite(jobs, sites) {
   });
 
   let secondsData = chosenBySeconds.data.concat(compareBySeconds.data);
+  let fileData = chosenByFile.data.concat(compareByFile.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
   secondsData = sortByKey(secondsData, 'name');
+  fileData = sortByKey(fileData, 'name');
   dateData = sortByKey(dateData, 'name');
 
   let compressedSecondsData = mergeLikeNames(secondsData);
@@ -613,13 +639,17 @@ export function convertACIResultsBySite(jobs, sites) {
   let ret = {
     graph1: {
       data: compressedSecondsData,
-      title: "Compared Over Seconds",
+      title: "Compared Over Seconds Per File",
       xAxisLabel: "Time (s)",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight',
       dataKey3: 'aciLeftC',
       dataKey4: 'aciRightC'
+    },
+    graph2: {
+      data: fileData,
+      title: "Compared By File",
     },
     graph3: {
       data: compressedDateData,
@@ -638,6 +668,8 @@ export function convertACIResultsBySite(jobs, sites) {
 
 export function convertACIResultsBySeries(jobs, series) {
 
+  console.log(jobs);
+
   const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
   const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 
@@ -645,9 +677,11 @@ export function convertACIResultsBySeries(jobs, series) {
   let compareResults = convertACIResults(compareSeriesJobs);
 
   let chosenBySeconds = chosenResults.graph1;
+  let chosenByFile = chosenResults.graph2;
   let chosenByDate = chosenResults.graph4;
 
   let compareBySeconds = compareResults.graph1;
+  let compareByFile = compareResults.graph2;
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
@@ -658,6 +692,13 @@ export function convertACIResultsBySeries(jobs, series) {
     delete(item['aciRight']);
   });
 
+  compareByFile.data.forEach(item => {
+    item['aciTotAllByMinLC'] = item['aciTotAllByMinL'];
+    item['aciTotAllByMinRC'] = item['aciTotAllByMinR'];
+    delete(item['aciTotAllByMinL']);
+    delete(item['aciTotAllByMinR']);
+  });
+
   compareByDate.data.forEach(item => {
     item['aciLeftC'] = item['aciLeft'];
     item['aciRightC'] = item['aciRight'];
@@ -666,13 +707,19 @@ export function convertACIResultsBySeries(jobs, series) {
   });
 
   let secondsData = chosenBySeconds.data.concat(compareBySeconds.data);
+  let fileData = chosenByFile.data.concat(compareByFile.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
   secondsData = sortByKey(secondsData, 'name');
+  fileData = sortByKey(fileData, 'name');
   dateData = sortByKey(dateData, 'name');
 
   let compressedSecondsData = mergeLikeNames(secondsData);
   let compressedDateData = mergeLikeNames(dateData);
+
+  console.log(fileData);
+  console.log(chosenByFile);
+  console.log(compareByFile);
 
   let ret = {
     graph1: {
@@ -684,6 +731,10 @@ export function convertACIResultsBySeries(jobs, series) {
       dataKey2: 'aciRight',
       dataKey3: 'aciLeftC',
       dataKey4: 'aciRightC'
+    },
+    graph2: {
+      data: fileData,
+      title: "Compared By File",
     },
     graph3: {
       data: compressedDateData,
