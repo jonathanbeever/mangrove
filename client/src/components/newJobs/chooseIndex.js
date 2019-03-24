@@ -110,24 +110,6 @@ avifauna" Boelman, et al. 2007.
         this.setState({ indexInfo: html })
         break;
       }
-      case 'rms': {
-        html = (
-          <div>
-            <h3>Root Mean Squared</h3>
-            <p>
-            Bioacoustic Index from Boelman, et al. 2007. Inspired on Matlab code courtesy of NT Boelman.
-Several parts where changed, in particular log math, so this won’t be directly comparable to the
-original code in the paper.
-The Bioacoustic Index is calculated as the "area under each curve included all frequency bands
-associated with the dB value that was greater than the minimum dB value for each curve. The area
-values are thus a function of both the sound level and the number of frequency bands used by the
-avifauna" Boelman, et al. 2007.
-            </p>
-          </div>
-        )
-        this.setState({ indexInfo: html })
-        break;
-      }
       default:
         break;
     }

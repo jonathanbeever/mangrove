@@ -75,14 +75,36 @@ class ChooseSpecs extends Component {
     // Format text field for each parameter
     var specInputHtml = Object.keys(params).map(param => {
       if(param !== 'shannon') {
-        return (
+        if(param === 'maxFreq' && this.props.index === 'aci') {
+          return (
+            <div key={param} style={{marginBottom: 0, paddingBottom: 0}}>
+              <TextField
+                label={<h6>{param}</h6>}
+                style={{width: '100%'}}
+                value={this.props.specParams[this.props.index][param]}
+                onChange={this.props.onSpecChange(param)}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={params.maxFreq === 'nyquist'}
+                    onChange={this.props.onSpecChange(param)}
+                    style={{color: '#b6cd26', marginBottom: 0, paddingBottom: 0, marginLeft: '10px'}}
+                  />
+                }
+                label={<h6 style={{marginBottom: 0, paddingBottom: 0}}>Nyquist (sample rate / 2)</h6>}
+              />
+            </div>
+          )
+        }
+        else return (
           <TextField
             key={param}
             label={<h6>{param}</h6>}
             style={{width: '100%'}}
             value={this.props.specParams[this.props.index][param]}
             onChange={this.props.onSpecChange(param)}
-          />   
+          />
         )
       }
       else {

@@ -208,7 +208,7 @@ class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
     // TODO: by time
-    orderBy: 'calories',
+    orderBy: '',
     selected: this.props.selectedSpecs,
     data: [
 

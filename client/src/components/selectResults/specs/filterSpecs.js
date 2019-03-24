@@ -122,6 +122,7 @@ class FilterSpecs extends Component {
     const {classes} = this.props
     // Format text field for each parameter
     var specInputHtml = params.map(param => {
+      console.log(param)
       if(param[0] !== 'shannon') {
         return (
           <TextField
@@ -215,7 +216,7 @@ class FilterSpecs extends Component {
   deleteSpecs = () => {
     let requests = [];
     let jobRequests = []
-    console.log(this.props.filteredJobs)
+
     this.props.filteredJobs.forEach(job => {
       console.log(job)
       if(this.state.selected.indexOf(job.spec) !== -1) {
