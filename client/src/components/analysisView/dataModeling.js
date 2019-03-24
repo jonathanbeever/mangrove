@@ -778,14 +778,14 @@ export function convertACIResultsBySeries(jobs, series) {
   fileData = sortByKey(fileData, 'name');
   dateData = sortByKey(dateData, 'name');
 
-  let compressedSecondsData = mergeLikeNames(secondsData);
+  // let compressedSecondsData = mergeLikeNames(secondsData);
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
     graph1: {
-      data: compressedSecondsData,
-      title: "Compared Over Seconds",
-      xAxisLabel: "Time (s)",
+      data: secondsData,
+      title: "Compared By Seconds Per File",
+      xAxisLabel: "File Name",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight',

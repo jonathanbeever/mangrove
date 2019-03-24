@@ -129,14 +129,11 @@ class AnalysisView extends Component {
   }
 
   handleDoNotShowAgain = () => {
-    console.log("hello?");
     this.setState({ checked: true });
   }
 
   handleClose = () => {
     let { checked } = this.state;
-    console.log("In handleclose");
-    console.log(checked);
     if(checked) localStorage.setItem('analysisViewAlert', false);
     this.setState({ open: false });
   };
@@ -258,11 +255,13 @@ class AnalysisView extends Component {
               this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
+            break;
           default:
             graphs = null
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
+        if(index === 'rms') specTitle = "RMS Results";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>
