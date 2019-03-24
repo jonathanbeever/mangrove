@@ -51,6 +51,7 @@ function getStepContent(step, $this) {
           selectedFiles={$this.state.selectedFiles}
           updateSelectedInputs={$this.updateSelectedFiles}
           openDialog={$this.openDialog}
+          startRms={$this.startRms}
         />
       )
     case 1:
@@ -248,6 +249,15 @@ class HorizontalLinearStepper extends React.Component {
     this.setState({ disabledSubmit: false })
   }
 
+  startRms = () => {
+    this.setState({
+      index: 'rms'
+    }, () => {
+      this.submitJob()
+      this.changeIndex('aci')
+    });
+  }
+
   submitJob = () => {
     var message = (
       <div><LinearIntermediate /></div>
@@ -257,6 +267,7 @@ class HorizontalLinearStepper extends React.Component {
     this.setState({open: true})
 
     var inputs = this.state.selectedFiles
+    console.log(inputs, this.state.index)
 
     // use this clear() for dev purposes
     // localStorage.clear();

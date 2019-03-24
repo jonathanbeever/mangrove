@@ -59,7 +59,6 @@ class RadioButtonsGroup extends React.Component {
             <FormControlLabel value="aei" control={<Radio color="primary" />} label={<h5>AEI</h5>} />
             <FormControlLabel value="adi" control={<Radio color="primary" />} label={<h5>ADI</h5>} />
             <FormControlLabel value="bi" control={<Radio color="primary" />} label={<h5>BIO</h5>} />
-            <FormControlLabel value="rms" control={<Radio color="primary" />} label={<h5>RMS</h5>} />
           </RadioGroup>
         </FormControl>
       </div>

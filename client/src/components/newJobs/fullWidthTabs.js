@@ -39,6 +39,10 @@ const styles = theme => ({
   },
   buttons: {
     textAlign: 'center'
+  },
+  button: {
+    paddingLeft: theme.spacing.unit * 3,
+    textAlign: 'center'
   }
 });
 
@@ -102,6 +106,14 @@ class FullWidthTabs extends React.Component {
                     time={this.props.filter.recordTimeMs.time}
                     message='Filter Input Files'
                   />
+                </div>
+                <div className={classes.button}>
+                  <Button
+                    disabled={!this.props.selected.length}
+                    onClick={this.props.startRms}
+                  >
+                    Start RMS Jobs
+                  </Button>
                 </div>
               </div>
               <div className="col-9">

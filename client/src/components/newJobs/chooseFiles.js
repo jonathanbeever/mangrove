@@ -279,6 +279,7 @@ class ChooseFiles extends React.Component {
             uploadFiles={this.uploadFiles}
             addSummaryFile={this.addSummaryFile}
             setNamingConvention={this.setNamingConvention}
+            startRms={this.props.startRms}
           /> : ''}
         </div>
       </div>
