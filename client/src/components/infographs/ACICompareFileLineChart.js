@@ -79,8 +79,18 @@ class ACICompareFileLineChart extends Component {
     return menuItems;
   }
 
+  replaceACI = (compareData) => {
+    compareData.forEach(item => {
+      item['aciLeftC'] = item['aciLeft'];
+      item['aciRightC'] = item['aciRight'];
+      delete(item['aciLeft']);
+      delete(item['aciRight']);
+    });
+    return compareData;
+  }
+
   mergeByStamp = (chosen, compare) => {
-    let bigger = chosen.length > compare.length ? chosen : compare;
+    let bigger = chosen.length >= compare.length ? chosen : compare;
     let smaller = chosen === bigger ? compare : chosen;
     let merged = [];
     let curObject = {};
@@ -91,27 +101,75 @@ class ACICompareFileLineChart extends Component {
       let aciRightC;
       if(i < smaller.length)
       {
-        aciLeftC = smaller[i].aciLeft;
-        aciRightC = smaller[i].aciRight;
+        aciLeftC = smaller[i].aciLeftC;
+        aciRightC = smaller[i].aciRightC;
+        if(thisItem.stamp === smaller[i].stamp)
+        {
+          curObject = {
+            stamp: thisItem.stamp,
+            aciLeft: thisItem.aciLeft,
+            aciRight: thisItem.aciRight,
+            aciLeftC: aciLeftC,
+            aciRightC: aciRightC
+          }
+
+          merged.push(curObject);
+        }else
+        {
+          curObject = {
+            stamp: thisItem.stamp,
+            aciLeft: thisItem.aciLeft,
+            aciRight: thisItem.aciRight,
+            aciLeftC: undefined,
+            aciRightC: undefined
+          }
+
+          merged.push(curObject);
+
+          curObject = {
+            stamp: smaller[i].stamp,
+            aciLeft: undefined,
+            aciRight: undefined,
+            aciLeftC: aciLeftC,
+            aciRightC: aciRightC
+          }
+
+          merged.push(curObject);
+        }
       }else
       {
         aciLeftC = undefined;
         aciRightC = undefined;
-      }
+        curObject = {
+          stamp: thisItem.stamp,
+          aciLeft: thisItem.aciLeft,
+          aciRight: thisItem.aciRight,
+          aciLeftC: aciLeftC,
+          aciRightC: aciRightC
+        }
 
-      curObject = {
-        stamp: thisItem.stamp,
-        aciLeft: thisItem.aciLeft,
-        aciRight: thisItem.aciRight,
-        aciLeftC: aciLeftC,
-        aciRightC: aciRightC
+        merged.push(curObject);
       }
-      merged.push(curObject);
     }
-    return merged;
+
+    return this.sortByKey(merged, "stamp");
+  }
+
+  sortByKey = (array, key) => {
+      return array.sort(function(a, b) {
+          var x = a[key]; var y = b[key];
+          let fromFloatX = parseFloat(x);
+          let fromFloatY = parseFloat(y);
+          return ((fromFloatX < fromFloatY) ? -1 : ((fromFloatX > fromFloatY) ? 1 : 0));
+      });
   }
 
   formatJob = (chosen, compare) => {
+    chosen = this.sortByKey(chosen, "stamp");
+    compare = this.sortByKey(compare, "stamp");
+    console.log(chosen);
+    console.log(compare);
+    if(compare[0]['aciLeftC'] === undefined) compare = this.replaceACI(compare);
     let formattedCompare = this.mergeByStamp(chosen, compare);
     return formattedCompare;
   }
@@ -197,10 +255,10 @@ class ACICompareFileLineChart extends Component {
             </YAxis>
             <Legend />
             <Tooltip/>
-            <Line type='monotone' dataKey={dataKey1} stroke='#8884d8' dot={false} />
-            <Line type='monotone' dataKey={dataKey2} stroke='#82ca9d' dot={false} />
-            <Line type='monotone' dataKey={dataKey3} stroke='#e79797' dot={false} />
-            <Line type='monotone' dataKey={dataKey4} stroke='#ed9f37' dot={false} />
+            <Line connectNulls={true} type='monotone' dataKey={dataKey1} stroke='#8884d8' dot={false} />
+            <Line connectNulls={true} type='monotone' dataKey={dataKey2} stroke='#82ca9d' dot={false} />
+            <Line connectNulls={true} type='monotone' dataKey={dataKey3} stroke='#e79797' dot={false} />
+            <Line connectNulls={true} type='monotone' dataKey={dataKey4} stroke='#ed9f37' dot={false} />
             <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
           </LineChart>
           :

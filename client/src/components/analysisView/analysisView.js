@@ -67,7 +67,6 @@ class AnalysisView extends Component {
     }
     console.log(selectedJobs);
     this.formatState(selectedJobs);
-    console.log(selectedJobs)
   }
 
   analysisViewAlertCallback = () => {
@@ -79,7 +78,7 @@ class AnalysisView extends Component {
   }
 
   refreshJobs = () => {
-    
+
     let { selectedJobs, unfinished } = this.state;
 
     if(selectedJobs === undefined || unfinished === undefined) return;
@@ -155,7 +154,6 @@ class AnalysisView extends Component {
   }
 
   formatState = (selectedJobs) => {
-    console.log(selectedJobs)
     let series = [];
     let sites = [];
 
@@ -538,7 +536,6 @@ class AnalysisView extends Component {
 
     let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.state;
-    console.log(this.state)
     let index;
     let item;
     let specId;
@@ -562,10 +559,8 @@ class AnalysisView extends Component {
         index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
       }
     }
-    console.log(jobs)
     // create base graphs
     this.formatJob(filteredChosenJobs);
-    console.log(jobs)
 
     // check if user has selected a site to compare
     if(chosenCompareSite)
@@ -589,8 +584,6 @@ class AnalysisView extends Component {
     {
       // get jobs from fullJobs where the site and series match
       filteredSelectedJobs = selectedJobs;
-      console.log(filteredSelectedJobs)
-      console.log(jobs)
       for(item in filteredSelectedJobs)
       {
         index = filteredSelectedJobs[item];
@@ -600,7 +593,6 @@ class AnalysisView extends Component {
           index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
         }
       }
-      console.log(filteredSelectedJobs)
 
       this.formatJobSeries(filteredSelectedJobs);
     }
