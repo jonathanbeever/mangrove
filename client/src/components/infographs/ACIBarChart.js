@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BarChart, Bar, Label, Brush, ReferenceLine, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
+import {BarChart, Bar, Label, Brush, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 
 class ACIBarChart extends Component {

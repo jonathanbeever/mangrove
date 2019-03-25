@@ -243,6 +243,8 @@ class HorizontalLinearStepper extends React.Component {
       case 'rms': {
         break;
       }
+      default:
+
     }
 
     this.setState({ specParams: params })

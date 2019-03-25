@@ -258,7 +258,6 @@ export function convertACIResults(jobs) {
     let len = job.result.aciFlValsL.length;
     let interval = (inputLen / len) / 1000;
     let stamp = interval;
-    let fftW = job.spec.fftW;
     for(var i = 0; i < len; i++)
     {
       let asF = parseFloat(stamp);
@@ -710,14 +709,14 @@ export function convertACIResultsBySite(jobs, sites) {
   fileData = sortByKey(fileData, 'name');
   dateData = sortByKey(dateData, 'name');
 
-  let compressedSecondsData = mergeLikeNames(secondsData);
+  // let compressedSecondsData = mergeLikeNames(secondsData);
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
     graph1: {
-      data: compressedSecondsData,
+      data: secondsData,
       title: "Compared Over Seconds Per File",
-      xAxisLabel: "Time (s)",
+      xAxisLabel: "File Name",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight',
@@ -784,7 +783,7 @@ export function convertACIResultsBySeries(jobs, series) {
   let ret = {
     graph1: {
       data: secondsData,
-      title: "Compared By Seconds Per File",
+      title: "Compared Over Seconds Per File",
       xAxisLabel: "File Name",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',

@@ -8,6 +8,7 @@ import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart
 import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
+import ACICompareFileLineChart from '../infographs/ACICompareFileLineChart';
 import ADIAEILineChart from '../infographs/ADIAEILineChart';
 import ADIAEICompareLineChart from '../infographs/ADIAEICompareLineChart';
 import BAAreaChart from '../infographs/BAAreaChart';
@@ -96,6 +97,19 @@ class GraphsTable extends React.Component {
                   />}
                 />
               )
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graphSeconds'+ctr}
+                  title="Compare Files By Seconds"
+                  graph={<ACICompareFileLineChart
+                    results={obj.data}
+                    dataKey1='aciLeft'
+                    dataKey2='aciRight'
+                    dataKey3='aciLeftC'
+                    dataKey4='aciRightC'
+                  />}
+                />
+              )
             }else{
               rows.push(
                 <GraphExpansionPanel
@@ -124,6 +138,20 @@ class GraphsTable extends React.Component {
                 title={obj.title}
                 graph={<ACICompareBarChart
                   results={obj.data}
+                />}
+              />
+            )
+          }else if(obj.title === "Compared Over Seconds Per File"){
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                graph={<ACICompareFileLineChart
+                  results={obj.data}
+                  dataKey1='aciLeft'
+                  dataKey2='aciRight'
+                  dataKey3='aciLeftC'
+                  dataKey4='aciRightC'
                 />}
               />
             )
