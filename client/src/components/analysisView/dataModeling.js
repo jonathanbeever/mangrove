@@ -68,10 +68,12 @@ export function isEmpty(obj) {
 export function convertRMSResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
   let ret = {
-    data: [],
-    avgL: 0,
-    avgR: 0,
-    title: "RMS By File"
+    graph1: {
+      data: [],
+      avgL: 0,
+      avgR: 0,
+      title: "RMS By File"
+    }
   }
 
   let avgL = 0;
@@ -88,12 +90,12 @@ export function convertRMSResults(jobs) {
       rmsR: job.result.rmsR
     }
 
-    ret.data.push(curObject);
+    ret.graph1.data.push(curObject);
   });
 
   let len = finished.length;
-  ret.avgL = avgL / len;
-  ret.avgR = avgR / len;
+  ret.graph1.avgL = avgL / len;
+  ret.graph1.avgR = avgR / len;
 
   return ret;
 }
@@ -644,7 +646,7 @@ export function convertRMSResultsBySite(jobs, sites) {
 
   compareResults = replaceRMS(compareResults);
 
-  chosenResults.data.concat(compareResults);
+  chosenResults.graph1.data.concat(compareResults);
 
   return chosenResults;
 }

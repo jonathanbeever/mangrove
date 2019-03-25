@@ -64,6 +64,7 @@ class AnalysisView extends Component {
     if(localStorage.getItem('analysisViewAlert') === null){
       localStorage.setItem('analysisViewAlert', true);
     }
+    console.log(selectedJobs);
     this.formatState(selectedJobs);
   }
 
@@ -373,6 +374,7 @@ class AnalysisView extends Component {
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
+        if(index === 'rms') specTitle = "RMS Compared By Site";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>
@@ -381,7 +383,7 @@ class AnalysisView extends Component {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SpecAnalysisPanel
-                index={index}
+                index={index+"-compare"}
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
@@ -488,6 +490,7 @@ class AnalysisView extends Component {
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
+        if(index === 'rms') specTitle = "RMS Compared By Series";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>
@@ -623,7 +626,7 @@ class AnalysisView extends Component {
   // Creates the items seen in the site menu
   siteMenuItems = (siteNames) => {
     const menuItems = siteNames.map(site => {
-      return <MenuItem value={"site"+site} key={site} value={site}>{site}</MenuItem>
+      return <MenuItem key={"site"+site} value={site}>{site}</MenuItem>
     });
     return menuItems;
   }

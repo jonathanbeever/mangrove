@@ -14,8 +14,8 @@ class RMSBarChart extends Component {
 
     return(
       <div>
-        <h5>RMS Left Channel Total: {this.props.results.avgL}</h5>
-        <h5>RMS Right Channel Total: {this.props.results.avgR}</h5>
+        <h5>RMS Left Channel Total: {this.formatYAxis(this.props.results.avgL)}</h5>
+        <h5>RMS Right Channel Total: {this.formatYAxis(this.props.results.avgR)}</h5>
         <BarChart width={900} height={600} data={data}
           margin={{top: 10, right: 30, left: 0, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" />

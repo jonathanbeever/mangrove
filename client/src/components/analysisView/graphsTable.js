@@ -35,6 +35,7 @@ class GraphsTable extends React.Component {
   render()
   {
     let { graphs, index } = this.props;
+    console.log(graphs);
     const rows = [];
     let ctr = 1;
     for (var key in graphs) {

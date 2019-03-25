@@ -10,14 +10,14 @@ class RMSCompareBarChart extends Component {
 
   render(){
 
-    let data = this.props.results;
+    let data = this.props.results.data;
 
     return(
       <div>
-        <h5>RMS Left Channel Total: {data.avgL}</h5>
-        <h5>RMS Left Channel Compare Total: {data.avgLC}</h5>
-        <h5>RMS Right Channel Total: {data.avgR}</h5>
-        <h5>RMS Right Channel Compare Total: {data.avgRC}</h5>
+        <h5>RMS Left Channel Total: {this.formatYAxis(this.props.results.avgL)}</h5>
+        <h5>RMS Left Channel Compare Total: {this.formatYAxis(this.props.results.avgLC)}</h5>
+        <h5>RMS Right Channel Total: {this.formatYAxis(this.props.results.avgR)}</h5>
+        <h5>RMS Right Channel Compare Total: {this.formatYAxis(this.props.results.avgRC)}</h5>
         <BarChart width={900} height={600} data={data}
           margin={{top: 10, right: 30, left: 0, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" />
