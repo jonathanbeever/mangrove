@@ -24,6 +24,7 @@ const newInputKeys = (includeOptional = false) => {
   keys.splice(keys.indexOf('durationMs'), 1);
   keys.splice(keys.indexOf('sampleRateHz'), 1);
   keys.splice(keys.indexOf('sizeBytes'), 1);
+  keys.splice(keys.indexOf('downloadUrl'), 1);
 
   return keys;
 };

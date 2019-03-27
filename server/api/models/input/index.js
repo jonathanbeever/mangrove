@@ -27,4 +27,5 @@ module.exports = mongoose.model('Input', new mongoose.Schema({
     },
     required: true,
   },
+  downloadUrl: { type: String, required: true },
 }));

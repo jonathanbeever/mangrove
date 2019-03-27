@@ -205,6 +205,7 @@ describe('Inputs', () => {
       expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
       expect(res.body.sizeBytes).to.equal(input.sizeBytes);
       expect(res.body.coords).to.eql(input.coords);
+      expect(res.body.downloadUrl).to.equal(input.downloadUrl); // TODO: Actual download
       expect(input.path).to.be.a.file()
         .and.equal(testInputFile);
     });
@@ -232,6 +233,7 @@ describe('Inputs', () => {
       expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
       expect(res.body.sizeBytes).to.equal(input.sizeBytes);
       expect(res.body.coords).to.eql(input.coords);
+      expect(res.body.downloadUrl).to.equal(input.downloadUrl); // TODO: Actual download
       expect(input.path).to.be.a.file()
         .and.equal(testInputFile);
     });
@@ -268,6 +270,7 @@ describe('Inputs', () => {
       expect(res.body.sampleRateHz).to.equal(input.sampleRateHz);
       expect(res.body.sizeBytes).to.equal(input.sizeBytes);
       expect(res.body.coords).to.eql(input.coords);
+      expect(res.body.downloadUrl).to.equal(input.downloadUrl); // TODO: Actual download
       expect(input.path).to.be.a.file()
         .and.equal(testInputFile);
     });
@@ -312,6 +315,7 @@ describe('Inputs', () => {
         expect(input.sampleRateHz).to.equal(inputs[index].sampleRateHz);
         expect(input.sizeBytes).to.equal(inputs[index].sizeBytes);
         expect(input.coords).to.eql(inputs[index].coords);
+        expect(input.downloadUrl).to.equal(inputs[index].downloadUrl); // TODO: Actual download
         expect(inputs[index].path).to.be.a.file()
           .and.equal(testInputFile);
       });

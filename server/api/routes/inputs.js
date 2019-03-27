@@ -117,6 +117,7 @@ router.put('/', (req, res) => {
           lat: parsedJson.coords.lat,
           long: parsedJson.coords.long,
         },
+        downloadUrl: req.file.path, // TODO: Actual download URL
       });
 
       const createResult = await Input.create(input);
@@ -134,6 +135,7 @@ router.put('/', (req, res) => {
           lat: createResult.coords.lat,
           long: createResult.coords.long,
         },
+        downloadUrl: createResult.downloadUrl, // TODO: Actual download URL
       });
     } catch (err) {
       console.error(err);
@@ -168,6 +170,7 @@ router.get('/:inputId', async (req, res) => {
         lat: searchResult.coords.lat,
         long: searchResult.coords.long,
       },
+      downloadUrl: searchResult.downloadUrl, // TODO: Actual download URL
     });
   } catch (err) {
     console.error(err);
@@ -195,6 +198,7 @@ router.get('/', async (req, res) => {
           lat: input.coords.lat,
           long: input.coords.long,
         },
+        downloadUrl: input.downloadUrl, // TODO: Actual download link
       })),
     });
   } catch (err) {
