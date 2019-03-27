@@ -184,19 +184,19 @@ class HorizontalLinearStepper extends React.Component {
       var keys = Object.keys(params[this.state.index])
 
       keys.forEach(key => {
-        if(key === 'shannon') 
+        if(key === 'shannon')
           params[this.state.index][key] = false
         else
           params[this.state.index][key] = ''
       })
-      
+
       this.setState({ specParams: params })
       this.setState({ disabledSubmit: true })
     }
     else
       this.setDefaultSpecs()
   }
-  
+
   setDefaultSpecs = () => {
     var params = this.state.specParams
 
@@ -243,6 +243,8 @@ class HorizontalLinearStepper extends React.Component {
       case 'rms': {
         break;
       }
+      default:
+
     }
 
     this.setState({ specParams: params })
@@ -267,7 +269,7 @@ class HorizontalLinearStepper extends React.Component {
     this.setState({open: true})
 
     var inputs = this.state.selectedFiles
-    console.log(inputs, this.state.index)
+    // console.log(inputs, this.state.index)
 
     // use this clear() for dev purposes
     // localStorage.clear();

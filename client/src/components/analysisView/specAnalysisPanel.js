@@ -4,7 +4,6 @@ import GraphsTable from './graphsTable';
 class SpecAnalysisPanel extends Component {
 
   render(){
-
     return(
       <div>
         <GraphsTable

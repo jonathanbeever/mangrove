@@ -8,12 +8,17 @@ import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart
 import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
+import ACICompareFileLineChart from '../infographs/ACICompareFileLineChart';
 import ADIAEILineChart from '../infographs/ADIAEILineChart';
 import ADIAEICompareLineChart from '../infographs/ADIAEICompareLineChart';
 import BAAreaChart from '../infographs/BAAreaChart';
 import BALineChart from '../infographs/BALineChart';
 import BADualLineChart from '../infographs/BADualLineChart';
 import BACompareAreaChart from '../infographs/BACompareAreaChart';
+import ACIBarChart from '../infographs/ACIBarChart';
+import ACICompareBarChart from '../infographs/ACICompareBarChart';
+import RMSBarChart from '../infographs/RMSBarChart';
+import RMSCompareBarChart from '../infographs/RMSCompareBarChart';
 
 const styles = theme => ({
   root: {
@@ -39,41 +44,135 @@ class GraphsTable extends React.Component {
       var obj = graphs[key];
       switch(index)
       {
-        case "aci":
+        case "rms":
           rows.push(
             <GraphExpansionPanel
               key={'graph'+ctr}
               title={obj.title}
-              data={obj.data}
-              graph={<ACILineChart
-                callback={this.props.callback}
-                results={obj.data}
-                xAxisLabel={obj.xAxisLabel}
-                yAxisLabel={obj.yAxisLabel}
-                dataKey1={obj.dataKey1}
-                dataKey2={obj.dataKey2}
+              graph={<RMSBarChart
+                results={obj}
               />}
             />
           )
           break;
-        case "aci-compare":
+        case "rms-compare":
           rows.push(
             <GraphExpansionPanel
               key={'graph'+ctr}
               title={obj.title}
-              data={obj.data}
-              graph={<ACIDualLineChart
-                callback={this.props.callback}
-                results={obj.data}
-                xAxisLabel={obj.xAxisLabel}
-                yAxisLabel={obj.yAxisLabel}
-                dataKey1={obj.dataKey1}
-                dataKey2={obj.dataKey2}
-                dataKey3={obj.dataKey3}
-                dataKey4={obj.dataKey4}
+              graph={<RMSCompareBarChart
+                results={obj}
               />}
             />
           )
+          break;
+        case "aci":
+          if(obj.title === "ACI Total Value Divided By Minutes")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                graph={<ACIBarChart
+                  results={obj.data}
+                />}
+              />
+            )
+          }else
+          {
+            if(obj.title === "ACI By Seconds Per File")
+            {
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ACILineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    custom={true}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                  />}
+                />
+              )
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graphSeconds'+ctr}
+                  title="Compare Files By Seconds"
+                  graph={<ACICompareFileLineChart
+                    results={obj.data}
+                    dataKey1='aciLeft'
+                    dataKey2='aciRight'
+                    dataKey3='aciLeftC'
+                    dataKey4='aciRightC'
+                  />}
+                />
+              )
+            }else{
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ACILineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    custom={false}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                  />}
+                />
+              )
+            }
+          }
+          break;
+        case "aci-compare":
+          if(obj.title === "Compared By File")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                graph={<ACICompareBarChart
+                  results={obj.data}
+                />}
+              />
+            )
+          }else if(obj.title === "Compared Over Seconds Per File"){
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                graph={<ACICompareFileLineChart
+                  results={obj.data}
+                  dataKey1='aciLeft'
+                  dataKey2='aciRight'
+                  dataKey3='aciLeftC'
+                  dataKey4='aciRightC'
+                />}
+              />
+            )
+          }else{
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                graph={<ACIDualLineChart
+                  callback={this.props.callback}
+                  results={obj.data}
+                  xAxisLabel={obj.xAxisLabel}
+                  yAxisLabel={obj.yAxisLabel}
+                  dataKey1={obj.dataKey1}
+                  dataKey2={obj.dataKey2}
+                  dataKey3={obj.dataKey3}
+                  dataKey4={obj.dataKey4}
+                />}
+              />
+            )
+          }
           break;
         case "ndsi":
           switch(obj.title)
@@ -83,7 +182,6 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
-                  data={obj.data}
                   graph={<NDSIChannelBarChart
                     callback={this.props.callback}
                     results={obj.data}
@@ -96,7 +194,6 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
-                  data={obj.data}
                   graph={<NDSIValuesBarChart
                     callback={this.props.callback}
                     results={obj.data}
@@ -109,7 +206,6 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
-                  data={obj.data}
                   graph={<NDSIValuesLineChart
                     callback={this.props.callback}
                     results={obj.data}
@@ -130,7 +226,6 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
-                  data={obj.data}
                   graph={<NDSIChannelCompareBarChart
                     callback={this.props.callback}
                     results={obj.data}
@@ -143,7 +238,6 @@ class GraphsTable extends React.Component {
                 <GraphExpansionPanel
                   key={'graph'+ctr}
                   title={obj.title}
-                  data={obj.data}
                   graph={<NDSIValuesCompareBarChart
                     callback={this.props.callback}
                     results={obj.data}
@@ -162,7 +256,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEILineChart
                   callback={this.props.callback}
                   reference={true}
@@ -184,7 +277,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEILineChart
                   callback={this.props.callback}
                   reference={false}
@@ -209,7 +301,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEICompareLineChart
                   callback={this.props.callback}
                   reference={true}
@@ -237,7 +328,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEICompareLineChart
                   callback={this.props.callback}
                   reference={false}
@@ -268,7 +358,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEILineChart
                   callback={this.props.callback}
                   reference={true}
@@ -290,7 +379,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEILineChart
                   callback={this.props.callback}
                   reference={false}
@@ -315,7 +403,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEICompareLineChart
                   callback={this.props.callback}
                   reference={true}
@@ -343,7 +430,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<ADIAEICompareLineChart
                   callback={this.props.callback}
                   reference={false}
@@ -374,7 +460,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<BAAreaChart
                   callback={this.props.callback}
                   results={obj.data}
@@ -390,7 +475,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<BALineChart
                   callback={this.props.callback}
                   results={obj.data}
@@ -408,7 +492,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<BACompareAreaChart
                   callback={this.props.callback}
                   results={obj.data}
@@ -426,7 +509,6 @@ class GraphsTable extends React.Component {
               <GraphExpansionPanel
                 key={'graph'+ctr}
                 title={obj.title}
-                data={obj.data}
                 graph={<BADualLineChart
                   callback={this.props.callback}
                   results={obj.data}

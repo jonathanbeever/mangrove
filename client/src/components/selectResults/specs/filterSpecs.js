@@ -122,7 +122,7 @@ class FilterSpecs extends Component {
     const {classes} = this.props
     // Format text field for each parameter
     var specInputHtml = params.map(param => {
-      console.log(param)
+      // console.log(param)
       if(param[0] !== 'shannon') {
         return (
           <TextField
@@ -218,7 +218,7 @@ class FilterSpecs extends Component {
     let jobRequests = []
 
     this.props.filteredJobs.forEach(job => {
-      console.log(job)
+      // console.log(job)
       if(this.state.selected.indexOf(job.spec) !== -1) {
         jobRequests.push(axios.delete('http://localhost:3000/jobs/'+job.jobId))
       }
@@ -231,7 +231,7 @@ class FilterSpecs extends Component {
     Promise.all(requests)
       .then(responses => {
         // TODO: notify based on response status
-        console.log(responses)
+        // console.log(responses)
         this.setState({ message: this.state.selected.length + ' spec(s) deleted and ' + jobRequests.length + ' corresponding job(s) deleted.' })
         this.setState({ buttons: ['Close'] })
         this.setState({ open: true })

@@ -15,7 +15,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
@@ -24,6 +23,7 @@ import { withStyles } from '@material-ui/core/styles';
 import * as utils from './dataModeling.js';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
+var _ = require('lodash');
 
 const styles = theme => ({
   selectEmpty: {
@@ -65,6 +65,7 @@ class AnalysisView extends Component {
     if(localStorage.getItem('analysisViewAlert') === null){
       localStorage.setItem('analysisViewAlert', true);
     }
+    console.log(selectedJobs);
     this.formatState(selectedJobs);
   }
 
@@ -128,14 +129,11 @@ class AnalysisView extends Component {
   }
 
   handleDoNotShowAgain = () => {
-    console.log("hello?");
     this.setState({ checked: true });
   }
 
   handleClose = () => {
     let { checked } = this.state;
-    console.log("In handleclose");
-    console.log(checked);
     if(checked) localStorage.setItem('analysisViewAlert', false);
     this.setState({ open: false });
   };
@@ -156,7 +154,6 @@ class AnalysisView extends Component {
   }
 
   formatState = (selectedJobs) => {
-
     let series = [];
     let sites = [];
 
@@ -178,12 +175,6 @@ class AnalysisView extends Component {
           }
         });
       }
-    }
-
-    let unfinished = this.hasUnfinished(selectedJobs);
-    if(unfinished.length > 0){
-      this.setState({ unfinished: unfinished });
-      this.interval = setInterval(() => this.refreshJobs(), 2000);
     }
 
     this.setState({ siteNames: sites });
@@ -220,6 +211,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertACIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -227,6 +219,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertNDSIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -234,6 +227,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertADIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -241,6 +235,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertAEIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -248,6 +243,15 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertBIResults(obj[spec]);
             }catch(error){
+              this.setState({ errorMessage: error });
+              this.setState({ errorMode: true });
+            }
+            break;
+          case "rms":
+            try{
+              graphs = utils.convertRMSResults(obj[spec]);
+            }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -256,6 +260,7 @@ class AnalysisView extends Component {
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
+        if(index === 'rms') specTitle = "RMS Results";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>
@@ -320,6 +325,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertACIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -327,6 +333,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertNDSIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -334,6 +341,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertADIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -341,6 +349,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertAEIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -348,6 +357,15 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertBIResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
             }catch(error){
+              this.setState({ errorMessage: error });
+              this.setState({ errorMode: true });
+            }
+            break;
+          case "rms":
+            try{
+              graphs = utils.convertRMSResultsBySite(obj[spec], [chosenSite, chosenCompareSite]);
+            }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -356,6 +374,7 @@ class AnalysisView extends Component {
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
+        if(index === 'rms') specTitle = "RMS Compared By Site";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>
@@ -364,7 +383,7 @@ class AnalysisView extends Component {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SpecAnalysisPanel
-                index={index}
+                index={index+"-compare"}
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
@@ -422,6 +441,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertACIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -429,6 +449,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertNDSIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -436,6 +457,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertADIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -443,6 +465,7 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertAEIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
             break;
@@ -450,14 +473,25 @@ class AnalysisView extends Component {
             try{
               graphs = utils.convertBIResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
             }catch(error){
+              this.setState({ errorMessage: error });
               this.setState({ errorMode: true });
             }
+            break;
+          case "rms":
+            graphs = utils.convertRMSResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            // try{
+            //   graphs = utils.convertRMSResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            // }catch(error){
+            //   this.setState({ errorMessage: error });
+            //   this.setState({ errorMode: true });
+            // }
             break;
           default:
             graphs = null
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
+        if(index === 'rms') specTitle = "RMS Compared By Series";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>
@@ -503,15 +537,20 @@ class AnalysisView extends Component {
 
     let { chosenSite, chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     let { selectedJobs } = this.state;
-
     let index;
     let item;
     let specId;
     let jobs;
     let filteredSelectedJobs;
 
+    let unfinished = this.hasUnfinished(selectedJobs);
+    if(unfinished.length > 0){
+      this.setState({ unfinished: unfinished });
+      if(this.interval === undefined) this.interval = setInterval(() => this.refreshJobs(), 10000);
+    }
+
     // get jobs for only the chosen site and series
-    let filteredChosenJobs = selectedJobs;
+    let filteredChosenJobs = _.cloneDeep(selectedJobs);
     for(item in filteredChosenJobs)
     {
       index = filteredChosenJobs[item];
@@ -521,7 +560,6 @@ class AnalysisView extends Component {
         index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
       }
     }
-
     // create base graphs
     this.formatJob(filteredChosenJobs);
 
@@ -556,6 +594,7 @@ class AnalysisView extends Component {
           index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
         }
       }
+
       this.formatJobSeries(filteredSelectedJobs);
     }
   }
@@ -587,7 +626,7 @@ class AnalysisView extends Component {
   // Creates the items seen in the site menu
   siteMenuItems = (siteNames) => {
     const menuItems = siteNames.map(site => {
-      return <MenuItem key={site} value={site}>{site}</MenuItem>
+      return <MenuItem key={"site"+site} value={site}>{site}</MenuItem>
     });
     return menuItems;
   }
@@ -597,8 +636,8 @@ class AnalysisView extends Component {
     let { chosenSite } = this.state;
 
     const siteNamesWithoutChosen = siteNames.filter(site => site !== chosenSite);
-    const menuItems = [<MenuItem value=""><em>None</em></MenuItem>].concat(siteNamesWithoutChosen.map(site => {
-      return <MenuItem value={site}>{site}</MenuItem>
+    const menuItems = [<MenuItem key="siteNone" value=""><em>None</em></MenuItem>].concat(siteNamesWithoutChosen.map(site => {
+      return <MenuItem key={"siteCompare"+site} value={site}>{site}</MenuItem>
     }));
 
     return menuItems;
@@ -607,7 +646,7 @@ class AnalysisView extends Component {
   // Creates the items seen in the series menu
   seriesMenuItems = (seriesNames) => {
     const menuItems = seriesNames.map(series => {
-      return <MenuItem value={series}>{series}</MenuItem>
+      return <MenuItem key={"series"+series} value={series}>{series}</MenuItem>
     });
     return menuItems;
   }
@@ -617,8 +656,8 @@ class AnalysisView extends Component {
     let { chosenSeries } = this.state;
 
     const seriesNamesWithoutChosen = seriesNames.filter(site => site !== chosenSeries);
-    const menuItems = [<MenuItem value=""><em>None</em></MenuItem>].concat(seriesNamesWithoutChosen.map(series => {
-      return <MenuItem value={series}>{series}</MenuItem>
+    const menuItems = [<MenuItem key={"seriesNone"} value=""><em>None</em></MenuItem>].concat(seriesNamesWithoutChosen.map(series => {
+      return <MenuItem key={"seriesCompare"+series} value={series}>{series}</MenuItem>
     }));
 
     return menuItems;
@@ -626,15 +665,15 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, unfinished, formattedJob, comparedJobsSite,
+    let { errorMode, formattedJob, comparedJobsSite,
           comparedJobsSeries, siteNames, seriesNames, chosenSite,
-          chosenSeries, chosenCompareSite, chosenCompareSeries, selectedJobs } = this.state;
+          chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
     const { classes } = this.props;
 
     return (
       <div style={{ marginBottom:25+'px' }}>
         {errorMode ?
-        'An error occurred. This is likely due to an error in job processing'
+        'An error occurred. ' + this.state.errorMessage
         :
         <div>
           <Paper style={{ marginTop:10+'px' }}>

@@ -65,6 +65,41 @@ export function isEmpty(obj) {
 }
 
 /********** Base graph data modeling functions **********/
+export function convertRMSResults(jobs) {
+  let finished = jobs.filter(x => x.status === "finished");
+  let ret = {
+    graph1: {
+      data: [],
+      avgL: 0,
+      avgR: 0,
+      title: "RMS By File"
+    }
+  }
+
+  let avgL = 0;
+  let avgR = 0;
+
+  let curObject = {};
+  finished.forEach(job => {
+    avgL += job.result.rmsL;
+    avgR += job.result.rmsR;
+
+    curObject = {
+      name: job.input.name,
+      rmsL: job.result.rmsL,
+      rmsR: job.result.rmsR
+    }
+
+    ret.graph1.data.push(curObject);
+  });
+
+  let len = finished.length;
+  ret.graph1.avgL = avgL / len;
+  ret.graph1.avgR = avgR / len;
+
+  return ret;
+}
+
 export function convertNDSIResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
   let ret;
@@ -180,23 +215,21 @@ export function convertNDSIResults(jobs) {
 export function convertACIResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
   let ret;
-  let aciFlValsL = [];
-  let aciFlValsR = [];
-
-  finished.forEach(function(job){
-    aciFlValsL.push.apply(aciFlValsL, job.result.aciFlValsL);
-    aciFlValsR.push.apply(aciFlValsR, job.result.aciFlValsR);
-  });
 
   ret = {
     graph1:
     {
       data: [],
-      title: "ACI By Seconds",
-      xAxisLabel: "Time (s)",
+      title: "ACI By Seconds Per File",
+      xAxisLabel: "File Name",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight'
+    },
+    graph2:
+    {
+      data: [],
+      title: "ACI Total Value Divided By Minutes",
     },
     graph4:
     {
@@ -218,23 +251,39 @@ export function convertACIResults(jobs) {
     }
   }
 
-  for(var i = 0; i < aciFlValsL.length; i++)
-  {
-    let curObject =
-    {
-      name: ((i + 1) * 5).toString(),
-      aciLeft: aciFlValsL[i],
-      aciRight: aciFlValsR[i]
-    }
-
-    ret.graph1.data.push(curObject);
-  }
-
   finished.forEach(function(job){
     let date = new Date(job.input.recordTimeMs);
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
     let curObject;
+    let inputLen = job.input.durationMs;
+    let len = job.result.aciFlValsL.length;
+    let interval = (inputLen / len) / 1000;
+    let stamp = interval;
+    for(var i = 0; i < len; i++)
+    {
+      let asF = parseFloat(stamp);
+      let formatted = (asF).toFixed(2);
+      let curObject =
+      {
+        name: job.input.name,
+        stamp: formatted.toString(),
+        aciLeft: job.result.aciFlValsL[i],
+        aciRight: job.result.aciFlValsR[i]
+      }
+
+      ret.graph1.data.push(curObject);
+      stamp += interval;
+    }
+
+    curObject =
+    {
+      name: job.input.name,
+      aciTotAllByMinL: job.result.aciTotAllByMinL,
+      aciTotAllByMinR: job.result.aciTotAllByMinR
+    }
+
+    ret.graph2.data.push(curObject);
 
     curObject =
     {
@@ -572,6 +621,55 @@ export function convertBIResults(jobs) {
 }
 
 /********** Comparison graph data modeling functions **********/
+
+export function convertRMSResultsBySite(jobs, sites) {
+
+  const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
+  const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
+
+  let chosenResults = convertRMSResults(chosenSiteJobs);
+  let compareResults = convertRMSResults(compareSiteJobs);
+
+  let chosenData = chosenResults.graph1.data;
+  let compareData = compareResults.graph1.data;
+  let concat = chosenData.concat(compareData);
+
+  chosenResults.graph1.data = concat;
+  chosenResults.graph1['avgLC'] = compareResults.graph1.avgL;
+  chosenResults.graph1['avgRC'] = compareResults.graph1.avgR;
+
+  return chosenResults;
+}
+
+export function convertRMSResultsBySeries(jobs, series) {
+
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
+
+  let chosenResults = convertRMSResults(chosenSeriesJobs);
+  let compareResults = convertRMSResults(compareSeriesJobs);
+
+  let chosenData = chosenResults.graph1.data;
+  let compareData = compareResults.graph1.data;
+  let concat = chosenData.concat(compareData);
+
+  chosenResults.graph1.data = concat;
+  chosenResults.graph1['avgLC'] = compareResults.graph1.avgL;
+  chosenResults.graph1['avgRC'] = compareResults.graph1.avgR;
+
+  return chosenResults;
+}
+
+function replaceACI(compareData){
+  compareData.data.forEach(item => {
+    item['aciLeftC'] = item['aciLeft'];
+    item['aciRightC'] = item['aciRight'];
+    delete(item['aciLeft']);
+    delete(item['aciRight']);
+  });
+  return compareData;
+}
+
 export function convertACIResultsBySite(jobs, sites) {
 
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
@@ -581,45 +679,49 @@ export function convertACIResultsBySite(jobs, sites) {
   let compareResults = convertACIResults(compareSiteJobs);
 
   let chosenBySeconds = chosenResults.graph1;
+  let chosenByFile = chosenResults.graph2;
   let chosenByDate = chosenResults.graph4;
 
   let compareBySeconds = compareResults.graph1;
+  let compareByFile = compareResults.graph2;
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareBySeconds.data.forEach(item => {
-    item['aciLeftC'] = item['aciLeft'];
-    item['aciRightC'] = item['aciRight'];
-    delete(item['aciLeft']);
-    delete(item['aciRight']);
-  });
+  compareBySeconds = replaceACI(compareBySeconds);
+  compareByDate = replaceACI(compareByDate);
 
-  compareByDate.data.forEach(item => {
-    item['aciLeftC'] = item['aciLeft'];
-    item['aciRightC'] = item['aciRight'];
-    delete(item['aciLeft']);
-    delete(item['aciRight']);
+  compareByFile.data.forEach(item => {
+    item['aciTotAllByMinLC'] = item['aciTotAllByMinL'];
+    item['aciTotAllByMinRC'] = item['aciTotAllByMinR'];
+    delete(item['aciTotAllByMinL']);
+    delete(item['aciTotAllByMinR']);
   });
 
   let secondsData = chosenBySeconds.data.concat(compareBySeconds.data);
+  let fileData = chosenByFile.data.concat(compareByFile.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
   secondsData = sortByKey(secondsData, 'name');
+  fileData = sortByKey(fileData, 'name');
   dateData = sortByKey(dateData, 'name');
 
-  let compressedSecondsData = mergeLikeNames(secondsData);
+  // let compressedSecondsData = mergeLikeNames(secondsData);
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
     graph1: {
-      data: compressedSecondsData,
-      title: "Compared Over Seconds",
-      xAxisLabel: "Time (s)",
+      data: secondsData,
+      title: "Compared Over Seconds Per File",
+      xAxisLabel: "File Name",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight',
       dataKey3: 'aciLeftC',
       dataKey4: 'aciRightC'
+    },
+    graph2: {
+      data: fileData,
+      title: "Compared By File",
     },
     graph3: {
       data: compressedDateData,
@@ -645,45 +747,49 @@ export function convertACIResultsBySeries(jobs, series) {
   let compareResults = convertACIResults(compareSeriesJobs);
 
   let chosenBySeconds = chosenResults.graph1;
+  let chosenByFile = chosenResults.graph2;
   let chosenByDate = chosenResults.graph4;
 
   let compareBySeconds = compareResults.graph1;
+  let compareByFile = compareResults.graph2;
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareBySeconds.data.forEach(item => {
-    item['aciLeftC'] = item['aciLeft'];
-    item['aciRightC'] = item['aciRight'];
-    delete(item['aciLeft']);
-    delete(item['aciRight']);
-  });
+  compareBySeconds = replaceACI(compareBySeconds);
+  compareByDate = replaceACI(compareByDate);
 
-  compareByDate.data.forEach(item => {
-    item['aciLeftC'] = item['aciLeft'];
-    item['aciRightC'] = item['aciRight'];
-    delete(item['aciLeft']);
-    delete(item['aciRight']);
+  compareByFile.data.forEach(item => {
+    item['aciTotAllByMinLC'] = item['aciTotAllByMinL'];
+    item['aciTotAllByMinRC'] = item['aciTotAllByMinR'];
+    delete(item['aciTotAllByMinL']);
+    delete(item['aciTotAllByMinR']);
   });
 
   let secondsData = chosenBySeconds.data.concat(compareBySeconds.data);
+  let fileData = chosenByFile.data.concat(compareByFile.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
   secondsData = sortByKey(secondsData, 'name');
+  fileData = sortByKey(fileData, 'name');
   dateData = sortByKey(dateData, 'name');
 
-  let compressedSecondsData = mergeLikeNames(secondsData);
+  // let compressedSecondsData = mergeLikeNames(secondsData);
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
     graph1: {
-      data: compressedSecondsData,
-      title: "Compared Over Seconds",
-      xAxisLabel: "Time (s)",
+      data: secondsData,
+      title: "Compared Over Seconds Per File",
+      xAxisLabel: "File Name",
       yAxisLabel: "ACI Value",
       dataKey1: 'aciLeft',
       dataKey2: 'aciRight',
       dataKey3: 'aciLeftC',
       dataKey4: 'aciRightC'
+    },
+    graph2: {
+      data: fileData,
+      title: "Compared By File",
     },
     graph3: {
       data: compressedDateData,
@@ -700,6 +806,28 @@ export function convertACIResultsBySeries(jobs, series) {
   return ret;
 }
 
+function replaceNDSI(compareData, channel){
+  if(channel){
+    compareData.data.forEach(item => {
+      item['anthrophonyC'] = item['anthrophony'];
+      item['biophonyC'] = item['biophony'];
+      item['ndsiC'] = item['ndsi'];
+      delete(item['anthrophony']);
+      delete(item['biophony']);
+      delete(item['ndsi']);
+    });
+    return compareData;
+  }
+
+  compareData.data.forEach(item => {
+    item['leftChannelC'] = item['leftChannel'];
+    item['rightChannelC'] = item['rightChannel'];
+    delete(item['leftChannel']);
+    delete(item['rightChannel']);
+  });
+  return compareData;
+}
+
 export function convertNDSIResultsBySite(jobs, sites) {
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0]);
   const compareSiteJobs = jobs.filter(x => x.input.site === sites[1]);
@@ -714,21 +842,8 @@ export function convertNDSIResultsBySite(jobs, sites) {
   let compareValues = compareResults.graph2;
 
   // rename keys in compare data
-  compareChannels.data.forEach(item => {
-    item['anthrophonyC'] = item['anthrophony'];
-    item['biophonyC'] = item['biophony'];
-    item['ndsiC'] = item['ndsi'];
-    delete(item['anthrophony']);
-    delete(item['biophony']);
-    delete(item['ndsi']);
-  });
-
-  compareValues.data.forEach(item => {
-    item['leftChannelC'] = item['leftChannel'];
-    item['rightChannelC'] = item['rightChannel'];
-    delete(item['leftChannel']);
-    delete(item['rightChannel']);
-  });
+  compareChannels = replaceNDSI(compareChannels, true);
+  compareValues = replaceNDSI(compareValues, false);
 
   let channelsData = chosenChannels.data.concat(compareChannels.data);
   let valuesData = chosenValues.data.concat(compareValues.data);
@@ -768,21 +883,8 @@ export function convertNDSIResultsBySeries(jobs, series) {
   let compareValues = compareResults.graph2;
 
   // rename keys in compare data
-  compareChannels.data.forEach(item => {
-    item['anthrophonyC'] = item['anthrophony'];
-    item['biophonyC'] = item['biophony'];
-    item['ndsiC'] = item['ndsi'];
-    delete(item['anthrophony']);
-    delete(item['biophony']);
-    delete(item['ndsi']);
-  });
-
-  compareValues.data.forEach(item => {
-    item['leftChannelC'] = item['leftChannel'];
-    item['rightChannelC'] = item['rightChannel'];
-    delete(item['leftChannel']);
-    delete(item['rightChannel']);
-  });
+  compareChannels = replaceNDSI(compareChannels, true);
+  compareValues = replaceNDSI(compareValues, false);
 
   let channelsData = chosenChannels.data.concat(compareChannels.data);
   let valuesData = chosenValues.data.concat(compareValues.data);
@@ -807,6 +909,26 @@ export function convertNDSIResultsBySeries(jobs, series) {
   return ret;
 }
 
+function replaceBI(compareData, spectrum){
+  if(spectrum){
+    compareData.data.forEach(item => {
+      item['leftSpectrumC'] = item['leftSpectrum'];
+      item['rightSpectrumC'] = item['rightSpectrum'];
+      delete(item['leftSpectrum']);
+      delete(item['rightSpectrum']);
+    });
+    return compareData;
+  }
+
+  compareData.data.forEach(item => {
+    item['areaLC'] = item['areaL'];
+    item['areaRC'] = item['areaR'];
+    delete(item['areaL']);
+    delete(item['areaR']);
+  });
+  return compareData;
+}
+
 export function convertBIResultsBySite(jobs, sites) {
 
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
@@ -822,19 +944,8 @@ export function convertBIResultsBySite(jobs, sites) {
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareSpectrumValues.data.forEach(item => {
-    item['leftSpectrumC'] = item['leftSpectrum'];
-    item['rightSpectrumC'] = item['rightSpectrum'];
-    delete(item['leftSpectrum']);
-    delete(item['rightSpectrum']);
-  });
-
-  compareByDate.data.forEach(item => {
-    item['areaLC'] = item['areaL'];
-    item['areaRC'] = item['areaR'];
-    delete(item['areaL']);
-    delete(item['areaR']);
-  });
+  compareSpectrumValues = replaceBI(compareSpectrumValues, true);
+  compareByDate = replaceBI(compareByDate, false);
 
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
@@ -886,19 +997,8 @@ export function convertBIResultsBySeries(jobs, series) {
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareSpectrumValues.data.forEach(item => {
-    item['leftSpectrumC'] = item['leftSpectrum'];
-    item['rightSpectrumC'] = item['rightSpectrum'];
-    delete(item['leftSpectrum']);
-    delete(item['rightSpectrum']);
-  });
-
-  compareByDate.data.forEach(item => {
-    item['areaLC'] = item['areaL'];
-    item['areaRC'] = item['areaR'];
-    delete(item['areaL']);
-    delete(item['areaR']);
-  });
+  compareSpectrumValues = replaceBI(compareSpectrumValues, true);
+  compareByDate = replaceBI(compareByDate, false);
 
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
@@ -931,6 +1031,36 @@ export function convertBIResultsBySeries(jobs, series) {
   return ret;
 }
 
+function replaceADIAEI(compareData, bands, aei){
+  if(bands){
+    compareData.data.forEach(item => {
+      item['leftBandValC'] = item['leftBandVal'];
+      item['rightBandValC'] = item['rightBandVal'];
+      delete(item['leftBandVal']);
+      delete(item['rightBandVal']);
+    });
+    return compareData;
+  }
+
+  if(aei){
+    compareData.data.forEach(item => {
+      item['leftAEIValC'] = item['leftAEIVal'];
+      item['rightAEIValC'] = item['rightAEIVal'];
+      delete(item['leftADIVal']);
+      delete(item['rightADIVal']);
+    });
+    return compareData;
+  }
+
+  compareData.data.forEach(item => {
+    item['leftADIValC'] = item['leftADIVal'];
+    item['rightADIValC'] = item['rightADIVal'];
+    delete(item['leftADIVal']);
+    delete(item['rightADIVal']);
+  });
+  return compareData;
+}
+
 export function convertADIResultsBySite(jobs, sites) {
 
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
@@ -951,19 +1081,8 @@ export function convertADIResultsBySite(jobs, sites) {
   let refRC = chosenByDate.refR;
 
   // rename keys in compare data
-  compareBandValues.data.forEach(item => {
-    item['leftBandValC'] = item['leftBandVal'];
-    item['rightBandValC'] = item['rightBandVal'];
-    delete(item['leftBandVal']);
-    delete(item['rightBandVal']);
-  });
-
-  compareByDate.data.forEach(item => {
-    item['leftADIValC'] = item['leftADIVal'];
-    item['rightADIValC'] = item['rightADIVal'];
-    delete(item['leftADIVal']);
-    delete(item['rightADIVal']);
-  });
+  compareBandValues = replaceADIAEI(compareBandValues, true, false);
+  compareByDate = replaceADIAEI(compareByDate, false, false);
 
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
@@ -1036,19 +1155,8 @@ export function convertADIResultsBySeries(jobs, series) {
   let refRC = chosenByDate.refR;
 
   // rename keys in compare data
-  compareBandValues.data.forEach(item => {
-    item['leftBandValC'] = item['leftBandVal'];
-    item['rightBandValC'] = item['rightBandVal'];
-    delete(item['leftBandVal']);
-    delete(item['rightBandVal']);
-  });
-
-  compareByDate.data.forEach(item => {
-    item['leftADIValC'] = item['leftADIVal'];
-    item['rightADIValC'] = item['rightADIVal'];
-    delete(item['leftADIVal']);
-    delete(item['rightADIVal']);
-  });
+  compareBandValues = replaceADIAEI(compareBandValues, true);
+  compareByDate = replaceADIAEI(compareByDate, false);
 
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
@@ -1121,19 +1229,8 @@ export function convertAEIResultsBySite(jobs, sites) {
   let refRC = chosenByDate.refR;
 
   // rename keys in compare data
-  compareBandValues.data.forEach(item => {
-    item['leftBandValC'] = item['leftBandVal'];
-    item['rightBandValC'] = item['rightBandVal'];
-    delete(item['leftBandVal']);
-    delete(item['rightBandVal']);
-  });
-
-  compareByDate.data.forEach(item => {
-    item['leftAEIValC'] = item['leftAEIVal'];
-    item['rightAEIValC'] = item['rightAEIVal'];
-    delete(item['leftAEIVal']);
-    delete(item['rightAEIVal']);
-  });
+  compareBandValues = replaceADIAEI(compareBandValues, true, true);
+  compareByDate = replaceADIAEI(compareByDate, false, true);
 
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
@@ -1206,19 +1303,8 @@ export function convertAEIResultsBySeries(jobs, series) {
     let refRC = chosenByDate.refR;
 
     // rename keys in compare data
-    compareBandValues.data.forEach(item => {
-      item['leftBandValC'] = item['leftBandVal'];
-      item['rightBandValC'] = item['rightBandVal'];
-      delete(item['leftBandVal']);
-      delete(item['rightBandVal']);
-    });
-
-    compareByDate.data.forEach(item => {
-      item['leftAEIValC'] = item['leftAEIVal'];
-      item['rightAEIValC'] = item['rightAEIVal'];
-      delete(item['leftAEIVal']);
-      delete(item['rightAEIVal']);
-    });
+    compareBandValues = replaceADIAEI(compareBandValues, true, true);
+    compareByDate = replaceADIAEI(compareByDate, false, true);
 
     let bandData = chosenBandValues.data.concat(compareBandValues.data);
     let dateData = chosenByDate.data.concat(compareByDate.data);

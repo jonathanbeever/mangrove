@@ -95,7 +95,7 @@ class Catalog extends Component {
       selectedSpecs[index] = []
     })
     this.setState({ selectedSpecs: selectedSpecs })
-    
+
     // get all db specs
     axios.get('http://localhost:3000/specs')
       .then(res => {
@@ -421,7 +421,7 @@ class Catalog extends Component {
         }
       }
     });
-    console.log(jobsObj)
+    // console.log(jobsObj)
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 
