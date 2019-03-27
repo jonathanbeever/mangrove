@@ -30,9 +30,9 @@ class RMSCompareBarChart extends Component {
           <Tooltip />
           <Legend />
           <Bar dataKey="rmsL" fill="#8884d8" />
-          <Bar dataKey="rmsLC" fill="#1910d4" />
+          {/*<Bar dataKey="rmsLC" fill="#1910d4" />*/}
           <Bar dataKey="rmsR" fill="#82ca9d" />
-          <Bar dataKey="rmsRC" fill="#108f3f" />
+          {/*<Bar dataKey="rmsRC" fill="#108f3f" />*/}
         </BarChart>
       </div>
     )

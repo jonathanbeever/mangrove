@@ -621,20 +621,6 @@ export function convertBIResults(jobs) {
 }
 
 /********** Comparison graph data modeling functions **********/
-function replaceRMS(compareResults){
-  compareResults.data.forEach(item => {
-    item['rmsLC'] = item['rmsL'];
-    item['rmsRC'] = item['rmsR'];
-    delete(item['rmsL']);
-    delete(item['rmsR']);
-  });
-
-  compareResults['avgLC'] = compareResults['avgL'];
-  compareResults['avgRC'] = compareResults['avgR'];
-  delete(compareResults['avgL']);
-  delete(compareResults['avgR']);
-  return compareResults;
-}
 
 export function convertRMSResultsBySite(jobs, sites) {
 
@@ -644,9 +630,13 @@ export function convertRMSResultsBySite(jobs, sites) {
   let chosenResults = convertRMSResults(chosenSiteJobs);
   let compareResults = convertRMSResults(compareSiteJobs);
 
-  compareResults = replaceRMS(compareResults);
+  let chosenData = chosenResults.graph1.data;
+  let compareData = compareResults.graph1.data;
+  let concat = chosenData.concat(compareData);
 
-  chosenResults.graph1.data.concat(compareResults);
+  chosenResults.graph1.data = concat;
+  chosenResults.graph1['avgLC'] = compareResults.graph1.avgL;
+  chosenResults.graph1['avgRC'] = compareResults.graph1.avgR;
 
   return chosenResults;
 }
@@ -659,9 +649,13 @@ export function convertRMSResultsBySeries(jobs, series) {
   let chosenResults = convertRMSResults(chosenSeriesJobs);
   let compareResults = convertRMSResults(compareSeriesJobs);
 
-  compareResults = replaceRMS(compareResults);
+  let chosenData = chosenResults.graph1.data;
+  let compareData = compareResults.graph1.data;
+  let concat = chosenData.concat(compareData);
 
-  chosenResults.data.concat(compareResults);
+  chosenResults.graph1.data = concat;
+  chosenResults.graph1['avgLC'] = compareResults.graph1.avgL;
+  chosenResults.graph1['avgRC'] = compareResults.graph1.avgR;
 
   return chosenResults;
 }

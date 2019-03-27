@@ -478,12 +478,13 @@ class AnalysisView extends Component {
             }
             break;
           case "rms":
-            try{
-              graphs = utils.convertRMSResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
-            }catch(error){
-              this.setState({ errorMessage: error });
-              this.setState({ errorMode: true });
-            }
+            graphs = utils.convertRMSResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            // try{
+            //   graphs = utils.convertRMSResultsBySeries(obj[spec], [chosenSeries, chosenCompareSeries]);
+            // }catch(error){
+            //   this.setState({ errorMessage: error });
+            //   this.setState({ errorMode: true });
+            // }
             break;
           default:
             graphs = null
