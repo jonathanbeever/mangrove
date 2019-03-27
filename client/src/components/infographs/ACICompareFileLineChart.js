@@ -167,7 +167,7 @@ class ACICompareFileLineChart extends Component {
   formatJob = (chosen, compare) => {
     chosen = this.sortByKey(chosen, "stamp");
     compare = this.sortByKey(compare, "stamp");
-    if(compare[0]['aciLeftC'] === undefined) compare = this.replaceACI(compare);
+    if(compare.length > 0 && compare[0]['aciLeftC'] === undefined) compare = this.replaceACI(compare);
     let formattedCompare = this.mergeByStamp(chosen, compare);
     return formattedCompare;
   }
