@@ -6,6 +6,7 @@ import NDSIValuesBarChart from '../infographs/NDSIValuesBarChart';
 import NDSIValuesLineChart from '../infographs/NDSIValuesLineChart';
 import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart';
 import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
+import NDSICompareFileBarChart from '../infographs/NDSICompareFileBarChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
 import ACICompareFileLineChart from '../infographs/ACICompareFileLineChart';
@@ -100,7 +101,7 @@ class GraphsTable extends React.Component {
               rows.push(
                 <GraphExpansionPanel
                   key={'graphSeconds'+ctr}
-                  title="Compare Files By Seconds"
+                  title="ACI By Seconds"
                   graph={<ACICompareFileLineChart
                     results={obj.data}
                     dataKey1='aciLeft'
@@ -145,7 +146,7 @@ class GraphsTable extends React.Component {
             rows.push(
               <GraphExpansionPanel
                 key={'graph'+ctr}
-                title={obj.title}
+                title="Compare Files By Seconds"
                 graph={<ACICompareFileLineChart
                   results={obj.data}
                   dataKey1='aciLeft'
@@ -201,6 +202,18 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
+            case "NDSI Values By File":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<NDSICompareFileBarChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
             case "NDSI By Date":
               rows.push(
                 <GraphExpansionPanel
@@ -227,6 +240,18 @@ class GraphsTable extends React.Component {
                   key={'graph'+ctr}
                   title={obj.title}
                   graph={<NDSIChannelCompareBarChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
+            case "Compared By File":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Compare NDSI By File"
+                  graph={<NDSICompareFileBarChart
                     callback={this.props.callback}
                     results={obj.data}
                   />}

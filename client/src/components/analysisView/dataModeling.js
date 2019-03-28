@@ -169,7 +169,7 @@ export function convertNDSIResults(jobs) {
     },
     graph5: {
       data: [],
-      title: "NDSI By File"
+      title: "NDSI Values By File"
     }
   }
 
@@ -194,6 +194,7 @@ export function convertNDSIResults(jobs) {
 
     curObject = {
       name: job.input.name,
+      downloadUrl: job.input.downloadUrl,
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -838,9 +839,11 @@ export function convertNDSIResultsBySite(jobs, sites) {
 
   let chosenChannels = chosenResults.graph1;
   let chosenValues = chosenResults.graph2;
+  let chosenFiles = chosenResults.graph5;
 
   let compareChannels = compareResults.graph1;
   let compareValues = compareResults.graph2;
+  let compareFiles = compareResults.graph5;
 
   // rename keys in compare data
   compareChannels = replaceNDSI(compareChannels, true);
@@ -848,6 +851,7 @@ export function convertNDSIResultsBySite(jobs, sites) {
 
   let channelsData = chosenChannels.data.concat(compareChannels.data);
   let valuesData = chosenValues.data.concat(compareValues.data);
+  let filesData = chosenFiles.data.concat(compareFiles.data);
 
   channelsData = sortByKey(channelsData, 'name');
   valuesData = sortByKey(valuesData, 'name');
@@ -863,7 +867,11 @@ export function convertNDSIResultsBySite(jobs, sites) {
     graph2: {
       data: compressedValuesData,
       title: "Compared By Values",
-    }
+    },
+    graph3: {
+      data: filesData,
+      title: "Compared By File",
+    },
   }
 
   return ret;
@@ -879,9 +887,11 @@ export function convertNDSIResultsBySeries(jobs, series) {
 
   let chosenChannels = chosenResults.graph1;
   let chosenValues = chosenResults.graph2;
+  let chosenFiles = chosenResults.graph5;
 
   let compareChannels = compareResults.graph1;
   let compareValues = compareResults.graph2;
+  let compareFiles = compareResults.graph5;
 
   // rename keys in compare data
   compareChannels = replaceNDSI(compareChannels, true);
@@ -889,6 +899,7 @@ export function convertNDSIResultsBySeries(jobs, series) {
 
   let channelsData = chosenChannels.data.concat(compareChannels.data);
   let valuesData = chosenValues.data.concat(compareValues.data);
+  let filesData = chosenFiles.data.concat(compareFiles.data);
 
   channelsData = sortByKey(channelsData, 'name');
   valuesData = sortByKey(valuesData, 'name');
@@ -904,7 +915,11 @@ export function convertNDSIResultsBySeries(jobs, series) {
     graph2: {
       data: compressedValuesData,
       title: "Compared By Values",
-    }
+    },
+    graph3: {
+      data: filesData,
+      title: "Compared By File",
+    },
   }
 
   return ret;

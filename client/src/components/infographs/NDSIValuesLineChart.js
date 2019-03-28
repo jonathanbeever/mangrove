@@ -37,7 +37,7 @@ class NDSIValuesLineChart extends Component {
           <XAxis dataKey="name">
             <Label value={xAxisLabel} position="insideBottom" offset={2} />
           </XAxis>
-          <YAxis domain={['dataMin-1', 'dataMax+1']}>
+          <YAxis tickFormatter={this.formatYAxis}>
             <Label value="Value" position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
           </YAxis>
           <Legend />
