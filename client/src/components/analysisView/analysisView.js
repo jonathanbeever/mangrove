@@ -23,6 +23,7 @@ import { withStyles } from '@material-ui/core/styles';
 import * as utils from './dataModeling.js';
 import ReactPlayer from 'react-player';
 import Checkbox from '@material-ui/core/Checkbox';
+import ExportCsv from '../selectResults/csvExport';
 import axios from 'axios';
 var _ = require('lodash');
 
@@ -207,6 +208,15 @@ class AnalysisView extends Component {
 
       specRows = [];
       for(var spec in obj) {
+        var csvExport = (
+          <ExportCsv
+            jobs={obj[spec]}
+            index={index}
+            site={chosenSite}
+            series={chosenSeries}
+          />
+        )
+
         switch(index)
         {
           case "aci":
@@ -284,7 +294,7 @@ class AnalysisView extends Component {
 
       rows.push(
         <Paper key={index}>
-          <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3>
+          <div className="row"><h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3><div className="text-right">{csvExport}</div></div>
           <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for { chosenSite } - { chosenSeries }</p>
           <IndexAnalysisPanel
             specRows={specRows}
