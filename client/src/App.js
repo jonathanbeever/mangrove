@@ -76,8 +76,12 @@ class NavBarWrapper extends Component {
 		this.renew = this.renew.bind(this);
 	}
 
-	// Renews Cognito Tokens with every page load (since they expire every hour) 
+	// Renews Cognito Tokens with every page load (since they expire every hour)
 	renew() {
+		if(window.email == null || window.refreshToken == null) {
+			return;
+		}
+
 		const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({RefreshToken: window.refreshToken});
 
 		const userData = {
