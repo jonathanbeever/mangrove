@@ -268,6 +268,7 @@ export function convertACIResults(jobs) {
       {
         name: job.input.name,
         stamp: formatted.toString(),
+        downloadUrl: job.input.downloadUrl,
         aciLeft: job.result.aciFlValsL[i],
         aciRight: job.result.aciFlValsR[i]
       }
