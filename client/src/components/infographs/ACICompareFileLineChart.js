@@ -272,7 +272,7 @@ class ACICompareFileLineChart extends Component {
               style={{margin: 20}}
               onClick={this.displayGraph}
               >
-              <h6>Show Graphs</h6>
+              <h6>Show Graph</h6>
             </Button>
           </div>
         </div>

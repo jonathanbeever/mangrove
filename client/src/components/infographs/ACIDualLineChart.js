@@ -34,7 +34,7 @@ class ACIDualLineChart extends Component {
         <XAxis dataKey="name">
           <Label value={xAxisLabel} position="insideBottom" offset={2} />
         </XAxis>
-        <YAxis domain={['dataMin-10', 'dataMax+10']} tickFormatter={this.formatYAxis}>
+        <YAxis domain={['dataMin-10', 'dataMax+10']} offset={0} tickFormatter={this.formatYAxis}>
           <Label value={yAxisLabel} position="insideLeft" offset={0} />
         </YAxis>
         <Legend />
