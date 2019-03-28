@@ -79,8 +79,8 @@ class Expansion extends React.Component {
               />
               {this.state.checkedRms ?
                 <Tooltip title="Delete">
-                  <IconButton aria-label="Delete">
-                    <DeleteIcon onClick={() => {this.props.deleteSpecs([this.props.specs[0].specId])}}/>
+                  <IconButton aria-label="Delete" onClick={() => {this.props.deleteSpecs([this.props.specs[0].specId])}}>
+                    <DeleteIcon/>
                   </IconButton>
                 </Tooltip>
                 :

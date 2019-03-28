@@ -68,7 +68,6 @@ class AnalysisView extends Component {
     if(localStorage.getItem('analysisViewAlert') === null){
       localStorage.setItem('analysisViewAlert', true);
     }
-    console.log(selectedJobs);
     this.formatState(selectedJobs);
   }
 
@@ -294,7 +293,14 @@ class AnalysisView extends Component {
 
       rows.push(
         <Paper key={index}>
-          <div className="row"><h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3><div className="text-right">{csvExport}</div></div>
+          <div className="row">
+            <div className="col-8">
+              <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3>            
+            </div>
+            <div className="row-4" style={{ paddingLeft: 50+'px', paddingTop: 30+'px', float:'right' }}>
+              {csvExport}
+            </div>
+          </div>
           <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for { chosenSite } - { chosenSeries }</p>
           <IndexAnalysisPanel
             specRows={specRows}
