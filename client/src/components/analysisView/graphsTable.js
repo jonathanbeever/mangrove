@@ -20,6 +20,7 @@ import ACIBarChart from '../infographs/ACIBarChart';
 import ACICompareBarChart from '../infographs/ACICompareBarChart';
 import RMSBarChart from '../infographs/RMSBarChart';
 import RMSCompareBarChart from '../infographs/RMSCompareBarChart';
+import AudioPlayer from '../infographs/components/AudioPlayer';
 
 const styles = theme => ({
   root: {
@@ -479,69 +480,100 @@ class GraphsTable extends React.Component {
           }
           break;
         case "bi":
-          if(obj.title === "Bioacoustic Spectrum Values")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BAAreaChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                />}
-              />
-            )
-          }else{
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BALineChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                />}
-              />
-            )
+            case "Bioacoustic Spectrum Values":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BAAreaChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                  />}
+                />
+              )
+              break;
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            default:
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BALineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                  />}
+                />
+              )
+              break;
           }
           break;
         case "bi-compare":
-          if(obj.title === "Compared By Spectrum Values")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BACompareAreaChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  dataKey3={obj.dataKey3}
-                  dataKey4={obj.dataKey4}
-                />}
-              />
-            )
-          }else{
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BADualLineChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                />}
-              />
-            )
+            case "Compared By Spectrum Values":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BACompareAreaChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    dataKey3={obj.dataKey3}
+                    dataKey4={obj.dataKey4}
+                  />}
+                />
+              )
+              break;
+            case "Compared By Date":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BADualLineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                  />}
+                />
+              )
+              break;
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            default:
+              break;
           }
           break;
         default:

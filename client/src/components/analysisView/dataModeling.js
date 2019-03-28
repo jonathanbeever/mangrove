@@ -556,6 +556,12 @@ export function convertBIResults(jobs) {
   let ret;
 
   ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: [],
+      urls: []
+    },
     graph1:
     {
       data: [],
@@ -599,6 +605,9 @@ export function convertBIResults(jobs) {
 
     let curObject;
 
+    ret.audioPlayer.files.push(job.input.name);
+    ret.audioPlayer.urls.push(job.input.downloadUrl);
+
     curObject =
     {
       name: dayDate,
@@ -606,7 +615,7 @@ export function convertBIResults(jobs) {
       areaR: job.result.areaR
     }
 
-    ret.graph5.data.push(curObject);
+    ret.graph4.data.push(curObject);
 
     curObject = {
       name: job.input.name,
@@ -617,7 +626,7 @@ export function convertBIResults(jobs) {
 
   });
 
-  ret.graph5.data = sortByKey(ret.graph5.data, 'name');
+  ret.graph4.data = sortByKey(ret.graph4.data, 'name');
 
   return ret;
 }
@@ -955,9 +964,13 @@ export function convertBIResultsBySite(jobs, sites) {
 
   let chosenSpectrumValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
 
   // rename keys in compare data
   compareSpectrumValues = replaceBI(compareSpectrumValues, true);
@@ -966,6 +979,9 @@ export function convertBIResultsBySite(jobs, sites) {
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
+
   spectrumData = sortByKey(spectrumData, 'name');
   dateData = sortByKey(dateData, 'name');
 
@@ -973,6 +989,12 @@ export function convertBIResultsBySite(jobs, sites) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
     graph1: {
       data: compressedSpectrumData,
       title: "Compared By Spectrum Values",
@@ -1008,9 +1030,13 @@ export function convertBIResultsBySeries(jobs, series) {
 
   let chosenSpectrumValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
 
   // rename keys in compare data
   compareSpectrumValues = replaceBI(compareSpectrumValues, true);
@@ -1019,6 +1045,9 @@ export function convertBIResultsBySeries(jobs, series) {
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
+
   spectrumData = sortByKey(spectrumData, 'name');
   dateData = sortByKey(dateData, 'name');
 
@@ -1026,6 +1055,12 @@ export function convertBIResultsBySeries(jobs, series) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
     graph1: {
       data: compressedSpectrumData,
       title: "Compared By Spectrum Values",
