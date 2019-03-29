@@ -6,11 +6,13 @@ import NDSIValuesBarChart from '../infographs/NDSIValuesBarChart';
 import NDSIValuesLineChart from '../infographs/NDSIValuesLineChart';
 import NDSIChannelCompareBarChart from '../infographs/NDSIChannelCompareBarChart';
 import NDSIValuesCompareBarChart from '../infographs/NDSIValuesCompareBarChart';
+import NDSICompareFileBarChart from '../infographs/NDSICompareFileBarChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
 import ACICompareFileLineChart from '../infographs/ACICompareFileLineChart';
 import ADIAEILineChart from '../infographs/ADIAEILineChart';
 import ADIAEICompareLineChart from '../infographs/ADIAEICompareLineChart';
+import ADIAEICompareFileLineChart from '../infographs/ADIAEICompareFileLineChart';
 import BAAreaChart from '../infographs/BAAreaChart';
 import BALineChart from '../infographs/BALineChart';
 import BADualLineChart from '../infographs/BADualLineChart';
@@ -19,6 +21,7 @@ import ACIBarChart from '../infographs/ACIBarChart';
 import ACICompareBarChart from '../infographs/ACICompareBarChart';
 import RMSBarChart from '../infographs/RMSBarChart';
 import RMSCompareBarChart from '../infographs/RMSCompareBarChart';
+import AudioPlayer from '../infographs/components/AudioPlayer';
 
 const styles = theme => ({
   root: {
@@ -100,7 +103,7 @@ class GraphsTable extends React.Component {
               rows.push(
                 <GraphExpansionPanel
                   key={'graphSeconds'+ctr}
-                  title="Compare Files By Seconds"
+                  title="ACI By Seconds"
                   graph={<ACICompareFileLineChart
                     results={obj.data}
                     dataKey1='aciLeft'
@@ -145,7 +148,7 @@ class GraphsTable extends React.Component {
             rows.push(
               <GraphExpansionPanel
                 key={'graph'+ctr}
-                title={obj.title}
+                title="Compare Files By Seconds"
                 graph={<ACICompareFileLineChart
                   results={obj.data}
                   dataKey1='aciLeft'
@@ -201,6 +204,18 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
+            case "NDSI Values By File":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<NDSICompareFileBarChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
             case "NDSI By Date":
               rows.push(
                 <GraphExpansionPanel
@@ -233,6 +248,18 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
+            case "Compared By File":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Compare NDSI By File"
+                  graph={<NDSICompareFileBarChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                  />}
+                />
+              )
+              break;
             case "Compared By Values":
               rows.push(
                 <GraphExpansionPanel
@@ -250,273 +277,364 @@ class GraphsTable extends React.Component {
           }
           break;
         case "adi":
-          if(obj.title === "ADI By Band Range")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEILineChart
-                  callback={this.props.callback}
-                  reference={true}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                />}
-              />
-            )
-          }else
-          {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEILineChart
-                  callback={this.props.callback}
-                  reference={false}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                />}
-              />
-            )
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="ADI Band Range Values By File"
+                  graph={<ADIAEICompareFileLineChart
+                    adi={true}
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+              break;
+            case "ADI Value By Band Range":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEILineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    index={"ADI"}
+                    vals={[obj.left, obj.right]}
+                  />}
+                />
+              )
+              break;
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            default:
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEILineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    index={"ADI"}
+                    vals={[obj.left, obj.right]}
+                  />}
+                />
+              )
+              break;
           }
           break;
         case "adi-compare":
-          if(obj.title === "Compared By Band Values")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEICompareLineChart
-                  callback={this.props.callback}
-                  reference={true}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  dataKey3={obj.dataKey3}
-                  dataKey4={obj.dataKey4}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLC={obj.refLC}
-                  refRC={obj.refRC}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                  refLabel3={obj.refLabel3}
-                  refLabel4={obj.refLabel4}
-                />}
-              />
-            )
-          }else
-          {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEICompareLineChart
-                  callback={this.props.callback}
-                  reference={false}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  dataKey3={obj.dataKey3}
-                  dataKey4={obj.dataKey4}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLC={obj.refLC}
-                  refRC={obj.refRC}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                  refLabel3={obj.refLabel3}
-                  refLabel4={obj.refLabel4}
-                />}
-              />
-            )
+            case "Compared By Band Values":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEICompareLineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    dataKey3={obj.dataKey3}
+                    dataKey4={obj.dataKey4}
+                    index={"ADI"}
+                    vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
+                  />}
+                />
+              )
+              break;
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Compare ADI Band Range Values By File"
+                  graph={<ADIAEICompareFileLineChart
+                    adi={true}
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+              break;
+            default:
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEICompareLineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    dataKey3={obj.dataKey3}
+                    dataKey4={obj.dataKey4}
+                    index={"ADI"}
+                    vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
+                  />}
+                />
+              )
+              break;
           }
           break;
         case "aei":
-          if(obj.title === "AEI By Band Range")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEILineChart
-                  callback={this.props.callback}
-                  reference={true}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                />}
-              />
-            )
-          }else
-          {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEILineChart
-                  callback={this.props.callback}
-                  reference={false}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                />}
-              />
-            )
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="AEI Band Range Values By File"
+                  graph={<ADIAEICompareFileLineChart
+                    adi={false}
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+              break;
+            case "AEI By Band Range":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEILineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    index={"AEI"}
+                    vals={[obj.left, obj.right]}
+                  />}
+                />
+              )
+              break;
+            default:
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEILineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    index={"AEI"}
+                    vals={[obj.left, obj.right]}
+                  />}
+                />
+              )
+              break;
           }
           break;
         case "aei-compare":
-          if(obj.title === "Compared By Band Values")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEICompareLineChart
-                  callback={this.props.callback}
-                  reference={true}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  dataKey3={obj.dataKey3}
-                  dataKey4={obj.dataKey4}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLC={obj.refLC}
-                  refRC={obj.refRC}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                  refLabel3={obj.refLabel3}
-                  refLabel4={obj.refLabel4}
-                />}
-              />
-            )
-          }else
-          {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<ADIAEICompareLineChart
-                  callback={this.props.callback}
-                  reference={false}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  dataKey3={obj.dataKey3}
-                  dataKey4={obj.dataKey4}
-                  refL={obj.refL}
-                  refR={obj.refR}
-                  refLC={obj.refLC}
-                  refRC={obj.refRC}
-                  refLabel1={obj.refLabel1}
-                  refLabel2={obj.refLabel2}
-                  refLabel3={obj.refLabel3}
-                  refLabel4={obj.refLabel4}
-                />}
-              />
-            )
+            case "Compared By Band Values":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEICompareLineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    dataKey3={obj.dataKey3}
+                    dataKey4={obj.dataKey4}
+                    index={"AEI"}
+                    vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
+                  />}
+                />
+              )
+              break;
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Compare AEI Band Range Values By File"
+                  graph={<ADIAEICompareFileLineChart
+                    adi={false}
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+              break;
+            default:
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ADIAEICompareLineChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    dataKey3={obj.dataKey3}
+                    dataKey4={obj.dataKey4}
+                    index={"AEI"}
+                    vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
+                  />}
+                />
+              )
+              break;
           }
           break;
         case "bi":
-          if(obj.title === "Bioacoustic Spectrum Values")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BAAreaChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                />}
-              />
-            )
-          }else{
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BALineChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                />}
-              />
-            )
+            case "Bioacoustic Spectrum Values":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BAAreaChart
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                  />}
+                />
+              )
+              break;
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            default:
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BALineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                  />}
+                />
+              )
+              break;
           }
           break;
         case "bi-compare":
-          if(obj.title === "Compared By Spectrum Values")
+          switch(obj.title)
           {
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BACompareAreaChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                  dataKey1={obj.dataKey1}
-                  dataKey2={obj.dataKey2}
-                  dataKey3={obj.dataKey3}
-                  dataKey4={obj.dataKey4}
-                />}
-              />
-            )
-          }else{
-            rows.push(
-              <GraphExpansionPanel
-                key={'graph'+ctr}
-                title={obj.title}
-                graph={<BADualLineChart
-                  callback={this.props.callback}
-                  results={obj.data}
-                  xAxisLabel={obj.xAxisLabel}
-                  yAxisLabel={obj.yAxisLabel}
-                />}
-              />
-            )
+            case "Compared By Spectrum Values":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BACompareAreaChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                    dataKey1={obj.dataKey1}
+                    dataKey2={obj.dataKey2}
+                    dataKey3={obj.dataKey3}
+                    dataKey4={obj.dataKey4}
+                  />}
+                />
+              )
+              break;
+            case "Compared By Date":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<BADualLineChart
+                    callback={this.props.callback}
+                    results={obj.data}
+                    xAxisLabel={obj.xAxisLabel}
+                    yAxisLabel={obj.yAxisLabel}
+                  />}
+                />
+              )
+              break;
+            case "Play Audio Files":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<AudioPlayer
+                    files={obj.files}
+                    urls={obj.urls}
+                  />}
+                />
+              )
+              break;
+            default:
+              break;
           }
           break;
         default:

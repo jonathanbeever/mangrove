@@ -169,7 +169,7 @@ export function convertNDSIResults(jobs) {
     },
     graph5: {
       data: [],
-      title: "NDSI By File"
+      title: "NDSI Values By File"
     }
   }
 
@@ -194,6 +194,7 @@ export function convertNDSIResults(jobs) {
 
     curObject = {
       name: job.input.name,
+      downloadUrl: job.input.downloadUrl,
       ndsiL: job.result.ndsiL,
       ndsiR: job.result.ndsiR,
       biophonyL: job.result.biophonyL,
@@ -268,6 +269,7 @@ export function convertACIResults(jobs) {
       {
         name: job.input.name,
         stamp: formatted.toString(),
+        downloadUrl: job.input.downloadUrl,
         aciLeft: job.result.aciFlValsL[i],
         aciRight: job.result.aciFlValsR[i]
       }
@@ -313,7 +315,11 @@ export function convertADIResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
   let ret;
 
-  let arrLength = finished[0].result.ADIbandValsL.length;
+  let arrLength;
+
+  if(finished.length === 0) arrLength = 0;
+  else arrLength = finished[0].result.bandL.length;
+
   let adiLTotal = 0;
   let adiRTotal = 0;
   let adiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
@@ -324,73 +330,80 @@ export function convertADIResults(jobs) {
     adiRTotal += job.result.adiR;
 
     adiLBandTemp = adiLBandTemp.map(function(num, idx){
-      return num + job.result.ADIbandValsL[idx];
+      return num + job.result.bandL[idx];
     });
 
     adiRBandTemp = adiRBandTemp.map(function(num, idx){
-      return num + job.result.ADIbandValsR[idx];
+      return num + job.result.bandR[idx];
     });
 
   });
 
-  let adiLAvg = adiLTotal / finished.length;
-  let adiRAvg = adiRTotal / finished.length;
+  let denom = finished.length > 0 ? finished.length : 1;
+  let adiLAvg = adiLTotal / denom;
+  let adiRAvg = adiRTotal / denom;
 
   let adiLBand = adiLBandTemp.map(function(element){
-    return element / finished.length;
+    return element / denom;
   });
 
   let adiRBand = adiRBandTemp.map(function(element){
-    return element / finished.length;
+    return element / denom;
   });
 
   ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: [],
+      urls: [],
+    },
     graph1:
     {
       data: [],
-      title: "ADI By Band Range",
+      title: "ADI Value By Band Range",
       xAxisLabel: "Hz Range",
       yAxisLabel: "ADI Value",
       dataKey1: "leftBandVal",
       dataKey2: "rightBandVal",
-      refL: adiLAvg,
-      refR: adiRAvg,
-      refLabel1: "ADI Left",
-      refLabel2: "ADI Right",
+      left: adiLAvg,
+      right: adiRAvg,
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: {},
+      fileNames: [],
     },
     graph2:
     {
       data: [],
-      title: "ADI By File",
+      title: "ADI Average By File",
       xAxisLabel: "File Name",
       yAxisLabel: "ADI Value",
       dataKey1: "leftADIVal",
       dataKey2: "rightADIVal",
-      refL: adiLAvg,
-      refR: adiRAvg,
-      refLabel1: "ADI Left",
-      refLabel2: "ADI Right",
+      left: adiLAvg,
+      right: adiRAvg,
     },
     graph4:
     {
       data: [],
-      title: "ADI By Date And Hour",
+      title: "ADI Average By Date And Hour",
       xAxisLabel: "Date",
       yAxisLabel: "ADI Value",
       dataKey1: "leftADIVal",
       dataKey2: "rightADIVal",
-      refL: adiLAvg,
-      refR: adiRAvg,
-      refLabel1: "ADI Left",
-      refLabel2: "ADI Right",
+      left: adiLAvg,
+      right: adiRAvg,
     }
   }
 
-  for(var i = 0; i < adiLBand.length; i++)
+  for(var i = 0; i < arrLength; i++)
   {
     let curObject =
     {
-      name: finished[0].result.ADIbandRangeL[i],
+      name: finished[0].result.bandRangeL[i],
       leftBandVal: adiLBand[i],
       rightBandVal: adiRBand[i]
     }
@@ -403,6 +416,12 @@ export function convertADIResults(jobs) {
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
     let curObject;
+
+    ret.fileData.files[job.input.name] = job.result;
+    ret.fileData.fileNames.push(job.input.name);
+
+    ret.audioPlayer.files.push(job.input.name);
+    ret.audioPlayer.urls.push(job.input.downloadUrl);
 
     curObject =
     {
@@ -433,7 +452,11 @@ export function convertAEIResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
   let ret;
 
-  let arrLength = finished[0].result.AEIbandValsL.length;
+  let arrLength;
+
+  if(finished.length === 0) arrLength = 0;
+  else arrLength = finished[0].result.bandL.length;
+
   let aeiLTotal = 0;
   let aeiRTotal = 0;
   let aeiLBandTemp = Array.apply(null, Array(arrLength)).map(Number.prototype.valueOf,0);
@@ -444,27 +467,35 @@ export function convertAEIResults(jobs) {
     aeiRTotal += job.result.aeiR;
 
     aeiLBandTemp = aeiLBandTemp.map(function(num, idx){
-      return num + job.result.AEIbandValsL[idx];
+      return num + job.result.bandRangeL[idx];
     });
 
     aeiRBandTemp = aeiRBandTemp.map(function(num, idx){
-      return num + job.result.AEIbandValsR[idx];
+      return num + job.result.bandRangeL[idx];
     });
 
   });
 
-  let aeiLAvg = aeiLTotal / finished.length;
-  let aeiRAvg = aeiRTotal / finished.length;
+  let denom = finished.length > 0 ? finished.length : 1;
+
+  let aeiLAvg = aeiLTotal / denom;
+  let aeiRAvg = aeiRTotal / denom;
 
   let aeiLBand = aeiLBandTemp.map(function(element){
-    return element / finished.length;
+    return element / denom;
   });
 
   let aeiRBand = aeiRBandTemp.map(function(element){
-    return element / finished.length;
+    return element / denom;
   });
 
   ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: [],
+      urls: [],
+    },
     graph1:
     {
       data: [],
@@ -473,10 +504,14 @@ export function convertAEIResults(jobs) {
       yAxisLabel: "AEI Level",
       dataKey1: "leftBandVal",
       dataKey2: "rightBandVal",
-      refL: aeiLAvg,
-      refR: aeiRAvg,
-      refLabel1: "AEI Left",
-      refLabel2: "AEI Right"
+      left: aeiLAvg,
+      right: aeiRAvg,
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: {},
+      fileNames: [],
     },
     graph2:
     {
@@ -486,10 +521,8 @@ export function convertAEIResults(jobs) {
       yAxisLabel: "AEI Level",
       dataKey1: "leftAEIVal",
       dataKey2: "rightAEIVal",
-      refL: aeiLAvg,
-      refR: aeiRAvg,
-      refLabel1: "AEI Left",
-      refLabel2: "AEI Right"
+      left: aeiLAvg,
+      right: aeiRAvg,
     },
     graph4:
     {
@@ -499,10 +532,8 @@ export function convertAEIResults(jobs) {
       yAxisLabel: "AEI Level",
       dataKey1: "leftAEIVal",
       dataKey2: "rightAEIVal",
-      refL: aeiLAvg,
-      refR: aeiRAvg,
-      refLabel1: "AEI Left",
-      refLabel2: "AEI Right"
+      left: aeiLAvg,
+      right: aeiRAvg,
     }
   }
 
@@ -510,7 +541,7 @@ export function convertAEIResults(jobs) {
   {
     let curObject =
     {
-      name: finished[0].result.AEIbandRangeL[i],
+      name: finished[0].result.bandRangeL[i],
       leftBandVal: aeiLBand[i],
       rightBandVal: aeiRBand[i]
     }
@@ -523,6 +554,12 @@ export function convertAEIResults(jobs) {
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
     let curObject;
+
+    ret.fileData.files[job.input.name] = job.result;
+    ret.fileData.fileNames.push(job.input.name);
+
+    ret.audioPlayer.files.push(job.input.name);
+    ret.audioPlayer.urls.push(job.input.downloadUrl);
 
     curObject =
     {
@@ -554,6 +591,12 @@ export function convertBIResults(jobs) {
   let ret;
 
   ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: [],
+      urls: []
+    },
     graph1:
     {
       data: [],
@@ -597,6 +640,9 @@ export function convertBIResults(jobs) {
 
     let curObject;
 
+    ret.audioPlayer.files.push(job.input.name);
+    ret.audioPlayer.urls.push(job.input.downloadUrl);
+
     curObject =
     {
       name: dayDate,
@@ -604,7 +650,7 @@ export function convertBIResults(jobs) {
       areaR: job.result.areaR
     }
 
-    ret.graph5.data.push(curObject);
+    ret.graph4.data.push(curObject);
 
     curObject = {
       name: job.input.name,
@@ -615,7 +661,7 @@ export function convertBIResults(jobs) {
 
   });
 
-  ret.graph5.data = sortByKey(ret.graph5.data, 'name');
+  ret.graph4.data = sortByKey(ret.graph4.data, 'name');
 
   return ret;
 }
@@ -837,9 +883,11 @@ export function convertNDSIResultsBySite(jobs, sites) {
 
   let chosenChannels = chosenResults.graph1;
   let chosenValues = chosenResults.graph2;
+  let chosenFiles = chosenResults.graph5;
 
   let compareChannels = compareResults.graph1;
   let compareValues = compareResults.graph2;
+  let compareFiles = compareResults.graph5;
 
   // rename keys in compare data
   compareChannels = replaceNDSI(compareChannels, true);
@@ -847,6 +895,7 @@ export function convertNDSIResultsBySite(jobs, sites) {
 
   let channelsData = chosenChannels.data.concat(compareChannels.data);
   let valuesData = chosenValues.data.concat(compareValues.data);
+  let filesData = chosenFiles.data.concat(compareFiles.data);
 
   channelsData = sortByKey(channelsData, 'name');
   valuesData = sortByKey(valuesData, 'name');
@@ -862,7 +911,11 @@ export function convertNDSIResultsBySite(jobs, sites) {
     graph2: {
       data: compressedValuesData,
       title: "Compared By Values",
-    }
+    },
+    graph3: {
+      data: filesData,
+      title: "Compared By File",
+    },
   }
 
   return ret;
@@ -878,9 +931,11 @@ export function convertNDSIResultsBySeries(jobs, series) {
 
   let chosenChannels = chosenResults.graph1;
   let chosenValues = chosenResults.graph2;
+  let chosenFiles = chosenResults.graph5;
 
   let compareChannels = compareResults.graph1;
   let compareValues = compareResults.graph2;
+  let compareFiles = compareResults.graph5;
 
   // rename keys in compare data
   compareChannels = replaceNDSI(compareChannels, true);
@@ -888,6 +943,7 @@ export function convertNDSIResultsBySeries(jobs, series) {
 
   let channelsData = chosenChannels.data.concat(compareChannels.data);
   let valuesData = chosenValues.data.concat(compareValues.data);
+  let filesData = chosenFiles.data.concat(compareFiles.data);
 
   channelsData = sortByKey(channelsData, 'name');
   valuesData = sortByKey(valuesData, 'name');
@@ -903,7 +959,11 @@ export function convertNDSIResultsBySeries(jobs, series) {
     graph2: {
       data: compressedValuesData,
       title: "Compared By Values",
-    }
+    },
+    graph3: {
+      data: filesData,
+      title: "Compared By File",
+    },
   }
 
   return ret;
@@ -939,9 +999,13 @@ export function convertBIResultsBySite(jobs, sites) {
 
   let chosenSpectrumValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
 
   // rename keys in compare data
   compareSpectrumValues = replaceBI(compareSpectrumValues, true);
@@ -950,6 +1014,9 @@ export function convertBIResultsBySite(jobs, sites) {
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
+
   spectrumData = sortByKey(spectrumData, 'name');
   dateData = sortByKey(dateData, 'name');
 
@@ -957,6 +1024,12 @@ export function convertBIResultsBySite(jobs, sites) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
     graph1: {
       data: compressedSpectrumData,
       title: "Compared By Spectrum Values",
@@ -992,9 +1065,13 @@ export function convertBIResultsBySeries(jobs, series) {
 
   let chosenSpectrumValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
 
   // rename keys in compare data
   compareSpectrumValues = replaceBI(compareSpectrumValues, true);
@@ -1003,6 +1080,9 @@ export function convertBIResultsBySeries(jobs, series) {
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
+
   spectrumData = sortByKey(spectrumData, 'name');
   dateData = sortByKey(dateData, 'name');
 
@@ -1010,6 +1090,12 @@ export function convertBIResultsBySeries(jobs, series) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
     graph1: {
       data: compressedSpectrumData,
       title: "Compared By Spectrum Values",
@@ -1071,14 +1157,19 @@ export function convertADIResultsBySite(jobs, sites) {
 
   let chosenBandValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
+  let chosenFileData = chosenResults.fileData.files;
+  let chosenLeft = chosenBandValues.left;
+  let chosenRight = chosenBandValues.right;
 
   let compareBandValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-
-  let refL = chosenByDate.refL;
-  let refR = chosenByDate.refR;
-  let refLC = chosenByDate.refL;
-  let refRC = chosenByDate.refR;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
+  let compareFileData = compareResults.fileData.files;
+  let compareLeft = compareBandValues.left;
+  let compareRight = compareBandValues.right;
 
   // rename keys in compare data
   compareBandValues = replaceADIAEI(compareBandValues, true, false);
@@ -1087,6 +1178,11 @@ export function convertADIResultsBySite(jobs, sites) {
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
+
+  let concatFileData = Object.assign({}, chosenFileData, compareFileData);
+
   bandData = sortByKey(bandData, 'name');
   dateData = sortByKey(dateData, 'name');
 
@@ -1094,6 +1190,12 @@ export function convertADIResultsBySite(jobs, sites) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
     graph1: {
       data: compressedBandData,
       title: "Compared By Band Values",
@@ -1103,14 +1205,16 @@ export function convertADIResultsBySite(jobs, sites) {
       dataKey2: "rightBandVal",
       dataKey3: "leftBandValC",
       dataKey4: "rightBandValC",
-      refL: refL,
-      refR: refR,
-      refLC: refLC,
-      refRC: refRC,
-      refLabel1: "ADI Left",
-      refLabel2: "ADI Right",
-      refLabel3: "ADI Left Compare",
-      refLabel4: "ADI Right Compare"
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: concatFileData,
+      fileNames: fileNames,
     },
     graph3: {
       data: compressedDateData,
@@ -1121,14 +1225,10 @@ export function convertADIResultsBySite(jobs, sites) {
       dataKey2: "rightADIVal",
       dataKey3: "leftADIValC",
       dataKey4: "rightADIValC",
-      refL: refL,
-      refR: refR,
-      refLC: refLC,
-      refRC: refRC,
-      refLabel1: "ADI Left",
-      refLabel2: "ADI Right",
-      refLabel3: "ADI Left Compare",
-      refLabel4: "ADI Right Compare"
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
     }
   }
 
@@ -1145,14 +1245,20 @@ export function convertADIResultsBySeries(jobs, series) {
 
   let chosenBandValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
+  let chosenFileData = chosenResults.fileData.files;
+  let chosenLeft = chosenBandValues.left;
+  let chosenRight = chosenBandValues.right;
 
   let compareBandValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
+  let compareFileData = compareResults.fileData.files;
+  let compareLeft = compareBandValues.left;
+  let compareRight = compareBandValues.right;
 
-  let refL = chosenByDate.refL;
-  let refR = chosenByDate.refR;
-  let refLC = chosenByDate.refL;
-  let refRC = chosenByDate.refR;
 
   // rename keys in compare data
   compareBandValues = replaceADIAEI(compareBandValues, true);
@@ -1161,6 +1267,11 @@ export function convertADIResultsBySeries(jobs, series) {
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
+
+  let concatFileData = Object.assign({}, chosenFileData, compareFileData);
+
   bandData = sortByKey(bandData, 'name');
   dateData = sortByKey(dateData, 'name');
 
@@ -1168,6 +1279,12 @@ export function convertADIResultsBySeries(jobs, series) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
     graph1: {
       data: compressedBandData,
       title: "Compared By Band Values",
@@ -1177,14 +1294,16 @@ export function convertADIResultsBySeries(jobs, series) {
       dataKey2: "rightBandVal",
       dataKey3: "leftBandValC",
       dataKey4: "rightBandValC",
-      refL: refL,
-      refR: refR,
-      refLC: refLC,
-      refRC: refRC,
-      refLabel1: "ADI Left",
-      refLabel2: "ADI Right",
-      refLabel3: "ADI Left Compare",
-      refLabel4: "ADI Right Compare"
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: concatFileData,
+      fileNames: fileNames,
     },
     graph3: {
       data: compressedDateData,
@@ -1195,14 +1314,10 @@ export function convertADIResultsBySeries(jobs, series) {
       dataKey2: "rightADIVal",
       dataKey3: "leftADIValC",
       dataKey4: "rightADIValC",
-      refL: refL,
-      refR: refR,
-      refLC: refLC,
-      refRC: refRC,
-      refLabel1: "ADI Left",
-      refLabel2: "ADI Right",
-      refLabel3: "ADI Left Compare",
-      refLabel4: "ADI Right Compare"
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
     }
   }
 
@@ -1219,14 +1334,19 @@ export function convertAEIResultsBySite(jobs, sites) {
 
   let chosenBandValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
+  let chosenFileData = chosenResults.fileData.files;
+  let chosenLeft = chosenBandValues.left;
+  let chosenRight = chosenBandValues.right;
 
   let compareBandValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-
-  let refL = chosenByDate.refL;
-  let refR = chosenByDate.refR;
-  let refLC = chosenByDate.refL;
-  let refRC = chosenByDate.refR;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
+  let compareFileData = compareResults.fileData.files;
+  let compareLeft = compareBandValues.left;
+  let compareRight = compareBandValues.right;
 
   // rename keys in compare data
   compareBandValues = replaceADIAEI(compareBandValues, true, true);
@@ -1235,6 +1355,11 @@ export function convertAEIResultsBySite(jobs, sites) {
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
+
+  let concatFileData = Object.assign({}, chosenFileData, compareFileData);
+
   bandData = sortByKey(bandData, 'name');
   dateData = sortByKey(dateData, 'name');
 
@@ -1242,6 +1367,12 @@ export function convertAEIResultsBySite(jobs, sites) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
     graph1: {
       data: compressedBandData,
       title: "Compared By Band Values",
@@ -1251,14 +1382,16 @@ export function convertAEIResultsBySite(jobs, sites) {
       dataKey2: "rightBandVal",
       dataKey3: "leftBandValC",
       dataKey4: "rightBandValC",
-      refL: refL,
-      refR: refR,
-      refLC: refLC,
-      refRC: refRC,
-      refLabel1: "AEI Left",
-      refLabel2: "AEI Right",
-      refLabel3: "AEI Left Compare",
-      refLabel4: "AEI Right Compare"
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: concatFileData,
+      fileNames: fileNames,
     },
     graph3: {
       data: compressedDateData,
@@ -1269,14 +1402,10 @@ export function convertAEIResultsBySite(jobs, sites) {
       dataKey2: "rightAEIVal",
       dataKey3: "leftAEIValC",
       dataKey4: "rightAEIValC",
-      refL: refL,
-      refR: refR,
-      refLC: refLC,
-      refRC: refRC,
-      refLabel1: "AEI Left",
-      refLabel2: "AEI Right",
-      refLabel3: "AEI Left Compare",
-      refLabel4: "AEI Right Compare"
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
     }
   }
 
@@ -1285,74 +1414,88 @@ export function convertAEIResultsBySite(jobs, sites) {
 
 export function convertAEIResultsBySeries(jobs, series) {
 
-    const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
-    const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
+  const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
+  const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 
-    let chosenResults = convertAEIResults(chosenSeriesJobs);
-    let compareResults = convertAEIResults(compareSeriesJobs);
+  let chosenResults = convertAEIResults(chosenSeriesJobs);
+  let compareResults = convertAEIResults(compareSeriesJobs);
 
-    let chosenBandValues = chosenResults.graph1;
-    let chosenByDate = chosenResults.graph4;
+  let chosenBandValues = chosenResults.graph1;
+  let chosenByDate = chosenResults.graph4;
+  let chosenFiles = chosenResults.audioPlayer.files;
+  let chosenUrls = chosenResults.audioPlayer.urls;
+  let chosenFileData = chosenResults.fileData.files;
+  let chosenLeft = chosenBandValues.left;
+  let chosenRight = chosenBandValues.right;
 
-    let compareBandValues = compareResults.graph1;
-    let compareByDate = compareResults.graph4;
+  let compareBandValues = compareResults.graph1;
+  let compareByDate = compareResults.graph4;
+  let compareFiles = compareResults.audioPlayer.files;
+  let compareUrls = compareResults.audioPlayer.urls;
+  let compareFileData = compareResults.fileData.files;
+  let compareLeft = compareBandValues.left;
+  let compareRight = compareBandValues.right;
 
-    let refL = chosenByDate.refL;
-    let refR = chosenByDate.refR;
-    let refLC = chosenByDate.refL;
-    let refRC = chosenByDate.refR;
+  // rename keys in compare data
+  compareBandValues = replaceADIAEI(compareBandValues, true, true);
+  compareByDate = replaceADIAEI(compareByDate, false, true);
 
-    // rename keys in compare data
-    compareBandValues = replaceADIAEI(compareBandValues, true, true);
-    compareByDate = replaceADIAEI(compareByDate, false, true);
+  let bandData = chosenBandValues.data.concat(compareBandValues.data);
+  let dateData = chosenByDate.data.concat(compareByDate.data);
 
-    let bandData = chosenBandValues.data.concat(compareBandValues.data);
-    let dateData = chosenByDate.data.concat(compareByDate.data);
+  let fileNames = chosenFiles.concat(compareFiles);
+  let urls = chosenUrls.concat(compareUrls);
 
-    bandData = sortByKey(bandData, 'name');
-    dateData = sortByKey(dateData, 'name');
+  let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
-    let compressedBandData = mergeLikeNames(bandData);
-    let compressedDateData = mergeLikeNames(dateData);
+  bandData = sortByKey(bandData, 'name');
+  dateData = sortByKey(dateData, 'name');
 
-    let ret = {
-      graph1: {
-        data: compressedBandData,
-        title: "Compared By Band Values",
-        xAxisLabel: "Hz Range",
-        yAxisLabel: "AEI Value",
-        dataKey1: "leftBandVal",
-        dataKey2: "rightBandVal",
-        dataKey3: "leftBandValC",
-        dataKey4: "rightBandValC",
-        refL: refL,
-        refR: refR,
-        refLC: refLC,
-        refRC: refRC,
-        refLabel1: "AEI Left",
-        refLabel2: "AEI Right",
-        refLabel3: "AEI Left Compare",
-        refLabel4: "AEI Right Compare"
-      },
-      graph3: {
-        data: compressedDateData,
-        title: "Compared By Date",
-        xAxisLabel: "Date",
-        yAxisLabel: "AEI Value",
-        dataKey1: "leftAEIVal",
-        dataKey2: "rightAEIVal",
-        dataKey3: "leftAEIValC",
-        dataKey4: "rightAEIValC",
-        refL: refL,
-        refR: refR,
-        refLC: refLC,
-        refRC: refRC,
-        refLabel1: "AEI Left",
-        refLabel2: "AEI Right",
-        refLabel3: "AEI Left Compare",
-        refLabel4: "AEI Right Compare"
-      }
+  let compressedBandData = mergeLikeNames(bandData);
+  let compressedDateData = mergeLikeNames(dateData);
+
+  let ret = {
+    audioPlayer:
+    {
+      title: "Play Audio Files",
+      files: fileNames,
+      urls: urls
+    },
+    graph1: {
+      data: compressedBandData,
+      title: "Compared By Band Values",
+      xAxisLabel: "Hz Range",
+      yAxisLabel: "AEI Value",
+      dataKey1: "leftBandVal",
+      dataKey2: "rightBandVal",
+      dataKey3: "leftBandValC",
+      dataKey4: "rightBandValC",
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: concatFileData,
+      fileNames: fileNames,
+    },
+    graph3: {
+      data: compressedDateData,
+      title: "Compared By Date",
+      xAxisLabel: "Date",
+      yAxisLabel: "AEI Value",
+      dataKey1: "leftAEIVal",
+      dataKey2: "rightAEIVal",
+      dataKey3: "leftAEIValC",
+      dataKey4: "rightAEIValC",
+      left: chosenLeft,
+      right: chosenRight,
+      leftC: compareLeft,
+      rightC: compareRight,
     }
+  }
 
-    return ret;
+  return ret;
 }

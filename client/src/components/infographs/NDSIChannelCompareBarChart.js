@@ -21,7 +21,7 @@ class NDSIChannelCompareBarChart extends Component {
           <XAxis dataKey="name">
             <Label value="NDSI Values" position="insideBottom" offset={2} />
           </XAxis>
-          <YAxis>
+          <YAxis tickFormatter={this.formatYAxis}>
             <Label value="Value" position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
           </YAxis>
           <Tooltip />
