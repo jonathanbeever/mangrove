@@ -33,6 +33,7 @@ const styles = theme => ({
   },
   stepper: {
     backgroundColor: 'rgba(54, 25, 25, .00004)',
+    marginTop: 80,
   },
   label: {
     fontSize: '26px',
@@ -437,7 +438,7 @@ class HorizontalLinearStepper extends React.Component {
       <div className={classes.root}>
         <div className="row" style={{paddingBottom: 0}}>
           <div className="col-9">
-            <Stepper className={classes.stepper} activeStep={activeStep}>
+            <Stepper position="static" className={classes.stepper} activeStep={activeStep}>
               {steps.map((label, index) => {
                 const props = {};
                 const labelProps = {};

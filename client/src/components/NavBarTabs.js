@@ -51,7 +51,7 @@ class NavBarTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" className={classes.background}>
+        <AppBar position="fixed" className={classes.background}>
           <Toolbar>
             <div className="col-2">
               <h2 className={classes.title}>Mangrove</h2>
