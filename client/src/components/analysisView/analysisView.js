@@ -297,7 +297,7 @@ class AnalysisView extends Component {
             <div className="col-8">
               <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3>            
             </div>
-            <div className="row-4" style={{ paddingLeft: 50+'px', paddingTop: 30+'px', float:'right' }}>
+            <div className="col-4" style={{ paddingLeft: 50+'px', paddingTop: 30+'px' }}>
               {csvExport}
             </div>
           </div>
