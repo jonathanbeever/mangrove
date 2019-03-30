@@ -21,6 +21,8 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import { withStyles } from '@material-ui/core/styles';
 import * as utils from './dataModeling.js';
+import ReactPlayer from 'react-player';
+import StickyFooter from 'react-sticky-footer';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 var _ = require('lodash');
@@ -28,6 +30,20 @@ var _ = require('lodash');
 const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
+  },
+  audioPlayerBottom: {
+    backgroundColor:"#FFFFFF",
+    height:'100%',
+    width:100+'px',
+    padding:5+'px',
+    marginBottom:25+"px",
+  },
+  audioPlayerSticky: {
+    backgroundColor:"#FFFFFF",
+    height:'100%',
+    width:100+'px',
+    padding:5+'px',
+    marginBottom:25+"px",
   },
 });
 
@@ -44,6 +60,7 @@ class AnalysisView extends Component {
       open: false,
       opened: false,
       checked: false,
+      showAudio: false,
     };
   }
 
@@ -273,6 +290,7 @@ class AnalysisView extends Component {
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
+                audioCallback={this.handleAudioPlayerOpen}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -387,6 +405,7 @@ class AnalysisView extends Component {
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
+                audioCallback={this.handleAudioPlayerOpen}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -504,6 +523,7 @@ class AnalysisView extends Component {
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
+                audioCallback={this.handleAudioPlayerOpen}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -663,15 +683,40 @@ class AnalysisView extends Component {
     return menuItems;
   }
 
+  handleAudioPlayerOpen = (data, index) => {
+    let seconds;
+    if(data.payload.stamp) seconds = parseFloat(data.payload.stamp);
+    else seconds = 0;
+    let finalPath = data.payload.downloadUrl;
+    let title;
+    if(seconds === 0) title = data.payload.fileName;
+    else title = data.payload.name;
+
+    let track = {
+      title: title,
+      startTime: seconds,
+      src: finalPath
+    }
+
+    this.setState({ track });
+    this.setState({ showAudio: true }, () => {
+      if(this.player) this.player.seekTo(track.startTime);
+    });
+  }
+
+  ref = player => {
+    this.player = player;
+  }
+
   render() {
 
     let { errorMode, formattedJob, comparedJobsSite,
           comparedJobsSeries, siteNames, seriesNames, chosenSite,
-          chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
+          chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track } = this.state;
     const { classes } = this.props;
 
     return (
-      <div style={{ marginBottom:25+'px' }}>
+      <div style={{ marginBottom:25+'px', marginTop:80+'px' }}>
         {errorMode ?
         'An error occurred. ' + this.state.errorMessage
         :
@@ -798,6 +843,23 @@ class AnalysisView extends Component {
             ''}
         </div>
       }
+      { showAudio ?
+        <StickyFooter
+          bottomThreshold={70}
+          normalStyles={ classes.audioPlayerBottom }
+          stickyStyles={ classes.audioPlayerSticky }
+        >
+          <div className="text-center">
+            <h5 style={{ backgroundColor:"#FFFFFF" }}>{track.title}</h5>
+            <ReactPlayer ref={this.ref}
+                         height='65px'
+                         width='100%'
+                         url={track.src}
+                         controls />
+          </div>
+        </StickyFooter>
+        :
+        ''}
       </div>
     );
   }

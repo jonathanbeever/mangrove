@@ -198,7 +198,6 @@ class JobQueue extends Component {
   render(){
 
     const { rowsPerPage, page } = this.state;
-    const { classes } = this.props;
 
     let data = [];
     let jobs = this.state.jobs;
