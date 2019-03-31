@@ -221,7 +221,7 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
-            case "NDSI By Date":
+            case "NDSI By Date and Hour":
               rows.push(
                 <GraphExpansionPanel
                   key={'graph'+ctr}

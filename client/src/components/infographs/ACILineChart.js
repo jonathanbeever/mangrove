@@ -39,7 +39,7 @@ class ACILineChart extends Component {
     return(
       <div>
         <div>
-          <h5>To listen to a sound file at the time shown, simply click on a datapoint dot, and an audio player will appear.</h5>
+          <h5>To listen to a sound file, simply click on a datapoint dot, and an audio player will appear.</h5>
           <LineChart width={900} height={600} data={data}
             margin={{top: 10, right: 30, left: 0, bottom: 0}}>
             <CartesianGrid strokeDasharray="3 3"/>

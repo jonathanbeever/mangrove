@@ -42,16 +42,10 @@ class NDSIValuesLineChart extends Component {
           </YAxis>
           <Legend />
           <Tooltip/>
-          <Line type='monotone' dataKey='biophonyL' stroke='#8884d8' dot={false} />
-          <Line type='monotone' dataKey='biophonyR' stroke='#5551a2' dot={false} />
-          <Line type='monotone' dataKey='anthrophonyL' stroke='#257142' dot={false} />
-          <Line type='monotone' dataKey='anthrophonyR' stroke='#82ca9d' dot={false} />
-          <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush}>
-            <Line type='monotone' dataKey='biophonyL' stroke='#8884d8' dot={false} />
-            <Line type='monotone' dataKey='biophonyR' stroke='#5551a2' dot={false} />
-            <Line type='monotone' dataKey='anthrophonyL' stroke='#257142' dot={false} />
-            <Line type='monotone' dataKey='anthrophonyR' stroke='#82ca9d' dot={false} />
-          </Brush>
+          <Line type='monotone' dataKey='ndsi' stroke='#8884d8' dot={false} />
+          <Line type='monotone' dataKey='biophony' stroke='#82ca9d' dot={false} />
+          <Line type='monotone' dataKey='anthrophony' stroke='#e79797' dot={false} />
+          <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
         </LineChart>
       </div>
     )

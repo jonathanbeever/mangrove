@@ -671,12 +671,22 @@ class AnalysisView extends Component {
 
   handleAudioPlayerOpen = (data, index) => {
     let seconds;
-    if(data.payload.stamp) seconds = parseFloat(data.payload.stamp);
-    else seconds = 0;
-    let finalPath = data.payload.downloadUrl;
+    let finalPath;
     let title;
-    if(seconds === 0) title = data.payload.fileName;
-    else title = data.payload.name;
+
+    if(data.payload)
+    {
+      if(data.payload.stamp) seconds = parseFloat(data.payload.stamp);
+      else seconds = 0;
+      if(data.payload.fileName) title = data.payload.fileName;
+      else title = data.payload.name;
+      finalPath = data.payload.downloadUrl;
+    }else
+    {
+      seconds = 0;
+      title = data.title;
+      finalPath = data.src;
+    }
 
     let track = {
       title: title,
