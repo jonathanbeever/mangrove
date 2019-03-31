@@ -31,20 +31,6 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
   },
-  audioPlayerBottom: {
-    backgroundColor:"#FFFFFF",
-    height:'100%',
-    width:100+'px',
-    padding:5+'px',
-    marginBottom:25+"px",
-  },
-  audioPlayerSticky: {
-    backgroundColor:"#FFFFFF",
-    height:'100%',
-    width:100+'px',
-    padding:5+'px',
-    marginBottom:25+"px",
-  },
 });
 
 function Transition(props) {
@@ -716,7 +702,7 @@ class AnalysisView extends Component {
     const { classes } = this.props;
 
     return (
-      <div style={{ marginBottom:25+'px', marginTop:80+'px' }}>
+      <div style={{ marginBottom:25+'px', marginTop:25+'px' }}>
         {errorMode ?
         'An error occurred. ' + this.state.errorMessage
         :
@@ -846,10 +832,10 @@ class AnalysisView extends Component {
       { showAudio ?
         <StickyFooter
           bottomThreshold={70}
-          normalStyles={ classes.audioPlayerBottom }
-          stickyStyles={ classes.audioPlayerSticky }
+          normalStyles={{ width:'100%' }}
+          stickyStyles={{ width:'100%' }}
         >
-          <div className="text-center">
+          <div style={{ backgroundColor:"#FFFFFF", padding:0+'px', marginLeft:'-'+10+'px', marginRight:0+'px' }} className="container text-center">
             <h5 style={{ backgroundColor:"#FFFFFF" }}>{track.title}</h5>
             <ReactPlayer ref={this.ref}
                          height='65px'
