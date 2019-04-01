@@ -21,6 +21,7 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import { withStyles } from '@material-ui/core/styles';
 import * as utils from './dataModeling.js';
+import ReactPlayer from 'react-player';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
 var _ = require('lodash');
@@ -44,6 +45,7 @@ class AnalysisView extends Component {
       open: false,
       opened: false,
       checked: false,
+      showAudio: false,
     };
   }
 
@@ -273,6 +275,7 @@ class AnalysisView extends Component {
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
+                audioCallback={this.handleAudioPlayerOpen}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -387,6 +390,7 @@ class AnalysisView extends Component {
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
+                audioCallback={this.handleAudioPlayerOpen}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -504,6 +508,7 @@ class AnalysisView extends Component {
                 spec={spec}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
+                audioCallback={this.handleAudioPlayerOpen}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -663,141 +668,221 @@ class AnalysisView extends Component {
     return menuItems;
   }
 
+  audioError = () => {
+    let track = {
+      title: "Error playing audio file",
+      startTime: 0,
+      src: ''
+    }
+
+    this.setState({ track });
+  }
+
+  closeAudioPlayer = () => {
+    if(this.player) this.player.playing = false;
+    this.setState({ showAudio: false });
+  }
+
+  handleAudioPlayerOpen = (data, index) => {
+    console.log("player open");
+    let seconds;
+    let finalPath;
+    let title;
+
+    if(data.payload)
+    {
+      if(data.payload.stamp) seconds = parseFloat(data.payload.stamp);
+      else seconds = 0;
+      if(data.payload.fileName) title = data.payload.fileName;
+      else title = data.payload.name;
+      finalPath = data.payload.downloadUrl;
+    }else
+    {
+      seconds = 0;
+      title = data.title;
+      finalPath = data.src;
+    }
+
+    let track = {
+      title: title,
+      startTime: seconds,
+      src: finalPath
+    }
+
+    this.setState({ track });
+    this.setState({ showAudio: true }, () => {
+      if(this.player) this.player.seekTo(track.startTime);
+    });
+  }
+
+  ref = player => {
+    this.player = player;
+  }
+
   render() {
 
     let { errorMode, formattedJob, comparedJobsSite,
           comparedJobsSeries, siteNames, seriesNames, chosenSite,
-          chosenSeries, chosenCompareSite, chosenCompareSeries } = this.state;
+          chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track } = this.state;
     const { classes } = this.props;
 
     return (
-      <div style={{ marginBottom:25+'px' }}>
-        {errorMode ?
-        'An error occurred. ' + this.state.errorMessage
-        :
-        <div>
-          <Paper style={{ marginTop:10+'px' }}>
-            <div className="row">
-              <div className="col-8">
-                <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
-                  <InputLabel shrink htmlFor="site-helper"><h4>Site</h4></InputLabel>
-                  <Select
-                    value={chosenSite ? chosenSite : ''}
-                    onChange={this.handleSiteChange}
-                    input={<Input name="site" id="site-helper" />}
-                    displayEmpty
-                    name="site"
-                    className={classes.selectEmpty}
-                  >
-                    {siteNames ?
-                      this.siteMenuItems(siteNames)
-                    :
-                      ''}
-                  </Select>
-                  <FormHelperText style={{ fontSize:12+'px' }}>Select site to view graphs</FormHelperText>
-                </FormControl>
-                <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
-                  <InputLabel shrink htmlFor="site-compare-helper"><h4>Site to compare</h4></InputLabel>
-                  <Select
-                    value={chosenCompareSite ? chosenCompareSite : ''}
-                    onChange={this.handleSiteCompareChange}
-                    input={<Input name="site-compare" id="site-compare-helper" />}
-                    displayEmpty
-                    name="site-compare"
-                    className={classes.selectEmpty}
-                  >
-                    {siteNames ?
-                      this.siteMenuCompareItems(siteNames)
-                    :
-                      ''}
-                  </Select>
-                  <FormHelperText style={{ fontSize:12+'px' }}>Select a site to compare to</FormHelperText>
-                </FormControl>
-                <FormControl style={{ marginLeft:20+'px', marginBottom:10+'px' }}>
-                  <InputLabel shrink htmlFor="series-helper"><h4>Series</h4></InputLabel>
-                  <Select
-                    value={chosenSeries ? chosenSeries : ''}
-                    onChange={this.handleSeriesChange}
-                    input={<Input name="series" id="series-helper" />}
-                    displayEmpty
-                    name="series"
-                    className={classes.selectEmpty}
-                  >
-                    {seriesNames ?
-                      this.seriesMenuItems(seriesNames)
-                    :
-                      ''}
-                  </Select>
-                  <FormHelperText style={{ fontSize:12+'px' }}>Select series to view graphs</FormHelperText>
-                </FormControl>
-                <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
-                  <InputLabel shrink htmlFor="series-compare-helper"><h4>Series to compare</h4></InputLabel>
-                  <Select
-                    value={chosenCompareSeries ? chosenCompareSeries : ''}
-                    onChange={this.handleSeriesCompareChange}
-                    input={<Input name="series-compare" id="series-compare-helper" />}
-                    displayEmpty
-                    name="series-compare"
-                    className={classes.selectEmpty}
-                  >
-                    {seriesNames ?
-                      this.seriesMenuCompareItems(seriesNames)
-                    :
-                      ''}
-                  </Select>
-                  <FormHelperText style={{ fontSize:12+'px' }}>Select a series to compare to</FormHelperText>
-                </FormControl>
-              </div>
-              <div className="col-4 text-right">
-                <Button
-                  style={{margin: 20}}
-                  onClick={this.displayGraphs}
-                  >
-                  <h6>Show Graphs</h6>
-                </Button>
-              </div>
-              <Dialog
-                open={this.state.open}
-                TransitionComponent={Transition}
-                keepMounted
-                onClose={this.handleClose}
-                aria-labelledby="alert-dialog-slide-title"
-                aria-describedby="alert-dialog-slide-description"
-              >
-                <DialogTitle id="alert-dialog-title">{"Performance Warning"}</DialogTitle>
-                <DialogContent>
-                  <h5>Warning: Increasing the scale of a graph this large may cause client performance issues. It is recommended that you stay at lower ranges for best performance.</h5>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={this.handleClose} style={{backgroundColor:"#b6cd26", margin: 7+'px'}}>
-                    <h6>Ok</h6>
+      <div>
+        <div style={{ marginBottom:25+'px', marginTop:22+'px' }}>
+          {errorMode ?
+          'An error occurred. ' + this.state.errorMessage
+          :
+          <div>
+            <Paper style={{ marginTop:10+'px', marginBottom:20+'px' }}>
+              <div className="row">
+                <div className="col-8">
+                  <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
+                    <InputLabel shrink htmlFor="site-helper"><h4>Site</h4></InputLabel>
+                    <Select
+                      value={chosenSite ? chosenSite : ''}
+                      onChange={this.handleSiteChange}
+                      input={<Input name="site" id="site-helper" />}
+                      displayEmpty
+                      name="site"
+                      className={classes.selectEmpty}
+                    >
+                      {siteNames ?
+                        this.siteMenuItems(siteNames)
+                      :
+                        ''}
+                    </Select>
+                    <FormHelperText style={{ fontSize:12+'px' }}>Select site to view graphs</FormHelperText>
+                  </FormControl>
+                  <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
+                    <InputLabel shrink htmlFor="site-compare-helper"><h4>Site to compare</h4></InputLabel>
+                    <Select
+                      value={chosenCompareSite ? chosenCompareSite : ''}
+                      onChange={this.handleSiteCompareChange}
+                      input={<Input name="site-compare" id="site-compare-helper" />}
+                      displayEmpty
+                      name="site-compare"
+                      className={classes.selectEmpty}
+                    >
+                      {siteNames ?
+                        this.siteMenuCompareItems(siteNames)
+                      :
+                        ''}
+                    </Select>
+                    <FormHelperText style={{ fontSize:12+'px' }}>Select a site to compare to</FormHelperText>
+                  </FormControl>
+                  <FormControl style={{ marginLeft:20+'px', marginBottom:10+'px' }}>
+                    <InputLabel shrink htmlFor="series-helper"><h4>Series</h4></InputLabel>
+                    <Select
+                      value={chosenSeries ? chosenSeries : ''}
+                      onChange={this.handleSeriesChange}
+                      input={<Input name="series" id="series-helper" />}
+                      displayEmpty
+                      name="series"
+                      className={classes.selectEmpty}
+                    >
+                      {seriesNames ?
+                        this.seriesMenuItems(seriesNames)
+                      :
+                        ''}
+                    </Select>
+                    <FormHelperText style={{ fontSize:12+'px' }}>Select series to view graphs</FormHelperText>
+                  </FormControl>
+                  <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
+                    <InputLabel shrink htmlFor="series-compare-helper"><h4>Series to compare</h4></InputLabel>
+                    <Select
+                      value={chosenCompareSeries ? chosenCompareSeries : ''}
+                      onChange={this.handleSeriesCompareChange}
+                      input={<Input name="series-compare" id="series-compare-helper" />}
+                      displayEmpty
+                      name="series-compare"
+                      className={classes.selectEmpty}
+                    >
+                      {seriesNames ?
+                        this.seriesMenuCompareItems(seriesNames)
+                      :
+                        ''}
+                    </Select>
+                    <FormHelperText style={{ fontSize:12+'px' }}>Select a series to compare to</FormHelperText>
+                  </FormControl>
+                </div>
+                <div className="col-4 text-right">
+                  <Button
+                    style={{margin: 20}}
+                    onClick={this.displayGraphs}
+                    >
+                    <h6>Show Graphs</h6>
                   </Button>
-                  <FormControlLabel
-                  control={
-                    <Checkbox value="donotshow"
-                      style={{color: '#b6cd26', margin: 7+'px', marginLeft: 7+'px'}}
-                      onChange={this.handleDoNotShowAgain}/>
-                  }
-                  label="Do not show this message again"
-                  />
-                </DialogActions>
-              </Dialog>
-            </div>
-          </Paper>
-          { formattedJob ?
-            formattedJob
-            :
-            ''}
-          { comparedJobsSite ?
-            comparedJobsSite
-            :
-            ''}
-          { comparedJobsSeries ?
-            comparedJobsSeries
-            :
-            ''}
+                </div>
+                <Dialog
+                  open={this.state.open}
+                  TransitionComponent={Transition}
+                  keepMounted
+                  onClose={this.handleClose}
+                  aria-labelledby="alert-dialog-slide-title"
+                  aria-describedby="alert-dialog-slide-description"
+                >
+                  <DialogTitle id="alert-dialog-title">{"Performance Warning"}</DialogTitle>
+                  <DialogContent>
+                    <h5>Warning: Increasing the scale of a graph this large may cause client performance issues. It is recommended that you stay at lower ranges for best performance.</h5>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={this.handleClose} style={{backgroundColor:"#b6cd26", margin: 7+'px'}}>
+                      <h6>Ok</h6>
+                    </Button>
+                    <FormControlLabel
+                    control={
+                      <Checkbox value="donotshow"
+                        style={{color: '#b6cd26', margin: 7+'px', marginLeft: 7+'px'}}
+                        onChange={this.handleDoNotShowAgain}/>
+                    }
+                    label="Do not show this message again"
+                    />
+                  </DialogActions>
+                </Dialog>
+              </div>
+            </Paper>
+            { formattedJob ?
+              formattedJob
+              :
+              ''}
+            { comparedJobsSite ?
+              comparedJobsSite
+              :
+              ''}
+            { comparedJobsSeries ?
+              comparedJobsSeries
+              :
+              ''}
+          </div>
+          }
         </div>
-      }
+        { showAudio ?
+          <div style={{ width:'100%', paddingLeft:0+'px', paddingRight:0+'px' }}>
+            <div style={{ marginTop:10+'px', display:'block', height:130+'px', width:'100%' }} />
+            <div style={{ position:'fixed', left:'auto', bottom:25+'px', height:100+'px', padding:0+'px' }}>
+              <div className="container text-center" style={{ borderStyle:'solid', borderWidth:1+'px', borderColor:'#e0e0e0', borderRadius:25+'px', width:1110+'px', backgroundColor:"#f1f3f4", margin:0+'px', padding:0+'px' }}>
+                <div className="row">
+                  <div className="col-8 text-right" style={{ paddingRight:70+'px' }}>
+                    <h5 style={{ marginTop:10+'px', marginBottom:0+'px' }}>{track.title}</h5>
+                  </div>
+                  <div className="col-4 text-right" style={{ paddingRight:30+'px' }}>
+                    <button style={{ background:'none', border:'none', padding:0, cursor:'pointer' }}
+                           onClick={this.closeAudioPlayer}>
+                     <i class="tiny material-icons">close</i>
+                    </button>
+                  </div>
+                </div>
+                <ReactPlayer ref={this.ref}
+                             onError={this.audioError}
+                             height='65px'
+                             width='100%'
+                             url={track.src}
+                             controls />
+              </div>
+            </div>
+          </div>
+          :
+          ''}
       </div>
     );
   }

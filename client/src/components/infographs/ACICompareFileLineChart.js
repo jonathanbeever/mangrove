@@ -7,7 +7,6 @@ import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
-import ReactPlayer from 'react-player';
 import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 const styles = theme => ({
@@ -26,7 +25,6 @@ class ACICompareFileLineChart extends Component {
 
     this.state = {
       showGraph: false,
-      showAudio: false,
     };
   }
 
@@ -195,29 +193,8 @@ class ACICompareFileLineChart extends Component {
     this.setState({ showGraph: true });
   }
 
-  handleDotClick = (data, index) => {
-    let seconds = parseFloat(data.payload.stamp);
-    let finalPath = data.payload.downloadUrl;
-
-    let track = {
-      title: data.payload.name,
-      startTime: seconds,
-      src: finalPath
-    }
-
-    this.setState({ track });
-    this.setState({ showAudio: true }, () => {
-      this.player.seekTo(track.startTime);
-    });
-  }
-
-  ref = player => {
-    this.player = player;
-  }
-
   render(){
-    let { showGraph, dataToShow, chosenFile, chosenCompareFile, fileNames,
-          track, showAudio } = this.state;
+    let { showGraph, dataToShow, chosenFile, chosenCompareFile, fileNames } = this.state;
     let { xAxisLabel, yAxisLabel, dataKey1, dataKey2, dataKey3, dataKey4 } = this.props;
     const { classes } = this.props;
 
@@ -290,23 +267,12 @@ class ACICompareFileLineChart extends Component {
               </YAxis>
               <Legend />
               <Tooltip/>
-              <Line activeDot={{ onClick: this.handleDotClick }} connectNulls={true} type='monotone' dataKey={dataKey1} stroke='#8884d8' dot={false} />
-              <Line activeDot={{ onClick: this.handleDotClick }} connectNulls={true} type='monotone' dataKey={dataKey2} stroke='#82ca9d' dot={false} />
-              <Line activeDot={{ onClick: this.handleDotClick }} connectNulls={true} type='monotone' dataKey={dataKey3} stroke='#e79797' dot={false} />
-              <Line activeDot={{ onClick: this.handleDotClick }} connectNulls={true} type='monotone' dataKey={dataKey4} stroke='#ed9f37' dot={false} />
+              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey1} stroke='#8884d8' dot={false} />
+              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey2} stroke='#82ca9d' dot={false} />
+              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey3} stroke='#e79797' dot={false} />
+              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey4} stroke='#ed9f37' dot={false} />
               <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
             </LineChart>
-          </div>
-          :
-          ''
-        }
-        { showAudio ?
-          <div>
-            <h5>{track.title}</h5>
-            <ReactPlayer ref={this.ref}
-                         height='65px'
-                         url={track.src}
-                         controls />
           </div>
           :
           ''

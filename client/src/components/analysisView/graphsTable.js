@@ -97,6 +97,7 @@ class GraphsTable extends React.Component {
                     yAxisLabel={obj.yAxisLabel}
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -110,6 +111,7 @@ class GraphsTable extends React.Component {
                     dataKey2='aciRight'
                     dataKey3='aciLeftC'
                     dataKey4='aciRightC'
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -126,6 +128,7 @@ class GraphsTable extends React.Component {
                     yAxisLabel={obj.yAxisLabel}
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -155,6 +158,7 @@ class GraphsTable extends React.Component {
                   dataKey2='aciRight'
                   dataKey3='aciLeftC'
                   dataKey4='aciRightC'
+                  audioCallback={this.props.audioCallback}
                 />}
               />
             )
@@ -212,11 +216,12 @@ class GraphsTable extends React.Component {
                   graph={<NDSICompareFileBarChart
                     callback={this.props.callback}
                     results={obj.data}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
               break;
-            case "NDSI By Date":
+            case "NDSI By Date and Hour":
               rows.push(
                 <GraphExpansionPanel
                   key={'graph'+ctr}
@@ -256,6 +261,7 @@ class GraphsTable extends React.Component {
                   graph={<NDSICompareFileBarChart
                     callback={this.props.callback}
                     results={obj.data}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -317,6 +323,7 @@ class GraphsTable extends React.Component {
                   graph={<AudioPlayer
                     files={obj.files}
                     urls={obj.urls}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -370,6 +377,7 @@ class GraphsTable extends React.Component {
                   graph={<AudioPlayer
                     files={obj.files}
                     urls={obj.urls}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -419,6 +427,7 @@ class GraphsTable extends React.Component {
                   graph={<AudioPlayer
                     files={obj.files}
                     urls={obj.urls}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -502,6 +511,7 @@ class GraphsTable extends React.Component {
                   graph={<AudioPlayer
                     files={obj.files}
                     urls={obj.urls}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -566,6 +576,7 @@ class GraphsTable extends React.Component {
                   graph={<AudioPlayer
                     files={obj.files}
                     urls={obj.urls}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )
@@ -629,6 +640,7 @@ class GraphsTable extends React.Component {
                   graph={<AudioPlayer
                     files={obj.files}
                     urls={obj.urls}
+                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )

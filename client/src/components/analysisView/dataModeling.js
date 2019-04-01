@@ -182,12 +182,9 @@ export function convertNDSIResults(jobs) {
     curObject =
     {
       name: dayDate,
-      ndsiL: job.result.ndsiL,
-      ndsiR: job.result.ndsiR,
-      biophonyL: job.result.biophonyL,
-      biophonyR: job.result.biophonyR,
-      anthrophonyL: job.result.anthrophonyL,
-      anthrophonyR: job.result.anthrophonyR
+      ndsi: (job.result.ndsiL + job.result.ndsiR) / 2,
+      biophony: (job.result.biophonyL + job.result.biophonyR) / 2,
+      anthrophony: (job.result.anthrophonyL + job.result.anthrophonyR) / 2
     }
 
     ret.graph4.data.push(curObject);

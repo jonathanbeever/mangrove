@@ -6,7 +6,7 @@ class CustomTooltip extends Component {
     const { active } = this.props;
     if(active){
       const { payload, label } = this.props;
-      if(payload === undefined || payload[0] === undefined)
+      if(payload === undefined || payload === null || payload[0] === null || payload[0] === undefined)
       {
         return(
           <div style={{ backgroundColor:'#FFFFFF', padding:8+'px'}}>

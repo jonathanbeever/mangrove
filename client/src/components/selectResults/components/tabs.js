@@ -29,8 +29,8 @@ const styles = theme => ({
   background: {
     backgroundColor: '#fafafa',
     color: '#031603',
-    marginTop: 19,
-    borderRadius: 2
+    marginTop: 80,
+    borderRadius: 2,
   }
 });
 
@@ -72,9 +72,6 @@ class SimpleTabs extends React.Component {
   render() {
     const { classes } = this.props;
     const { value } = this.state;
-
-    // console.log(this.props.selectedIndexedJobs);
-    // console.log(this.props.selectedJobs);
 
     return (
       <div className={classes.root}>

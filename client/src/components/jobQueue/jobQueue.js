@@ -34,6 +34,7 @@ const styles = {
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    marginTop: 130,
   }
 }
 
@@ -216,7 +217,7 @@ class JobQueue extends Component {
     }
 
     return(
-      <div className="container">
+      <div position="static" style={{ marginTop:80+'px' }} className="container">
         <div className="row">
           <div className="col-6">
             <Button

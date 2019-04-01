@@ -7,7 +7,6 @@ import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
-import ReactPlayer from 'react-player';
 
 const styles = theme => ({
   selectEmpty: {
@@ -61,12 +60,11 @@ class AudioPlayer extends Component {
       src: finalPath
     }
 
-    this.setState({ track });
-    this.setState({ showAudio: true });
+    this.props.audioCallback(track);
   }
 
   render(){
-    let { chosenFile, files, track, showAudio } = this.state;
+    let { chosenFile, files } = this.state;
     const { classes } = this.props;
 
     return(
@@ -98,17 +96,6 @@ class AudioPlayer extends Component {
             <h6>Play Audio</h6>
           </Button>
         </div>
-        { showAudio ?
-          <div width={900} height={600}>
-            <h5>{track.title}</h5>
-            <ReactPlayer ref={this.ref}
-                         height='65px'
-                         url={track.src}
-                         controls />
-          </div>
-          :
-          ''
-        }
       </div>
     );
   }

@@ -7,7 +7,6 @@ import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
-import ReactPlayer from 'react-player';
 import {BarChart, Bar, ReferenceLine, Label, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 const styles = theme => ({
@@ -26,7 +25,6 @@ class NDSICompareFileBarChart extends Component {
 
     this.state = {
       showGraph: false,
-      showAudio: false,
     };
   }
 
@@ -72,18 +70,6 @@ class NDSICompareFileBarChart extends Component {
     }));
 
     return menuItems;
-  }
-
-  handleBarClick = (data, index) => {
-    let finalPath = data.payload.downloadUrl;
-
-    let track = {
-      title: data.payload.fileName,
-      src: finalPath
-    }
-
-    this.setState({ track });
-    this.setState({ showAudio: true });
   }
 
   formatJob = (chosen, compare) => {
@@ -150,13 +136,8 @@ class NDSICompareFileBarChart extends Component {
     this.setState({ showGraph: true });
   }
 
-  ref = player => {
-    this.player = player;
-  }
-
   render(){
-    let { showGraph, dataToShow, chosenFile, chosenCompareFile, fileNames,
-          showAudio, track } = this.state;
+    let { showGraph, dataToShow, chosenFile, chosenCompareFile, fileNames } = this.state;
     const { classes } = this.props;
 
     return(
@@ -222,24 +203,13 @@ class NDSICompareFileBarChart extends Component {
             <Tooltip />
             <Legend />
             <ReferenceLine y={0} stroke="#000" />
-            <Bar onClick={this.handleBarClick} dataKey="ndsiL" fill="#8884d8" />
-            <Bar onClick={this.handleBarClick} dataKey="ndsiR" fill="#615cd7" />
-            <Bar onClick={this.handleBarClick} dataKey="biophonyL" fill="#82ca9d" />
-            <Bar onClick={this.handleBarClick} dataKey="biophonyR" fill="#108f3f" />
-            <Bar onClick={this.handleBarClick} dataKey="anthrophonyL" fill="#e79797" />
-            <Bar onClick={this.handleBarClick} dataKey="anthrophonyR" fill="#e73535" />
+            <Bar onClick={this.props.audioCallback} dataKey="ndsiL" fill="#8884d8" />
+            <Bar onClick={this.props.audioCallback} dataKey="ndsiR" fill="#615cd7" />
+            <Bar onClick={this.props.audioCallback} dataKey="biophonyL" fill="#82ca9d" />
+            <Bar onClick={this.props.audioCallback} dataKey="biophonyR" fill="#108f3f" />
+            <Bar onClick={this.props.audioCallback} dataKey="anthrophonyL" fill="#e79797" />
+            <Bar onClick={this.props.audioCallback} dataKey="anthrophonyR" fill="#e73535" />
           </BarChart>
-        </div>
-        :
-        ''
-      }
-      { showAudio ?
-        <div>
-          <h5>{track.title}</h5>
-          <ReactPlayer ref={this.ref}
-                       height='65px'
-                       url={track.src}
-                       controls />
         </div>
         :
         ''
