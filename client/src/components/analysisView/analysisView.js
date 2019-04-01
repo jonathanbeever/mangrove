@@ -857,20 +857,28 @@ class AnalysisView extends Component {
           }
         </div>
         { showAudio ?
-          <div style={{ paddingLeft:0+'px', paddingRight:0+'px' }} className="text-center">
+          <div style={{ width:'100%', paddingLeft:0+'px', paddingRight:0+'px' }}>
             <div style={{ marginTop:10+'px', display:'block', height:130+'px', width:'100%' }} />
-            <div style={{ marginLeft:'-'+12+'px', backgroundColor:"#FFFFFF", position:'fixed', left:'auto', bottom:25+'px', height:100+'px', width:'100%', padding:0+'px' }} className="container">
-              <h5 style={{ backgroundColor:"#FFFFFF" }}>{track.title}</h5>
-              <ReactPlayer ref={this.ref}
-                           onError={this.audioError}
-                           height='65px'
-                           width='100%'
-                           url={track.src}
-                           controls />
-              <button style={{ background:'none', backgroundColor:"#FFFFFF", border:'none', marginBottom:5+'px', padding:0, cursor:'pointer' }}
-                     onClick={this.closeAudioPlayer}>
-               Close Player
-              </button>
+            <div style={{ position:'fixed', left:'auto', bottom:25+'px', height:100+'px', padding:0+'px' }}>
+              <div className="container text-center" style={{ borderStyle:'solid', borderWidth:1+'px', borderColor:'#e0e0e0', borderRadius:25+'px', width:1110+'px', backgroundColor:"#f1f3f4", margin:0+'px', padding:0+'px' }}>
+                <div className="row">
+                  <div className="col-8 text-right" style={{ paddingRight:70+'px' }}>
+                    <h5 style={{ marginTop:10+'px', marginBottom:0+'px' }}>{track.title}</h5>
+                  </div>
+                  <div className="col-4 text-right" style={{ paddingRight:30+'px' }}>
+                    <button style={{ background:'none', border:'none', padding:0, cursor:'pointer' }}
+                           onClick={this.closeAudioPlayer}>
+                     <i class="tiny material-icons">close</i>
+                    </button>
+                  </div>
+                </div>
+                <ReactPlayer ref={this.ref}
+                             onError={this.audioError}
+                             height='65px'
+                             width='100%'
+                             url={track.src}
+                             controls />
+              </div>
             </div>
           </div>
           :
