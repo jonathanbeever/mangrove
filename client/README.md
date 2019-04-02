@@ -28,17 +28,19 @@ The Site field for files should be the location in which the recordings took pla
 ### Creating jobs that can be compared
 In order to be able to compare results over Site or Series, you must conduct the same jobs on inputs from a Site or Series. This means that you must use the same inputs and specs for each index used. An example of a comparable set of inputs would be the following:
 
-**Inputs**   **Site**      **Series**    **Index Used**    **Spec Used**
-File 1       Sanford Zoo   Black Bear    NDSI, ACI         NDSI1, ACI1
-File 2       Sanford Zoo   Black Bear    NDSI, ACI         NDSI1, ACI1
-File 3       Naples Zoo    Black Bear    NDSI              NDSI1
+| Inputs | Site | Series | Index Used | Spec Used |
+| ------ | ---- | ------ | ---------- | --------- |
+| File 1 | Sanford Zoo | Black Bear | NDSI, ACI | NDSI1, ACI1 |
+| File 2 | Sanford Zoo | Black Bear | NDSI, ACI | NDSI1, ACI1 |
+| File 3 | Naples Zoo | Black Bear | NDSI | NDSI1 |
 
 In this example, you could compare The Sanford Zoo Black Bear with the Naples Zoo Black Bear data **only** using NDSI. The reason for this is because only NDSI has been run on the Naples Zoo Black Bear data. If you wanted to compare ACI as well, you would need to run ACI on the Naples Zoo Black Bear data using the ACI1 spec. Using any other specs for ACI would not allow you to compare them, because different specs produce different results. Another case includes:
 
-**Inputs**   **Site**      **Series**    **Index Used**    **Spec Used**
-File 1       Sanford Zoo   Black Bear    NDSI              NDSI1, NDSI2
-File 2       Sanford Zoo   Black Bear    NDSI              NDSI1, NDSI2
-File 3       Naples Zoo    Black Bear    NDSI              NDSI1, NDSI2
+| Inputs | Site | Series | Index Used | Spec Used |
+| ------ | ---- | ------ | ---------- | --------- |
+| File 1 | Sanford Zoo | Black Bear | NDSI | NDSI1, NDSI2 |
+| File 2 | Sanford Zoo | Black Bear | NDSI | NDSI1, NDSI2 |
+| File 3 | Naples Zoo | Black Bear | NDSI | NDSI1, NDSI2 |
 
 Here, you could compare all files from both Sanford Zoo Black Bear and Naples Zoo Black Bear. In this case, you would get two sections of NDSI graphs. One would be the results using NDSI1 specs, and the other would be results from the NDSI2 specs.
 
