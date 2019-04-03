@@ -79,7 +79,12 @@ class NavBarWrapper extends Component {
 	// Renews Cognito Tokens with every page load (since they expire every hour)
 	renew() {
 		if(window.email == null || window.refreshToken == null) {
-			return;
+			window.email = window.localStorage.getItem('email');
+			window.refreshToken = window.localStorage.getItem('refresh');
+			window.validLogin = window.localStorage.getItem('validLogin');
+
+			if(window.email == null || window.refreshToken == null)
+				return;
 		}
 
 		const refreshToken = new AmazonCognitoIdentity.CognitoRefreshToken({RefreshToken: window.refreshToken});
@@ -98,6 +103,7 @@ class NavBarWrapper extends Component {
 				window.idToken = session.idToken.jwtToken;
 				window.accessToken = session.accessToken.jwtToken;
 				window.refreshToken = session.refreshToken.token;
+				window.localStorage.setItem('refresh', window.refreshToken);
 			}
 		});
 
@@ -157,13 +163,19 @@ class NavBarWrapper extends Component {
 			}
 		});
 
+		if(window.validLogin) {
+			window.localStorage.setItem('validLogin', window.validLogin.toString());
+		}
+		else {
+			window.localStorage.setItem('validLogin', 'false');
+		}
 		return window.validLogin;
 	}
 
 	render() {
 		this.renew();
 
-		if(window.refreshToken === null || window.refreshToken === '' || !this.validateToken()) {
+		if(window.refreshToken === null || window.refreshToken === '' || !this.validateToken() || window.localStorage.getItem('validLogin') !== 'true') {
 			return <Redirect push to="/" />;
 		}
 
