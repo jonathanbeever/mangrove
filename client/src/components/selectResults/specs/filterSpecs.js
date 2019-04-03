@@ -220,12 +220,12 @@ class FilterSpecs extends Component {
     this.props.filteredJobs.forEach(job => {
       // console.log(job)
       if(this.state.selected.indexOf(job.spec) !== -1) {
-        jobRequests.push(axios.delete('http://localhost:3000/jobs/'+job.jobId))
+        jobRequests.push(axios.delete('http://127.0.0.1:34251/jobs/'+job.jobId))
       }
     })
 
     this.state.selected.forEach(specId => {
-      requests.push(axios.delete('http://localhost:3000/specs/'+specId));
+      requests.push(axios.delete('http://127.0.0.1:34251/specs/'+specId));
     });
 
     Promise.all(requests)

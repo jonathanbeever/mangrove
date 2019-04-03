@@ -121,7 +121,7 @@ class JobQueue extends Component {
 
     // create requests for getting each job
     queueJobIds.forEach(job => {
-      jobRequests.push(axios.get('http://localhost:3000/jobs/'+job));
+      jobRequests.push(axios.get('http://127.0.0.1:34251/jobs/'+job));
     });
 
     Promise.all(jobRequests)
@@ -144,7 +144,7 @@ class JobQueue extends Component {
 
     // create requests for getting each job
     queueJobIds.forEach(job => {
-      jobRequests.push(axios.get('http://localhost:3000/jobs/'+job));
+      jobRequests.push(axios.get('http://127.0.0.1:34251/jobs/'+job));
     });
 
     // execute requests for jobs
@@ -158,8 +158,8 @@ class JobQueue extends Component {
         responses.forEach(response => {
           let inputId = response.data.input;
           let specId = response.data.spec
-          inputRequests.push(axios.get('http://localhost:3000/inputs/'+inputId));
-          specRequests.push(axios.get('http://localhost:3000/specs/'+specId))
+          inputRequests.push(axios.get('http://127.0.0.1:34251/inputs/'+inputId));
+          specRequests.push(axios.get('http://127.0.0.1:34251/specs/'+specId))
           jobData.push(response.data);
         });
 

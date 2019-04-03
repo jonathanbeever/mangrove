@@ -97,7 +97,7 @@ class Catalog extends Component {
     this.setState({ selectedSpecs: selectedSpecs })
 
     // get all db specs
-    axios.get('http://localhost:3000/specs')
+    axios.get('http://127.0.0.1:34251/specs')
       .then(res => {
         var specs = {
           'aci': [],
@@ -124,7 +124,7 @@ class Catalog extends Component {
 
       var indexedFiles = {}
 
-      axios.get('http://localhost:3000/inputs')
+      axios.get('http://127.0.0.1:34251/inputs')
       .then(res => {
         res.data.inputs.forEach(file => {
           indexedFiles[file.inputId] = file
@@ -133,7 +133,7 @@ class Catalog extends Component {
         this.setState({ allFiles: res.data.inputs })
       })
 
-      axios.get('http://localhost:3000/jobs')
+      axios.get('http://127.0.0.1:34251/jobs')
       .then(res => {
         // Set all specs state
         this.setState({ allJobs: res.data.jobs })

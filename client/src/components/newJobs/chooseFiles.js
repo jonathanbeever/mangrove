@@ -59,7 +59,7 @@ class ChooseFiles extends React.Component {
   };
 
   componentDidMount = () => {
-    axios.get('http://localhost:3000/inputs')
+    axios.get('http://127.0.0.1:34251/inputs')
     .then(res => {
       this.setState({ allFiles: res.data.inputs })
       this.setState({ filteredInputs: res.data.inputs })
@@ -194,7 +194,7 @@ class ChooseFiles extends React.Component {
     var files = this.state.filesToUpload
     var uploadRequests = []
 
-    const url = 'http://localhost:3000/inputs';
+    const url = 'http://127.0.0.1:34251/inputs';
 
     fileNames.forEach(fileName => {
       var file = _.cloneDeep(files[fileName].json)

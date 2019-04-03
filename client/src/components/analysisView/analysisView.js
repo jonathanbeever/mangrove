@@ -93,7 +93,7 @@ class AnalysisView extends Component {
     let jobRequests = [];
 
     unfinished.forEach(job => {
-      jobRequests.push(axios.get('http://localhost:3000/jobs/'+job));
+      jobRequests.push(axios.get('http://127.0.0.1:34251/jobs/'+job));
     });
 
     Promise.all(jobRequests)

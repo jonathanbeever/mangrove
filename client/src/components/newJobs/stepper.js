@@ -282,7 +282,7 @@ class HorizontalLinearStepper extends React.Component {
         inputs.forEach((inputId, inputIdx) => {
           // Request to queue new job
           axios.put(
-            "http://localhost:3000/jobs",
+            "http://127.0.0.1:34251/jobs",
             {
               input: inputId,
               spec: spec
@@ -315,7 +315,7 @@ class HorizontalLinearStepper extends React.Component {
       body.type = this.state.index
 
       axios.put(
-        "http://localhost:3000/specs",
+        "http://127.0.0.1:34251/specs",
         body,
         {headers: {"Content-Type": "application/json"}}
       )
@@ -325,7 +325,7 @@ class HorizontalLinearStepper extends React.Component {
         inputs.forEach((inputId, inputIdx) => {
           // Request to queue new job
           axios.put(
-            "http://localhost:3000/jobs",
+            "http://127.0.0.1:34251/jobs",
             {
               input: inputId,
               spec: specId

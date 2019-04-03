@@ -44,7 +44,7 @@ class ChooseSpecs extends Component {
   }
 
   componentDidMount = () => {
-    axios.get('http://localhost:3000/specs')
+    axios.get('http://127.0.0.1:34251/specs')
     .then(res => {
       var specs = {
         'aci': [],

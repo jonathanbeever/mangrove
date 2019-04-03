@@ -124,12 +124,12 @@ class FilterInputs extends Component {
 
     this.props.filteredJobs.forEach(job => {
       if(this.state.selected.indexOf(job.input) !== -1) {
-        jobRequests.push(axios.delete('http://localhost:3000/jobs/'+job.jobId))
+        jobRequests.push(axios.delete('http://127.0.0.1:34251/jobs/'+job.jobId))
       }
     })
 
     this.state.selected.forEach(inputId => {
-      requests.push(axios.delete('http://localhost:3000/inputs/'+inputId));
+      requests.push(axios.delete('http://127.0.0.1:34251/inputs/'+inputId));
     });
 
     Promise.all(requests)
