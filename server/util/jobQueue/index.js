@@ -1,3 +1,4 @@
+const config = require('config');
 const Queue = require('bull');
 
 const Status = require('../../api/models/status');
@@ -7,6 +8,7 @@ const {
 } = require('../../api/models/job/utils');
 const settings = require('../settings');
 
+const redis = config.get('redisConfig');
 const cores = settings.value('cores');
 
 function JobQueue() {
@@ -29,7 +31,7 @@ function JobQueue() {
   };
 
   const createQueue = () => {
-    this.queue = new Queue('job processing');
+    this.queue = new Queue('job processing', { redis });
     this.queue.process(cores, `${__dirname}/processJob.js`);
 
     this.queue.on('active', (job) => {
