@@ -1,22 +1,2 @@
-# Production
-build
-
-# Testing
-coverage
-.nyc_output
-
-# Package management
-*.pnp
-*.pnp.js
-node_modules
-npm-debug.log*
-package-lock.json
-yarn-debug.log*
-yarn-error.log*
-
 # Miscellaneous
 .DS_Store
-.env.development.local
-.env.local
-.env.production.local
-.env.test.local
