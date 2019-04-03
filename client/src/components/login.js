@@ -77,6 +77,10 @@ class Login extends Component {
 			window.refreshToken = result.refreshToken.token;
 			window.email = this.state.userField;
 			window.validLogin = true;
+
+			window.localStorage.setItem('email', window.email);
+			window.localStorage.setItem('refresh', window.refreshToken);
+			window.localStorage.setItem('validLogin', 'true');
 		}
 		else {
 			resultText = "Incorrect Username/Password";
@@ -84,6 +88,10 @@ class Login extends Component {
 			window.accessToken = "";
 			window.idToken = "";
 			window.refreshToken = "";
+			window.validLogin = false;
+
+			window.localStorage.setItem('refresh', window.refreshToken);
+			window.localStorage.setItem('validLogin', 'false');
 
 		}
 
