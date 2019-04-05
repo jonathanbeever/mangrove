@@ -6,6 +6,7 @@ import Modal from '@material-ui/core/Modal';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
+import { sortByKeys } from '../analysisView/dataModeling';
 import moment from 'moment';
 
 var _ = require('lodash');
@@ -38,15 +39,15 @@ class ExportCsv extends Component {
     super(props);
 
     this.state = {
-      ready: false,
       open: false,
+      separateCsvs: false,
       showFields: {
         aci: {
           fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
           sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
           sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
           durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
-          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', stringify: true, show: true},
+          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
           lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
           long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
           index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
@@ -65,7 +66,7 @@ class ExportCsv extends Component {
           sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
           sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
           durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
-          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', stringify: true, show: true},
+          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
           lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
           long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
           index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
@@ -86,7 +87,7 @@ class ExportCsv extends Component {
           sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
           sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
           durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
-          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', stringify: true, show: true},
+          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
           lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
           long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
           index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
@@ -104,7 +105,7 @@ class ExportCsv extends Component {
           sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
           sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
           durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
-          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', stringify: true, show: true},
+          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
           lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
           long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
           index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
@@ -119,7 +120,7 @@ class ExportCsv extends Component {
           sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
           sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
           durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
-          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', stringify: true, show: true},
+          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
           lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
           long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
           index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
@@ -134,7 +135,7 @@ class ExportCsv extends Component {
           sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
           sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
           durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
-          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', stringify: true, show: true},
+          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
           lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
           long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
           index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
@@ -146,6 +147,9 @@ class ExportCsv extends Component {
   }
 
   componentDidMount = () => {
+    var sortedJobs = sortByKeys(this.props.jobs, 'input', 'recordTimeMs')
+    console.log(sortedJobs)
+    this.setState({ sortedJobs: sortedJobs })
     this.setModalHtml()
   }
   
@@ -239,7 +243,6 @@ class ExportCsv extends Component {
   convertJobsData = () => {
     var fields = _.cloneDeep(this.state.showFields[this.props.index])
     Object.keys(fields).forEach(fieldName => {
-      console.log(fields[fieldName])
       if(fields[fieldName]['show'] === false){
         delete fields[fieldName]
       }
@@ -253,10 +256,11 @@ class ExportCsv extends Component {
     fields = Object.values(fields)
     const json2csvParser = new Parser({ fields });
 
-    var dateFormattedJobs = _.cloneDeep(this.props.jobs)
+    var dateFormattedJobs = _.cloneDeep(this.state.sortedJobs)
     dateFormattedJobs.map(job => {
-      job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MMM Do YY, h:mm:ss a')
+      job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY, HH:mm:ss')
     })
+
     const csv = json2csvParser.parse(dateFormattedJobs);
 
     var hiddenElement = document.createElement('a');

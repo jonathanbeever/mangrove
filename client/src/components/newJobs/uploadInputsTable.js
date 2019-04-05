@@ -24,11 +24,11 @@ function createData(id, siteName, setName, fileName, recordTimeMs, latitude, lon
   var recordTime = ''
 
   if(recordTimeMs[0].length && recordTimeMs[1].length)
-    recordTime = moment(recordTimeMs[0] + ' ' + recordTimeMs[1]).format('MMM Do YY, h:mm a')
+    recordTime = moment(recordTimeMs[0] + ' ' + recordTimeMs[1]).format('MM/DD/YY, HH:mm:ss')
   else if(recordTimeMs[0].length)
-    recordTime = moment(recordTimeMs[0]).format('MMM Do YY')
+    recordTime = moment(recordTimeMs[0]).format('MM/DD/YY')
   else if(recordTimeMs[1].length) {
-    recordTime = moment('2000-01-01 ' + recordTimeMs[1]).format('MMM Do YY, h:mm a')
+    recordTime = moment('2000-01-01 ' + recordTimeMs[1]).format('MM/DD/YY, HH:mm:ss')
     recordTime = 'Date Needed' + recordTime.substring(recordTime.indexOf(', '), recordTime.length)
   }
 
