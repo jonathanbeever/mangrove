@@ -58,7 +58,8 @@ class ExportCsv extends Component {
           aciTotAllL: {label:'ACI_TOT_ALL_L', value: 'result.aciTotAllL', stringify: true, show: true, type: 'result'},
           aciTotAllR: {label:'ACI_TOT_ALL_R', value: 'result.aciTotAllR', stringify: true, show: true, type: 'result'},
           aciTotAllByMinL: {label:'ACI_TOT_ALL_BY_MIN_L', value: 'result.aciTotAllByMinL', stringify: true, show: true, type: 'result'},
-          aciTotAllByMinR: {label:'ACI_TOT_ALL_BY_MIN_R', value: 'result.aciTotAllByMinR', stringify: true, show: true, type: 'result'}
+          aciTotAllByMinR: {label:'ACI_TOT_ALL_BY_MIN_R', value: 'result.aciTotAllByMinR', stringify: true, show: true, type: 'result'},
+          aciMatrixL: {label:'ACI_MATRIX_L', value: 'result.aciMatrixL', stringify: true, show: false, type: 'result', disabled: true}
           // aciFlVals, aciMatrix
         },
         ndsi: {
@@ -165,65 +166,85 @@ class ExportCsv extends Component {
     var resultCheckBoxes = []
 
     Object.keys(this.state.showFields[this.props.index]).forEach(field => {
-      if(this.state.showFields[this.props.index][field]['type'] === 'param')
-      paramCheckBoxes.push(
-        <FormControlLabel
-          key={this.state.showFields[this.props.index][field]['label']}
-          control={
-            <Checkbox
-              checked={this.state.showFields[this.props.index][field]['show']}
-              onChange={this.handleChange(field)}
-              value={this.state.showFields[this.props.index][field]['label']}
-              color="primary"
-            />
-          }
-          label={field}
-        />
-      )
-      else if(this.state.showFields[this.props.index][field]['type'] === 'result')
-      resultCheckBoxes.push(
-        <FormControlLabel
-          key={this.state.showFields[this.props.index][field]['label']}
-          control={
-            <Checkbox
-              checked={this.state.showFields[this.props.index][field]['show']}
-              onChange={this.handleChange(field)}
-              value={this.state.showFields[this.props.index][field]['label']}
-              color="primary"
-            />
-          }
-          label={field}
-        />
-      )
+      var currField = this.state.showFields[this.props.index][field]
+
+      if(currField['type'] === 'param')
+        paramCheckBoxes.push(
+          <FormControlLabel
+            key={currField['label']}
+            control={
+              <Checkbox
+                checked={currField['show']}
+                onChange={this.handleChange(field)}
+                value={currField['label']}
+                color="primary"
+              />
+            }
+            label={field}
+          />
+        )
+      else if(currField['type'] === 'result') {
+        var disabled, checked;
+        if(currField['disabled'] !== undefined)
+          disabled = !this.state.separateCsvs
+        else
+          disabled = false
+
+        resultCheckBoxes.push(
+          <FormControlLabel
+            key={currField['label']}
+            control={
+              <Checkbox
+                checked={currField['show']}
+                disabled={disabled}
+                onChange={this.handleChange(field)}
+                value={currField['label']}
+                color="primary"
+              />
+            }
+            label={field}
+          />
+        )
+      }
       else
-      inputCheckBoxes.push(
-        <FormControlLabel
-          key={this.state.showFields[this.props.index][field]['label']}
-          control={
-            <Checkbox
-              checked={this.state.showFields[this.props.index][field]['show']}
-              onChange={this.handleChange(field)}
-              value={this.state.showFields[this.props.index][field]['label']}
-              color="primary"
-            />
-          }
-          label={field}
-        />
-      )
+        inputCheckBoxes.push(
+          <FormControlLabel
+            key={currField['label']}
+            control={
+              <Checkbox
+                checked={currField['show']}
+                onChange={this.handleChange(field)}
+                value={currField['label']}
+                color="primary"
+              />
+            }
+            label={field}
+          />
+        )
     })
 
     var modalHtml = (
       <div>
         <h5>Select {this.props.index.toUpperCase()} fields to list in CSV</h5>
-        <h6>Input Fields</h6>
+        <hr/>
+        <h5>Input Fields</h5>
         <FormGroup row>
           {inputCheckBoxes}
         </FormGroup>
-        <h6>Parameter Fields</h6>
+        <h5>Parameter Fields</h5>
         <FormGroup row>
           {paramCheckBoxes}
         </FormGroup>
-        <h6>Result Fields</h6>
+        <h5>Result Fields</h5>
+        {this.props.index === 'aci' ? 
+          <h6>AciFlVals(L/R) and AciMatrix(L/R) can only be exported to a single job CSV file.</h6>
+          :
+          (this.props.index === 'adi' ? 
+            <p></p>
+            : 
+            ''
+          )
+        }
         <FormGroup row>
           {resultCheckBoxes}
         </FormGroup>
@@ -233,11 +254,36 @@ class ExportCsv extends Component {
   }
 
   handleChange = (name) => e => {
-    var fields = this.state.showFields
-    fields[this.props.index][name]['show'] = e.target.checked
-
-    this.setState({ showFields: fields })
-    this.setModalHtml()
+    if(name === 'separateCsvs') {
+      if(!e.target.checked && this.props.index === 'aci') {
+        var fields = this.state.showFields
+        fields[this.props.index]['aciMatrixL']['show'] = e.target.checked
+        
+        this.setState({
+          [name]: e.target.checked,
+          showFields: fields
+        }, () => {
+          this.setModalHtml()
+        })
+      }
+      else {
+        this.setState({
+          [name]: e.target.checked,
+        }, () => {
+          this.setModalHtml()
+        })
+      } 
+    }
+    else {
+      var fields = this.state.showFields
+      fields[this.props.index][name]['show'] = e.target.checked
+      
+      this.setState({
+        showFields: fields
+      }, () => {
+        this.setModalHtml()
+      })
+    }
   }
 
   convertJobsData = () => {
@@ -299,6 +345,17 @@ class ExportCsv extends Component {
         >
           <div className={classes.paper} style={getModalStyle()}>
             {this.state.modalHtml}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={this.state.separateCsvs}
+                  onChange={this.handleChange('separateCsvs')}
+                  value="separateCsvs"
+                  color="primary"
+                />
+              }
+              label="Export jobs to separate CSV files"
+            />
             <Button
               onClick={this.convertJobsData}
             >
