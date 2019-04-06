@@ -2,12 +2,18 @@
   "settingsFile": "settings.json",
   "port": 34251,
   "dbConfig": {
-    "host": "127.0.0.1",
+    "host": {
+      "local": "127.0.0.1",
+      "docker": "mangrove-server-mongodb"
+    },
     "port": 27017,
     "dbName": "mangrove"
   },
   "redisConfig": {
-    "host": "127.0.0.1",
+    "host": {
+      "local": "127.0.0.1",
+      "docker": "mangrove-server-redis"
+    },
     "port": 6379
   },
   "storage": {

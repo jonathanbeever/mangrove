@@ -36,7 +36,7 @@ const deleteInputDir = () => {
 };
 
 const deleteRootDir = () => {
-  rimraf.sync(settings.rootDir);
+  rimraf.sync(settings.rootDir());
 };
 
 module.exports = {

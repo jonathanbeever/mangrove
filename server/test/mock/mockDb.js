@@ -6,7 +6,7 @@ const { uri } = require('../../util/db');
 
 const setup = async () => {
   await mockgoose.prepareStorage();
-  await mongoose.connect(uri, { useNewUrlParser: true });
+  await mongoose.connect(uri(), { useNewUrlParser: true });
 };
 
 const teardown = async () => {
