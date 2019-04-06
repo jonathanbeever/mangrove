@@ -1,3 +1,3 @@
 \subsubsection{Login Page Specifications}
 \includegraphics[width=\textwidth]{login}\\
-The login page is pretty straightforward. Users will create accounts with their email or may choose to log in with their gmail account. A password reset can be emailed to the user if they forgot their password. This page will also feature a logo that represents our application. Information about what the application does and available features can also be found on this page.\par
+The login page is fairly straightforward. When the program starts the user must first login, so they will be prompted to do so everytime. Additionally, the session is token based and can expire after some time without activity. The user will have to login again should this occru. Users will create accounts with their email, and must verify them using an email verification code from Cognito. Logging in requires a valid login username and password.\par
