@@ -9,13 +9,9 @@
   },
   "scripts": {
     "pretest": "eslint --ignore-path ../.gitignore .",
-    "test": "run-script-os",
-    "test:darwin:linux": "export NODE_ENV=test && nyc --reporter=text --reporter=html mocha",
-    "test:win32": "SET NODE_ENV=test&& nyc --reporter=text --reporter=html mocha",
+    "test": "cross-env-shell NODE_ENV=test nyc --reporter=text --reporter=html mocha",
     "lint-fix": "eslint --ignore-path ../.gitignore --fix .",
-    "dev": "run-script-os",
-    "dev:darwin:linux": "export NODE_ENV=dev && nodemon server.js",
-    "dev:win32": "SET NODE_ENV=dev&& nodemon server.js",
+    "dev": "cross-env-shell NODE_ENV=dev nodemon server.js",
     "start": "node server.js"
   },
   "contributors": [
@@ -43,6 +39,7 @@
     "bull": "3.7.0",
     "config": "3.0.1",
     "cors": "2.8.5",
+    "cross-env": "5.2.0",
     "execa": "1.0.0",
     "express": "4.16.4",
     "ffprobe-static": "3.0.0",
