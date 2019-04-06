@@ -263,7 +263,7 @@ class ACICompareFileLineChart extends Component {
                 <Label value={xAxisLabel} position="insideBottom" offset={2} />
               </XAxis>
               <YAxis domain={['dataMin-10', 'dataMax+10']} tickFormatter={this.formatYAxis}>
-                <Label value={yAxisLabel} position="insideLeft" offset={0} />
+                <Label value="ACI Value" position="insideLeft" offset={0} />
               </YAxis>
               <Legend />
               <Tooltip/>

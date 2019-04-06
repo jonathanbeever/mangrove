@@ -1,18 +1,22 @@
 \subsubsection{ACI Visualization}
-As ACI is best represented over a period of time, the first infographics that come to mind for representing it are line charts and histograms. A line chart can represent ACI values over time and also represent multiple results across time. This benefits users because it allows them to visually compare results taken at the same time of day, but from different days. Our sponsor mentioned that being able to see if there is a correlation between time of day and when a site is loud or quiet is useful in research. A histogram on the other hand is best fit for representing the distribution of a single variable over time. This would be useful for representing a single result, instead of comparing results over time. Thus, the two visualizations initially available for ACI were line charts for comparing results, and a histogram for individual results.\par
+As ACI is best represented over a period of time, the first infographic that comes to mind for representing it is a line chart. Naturally, a line chart can represent date and time in the X axis and the ACI value in the Y axis. Additionally, a bar chart for showing the overall ACI value for a data set as a whole would be useful. Researchers organize their data in different ways, and it is important to provide as many different graphs as possible to try to accommodate the research goal. The ACI index has the most graphs available because of this.\par
 
 \begin{center}
   \includegraphics[width=\textwidth]{ACIgraph1} \\[12pt]
 \end{center}
-This was the first idea for creating a visualization of ACI. This graph included the ability to see the specific value for each data point, which is useful for researchers. The X axis represents the time stamp in the file, and the Y axis represents the ACI value at that time stamp. The heading of the graph includes the ACI total value for both the left and the right channel. While this graph is useful, it does not include the ability to zoom into a specific time range, something that can be helpful especially for longer files. Thus the next iteration came to fruition.\par
+The first graph available shows all the files in the set, in order in which they appear in the set. Further, each data point represents a time stamp in that file. The X axis here represents the name of the file, and if you hover over a data point, it will detail at what time stamp in the file did that data occur. Here, an audio player is also available if you click on any data point, and it will even begin playback at that time stamp.\par
 
 \begin{center}
   \includegraphics[width=\textwidth]{ACIgraph2} \\[12pt]
-  \includegraphics[width=\textwidth]{ACIgraph2-1} \\[12pt]
 \end{center}
-These graphs are similar to the first version, however they include a brush bar. This bar can be used to specify a range of time that the graph natively zooms in on, as shown in the second image. In addition, that range of time can be scrolled through, so the user could filter by thirty second intervals and manually scroll through the data as they please. We feel this visualization is the best representation for both the data and the user.\par
+This graph aims to compare individual files in a data set much like the first graph. Here, you can examine a single file or compare two files in the chosen Site and/or Series. Again, an audio player is available and can also begin playback at the designated time stamp.\par
 
 \begin{center}
-  \includegraphics[width=\textwidth]{ACIgraph2-2} \\[12pt]
+  \includegraphics[width=\textwidth]{ACIgraph3} \\[12pt]
 \end{center}
-This graph is included to showcase what an actual, hour long file will look like represented with the graphs included. The high spikes are most likely the result of file splicing, done to make analysis possible, as outlined in the Benchmarking section of this document.
+This graph differs from the first two as it is a bar chart and it also represents overall ACI value for the file rather than over time of the file. Here, each file gets its own Bar representation with each channel. This graph is useful to see overall ACI value as it changes from file to file.\par
+
+\begin{center}
+  \includegraphics[width=\textwidth]{ACIgraph4} \\[12pt]
+\end{center}
+The last two graphs available for ACI are for showing ACI by date and time and by file. These are simple line graphs that include the ACI value at the given date and time or by the given file.
