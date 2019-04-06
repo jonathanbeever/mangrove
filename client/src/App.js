@@ -49,8 +49,8 @@ class App extends Component {
         <MuiThemeProvider theme={theme}>
           <Switch>
             <Route path="/login" component={Login} />
-			<Route path="/catalog" render={() => <div><NavBarWrapper/><Catalog/></div>} />
-	        <Route path="/newJobs" render={() => <div><NavBarWrapper/><NewJobs/></div>} />
+            <Route path="/newJobs" render={() => <div><NavBarWrapper/><NewJobs/></div>} />
+  		      <Route path="/catalog" render={() => <div><NavBarWrapper/><Catalog/></div>} />
             <Route path="/jobQueue" render={() => <div><NavBarWrapper/><JobQueue/></div>} />
             <Redirect from="/" to="/login" />
           </Switch>

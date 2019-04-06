@@ -62,14 +62,14 @@ class NavBarTabs extends React.Component {
                 TabIndicatorProps={{style: {backgroundColor: "#fdc907"}}}
                 centered>
                 <Tab value={0}
-                  label="Catalog"
-                  to="/catalog"
+                  label="Create Jobs"
+                  to="/newJobs"
                   style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
                   activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
                   component={NavLink} />
                 <Tab value={1}
-                  label="Create Jobs"
-                  to="/newJobs"
+                  label="Results Catalog"
+                  to="/catalog"
                   style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
                   activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
                   component={NavLink} />
