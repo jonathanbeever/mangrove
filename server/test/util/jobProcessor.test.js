@@ -53,18 +53,8 @@ describe('Job Processor', () => {
     expect(result.aciTotAllR).to.be.a('number');
     expect(result.aciTotAllByMinL).to.be.a('number');
     expect(result.aciTotAllByMinR).to.be.a('number');
-    expect(result.aciFlValsL).to.be.an('array');
-    expect(result.aciFlValsR).to.be.an('array');
-    expect(result.aciMatrixL).to.be.an('array');
-    result.aciMatrixL.forEach((subarray) => {
-      expect(subarray).to.be.an('array');
-      subarray.forEach(item => expect(item).to.be.a('number'));
-    });
-    expect(result.aciMatrixR).to.be.an('array');
-    result.aciMatrixR.forEach((subarray) => {
-      expect(subarray).to.be.an('array');
-      subarray.forEach(item => expect(item).to.be.a('number'));
-    });
+    expect(result.aciOverTimeL).to.be.an('array');
+    expect(result.aciOverTimeR).to.be.an('array');
   });
 
   it('It should process an ADI Job', async () => {
