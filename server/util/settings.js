@@ -12,9 +12,15 @@ const settingsFile = config.get('settingsFile');
 // when while running in prod or dev, and mock it during tests.
 const testSettings = [];
 
-const rootDir = config.util.getEnv('NODE_ENV') !== 'test'
-  ? path.join(os.homedir(), storage.root)
-  : path.join(os.tmpdir(), storage.root);
+const rootDir = () => {
+  if (config.util.getEnv('NODE_ENV') === 'test') {
+    return path.join(os.tmpdir(), storage.root);
+  }
+  if (process.env.DOCKER_MANGROVE === 'yes') {
+    return path.join('/', storage.root);
+  }
+  return path.join(os.homedir(), storage.root);
+};
 
 const value = key => (config.util.getEnv('NODE_ENV') !== 'test'
   ? settings.value(key)
@@ -47,14 +53,18 @@ const load = () => {
   if (config.util.getEnv('NODE_ENV') !== 'test') {
     settings.init({
       electronApp: false,
-      filename: path.join(rootDir, settingsFile),
+      filename: path.join(rootDir(), settingsFile),
     });
   }
 
   // TODO: Check to make sure we have ownership/access for this directory
   // TODO: Make sure inputDir is Valid.
   if (!value('inputDir')) {
-    setValue('inputDir', path.join(rootDir, storage.inputs));
+    if (process.env.DOCKER_MANGROVE === 'yes' && config.util.getEnv('NODE_ENV') !== 'test') {
+      setValue('inputDir', path.join('/', storage.inputs));
+    } else {
+      setValue('inputDir', path.join(rootDir(), storage.inputs));
+    }
   }
   if (!value('cores')) {
     setValue('cores', os.cpus().length);
