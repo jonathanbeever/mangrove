@@ -10,7 +10,7 @@ import { sortByKeys } from '../analysisView/dataModeling';
 import moment from 'moment';
 
 var _ = require('lodash');
-const { Parser } = require('json2csv');
+const { AsyncParser, Parser } = require('json2csv');
 
 function getModalStyle() {
   const top = 50;
@@ -59,8 +59,10 @@ class ExportCsv extends Component {
           aciTotAllR: {label:'ACI_TOT_ALL_R', value: 'result.aciTotAllR', stringify: true, show: true, type: 'result'},
           aciTotAllByMinL: {label:'ACI_TOT_ALL_BY_MIN_L', value: 'result.aciTotAllByMinL', stringify: true, show: true, type: 'result'},
           aciTotAllByMinR: {label:'ACI_TOT_ALL_BY_MIN_R', value: 'result.aciTotAllByMinR', stringify: true, show: true, type: 'result'},
-          aciMatrixL: {label:'ACI_MATRIX_L', value: 'result.aciMatrixL', stringify: true, show: false, type: 'result', disabled: true}
-          // aciFlVals, aciMatrix
+          aciFlValsL: {label:'ACI_FL_VALS_L', value: 'result.aciFlValsL', stringify: true, show: false, type: 'result', disabled: true},          
+          aciFlValsR: {label:'ACI_FL_VALS_R', value: 'result.aciFlValsR', stringify: true, show: false, type: 'result', disabled: true},                    
+          aciMatrixL: {label:'ACI_MATRIX_L', value: 'result.aciMatrixL', stringify: true, show: false, type: 'result', disabled: true},
+          aciMatrixR: {label:'ACI_MATRIX_R', value: 'result.aciMatrixR', stringify: true, show: false, type: 'result', disabled: true}
         },
         ndsi: {
           fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
@@ -97,9 +99,11 @@ class ExportCsv extends Component {
           freqStep: {label:'FREQ_STEP', value: 'spec.freqStep', stringify: true, show: true, type: 'param'},
           shannon: {label:'SHANNON', value: 'spec.shannon', stringify: true, show: true, type: 'param'},
           adiL: {label:'ADI_L', value: 'result.adiL', stringify: true, show: true, type: 'result'},
-          adiR: {label:'ADI_R', value: 'result.adiR', stringify: true, show: true, type: 'result'}
-          // {label:'BAND_L', value: 'result.bandL', stringify: true},
-          // {label:'BAND_R', value: 'result.bandR', stringify: true}
+          adiR: {label:'BAND_L', value: 'result.bandL', stringify: true, show: true, type: 'result'},
+          bandL: {label:'BAND_L', value: 'result.bandL', stringify: true, show: true, type: 'result'},
+          bandR: {label:'BAND_R', value: 'result.bandR', stringify: true, show: true, type: 'result'},
+          bandRangeL: {label:'BAND_RANGE_L', value: 'result.bandRangeL', stringify: true, show: true, type: 'result'},
+          bandRangeR: {label:'BAND_RANGE_R', value: 'result.bandRangeR', stringify: true, show: true, type: 'result'}
         },
         aei: {
           fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
@@ -149,8 +153,8 @@ class ExportCsv extends Component {
 
   componentDidMount = () => {
     var sortedJobs = sortByKeys(this.props.jobs, 'input', 'recordTimeMs')
-    console.log(sortedJobs)
     this.setState({ sortedJobs: sortedJobs })
+
     this.setModalHtml()
   }
   
@@ -184,11 +188,9 @@ class ExportCsv extends Component {
           />
         )
       else if(currField['type'] === 'result') {
-        var disabled, checked;
-        if(currField['disabled'] !== undefined)
-          disabled = !this.state.separateCsvs
-        else
-          disabled = false
+        var disabled;
+        if(currField['disabled'] !== undefined) disabled = currField['disabled']
+        else disabled = false
 
         resultCheckBoxes.push(
           <FormControlLabel
@@ -206,7 +208,7 @@ class ExportCsv extends Component {
           />
         )
       }
-      else
+      else {
         inputCheckBoxes.push(
           <FormControlLabel
             key={currField['label']}
@@ -221,6 +223,7 @@ class ExportCsv extends Component {
             label={field}
           />
         )
+      }
     })
 
     var modalHtml = (
@@ -255,29 +258,59 @@ class ExportCsv extends Component {
 
   handleChange = (name) => e => {
     if(name === 'separateCsvs') {
-      if(!e.target.checked && this.props.index === 'aci') {
-        var fields = this.state.showFields
-        fields[this.props.index]['aciMatrixL']['show'] = e.target.checked
+      var fields = this.state.showFields
+
+      if(this.props.index === 'aci') {
+        ['aciFlValsL', 'aciFlValsR', 'aciMatrixL', 'aciMatrixR'].forEach(field => {
+          if(!e.target.checked) {
+            fields[this.props.index][field]['show'] = e.target.checked
+            // fields[this.props.index]['aciFlValsR']['show'] = e.target.checked
+            // fields[this.props.index]['aciMatrixL']['show'] = e.target.checked
+            // fields[this.props.index]['aciMatrixR']['show'] = e.target.checked  
+          }
+          fields[this.props.index][field]['disabled'] = !e.target.checked
+          // fields[this.props.index]['aciFlValsR']['disabled'] = !e.target.checked
+          // fields[this.props.index]['aciMatrixL']['disabled'] = !e.target.checked
+          // fields[this.props.index]['aciMatrixR']['disabled'] = !e.target.checked  
+        })
         
-        this.setState({
-          [name]: e.target.checked,
-          showFields: fields
-        }, () => {
-          this.setModalHtml()
-        })
       }
-      else {
-        this.setState({
-          [name]: e.target.checked,
-        }, () => {
-          this.setModalHtml()
-        })
-      } 
+      else if(this.props.index === 'adi') {
+        if(!e.target.checked) {
+          fields[this.props.index]['bandL']['show'] = e.target.checked
+          fields[this.props.index]['bandR']['show'] = e.target.checked
+          fields[this.props.index]['bandRangeL']['show'] = e.target.checked
+          fields[this.props.index]['bandRangeR']['show'] = e.target.checked  
+        }
+        fields[this.props.index]['bandL']['disabled'] = !e.target.checked
+        fields[this.props.index]['bandR']['disabled'] = !e.target.checked
+        fields[this.props.index]['bandRangeL']['disabled'] = !e.target.checked
+        fields[this.props.index]['bandRangeR']['disabled'] = !e.target.checked  
+      }
+      
+      this.setState({
+        [name]: e.target.checked,
+        showFields: fields
+      }, () => {
+        this.setModalHtml()
+      })
     }
     else {
       var fields = this.state.showFields
       fields[this.props.index][name]['show'] = e.target.checked
-      
+
+      if(name === 'aciMatrixL') {
+        fields[this.props.index]['aciMatrixR']['disabled'] = e.target.checked
+        fields[this.props.index]['aciFlValsR']['disabled'] = e.target.checked
+        fields[this.props.index]['aciMatrixR']['show'] = false
+        fields[this.props.index]['aciFlValsR']['show'] = false
+      }
+      else if(name === 'aciMatrixR') {
+        fields[this.props.index]['aciMatrixL']['disabled'] = e.target.checked
+        fields[this.props.index]['aciFlValsL']['disabled'] = e.target.checked
+        fields[this.props.index]['aciMatrixL']['show'] = false
+        fields[this.props.index]['aciFlValsL']['show'] = false
+      }
       this.setState({
         showFields: fields
       }, () => {
@@ -286,7 +319,7 @@ class ExportCsv extends Component {
     }
   }
 
-  convertJobsData = () => {
+  jobSetSummary = () => {
     var fields = _.cloneDeep(this.state.showFields[this.props.index])
     Object.keys(fields).forEach(fieldName => {
       if(fields[fieldName]['show'] === false){
@@ -308,12 +341,102 @@ class ExportCsv extends Component {
     })
 
     const csv = json2csvParser.parse(dateFormattedJobs);
+    var fileName = this.props.site + '-' + this.props.series + '-' + this.props.index +'.csv';
+    this.downloadCsv(csv, fileName);
+  }
 
-    var hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-    hiddenElement.target = '_blank';
-    hiddenElement.download = this.props.site + '-' + this.props.series + '-' + this.props.index +'.csv';
-    hiddenElement.click();
+  individualJobSummary = () => {
+    var fields = _.cloneDeep(this.state.showFields[this.props.index])
+
+    if(this.props.index === 'aci') {
+      var matrixL = fields['aciMatrixL']['show']
+      var matrixR = fields['aciMatrixR']['show']
+      var flValsL = fields['aciFlValsL']['show']
+      var flValsR = fields['aciFlValsR']['show']
+    }
+    if(this.props.index === 'adi') {
+      var bandL = fields['bandL']['show']
+      var bandR = fields['bandR']['show']
+      var bandRangeL = fields['bandRangeL']['show']
+      var bandRangeR = fields['bandRangeR']['show']
+    }
+
+    Object.keys(fields).forEach(fieldName => {
+      if(fields[fieldName]['show'] === false){
+        delete fields[fieldName]
+      }
+      else {
+        delete fields[fieldName]['show']
+        if(fields[fieldName]['type'] !== undefined)
+          delete fields[fieldName]['type']
+        if(fields[fieldName]['disabled'] !== undefined)
+          delete fields[fieldName]['disabled']
+      }
+    })
+
+    if(this.props.index === 'aci') {
+      var value
+
+      delete fields['aciMatrixL']
+      delete fields['aciMatrixR']
+
+      this.state.sortedJobs.forEach((job) => {
+        var unwind = []
+        if(flValsL) unwind.push('result.aciFlValsL')
+        if(flValsR) unwind.push('result.aciFlValsR')
+
+        if(matrixL) {
+          unwind.push('result.aciMatrixL')
+          job.result.aciMatrixL[0].forEach((col, i) => {
+            var fieldName = 'aciMatrixL' + i
+            value = 'result.aciMatrixL[' + i + ']'
+            fields[fieldName] = {label: fieldName, value: value, stringify: true}
+          })
+        }
+
+        if(matrixR) {
+          unwind.push('result.aciMatrixR')
+          job.result.aciMatrixR[0].forEach((col, i) => {
+            var fieldName = 'aciMatrixR' + i
+            value = 'result.aciMatrixR[' + i + ']'
+            fields[fieldName] = {label: fieldName, value: value, stringify: true}
+          })
+        }
+
+        this.parseJSON(fields, unwind, job)
+      })
+    }
+    else if(this.props.index === 'adi'){
+      var unwind = []
+      if(bandL) unwind.push('result.bandL')
+      if(bandR) unwind.push('result.bandR')
+      if(bandRangeL) unwind.push('result.bandRangeL')
+      if(bandRangeR) unwind.push('result.bandRangeR')
+
+      this.state.sortedJobs.forEach(job => {this.parseJSON(fields, unwind, job)})
+    }
+    else {
+      this.state.sortedJobs.forEach(job => {this.parseJSON(fields, [], job)})
+    }
+  }
+
+  parseJSON = (fields, unwind, job) => {
+    job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY, HH:mm:ss')
+    var fileName = this.props.site + '-' + this.props.series + '-' + job.input.name + '-' + this.props.index +'.csv'
+    fields = Object.values(fields)
+
+    const json2csvParser = new Parser({fields: fields, unwind: unwind});
+    const csv = json2csvParser.parse(job);
+
+    this.downloadCsv(csv, fileName)
+  }
+
+  downloadCsv = (csv, fileName) => {
+    var hiddenElement = document.createElement('a')
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv)
+    hiddenElement.target = '_blank'
+    hiddenElement.download = fileName
+    hiddenElement.click()
   }
 
   openModal = () => {
@@ -357,7 +480,7 @@ class ExportCsv extends Component {
               label="Export jobs to separate CSV files"
             />
             <Button
-              onClick={this.convertJobsData}
+              onClick={this.state.separateCsvs ? this.individualJobSummary : this.jobSetSummary}
             >
               Download
             </Button>
