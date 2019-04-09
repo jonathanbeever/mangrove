@@ -112,6 +112,8 @@ const getResultKeys = (type) => {
         'aciTotAllByMinR',
         'aciOverTimeL',
         'aciOverTimeR',
+        'aciFlRightVals',
+        'aciFlLeftVals',
       ];
     case Type.ADI:
       return [

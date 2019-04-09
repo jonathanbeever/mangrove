@@ -55,6 +55,8 @@ describe('Job Processor', () => {
     expect(result.aciTotAllByMinR).to.be.a('number');
     expect(result.aciOverTimeL).to.be.an('array');
     expect(result.aciOverTimeR).to.be.an('array');
+    expect(result.aciFlRightVals).to.be.an('array');
+    expect(result.aciFlLeftVals).to.be.an('array');
   });
 
   it('It should process an ADI Job', async () => {

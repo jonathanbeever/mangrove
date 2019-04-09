@@ -17,6 +17,8 @@ module.exports = Job.discriminator(JobType.ACI, new mongoose.Schema({
       aciTotAllByMinR: Number,
       aciOverTimeL: [Number],
       acioverTimeR: [Number],
+      aciFlLeftVals: [Number],
+      aciFlRightVals: [Number],
     },
     default: null,
   },

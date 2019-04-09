@@ -25,7 +25,7 @@ if (job$spec$type == "aci") {
                                 j = job$spec$j,
                                 fft_w = job$spec$fftW,
                                 matrix=FALSE,
-                                bands=FALSE)
+                                bands=TRUE)
 } else if (job$spec$type == "adi") {
   result <- acoustic_diversity(soundfile,
                                max_freq = job$spec$maxFreq,
