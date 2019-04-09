@@ -54,6 +54,9 @@ There are three additional prerequisites that must be installed and accessible v
 - [Redis](https://redis.io) (Windows users should get a stable build from [here](https://github.com/MicrosoftArchive/redis/releases))
 - The [R programming language](https://www.r-project.org/)
 
+#### Windows Only
+If you are running windows you will need to manually install Rtools. This allows the application to download our [modified R scripts](https://github.com/OtGabaldon/soundecology) from github. Download the most recent stable version from [here](https://cran.r-project.org/bin/windows/Rtools/). **When prompted during installation, select the Add to Path option**
+
 Similar to `git`, `node,` and `npm`, we should check to make sure they installed correctly and can be used from the terminal:
 ```
 $ mongod --version
