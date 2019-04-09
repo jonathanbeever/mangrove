@@ -15,6 +15,8 @@
 \graphicspath{ {./img/} }
 \usepackage{makecell} % Allows for more formatting options within table cells
 \usepackage{caption}% Allows for captions to be made for figures/images
+\usepackage[backend=biber]{biblatex} % References library
+\bibliography{references}
 
 % General formatting
 \newcommand{\paragraphheaderspace}{8pt}
@@ -43,6 +45,9 @@
   \begin{multicols*}{2}
     \input{title}
     \input{abstract}
-
+    \input{soundecology}
+    \input{indices}
+    \input{research}
   \end{multicols*}
+  \printbibliography
 \end{document}

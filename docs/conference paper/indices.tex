@@ -1,0 +1,26 @@
+\begin{center}
+II. Soundscape Indices
+\end{center}
+\begin{flushleft}
+\setlength{\parindent}{0.125in}
+The \codesnip{soundecology} R package was developed by Luis Villanueva. This package contains algorithms for calculating the major indices, along with some extra abilities. Obviously, each algorithm outputs the index value, however each also outputs specific values, value lists, and matrices that are also used heavily in this service for creating the visualizations.\par
+
+\noindent\textit{A. Acoustic Complexity Index}\par
+The ACI, in combination with other measuring techniques, can be a powerful tool for finding the Biophonic sounds within a recording. ACI relies on the fact that most Biophonic (non-human biological sounds) have a high level of complexity when it comes to their intensity. Meaning that most natural sounds have a high variance of loudness. This is in stark contrast with the mostly monotone nature of human made sounds. This key difference in sound types allows the ACI to filter out plane noises or car sounds amongst bird sounds and other Biophonic interests. While there is a promising amount of research for the ability of the ACI to discriminate between Anthrophony and Biophony, the algorithm still does very poorly in discerning between different types of Biophony and Geophony. This challenge can be highlighted by the fact that the algorithm produces high numbers for sounds such as buzzing insects and wind.\par
+
+\noindent\textit{B. Normalized Difference Soundscape Index}\par
+One goal within the field of soundscape ecology is the analysis of the key characteristics of the Anthropocene, that is, the impact that humans have on wildlife and Earth as a whole. And perhaps no other metric of analysis symbolizes this better than the NDSI. NDSI has the goal of measuring the ratio between anthropogenic sounds and biological sounds.\par
+The basis of this metric originates from a 2004 thesis written by Brian Michael Napoletano entitled \textit{Measurement, Quantification and Interpretation of Acoustic Signals Within an Ecological Context.} In this paper, Napoletano proposed three classifications for the sources for domains of sound frequencies: geophony (full spectrum), anthrophony (0 to 2 kHz), and biophony (3 to 11 kHz).\cite{napoletano} By ignoring potential geophony (as it would occur over too wide of a spectrum to identify), NDSI measures the acoustic energy (in watts) produced within the anthrophony and biophony spectrums.\par
+Of course, this metric has its limits. In addition to completely ignoring all signals of geophony, NDSI fails to take into account variations in acoustic energy patterns depending on the source of sound, the time of day, and the season.\par
+
+\noindent\textit{C. Bioacoustic Index}\par
+The bioacoustic index was originally developed by ecologists studying the effects of invasive species on the native bird population of Hawaii. The purpose of such an index was to create a metric that closely correlated to the actual population of birds within an environment. This way, the researchers could have a reasonable estimation of the amount of birds within a given area without having to count them all by hand all the time.\par
+This metric works by first specifying a range of frequencies (in Hz) at which biophony (or just about any type of sound that researchers expect to target) is expected to occur. Then, within this range of frequencies, measure the power (in Db) produced from these recordings within bins of specified ranges of time (in s). This should result in a collection of segments of curves of power. Finally, through determining the average area underneath these curves, the bioacoustic index value is found.\par
+Of course, however, this metric has some drawbacks. Namely, it requires knowledge of the environment that the field work is occurring in. In order for this metric to be used effectively, researchers need to know beforehand the frequency range they intend to target and the correlation factor between the actual population count and the bioacoustic index value.\par
+
+\noindent\textit{D. Acoustic Evenness and Diversity Index}\par
+The ADI (Acoustic Diversity Index) bases its numerical evaluation on the concept of evenness of a set. A statistical theory first appearing in the 1960\textquotesingle s it is used to measure the diversity of a set of data.\par
+One of the great features of the ADI using the Shannon-Wiener index is that it is not greatly affected by sample size. Along with that the ADI can capture a lot of information in one expression. Which can be helpful to express data to a general audience. That being said you must put this index into context. Mainly one must state the range of values that the index can output. These minimum and maximum values put the output value into context for the data collected. Just like most indices it is important that diversity indices are used along other measures. This allows for a holistic measure of the state the environment is in.\cite{shannonWiener}\par
+While the method of taking individual sounds of birds and using ratios of specific calls is much more accurate, it is very difficult to identify individual calls in an automated fashion. Thus, when using a script to calculate the evenness or diversity of a sound clip, bands of frequencies are often used.
+
+\end{flushleft}
