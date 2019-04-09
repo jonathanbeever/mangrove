@@ -1,0 +1,10 @@
+rm -rf _minted-main
+rm main.aux
+rm main.bbl
+rm main.bcf
+rm main.blg
+rm main.log
+rm main.out
+rm main.pdf
+rm main.run.xml
+rm main.toc
