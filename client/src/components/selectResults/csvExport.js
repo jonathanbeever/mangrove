@@ -100,10 +100,10 @@ class ExportCsv extends Component {
           shannon: {label:'SHANNON', value: 'spec.shannon', stringify: true, show: true, type: 'param'},
           adiL: {label:'ADI_L', value: 'result.adiL', stringify: true, show: true, type: 'result'},
           adiR: {label:'BAND_L', value: 'result.bandL', stringify: true, show: true, type: 'result'},
-          bandL: {label:'BAND_L', value: 'result.bandL', stringify: true, show: true, type: 'result'},
-          bandR: {label:'BAND_R', value: 'result.bandR', stringify: true, show: true, type: 'result'},
-          bandRangeL: {label:'BAND_RANGE_L', value: 'result.bandRangeL', stringify: true, show: true, type: 'result'},
-          bandRangeR: {label:'BAND_RANGE_R', value: 'result.bandRangeR', stringify: true, show: true, type: 'result'}
+          bandL: {label:'BAND_L', value: 'result.bandL', stringify: true, show: false, type: 'result', disabled: true},
+          bandR: {label:'BAND_R', value: 'result.bandR', stringify: true, show: false, type: 'result', disabled: true},
+          bandRangeL: {label:'BAND_RANGE_L', value: 'result.bandRangeL', stringify: true, show: false, type: 'result', disabled: true},
+          bandRangeR: {label:'BAND_RANGE_R', value: 'result.bandRangeR', stringify: true, show: false, type: 'result', disabled: true}
         },
         aei: {
           fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
@@ -264,28 +264,18 @@ class ExportCsv extends Component {
         ['aciFlValsL', 'aciFlValsR', 'aciMatrixL', 'aciMatrixR'].forEach(field => {
           if(!e.target.checked) {
             fields[this.props.index][field]['show'] = e.target.checked
-            // fields[this.props.index]['aciFlValsR']['show'] = e.target.checked
-            // fields[this.props.index]['aciMatrixL']['show'] = e.target.checked
-            // fields[this.props.index]['aciMatrixR']['show'] = e.target.checked  
           }
           fields[this.props.index][field]['disabled'] = !e.target.checked
-          // fields[this.props.index]['aciFlValsR']['disabled'] = !e.target.checked
-          // fields[this.props.index]['aciMatrixL']['disabled'] = !e.target.checked
-          // fields[this.props.index]['aciMatrixR']['disabled'] = !e.target.checked  
         })
         
       }
       else if(this.props.index === 'adi') {
-        if(!e.target.checked) {
-          fields[this.props.index]['bandL']['show'] = e.target.checked
-          fields[this.props.index]['bandR']['show'] = e.target.checked
-          fields[this.props.index]['bandRangeL']['show'] = e.target.checked
-          fields[this.props.index]['bandRangeR']['show'] = e.target.checked  
-        }
-        fields[this.props.index]['bandL']['disabled'] = !e.target.checked
-        fields[this.props.index]['bandR']['disabled'] = !e.target.checked
-        fields[this.props.index]['bandRangeL']['disabled'] = !e.target.checked
-        fields[this.props.index]['bandRangeR']['disabled'] = !e.target.checked  
+        ['bandL', 'bandR', 'bandRangeL', 'bandRangeR'].forEach(field => {
+          if(!e.target.checked) {
+            fields[this.props.index][field]['show'] = e.target.checked
+          }
+          fields[this.props.index][field]['disabled'] = !e.target.checked
+        })  
       }
       
       this.setState({
@@ -299,18 +289,21 @@ class ExportCsv extends Component {
       var fields = this.state.showFields
       fields[this.props.index][name]['show'] = e.target.checked
 
-      if(name === 'aciMatrixL') {
-        fields[this.props.index]['aciMatrixR']['disabled'] = e.target.checked
-        fields[this.props.index]['aciFlValsR']['disabled'] = e.target.checked
-        fields[this.props.index]['aciMatrixR']['show'] = false
-        fields[this.props.index]['aciFlValsR']['show'] = false
+      if(this.props.index === 'aci') {
+        // Only allow one array value to be exported until fixed
+        // Crashes otherwise
+        var aciSingleFields = ['aciMatrixL', 'aciMatrixR', 'aciFlValsL', 'aciFlValsR']
+        
+        if(aciSingleFields.indexOf(name) !== -1) {
+          aciSingleFields.splice(aciSingleFields.indexOf(name), 1)
+
+          aciSingleFields.forEach(field => {
+            fields[this.props.index][field]['disabled'] = e.target.checked
+            fields[this.props.index][field]['show'] = false
+          })
+        }
       }
-      else if(name === 'aciMatrixR') {
-        fields[this.props.index]['aciMatrixL']['disabled'] = e.target.checked
-        fields[this.props.index]['aciFlValsL']['disabled'] = e.target.checked
-        fields[this.props.index]['aciMatrixL']['show'] = false
-        fields[this.props.index]['aciFlValsL']['show'] = false
-      }
+      
       this.setState({
         showFields: fields
       }, () => {
@@ -434,7 +427,7 @@ class ExportCsv extends Component {
   downloadCsv = (csv, fileName) => {
     var hiddenElement = document.createElement('a')
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv)
-    hiddenElement.target = '_blank'
+    // hiddenElement.target = '_blank'
     hiddenElement.download = fileName
     hiddenElement.click()
   }
