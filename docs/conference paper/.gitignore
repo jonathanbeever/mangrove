@@ -1,0 +1,16 @@
+# Documentation (LaTeX)
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.log
+*.out
+*.pdf
+*.pyg
+*.run.xml
+*.toc
+_minted-main
+
+# Miscellaneous
+.DS_Store
