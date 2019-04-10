@@ -4,6 +4,9 @@ The core requirements are as follows:
 \begin{itemize}
   \item Create a user interface for data analysis
   \begin{itemize}
+    \item Create a catalog to organize user sound files and results
+    \item Create an interface for uploading user sound files
+    \item Create an interface for creating jobs to process sound files
     \item Allow user to queue jobs for sound file analysis
     \begin{itemize}
       \item Allow up to four jobs to queue for processing
@@ -11,12 +14,9 @@ The core requirements are as follows:
   \end{itemize}
   \item Use existing algorithms to turn audio recordings into data visualizations
     \begin{itemize}
-      \item Create at least one graph per index
-      \item Create one line plot per job queued
-      \item Create one graph for comparing data across time and data sites
-      \item Include one choropleth map for visualizing data
-      \item Include one spectrogram for each job queued
-      \item Create tool for analysis and visualization of multiple datasets compared over time and site
+      \item Create at least one meaningful graph per index
+      \item Create one graph for comparing data across time and data site for each index
+      \item Create tool for analysis and visualization of multiple datasets compared over site and/or series
     \end{itemize}
   \item Include the following six indices and their parameters for analysis
     \begin{itemize}
@@ -28,22 +28,16 @@ The core requirements are as follows:
       \item Root Mean Square (RMS)
     \end{itemize}
   \item Allow users to input their own parameters to be used in index calculation
-  \item Include parameter presets for each index based on sponsor given values
+    \begin{itemize}
+      \item Include parameter presets for each index based on R package given values
+    \end{itemize}
+  \item Include an option to download the data being used by the visualizations in CSV format
   \item Create a tool for identifying and examining outliers in data
     \begin{itemize}
       \item Identify which sound file from data set contained outliers
-      \item Provide time marks for outliers
-      \item Create a tool for examining specific audio files from data visualizations
-      \item Include tool to allow user to listen to specific file in dataset
-    \end{itemize}
-  \item Create collaborative abilities for researchers
-    \begin{itemize}
-      \item Allow user to join or create a research team
-      \item Allow user to invite other users to a research team
-      \item Allow research groups to share data and research to other teams
-      \item Create crowd sourced data visualizations from sites and research teams
-      \item Allow users to access other users\textquotesingle cloud-hosted sound files
-      \item Allow users to provide access to cloud storage
+      \item Provide time marks for potential outliers
+      \item Allow user to play specific audio files from data visualizations
+      \item Include tool to allow user to listen to specific files in dataset
     \end{itemize}
   \item Implement secure access rights from user access information
 \end{itemize}
