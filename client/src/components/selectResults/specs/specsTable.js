@@ -422,7 +422,7 @@ class EnhancedTable extends React.Component {
                         selected={isSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox 
+                          <Checkbox
                             checked={isSelected}
                             style={{color: '#b6cd26'}}
                           />

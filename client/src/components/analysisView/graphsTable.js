@@ -10,6 +10,7 @@ import NDSICompareFileBarChart from '../infographs/NDSICompareFileBarChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
 import ACICompareFileLineChart from '../infographs/ACICompareFileLineChart';
+import ACICompareFileBandLineChart from '../infographs/ACICompareFileBandLineChart';
 import ADIAEILineChart from '../infographs/ADIAEILineChart';
 import ADIAEICompareLineChart from '../infographs/ADIAEICompareLineChart';
 import ADIAEICompareFileLineChart from '../infographs/ADIAEICompareFileLineChart';
@@ -115,6 +116,21 @@ class GraphsTable extends React.Component {
                   />}
                 />
               )
+            }else if(obj.title === "ACI By Band Range")
+            {
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ACICompareFileBandLineChart
+                    results={obj.data}
+                    dataKey1='aciLeft'
+                    dataKey2='aciRight'
+                    dataKey3='aciLeftC'
+                    dataKey4='aciRightC'
+                  />}
+                />
+              )
             }else{
               rows.push(
                 <GraphExpansionPanel
@@ -162,7 +178,23 @@ class GraphsTable extends React.Component {
                 />}
               />
             )
-          }else{
+          }else if(obj.title === "Compared By Band Values")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                graph={<ACICompareFileBandLineChart
+                  results={obj.data}
+                  dataKey1='aciLeft'
+                  dataKey2='aciRight'
+                  dataKey3='aciLeftC'
+                  dataKey4='aciRightC'
+                />}
+              />
+            )
+          }
+          else{
             rows.push(
               <GraphExpansionPanel
                 key={'graph'+ctr}
