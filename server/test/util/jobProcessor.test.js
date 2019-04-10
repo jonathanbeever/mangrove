@@ -100,7 +100,7 @@ describe('Job Processor', () => {
     expect(result.valsR).to.be.an('array');
     expect(result.valsNormalizedL).to.be.an('array');
     expect(result.valsNormalizedR).to.be.an('array');
-    expect(result.freqs).to.be.an('array');
+    expect(result.freqVals).to.be.an('array');
   });
 
   it('It should process an NDSI Job', async () => {
