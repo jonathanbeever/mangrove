@@ -2,6 +2,10 @@ job <- input[[1]]
 
 needs("tuneR")
 if (job$spec$type %in% list("aci", "adi", "aei", "bi", "ndsi")) {
+  needs("devtools")
+  devtools::install_github("OtGabaldon/soundecology",
+                           subdir = "soundecology",
+                           quiet = TRUE)
   needs("soundecology")
   if (job$spec$type == 'aci')
     source("./util/jobProcessor/R/nyquist.R")
@@ -9,7 +13,6 @@ if (job$spec$type %in% list("aci", "adi", "aei", "bi", "ndsi")) {
   source("./util/jobProcessor/R/rootMeanSquare.R")
 } else
   throw('Invalid `type` provided: ', job$spec$type)
-source("./util/jobProcessor/R/sanitizeResult.R")
 
 soundfile <- readWave(job$input$path)
 
@@ -17,10 +20,12 @@ if (job$spec$type == "aci") {
   maxFreq <- if (job$spec$maxFreq >= 0) job$spec$maxFreq
              else getNyquistFrequency(job)
   result <- acoustic_complexity(soundfile,
-                                min_freq = job$spec$minFreq,
-                                max_freq = maxFreq,
+                                minFreq = job$spec$minFreq,
+                                maxFreq = maxFreq,
                                 j = job$spec$j,
-                                fft_w = job$spec$fftW)
+                                fft_w = job$spec$fftW,
+                                matrix = FALSE,
+                                bands = TRUE)
 } else if (job$spec$type == "adi") {
   result <- acoustic_diversity(soundfile,
                                max_freq = job$spec$maxFreq,
@@ -48,4 +53,4 @@ if (job$spec$type == "aci") {
   result <- rootMeanSquare(soundfile)
 }
 
-sanitizeResult(result, job$spec$type)
+result

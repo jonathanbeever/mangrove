@@ -110,10 +110,10 @@ const getResultKeys = (type) => {
         'aciTotAllR',
         'aciTotAllByMinL',
         'aciTotAllByMinR',
-        'aciFlValsL',
+        'aciOverTimeL',
+        'aciOverTimeR',
         'aciFlValsR',
-        'aciMatrixL',
-        'aciMatrixR',
+        'aciFlValsL',
       ];
     case Type.ADI:
       return [
