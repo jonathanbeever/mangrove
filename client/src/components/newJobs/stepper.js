@@ -25,7 +25,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
   },
   buttonTop: {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing.unit * 12,
   },
   instructions: {
     marginTop: theme.spacing.unit,

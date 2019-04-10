@@ -61,8 +61,8 @@ class ExportCsv extends Component {
           aciTotAllByMinR: {label:'ACI_TOT_ALL_BY_MIN_R', value: 'result.aciTotAllByMinR', stringify: true, show: true, type: 'result'},
           aciFlValsL: {label:'ACI_FL_VALS_L', value: 'result.aciFlValsL', stringify: true, show: false, type: 'result', disabled: true},          
           aciFlValsR: {label:'ACI_FL_VALS_R', value: 'result.aciFlValsR', stringify: true, show: false, type: 'result', disabled: true},                    
-          aciMatrixL: {label:'ACI_MATRIX_L', value: 'result.aciMatrixL', stringify: true, show: false, type: 'result', disabled: true},
-          aciMatrixR: {label:'ACI_MATRIX_R', value: 'result.aciMatrixR', stringify: true, show: false, type: 'result', disabled: true}
+          aciOverTimeL: {label:'ACI_OVERTIME_L', value: 'result.aciOverTimeL', stringify: true, show: false, type: 'result', disabled: true},
+          aciOverTimeR: {label:'ACI_OVERTIME_R', value: 'result.aciOverTimeR', stringify: true, show: false, type: 'result', disabled: true}
         },
         ndsi: {
           fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
@@ -240,7 +240,7 @@ class ExportCsv extends Component {
         </FormGroup>
         <h5>Result Fields</h5>
         {this.props.index === 'aci' ? 
-          <h6>AciFlVals(L/R) and AciMatrix(L/R) can only be exported to a single job CSV file.</h6>
+          <h6>AciFlVals(L/R) and AciOverTime(L/R) can only be exported to a single job CSV file.</h6>
           :
           (this.props.index === 'adi' ? 
             <p></p>
@@ -261,7 +261,7 @@ class ExportCsv extends Component {
       var fields = this.state.showFields
 
       if(this.props.index === 'aci') {
-        ['aciFlValsL', 'aciFlValsR', 'aciMatrixL', 'aciMatrixR'].forEach(field => {
+        ['aciFlValsL', 'aciFlValsR', 'aciOverTimeL', 'aciOverTimeR'].forEach(field => {
           if(!e.target.checked) {
             fields[this.props.index][field]['show'] = e.target.checked
           }
@@ -290,7 +290,7 @@ class ExportCsv extends Component {
       fields[this.props.index][name]['show'] = e.target.checked
 
       if(this.props.index === 'aci') {
-        var aciSingleFields = ['aciMatrixL', 'aciMatrixR', 'aciFlValsL', 'aciFlValsR']
+        var aciSingleFields = ['aciOverTimeL', 'aciOverTimeR', 'aciFlValsL', 'aciFlValsR']
         
         if(aciSingleFields.indexOf(name) !== -1) {
           aciSingleFields.splice(aciSingleFields.indexOf(name), 1)
@@ -340,8 +340,8 @@ class ExportCsv extends Component {
     var fields = _.cloneDeep(this.state.showFields[this.props.index])
 
     if(this.props.index === 'aci') {
-      var matrixL = fields['aciMatrixL']['show']
-      var matrixR = fields['aciMatrixR']['show']
+      var overTimeL = fields['aciOverTimeL']['show']
+      var overTimeR = fields['aciOverTimeR']['show']
       var flValsL = fields['aciFlValsL']['show']
       var flValsR = fields['aciFlValsR']['show']
     }
@@ -368,31 +368,32 @@ class ExportCsv extends Component {
     if(this.props.index === 'aci') {
       var value
 
-      delete fields['aciMatrixL']
-      delete fields['aciMatrixR']
+      // delete fields['aciOverTimeL']
+      // delete fields['aciOverTimeR']
 
       this.state.sortedJobs.forEach((job) => {
         var unwind = []
         if(flValsL) unwind.push('result.aciFlValsL')
         if(flValsR) unwind.push('result.aciFlValsR')
+        if(overTimeL) unwind.push('result.aciOverTimeL')
+        if(overTimeR) unwind.push('result.aciOverTimeR')
+        // if(matrixL) {
+        //   unwind.push('result.aciOverTimeL')
+        //   job.result.aciOverTimeL[0].forEach((col, i) => {
+        //     var fieldName = 'aciOverTimeL' + i
+        //     value = 'result.aciOverTimeL[' + i + ']'
+        //     fields[fieldName] = {label: fieldName, value: value, stringify: true}
+        //   })
+        // }
 
-        if(matrixL) {
-          unwind.push('result.aciMatrixL')
-          job.result.aciMatrixL[0].forEach((col, i) => {
-            var fieldName = 'aciMatrixL' + i
-            value = 'result.aciMatrixL[' + i + ']'
-            fields[fieldName] = {label: fieldName, value: value, stringify: true}
-          })
-        }
-
-        if(matrixR) {
-          unwind.push('result.aciMatrixR')
-          job.result.aciMatrixR[0].forEach((col, i) => {
-            var fieldName = 'aciMatrixR' + i
-            value = 'result.aciMatrixR[' + i + ']'
-            fields[fieldName] = {label: fieldName, value: value, stringify: true}
-          })
-        }
+        // if(OverTimeR) {
+        //   unwind.push('result.aciOverTimeR')
+        //   job.result.aciOverTimeR[0].forEach((col, i) => {
+        //     var fieldName = 'aciOverTimeR' + i
+        //     value = 'result.aciOverTimeR[' + i + ']'
+        //     fields[fieldName] = {label: fieldName, value: value, stringify: true}
+        //   })
+        // }
 
         this.parseJSON(fields, unwind, job)
       })
