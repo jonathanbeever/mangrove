@@ -290,8 +290,6 @@ class ExportCsv extends Component {
       fields[this.props.index][name]['show'] = e.target.checked
 
       if(this.props.index === 'aci') {
-        // Only allow one array value to be exported until fixed
-        // Crashes otherwise
         var aciSingleFields = ['aciMatrixL', 'aciMatrixR', 'aciFlValsL', 'aciFlValsR']
         
         if(aciSingleFields.indexOf(name) !== -1) {
@@ -414,7 +412,7 @@ class ExportCsv extends Component {
   }
 
   parseJSON = (fields, unwind, job) => {
-    job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY, HH:mm:ss')
+    job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY HH:mm:ss')
     var fileName = this.props.site + '-' + this.props.series + '-' + job.input.name + '-' + this.props.index +'.csv'
     fields = Object.values(fields)
 
@@ -427,7 +425,6 @@ class ExportCsv extends Component {
   downloadCsv = (csv, fileName) => {
     var hiddenElement = document.createElement('a')
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv)
-    // hiddenElement.target = '_blank'
     hiddenElement.download = fileName
     hiddenElement.click()
   }
