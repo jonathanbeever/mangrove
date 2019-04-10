@@ -368,9 +368,6 @@ class ExportCsv extends Component {
     if(this.props.index === 'aci') {
       var value
 
-      // delete fields['aciOverTimeL']
-      // delete fields['aciOverTimeR']
-
       this.state.sortedJobs.forEach((job) => {
         var unwind = []
         if(flValsL) unwind.push('result.aciFlValsL')
@@ -396,7 +393,7 @@ class ExportCsv extends Component {
   }
 
   parseJSON = (fields, unwind, job) => {
-    job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY HH:mm:ss')
+    job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY-HH:mm:ss')
     var fileName = this.props.site + '-' + this.props.series + '-' + job.input.name + '-' + this.props.index +'.csv'
     fields = Object.values(fields)
 
