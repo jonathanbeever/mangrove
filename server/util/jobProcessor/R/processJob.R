@@ -3,9 +3,9 @@ job <- input[[1]]
 needs("tuneR")
 if (job$spec$type %in% list("aci", "adi", "aei", "bi", "ndsi")) {
   needs("devtools")
-  if(!"soundecology" %in% rownames(installed.packages()))
-    devtools::install_github("OtGabaldon/soundecology",subdir="soundecology",quiet = TRUE)
-
+  devtools::install_github("OtGabaldon/soundecology",
+                           subdir = "soundecology",
+                           quiet = TRUE)
   needs("soundecology")
   if (job$spec$type == 'aci')
     source("./util/jobProcessor/R/nyquist.R")
@@ -24,8 +24,8 @@ if (job$spec$type == "aci") {
                                 maxFreq = maxFreq,
                                 j = job$spec$j,
                                 fft_w = job$spec$fftW,
-                                matrix=FALSE,
-                                bands=TRUE)
+                                matrix = FALSE,
+                                bands = TRUE)
 } else if (job$spec$type == "adi") {
   result <- acoustic_diversity(soundfile,
                                max_freq = job$spec$maxFreq,
@@ -52,4 +52,5 @@ if (job$spec$type == "aci") {
 } else if (job$spec$type == "rms") {
   result <- rootMeanSquare(soundfile)
 }
-return (result)
+
+result
