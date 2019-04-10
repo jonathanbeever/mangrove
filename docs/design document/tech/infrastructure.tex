@@ -28,9 +28,3 @@ Once the data is stored in the local database, it is then accessible in the user
 Using Amazon Web Services, we can use DynamoDB and Cognito to securely and efficiently manage our users\textquotesingle\ credentials and analysis. Cognito is used for storing user credentials and DynamoDB for research groups and their respective permissions, as well as user shared data.\par
 Amazon Cognito is a very useful tool, as it provides a built in interface for users to create accounts as well as log in to existing accounts. These credentials are then stored securely by Amazon to easily create user pools. In addition, Cognito allows for Facebook and Google account log ins, to make account creation easier for the user.\par
 DynamoDB is a non relational database, which is useful for us because our local MongoDB database is also non relational. The DynamoDB service will store user shared data analysis that they did on their desktop application. From here, anyone using the service can see that researcher\textquotesingle s analysis. In addition to data outputs, this service will store the user created research groups and their members in order to ensure that users are able to collaborate \textbf{only} with those they wish to.
-
-\subsubsection{Use Case Diagrams}
-\begin{center}
-    \includegraphics[width=\textwidth]{UseCase}
-\end{center}
-\newpage
