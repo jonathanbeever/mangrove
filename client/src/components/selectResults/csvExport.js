@@ -43,109 +43,109 @@ class ExportCsv extends Component {
       separateCsvs: false,
       showFields: {
         aci: {
-          fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
-          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
-          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
-          durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
+          fileName: {label:'FILENAME', value: 'input.name', show: true},
+          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', show: true},
+          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', show: true},
+          durationMs: {label:'DURATION', value: 'input.durationMs', show: true},
           recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
-          lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
-          long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
-          index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
-          minFreq: {label:'MIN_FREQ', value: 'spec.minFreq', stringify: true, show: true, type: 'param'},
-          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', stringify: true, show: true, type: 'param'},
-          j: {label:'J', value: 'spec.j', stringify: true, show: true, type: 'param'},
-          fftW: {label:'FFT_W', value: 'spec.fftW', stringify: true, show: true, type: 'param'},
-          aciTotAllL: {label:'ACI_TOT_ALL_L', value: 'result.aciTotAllL', stringify: true, show: true, type: 'result'},
-          aciTotAllR: {label:'ACI_TOT_ALL_R', value: 'result.aciTotAllR', stringify: true, show: true, type: 'result'},
-          aciTotAllByMinL: {label:'ACI_TOT_ALL_BY_MIN_L', value: 'result.aciTotAllByMinL', stringify: true, show: true, type: 'result'},
-          aciTotAllByMinR: {label:'ACI_TOT_ALL_BY_MIN_R', value: 'result.aciTotAllByMinR', stringify: true, show: true, type: 'result'},
-          aciFlValsL: {label:'ACI_FL_VALS_L', value: 'result.aciFlValsL', stringify: true, show: false, type: 'result', disabled: true},          
-          aciFlValsR: {label:'ACI_FL_VALS_R', value: 'result.aciFlValsR', stringify: true, show: false, type: 'result', disabled: true},                    
-          aciOverTimeL: {label:'ACI_OVERTIME_L', value: 'result.aciOverTimeL', stringify: true, show: false, type: 'result', disabled: true},
-          aciOverTimeR: {label:'ACI_OVERTIME_R', value: 'result.aciOverTimeR', stringify: true, show: false, type: 'result', disabled: true}
+          lat: {label:'LAT', value: 'input.coords.lat', show: true},
+          long: {label:'LONG', value: 'input.coords.long', show: true},
+          index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'},
+          minFreq: {label:'MIN_FREQ', value: 'spec.minFreq', show: true, type: 'param'},
+          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', show: true, type: 'param'},
+          j: {label:'J', value: 'spec.j', show: true, type: 'param'},
+          fftW: {label:'FFT_W', value: 'spec.fftW', show: true, type: 'param'},
+          aciTotAllL: {label:'ACI_TOT_ALL_L', value: 'result.aciTotAllL', show: true, type: 'result'},
+          aciTotAllR: {label:'ACI_TOT_ALL_R', value: 'result.aciTotAllR', show: true, type: 'result'},
+          aciTotAllByMinL: {label:'ACI_TOT_ALL_BY_MIN_L', value: 'result.aciTotAllByMinL', show: true, type: 'result'},
+          aciTotAllByMinR: {label:'ACI_TOT_ALL_BY_MIN_R', value: 'result.aciTotAllByMinR', show: true, type: 'result'},
+          aciFlValsL: {label:'ACI_FL_VALS_L', value: 'result.aciFlValsL', show: false, type: 'result', disabled: true},          
+          aciFlValsR: {label:'ACI_FL_VALS_R', value: 'result.aciFlValsR', show: false, type: 'result', disabled: true},                    
+          aciOverTimeL: {label:'ACI_OVERTIME_L', value: 'result.aciOverTimeL', show: false, type: 'result', disabled: true},
+          aciOverTimeR: {label:'ACI_OVERTIME_R', value: 'result.aciOverTimeR', show: false, type: 'result', disabled: true}
         },
         ndsi: {
-          fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
-          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
-          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
-          durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
+          fileName: {label:'FILENAME', value: 'input.name', show: true},
+          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', show: true},
+          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', show: true},
+          durationMs: {label:'DURATION', value: 'input.durationMs', show: true},
           recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
-          lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
-          long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
-          index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
-          bioMin: {label:'BIO_MIN', value: 'spec.bioMin', stringify: true, show: true, type: 'param'},
-          bioMax: {label:'BIO_MAX', value: 'spec.bioMax', stringify: true, show: true, type: 'param'},
-          anthroMin: {label:'ANTHRO_MIN', value: 'spec.anthroMin', stringify: true, show: true, type: 'param'},
-          anthroMax: {label:'ANTHRO_MAX', value: 'spec.anthroMax', stringify: true, show: true, type: 'param'},          
-          fftW: {label:'FFT_W', value: 'spec.fftW', stringify: true, show: true, type: 'param'},
-          ndsiL: {label:'NDSI_L', value: 'result.ndsiL', stringify: true, show: true, type: 'result'},
-          ndsiR: {label:'NDSI_R', value: 'result.ndsiR', stringify: true, show: true, type: 'result'},
-          bioL: {label:'BIOPHONY_L', value: 'result.biophonyL', stringify: true, show: true, type: 'result'},
-          bioR: {label:'BIOPHONY_R', value: 'result.biophonyR', stringify: true, show: true, type: 'result'},
-          anthroL: {label:'ANTHROPHONY_L', value: 'result.anthrophonyL', stringify: true, show: true, type: 'result'},
-          anthroR: {label:'ANTHROPHONY_R', value: 'result.anthrophonyR', stringify: true, show: true, type: 'result'}
+          lat: {label:'LAT', value: 'input.coords.lat', show: true},
+          long: {label:'LONG', value: 'input.coords.long', show: true},
+          index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'},
+          bioMin: {label:'BIO_MIN', value: 'spec.bioMin', show: true, type: 'param'},
+          bioMax: {label:'BIO_MAX', value: 'spec.bioMax', show: true, type: 'param'},
+          anthroMin: {label:'ANTHRO_MIN', value: 'spec.anthroMin', show: true, type: 'param'},
+          anthroMax: {label:'ANTHRO_MAX', value: 'spec.anthroMax', show: true, type: 'param'},          
+          fftW: {label:'FFT_W', value: 'spec.fftW', show: true, type: 'param'},
+          ndsiL: {label:'NDSI_L', value: 'result.ndsiL', show: true, type: 'result'},
+          ndsiR: {label:'NDSI_R', value: 'result.ndsiR', show: true, type: 'result'},
+          bioL: {label:'BIOPHONY_L', value: 'result.biophonyL', show: true, type: 'result'},
+          bioR: {label:'BIOPHONY_R', value: 'result.biophonyR', show: true, type: 'result'},
+          anthroL: {label:'ANTHROPHONY_L', value: 'result.anthrophonyL', show: true, type: 'result'},
+          anthroR: {label:'ANTHROPHONY_R', value: 'result.anthrophonyR', show: true, type: 'result'}
         },
         adi: {
-          fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
-          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
-          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
-          durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
+          fileName: {label:'FILENAME', value: 'input.name', show: true},
+          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', show: true},
+          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', show: true},
+          durationMs: {label:'DURATION', value: 'input.durationMs', show: true},
           recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
-          lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
-          long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
-          index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
-          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', stringify: true, show: true, type: 'param'},
-          dbThreshold: {label:'DB_THRESHOLD', value: 'spec.dbThreshold', stringify: true, show: true, type: 'param'},
-          freqStep: {label:'FREQ_STEP', value: 'spec.freqStep', stringify: true, show: true, type: 'param'},
-          shannon: {label:'SHANNON', value: 'spec.shannon', stringify: true, show: true, type: 'param'},
-          adiL: {label:'ADI_L', value: 'result.adiL', stringify: true, show: true, type: 'result'},
-          adiR: {label:'BAND_L', value: 'result.bandL', stringify: true, show: true, type: 'result'},
-          bandL: {label:'BAND_L', value: 'result.bandL', stringify: true, show: false, type: 'result', disabled: true},
-          bandR: {label:'BAND_R', value: 'result.bandR', stringify: true, show: false, type: 'result', disabled: true},
-          bandRangeL: {label:'BAND_RANGE_L', value: 'result.bandRangeL', stringify: true, show: false, type: 'result', disabled: true},
-          bandRangeR: {label:'BAND_RANGE_R', value: 'result.bandRangeR', stringify: true, show: false, type: 'result', disabled: true}
+          lat: {label:'LAT', value: 'input.coords.lat', show: true},
+          long: {label:'LONG', value: 'input.coords.long', show: true},
+          index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'},
+          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', show: true, type: 'param'},
+          dbThreshold: {label:'DB_THRESHOLD', value: 'spec.dbThreshold', show: true, type: 'param'},
+          freqStep: {label:'FREQ_STEP', value: 'spec.freqStep', show: true, type: 'param'},
+          shannon: {label:'SHANNON', value: 'spec.shannon', show: true, type: 'param'},
+          adiL: {label:'ADI_L', value: 'result.adiL', show: true, type: 'result'},
+          adiR: {label:'BAND_L', value: 'result.bandL', show: true, type: 'result'},
+          bandL: {label:'BAND_L', value: 'result.bandL', show: false, type: 'result', disabled: true},
+          bandR: {label:'BAND_R', value: 'result.bandR', show: false, type: 'result', disabled: true},
+          bandRangeL: {label:'BAND_RANGE_L', value: 'result.bandRangeL', show: false, type: 'result', disabled: true},
+          bandRangeR: {label:'BAND_RANGE_R', value: 'result.bandRangeR', show: false, type: 'result', disabled: true}
         },
         aei: {
-          fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
-          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
-          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
-          durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
+          fileName: {label:'FILENAME', value: 'input.name', show: true},
+          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', show: true},
+          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', show: true},
+          durationMs: {label:'DURATION', value: 'input.durationMs', show: true},
           recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
-          lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
-          long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
-          index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
-          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', stringify: true, show: true, type: 'param'},
-          dbThreshold: {label:'DB_THRESHOLD', value: 'spec.dbThreshold', stringify: true, show: true, type: 'param'},
-          freqStep: {label:'FREQ_STEP', value: 'spec.freqStep', stringify: true, show: true, type: 'param'},
-          aeiL: {label:'AEI_L', value: 'result.aeiL', stringify: true, show: true, type: 'result'},
-          aeiR: {label:'AEI_R', value: 'result.aeiR', stringify: true, show: true, type: 'result'}
+          lat: {label:'LAT', value: 'input.coords.lat', show: true},
+          long: {label:'LONG', value: 'input.coords.long', show: true},
+          index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'},
+          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', show: true, type: 'param'},
+          dbThreshold: {label:'DB_THRESHOLD', value: 'spec.dbThreshold', show: true, type: 'param'},
+          freqStep: {label:'FREQ_STEP', value: 'spec.freqStep', show: true, type: 'param'},
+          aeiL: {label:'AEI_L', value: 'result.aeiL', show: true, type: 'result'},
+          aeiR: {label:'AEI_R', value: 'result.aeiR', show: true, type: 'result'}
         },
         bi: {
-          fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
-          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
-          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
-          durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
+          fileName: {label:'FILENAME', value: 'input.name', show: true},
+          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', show: true},
+          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', show: true},
+          durationMs: {label:'DURATION', value: 'input.durationMs', show: true},
           recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
-          lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
-          long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
-          index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
-          minFreq: {label:'MIN_FREQ', value: 'spec.minFreq', stringify: true, show: true, type: 'param'},
-          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', stringify: true, show: true, type: 'param'},
-          fftW: {label:'FFT_W', value: 'spec.fftW', stringify: true, show: true, type: 'param'},
-          areaL: {label:'AREA_L', value: 'result.areaL', stringify: true, show: true, type: 'result'},
-          areaR: {label:'AREA_R', value: 'result.areaR', stringify: true, show: true, type: 'result'}
+          lat: {label:'LAT', value: 'input.coords.lat', show: true},
+          long: {label:'LONG', value: 'input.coords.long', show: true},
+          index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'},
+          minFreq: {label:'MIN_FREQ', value: 'spec.minFreq', show: true, type: 'param'},
+          maxFreq: {label:'MAX_FREQ', value: 'spec.maxFreq', show: true, type: 'param'},
+          fftW: {label:'FFT_W', value: 'spec.fftW', show: true, type: 'param'},
+          areaL: {label:'AREA_L', value: 'result.areaL', show: true, type: 'result'},
+          areaR: {label:'AREA_R', value: 'result.areaR', show: true, type: 'result'}
         },
         rms: {
-          fileName: {label:'FILENAME', value: 'input.name', stringify: true, show: true},
-          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', stringify: true, show: true},
-          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', stringify: true, show: true},
-          durationMs: {label:'DURATION', value: 'input.durationMs', stringify: true, show: true},
+          fileName: {label:'FILENAME', value: 'input.name', show: true},
+          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', show: true},
+          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', show: true},
+          durationMs: {label:'DURATION', value: 'input.durationMs', show: true},
           recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
-          lat: {label:'LAT', value: 'input.coords.lat', stringify: true, show: true},
-          long: {label:'LONG', value: 'input.coords.long', stringify: true, show: true},
-          index: {label:'INDEX', value: 'spec.type', stringify: true, show: true, type: 'param'},
-          rmsL: {label:'RMS_L', value: 'result.rmsL', stringify: true, show: true, type: 'result'},
-          rmsR: {label:'RMS_R', value: 'result.rmsR', stringify: true, show: true, type: 'result'}
+          lat: {label:'LAT', value: 'input.coords.lat', show: true},
+          long: {label:'LONG', value: 'input.coords.long', show: true},
+          index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'},
+          rmsL: {label:'RMS_L', value: 'result.rmsL', show: true, type: 'result'},
+          rmsR: {label:'RMS_R', value: 'result.rmsR', show: true, type: 'result'}
         }
       }
     }
@@ -328,7 +328,7 @@ class ExportCsv extends Component {
 
     var dateFormattedJobs = _.cloneDeep(this.state.sortedJobs)
     dateFormattedJobs.map(job => {
-      job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY, HH:mm:ss')
+      job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY-HH:mm:ss')
     })
 
     const csv = json2csvParser.parse(dateFormattedJobs);
@@ -377,24 +377,7 @@ class ExportCsv extends Component {
         if(flValsR) unwind.push('result.aciFlValsR')
         if(overTimeL) unwind.push('result.aciOverTimeL')
         if(overTimeR) unwind.push('result.aciOverTimeR')
-        // if(matrixL) {
-        //   unwind.push('result.aciOverTimeL')
-        //   job.result.aciOverTimeL[0].forEach((col, i) => {
-        //     var fieldName = 'aciOverTimeL' + i
-        //     value = 'result.aciOverTimeL[' + i + ']'
-        //     fields[fieldName] = {label: fieldName, value: value, stringify: true}
-        //   })
-        // }
-
-        // if(OverTimeR) {
-        //   unwind.push('result.aciOverTimeR')
-        //   job.result.aciOverTimeR[0].forEach((col, i) => {
-        //     var fieldName = 'aciOverTimeR' + i
-        //     value = 'result.aciOverTimeR[' + i + ']'
-        //     fields[fieldName] = {label: fieldName, value: value, stringify: true}
-        //   })
-        // }
-
+        
         this.parseJSON(fields, unwind, job)
       })
     }

@@ -489,9 +489,6 @@ class HorizontalLinearStepper extends React.Component {
                   <Button onClick={this.handleReset} style={{margin: 7}}>
                     <h6>Start More Jobs</h6>
                   </Button>
-                  <Button onClick={this.redirectJobQueue} style={{margin: 7}}>
-                    <h6>View Job Queue</h6>
-                  </Button>
                   <Button onClick={this.handleClose} style={{margin: 7}}>
                     <h6>Close</h6>
                   </Button>
