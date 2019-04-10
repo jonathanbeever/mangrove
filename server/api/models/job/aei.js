@@ -13,6 +13,10 @@ module.exports = Job.discriminator(JobType.AEI, new mongoose.Schema({
     type: {
       aeiL: Number,
       aeiR: Number,
+      bandValuesL: [Number],
+      bandValuesR: [Number],
+      bandRangeValuesL: [String],
+      bandRangeValuesR: [String],
     },
     default: null,
   },
