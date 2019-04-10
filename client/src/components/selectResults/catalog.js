@@ -421,7 +421,6 @@ class Catalog extends Component {
         }
       }
     });
-    // console.log(jobsObj)
     this.setState({ selectedIndexedJobs: jobsObj })
   }
 

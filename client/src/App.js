@@ -22,7 +22,7 @@ const theme = createMuiTheme({
         borderRadius: 3,
         border: 0,
         color: 'white',
-        height: 28,
+        height: 32,
         padding: '0 20px',
         boxShadow: '0 1px 1px 1px #606060',
       },

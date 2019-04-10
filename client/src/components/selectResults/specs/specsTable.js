@@ -168,8 +168,8 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         {numSelected > 0 ? (
           <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon onClick={() => {deleteSpecs(selected)}}/>
+            <IconButton aria-label="Delete" onClick={() => {deleteSpecs(selected)}}>
+              <DeleteIcon/>
             </IconButton>
           </Tooltip>
         ) : (
@@ -253,7 +253,6 @@ class EnhancedTable extends React.Component {
       }
       case 'aei' : {
         data = this.props.specs.map(spec => {
-          console.log(spec)
           return createAeiData(spec.specId, spec[this.props.params[0]], spec[this.props.params[1]], spec[this.props.params[2]])
         })
         this.setState({data: data})

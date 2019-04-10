@@ -25,7 +25,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
   },
   buttonTop: {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing.unit * 12,
   },
   instructions: {
     marginTop: theme.spacing.unit,
@@ -488,9 +488,6 @@ class HorizontalLinearStepper extends React.Component {
                 <div>
                   <Button onClick={this.handleReset} style={{margin: 7}}>
                     <h6>Start More Jobs</h6>
-                  </Button>
-                  <Button onClick={this.redirectJobQueue} style={{margin: 7}}>
-                    <h6>View Job Queue</h6>
                   </Button>
                   <Button onClick={this.handleClose} style={{margin: 7}}>
                     <h6>Close</h6>

@@ -162,8 +162,8 @@ let EnhancedTableToolbar = props => {
       <div className={classes.actions}>
         {numSelected > 0 ? (
           <Tooltip title={<p style={{fontSize:10+'px'}}>Delete</p>} placement='top'>
-            <IconButton aria-label="Delete">
-              <DeleteIcon onClick={() => {deleteInputs(selected)}}/>
+            <IconButton aria-label="Delete" onClick={() => {deleteInputs(selected)}}>
+              <DeleteIcon/>
             </IconButton>
           </Tooltip>
         ) : (
@@ -213,7 +213,7 @@ class EnhancedTable extends React.Component {
 
   componentDidMount = () => {
     var data = this.props.filteredInputs.map(input => {
-      return createData(input.inputId, input.site, input.series, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
+      return createData(input.inputId, input.site, input.series, input.recordTimeMs, input.coords.lat, input.coords.long)
     })
     this.setState({data: data})
   }
@@ -221,7 +221,7 @@ class EnhancedTable extends React.Component {
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
       var data = this.props.filteredInputs.map(input => {
-        return createData(input.inputId, input.site, input.series, moment(input.recordTimeMs).format("MMM Do YY, hh:mm:ss"), input.coords.lat, input.coords.long)
+        return createData(input.inputId, input.site, input.series, input.recordTimeMs, input.coords.lat, input.coords.long)
       })
       if(data !== this.state.data)
         this.setState({data: data})
@@ -326,7 +326,7 @@ class EnhancedTable extends React.Component {
                         {n.siteName}
                       </TableCell>
                       <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.setName}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.recordTime}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{moment(n.recordTime).format("MM/DD/YY, HH:mm:ss")}</TableCell>
                       <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.latitude}</TableCell>
                       <TableCell style={{ fontSize:13+'px' }} component="th" scope="row" padding="none">{n.longitude}</TableCell>
                     </TableRow>

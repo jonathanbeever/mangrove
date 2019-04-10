@@ -19,7 +19,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import moment from 'moment';
 
 function createData(id, type, author, time, input) {
-  input = input.site + ' - ' + input.series + ' - ' + moment(input.recordTimeMs).format("MM/DD/YY, hh:mm:ss")
+  input = input.site + ' - ' + input.series + ' - ' + moment(input.recordTimeMs).format("MM/DD/YY, HH:mm:ss")
   return { id: id, type, author, time, input };
 }
 
@@ -201,7 +201,7 @@ const styles = theme => ({
 class EnhancedTable extends React.Component {
   state = {
     order: 'asc',
-    orderBy: 'time',
+    orderBy: 'input',
     selected: this.props.selectedJobs,
     data: [
 
@@ -325,7 +325,7 @@ class EnhancedTable extends React.Component {
                         {n.type}
                       </TableCell>
                       <TableCell style={{ fontSize:13+'px' }} align="right">{n.author}</TableCell>
-                      <TableCell style={{ fontSize:13+'px' }} align="right">{moment(n.time).format('MMM Do YY, h:mm:ss a')}</TableCell>
+                      <TableCell style={{ fontSize:13+'px' }} align="right">{moment(n.time).format('MM/DD/YY, HH:mm:ss')}</TableCell>
                       <TableCell style={{ fontSize:13+'px' }} align="right">{n.input}</TableCell>
                     </TableRow>
                   );
