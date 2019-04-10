@@ -519,7 +519,7 @@ export function convertAEIResults(jobs) {
     });
 
     aeiRBandTemp = aeiRBandTemp.map(function(num, idx){
-      return num + job.result.bandRangeL[idx];
+      return num + job.result.bandRangeR[idx];
     });
 
   });
@@ -674,9 +674,9 @@ export function convertBIResults(jobs) {
   {
     let curObject =
     {
-      name: finished[0].result.freq_vals[i],
-      leftSpectrum: finished[0].result.left_vals[i],
-      rightSpectrum: finished[0].result.right_vals[i]
+      name: finished[0].result.freqVals[i],
+      leftSpectrum: finished[0].result.valsL[i],
+      rightSpectrum: finished[0].result.valsR[i]
     }
 
     ret.graph1.data.push(curObject);
