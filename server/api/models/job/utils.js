@@ -128,10 +128,10 @@ const getResultKeys = (type) => {
       return [
         'aeiL',
         'aeiR',
-        'bandValuesL',
-        'bandValuesR',
-        'bandRangeValuesL',
-        'bandRangeValuesR',
+        'bandL',
+        'bandR',
+        'bandRangeL',
+        'bandRangeR',
       ];
     case Type.BI:
       return [
