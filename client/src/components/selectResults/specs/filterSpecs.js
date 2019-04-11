@@ -122,7 +122,6 @@ class FilterSpecs extends Component {
     const {classes} = this.props
     // Format text field for each parameter
     var specInputHtml = params.map(param => {
-      // console.log(param)
       if(param[0] !== 'shannon') {
         return (
           <TextField
@@ -203,26 +202,12 @@ class FilterSpecs extends Component {
   handleClose = (deleteSpecs) => {
     this.setState({ open: false });
 
-    if(deleteSpecs === 'delete') {
-      this.deleteSpecs()
-    }
-    else if(deleteSpecs === 'deleted') {
-      // Change back to select specs tab, make request for inputs/specs/jobs again
-      // TODO: better solution to update after delete
-      this.props.changeTab(0)
-    }
+    if(deleteSpecs === 'delete') { this.deleteSpecs() }
+    else if(deleteSpecs === 'deleted') { this.props.changeTab(0) }
   };
 
   deleteSpecs = () => {
     let requests = [];
-    let jobRequests = []
-
-    this.props.filteredJobs.forEach(job => {
-      // console.log(job)
-      if(this.state.selected.indexOf(job.spec) !== -1) {
-        jobRequests.push(axios.delete('http://127.0.0.1:34251/jobs/'+job.jobId))
-      }
-    })
 
     this.state.selected.forEach(specId => {
       requests.push(axios.delete('http://127.0.0.1:34251/specs/'+specId));
@@ -230,14 +215,14 @@ class FilterSpecs extends Component {
 
     Promise.all(requests)
       .then(responses => {
-        // TODO: notify based on response status
-        // console.log(responses)
-        this.setState({ message: this.state.selected.length + ' spec(s) deleted and ' + jobRequests.length + ' corresponding job(s) deleted.' })
+        let deleted = 0
+        responses.forEach(response => { deleted += response.data.jobs.length })
+
+        this.setState({ message: this.state.selected.length + ' spec(s) deleted and ' + deleted + ' corresponding job(s) deleted.' })
         this.setState({ buttons: ['Close'] })
         this.setState({ open: true })
       });
   }
-
 
   render() {
     const { classes } = this.props;

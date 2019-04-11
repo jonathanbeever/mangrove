@@ -53,6 +53,8 @@ function getStepContent(step, $this) {
           updateSelectedInputs={$this.updateSelectedFiles}
           openDialog={$this.openDialog}
           startRms={$this.startRms}
+          promptConfirmDelete={$this.promptConfirmDelete}
+          deletedFiles={$this.state.deletedFiles}
         />
       )
     case 1:
@@ -270,7 +272,6 @@ class HorizontalLinearStepper extends React.Component {
     this.setState({open: true})
 
     var inputs = this.state.selectedFiles
-    // console.log(inputs, this.state.index)
 
     // use this clear() for dev purposes
     // localStorage.clear();
@@ -422,11 +423,47 @@ class HorizontalLinearStepper extends React.Component {
       this.setState({ open: false });
     if(this.state.activeStep === 2)
       this.closeDialog()
+    if(this.state.deletedFiles !== undefined && this.state.deletedFiles.length > 0)
+      this.setState({ deletedFiles: [] })
   };
 
-  redirectJobQueue = () => {
-    var path = '/jobQueue'
-    this.props.history.push(path)
+  promptConfirmDelete = (selected) => {
+    console.log(selected)
+    this.setState({
+      message: 'Are you sure you want to delete ' + selected.length + ' file(s) and corresponding jobs?',
+      delete: true,
+      open: true,
+      selectedFiles: selected
+    })
+  }
+
+  handleConfirmDelete = () => {
+    let requests = [];
+
+    this.state.selectedFiles.forEach(inputId => {
+      requests.push(axios.delete('http://127.0.0.1:34251/inputs/'+inputId));
+    });
+
+    Promise.all(requests)
+      .then(responses => {
+        let deleted = 0
+        let successDeleted = []
+        
+        responses.forEach(response => {
+          if(response.status === 200) {
+            successDeleted.push(response.data.message.substring(response.data.message.indexOf(': ') + 2, response.data.message.length - 1))
+            deleted += response.data.jobs.length
+          }
+        })
+
+        this.setState({
+          message: successDeleted.length + ' files(s) and ' + deleted + ' corresponding job(s) deleted.',
+          open: true,
+          delete: false,
+          selectedFiles: [],
+          deletedFiles: successDeleted
+        })
+      });
   }
 
   render() {
@@ -494,9 +531,20 @@ class HorizontalLinearStepper extends React.Component {
                   </Button>
                 </div>
                 :
-                <Button onClick={this.handleClose} style={{margin: 7}}>
-                  <h6>Close</h6>
-                </Button>
+                (this.state.delete && this.state.open ?
+                  <div>
+                    <Button onClick={this.handleConfirmDelete} style={{margin: 7}}>
+                      <h6>Yes</h6>
+                    </Button>
+                    <Button onClick={this.handleClose} style={{margin: 7}}>
+                      <h6>No</h6>
+                    </Button>
+                  </div>
+                  :
+                  <Button onClick={this.handleClose} style={{margin: 7}}>
+                    <h6>Close</h6>
+                  </Button>
+                )
               }
             </DialogActions>
           </Dialog>
