@@ -102,7 +102,7 @@ class SimpleModal extends React.Component {
                   name="naming"
                   className={classes.group}
                   value={this.state.value}
-                  onChange={this.handleChange}
+                  onChange={this.handleRadioChange}
                 >
                   <FormControlLabel
                     value="STRING,DATE,TIME"
