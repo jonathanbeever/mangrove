@@ -121,7 +121,8 @@ class FullWidthTabs extends React.Component {
                   <InputsTable
                     updateSelectedInputs={this.props.updateSelectedInputs} 
                     filteredInputs={this.props.filteredInputs} 
-                    selected={this.props.selected}          
+                    selected={this.props.selected}
+                    deleteInputs={this.props.promptConfirmDelete}
                   />
                 </div>
               </div>
@@ -156,7 +157,7 @@ class FullWidthTabs extends React.Component {
                     :
                     ''
                   }
-                  {this.state.modal ? <AutomateInputProperties modal={this.state.modal} closeModal={this.closeModal} addSummaryFile={this.props.addSummaryFile} setNamingConvention={this.props.setNamingConvention}/> : ''}
+                  {this.state.modal ? <AutomateInputProperties modal={this.state.modal} closeModal={this.closeModal} setNamingConvention={this.props.setNamingConvention}/> : ''}
                   <SearchInputs 
                     onChange={this.props.updateProperties}
                     value='upload'

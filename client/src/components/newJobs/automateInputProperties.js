@@ -88,66 +88,43 @@ class SimpleModal extends React.Component {
         >
           <div style={getModalStyle()} className={classes.paper}>
             <div className='row'>
-              {/* <div className='col-4'>
-                <Typography variant="h5" id="simple-modal-description">
-                  Upload Summary File
-                </Typography>
-                <input
-                  accept=".txt"
-                  style={{ display: 'none' }}
-                  onChange={this.props.addSummaryFile}
-                  id="selectFiles"
-                  type="file"
+              <Typography variant="h4" id="simple-modal-description">
+                Input properties contained in file names<br/><br/>
+              </Typography>
+              <Typography variant="h5" id="simple-modal-description">
+                Use any of the key words <strong>DATE, TIME, LAT, LONG, SITE, SERIES</strong> to represent the location of these properties in your file naming convention, separated by a comma.
+                Use keyword <strong>STRING</strong> for parts of the file names not correlating to one of these keywords.
+                Define the character separating these fields, such as underscores and slashes.
+              </Typography>
+              <FormControl component="fieldset" className={classes.formControl}>
+                <RadioGroup
+                  aria-label="naming"
+                  name="naming"
+                  className={classes.group}
+                  value={this.state.value}
+                  onChange={this.handleRadioChange}
+                >
+                  <FormControlLabel
+                    value="STRING,DATE,TIME"
+                    control={<Radio color="primary" />}
+                    label={<h6>STRING,DATE,TIME (separator: _)</h6>}
+                    labelPlacement="end"
+                  />
+                </RadioGroup>
+                <TextField
+                  id="convention"
+                  label="Order"
+                  onChange={this.handleChange('value')}
+                  style={{marginBottom: '10px'}}
                 />
-                <div>
-                  <div>
-                    <label htmlFor="selectFiles">
-                      <Button component="span">
-                        Choose .txt File
-                      </Button>
-                    </label> 
-                  </div>
-                </div> 
-              </div> */}
-              {/* <div className='col-8'> */}
-                <Typography variant="h4" id="simple-modal-description">
-                  Input properties contained in file names<br/><br/>
-                </Typography>
-                <Typography variant="h5" id="simple-modal-description">
-                  Use any of the key words <strong>DATE, TIME, LAT, LONG, SITE, SERIES</strong> to represent the location of these properties in your file naming convention, separated by a comma.
-                  Use keyword <strong>STRING</strong> for parts of the file names not correlating to one of these keywords.
-                  Define the character separating these fields, such as underscores and slashes.
-                </Typography>
-                <FormControl component="fieldset" className={classes.formControl}>
-                  <RadioGroup
-                    aria-label="naming"
-                    name="naming"
-                    className={classes.group}
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                  >
-                    <FormControlLabel
-                      value="STRING,DATE,TIME"
-                      control={<Radio color="primary" />}
-                      label={<h6>STRING,DATE,TIME (separator: _)</h6>}
-                      labelPlacement="end"
-                    />
-                  </RadioGroup>
-                  <TextField
-                    id="convention"
-                    label="Order"
-                    onChange={this.handleChange('value')}
-                    style={{marginBottom: '10px'}}
-                  />
-                  <TextField
-                    id="convention"
-                    label="Separator"
-                    onChange={this.handleChange('separator')}
-                    style={{marginBottom: '10px'}}
-                  />
-                  <Button onClick={this.handleSubmit}>Apply</Button>
-                </FormControl>
-              {/* </div> */}
+                <TextField
+                  id="convention"
+                  label="Separator"
+                  onChange={this.handleChange('separator')}
+                  style={{marginBottom: '10px'}}
+                />
+                <Button onClick={this.handleSubmit}>Apply</Button>
+              </FormControl>
             </div>
           </div>
         </Modal>

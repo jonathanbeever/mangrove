@@ -108,25 +108,12 @@ class FilterInputs extends Component {
   handleClose = (deleteInputs) => {
     this.setState({ open: false });
 
-    if(deleteInputs === 'delete') {
-      this.deleteFiles()
-    }
-    else if(deleteInputs === 'deleted') {
-      // Change back to select specs tab, make request for inputs/specs/jobs again
-      // TODO: better solution to update after delete
-      this.props.changeTab(0)
-    }
+    if(deleteInputs === 'delete') { this.deleteFiles() }
+    else if(deleteInputs === 'deleted') { this.props.changeTab(0) }
   };
 
   deleteFiles = () => {
     let requests = [];
-    let jobRequests = []
-
-    this.props.filteredJobs.forEach(job => {
-      if(this.state.selected.indexOf(job.input) !== -1) {
-        jobRequests.push(axios.delete('http://127.0.0.1:34251/jobs/'+job.jobId))
-      }
-    })
 
     this.state.selected.forEach(inputId => {
       requests.push(axios.delete('http://127.0.0.1:34251/inputs/'+inputId));
@@ -134,9 +121,10 @@ class FilterInputs extends Component {
 
     Promise.all(requests)
       .then(responses => {
-        // TODO: notify based on response status
-        console.log(responses)
-        this.setState({ message: this.state.selected.length + ' file(s) deleted and ' + jobRequests.length + ' corresponding job(s) deleted.' })
+        let deleted = 0
+        responses.forEach(response => { deleted += response.data.jobs.length })
+
+        this.setState({ message: this.state.selected.length + ' file(s) deleted and ' + deleted + ' corresponding job(s) deleted.' })
         this.setState({ buttons: ['Close'] })
         this.setState({ open: true })
       });
