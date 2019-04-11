@@ -47,6 +47,12 @@ https://<base-url>/inputs/input-1-uuid
   & String
   & A message containing information regarding the deletion.
   \\ \hline
+
+  \codesnip{jobs}
+  & Object[]
+  & A list of \codesnip{jobId}s of all Jobs associated with the input that was
+  deleted. These Jobs have also been deleted in the process.
+  \\ \hline
 \end{longtable}
 \endgroup
 
@@ -54,22 +60,9 @@ https://<base-url>/inputs/input-1-uuid
 \begin{jsoncode}
 {
   "success": true,
-  "message": "Successfully deleted input with inputId: input-1-uuid."
+  "message": "Successfully deleted input with inputId: input-1-uuid.",
+  "jobs": [
+    "job-1a-uuid"
+  ]
 }
 \end{jsoncode}
-
-\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
-\begingroup
-\renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
-  \hline
-  \tablehead{Condition}
-  & \multicolumn{2}{|l|}{\tablehead{Response}}
-  \\ \hline
-
-  The requested input does not exist.
-  & 404
-  & An object containing a single field, \codesnip{message} (String), stating that an input with the \codesnip{inputId} provided in the request was not found.
-  \\ \hline
-\end{longtable}
-\endgroup
