@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
+const image = require('./logo.1.svg')
 
 function TabContainer(props) {
   return (
@@ -27,7 +28,9 @@ const styles = theme => ({
   },
   title: {
     paddingLeft: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit
+    paddingBottom: theme.spacing.unit,
+    paddingTop: theme.spacing.unit,
+    marginTop: 0
   },
   background: {
     backgroundColor: "#031603",
@@ -45,6 +48,11 @@ class NavBarTabs extends React.Component {
     this.setState({ value });
   };
 
+  handleMangroveClick = () => {
+    const shell = window.require('electron').shell;
+    shell.openExternal("http://jonathan.beever.org/");
+  }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;
@@ -53,10 +61,10 @@ class NavBarTabs extends React.Component {
       <div className={classes.root}>
         <AppBar position="fixed" className={classes.background}>
           <Toolbar>
-            <div className="col-2">
-              <h2 className={classes.title}>Mangrove</h2>
+            <div className="col-3">
+              <h2 className={classes.title}><span style={{float: "left"}}><a style={{ color:"#fdc907", textDecoration:'none' }} href="" onClick={this.handleMangroveClick}><img style={{filter: 'invert(1)', marginRight: 5+'px', marginBottom: 5+'px'}} src={image} alt="Mangrove Logo"/>Mangrove</a></span></h2>
             </div>
-            <div className="col-8">
+            <div className="col-8" style={{paddingRight: 15+'%'}}>
               <Tabs value={value}
                 onChange={this.handleChange}
                 TabIndicatorProps={{style: {backgroundColor: "#fdc907"}}}
