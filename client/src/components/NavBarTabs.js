@@ -45,6 +45,11 @@ class NavBarTabs extends React.Component {
     this.setState({ value });
   };
 
+  handleMangroveClick = () => {
+    const shell = window.require('electron').shell;
+    shell.openExternal("http://jonathan.beever.org/");
+  }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;
@@ -54,7 +59,7 @@ class NavBarTabs extends React.Component {
         <AppBar position="fixed" className={classes.background}>
           <Toolbar>
             <div className="col-2">
-              <h2 className={classes.title}>Mangrove</h2>
+              <h2 className={classes.title}><a style={{ color:"#fdc907", textDecoration:'none' }}href="" onClick={this.handleMangroveClick}>Mangrove</a></h2>
             </div>
             <div className="col-8">
               <Tabs value={value}
