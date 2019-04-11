@@ -83,6 +83,10 @@ describe('Job Processor', () => {
     expect(result).to.have.all.keys(getResultKeys(Type.AEI));
     expect(result.aeiL).to.be.a('number');
     expect(result.aeiR).to.be.a('number');
+    expect(result.bandValuesL).to.be.an('array');
+    expect(result.bandValuesR).to.be.an('array');
+    expect(result.bandRangeValuesL).to.be.an('array');
+    expect(result.bandRangeValuesR).to.be.an('array');
   });
 
   it('It should process an BI Job', async () => {
@@ -92,6 +96,11 @@ describe('Job Processor', () => {
     expect(result).to.have.all.keys(getResultKeys(Type.BI));
     expect(result.areaL).to.be.a('number');
     expect(result.areaR).to.be.a('number');
+    expect(result.valsL).to.be.an('array');
+    expect(result.valsR).to.be.an('array');
+    expect(result.valsNormalizedL).to.be.an('array');
+    expect(result.valsNormalizedR).to.be.an('array');
+    expect(result.freqVals).to.be.an('array');
   });
 
   it('It should process an NDSI Job', async () => {

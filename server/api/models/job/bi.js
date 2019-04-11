@@ -13,6 +13,11 @@ module.exports = Job.discriminator(JobType.BI, new mongoose.Schema({
     type: {
       areaL: Number,
       areaR: Number,
+      valsL: [Number],
+      valsR: [Number],
+      valsNormalizedL: [Number],
+      valsNormalizedR: [Number],
+      freqVals: [Number],
     },
     default: null,
   },

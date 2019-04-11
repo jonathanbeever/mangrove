@@ -128,11 +128,20 @@ const getResultKeys = (type) => {
       return [
         'aeiL',
         'aeiR',
+        'bandValuesL',
+        'bandValuesR',
+        'bandRangeValuesL',
+        'bandRangeValuesR',
       ];
     case Type.BI:
       return [
         'areaL',
         'areaR',
+        'valsL',
+        'valsR',
+        'valsNormalizedL',
+        'valsNormalizedR',
+        'freqVals',
       ];
     case Type.NDSI:
       return [
