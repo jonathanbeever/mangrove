@@ -26,10 +26,6 @@ const theme = createMuiTheme({
         padding: '0 20px',
         boxShadow: '0 1px 1px 1px #606060',
       },
-    },
-    MuiRadio: {
-        checked: {
-      colorPrimary: '#b6cd26'}
     }
   },
   typography: { useNextVariants: true },

@@ -26,6 +26,7 @@ const styles = theme => ({
   },
   buttonTop: {
     marginTop: theme.spacing.unit * 12,
+    marginRight: 15+'px'
   },
   instructions: {
     marginTop: theme.spacing.unit,
@@ -474,7 +475,7 @@ class HorizontalLinearStepper extends React.Component {
     return (
       <div className={classes.root}>
         <div className="row" style={{paddingBottom: 0}}>
-          <div className="col-9">
+          <div style={{width: 70+'%'}}>
             <Stepper position="static" className={classes.stepper} activeStep={activeStep}>
               {steps.map((label, index) => {
                 const props = {};
@@ -487,7 +488,7 @@ class HorizontalLinearStepper extends React.Component {
               })}
             </Stepper>
           </div>
-          <div className='col-3'>
+          <div style={{width: 30+'%'}}>
             <div className={classes.buttonTop} style={{float:'right'}}>
               <Button
                 disabled={activeStep === 0}
