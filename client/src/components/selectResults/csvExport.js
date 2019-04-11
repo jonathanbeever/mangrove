@@ -10,7 +10,7 @@ import { sortByKeys } from '../analysisView/dataModeling';
 import moment from 'moment';
 
 var _ = require('lodash');
-const { AsyncParser, Parser } = require('json2csv');
+const { Parser } = require('json2csv');
 
 function getModalStyle() {
   const top = 50;
@@ -257,9 +257,8 @@ class ExportCsv extends Component {
   }
 
   handleChange = (name) => e => {
+    var fields = this.state.showFields
     if(name === 'separateCsvs') {
-      var fields = this.state.showFields
-
       if(this.props.index === 'aci') {
         ['aciFlValsL', 'aciFlValsR', 'aciOverTimeL', 'aciOverTimeR'].forEach(field => {
           if(!e.target.checked) {
@@ -286,7 +285,6 @@ class ExportCsv extends Component {
       })
     }
     else {
-      var fields = this.state.showFields
       fields[this.props.index][name]['show'] = e.target.checked
 
       if(this.props.index === 'aci') {
@@ -366,8 +364,6 @@ class ExportCsv extends Component {
     })
 
     if(this.props.index === 'aci') {
-      var value
-
       this.state.sortedJobs.forEach((job) => {
         var unwind = []
         if(flValsL) unwind.push('result.aciFlValsL')
