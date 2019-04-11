@@ -294,14 +294,14 @@ class Catalog extends Component {
   }
 
   updateSelectedSpecs = (selected, index) => {
+    console.log(selected, index)
     if(this.state.allJobs === undefined) return;
     var specs = this.state.selectedSpecs
     specs[index] = selected
     this.setState({ selectedSpecs: specs})
 
     var obj = {}
-    if(selected.length)
-      var inputs = this.state.matchingInputIds
+    var inputs = this.state.matchingInputIds
 
     var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
     indices.forEach(index => {
@@ -393,13 +393,8 @@ class Catalog extends Component {
       'rms': {}
     }
 
-    // these are the inputs selected as an object
-    // console.log(this.state.indexedFiles);
-    // these are the jobs selected as an array
-    // console.log(selected);
     jobs.forEach(job => {
       // If curr job is selected
-      // console.log(job);
       job.input = this.state.indexedFiles[job.input]
       job.spec = this.state.indexedSpecsById[job.spec]
 

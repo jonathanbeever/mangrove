@@ -39,6 +39,13 @@ class Expansion extends React.Component {
       this.props.handleChange(this.props.index)
   };
 
+  componentDidMount = () => {
+    if(this.props.index === 'rms') {
+      if(this.props.selectedSpecs.length)
+        this.setState({ checkedRms: true })
+    }
+  }
+
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(this.props.index === 'rms') {
       if(!this.props.specs.length && prevProps.specs.length)
