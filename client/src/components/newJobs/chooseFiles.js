@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import FileTabs from './fullWidthTabs';
 import axios from 'axios';
-import LinearIntermediate from './linearIntermediate';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import moment from 'moment';
 var _ = require('lodash');
 
@@ -23,10 +23,6 @@ const styles = theme => ({
 });
 
 class ChooseFiles extends React.Component {
-  constructor() {
-    super()
-  }
-
   state = {
     allFiles: [],
     newFiles: [],
@@ -53,7 +49,10 @@ class ChooseFiles extends React.Component {
         date: '',
         time: ''
       }
-    }
+    },
+    progress: 0,
+    showUploadProgress: false,
+    progressBar: ''
   };
 
   componentDidMount = () => {
@@ -111,13 +110,12 @@ class ChooseFiles extends React.Component {
 
   listDbFiles = (resp) => {
     var allFiles = this.state.allFiles
-
     resp.forEach(file => {
       if(allFiles.indexOf(file.data) === -1) {
         allFiles.push(file.data)
       }
     })
-    this.setState({ allFiles: allFiles })
+    this.setState({ allFiles: allFiles, filteredInputs: allFiles })
   }
 
   addFilesToUpload = (e) => {
@@ -162,11 +160,16 @@ class ChooseFiles extends React.Component {
   }
 
   uploadFiles = () => {
-    this.props.openDialog(<div><LinearIntermediate /></div>)
+    this.setState({
+      showUploadProgress: true,
+      progressBar: (<LinearProgress variant="determinate" value={this.state.progress} />)
+    })
 
     var fileNames = Object.keys(this.state.filesToUpload)
     var files = this.state.filesToUpload
     var uploadRequests = []
+    var responses = []
+    var failed = []
 
     const url = 'http://127.0.0.1:34251/inputs';
 
@@ -181,18 +184,58 @@ class ChooseFiles extends React.Component {
 
       form.append('json', JSON.stringify(file))
       form.append('file', files[fileName].file)
-  
-      uploadRequests.push(axios.put(url, form))
+      
+
+      uploadRequests.push(
+        axios.put(url, form)
+        .then(response => {
+          if(response.status === 201) {
+            var progress = this.state.progress
+            progress++
+
+            this.setState({
+              progressBar: (<LinearProgress variant="determinate" value={Math.ceil(progress/uploadRequests.length * 100)} />)
+            })
+
+            this.setState({progress: progress})
+          } 
+          responses.push(response)
+        })
+        .catch(function (error) {
+          failed.push(error)
+        })
+      )
     })
 
     Promise.all(uploadRequests)
-    .then(responses => {
+    .then(() => {
+      var message = ''
+      var clear = this.state.upload
+      clear['site'] = clear['series'] = clear['lat'] = clear['long'] = clear['recordTimeMs']['date'] = clear['recordTimeMs']['time'] = ''
+      
+      if(responses.length) {
+
+        if(responses.length > 1)
+          message += responses.length + ' files successfully added. '
+        else
+          message += responses.length + ' file successfully added. '
+      }
+      if(failed.length) {
+        if(failed.length > 1)
+          message += 'Failed to upload ' + failed.length + ' files.'
+        else
+          message += 'Failed to upload ' + failed.length + ' file.'
+      }
+     
+      this.props.openDialog(message)
       this.listDbFiles(responses)
-      this.props.openDialog(responses.length + ' files successfully added')
-      this.setState({ filesToUpload: [] })
-      this.setState({ selectedToEdit: [] })
-    }).catch(err => {
-      this.props.openDialog(err.message + '. Please make sure to add a site and series name to all files.')
+
+      this.setState({
+        showUploadProgress: false,
+        filesToUpload: [],
+        selectedToEdit: [],
+        upload: clear
+      })
     })
   }
   
@@ -235,26 +278,31 @@ class ChooseFiles extends React.Component {
     return (
       <div className={classes.root}>
         <div className="col-12">
+        {this.state.showUploadProgress ?
+          this.state.progressBar : ''
+        }
         {this.state.filteredInputs ? 
-          <FileTabs 
-            updateSelectedInputs={this.props.updateSelectedInputs} 
-            filteredInputs={this.state.filteredInputs}
-            selected={this.props.selectedFiles}    
-            onChange={this.handleInputUpload}  
-            filter={this.state.filter}
-            submitInputFilter={this.submitInputFilter}
-            addFilesToUpload={this.addFilesToUpload}
-            filesToUpload={this.state.filesToUpload}
-            updateSelectedUploads={this.updateSelectedUploads} 
-            selectedToEdit={this.state.selectedToEdit} 
-            updateProperties={this.updateInputProperties}
-            submitInputProperties={this.submitInputProperties}
-            upload={this.state.upload}
-            uploadFiles={this.uploadFiles}
-            setNamingConvention={this.setNamingConvention}
-            startRms={this.props.startRms}
-            promptConfirmDelete={this.props.promptConfirmDelete}
-          /> : ''}
+          <div style={{marginTop: 5+'px'}}>
+            <FileTabs 
+              updateSelectedInputs={this.props.updateSelectedInputs} 
+              filteredInputs={this.state.filteredInputs}
+              selected={this.props.selectedFiles}    
+              onChange={this.handleInputUpload}  
+              filter={this.state.filter}
+              submitInputFilter={this.submitInputFilter}
+              addFilesToUpload={this.addFilesToUpload}
+              filesToUpload={this.state.filesToUpload}
+              updateSelectedUploads={this.updateSelectedUploads} 
+              selectedToEdit={this.state.selectedToEdit} 
+              updateProperties={this.updateInputProperties}
+              submitInputProperties={this.submitInputProperties}
+              upload={this.state.upload}
+              uploadFiles={this.uploadFiles}
+              setNamingConvention={this.setNamingConvention}
+              startRms={this.props.startRms}
+              promptConfirmDelete={this.props.promptConfirmDelete}
+            />
+          </div> : ''}
         </div>
       </div>
     );
