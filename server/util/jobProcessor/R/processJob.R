@@ -4,6 +4,7 @@ needs("tuneR")
 if (job$spec$type %in% list("aci", "adi", "aei", "bi", "ndsi")) {
   needs("devtools")
   devtools::install_github("OtGabaldon/soundecology",
+                           ref = "a78393ab9929955a0151e5766a08bfbdef168ecd"
                            subdir = "soundecology",
                            quiet = TRUE)
   needs("soundecology")
