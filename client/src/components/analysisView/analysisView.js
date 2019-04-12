@@ -198,6 +198,7 @@ class AnalysisView extends Component {
   // Then, it creates the Paper and ExpansionPanel components used
   // for displaying the graphs themselves.
   formatJob = (data) => {
+    console.log(data);
     const rows = [];
     let specRows = [];
     let graphs;
@@ -446,8 +447,6 @@ class AnalysisView extends Component {
   // Then, it creates the Paper and ExpansionPanel components used
   // for displaying the graphs for comparing jobs across series.
   formatJobSeries = (data) => {
-    console.log("Format series data: ");
-    console.log(data);
     const rows = [];
     let specRows = [];
     let graphs;
@@ -641,9 +640,9 @@ class AnalysisView extends Component {
     let { siteDict, siteNames } = this.state;
     let chosenSite = event.target.value;
     let chosenSiteSeries = siteDict[chosenSite];
-    this.setState({ siteNamesCompare: siteNames.filter(site => site != chosenSite) });
+    this.setState({ siteNamesCompare: siteNames.filter(site => site !== chosenSite) });
     this.setState({ seriesNames: chosenSiteSeries });
-    this.setState({ seriesNamesCompare: chosenSiteSeries.length > 1 ? chosenSiteSeries.filter(series => series != chosenSiteSeries[0]) : [] });
+    this.setState({ seriesNamesCompare: chosenSiteSeries.length > 1 ? chosenSiteSeries.filter(series => series !== chosenSiteSeries[0]) : [] });
     this.setState({ chosenSite: chosenSite });
     this.setState({ chosenSeries: chosenSiteSeries[0] });
     this.setState({ comparedJobsSeries: null });

@@ -764,7 +764,7 @@ export function convertACIResultsBySite(jobs, sites) {
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareBySeconds = replaceACI(compareBySeconds);
+  // compareBySeconds = replaceACI(compareBySeconds);
   compareByDate = replaceACI(compareByDate);
 
   compareByFile.data.forEach(item => {
@@ -839,7 +839,7 @@ export function convertACIResultsBySeries(jobs, series) {
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareBySeconds = replaceACI(compareBySeconds);
+  // compareBySeconds = replaceACI(compareBySeconds);
   compareByDate = replaceACI(compareByDate);
 
   compareByFile.data.forEach(item => {

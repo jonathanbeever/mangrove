@@ -34,6 +34,13 @@ class BACompareFileAreaChart extends Component {
     this.setState({ chosenFile: fileNames[0] });
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if(nextProps === null || nextProps === undefined) return;
+    let fileNames = nextProps.fileNames;
+    this.setState({ fileNames });
+    this.setState({ chosenFile: fileNames[0] });
+  }
+
   // Handler for the file Select
   handleFileChange = event => {
     this.setState({ chosenFile: event.target.value });

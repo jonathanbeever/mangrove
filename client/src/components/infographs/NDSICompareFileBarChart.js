@@ -35,6 +35,13 @@ class NDSICompareFileBarChart extends Component {
     this.setState({ chosenFile: fileNames[0] });
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if(nextProps === null || nextProps === undefined) return;
+    let fileNames = [...new Set(nextProps.results.map(x => x.name))];
+    this.setState({ fileNames });
+    this.setState({ chosenFile: fileNames[0] });
+  }
+
   formatYAxis = (tickItem) => {
     let asF = parseFloat(tickItem);
     return (asF).toFixed(2);
@@ -73,8 +80,6 @@ class NDSICompareFileBarChart extends Component {
   }
 
   formatJob = (chosen, compare) => {
-    console.log(chosen);
-    console.log(compare);
     if(compare.length === 0) compare[0] = {ndsiL:null,ndsiR:null,
                                           biophonyL:null,biophonyR:null,
                                           anthrophonyL:null,anthrophonyR:null};
