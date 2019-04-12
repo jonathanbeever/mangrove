@@ -273,15 +273,18 @@ class HorizontalLinearStepper extends React.Component {
     this.setState({open: true})
 
     var inputs = this.state.selectedFiles
+    console.log(inputs)
 
     // use this clear() for dev purposes
     // localStorage.clear();
 
     // Spec already exists
+    console.log(this.state.selectedSpec)
     if(this.state.selectedSpec.length) {
       this.state.selectedSpec.forEach((spec, specIdx) => {
 
         inputs.forEach((inputId, inputIdx) => {
+          console.log(spec, inputId)
           // Request to queue new job
           axios.put(
             "http://127.0.0.1:34251/jobs",
@@ -323,6 +326,7 @@ class HorizontalLinearStepper extends React.Component {
       )
       .then(res => {
         var specId = res.data.specId
+        console.log(specId)
         // Loop through inputs and make requests
         inputs.forEach((inputId, inputIdx) => {
           // Request to queue new job
@@ -335,6 +339,7 @@ class HorizontalLinearStepper extends React.Component {
             {headers: {"Content-Type": "application/json"}}
           )
           .then(res => {
+            console.log(res)
             if(res.status === 201) {
               if(inputIdx === inputs.length - 1) {
                 this.setState({message: 'Jobs started. View progress in the job queue.'})
@@ -401,9 +406,14 @@ class HorizontalLinearStepper extends React.Component {
       this.submitJob()
     }
     else {
-      this.setState({
-        activeStep: activeStep + 1
-      });
+      if(this.state.activeStep === 1 && this.state.index === 'rms') {
+        this.startRms()
+      }
+      else {
+        this.setState({
+          activeStep: activeStep + 1
+        });
+      }
     }
   };
 
@@ -424,6 +434,11 @@ class HorizontalLinearStepper extends React.Component {
       this.setState({ open: false });
     if(this.state.activeStep === 2)
       this.closeDialog()
+    if(this.state.activeStep === 1) {
+      this.setState({ open: false })
+      this.setState({ selectedSpec: [] })
+      this.setState({ disabledSubmit: false })
+    }
     if(this.state.deletedFiles !== undefined && this.state.deletedFiles.length > 0)
       this.setState({ deletedFiles: [] })
   };
@@ -504,7 +519,15 @@ class HorizontalLinearStepper extends React.Component {
                 onClick={this.handleNext}
                 className={classes.button}
               >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                {activeStep === steps.length - 1 ?
+                  'Finish'
+                  :
+                  (activeStep === steps.length - 2 && this.state.index === 'rms' ?
+                    'Finish'
+                    :
+                    'Next'
+                  )
+                }
               </Button>
             </div>
           </div>
@@ -566,7 +589,15 @@ class HorizontalLinearStepper extends React.Component {
                 onClick={this.handleNext}
                 className={classes.button}
               >
-                {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                {activeStep === steps.length - 1 ?
+                  'Finish'
+                  :
+                  (activeStep === steps.length - 2 && this.state.index === 'rms' ?
+                    'Finish'
+                    :
+                    'Next'
+                  )
+                }
               </Button>
             </div>
           </div>
