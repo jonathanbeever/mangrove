@@ -8,6 +8,8 @@ const settings = require('../util/settings');
 settings.load();
 
 switch (process.argv[2]) {
+  case undefined:
+    break;
   case 'rootDir':
     process.stdout.write(settings.rootDir());
     break;

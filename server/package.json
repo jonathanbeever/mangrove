@@ -11,6 +11,7 @@
     "pretest": "eslint --ignore-path ../.gitignore .",
     "test": "cross-env-shell NODE_ENV=test nyc --reporter=text --reporter=html mocha",
     "lint-fix": "eslint --ignore-path ../.gitignore --fix .",
+    "predev": "node ./scripts/env.js",
     "dev": "cross-env-shell NODE_ENV=dev nodemon server.js",
     "prestart": "node ./scripts/env.js",
     "start": "node server.js",
