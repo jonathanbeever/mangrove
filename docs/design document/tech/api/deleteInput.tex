@@ -28,6 +28,21 @@ https://<base-url>/inputs/:inputId
 https://<base-url>/inputs/input-1-uuid
 \end{htmlcode}
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & The input with the specified \codesnip{inputId} was deleted if it existed. Otherwise, nothing happened.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}

@@ -28,6 +28,21 @@ https://<base-url>/jobs/:jobId
 https://<base-url>/jobs/job-1a-uuid
 \end{htmlcode}
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & The job with the specified \codesnip{jobId} was deleted if it existed. Otherwise, nothing happened.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
@@ -57,19 +72,3 @@ https://<base-url>/jobs/job-1a-uuid
   "message": "Successfully deleted Job with jobId: job-1a-uuid."
 }
 \end{jsoncode}
-
-\paragraph{Error Handling} \mbox{}\\[\longtableheaderspace]
-\begingroup
-\renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\errconditioncol} | m{\errcodecol} | m{\errbodycol} |}
-  \hline
-  \tablehead{Condition}
-  & \multicolumn{2}{|l|}{\tablehead{Response}}
-  \\ \hline
-
-  The requested job does not exist.
-  & 404
-  & An object containing a single field, \codesnip{message} (String), stating that a job with the \codesnip{jobId} provided in the request was not found.
-  \\ \hline
-\end{longtable}
-\endgroup

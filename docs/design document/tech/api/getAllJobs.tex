@@ -29,6 +29,21 @@ https://<base-url>/jobs
 %\end{longtable}
 %\endgroup
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & All existing jobs were found and returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}

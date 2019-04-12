@@ -28,6 +28,21 @@ https://<base-url>/specs/:specId
 https://<base-url>/specs/spec-a-uuid
 \end{htmlcode}
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & A spec with the requested \codesnip{specId} was found and returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}

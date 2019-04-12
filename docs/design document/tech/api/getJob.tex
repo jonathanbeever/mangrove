@@ -28,6 +28,21 @@ https://<base-url>/jobs/:jobId
 https://<base-url>/jobs/job-1a-uuid
 \end{htmlcode}
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & A job with the requested \codesnip{jobId} was found and returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
