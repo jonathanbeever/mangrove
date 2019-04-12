@@ -99,17 +99,33 @@ class FilterSpecs extends Component {
   formatChipHtml = () => {
     var chipHtml = []
 
-    Object.keys(this.props.specParamsByIndex[this.props.index]).forEach(param => {
-      if(this.props.specParamsByIndex[this.props.index][param].length) {
-        chipHtml.push(
-          <Chip
-            key={param}
-            label={<h3>{this.props.index + ' : ' + param + ' - ' + this.props.specParamsByIndex[this.props.index][param]}</h3>}
-            onDelete={this.deleteChip}
-          />
-        )
-      }
+    const indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
+
+    indices.forEach(index => {
+      Object.keys(this.props.specParamsByIndex[index]).forEach((param, i) => {
+        if(this.props.specParamsByIndex[index][param].length) {
+          if(i !== 0)
+            chipHtml.push(
+              <div style={{marginTop: 3+'px'}}>
+                <Chip
+                  key={param}
+                  label={<h5>{index + ' : ' + param + ' - ' + this.props.specParamsByIndex[index][param]}</h5>}
+                  onDelete={this.deleteChip}
+                />
+              </div>
+            )
+          else
+            chipHtml.push(
+              <Chip
+                key={param}
+                label={<h5>{this.props.index + ' : ' + param + ' - ' + this.props.specParamsByIndex[this.props.index][param]}</h5>}
+                onDelete={this.deleteChip}
+              />
+            )
+        }
+      })
     })
+    
     this.setState({ chips: <div>{chipHtml}</div> })
   }
 

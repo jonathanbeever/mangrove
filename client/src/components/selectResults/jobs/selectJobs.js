@@ -28,73 +28,8 @@ const styles = theme => ({
 });
 
 class SelectJobs extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputChips: '',
-      specChips: ''
-    }
-  }
-
   componentDidMount = () => {
     sessionStorage.removeItem('analysisViewSave');
-    this.formatInputChipHtml()
-    this.formatSpecFilterHtml()
-  }
-
-  componentDidUpdate = (prevProps) => {
-    if(prevProps.inputFiltering !== this.props.inputFiltering) {
-      this.formatInputChipHtml()
-    }
-  }
-
-  deleteInputChip = (label) => {
-    this.props.onDelete(label)
-    this.formatInputChipHtml()
-  }
-
-  formatInputChipHtml = () => {
-    var chipHtml = []
-    Object.keys(this.props.inputFiltering).forEach(param => {
-      if(this.props.inputFiltering[param].length) {
-        chipHtml.push(
-          <Chip
-            key={param}
-            label={param + ' : ' + this.props.inputFiltering[param]}
-            onDelete={this.deleteInputChip}
-          />
-        )
-      }
-    })
-    if(chipHtml.length)
-      this.setState({ inputChips: <div>{chipHtml}</div> })
-    else
-      this.setState({ inputChips: '' })
-  }
-
-  deleteSpecChip = (label) => {
-    this.props.onDeleteSpecChip(label)
-    this.formatSpecChipHtml()
-  }
-
-  formatSpecFilterHtml = () => {
-    var html = ''
-    var html2 = ''
-    if(this.props.selectedIndex.length) {
-      html = <h5><strong>Index: </strong>{this.props.selectedIndex}</h5>
-      // change from array if keeping pne spec
-      if(this.props.selectedSpecs[this.props.selectedIndex][0] === this.props.filteredSpecs[this.props.selectedIndex][0].specId) {
-        html2 = Object.keys(this.props.filteredSpecs[this.props.selectedIndex][0]).map(param => {
-          if(param !== 'specId' && param !== 'type')
-            return <div key={param}>{param + ': ' + this.props.filteredSpecs[this.props.selectedIndex][0][param]}</div>
-          else
-            return null;
-        })
-      }
-      html = <div>{html}<div>{html2}</div></div>
-    }
-    this.setState({ specHtml: html })
   }
 
   render() {
@@ -103,21 +38,6 @@ class SelectJobs extends Component {
     return (
       <div className="row">
         <div className="col-4">
-          {this.props.selectedIndex.length ?
-            <Paper className={classes.root}>
-              {this.state.specHtml}
-            </Paper>
-          :
-            ''
-          }
-          {this.state.inputChips !== '' ?
-            <Paper className={classes.root}>
-              <h5>Input Specifications</h5>
-              {this.state.inputChips}
-            </Paper>
-          :
-            ''
-          }
           <Paper className={classes.root}>
             <h4>Filter Jobs</h4>
             <div>
@@ -127,8 +47,6 @@ class SelectJobs extends Component {
                 className={classes.textField}
                 onChange={this.props.onChangeJobFilter('author')}
               />
-              {/* TODO */}
-              {/* <DateAndTimePickers /> */}
             </div>
             <div className="row filterSubmit">
               <Button onClick={this.props.onSubmitFiltering} style={{margin: "0 auto"}}>

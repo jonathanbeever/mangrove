@@ -21,7 +21,7 @@ function OutlinedChips(props) {
         label={props.label}
         onDelete={()=>props.onDelete(props.label)}
         className={classes.chip}
-        color="secondary"
+        color="primary"
         variant="outlined"
       />
     </div>
