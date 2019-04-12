@@ -6,7 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import MenuItem from '@material-ui/core/MenuItem';
-import ADIAEICompareLineChart from './ADIAEICompareLineChart';
+import BACompareAreaChart from './BACompareAreaChart';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -19,7 +19,7 @@ const styles = theme => ({
   }
 });
 
-class ADIAEICompareFileLineChart extends Component {
+class BACompareFileAreaChart extends Component {
   constructor() {
     super();
 
@@ -66,58 +66,45 @@ class ADIAEICompareFileLineChart extends Component {
     return menuItems;
   }
 
+  replaceBI = (compareData) => {
+    compareData.data.forEach(item => {
+      item['leftSpectrumC'] = item['leftSpectrum'];
+      item['rightSpectrumC'] = item['rightSpectrum'];
+      delete(item['leftSpectrum']);
+      delete(item['rightSpectrum']);
+    });
+    return compareData;
+  }
+
   formatJob = (chosen, compare) => {
-    let { adi } = this.props;
-    let x = chosen.bandL.length;
+    console.log(chosen);
+    let x = chosen.freqVals.length;
     if(compare === undefined || compare.length > 0)
     {
-      if(adi) compare = {adiL:0,adiR:0,bandL:new Array(x).fill(undefined),bandR:new Array(x).fill(undefined),bandRangeL:chosen.bandRangeL,bandRangeR:chosen.bandRangeR};
-      else compare = {aeiL:0,aeiR:0,bandL:new Array(x).fill(undefined),bandR:new Array(x).fill(undefined),bandRangeL:chosen.bandRangeL,bandRangeR:chosen.bandRangeR};
-    }
-
-    let yAxis = adi ? "ADI Value" : "AEI Value";
-    let chosenValL;
-    let chosenValR;
-    let compareValL;
-    let compareValR;
-    if(adi)
-    {
-      chosenValL = chosen.adiL;
-      chosenValR = chosen.adiR;
-      compareValL = compare.adiL;
-      compareValR = compare.adiR;
-    }else
-    {
-      chosenValL = chosen.aeiL;
-      chosenValR = chosen.aeiR;
-      compareValL = compare.aeiL;
-      compareValR = compare.aeiR;
+      compare = {areaL:0,areaR:0,freqVals:chosen.freqVals,valsL:new Array(x).fill(undefined),valsR:new Array(x).fill(undefined),valsNormalizedL:new Array(x).fill(undefined),valsNormalizedR:new Array(x).fill(undefined)};
     }
 
     let ret = {
       data: [],
       xAxisLabel: "Hz Range",
-      yAxisLabel: yAxis,
-      dataKey1: "leftBandVal",
-      dataKey2: "rightBandVal",
-      dataKey3: "leftBandValC",
-      dataKey4: "rightBandValC",
-      left: chosenValL,
-      right: chosenValR,
-      leftC: compareValL,
-      rightC: compareValR,
+      yAxisLabel: "BI Value",
+      dataKey1: "leftSpectrum",
+      dataKey2: "rightSpectrum",
+      dataKey3: "leftSpectrumC",
+      dataKey4: "rightSpectrumC",
     };
 
-    let curObject;
-    for(let i = 0; i < x; i++)
+    for(var i = 0; i < x; i++)
     {
-      curObject = {
-        name: chosen.bandRangeL[i],
-        leftBandVal: chosen.bandL[i],
-        rightBandVal: chosen.bandR[i],
-        leftBandValC: compare.bandL[i],
-        rightBandValC: compare.bandR[i]
+      let curObject =
+      {
+        name: chosen.freqVals[i],
+        leftSpectrum: chosen.valsNormalizedL[i],
+        rightSpectrum: chosen.valsNormalizedR[i],
+        leftSpectrumC: compare.valsNormalizedL[i],
+        rightSpectrumC: compare.valsNormalizedR[i]
       }
+
       ret.data.push(curObject);
     }
 
@@ -187,8 +174,8 @@ class ADIAEICompareFileLineChart extends Component {
         </div>
         { showGraph ?
           <div>
-            <ADIAEICompareLineChart
-              reference={true}
+            <BACompareAreaChart
+              callback={this.props.callback}
               results={dataToShow.data}
               xAxisLabel={dataToShow.xAxisLabel}
               yAxisLabel={dataToShow.yAxisLabel}
@@ -196,8 +183,6 @@ class ADIAEICompareFileLineChart extends Component {
               dataKey2={dataToShow.dataKey2}
               dataKey3={dataToShow.dataKey3}
               dataKey4={dataToShow.dataKey4}
-              index={this.props.adi ? "ADI" : "AEI"}
-              vals={[dataToShow.left, dataToShow.right, dataToShow.leftC, dataToShow.rightC]}
             />
           </div>
           :
@@ -208,4 +193,4 @@ class ADIAEICompareFileLineChart extends Component {
   }
 }
 
-export default withStyles(styles)(ADIAEICompareFileLineChart);
+export default withStyles(styles)(BACompareFileAreaChart);

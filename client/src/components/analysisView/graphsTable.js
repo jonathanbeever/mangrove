@@ -10,9 +10,11 @@ import NDSICompareFileBarChart from '../infographs/NDSICompareFileBarChart';
 import ACILineChart from '../infographs/ACILineChart';
 import ACIDualLineChart from '../infographs/ACIDualLineChart';
 import ACICompareFileLineChart from '../infographs/ACICompareFileLineChart';
+import ACICompareFileBandLineChart from '../infographs/ACICompareFileBandLineChart';
 import ADIAEILineChart from '../infographs/ADIAEILineChart';
 import ADIAEICompareLineChart from '../infographs/ADIAEICompareLineChart';
 import ADIAEICompareFileLineChart from '../infographs/ADIAEICompareFileLineChart';
+import BACompareFileAreaChart from '../infographs/BACompareFileAreaChart';
 import BAAreaChart from '../infographs/BAAreaChart';
 import BALineChart from '../infographs/BALineChart';
 import BADualLineChart from '../infographs/BADualLineChart';
@@ -115,6 +117,21 @@ class GraphsTable extends React.Component {
                   />}
                 />
               )
+            }else if(obj.title === "ACI By Band Range")
+            {
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title={obj.title}
+                  graph={<ACICompareFileBandLineChart
+                    results={obj.data}
+                    dataKey1='aciLeft'
+                    dataKey2='aciRight'
+                    dataKey3='aciLeftC'
+                    dataKey4='aciRightC'
+                  />}
+                />
+              )
             }else{
               rows.push(
                 <GraphExpansionPanel
@@ -162,7 +179,23 @@ class GraphsTable extends React.Component {
                 />}
               />
             )
-          }else{
+          }else if(obj.title === "Compared By Band Values")
+          {
+            rows.push(
+              <GraphExpansionPanel
+                key={'graph'+ctr}
+                title={obj.title}
+                graph={<ACICompareFileBandLineChart
+                  results={obj.data}
+                  dataKey1='aciLeft'
+                  dataKey2='aciRight'
+                  dataKey3='aciLeftC'
+                  dataKey4='aciRightC'
+                />}
+              />
+            )
+          }
+          else{
             rows.push(
               <GraphExpansionPanel
                 key={'graph'+ctr}
@@ -553,6 +586,18 @@ class GraphsTable extends React.Component {
         case "bi":
           switch(obj.title)
           {
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Bioacoustic Value By File"
+                  graph={<BACompareFileAreaChart
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+            break;
             case "Bioacoustic Spectrum Values":
               rows.push(
                 <GraphExpansionPanel
@@ -632,6 +677,18 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Bioacoustic Value By File"
+                  graph={<BACompareFileAreaChart
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+            break;
             case "Play Audio Files":
               rows.push(
                 <GraphExpansionPanel

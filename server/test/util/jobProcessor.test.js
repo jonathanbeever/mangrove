@@ -54,9 +54,13 @@ describe('Job Processor', () => {
     expect(result.aciTotAllByMinL).to.be.a('number');
     expect(result.aciTotAllByMinR).to.be.a('number');
     expect(result.aciOverTimeL).to.be.an('array');
+    result.aciOverTimeL.forEach(item => expect(item).to.be.a('number'));
     expect(result.aciOverTimeR).to.be.an('array');
+    result.aciOverTimeR.forEach(item => expect(item).to.be.a('number'));
     expect(result.aciFlValsR).to.be.an('array');
+    result.aciFlValsR.forEach(item => expect(item).to.be.a('number'));
     expect(result.aciFlValsL).to.be.an('array');
+    result.aciFlValsL.forEach(item => expect(item).to.be.a('number'));
   });
 
   it('It should process an ADI Job', async () => {
@@ -83,10 +87,14 @@ describe('Job Processor', () => {
     expect(result).to.have.all.keys(getResultKeys(Type.AEI));
     expect(result.aeiL).to.be.a('number');
     expect(result.aeiR).to.be.a('number');
-    expect(result.bandValuesL).to.be.an('array');
-    expect(result.bandValuesR).to.be.an('array');
-    expect(result.bandRangeValuesL).to.be.an('array');
-    expect(result.bandRangeValuesR).to.be.an('array');
+    expect(result.bandL).to.be.an('array');
+    result.bandL.forEach(item => expect(item).to.be.a('number'));
+    expect(result.bandR).to.be.an('array');
+    result.bandR.forEach(item => expect(item).to.be.a('number'));
+    expect(result.bandRangeL).to.be.an('array');
+    result.bandRangeL.forEach(item => expect(item).to.be.a('string'));
+    expect(result.bandRangeR).to.be.an('array');
+    result.bandRangeR.forEach(item => expect(item).to.be.a('string'));
   });
 
   it('It should process an BI Job', async () => {
@@ -97,10 +105,15 @@ describe('Job Processor', () => {
     expect(result.areaL).to.be.a('number');
     expect(result.areaR).to.be.a('number');
     expect(result.valsL).to.be.an('array');
+    result.valsL.forEach(item => expect(item).to.be.a('number'));
     expect(result.valsR).to.be.an('array');
+    result.valsR.forEach(item => expect(item).to.be.a('number'));
     expect(result.valsNormalizedL).to.be.an('array');
+    result.valsNormalizedL.forEach(item => expect(item).to.be.a('number'));
     expect(result.valsNormalizedR).to.be.an('array');
+    result.valsNormalizedL.forEach(item => expect(item).to.be.a('number'));
     expect(result.freqVals).to.be.an('array');
+    result.freqVals.forEach(item => expect(item).to.be.a('number'));
   });
 
   it('It should process an NDSI Job', async () => {

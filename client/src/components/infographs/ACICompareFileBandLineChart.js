@@ -19,7 +19,7 @@ const styles = theme => ({
   }
 });
 
-class ACICompareFileLineChart extends Component {
+class ACICompareFileBandLineChart extends Component {
   constructor() {
     super();
 
@@ -30,7 +30,7 @@ class ACICompareFileLineChart extends Component {
 
   componentDidMount = () => {
     let { results } = this.props;
-    let fileNames = [...new Set(results.map(x => x.name))];
+    let fileNames = [...new Set(results.map(x => x.fileName))];
     this.setState({ fileNames });
     this.setState({ chosenFile: fileNames[0] });
   }
@@ -93,109 +93,34 @@ class ACICompareFileLineChart extends Component {
     return compareData;
   }
 
-  mergeByStamp = (chosen, compare) => {
-    let bigger = chosen.length >= compare.length ? chosen : compare;
-    let smaller = chosen === bigger ? compare : chosen;
-    let merged = [];
-    let curObject = {};
-    for(let i = 0; i < bigger.length; i++)
-    {
-      let thisItem = bigger[i];
-      let aciLeftC;
-      let aciRightC;
-      if(i < smaller.length)
-      {
-        aciLeftC = smaller[i].aciLeftC;
-        aciRightC = smaller[i].aciRightC;
-        if(thisItem.stamp === smaller[i].stamp)
-        {
-          curObject = {
-            stamp: thisItem.stamp,
-            name: thisItem.name,
-            downloadUrl: thisItem.downloadUrl,
-            aciLeft: thisItem.aciLeft,
-            aciRight: thisItem.aciRight,
-            aciLeftC: aciLeftC,
-            aciRightC: aciRightC
-          }
-
-          merged.push(curObject);
-        }else
-        {
-          curObject = {
-            stamp: thisItem.stamp,
-            name: thisItem.name,
-            downloadUrl: thisItem.downloadUrl,
-            aciLeft: thisItem.aciLeft,
-            aciRight: thisItem.aciRight,
-            aciLeftC: undefined,
-            aciRightC: undefined
-          }
-
-          merged.push(curObject);
-
-          curObject = {
-            stamp: smaller[i].stamp,
-            name: smaller[i].name,
-            downloadUrl: smaller[i].downloadUrl,
-            aciLeft: undefined,
-            aciRight: undefined,
-            aciLeftC: aciLeftC,
-            aciRightC: aciRightC
-          }
-
-          merged.push(curObject);
-        }
-      }else
-      {
-        aciLeftC = undefined;
-        aciRightC = undefined;
-        curObject = {
-          stamp: thisItem.stamp,
-          downloadUrl: thisItem.downloadUrl,
-          name: thisItem.name,
-          aciLeft: thisItem.aciLeft,
-          aciRight: thisItem.aciRight,
-          aciLeftC: aciLeftC,
-          aciRightC: aciRightC
-        }
-
-        merged.push(curObject);
-      }
-    }
-
-    return this.sortByKey(merged, "stamp");
-  }
-
-  sortByKey = (array, key) => {
-      return array.sort(function(a, b) {
-          var x = a[key]; var y = b[key];
-          let fromFloatX = parseFloat(x);
-          let fromFloatY = parseFloat(y);
-          return ((fromFloatX < fromFloatY) ? -1 : ((fromFloatX > fromFloatY) ? 1 : 0));
-      });
+  mergeByBand = (chosen, compare) => {
+    let indx = 0;
+    chosen.forEach(item => {
+      item['aciLeftC'] = compare[indx].aciLeft;
+      item['aciRightC'] = compare[indx].aciRight;
+      indx++;
+    });
+    return chosen;
   }
 
   formatJob = (chosen, compare) => {
-    chosen = this.sortByKey(chosen, "stamp");
-    compare = this.sortByKey(compare, "stamp");
-    if(compare.length > 0 && compare[0]['aciLeftC'] === undefined) compare = this.replaceACI(compare);
-    let formattedCompare = this.mergeByStamp(chosen, compare);
+    if(compare.length === 0) return chosen;
+    let formattedCompare = this.mergeByBand(chosen, compare);
     return formattedCompare;
   }
 
   displayGraph = () => {
     let { chosenFile, chosenCompareFile } = this.state;
     let { results } = this.props;
-    let chosenData = results.filter(x => x.name === chosenFile);
-    let compareData = results.filter(x => x.name === chosenCompareFile);
+    let chosenData = results.filter(x => x.fileName === chosenFile);
+    let compareData = results.filter(x => x.fileName === chosenCompareFile);
     this.setState({ dataToShow: this.formatJob(chosenData, compareData) });
     this.setState({ showGraph: true });
   }
 
   render(){
     let { showGraph, dataToShow, chosenFile, chosenCompareFile, fileNames } = this.state;
-    let { xAxisLabel, dataKey1, dataKey2, dataKey3, dataKey4 } = this.props;
+    let { dataKey1, dataKey2, dataKey3, dataKey4 } = this.props;
     const { classes } = this.props;
 
     let endOfBrush;
@@ -255,22 +180,21 @@ class ACICompareFileLineChart extends Component {
         </div>
         { showGraph ?
           <div>
-            <h5>To listen to a sound file at the time shown, simply click on a datapoint dot, and an audio player will appear.</h5>
             <LineChart width={900} height={600} data={dataToShow}
               margin={{top: 10, right: 30, left: 0, bottom: 0}}>
               <CartesianGrid strokeDasharray="3 3"/>
-              <XAxis dataKey="stamp">
-                <Label value={xAxisLabel} position="insideBottom" offset={2} />
+              <XAxis dataKey="name">
+                <Label value="Hz Range" position="insideBottom" offset={2} />
               </XAxis>
               <YAxis domain={['dataMin-10', 'dataMax+10']} tickFormatter={this.formatYAxis}>
                 <Label value="ACI Value" position="insideLeft" offset={0} />
               </YAxis>
               <Legend />
               <Tooltip/>
-              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey1} stroke='#8884d8' dot={false} />
-              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey2} stroke='#82ca9d' dot={false} />
-              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey3} stroke='#e79797' dot={false} />
-              <Line activeDot={{ onClick: this.props.audioCallback }} connectNulls={true} type='monotone' dataKey={dataKey4} stroke='#ed9f37' dot={false} />
+              <Line connectNulls={true} type='monotone' dataKey={dataKey1} stroke='#8884d8' dot={false} />
+              <Line connectNulls={true} type='monotone' dataKey={dataKey2} stroke='#82ca9d' dot={false} />
+              <Line connectNulls={true} type='monotone' dataKey={dataKey3} stroke='#e79797' dot={false} />
+              <Line connectNulls={true} type='monotone' dataKey={dataKey4} stroke='#ed9f37' dot={false} />
               <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
             </LineChart>
           </div>
@@ -282,4 +206,4 @@ class ACICompareFileLineChart extends Component {
   }
 }
 
-export default withStyles(styles)(ACICompareFileLineChart);
+export default withStyles(styles)(ACICompareFileBandLineChart);
