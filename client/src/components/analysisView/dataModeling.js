@@ -1415,7 +1415,6 @@ export function convertADIResultsBySeries(jobs, series) {
 }
 
 export function convertAEIResultsBySite(jobs, sites) {
-
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
   const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
 

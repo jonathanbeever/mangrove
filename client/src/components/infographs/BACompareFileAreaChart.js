@@ -77,7 +77,6 @@ class BACompareFileAreaChart extends Component {
   }
 
   formatJob = (chosen, compare) => {
-    console.log(chosen);
     let x = chosen.freqVals.length;
     if(compare === undefined || compare.length > 0)
     {
