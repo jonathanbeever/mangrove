@@ -158,12 +158,6 @@ class ExportCsv extends Component {
     this.setModalHtml()
   }
 
-  componentDidUpdate = (prevProps, prevState, snapshot) => {
-    if(prevProps !== this.props) {
-      // console.log(this.props)
-    }
-  }
-
   setModalHtml = () => {
     var inputCheckBoxes = []
     var paramCheckBoxes = []

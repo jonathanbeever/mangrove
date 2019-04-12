@@ -273,18 +273,15 @@ class HorizontalLinearStepper extends React.Component {
     this.setState({open: true})
 
     var inputs = this.state.selectedFiles
-    console.log(inputs)
 
     // use this clear() for dev purposes
     // localStorage.clear();
 
     // Spec already exists
-    console.log(this.state.selectedSpec)
     if(this.state.selectedSpec.length) {
       this.state.selectedSpec.forEach((spec, specIdx) => {
 
         inputs.forEach((inputId, inputIdx) => {
-          console.log(spec, inputId)
           // Request to queue new job
           axios.put(
             "http://127.0.0.1:34251/jobs",
@@ -326,7 +323,6 @@ class HorizontalLinearStepper extends React.Component {
       )
       .then(res => {
         var specId = res.data.specId
-        console.log(specId)
         // Loop through inputs and make requests
         inputs.forEach((inputId, inputIdx) => {
           // Request to queue new job
@@ -339,7 +335,6 @@ class HorizontalLinearStepper extends React.Component {
             {headers: {"Content-Type": "application/json"}}
           )
           .then(res => {
-            console.log(res)
             if(res.status === 201) {
               if(inputIdx === inputs.length - 1) {
                 this.setState({message: 'Jobs started. View progress in the job queue.'})
@@ -444,7 +439,6 @@ class HorizontalLinearStepper extends React.Component {
   };
 
   promptConfirmDelete = (selected) => {
-    console.log(selected)
     this.setState({
       message: 'Are you sure you want to delete ' + selected.length + ' file(s) and corresponding jobs?',
       delete: true,
