@@ -34,21 +34,6 @@ const setValue = (key, newValue) => {
   }
 };
 
-// TODO: Integrate this into the setValue() function
-const setCores = async (numCores) => {
-  if (global.jobQueue.queue !== null) await global.jobQueue.queue.pause();
-
-  if (numCores > os.cpus().length) {
-    settings.setValue('cores', os.cpus().length);
-  } else if (numCores <= 0) {
-    settings.setValue('cores', 1);
-  } else {
-    settings.setValue('cores', numCores);
-  }
-
-  if (global.jobQueue.queue !== null) await global.jobQueue.queue.pause();
-};
-
 const load = () => {
   if (config.util.getEnv('NODE_ENV') !== 'test') {
     settings.init({
@@ -66,8 +51,11 @@ const load = () => {
       setValue('inputDir', path.join(rootDir(), storage.inputs));
     }
   }
-  if (!value('cores')) {
-    setValue('cores', os.cpus().length);
+
+  // TODO: Reduce memory consumption in Job Processor. Once it's at a reasonable
+  // level, multicore job processing will become an option with os.cpus().length
+  if (!value('cores') || value('cores') !== 1) {
+    setValue('cores', 1);
   }
 };
 
@@ -76,5 +64,4 @@ module.exports = {
   load,
   value,
   setValue,
-  setCores,
 };
