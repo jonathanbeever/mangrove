@@ -50,7 +50,7 @@ https://<base-url>/jobs/job-1a-uuid
   \hline
   \tablehead{Field}
   & \tablehead{Type}
-  & \tablehead{Metric}
+  & \tablehead{Index}
   & \tablehead{Description}
   \\ \hline
 
@@ -60,16 +60,10 @@ https://<base-url>/jobs/job-1a-uuid
   & A unique identifier for the job created.
   \\ \hline
 
-  \codesnip{type}
-  & String
-  &
-  & The type of metric to be run on the job. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
-  \\ \hline
-
   \codesnip{input}
   & String
   &
-  & The \codesnip{inputId} of the input to be analyzed for metrics.
+  & The \codesnip{inputId} of the input to be analyzed for results.
   \\ \hline
 
   \codesnip{spec}
@@ -126,6 +120,18 @@ https://<base-url>/jobs/job-1a-uuid
   & The ACI total for the right channel divided by the number of minutes.
   \\ \hline
 
+  \hspace{3mm} \codesnip{aciOverTimeL}
+  & Number[]
+  & ACI
+  & The ACI values for each interval of \codesnip{j} seconds (provided by the spec) for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{aciOverTimeR}
+  & Number[]
+  & ACI
+  & The ACI values for each interval of \codesnip{j} seconds (provided by the spec) for the right channel.
+  \\ \hline
+
   \hspace{3mm} \codesnip{aciFlValsL}
   & Number[]
   & ACI
@@ -136,18 +142,6 @@ https://<base-url>/jobs/job-1a-uuid
   & Number[]
   & ACI
   & The values of ACI(fl) for the right channel.
-  \\ \hline
-
-  \hspace{3mm} \codesnip{aciMatrixL}
-  & Number[][]
-  & ACI
-  & The matrix of all values before calculating ACI(fl) for the left channel.
-  \\ \hline
-
-  \hspace{3mm} \codesnip{aciMatrixR}
-  & Number[][]
-  & ACI
-  & The matrix of all values before calculating ACI(fl) for the right channel.
   \\ \hline
 
   \hspace{3mm} \codesnip{adiL}
@@ -164,25 +158,25 @@ https://<base-url>/jobs/job-1a-uuid
 
   \hspace{3mm} \codesnip{bandL}
   & Number[]
-  & ADI
+  & ADI, AEI
   & The vector of proportion values for each band for the left channel.
   \\ \hline
 
   \hspace{3mm} \codesnip{bandR}
   & Number[]
-  & ADI
+  & ADI, AEI
   & The vector of proportion values for each band for the right channel.
   \\ \hline
 
   \hspace{3mm} \codesnip{bandRangeL}
   & String[]
-  & ADI
+  & ADI, AEI
   & The vector of frequency values for each band for the left channel.
   \\ \hline
 
   \hspace{3mm} \codesnip{bandRangeR}
   & String[]
-  & ADI
+  & ADI, AEI
   & The vector of frequency values for each band for the right channel.
   \\ \hline
 
@@ -208,6 +202,36 @@ https://<base-url>/jobs/job-1a-uuid
   & Number
   & BI
   & The area under the curve for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{valsL}
+  & Number[]
+  & BI
+  & The bioacoustic index values for each frequency range listed in \codesnip{freqVals} for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{valsR}
+  & Number[]
+  & BI
+  & The bioacoustic index values for each frequency range listed in \codesnip{freqVals} for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{valsNormalizedL}
+  & Number[]
+  & BI
+  & The normalized bioacoustic index values for each frequency range listed in \codesnip{freqVals} for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{valsNormalizedR}
+  & Number[]
+  & BI
+  & The normalized bioacoustic index values for each frequency range listed in \codesnip{freqVals} for the right channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{freqVals}
+  & Number[]
+  & BI
+  & The frequency ranges of the recording, as designated by the \codesnip{minFreq} and \codesnip{maxFreq} values of the specification.
   \\ \hline
 
   \hspace{3mm} \codesnip{ndsiL}
@@ -245,6 +269,18 @@ https://<base-url>/jobs/job-1a-uuid
   & NDSI
   & The anthrophony value for the right channel.
   \\ \hline
+
+  \hspace{3mm} \codesnip{rmsL}
+  & Number
+  & RMS
+  & The root mean square value for the left channel.
+  \\ \hline
+
+  \hspace{3mm} \codesnip{rmsR}
+  & Number
+  & RMS
+  & The root mean square value for the right channel.
+  \\ \hline
 \end{longtable}
 \endgroup
 
@@ -252,7 +288,6 @@ https://<base-url>/jobs/job-1a-uuid
 \begin{jsoncode}
 {
   "jobId": "job-1a-uuid",
-  "type": "aci",
   "input": "input-1-uuid",
   "spec": "spec-a-uuid",
   "author": "user-1-uuid",

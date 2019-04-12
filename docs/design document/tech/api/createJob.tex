@@ -1,5 +1,5 @@
 \subsubsection{Create Job}
-Create a job based on an input and a specification. The job will be entered into a queue on the server to be processed for metric results.
+Create a job based on an input and a specification. The job will be entered into a queue on the server to be processed for results.
 
 \paragraph{PUT} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
@@ -33,17 +33,12 @@ https://<base-url>/jobs
   & \tablehead{Description}
   \\ \hline
 
-  \codesnip{type}
+  \codesnip{input}
   & String
-  & The type of metric to be run on the job. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
+  & The input file (listed by \codesnip{inputId}) to be analyzed for results.
   \\ \hline
 
-  \codesnip{inputId}
-  & String
-  & The input file (listed by \codesnip{inputId}) to be analyzed for metrics.
-  \\ \hline
-
-  \codesnip{specId}
+  \codesnip{spec}
   & String
   & The \codesnip{specId} of the specification to be used to analyze the input.
   \\ \hline
@@ -53,9 +48,8 @@ https://<base-url>/jobs
 \paragraph{Example Request Body} \mbox{}\\[\codeheaderspace]
 \begin{jsoncode}
 {
-  "type": "aci",
-  "inputId": "input-1-uuid",
-  "specId": "spec-a-uuid"
+  "input": "input-1-uuid",
+  "spec": "spec-a-uuid"
 }
 \end{jsoncode}
 
@@ -73,7 +67,7 @@ https://<base-url>/jobs
   \\ \hline
 
   \hspace{2.5mm} 200
-  & No new job is created. The \codesnip{inputId} and \codesnip{specId} provided match an existing job, which is returned.
+  & No new job is created. The \codesnip{input} and \codesnip{spec} provided match an existing job, which is returned.
   \\ \hline
 \end{longtable}
 \endgroup
@@ -93,14 +87,9 @@ https://<base-url>/jobs
   & A unique identifier for the job created.
   \\ \hline
 
-  \codesnip{type}
-  & String
-  & The type of metric to be run on the job. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
-  \\ \hline
-
   \codesnip{input}
   & String
-  & The \codesnip{inputId} of the input to be analyzed for metrics.
+  & The \codesnip{inputId} of the input to be analyzed for results.
   \\ \hline
 
   \codesnip{spec}
@@ -129,7 +118,6 @@ https://<base-url>/jobs
 \begin{jsoncode}
 {
   "jobId": "job-1a-uuid",
-  "type": "aci",
   "input": "input-1-uuid",
   "spec": "spec-a-uuid",
   "author": "user-1-uuid",
@@ -157,9 +145,9 @@ https://<base-url>/jobs
   & An object containing a single field, \codesnip{message} (String), identifying the field in question and its possible values.
   \\ \hline
 
-  An input or specification with the specified \codesnip{inputId} or \codesnip{specId} does not exist.
-  & 400
-  & An object containing a single field, \codesnip{message} (String), stating that an input or specification with the \codesnip{inputId} or \codesnip{specId} provided in the request was not found.
+  An input or specification with the specified \codesnip{input} or \codesnip{spec} does not exist.
+  & 404
+  & An object containing a single field, \codesnip{message} (String), stating that an input or specification with the \codesnip{input} or \codesnip{spec} provided in the request was not found.
   \\ \hline
 \end{longtable}
 \endgroup
