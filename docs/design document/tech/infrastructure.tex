@@ -6,7 +6,7 @@ At a high level, the system\textquotesingle s infrastructure is composed of thre
 \begin{enumerate}
     \item The \textbf{Client Application}: This contains the user interface with which any users may interact. It runs via an Electron application, and so will be able to run on all major operating systems. Using this application, a user may log into an account, create job requests to process audio files, and present the results of those jobs in a visually accessible manner.
     \item The \textbf{Server Application}: This is where the vast majority of the heavy lifting occurs, including the analysis of audio files for metric data, the storage of the resulting data, and the transmission of any files or data requested by the user via the Client Application. Typically, this application runs on a dedicated server, on which any sound files that are to be analyzed are stored. However, it is equally as possible for the user to run this application and the Client Application on the same machine.
-    \item \textbf{Amazon Web Services}: AWS will be tasked with user account management, metric data storage, and intercommunication between Client and Server Applications over the internet. Users that run their own instances of the Server Application will be able to enable data sharing from their own servers, the data from which will be mirrored on AWS DynamoDB, accessible by other users from across the web.
+    \item \textbf{Amazon Web Services}: AWS will be tasked with user account management. An individual account will able to be used by all instances of the server and client applications, as opposed to creating a new account for each server instance.
 \end{enumerate}
 
 \subsubsection{Front End Infrastructure}
