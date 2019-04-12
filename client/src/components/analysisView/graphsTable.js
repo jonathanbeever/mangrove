@@ -14,6 +14,7 @@ import ACICompareFileBandLineChart from '../infographs/ACICompareFileBandLineCha
 import ADIAEILineChart from '../infographs/ADIAEILineChart';
 import ADIAEICompareLineChart from '../infographs/ADIAEICompareLineChart';
 import ADIAEICompareFileLineChart from '../infographs/ADIAEICompareFileLineChart';
+import BACompareFileAreaChart from '../infographs/BACompareFileAreaChart';
 import BAAreaChart from '../infographs/BAAreaChart';
 import BALineChart from '../infographs/BALineChart';
 import BADualLineChart from '../infographs/BADualLineChart';
@@ -585,6 +586,18 @@ class GraphsTable extends React.Component {
         case "bi":
           switch(obj.title)
           {
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Bioacoustic Value By File"
+                  graph={<BACompareFileAreaChart
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+            break;
             case "Bioacoustic Spectrum Values":
               rows.push(
                 <GraphExpansionPanel
@@ -664,6 +677,18 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
+            case "File Data":
+              rows.push(
+                <GraphExpansionPanel
+                  key={'graph'+ctr}
+                  title="Bioacoustic Value By File"
+                  graph={<BACompareFileAreaChart
+                    files={obj.files}
+                    fileNames={obj.fileNames}
+                  />}
+                />
+              )
+            break;
             case "Play Audio Files":
               rows.push(
                 <GraphExpansionPanel

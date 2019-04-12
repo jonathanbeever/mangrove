@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {AreaChart, Brush, Label, Legend, Area, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
-class BAAreaChart extends Component {
+class BACompareAreaChart extends Component {
 
   formatYAxis = (tickItem) => {
     let asF = parseFloat(tickItem);
@@ -49,4 +49,4 @@ class BAAreaChart extends Component {
   }
 }
 
-export default BAAreaChart;
+export default BACompareAreaChart;

@@ -644,11 +644,17 @@ export function convertBIResults(jobs) {
       files: [],
       urls: []
     },
+    fileData:
+    {
+      title: "File Data",
+      files: {},
+      fileNames: [],
+    },
     graph1:
     {
       data: [],
       xAxisLabel: "Hz Range",
-      yAxisLabel: "Spectrum Value",
+      yAxisLabel: "Normalized Spectrum Value",
       dataKey1: 'leftSpectrum',
       dataKey2: 'rightSpectrum',
       title: "Bioacoustic Spectrum Values"
@@ -669,13 +675,13 @@ export function convertBIResults(jobs) {
     }
   }
 
-  for(var i = 0; i < finished[0].result.freq_vals.length; i++)
+  for(var i = 0; i < finished[0].result.freqVals.length; i++)
   {
     let curObject =
     {
       name: finished[0].result.freqVals[i],
-      leftSpectrum: finished[0].result.valsL[i],
-      rightSpectrum: finished[0].result.valsR[i]
+      leftSpectrum: finished[0].result.valsNormalizedL[i],
+      rightSpectrum: finished[0].result.valsNormalizedR[i]
     }
 
     ret.graph1.data.push(curObject);
@@ -686,6 +692,9 @@ export function convertBIResults(jobs) {
     let dayDate = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
 
     let curObject;
+
+    ret.fileData.files[job.input.name] = job.result;
+    ret.fileData.fileNames.push(job.input.name);
 
     ret.audioPlayer.files.push(job.input.name);
     ret.audioPlayer.urls.push(job.input.downloadUrl);
@@ -1062,11 +1071,13 @@ export function convertBIResultsBySite(jobs, sites) {
   let chosenByDate = chosenResults.graph4;
   let chosenFiles = chosenResults.audioPlayer.files;
   let chosenUrls = chosenResults.audioPlayer.urls;
+  let chosenFileData = chosenResults.fileData.files;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
   let compareFiles = compareResults.audioPlayer.files;
   let compareUrls = compareResults.audioPlayer.urls;
+  let compareFileData = compareResults.fileData.files;
 
   // rename keys in compare data
   compareSpectrumValues = replaceBI(compareSpectrumValues, true);
@@ -1077,6 +1088,8 @@ export function convertBIResultsBySite(jobs, sites) {
 
   let fileNames = chosenFiles.concat(compareFiles);
   let urls = chosenUrls.concat(compareUrls);
+
+  let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
   spectrumData = sortByKey(spectrumData, 'name');
   dateData = sortByKey(dateData, 'name');
@@ -1090,6 +1103,12 @@ export function convertBIResultsBySite(jobs, sites) {
       title: "Play Audio Files",
       files: fileNames,
       urls: urls
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: concatFileData,
+      fileNames: fileNames,
     },
     graph1: {
       data: compressedSpectrumData,
@@ -1128,11 +1147,13 @@ export function convertBIResultsBySeries(jobs, series) {
   let chosenByDate = chosenResults.graph4;
   let chosenFiles = chosenResults.audioPlayer.files;
   let chosenUrls = chosenResults.audioPlayer.urls;
+  let chosenFileData = chosenResults.fileData.files;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
   let compareFiles = compareResults.audioPlayer.files;
   let compareUrls = compareResults.audioPlayer.urls;
+  let compareFileData = compareResults.fileData.files;
 
   // rename keys in compare data
   compareSpectrumValues = replaceBI(compareSpectrumValues, true);
@@ -1143,6 +1164,8 @@ export function convertBIResultsBySeries(jobs, series) {
 
   let fileNames = chosenFiles.concat(compareFiles);
   let urls = chosenUrls.concat(compareUrls);
+
+  let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
   spectrumData = sortByKey(spectrumData, 'name');
   dateData = sortByKey(dateData, 'name');
@@ -1156,6 +1179,12 @@ export function convertBIResultsBySeries(jobs, series) {
       title: "Play Audio Files",
       files: fileNames,
       urls: urls
+    },
+    fileData:
+    {
+      title: "File Data",
+      files: concatFileData,
+      fileNames: fileNames,
     },
     graph1: {
       data: compressedSpectrumData,
