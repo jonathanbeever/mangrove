@@ -70,15 +70,26 @@ class FilterInputs extends Component {
 
   formatChipHtml = () => {
     var chipHtml = []
-    Object.keys(this.props.inputFiltering).forEach(param => {
+    Object.keys(this.props.inputFiltering).forEach((param, i) => {
       if(this.props.inputFiltering[param].length) {
-        chipHtml.push(
-          <Chip
-            key={param}
-            label={<h4>{param + ' : ' + this.props.inputFiltering[param]}</h4>}
-            onDelete={this.deleteChip}
-          />
-        )
+        if(i !== 0)
+          chipHtml.push(
+            <div style={{marginTop: 3+'px'}}>
+              <Chip
+                key={param}
+                label={<h5>{param + ' : ' + this.props.inputFiltering[param]}</h5>}
+                onDelete={this.deleteChip}
+              />
+            </div>
+          )
+        else
+          chipHtml.push(
+            <Chip
+              key={param}
+              label={<h5>{param + ' : ' + this.props.inputFiltering[param]}</h5>}
+              onDelete={this.deleteChip}
+            />
+          )
       }
     })
     this.setState({ chips: <h3>{chipHtml}</h3> })

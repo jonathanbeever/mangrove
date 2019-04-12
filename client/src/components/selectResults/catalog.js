@@ -151,7 +151,9 @@ class Catalog extends Component {
   };
 
   submitIndexFilter = () => {
-    var filteredInputs = this.state.filteredInputs.filter(file => {
+    var allFiles = _.cloneDeep(this.state.allFiles)
+
+    var filteredInputs = allFiles.filter(file => {
       var matchingFile = ''
       if(!this.state.inputFiltering.site || this.state.inputFiltering.site.toLowerCase() === file.site.toLowerCase()) {
         if(!this.state.inputFiltering.series || this.state.inputFiltering.series.toLowerCase() === file.series.toLowerCase()) {
@@ -164,7 +166,6 @@ class Catalog extends Component {
       }
       return matchingFile
     })
-
     this.setState({ filteredInputs: filteredInputs })
 
     var selected = filteredInputs.map(input => {
@@ -184,8 +185,6 @@ class Catalog extends Component {
     this.setState({ inputFiltering : inputFiltering })
 
     this.submitIndexFilter()
-
-    this.updateSelectedSpecs(this.state.selectedSpecs['aci'], 'aci')
   }
 
   // Array of inputIds selected in table
@@ -207,7 +206,6 @@ class Catalog extends Component {
       if(selected.indexOf(job.input) !== -1)
         return job
     })
-    // console.log(selectedJobs)
     this.updateSelectedJobs(selectedJobs)
     this.setState({ jobsFiltered: filteredJobByInputs })
     this.setState({ selectedInputs: selected })
@@ -294,8 +292,8 @@ class Catalog extends Component {
   }
 
   updateSelectedSpecs = (selected, index) => {
-    console.log(selected, index)
     if(this.state.allJobs === undefined) return;
+    
     var specs = this.state.selectedSpecs
     specs[index] = selected
     this.setState({ selectedSpecs: specs})
