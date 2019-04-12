@@ -59,8 +59,8 @@ class ExportCsv extends Component {
           aciTotAllR: {label:'ACI_TOT_ALL_R', value: 'result.aciTotAllR', show: true, type: 'result'},
           aciTotAllByMinL: {label:'ACI_TOT_ALL_BY_MIN_L', value: 'result.aciTotAllByMinL', show: true, type: 'result'},
           aciTotAllByMinR: {label:'ACI_TOT_ALL_BY_MIN_R', value: 'result.aciTotAllByMinR', show: true, type: 'result'},
-          aciFlValsL: {label:'ACI_FL_VALS_L', value: 'result.aciFlValsL', show: false, type: 'result', disabled: true},          
-          aciFlValsR: {label:'ACI_FL_VALS_R', value: 'result.aciFlValsR', show: false, type: 'result', disabled: true},                    
+          aciFlValsL: {label:'ACI_FL_VALS_L', value: 'result.aciFlValsL', show: false, type: 'result', disabled: true},
+          aciFlValsR: {label:'ACI_FL_VALS_R', value: 'result.aciFlValsR', show: false, type: 'result', disabled: true},
           aciOverTimeL: {label:'ACI_OVERTIME_L', value: 'result.aciOverTimeL', show: false, type: 'result', disabled: true},
           aciOverTimeR: {label:'ACI_OVERTIME_R', value: 'result.aciOverTimeR', show: false, type: 'result', disabled: true}
         },
@@ -76,7 +76,7 @@ class ExportCsv extends Component {
           bioMin: {label:'BIO_MIN', value: 'spec.bioMin', show: true, type: 'param'},
           bioMax: {label:'BIO_MAX', value: 'spec.bioMax', show: true, type: 'param'},
           anthroMin: {label:'ANTHRO_MIN', value: 'spec.anthroMin', show: true, type: 'param'},
-          anthroMax: {label:'ANTHRO_MAX', value: 'spec.anthroMax', show: true, type: 'param'},          
+          anthroMax: {label:'ANTHRO_MAX', value: 'spec.anthroMax', show: true, type: 'param'},
           fftW: {label:'FFT_W', value: 'spec.fftW', show: true, type: 'param'},
           ndsiL: {label:'NDSI_L', value: 'result.ndsiL', show: true, type: 'result'},
           ndsiR: {label:'NDSI_R', value: 'result.ndsiR', show: true, type: 'result'},
@@ -157,10 +157,10 @@ class ExportCsv extends Component {
 
     this.setModalHtml()
   }
-  
+
   componentDidUpdate = (prevProps, prevState, snapshot) => {
     if(prevProps !== this.props) {
-      console.log(this.props)
+      // console.log(this.props)
     }
   }
 
@@ -239,12 +239,12 @@ class ExportCsv extends Component {
           {paramCheckBoxes}
         </FormGroup>
         <h5>Result Fields</h5>
-        {this.props.index === 'aci' ? 
+        {this.props.index === 'aci' ?
           <h6>AciFlVals(L/R) and AciOverTime(L/R) can only be exported to a single job CSV file.</h6>
           :
-          (this.props.index === 'adi' ? 
+          (this.props.index === 'adi' ?
             <p></p>
-            : 
+            :
             ''
           )
         }
@@ -266,7 +266,7 @@ class ExportCsv extends Component {
           }
           fields[this.props.index][field]['disabled'] = !e.target.checked
         })
-        
+
       }
       else if(this.props.index === 'adi') {
         ['bandL', 'bandR', 'bandRangeL', 'bandRangeR'].forEach(field => {
@@ -274,9 +274,9 @@ class ExportCsv extends Component {
             fields[this.props.index][field]['show'] = e.target.checked
           }
           fields[this.props.index][field]['disabled'] = !e.target.checked
-        })  
+        })
       }
-      
+
       this.setState({
         [name]: e.target.checked,
         showFields: fields
@@ -289,7 +289,7 @@ class ExportCsv extends Component {
 
       if(this.props.index === 'aci') {
         var aciSingleFields = ['aciOverTimeL', 'aciOverTimeR', 'aciFlValsL', 'aciFlValsR']
-        
+
         if(aciSingleFields.indexOf(name) !== -1) {
           aciSingleFields.splice(aciSingleFields.indexOf(name), 1)
 
@@ -299,7 +299,7 @@ class ExportCsv extends Component {
           })
         }
       }
-      
+
       this.setState({
         showFields: fields
       }, () => {
@@ -370,7 +370,7 @@ class ExportCsv extends Component {
         if(flValsR) unwind.push('result.aciFlValsR')
         if(overTimeL) unwind.push('result.aciOverTimeL')
         if(overTimeR) unwind.push('result.aciOverTimeR')
-        
+
         this.parseJSON(fields, unwind, job)
       })
     }

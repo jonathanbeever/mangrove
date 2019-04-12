@@ -515,11 +515,11 @@ export function convertAEIResults(jobs) {
     aeiRTotal += job.result.aeiR;
 
     aeiLBandTemp = aeiLBandTemp.map(function(num, idx){
-      return num + job.result.bandRangeL[idx];
+      return num + job.result.bandL[idx];
     });
 
     aeiRBandTemp = aeiRBandTemp.map(function(num, idx){
-      return num + job.result.bandRangeR[idx];
+      return num + job.result.bandR[idx];
     });
 
   });
@@ -630,7 +630,6 @@ export function convertAEIResults(jobs) {
   });
 
   ret.graph4.data = sortByKey(ret.graph4.data, 'name');
-
   return ret;
 }
 
@@ -1194,8 +1193,8 @@ function replaceADIAEI(compareData, bands, aei){
     compareData.data.forEach(item => {
       item['leftAEIValC'] = item['leftAEIVal'];
       item['rightAEIValC'] = item['rightAEIVal'];
-      delete(item['leftADIVal']);
-      delete(item['rightADIVal']);
+      delete(item['leftAEIVal']);
+      delete(item['rightAEIVal']);
     });
     return compareData;
   }

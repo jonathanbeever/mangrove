@@ -76,6 +76,23 @@ class ADIAEICompareFileLineChart extends Component {
     }
 
     let yAxis = adi ? "ADI Value" : "AEI Value";
+    let chosenValL;
+    let chosenValR;
+    let compareValL;
+    let compareValR;
+    if(adi)
+    {
+      chosenValL = chosen.adiL;
+      chosenValR = chosen.adiR;
+      compareValL = compare.adiL;
+      compareValR = compare.adiR;
+    }else
+    {
+      chosenValL = chosen.aeiL;
+      chosenValR = chosen.aeiR;
+      compareValL = compare.aeiL;
+      compareValR = compare.aeiR;
+    }
 
     let ret = {
       data: [],
@@ -85,10 +102,10 @@ class ADIAEICompareFileLineChart extends Component {
       dataKey2: "rightBandVal",
       dataKey3: "leftBandValC",
       dataKey4: "rightBandValC",
-      left: chosen.adiL,
-      right: chosen.adiR,
-      leftC: compare.adiL,
-      rightC: compare.adiR,
+      left: chosenValL,
+      right: chosenValR,
+      leftC: compareValL,
+      rightC: compareValR,
     };
 
     let curObject;
