@@ -28,14 +28,29 @@ https://<base-url>/specs/:specId
 https://<base-url>/specs/spec-a-uuid
 \end{htmlcode}
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & A spec with the requested \codesnip{specId} was found and returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\indexcolwidth} | m{\desccolwidthsm} |}
   \hline
   \tablehead{Field}
   & \tablehead{Type}
-  & \tablehead{Metric}
+  & \tablehead{Index}
   & \tablehead{Description}
   \\ \hline
 
@@ -45,10 +60,10 @@ https://<base-url>/specs/spec-a-uuid
   & A unique identifier for the specification.
   \\ \hline
 
-  \codesnip{metric}
+  \codesnip{type}
   & String
   &
-  & The metric to be calculated for a given spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
+  & The index to be calculated for a given spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
   \\ \hline
 
   \codesnip{minFreq}
@@ -58,9 +73,9 @@ https://<base-url>/specs/spec-a-uuid
   \\ \hline
 
   \codesnip{maxFreq}
-  & Number
+  & Number*
   & ACI, ADI, AEI, BI
-  & The maximum frequency to use when calculating the value, in Hertz.
+  & The maximum frequency to use when calculating the value, in Hertz. *If used in an ACI spec, this can also be set to the string \codesnip{"nyquist"} in order to use the audio file\textquotesingle s Nyquist frequency.
   \\ \hline
 
   \codesnip{j}
@@ -117,7 +132,7 @@ https://<base-url>/specs/spec-a-uuid
   & The maximum value of the range of frequencies of the biophony.
   \\ \hline
 
-  % TODO: Add RMS metric parameters.
+  % RMS has no parameters
 \end{longtable}
 \endgroup
 
@@ -125,11 +140,11 @@ https://<base-url>/specs/spec-a-uuid
 \begin{jsoncode}
 {
   "specId": "spec-a-uuid",
-  "metric": "aci",
+  "type": "aci",
   "minFreq": 0,
-  "maxFreq": 16000,
-  "j": 30,
-  "fftW": 10
+  "maxFreq": "nyquist",
+  "j": 5,
+  "fftW": 512
 }
 \end{jsoncode}
 

@@ -29,6 +29,21 @@ https://<base-url>/specs
 %\end{longtable}
 %\endgroup
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & All existing specs were found and returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
@@ -64,11 +79,11 @@ https://<base-url>/specs
   "specs": [
     {
       "specId": "spec-a-uuid",
-      "metric": "aci",
+      "type": "aci",
       "minFreq": 0,
-      "maxFreq": 16000,
-      "j": 30,
-      "fftW": 10
+      "maxFreq": "nyquist",
+      "j": 5,
+      "fftW": 512
     }
   ]
 }

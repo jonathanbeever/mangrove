@@ -29,6 +29,21 @@ https://<base-url>/inputs
 %\end{longtable}
 %\endgroup
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & All existing inputs were found and returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
@@ -64,14 +79,18 @@ https://<base-url>/inputs
   "inputs": [
     {
       "inputId": "input-1-uuid",
-      "path": "./UCF Arboretum/Hurricane Irma/irma-1.wav",
       "site": "UCF Arboretum",
       "series": "Hurricane Irma",
+      "name", "irma-1",
       "recordTimeMs": 1505016000000,
+      "durationMs": 3600000,
+      "sampleRateHz": 96000,
+      "sizeBytes": 1381249278,
       "coords": {
         "lat": 28.596238,
         "long": -81.191381
-      }
+      },
+      "downloadUrl": "https://<base-url>/path/to/irma-1.wav",
     }
   ]
 }

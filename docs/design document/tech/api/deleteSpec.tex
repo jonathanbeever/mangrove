@@ -1,9 +1,9 @@
-\subsubsection{Delete Input}
-Delete an existing input by \codesnip{inputId}.
+\subsubsection{Delete Spec}
+Delete an existing spec by \codesnip{specId}.
 
 \paragraph{DELETE} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/inputs/:inputId
+https://<base-url>/specs/:specId
 \end{htmlcode}
 
 \paragraph{URL Parameters} \mbox{}\\[\longtableheaderspace]
@@ -16,16 +16,16 @@ https://<base-url>/inputs/:inputId
   & \tablehead{Description}
   \\ \hline
 
-  \codesnip{inputId}
+  \codesnip{specId}
   & String
-  & The \codesnip{inputId} of the input to be deleted.
+  & The \codesnip{specId} of the spec to be deleted.
   \\ \hline
 \end{longtable}
 \endgroup
 
 \paragraph{Example Request: DELETE} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
-https://<base-url>/inputs/input-1-uuid
+https://<base-url>/specs/spec-a-uuid
 \end{htmlcode}
 
 \paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
@@ -38,7 +38,7 @@ https://<base-url>/inputs/input-1-uuid
   \\ \hline
 
   \hspace{2.5mm} 200
-  & The input with the specified \codesnip{inputId} was deleted if it existed. Otherwise, nothing happened.
+  & The spec with the specified \codesnip{specId} was deleted if it existed. Otherwise, nothing happened.
   \\ \hline
 \end{longtable}
 \endgroup
@@ -55,7 +55,7 @@ https://<base-url>/inputs/input-1-uuid
 
   \codesnip{success}
   & Boolean
-  & A confirmation of whether or not the specified input was removed.
+  & A confirmation of whether or not the specified spec was removed.
   \\ \hline
 
   \codesnip{message}
@@ -65,7 +65,7 @@ https://<base-url>/inputs/input-1-uuid
 
   \codesnip{jobs}
   & Object[]
-  & A list of \codesnip{jobId}s of all Jobs associated with the input that was
+  & A list of \codesnip{jobId}s of all Jobs associated with the spec that was
   deleted. These Jobs have also been deleted in the process.
   \\ \hline
 \end{longtable}
@@ -75,7 +75,7 @@ https://<base-url>/inputs/input-1-uuid
 \begin{jsoncode}
 {
   "success": true,
-  "message": "Successfully deleted input with inputId: input-1-uuid.",
+  "message": "Successfully deleted spec with specId: spec-a-uuid.",
   "jobs": [
     "job-1a-uuid"
   ]

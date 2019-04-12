@@ -1,5 +1,5 @@
 \subsubsection{Create Specification}
-Create a specification for a given metric, including the Acoustic Complexity Index (ACI), Acoustic Diversity Index (ADI), Acoustic Evenness Index (AEI), Bioacoustic Index (BI), Normalized Difference Soundscape Index (NDSI), and Root Mean Square (RMS).
+Create a specification for a given index, including the Acoustic Complexity Index (ACI), Acoustic Diversity Index (ADI), Acoustic Evenness Index (AEI), Bioacoustic Index (BI), Normalized Difference Soundscape Index (NDSI), and Root Mean Square (RMS).
 
 \paragraph{PUT} \mbox{}\\[\codeheaderspace]
 \begin{htmlcode}
@@ -26,18 +26,18 @@ https://<base-url>/specs
 \paragraph{Request Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\indexcolwidth} | m{\desccolwidthsm} |}
   \hline
   \tablehead{Field}
   & \tablehead{Type}
-  & \tablehead{Metric}
+  & \tablehead{Index}
   & \tablehead{Description}
   \\ \hline
 
-  \codesnip{metric}
+  \codesnip{type}
   & String
   &
-  & The metric to be calculated for a given spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
+  & The index to be calculated for a given spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
   \\ \hline
 
   \codesnip{minFreq}
@@ -47,9 +47,9 @@ https://<base-url>/specs
   \\ \hline
 
   \codesnip{maxFreq}
-  & Number
+  & Number*
   & ACI, ADI, AEI, BI
-  & The maximum frequency to use when calculating the value, in Hertz.
+  & The maximum frequency to use when calculating the value, in Hertz. *If used in an ACI spec, this can also be set to the string \codesnip{"nyquist"} in order to use the audio file\textquotesingle s Nyquist frequency.
   \\ \hline
 
   \codesnip{j}
@@ -106,18 +106,18 @@ https://<base-url>/specs
   & The maximum value of the range of frequencies of the biophony.
   \\ \hline
 
-  % TODO: Add RMS metric parameters.
+  % RMS has no parameters
 \end{longtable}
 \endgroup
 
 \paragraph{Example Request Body} \mbox{}\\[\codeheaderspace]
 \begin{jsoncode}
 {
-  "metric": "aci",
+  "type": "aci",
   "minFreq": 0,
-  "maxFreq": 16000,
-  "j": 30,
-  "fftW": 10
+  "maxFreq": "nyquist",
+  "j": 5,
+  "fftW": 512
 }
 \end{jsoncode}
 
@@ -143,11 +143,11 @@ https://<base-url>/specs
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
-\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\metriccolwidth} | m{\desccolwidthsm} |}
+\begin{longtable}{| m{\fieldcolwidth} | m{\typecolwidth} | m{\indexcolwidth} | m{\desccolwidthsm} |}
   \hline
   \tablehead{Field}
   & \tablehead{Type}
-  & \tablehead{Metric}
+  & \tablehead{Index}
   & \tablehead{Description}
   \\ \hline
 
@@ -157,10 +157,10 @@ https://<base-url>/specs
   & A unique identifier for the specification.
   \\ \hline
 
-  \codesnip{metric}
+  \codesnip{type}
   & String
   &
-  & The metric to be calculated for a given spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
+  & The index to be calculated for a given spec. Possible values: \codesnip{"aci"}, \codesnip{"adi"}, \codesnip{"aei"}, \codesnip{"bi"}, \codesnip{"ndsi"}, \codesnip{"rms"}.
   \\ \hline
 
   \codesnip{minFreq}
@@ -170,9 +170,9 @@ https://<base-url>/specs
   \\ \hline
 
   \codesnip{maxFreq}
-  & Number
+  & Number*
   & ACI, ADI, AEI, BI
-  & The maximum frequency to use when calculating the value, in Hertz.
+  & The maximum frequency to use when calculating the value, in Hertz. *If used in an ACI spec, this can also be set to the string \codesnip{"nyquist"} in order to use the audio file\textquotesingle s Nyquist frequency.
   \\ \hline
 
   \codesnip{j}
@@ -229,7 +229,7 @@ https://<base-url>/specs
   & The maximum value of the range of frequencies of the biophony.
   \\ \hline
 
-  % TODO: Add RMS metric parameters.
+  % RMS has no parameters
 \end{longtable}
 \endgroup
 
@@ -237,11 +237,11 @@ https://<base-url>/specs
 \begin{jsoncode}
 {
   "specId": "spec-a-uuid",
-  "metric": "aci",
+  "type": "aci",
   "minFreq": 0,
-  "maxFreq": 16000,
-  "j": 30,
-  "fftW": 10
+  "maxFreq": "nyquist",
+  "j": 5,
+  "fftW": 512
 }
 \end{jsoncode}
 
@@ -256,7 +256,7 @@ https://<base-url>/specs
 
   A field was included that was not listed as a valid request body field.
   & 400
-  & An object containing a single field, \codesnip{message} (String), identifying the invalid field from the request. This may result from a valid request body field being included for the wrong \codesnip{metric}.
+  & An object containing a single field, \codesnip{message} (String), identifying the invalid field from the request. This may result from a valid request body field being included for the wrong \codesnip{type}.
   \\ \hline
 
   A field contains an invalid value.

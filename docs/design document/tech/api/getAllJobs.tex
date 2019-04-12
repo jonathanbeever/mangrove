@@ -29,6 +29,21 @@ https://<base-url>/jobs
 %\end{longtable}
 %\endgroup
 
+\paragraph{Response Codes} \mbox{}\\[\responseheaderspace]
+\begingroup
+\renewcommand{\arraystretch}{\cellpaddingvertical}
+\begin{longtable}{| m{\rescodecol} | m{\resconditioncol} |}
+  \hline
+  \tablehead{Code}
+  & \tablehead{Response}
+  \\ \hline
+
+  \hspace{2.5mm} 200
+  & All existing jobs were found and returned.
+  \\ \hline
+\end{longtable}
+\endgroup
+
 \paragraph{Response Body Fields} \mbox{}\\[\longtableheaderspace]
 \begingroup
 \renewcommand{\arraystretch}{\cellpaddingvertical}
@@ -64,7 +79,6 @@ https://<base-url>/jobs
   "jobs": [
     {
       "jobId": "job-1a-uuid",
-      "type": "aci",
       "input": "input-1-uuid",
       "spec": "spec-a-uuid",
       "author": "user-1-uuid",
@@ -75,29 +89,29 @@ https://<base-url>/jobs
         "aciTotAllR": 9.168,
         "aciTotAllLByMin": 29.06,
         "aciTotAllRByMin": 27.50,
-        "aciFlLVals": [
+        "aciOverTimeL": [
+          0.7882973,
+          0.6100598,
+          0.6087823,
+          0.5488723
+        ],
+        "aciOverTimeR": [
+          0.5662433,
+          0.5853032,
+          0.5664255,
+          0.5616194
+        ],
+        "aciFlValsL": [
           3.087412,
           2.281832,
           2.328070,
           1.989101
         ],
-        "aciFlRVals": [
+        "aciFlValsR": [
           2.343111,
           2.279407,
           2.272682,
           2.272511
-        ],
-        "aciLMatrix": [
-          [ 0.7882973, 0.7676500, 0.7303533, 0.8011109 ],
-          [ 0.6100598, 0.5697262, 0.5771978, 0.5248486 ],
-          [ 0.6087823, 0.5731910, 0.5840644, 0.5620326 ],
-          [ 0.5488723, 0.4599770, 0.5502799, 0.4299721 ]
-        ],
-        "aciRMatrix": [
-          [ 0.5662433, 0.6158158, 0.5839678, 0.5770842 ],
-          [ 0.5853032, 0.5145061, 0.6156399, 0.5639573 ],
-          [ 0.5664255, 0.5612574, 0.5577378, 0.5872616 ],
-          [ 0.5616194, 0.5644255, 0.5562360, 0.5902302 ]
         ]
       }
     }
