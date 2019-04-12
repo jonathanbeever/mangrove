@@ -24,6 +24,7 @@ import * as utils from './dataModeling.js';
 import ReactPlayer from 'react-player';
 import Checkbox from '@material-ui/core/Checkbox';
 import ExportCsv from '../selectResults/csvExport';
+import AudioPlayer from '../infographs/components/AudioPlayer';
 import axios from 'axios';
 var _ = require('lodash');
 
@@ -182,8 +183,6 @@ class AnalysisView extends Component {
       }
     }
 
-    console.log(dict);
-
     this.setState({ siteDict: dict });
     this.setState({ siteNames: sites });
     this.setState({ siteNamesCompare: sites.length > 1 ? sites.slice(1) : [] });
@@ -330,8 +329,6 @@ class AnalysisView extends Component {
   // Then, it creates the Paper and ExpansionPanel components used
   // for displaying the graphs for comparing jobs across sites.
   formatJobSite = (data) => {
-    console.log("Format site data: ");
-    console.log(data);
     const rows = [];
     let specRows = [];
     let graphs;
@@ -574,7 +571,8 @@ class AnalysisView extends Component {
     let item;
     let specId;
     let jobs;
-    let filteredSelectedJobs;
+    let filteredChosenJobs;
+    let filteredChosenInputs;
 
     let unfinished = this.hasUnfinished(selectedJobs);
     if(unfinished.length > 0){
@@ -583,7 +581,7 @@ class AnalysisView extends Component {
     }
 
     // get jobs for only the chosen site and series
-    let filteredChosenJobs = _.cloneDeep(selectedJobs);
+    filteredChosenJobs = _.cloneDeep(selectedJobs);
     for(item in filteredChosenJobs)
     {
       index = filteredChosenJobs[item];
@@ -591,45 +589,51 @@ class AnalysisView extends Component {
       {
         jobs = index[specId];
         index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
+        filteredChosenInputs = index[specId].map(x => x.input);
       }
     }
     // create base graphs
     this.formatJob(filteredChosenJobs);
 
-    // check if user has selected a site to compare
+    // check if user has selected both a site and series to compare
     if(chosenCompareSite && chosenCompareSeries)
     {
       // get jobs from fullJobs where the site and series match
-      filteredSelectedJobs = _.cloneDeep(selectedJobs);
-      for(item in filteredSelectedJobs)
+      filteredChosenJobs = _.cloneDeep(selectedJobs);
+      for(item in filteredChosenJobs)
       {
-        index = filteredSelectedJobs[item];
+        index = filteredChosenJobs[item];
         for(specId in index)
         {
           jobs = index[specId];
           index[specId] = jobs.filter(x => (x.input.site === chosenSite && x.input.series === chosenSeries) || (x.input.site === chosenCompareSite && x.input.series === chosenCompareSeries));
+          filteredChosenInputs = (index[specId].map(x => x.input));
         }
       }
-      this.formatJobSite(filteredSelectedJobs);
+      this.formatJobSite(filteredChosenJobs);
     }
 
-    //  check if user has selected a series to compare
+    //  check if user has selected only a series to compare
     if(chosenCompareSeries && !chosenCompareSite)
     {
       // get jobs from fullJobs where the site and series match
-      filteredSelectedJobs = _.cloneDeep(selectedJobs);
-      for(item in filteredSelectedJobs)
+      filteredChosenJobs = _.cloneDeep(selectedJobs);
+      for(item in filteredChosenJobs)
       {
-        index = filteredSelectedJobs[item];
+        index = filteredChosenJobs[item];
         for(specId in index)
         {
           jobs = index[specId];
           index[specId] = jobs.filter(x => x.input.series === chosenSeries || x.input.series === chosenCompareSeries);
+          filteredChosenInputs = (index[specId].map(x => x.input));
         }
       }
 
-      this.formatJobSeries(filteredSelectedJobs);
+      this.formatJobSeries(filteredChosenJobs);
     }
+
+    this.setState({ files: filteredChosenInputs.map(x => x.name) });
+    this.setState({ urls: filteredChosenInputs.map(x => x.downloadUrl) });
   }
 
   // Handler for the site Select
@@ -735,7 +739,6 @@ class AnalysisView extends Component {
   }
 
   handleAudioPlayerOpen = (data, index) => {
-    console.log("player open");
     let seconds;
     let finalPath;
     let title;
@@ -772,16 +775,10 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, formattedJob, comparedJobsSite,
+    let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track } = this.state;
     const { classes } = this.props;
-
-    console.log("Chosen site: " + chosenSite);
-    console.log("Chosen series: " + chosenSeries);
-    console.log("Chosen compare site: " + chosenCompareSite);
-    console.log("Chosen compare series: " + chosenCompareSeries);
-    console.log("---------------------------------------------");
 
     return (
       <div>
@@ -898,6 +895,17 @@ class AnalysisView extends Component {
                 </Dialog>
               </div>
             </Paper>
+            { files ?
+              <Paper key="audio">
+                <AudioPlayer
+                  key="audioPlayer"
+                  files={files}
+                  urls={urls}
+                  audioCallback={this.handleAudioPlayerOpen}
+                />
+              </Paper>
+              :
+              ''}
             { formattedJob ?
               formattedJob
               :
