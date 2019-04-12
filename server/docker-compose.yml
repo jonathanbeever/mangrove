@@ -6,10 +6,11 @@ services:
     build: .
     environment:
       - DOCKER_MANGROVE=yes
+      - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
     command:
       - $CMD
     volumes:
-      - $MANGROVE_INPUT_DIR:/inputs
+      - $MANGROVE_INPUT_DIR:$MANGROVE_INPUT_DIR
       - ../:/mangrove
     ports:
       - "34251:34251"
