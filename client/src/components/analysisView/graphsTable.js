@@ -23,7 +23,6 @@ import ACIBarChart from '../infographs/ACIBarChart';
 import ACICompareBarChart from '../infographs/ACICompareBarChart';
 import RMSBarChart from '../infographs/RMSBarChart';
 import RMSCompareBarChart from '../infographs/RMSCompareBarChart';
-import AudioPlayer from '../infographs/components/AudioPlayer';
 
 const styles = theme => ({
   root: {
@@ -348,19 +347,6 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
-            case "Play Audio Files":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  graph={<AudioPlayer
-                    files={obj.files}
-                    urls={obj.urls}
-                    audioCallback={this.props.audioCallback}
-                  />}
-                />
-              )
-              break;
             default:
               rows.push(
                 <GraphExpansionPanel
@@ -402,19 +388,6 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
-            case "Play Audio Files":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  graph={<AudioPlayer
-                    files={obj.files}
-                    urls={obj.urls}
-                    audioCallback={this.props.audioCallback}
-                  />}
-                />
-              )
-              break;
             case "File Data":
               rows.push(
                 <GraphExpansionPanel
@@ -452,19 +425,6 @@ class GraphsTable extends React.Component {
         case "aei":
           switch(obj.title)
           {
-            case "Play Audio Files":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  graph={<AudioPlayer
-                    files={obj.files}
-                    urls={obj.urls}
-                    audioCallback={this.props.audioCallback}
-                  />}
-                />
-              )
-              break;
             case "File Data":
               rows.push(
                 <GraphExpansionPanel
@@ -536,19 +496,6 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
-            case "Play Audio Files":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  graph={<AudioPlayer
-                    files={obj.files}
-                    urls={obj.urls}
-                    audioCallback={this.props.audioCallback}
-                  />}
-                />
-              )
-              break;
             case "File Data":
               rows.push(
                 <GraphExpansionPanel
@@ -613,19 +560,6 @@ class GraphsTable extends React.Component {
                 />
               )
               break;
-            case "Play Audio Files":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  graph={<AudioPlayer
-                    files={obj.files}
-                    urls={obj.urls}
-                    audioCallback={this.props.audioCallback}
-                  />}
-                />
-              )
-              break;
             default:
               rows.push(
                 <GraphExpansionPanel
@@ -685,19 +619,6 @@ class GraphsTable extends React.Component {
                   graph={<BACompareFileAreaChart
                     files={obj.files}
                     fileNames={obj.fileNames}
-                  />}
-                />
-              )
-            break;
-            case "Play Audio Files":
-              rows.push(
-                <GraphExpansionPanel
-                  key={'graph'+ctr}
-                  title={obj.title}
-                  graph={<AudioPlayer
-                    files={obj.files}
-                    urls={obj.urls}
-                    audioCallback={this.props.audioCallback}
                   />}
                 />
               )

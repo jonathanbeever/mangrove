@@ -35,6 +35,13 @@ class AudioPlayer extends Component {
     this.setState({ chosenUrl: urls[0] })
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({ files: nextProps.files });
+    this.setState({ urls: nextProps.urls });
+    this.setState({ chosenFile: nextProps.files[0] });
+    this.setState({ chosenUrl: nextProps.urls[0] });
+  }
+
   // Handler for the file Select
   handleFileChange = event => {
     let { files, urls } = this.state;
@@ -68,9 +75,9 @@ class AudioPlayer extends Component {
     const { classes } = this.props;
 
     return(
-      <div className="row">
+      <div style={{ paddingLeft: 15+'px', marginBottom:20+'px' }}className="row">
         <div>
-          <FormControl style={{ marginLeft:10+'px', marginBottom:10+'px' }}>
+          <FormControl style={{ marginLeft:10+'px' }}>
             <InputLabel shrink htmlFor="file-helper"><h4>File Name</h4></InputLabel>
             <Select
               value={chosenFile ? chosenFile : ''}

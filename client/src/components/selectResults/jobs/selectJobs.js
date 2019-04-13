@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import '../selectResults.css';
-import Chip from '../components/chip';
 import JobsTable from './jobsTable';
 
 const styles = theme => ({
