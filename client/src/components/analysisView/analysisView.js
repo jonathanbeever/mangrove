@@ -24,6 +24,7 @@ import * as utils from './dataModeling.js';
 import ReactPlayer from 'react-player';
 import Checkbox from '@material-ui/core/Checkbox';
 import ExportCsv from '../selectResults/csvExport';
+import AudioPlayer from '../infographs/components/AudioPlayer';
 import axios from 'axios';
 var _ = require('lodash');
 
@@ -158,6 +159,7 @@ class AnalysisView extends Component {
   formatState = (selectedJobs) => {
     let series = [];
     let sites = [];
+    let dict = {};
 
     for(var item in selectedJobs)
     {
@@ -167,22 +169,27 @@ class AnalysisView extends Component {
       {
         var jobs = index[specId];
         jobs.forEach(job => {
-          if(!series.includes(job.input.series))
-          {
-            series.push(job.input.series);
-          }
           if(!sites.includes(job.input.site))
           {
             sites.push(job.input.site);
+            dict[job.input.site] = [];
+          }
+          if(!series.includes(job.input.series))
+          {
+            series.push(job.input.series);
+            dict[job.input.site].push(job.input.series);
           }
         });
       }
     }
 
+    this.setState({ siteDict: dict });
     this.setState({ siteNames: sites });
+    this.setState({ siteNamesCompare: sites.length > 1 ? sites.slice(1) : [] });
+    this.setState({ seriesNames: dict[sites[0]] });
+    this.setState({ seriesNamesCompare: series.length > 1 ? series.slice(1) : [] });
     this.setState({ chosenSite: sites[0] });
-    this.setState({ seriesNames: series });
-    this.setState({ chosenSeries: series[0] });
+    this.setState({ chosenSeries: dict[sites[0]][0] });
     this.setState({ formattedJob: null });
     this.setState({ selectedJobs: selectedJobs });
   }
@@ -191,6 +198,7 @@ class AnalysisView extends Component {
   // Then, it creates the Paper and ExpansionPanel components used
   // for displaying the graphs themselves.
   formatJob = (data) => {
+    console.log(data);
     const rows = [];
     let specRows = [];
     let graphs;
@@ -295,7 +303,7 @@ class AnalysisView extends Component {
         <Paper key={index}>
           <div className="row">
             <div className="col-8">
-              <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3>            
+              <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()}</h3>
             </div>
             <div className="col-4" style={{ paddingLeft: 50+'px', paddingTop: 30+'px' }}>
               {csvExport}
@@ -327,7 +335,7 @@ class AnalysisView extends Component {
     let graphs;
 
     let { indexedSpecs } = this.props;
-    let { chosenSite, chosenCompareSite } = this.state;
+    let { chosenSite, chosenCompareSite, chosenSeries, chosenCompareSeries } = this.state;
 
     // loop through each input index
     for (var index in data) {
@@ -416,8 +424,8 @@ class AnalysisView extends Component {
       rows.push(
         <Paper key={index}>
           <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Site</h3>
-          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSite } and { chosenCompareSite }</p>
-          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are the series you chose to compare</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSite } - { chosenSeries } and { chosenCompareSite } - { chosenCompareSeries }</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are from the site you chose to compare</p>
           <IndexAnalysisPanel
             specRows={specRows}
           />
@@ -535,7 +543,7 @@ class AnalysisView extends Component {
         <Paper key={index}>
           <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Series</h3>
           <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSeries } and { chosenCompareSeries }</p>
-          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are the series you chose to compare</p>
+          <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are from the series you chose to compare</p>
           <IndexAnalysisPanel
             specRows={specRows}
           />
@@ -562,7 +570,8 @@ class AnalysisView extends Component {
     let item;
     let specId;
     let jobs;
-    let filteredSelectedJobs;
+    let filteredChosenJobs;
+    let filteredChosenInputs;
 
     let unfinished = this.hasUnfinished(selectedJobs);
     if(unfinished.length > 0){
@@ -571,7 +580,7 @@ class AnalysisView extends Component {
     }
 
     // get jobs for only the chosen site and series
-    let filteredChosenJobs = _.cloneDeep(selectedJobs);
+    filteredChosenJobs = _.cloneDeep(selectedJobs);
     for(item in filteredChosenJobs)
     {
       index = filteredChosenJobs[item];
@@ -579,69 +588,95 @@ class AnalysisView extends Component {
       {
         jobs = index[specId];
         index[specId] = jobs.filter(x => x.input.series === chosenSeries && x.input.site === chosenSite);
+        filteredChosenInputs = index[specId].map(x => x.input);
       }
     }
     // create base graphs
     this.formatJob(filteredChosenJobs);
 
-    // check if user has selected a site to compare
-    if(chosenCompareSite)
+    // check if user has selected both a site and series to compare
+    if(chosenCompareSite && chosenCompareSeries)
     {
       // get jobs from fullJobs where the site and series match
-      filteredSelectedJobs = selectedJobs;
-      for(item in filteredSelectedJobs)
+      filteredChosenJobs = _.cloneDeep(selectedJobs);
+      for(item in filteredChosenJobs)
       {
-        index = filteredSelectedJobs[item];
+        index = filteredChosenJobs[item];
         for(specId in index)
         {
           jobs = index[specId];
-          index[specId] = jobs.filter(x => x.input.series === chosenSeries && (x.input.site === chosenSite || x.input.site === chosenCompareSite));
+          index[specId] = jobs.filter(x => (x.input.site === chosenSite && x.input.series === chosenSeries) || (x.input.site === chosenCompareSite && x.input.series === chosenCompareSeries));
+          filteredChosenInputs = (index[specId].map(x => x.input));
         }
       }
-      this.formatJobSite(filteredSelectedJobs);
+      this.formatJobSite(filteredChosenJobs);
     }
 
-    //  check if user has selected a series to compare
-    if(chosenCompareSeries)
+    //  check if user has selected only a series to compare
+    if(chosenCompareSeries && !chosenCompareSite)
     {
       // get jobs from fullJobs where the site and series match
-      filteredSelectedJobs = selectedJobs;
-      for(item in filteredSelectedJobs)
+      filteredChosenJobs = _.cloneDeep(selectedJobs);
+      for(item in filteredChosenJobs)
       {
-        index = filteredSelectedJobs[item];
+        index = filteredChosenJobs[item];
         for(specId in index)
         {
           jobs = index[specId];
-          index[specId] = jobs.filter(x => (x.input.series === chosenSeries || x.input.series === chosenCompareSeries) && x.input.site === chosenSite);
+          index[specId] = jobs.filter(x => x.input.series === chosenSeries || x.input.series === chosenCompareSeries);
+          filteredChosenInputs = (index[specId].map(x => x.input));
         }
       }
 
-      this.formatJobSeries(filteredSelectedJobs);
+      this.formatJobSeries(filteredChosenJobs);
     }
+
+    this.setState({ files: filteredChosenInputs.map(x => x.name) });
+    this.setState({ urls: filteredChosenInputs.map(x => x.downloadUrl) });
   }
 
   // Handler for the site Select
   handleSiteChange = event => {
-    this.setState({ chosenSite: event.target.value });
+    let { siteDict, siteNames } = this.state;
+    let chosenSite = event.target.value;
+    let chosenSiteSeries = siteDict[chosenSite];
+    this.setState({ siteNamesCompare: siteNames.filter(site => site !== chosenSite) });
+    this.setState({ seriesNames: chosenSiteSeries });
+    this.setState({ seriesNamesCompare: chosenSiteSeries.length > 1 ? chosenSiteSeries.filter(series => series !== chosenSiteSeries[0]) : [] });
+    this.setState({ chosenSite: chosenSite });
+    this.setState({ chosenSeries: chosenSiteSeries[0] });
+    this.setState({ comparedJobsSeries: null });
+    this.setState({ comparedJobsSite: null });
     this.setState({ [event.target.name]: event.target.value });
   }
 
   // Handler for the site-compare Select
   handleSiteCompareChange = event => {
-    this.setState({ chosenCompareSite: event.target.value });
+    let { siteDict, chosenSeries } = this.state;
+    let chosenCompareSite = event.target.value;
+    this.setState({ chosenCompareSite: chosenCompareSite });
     this.setState({ [event.target.name]: event.target.value });
+    if(chosenCompareSite === "")
+    {
+      this.setState({ chosenSeries: chosenSeries });
+      this.setState({ comparedJobsSite: null });
+    }
+    else this.setState({ chosenCompareSeries: siteDict[chosenCompareSite][0] });
   }
 
   // Handler for the series Select
   handleSeriesChange = event => {
-    this.setState({ chosenSeries: event.target.value });
+    let chosenSeries = event.target.value;
+    this.setState({ chosenSeries: chosenSeries });
     this.setState({ [event.target.name]: event.target.value });
   }
 
   // Handler for the series-compare Select
   handleSeriesCompareChange = event => {
-    this.setState({ chosenCompareSeries: event.target.value });
+    let chosenCompareSeries = event.target.value;
+    this.setState({ chosenCompareSeries: chosenCompareSeries });
     this.setState({ [event.target.name]: event.target.value });
+    if(chosenCompareSeries === "") this.setState({ comparedJobsSeries: null });
   }
 
   // Creates the items seen in the site menu
@@ -674,9 +709,12 @@ class AnalysisView extends Component {
 
   // Creates the items seen in the compare series menu
   seriesMenuCompareItems = (seriesNames) => {
-    let { chosenSeries } = this.state;
+    let { chosenSeries, chosenSite, chosenCompareSite, siteDict } = this.state;
+    let chosenCompareSeriesNames;
+    if(siteDict[chosenCompareSite]) chosenCompareSeriesNames = siteDict[chosenCompareSite];
+    else chosenCompareSeriesNames = siteDict[chosenSite];
 
-    const seriesNamesWithoutChosen = seriesNames.filter(site => site !== chosenSeries);
+    const seriesNamesWithoutChosen = chosenCompareSeriesNames.filter(series => series !== chosenSeries);
     const menuItems = [<MenuItem key={"seriesNone"} value=""><em>None</em></MenuItem>].concat(seriesNamesWithoutChosen.map(series => {
       return <MenuItem key={"seriesCompare"+series} value={series}>{series}</MenuItem>
     }));
@@ -700,7 +738,6 @@ class AnalysisView extends Component {
   }
 
   handleAudioPlayerOpen = (data, index) => {
-    console.log("player open");
     let seconds;
     let finalPath;
     let title;
@@ -737,8 +774,8 @@ class AnalysisView extends Component {
 
   render() {
 
-    let { errorMode, formattedJob, comparedJobsSite,
-          comparedJobsSeries, siteNames, seriesNames, chosenSite,
+    let { errorMode, formattedJob, comparedJobsSite, files, urls,
+          comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track } = this.state;
     const { classes } = this.props;
 
@@ -779,8 +816,8 @@ class AnalysisView extends Component {
                       name="site-compare"
                       className={classes.selectEmpty}
                     >
-                      {siteNames ?
-                        this.siteMenuCompareItems(siteNames)
+                      {siteNamesCompare ?
+                        this.siteMenuCompareItems(siteNamesCompare)
                       :
                         ''}
                     </Select>
@@ -813,8 +850,8 @@ class AnalysisView extends Component {
                       name="series-compare"
                       className={classes.selectEmpty}
                     >
-                      {seriesNames ?
-                        this.seriesMenuCompareItems(seriesNames)
+                      {seriesNamesCompare ?
+                        this.seriesMenuCompareItems(seriesNamesCompare)
                       :
                         ''}
                     </Select>
@@ -857,6 +894,17 @@ class AnalysisView extends Component {
                 </Dialog>
               </div>
             </Paper>
+            { files ?
+              <Paper key="audio">
+                <AudioPlayer
+                  key="audioPlayer"
+                  files={files}
+                  urls={urls}
+                  audioCallback={this.handleAudioPlayerOpen}
+                />
+              </Paper>
+              :
+              ''}
             { formattedJob ?
               formattedJob
               :

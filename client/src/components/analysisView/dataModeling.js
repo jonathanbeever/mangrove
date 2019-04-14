@@ -400,12 +400,6 @@ export function convertADIResults(jobs) {
   });
 
   ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: [],
-      urls: [],
-    },
     graph1:
     {
       data: [],
@@ -467,9 +461,6 @@ export function convertADIResults(jobs) {
 
     ret.fileData.files[job.input.name] = job.result;
     ret.fileData.fileNames.push(job.input.name);
-
-    ret.audioPlayer.files.push(job.input.name);
-    ret.audioPlayer.urls.push(job.input.downloadUrl);
 
     curObject =
     {
@@ -538,12 +529,6 @@ export function convertAEIResults(jobs) {
   });
 
   ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: [],
-      urls: [],
-    },
     graph1:
     {
       data: [],
@@ -606,9 +591,6 @@ export function convertAEIResults(jobs) {
     ret.fileData.files[job.input.name] = job.result;
     ret.fileData.fileNames.push(job.input.name);
 
-    ret.audioPlayer.files.push(job.input.name);
-    ret.audioPlayer.urls.push(job.input.downloadUrl);
-
     curObject =
     {
       name: dayDate,
@@ -638,12 +620,6 @@ export function convertBIResults(jobs) {
   let ret;
 
   ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: [],
-      urls: []
-    },
     fileData:
     {
       title: "File Data",
@@ -695,9 +671,6 @@ export function convertBIResults(jobs) {
 
     ret.fileData.files[job.input.name] = job.result;
     ret.fileData.fileNames.push(job.input.name);
-
-    ret.audioPlayer.files.push(job.input.name);
-    ret.audioPlayer.urls.push(job.input.downloadUrl);
 
     curObject =
     {
@@ -791,7 +764,7 @@ export function convertACIResultsBySite(jobs, sites) {
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareBySeconds = replaceACI(compareBySeconds);
+  // compareBySeconds = replaceACI(compareBySeconds);
   compareByDate = replaceACI(compareByDate);
 
   compareByFile.data.forEach(item => {
@@ -866,7 +839,7 @@ export function convertACIResultsBySeries(jobs, series) {
   let compareByDate = compareResults.graph4;
 
   // rename keys in compare data
-  compareBySeconds = replaceACI(compareBySeconds);
+  // compareBySeconds = replaceACI(compareBySeconds);
   compareByDate = replaceACI(compareByDate);
 
   compareByFile.data.forEach(item => {
@@ -1069,14 +1042,10 @@ export function convertBIResultsBySite(jobs, sites) {
 
   let chosenSpectrumValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
-  let chosenFiles = chosenResults.audioPlayer.files;
-  let chosenUrls = chosenResults.audioPlayer.urls;
   let chosenFileData = chosenResults.fileData.files;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-  let compareFiles = compareResults.audioPlayer.files;
-  let compareUrls = compareResults.audioPlayer.urls;
   let compareFileData = compareResults.fileData.files;
 
   // rename keys in compare data
@@ -1086,8 +1055,7 @@ export function convertBIResultsBySite(jobs, sites) {
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
-  let fileNames = chosenFiles.concat(compareFiles);
-  let urls = chosenUrls.concat(compareUrls);
+  let fileNames = Object.keys(chosenFileData).concat(Object.keys(compareFileData));
 
   let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
@@ -1098,12 +1066,6 @@ export function convertBIResultsBySite(jobs, sites) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: fileNames,
-      urls: urls
-    },
     fileData:
     {
       title: "File Data",
@@ -1145,14 +1107,10 @@ export function convertBIResultsBySeries(jobs, series) {
 
   let chosenSpectrumValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
-  let chosenFiles = chosenResults.audioPlayer.files;
-  let chosenUrls = chosenResults.audioPlayer.urls;
   let chosenFileData = chosenResults.fileData.files;
 
   let compareSpectrumValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-  let compareFiles = compareResults.audioPlayer.files;
-  let compareUrls = compareResults.audioPlayer.urls;
   let compareFileData = compareResults.fileData.files;
 
   // rename keys in compare data
@@ -1162,8 +1120,7 @@ export function convertBIResultsBySeries(jobs, series) {
   let spectrumData = chosenSpectrumValues.data.concat(compareSpectrumValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
-  let fileNames = chosenFiles.concat(compareFiles);
-  let urls = chosenUrls.concat(compareUrls);
+  let fileNames = Object.keys(chosenFileData).concat(Object.keys(compareFileData));
 
   let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
@@ -1174,12 +1131,6 @@ export function convertBIResultsBySeries(jobs, series) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: fileNames,
-      urls: urls
-    },
     fileData:
     {
       title: "File Data",
@@ -1247,16 +1198,12 @@ export function convertADIResultsBySite(jobs, sites) {
 
   let chosenBandValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
-  let chosenFiles = chosenResults.audioPlayer.files;
-  let chosenUrls = chosenResults.audioPlayer.urls;
   let chosenFileData = chosenResults.fileData.files;
   let chosenLeft = chosenBandValues.left;
   let chosenRight = chosenBandValues.right;
 
   let compareBandValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-  let compareFiles = compareResults.audioPlayer.files;
-  let compareUrls = compareResults.audioPlayer.urls;
   let compareFileData = compareResults.fileData.files;
   let compareLeft = compareBandValues.left;
   let compareRight = compareBandValues.right;
@@ -1268,8 +1215,7 @@ export function convertADIResultsBySite(jobs, sites) {
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
-  let fileNames = chosenFiles.concat(compareFiles);
-  let urls = chosenUrls.concat(compareUrls);
+  let fileNames = Object.keys(chosenFileData).concat(Object.keys(compareFileData));
 
   let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
@@ -1280,12 +1226,6 @@ export function convertADIResultsBySite(jobs, sites) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: fileNames,
-      urls: urls
-    },
     graph1: {
       data: compressedBandData,
       title: "Compared By Band Values",
@@ -1335,16 +1275,12 @@ export function convertADIResultsBySeries(jobs, series) {
 
   let chosenBandValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
-  let chosenFiles = chosenResults.audioPlayer.files;
-  let chosenUrls = chosenResults.audioPlayer.urls;
   let chosenFileData = chosenResults.fileData.files;
   let chosenLeft = chosenBandValues.left;
   let chosenRight = chosenBandValues.right;
 
   let compareBandValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-  let compareFiles = compareResults.audioPlayer.files;
-  let compareUrls = compareResults.audioPlayer.urls;
   let compareFileData = compareResults.fileData.files;
   let compareLeft = compareBandValues.left;
   let compareRight = compareBandValues.right;
@@ -1357,8 +1293,7 @@ export function convertADIResultsBySeries(jobs, series) {
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
-  let fileNames = chosenFiles.concat(compareFiles);
-  let urls = chosenUrls.concat(compareUrls);
+  let fileNames = Object.keys(chosenFileData).concat(Object.keys(compareFileData));
 
   let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
@@ -1369,12 +1304,6 @@ export function convertADIResultsBySeries(jobs, series) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: fileNames,
-      urls: urls
-    },
     graph1: {
       data: compressedBandData,
       title: "Compared By Band Values",
@@ -1415,7 +1344,6 @@ export function convertADIResultsBySeries(jobs, series) {
 }
 
 export function convertAEIResultsBySite(jobs, sites) {
-
   const chosenSiteJobs = jobs.filter(x => x.input.site === sites[0] && x.status === "finished");
   const compareSiteJobs = jobs.filter(x => x.input.site === sites[1] && x.status === "finished");
 
@@ -1424,16 +1352,12 @@ export function convertAEIResultsBySite(jobs, sites) {
 
   let chosenBandValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
-  let chosenFiles = chosenResults.audioPlayer.files;
-  let chosenUrls = chosenResults.audioPlayer.urls;
   let chosenFileData = chosenResults.fileData.files;
   let chosenLeft = chosenBandValues.left;
   let chosenRight = chosenBandValues.right;
 
   let compareBandValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-  let compareFiles = compareResults.audioPlayer.files;
-  let compareUrls = compareResults.audioPlayer.urls;
   let compareFileData = compareResults.fileData.files;
   let compareLeft = compareBandValues.left;
   let compareRight = compareBandValues.right;
@@ -1445,8 +1369,7 @@ export function convertAEIResultsBySite(jobs, sites) {
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
-  let fileNames = chosenFiles.concat(compareFiles);
-  let urls = chosenUrls.concat(compareUrls);
+  let fileNames = Object.keys(chosenFileData).concat(Object.keys(compareFileData));
 
   let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
@@ -1457,12 +1380,6 @@ export function convertAEIResultsBySite(jobs, sites) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: fileNames,
-      urls: urls
-    },
     graph1: {
       data: compressedBandData,
       title: "Compared By Band Values",
@@ -1512,16 +1429,12 @@ export function convertAEIResultsBySeries(jobs, series) {
 
   let chosenBandValues = chosenResults.graph1;
   let chosenByDate = chosenResults.graph4;
-  let chosenFiles = chosenResults.audioPlayer.files;
-  let chosenUrls = chosenResults.audioPlayer.urls;
   let chosenFileData = chosenResults.fileData.files;
   let chosenLeft = chosenBandValues.left;
   let chosenRight = chosenBandValues.right;
 
   let compareBandValues = compareResults.graph1;
   let compareByDate = compareResults.graph4;
-  let compareFiles = compareResults.audioPlayer.files;
-  let compareUrls = compareResults.audioPlayer.urls;
   let compareFileData = compareResults.fileData.files;
   let compareLeft = compareBandValues.left;
   let compareRight = compareBandValues.right;
@@ -1533,8 +1446,7 @@ export function convertAEIResultsBySeries(jobs, series) {
   let bandData = chosenBandValues.data.concat(compareBandValues.data);
   let dateData = chosenByDate.data.concat(compareByDate.data);
 
-  let fileNames = chosenFiles.concat(compareFiles);
-  let urls = chosenUrls.concat(compareUrls);
+  let fileNames = Object.keys(chosenFileData).concat(Object.keys(compareFileData));
 
   let concatFileData = Object.assign({}, chosenFileData, compareFileData);
 
@@ -1545,12 +1457,6 @@ export function convertAEIResultsBySeries(jobs, series) {
   let compressedDateData = mergeLikeNames(dateData);
 
   let ret = {
-    audioPlayer:
-    {
-      title: "Play Audio Files",
-      files: fileNames,
-      urls: urls
-    },
     graph1: {
       data: compressedBandData,
       title: "Compared By Band Values",

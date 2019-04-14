@@ -35,6 +35,12 @@ class ACICompareFileLineChart extends Component {
     this.setState({ chosenFile: fileNames[0] });
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    let fileNames = [...new Set(nextProps.results.map(x => x.name))];
+    this.setState({ fileNames });
+    this.setState({ chosenFile: fileNames[0] });
+  }
+
   formatYAxis = (tickItem) => {
     let asF = parseFloat(tickItem);
     return (asF).toFixed(2);
@@ -83,81 +89,40 @@ class ACICompareFileLineChart extends Component {
     return menuItems;
   }
 
-  replaceACI = (compareData) => {
-    compareData.forEach(item => {
-      item['aciLeftC'] = item['aciLeft'];
-      item['aciRightC'] = item['aciRight'];
-      delete(item['aciLeft']);
-      delete(item['aciRight']);
-    });
-    return compareData;
-  }
-
   mergeByStamp = (chosen, compare) => {
-    let bigger = chosen.length >= compare.length ? chosen : compare;
-    let smaller = chosen === bigger ? compare : chosen;
     let merged = [];
     let curObject = {};
-    for(let i = 0; i < bigger.length; i++)
+    for(let i = 0; i < chosen.length; i++)
     {
-      let thisItem = bigger[i];
-      let aciLeftC;
-      let aciRightC;
-      if(i < smaller.length)
+      curObject =
       {
-        aciLeftC = smaller[i].aciLeftC;
-        aciRightC = smaller[i].aciRightC;
-        if(thisItem.stamp === smaller[i].stamp)
-        {
-          curObject = {
-            stamp: thisItem.stamp,
-            name: thisItem.name,
-            downloadUrl: thisItem.downloadUrl,
-            aciLeft: thisItem.aciLeft,
-            aciRight: thisItem.aciRight,
-            aciLeftC: aciLeftC,
-            aciRightC: aciRightC
-          }
+        aciLeft: chosen[i].aciLeft,
+        aciRight: chosen[i].aciRight,
+        stamp: chosen[i].stamp,
+        name: chosen[i].name,
+        downloadUrl: chosen[i].downloadUrl
+      }
 
-          merged.push(curObject);
-        }else
-        {
-          curObject = {
-            stamp: thisItem.stamp,
-            name: thisItem.name,
-            downloadUrl: thisItem.downloadUrl,
-            aciLeft: thisItem.aciLeft,
-            aciRight: thisItem.aciRight,
-            aciLeftC: undefined,
-            aciRightC: undefined
-          }
+      merged.push(curObject);
+    }
 
-          merged.push(curObject);
-
-          curObject = {
-            stamp: smaller[i].stamp,
-            name: smaller[i].name,
-            downloadUrl: smaller[i].downloadUrl,
-            aciLeft: undefined,
-            aciRight: undefined,
-            aciLeftC: aciLeftC,
-            aciRightC: aciRightC
-          }
-
-          merged.push(curObject);
-        }
-      }else
+    if(compare.length > 0)
+    {
+      for(let i = 0; i < compare.length && i < merged.length; i++)
       {
-        aciLeftC = undefined;
-        aciRightC = undefined;
-        curObject = {
-          stamp: thisItem.stamp,
-          downloadUrl: thisItem.downloadUrl,
-          name: thisItem.name,
-          aciLeft: thisItem.aciLeft,
-          aciRight: thisItem.aciRight,
-          aciLeftC: aciLeftC,
-          aciRightC: aciRightC
+        merged[i]['aciLeftC'] = compare[i].aciLeft;
+        merged[i]['aciRightC'] = compare[i].aciRight;
+      }
+
+      for(let i = merged.length; i < compare.length; i++)
+      {
+        curObject =
+        {
+          aciLeftC: compare[i].aciLeft,
+          aciRightC: compare[i].aciRight,
+          stamp: compare[i].stamp,
+          name: compare[i].name,
+          downloadUrl: compare[i].downloadUrl
         }
 
         merged.push(curObject);
@@ -179,7 +144,6 @@ class ACICompareFileLineChart extends Component {
   formatJob = (chosen, compare) => {
     chosen = this.sortByKey(chosen, "stamp");
     compare = this.sortByKey(compare, "stamp");
-    if(compare.length > 0 && compare[0]['aciLeftC'] === undefined) compare = this.replaceACI(compare);
     let formattedCompare = this.mergeByStamp(chosen, compare);
     return formattedCompare;
   }
