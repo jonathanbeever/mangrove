@@ -148,9 +148,9 @@ class ChooseFiles extends React.Component {
       if(this.state.upload.series.length)
         fileInfo[file].json.series = this.state.upload.series
       if(this.state.upload.lat.length)
-        fileInfo[file].json.coords.lat = parseInt(this.state.upload.lat)
+        fileInfo[file].json.coords.lat = Number(this.state.upload.lat)
       if(this.state.upload.long.length)
-        fileInfo[file].json.coords.long = parseInt(this.state.upload.long)
+        fileInfo[file].json.coords.long = Number(this.state.upload.long)
       if(this.state.upload.recordTimeMs.date.length)
         fileInfo[file].json.recordTimeMs[0] = this.state.upload.recordTimeMs.date
       if(this.state.upload.recordTimeMs.time.length)
