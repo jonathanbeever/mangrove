@@ -80,6 +80,7 @@ class Login extends Component {
 
 			window.localStorage.setItem('email', window.email);
 			window.localStorage.setItem('refresh', window.refreshToken);
+			window.localStorage.setItem('id', window.idToken);
 			window.localStorage.setItem('validLogin', 'true');
 		}
 		else {
@@ -294,7 +295,7 @@ class Login extends Component {
 		const steps = ["Register Account", "Verify Email Address"];
 
 		if(this.state.redirect) {
-			return <Redirect push to="/catalog" />;
+			return <Redirect push to="/newJobs" />;
 		}
 
 		return (

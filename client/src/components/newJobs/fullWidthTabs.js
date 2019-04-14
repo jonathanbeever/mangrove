@@ -186,7 +186,8 @@ class FullWidthTabs extends React.Component {
                   <UploadsTable
                     filteredInputs={this.props.filesToUpload}
                     updateSelectedInputs={this.props.updateSelectedUploads} 
-                    selected={this.props.selectedToEdit}          
+                    selected={this.props.selectedToEdit}
+                    deleteFromUploads={this.props.deleteFromUploads}    
                   />
                 </div>
               </div>
