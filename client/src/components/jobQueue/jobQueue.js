@@ -255,32 +255,36 @@ class JobQueue extends Component {
                   data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                    .filter(el => { return el != null; }).map(job =>
                    {
-                     let date = new Date(job.creationTimeMs);
-                     date = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
-                     let jobDesc = job.input.site + " - " + job.input.series;
-                     let specDesc = job.spec.type.toUpperCase();
-                     return(
-                       <TableRow
+                     try {
+                       let date = new Date(job.creationTimeMs);
+                       date = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
+                       let jobDesc = job.input.site + " - " + job.input.series;
+                       let specDesc = job.spec.type.toUpperCase();
+                       return(
+                         <TableRow
                          key={job.jobId}
-                       >
+                         >
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                             {jobDesc}
+                         {jobDesc}
                          </TableCell>
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                             {job.input.name}
+                         {job.input.name}
                          </TableCell>
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                             {specDesc}
+                         {specDesc}
                          </TableCell>
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                             {date}
+                         {date}
                          </TableCell>
                          <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                             {job.author}
+                         {job.author}
                          </TableCell>
                          {this.statusCell(job.status)}
-                       </TableRow>
-                     )
+                         </TableRow>
+                       )
+                     } catch (err) {
+                       console.error(err);
+                     }
                    })
                 }
                 </TableBody>
