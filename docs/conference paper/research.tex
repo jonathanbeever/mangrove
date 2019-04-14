@@ -1,5 +1,5 @@
 \begin{center}
-IV. Soundscape Ecology
+V. Research
 \end{center}
 \begin{flushleft}
 \setlength{\parindent}{0.125in}
@@ -13,5 +13,11 @@ An effort was made to try and lead some improvement into the package. This effor
 
 \noindent\textit{C. Visualization Research}\par
 As each index represents different data in a sound file, it is important to represent that data in a way that makes sense to researchers and for publication. In general, bar charts and line charts are used in the service to represent the data, but each index has its own meaning in its charts. Regardless of index, a line graph representing the index value over time is available. Being able to show index value over time is of great importance to researchers as change over time is great for drawing conclusions when correlating with other forms of research. A great example of this would be our own sponsor Dr. Beever\textquotesingle s research at the Sanford Zoo. There, they are researching whether the man made noise like the train passing by, has any effect on the animal well being.
+
+\noindent\textit{D. Data Collections}\par
+In order to make headway for future groups to be able to preform machine learning we needed data. We had three major sources that we gathered our data from. The primary being the Cornell Avian laboratory\textquotesingle s data base of bird sounds. Along with this package of sound we used the EC-50 sound data set to supplement our data with anthrophonic sounds. We combined these two data sources with a labeled excel sheet. With this labeled data set we created spectrographs for all the sounds in order to facilitate the use of Convolutional networks. Additionally, we web scraped some insect sounds and included code in order to display how to scrape websites. This should allow future teams to collect data from almost any online source.
+
+\noindent\textit{D. Machine Learning}\par
+Many architectures were studied in our journey to find the optimal solution for machine listening. What we found is that convolutional networks out-perform vanilla networks in accuracy. While vanilla networks trained on MFCC log scale sounds only preformed with a 60\% accuracy convolutional networks trained on spectrographs can achieve up to 75\% accuracy. We found that in order to achieve maximum performance you can run the spectrographs through ConvRBMs. This transforms regular spectrographs, that just use Fourier transforms to display sounds, into representations that have features highlighted. This allows Convolutional networks to more easily detect these features and correctly label sounds.
 
 \end{flushleft}
