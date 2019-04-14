@@ -153,7 +153,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes } = props;
+  const { numSelected, classes, deleteFromUploads } = props;
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -174,7 +174,7 @@ let EnhancedTableToolbar = props => {
       <div className={classes.spacer} />
       <div className={classes.actions}>
         {numSelected > 0 ? (
-          <Tooltip title={<p style={{fontSize:10+'px'}}>Delete</p>} placement='top'>
+          <Tooltip title={<p style={{fontSize:10+'px'}}>Delete</p>} placement='top' onClick={deleteFromUploads}>
             <IconButton aria-label="Delete">
               <DeleteIcon />
             </IconButton>
@@ -324,14 +324,14 @@ class EnhancedTable extends React.Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { classes } = this.props;
+    const { classes, deleteFromUploads } = this.props;
     const { data, order, orderBy, selected, rowsPerPage, page, selectedPage } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     return (
       <div>
         <Paper className={classes.root}>
-          <EnhancedTableToolbar numSelected={selected.length} />
+          <EnhancedTableToolbar numSelected={selected.length} deleteFromUploads={deleteFromUploads}/>
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <EnhancedTableHead

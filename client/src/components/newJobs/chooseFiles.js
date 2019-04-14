@@ -139,6 +139,18 @@ class ChooseFiles extends React.Component {
     this.setState({ filesToUpload: fileInfo })
   }
 
+  deleteFromUploads = () => {
+    var fileInfo = this.state.filesToUpload
+    var selected = this.state.selectedToEdit
+
+    selected.forEach(file => {
+      delete fileInfo[file]
+    })
+
+    this.setState({ filesToUpload: fileInfo })
+    this.updateSelectedUploads([])
+  }
+
   submitInputProperties = () => {
     var fileInfo = this.state.filesToUpload
 
@@ -301,6 +313,7 @@ class ChooseFiles extends React.Component {
               setNamingConvention={this.setNamingConvention}
               startRms={this.props.startRms}
               promptConfirmDelete={this.props.promptConfirmDelete}
+              deleteFromUploads={this.deleteFromUploads}
             />
           </div> : ''}
         </div>
