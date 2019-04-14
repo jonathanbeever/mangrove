@@ -16,11 +16,20 @@ const Type = require('../models/type');
 const Nyquist = require('../models/spec/nyquist');
 
 const { arrayDiff } = require('../../util/array');
+const { verify } = require('../../util/verify');
+
 
 const error = config.get('error');
 
 // Create Spec
 router.put('/', async (req, res) => {
+  const token = req.get('Authorization');
+
+  const isAllowed = await verify(token);
+  if (!isAllowed) {
+    return res.status(401).json({ error: 'Invalid login' });
+  }
+
   const missingKeys = arrayDiff(newSpecKeys(), Object.keys(req.body));
   if (missingKeys.length > 0) {
     return res.status(400).json({
@@ -86,8 +95,13 @@ router.put('/', async (req, res) => {
 // Get Spec
 router.get('/:specId', async (req, res) => {
   const { specId } = req.params;
+  const token = req.get('Authorization');
 
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const searchResult = await Spec.findById(specId).exec();
 
     if (!searchResult) {
@@ -109,7 +123,13 @@ router.get('/:specId', async (req, res) => {
 
 // Get All Specs
 router.get('/', async (req, res) => {
+  const token = req.get('Authorization');
+
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const searchResult = await Spec.find().exec();
 
     return res.status(200).json({
@@ -129,8 +149,13 @@ router.get('/', async (req, res) => {
 // Delete Spec
 router.delete('/:specId', async (req, res) => {
   const { specId } = req.params;
+  const token = req.get('Authorization');
 
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const deleteResult = await Spec.findOneAndDelete({ _id: specId }).exec();
 
     let jobsWithSpec = [];

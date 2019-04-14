@@ -21,6 +21,8 @@ const {
   getExtensionlessFilename,
 } = require('../models/input/utils');
 
+const { verify } = require('../../util/verify');
+
 const error = config.get('error');
 
 const upload = multer({
@@ -74,6 +76,12 @@ const upload = multer({
 // path information from req.body.json by the time we're storing the file. This
 // is a limitation of the Multer package. See the 'upload' variable above.
 router.put('/', (req, res) => {
+  const token = req.get('Authorization');
+
+  const isAllowed = verify(token);
+  if (!isAllowed) {
+    return res.status(401).json({ error: 'Invalid login' });
+  }
   upload.single('file')(req, res, async (uploadErr) => {
     if (uploadErr) {
       if (uploadErr instanceof multer.MulterError) {
@@ -147,8 +155,13 @@ router.put('/', (req, res) => {
 // Get Input
 router.get('/:inputId', async (req, res) => {
   const { inputId } = req.params;
+  const token = req.get('Authorization');
 
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const searchResult = await Input.findById(inputId).exec();
 
     if (!searchResult) {
@@ -180,7 +193,14 @@ router.get('/:inputId', async (req, res) => {
 
 // Get All Inputs
 router.get('/', async (req, res) => {
+  const token = req.get('Authorization');
+
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
+
     const searchResult = await Input.find().exec();
 
     return res.status(200).json({
@@ -210,8 +230,13 @@ router.get('/', async (req, res) => {
 // Delete Input
 router.delete('/:inputId', async (req, res) => {
   const { inputId } = req.params;
+  const token = req.get('Authorization');
 
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const deleteResult = await Input.findOneAndDelete({ _id: inputId }).exec();
     if (deleteResult) deleteInputFile(deleteResult.path);
 

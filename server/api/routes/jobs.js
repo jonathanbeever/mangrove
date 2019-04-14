@@ -15,11 +15,20 @@ const {
 const Status = require('../models/status');
 
 const { arrayDiff } = require('../../util/array');
+const { verify, getUser } = require('../../util/verify');
+
 
 const error = config.get('error');
 
 // Create Job
 router.put('/', async (req, res) => {
+  const token = req.get('Authorization');
+
+  const isAllowed = await verify(token);
+  if (!isAllowed) {
+    return res.status(401).json({ error: 'Invalid login' });
+  }
+
   const missingKeys = arrayDiff(newJobKeys(), Object.keys(req.body));
   if (missingKeys.length > 0) {
     return res.status(400).json({
@@ -75,11 +84,12 @@ router.put('/', async (req, res) => {
       });
     }
 
+    const username = await getUser(token);
     const job = new JobModel({
       _id: new mongoose.Types.ObjectId(),
       input: input.id,
       spec: spec.id,
-      author: 'Test Author', // TODO: Implement user authentication
+      author: username,
       creationTimeMs: moment().valueOf(),
       status: Status.WAITING,
     });
@@ -104,8 +114,13 @@ router.put('/', async (req, res) => {
 // Get Job
 router.get('/:jobId', async (req, res) => {
   const { jobId } = req.params;
+  const token = req.get('Authorization');
 
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const searchResult = await Job.findById(jobId).exec();
 
     if (!searchResult) {
@@ -133,7 +148,13 @@ router.get('/:jobId', async (req, res) => {
 
 // Get All Jobs
 router.get('/', async (req, res) => {
+  const token = req.get('Authorization');
+
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const searchResult = await Job.find().exec();
 
     return res.status(200).json({
@@ -159,8 +180,13 @@ router.get('/', async (req, res) => {
 // Delete Job
 router.delete('/:jobId', async (req, res) => {
   const { jobId } = req.params;
+  const token = req.get('Authorization');
 
   try {
+    const isAllowed = await verify(token);
+    if (!isAllowed) {
+      return res.status(401).json({ error: 'Invalid login' });
+    }
     const deleteResult = await Job.deleteOne({ _id: jobId }).exec();
 
     return res.status(200).json({
