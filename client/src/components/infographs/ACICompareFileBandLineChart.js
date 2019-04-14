@@ -101,12 +101,21 @@ class ACICompareFileBandLineChart extends Component {
   }
 
   mergeByBand = (chosen, compare) => {
+    console.log(chosen, compare);
     let indx = 0;
     chosen.forEach(item => {
-      item['aciLeftC'] = compare[indx].aciLeft;
-      item['aciRightC'] = compare[indx].aciRight;
-      indx++;
+      if(indx < compare.length)
+      {
+        item['aciLeftC'] = compare[indx].aciLeft;
+        item['aciRightC'] = compare[indx].aciRight;
+        indx++;
+      }else
+      {
+        item['aciLeftC'] = undefined;
+        item['aciRightC'] = undefined;
+      }
     });
+
     return chosen;
   }
 

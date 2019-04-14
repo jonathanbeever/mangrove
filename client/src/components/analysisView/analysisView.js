@@ -161,28 +161,34 @@ class AnalysisView extends Component {
     let sites = [];
     let dict = {};
 
-    for(var item in selectedJobs)
+    if(selectedJobs === undefined || selectedJobs === null || selectedJobs.length === 0)
     {
-      var index = selectedJobs[item];
-      if(utils.isEmpty(index)) continue;
-      for(var specId in index)
+      sites.push("ERROR");
+      dict['ERROR'] = ["ERROR"];
+    }else
+    {
+      for(var item in selectedJobs)
       {
-        var jobs = index[specId];
-        jobs.forEach(job => {
-          if(!sites.includes(job.input.site))
-          {
-            sites.push(job.input.site);
-            dict[job.input.site] = [];
-          }
-          if(!series.includes(job.input.series))
-          {
-            series.push(job.input.series);
-            dict[job.input.site].push(job.input.series);
-          }
-        });
+        var index = selectedJobs[item];
+        if(utils.isEmpty(index)) continue;
+        for(var specId in index)
+        {
+          var jobs = index[specId];
+          jobs.forEach(job => {
+            if(!sites.includes(job.input.site))
+            {
+              sites.push(job.input.site);
+              dict[job.input.site] = [];
+            }
+            if(!series.includes(job.input.series))
+            {
+              series.push(job.input.series);
+              dict[job.input.site].push(job.input.series);
+            }
+          });
+        }
       }
     }
-
     this.setState({ siteDict: dict });
     this.setState({ siteNames: sites });
     this.setState({ siteNamesCompare: sites.length > 1 ? sites.slice(1) : [] });
@@ -401,7 +407,7 @@ class AnalysisView extends Component {
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
-        if(index === 'rms') specTitle = "RMS Compared By Site";
+        if(index === 'rms') specTitle = "RMS Compared By Site and Series";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>
@@ -423,7 +429,7 @@ class AnalysisView extends Component {
 
       rows.push(
         <Paper key={index}>
-          <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Site</h3>
+          <h3 style={{ paddingLeft: 15+'px', paddingTop: 15+'px' }}>{index.toUpperCase()} By Site and Series</h3>
           <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>Graphs available for comparing { chosenSite } - { chosenSeries } and { chosenCompareSite } - { chosenCompareSeries }</p>
           <p style={{ paddingLeft: 15+'px', fontSize:12+'px' }}>The items denoted with a 'C' at the end are from the site you chose to compare</p>
           <IndexAnalysisPanel
