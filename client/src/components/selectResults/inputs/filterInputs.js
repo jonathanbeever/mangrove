@@ -142,6 +142,7 @@ class FilterInputs extends Component {
   }
 
   render() {
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
     const { classes } = this.props;
 
     return (
