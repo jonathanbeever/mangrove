@@ -8,7 +8,7 @@
     "url": "https://github.com/ucfcs/Fall2018-Group11"
   },
   "scripts": {
-    "pretest": "eslint --ignore-path ../.gitignore .",
+    "pretest": "node ./scripts/makeUser.js && eslint --ignore-path ../.gitignore .",
     "test": "cross-env-shell NODE_ENV=test nyc --reporter=text --reporter=html mocha",
     "lint-fix": "eslint --ignore-path ../.gitignore --fix .",
     "predev": "node ./scripts/env.js",
@@ -46,6 +46,7 @@
     "nyc": "13.3.0"
   },
   "dependencies": {
+    "amazon-cognito-identity-js": "3.0.11",
     "body-parser": "1.18.3",
     "bull": "3.7.0",
     "config": "3.0.1",
@@ -61,6 +62,7 @@
     "mongoose": "5.4.20",
     "morgan": "1.9.1",
     "multer": "1.4.1",
+    "node-fetch": "2.3.0",
     "r-script": "git+https://git@github.com/khamurdik/r-script.git",
     "rimraf": "2.6.3",
     "run-script-os": "1.0.3",
