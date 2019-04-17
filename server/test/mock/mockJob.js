@@ -31,7 +31,7 @@ const nextMockJob = async (type, status = Status.WAITING) => {
   const jobId = nextMockObjectId();
   const input = nextMockInput();
   const spec = mockSpec(nextMockObjectId(), type, {});
-  const author = 'Test Author';
+  const author = 'aninjnlx@sharklasers.com';
   const creationTimeMs = moment().valueOf();
 
   await Input.create(input);
