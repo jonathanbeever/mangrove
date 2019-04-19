@@ -5,12 +5,13 @@ import FileTabs from './fullWidthTabs';
 import axios from 'axios';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import moment from 'moment';
+
 var _ = require('lodash');
 
 const styles = theme => ({
   root: {
     display: 'flex',
-    marginTop: theme.spacing.unit 
+    marginTop: theme.spacing.unit
   },
   formControl: {
     paddingTop: theme.spacing.unit * 3,
@@ -196,7 +197,7 @@ class ChooseFiles extends React.Component {
 
       form.append('json', JSON.stringify(file))
       form.append('file', files[fileName].file)
-      
+
 
       uploadRequests.push(
         axios.put(url, form)
@@ -210,7 +211,7 @@ class ChooseFiles extends React.Component {
             })
 
             this.setState({progress: progress})
-          } 
+          }
           responses.push(response)
         })
         .catch(function (error) {
@@ -224,7 +225,7 @@ class ChooseFiles extends React.Component {
       var message = ''
       var clear = this.state.upload
       clear['site'] = clear['series'] = clear['lat'] = clear['long'] = clear['recordTimeMs']['date'] = clear['recordTimeMs']['time'] = ''
-      
+
       if(responses.length) {
 
         if(responses.length > 1)
@@ -238,7 +239,7 @@ class ChooseFiles extends React.Component {
         else
           message += 'Failed to upload ' + failed.length + ' file.'
       }
-     
+
       this.props.openDialog(message)
       this.listDbFiles(responses)
 
@@ -250,7 +251,7 @@ class ChooseFiles extends React.Component {
       })
     })
   }
-  
+
   // add filter by datetime
   submitInputFilter = () => {
     var filteredInputs = this.state.allFiles.filter(file => {
@@ -285,6 +286,7 @@ class ChooseFiles extends React.Component {
   }
 
   render() {
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
     const { classes } = this.props;
 
     return (
@@ -293,19 +295,19 @@ class ChooseFiles extends React.Component {
         {this.state.showUploadProgress ?
           this.state.progressBar : ''
         }
-        {this.state.filteredInputs ? 
+        {this.state.filteredInputs ?
           <div style={{marginTop: 5+'px'}}>
-            <FileTabs 
-              updateSelectedInputs={this.props.updateSelectedInputs} 
+            <FileTabs
+              updateSelectedInputs={this.props.updateSelectedInputs}
               filteredInputs={this.state.filteredInputs}
-              selected={this.props.selectedFiles}    
-              onChange={this.handleInputUpload}  
+              selected={this.props.selectedFiles}
+              onChange={this.handleInputUpload}
               filter={this.state.filter}
               submitInputFilter={this.submitInputFilter}
               addFilesToUpload={this.addFilesToUpload}
               filesToUpload={this.state.filesToUpload}
-              updateSelectedUploads={this.updateSelectedUploads} 
-              selectedToEdit={this.state.selectedToEdit} 
+              updateSelectedUploads={this.updateSelectedUploads}
+              selectedToEdit={this.state.selectedToEdit}
               updateProperties={this.updateInputProperties}
               submitInputProperties={this.submitInputProperties}
               upload={this.state.upload}

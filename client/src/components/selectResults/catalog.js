@@ -464,6 +464,7 @@ class Catalog extends Component {
   }
 
   render() {
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
     return (
       <div className="container">
         <Tabs

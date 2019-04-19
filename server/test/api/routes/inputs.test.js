@@ -38,6 +38,8 @@ const inputDir = settings.value('inputDir');
 
 const testInputFile = './test/mock/wav/test.wav';
 
+const { token } = require('../../../util/testUser.js');
+
 chai.use(chaiFs);
 chai.use(chaiHttp);
 
@@ -62,8 +64,9 @@ describe('Inputs', () => {
     // TODO: Deal with error "Multipart: Boundary not found"
     it('It should fail to PUT an Input (missing both keys)', async () => {
       const res = await chai.request(app)
-        .put('/inputs');
-        // .set('Content-Type', 'multipart/form-data');
+        .put('/inputs')
+        .set('Authorization', token);
+      // .set('Content-Type', 'multipart/form-data');
 
       expect(res).to.have.status(400);
       expect(res.body).to.have.all.keys('message');
@@ -76,6 +79,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson);
 
       expect(res).to.have.status(400);
@@ -87,6 +91,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .attach('file', testInputFile);
 
       expect(res).to.have.status(400);
@@ -101,6 +106,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson)
         .field('extra', true)
         .attach('file', testInputFile);
@@ -117,6 +123,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson)
         .attach('file', testInputFile);
 
@@ -132,6 +139,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson)
         .attach('file', testInputFile);
 
@@ -156,6 +164,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson)
         .attach('file', testInputFile);
 
@@ -171,6 +180,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson)
         .attach('file', './README.md');
 
@@ -187,6 +197,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson)
         .attach('file', testInputFile);
 
@@ -217,6 +228,7 @@ describe('Inputs', () => {
       const res = await chai.request(app)
         .put('/inputs')
         .set('Content-Type', 'multipart/form-data')
+        .set('Authorization', token)
         .field('json', inputJson)
         .attach('file', testInputFile);
 
@@ -244,7 +256,8 @@ describe('Inputs', () => {
   describe('/GET Input', () => {
     it('It should fail to GET an Input (not found)', async () => {
       const res = await chai.request(app)
-        .get(`/inputs/${nextMockObjectId()}`);
+        .get(`/inputs/${nextMockObjectId()}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(404);
       expect(res.body).to.have.all.keys('message');
@@ -257,7 +270,8 @@ describe('Inputs', () => {
       await Input.create(input);
 
       const res = await chai.request(app)
-        .get(`/inputs/${input.id}`);
+        .get(`/inputs/${input.id}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys(getInputKeys());
@@ -279,7 +293,8 @@ describe('Inputs', () => {
   describe('/GET all Inputs', () => {
     it('It should GET all the Inputs (none)', async () => {
       const res = await chai.request(app)
-        .get('/inputs');
+        .get('/inputs')
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -296,7 +311,8 @@ describe('Inputs', () => {
       await Input.insertMany(inputs);
 
       const res = await chai.request(app)
-        .get('/inputs');
+        .get('/inputs')
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -325,7 +341,8 @@ describe('Inputs', () => {
   describe('/DELETE Input', () => {
     it('It should DELETE an Input (not found)', async () => {
       const res = await chai.request(app)
-        .delete(`/inputs/${nextMockObjectId()}`);
+        .delete(`/inputs/${nextMockObjectId()}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -343,7 +360,8 @@ describe('Inputs', () => {
       await Input.create(input);
 
       const res = await chai.request(app)
-        .delete(`/inputs/${input.id}`);
+        .delete(`/inputs/${input.id}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -360,7 +378,8 @@ describe('Inputs', () => {
       const job = await nextMockPopulatedJob(Type.ACI);
 
       const res = await chai.request(app)
-        .delete(`/inputs/${job.input.id}`);
+        .delete(`/inputs/${job.input.id}`)
+        .set('Authorization', token);
 
       const remainingJobs = await Job.find({ input: job.input.id });
 

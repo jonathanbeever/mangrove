@@ -36,6 +36,8 @@ const statuses = Object.values(Status);
 const statusesNotFinished = statuses.slice();
 statusesNotFinished.splice(statusesNotFinished.indexOf(Status.FINISHED), 1);
 
+const { token } = require('../../../util/testUser.js');
+
 describe('Jobs', () => {
   before(async () => {
     await mockDb.setup();
@@ -61,6 +63,7 @@ describe('Jobs', () => {
       const res = await chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(jobJson);
 
       expect(res).to.have.status(400);
@@ -78,6 +81,7 @@ describe('Jobs', () => {
       const res = await chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(jobJson);
 
       expect(res).to.have.status(400);
@@ -94,6 +98,7 @@ describe('Jobs', () => {
       const res = await chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(jobJson);
 
       expect(res).to.have.status(404);
@@ -110,6 +115,7 @@ describe('Jobs', () => {
       const res = await chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(jobJson);
 
       expect(res).to.have.status(404);
@@ -126,6 +132,7 @@ describe('Jobs', () => {
       const res = await chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(jobJson);
 
       expect(res).to.have.status(400);
@@ -141,6 +148,7 @@ describe('Jobs', () => {
       const requests = jobJsons.map(json => chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(json));
       const responses = await Promise.all(requests);
 
@@ -181,6 +189,7 @@ describe('Jobs', () => {
       const requests = jobJsons.map(json => chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(json));
       const responses = await Promise.all(requests);
 
@@ -214,6 +223,7 @@ describe('Jobs', () => {
       const requests = jobJsons.map(json => chai.request(app)
         .put('/jobs')
         .set('Content-Type', 'application/json')
+        .set('Authorization', token)
         .send(json));
       const responses = await Promise.all(requests);
 
@@ -240,7 +250,8 @@ describe('Jobs', () => {
   describe('/GET Job', () => {
     it('It should fail to GET a Job (not found)', async () => {
       const res = await chai.request(app)
-        .get(`/jobs/${nextMockObjectId()}`);
+        .get(`/jobs/${nextMockObjectId()}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(404);
       expect(res.body).to.have.all.keys('message');
@@ -260,7 +271,8 @@ describe('Jobs', () => {
       await Job.insertMany(jobs);
 
       const requests = jobs.map(job => chai.request(app)
-        .get(`/jobs/${job.id}`));
+        .get(`/jobs/${job.id}`)
+        .set('Authorization', token));
       const responses = await Promise.all(requests);
 
       responses.forEach((res, index) => {
@@ -290,7 +302,8 @@ describe('Jobs', () => {
       await Job.insertMany(jobs);
 
       const requests = jobs.map(job => chai.request(app)
-        .get(`/jobs/${job.id}`));
+        .get(`/jobs/${job.id}`)
+        .set('Authorization', token));
       const responses = await Promise.all(requests);
 
       responses.forEach((res, index) => {
@@ -316,7 +329,8 @@ describe('Jobs', () => {
   describe('/GET all Jobs', () => {
     it('It should GET all Jobs (none)', async () => {
       const res = await chai.request(app)
-        .get('/jobs');
+        .get('/jobs')
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys(['count', 'jobs']);
@@ -338,7 +352,8 @@ describe('Jobs', () => {
       await Job.insertMany(jobs);
 
       const res = await chai.request(app)
-        .get('/jobs');
+        .get('/jobs')
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys(['count', 'jobs']);
@@ -371,7 +386,8 @@ describe('Jobs', () => {
       await Job.insertMany(jobs);
 
       const res = await chai.request(app)
-        .get('/jobs');
+        .get('/jobs')
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys(['count', 'jobs']);
@@ -400,7 +416,8 @@ describe('Jobs', () => {
   describe('/DELETE Job', () => {
     it('It should DELETE a Job (not found)', async () => {
       const res = await chai.request(app)
-        .delete(`/jobs/${nextMockObjectId()}`);
+        .delete(`/jobs/${nextMockObjectId()}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys('success', 'message');
@@ -414,7 +431,8 @@ describe('Jobs', () => {
       await Job.create(job);
 
       const res = await chai.request(app)
-        .delete(`/jobs/${job.id}`);
+        .delete(`/jobs/${job.id}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys('success', 'message');

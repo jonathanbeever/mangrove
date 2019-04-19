@@ -779,6 +779,7 @@ class AnalysisView extends Component {
   }
 
   render() {
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
 
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,

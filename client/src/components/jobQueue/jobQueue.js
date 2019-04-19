@@ -196,7 +196,7 @@ class JobQueue extends Component {
   };
 
   render(){
-
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
     const { rowsPerPage, page } = this.state;
 
     let data = [];

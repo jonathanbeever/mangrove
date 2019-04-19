@@ -477,6 +477,7 @@ class HorizontalLinearStepper extends React.Component {
   }
 
   render() {
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
     const { classes } = this.props;
     const steps = getSteps();
     const { activeStep } = this.state;

@@ -128,7 +128,7 @@ class ChooseSpecs extends Component {
     specInputHtml = (
       <div>
         <h4>Use New Specs</h4>
-        {specInputHtml} 
+        {specInputHtml}
       </div>
     )
     this.setState({ specInputHtml: specInputHtml })
@@ -136,6 +136,7 @@ class ChooseSpecs extends Component {
 
   render() {
     const { classes } = this.props;
+    axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
 
     return (
       <div className="row">
@@ -160,7 +161,7 @@ class ChooseSpecs extends Component {
         <div className="col-8">
           <Paper className={classes.root}>
           {this.state.indexedSpecs ?
-            <SpecsTable 
+            <SpecsTable
               index={this.props.index}
               specs={this.state.indexedSpecs[this.props.index]}
               params={Object.keys(this.props.specParams[this.props.index])}

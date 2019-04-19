@@ -28,6 +28,8 @@ const Type = require('../../../api/models/type');
 const Param = require('../../../api/models/spec/param');
 const Nyquist = require('../../../api/models/spec/nyquist');
 
+const { token } = require('../../../util/testUser.js');
+
 const { expect } = chai;
 
 chai.use(chaiHttp);
@@ -54,6 +56,7 @@ describe('Specs', () => {
 
       const res = await chai.request(app)
         .put('/specs')
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .send(specJson);
 
@@ -71,6 +74,7 @@ describe('Specs', () => {
 
       const res = await chai.request(app)
         .put('/specs')
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .send(specJson);
 
@@ -85,6 +89,7 @@ describe('Specs', () => {
 
       const res = await chai.request(app)
         .put('/specs')
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .send(specJson);
 
@@ -128,6 +133,7 @@ describe('Specs', () => {
 
       const requests = specJsons.map(json => chai.request(app)
         .put('/specs')
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .send(json));
       const responses = await Promise.all(requests);
@@ -152,6 +158,7 @@ describe('Specs', () => {
 
       const requests = specJsons.map(json => chai.request(app)
         .put('/specs')
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .send(json));
       const responses = await Promise.all(requests);
@@ -177,6 +184,7 @@ describe('Specs', () => {
 
       const res = await chai.request(app)
         .put('/specs')
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .send(specJson);
 
@@ -202,6 +210,7 @@ describe('Specs', () => {
 
       const requests = specJsons.map(json => chai.request(app)
         .put('/specs')
+        .set('Authorization', token)
         .set('Content-Type', 'application/json')
         .send(json));
       const responses = await Promise.all(requests);
@@ -220,7 +229,8 @@ describe('Specs', () => {
   describe('/GET Spec', () => {
     it('It should fail to GET a Spec (not found)', async () => {
       const res = await chai.request(app)
-        .get(`/specs/${nextMockObjectId()}`);
+        .get(`/specs/${nextMockObjectId()}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(404);
       expect(res.body).to.have.all.keys('message');
@@ -233,7 +243,8 @@ describe('Specs', () => {
       await Spec.create(spec);
 
       const res = await chai.request(app)
-        .get(`/specs/${spec.id}`);
+        .get(`/specs/${spec.id}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.have.all.keys(getSpecKeys(spec.type));
@@ -248,7 +259,8 @@ describe('Specs', () => {
   describe('/GET all Specs', () => {
     it('It should GET all the Specs (none)', async () => {
       const res = await chai.request(app)
-        .get('/specs');
+        .get('/specs')
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -270,7 +282,8 @@ describe('Specs', () => {
       await Spec.insertMany(specs);
 
       const res = await chai.request(app)
-        .get('/specs');
+        .get('/specs')
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -292,7 +305,8 @@ describe('Specs', () => {
   describe('/DELETE Spec', () => {
     it('It should DELETE a Spec (not found)', async () => {
       const res = await chai.request(app)
-        .delete(`/specs/${nextMockObjectId()}`);
+        .delete(`/specs/${nextMockObjectId()}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -310,7 +324,8 @@ describe('Specs', () => {
       await Spec.create(spec);
 
       const res = await chai.request(app)
-        .delete(`/specs/${spec.id}`);
+        .delete(`/specs/${spec.id}`)
+        .set('Authorization', token);
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -326,7 +341,8 @@ describe('Specs', () => {
       const job = await nextMockPopulatedJob(Type.ACI);
 
       const res = await chai.request(app)
-        .delete(`/specs/${job.spec.id}`);
+        .delete(`/specs/${job.spec.id}`)
+        .set('Authorization', token);
 
       const remainingJobs = await Job.find({ spec: job.spec.id });
 
