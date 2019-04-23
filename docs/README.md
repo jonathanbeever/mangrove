@@ -1,4 +1,4 @@
-# Mangrove ‒ Design Documentation
+# Mangrove Design Documentation
 
 ## Installation
 Install either [TeX Live](https://www.tug.org/texlive/) or [MiKTeX](https://miktex.org).

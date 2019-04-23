@@ -1,4 +1,4 @@
-# Mangrove ‒ Client
+# Mangrove Client
 
 ## Prerequisites
 Assuming you've cloned this repository and have a terminal open to this directory, you can install the client:

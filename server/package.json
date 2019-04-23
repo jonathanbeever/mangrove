@@ -2,11 +2,19 @@
   "name": "mangrove-server",
   "version": "1.0.0",
   "description": "Data processing and visualization software for soundscape ecology research",
-  "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ucfcs/Fall2018-Group11"
+    "url": "https://github.com/jonathanbeever/mangrove"
   },
+  "license": "GPLv3",
+  "contributors": [
+    "Ot Gabaldon",
+    "Keith Guske",
+    "David Palumbo",
+    "Josh Pollmann",
+    "Brita Ramsay"
+  ],
+  "main": "server.js",
   "scripts": {
     "pretest": "node ./scripts/makeUser.js && eslint --ignore-path ../.gitignore .",
     "test": "cross-env-shell NODE_ENV=test nyc --reporter=text --reporter=html mocha",
@@ -25,14 +33,6 @@
     "docker-clean:darwin:linux": "docker-compose down; docker image rm server_mangrove",
     "docker-clean:win32": "docker-compose down & docker image rm server_mangrove"
   },
-  "contributors": [
-    "Ot Gabaldon",
-    "Keith Guske",
-    "David Palumbo",
-    "Josh Pollmann",
-    "Brita Ramsay"
-  ],
-  "license": "ISC",
   "devDependencies": {
     "chai": "4.2.0",
     "chai-fs": "2.0.0",

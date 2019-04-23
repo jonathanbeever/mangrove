@@ -1,6 +1,19 @@
 {
   "name": "mangrove-client",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Data processing and visualization software for soundscape ecology research",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonathanbeever/mangrove"
+  },
+  "license": "GPLv3",
+  "contributors": [
+    "Ot Gabaldon",
+    "Keith Guske",
+    "David Palumbo",
+    "Josh Pollmann",
+    "Brita Ramsay"
+  ],
   "private": true,
   "dependencies": {
     "@material-ui/core": "3.9.2",
