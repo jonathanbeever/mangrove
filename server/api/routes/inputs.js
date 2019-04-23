@@ -125,7 +125,10 @@ router.put('/', (req, res) => {
           lat: parsedJson.coords.lat,
           long: parsedJson.coords.long,
         },
-        downloadUrl: req.file.path, // TODO: Actual download URL
+        // TODO: Remove this attribute (from here and from Input model), but
+        // keep it in each response. Instead, generate it each time, depending
+        // on whether or not the client is local to the server.
+        downloadUrl: `file:${req.file.path}`,
       });
 
       const createResult = await Input.create(input);
@@ -143,7 +146,7 @@ router.put('/', (req, res) => {
           lat: createResult.coords.lat,
           long: createResult.coords.long,
         },
-        downloadUrl: createResult.downloadUrl, // TODO: Actual download URL
+        downloadUrl: createResult.downloadUrl,
       });
     } catch (err) {
       console.error(err);
@@ -183,7 +186,7 @@ router.get('/:inputId', async (req, res) => {
         lat: searchResult.coords.lat,
         long: searchResult.coords.long,
       },
-      downloadUrl: searchResult.downloadUrl, // TODO: Actual download URL
+      downloadUrl: searchResult.downloadUrl,
     });
   } catch (err) {
     console.error(err);
@@ -218,7 +221,7 @@ router.get('/', async (req, res) => {
           lat: input.coords.lat,
           long: input.coords.long,
         },
-        downloadUrl: input.downloadUrl, // TODO: Actual download link
+        downloadUrl: input.downloadUrl,
       })),
     });
   } catch (err) {

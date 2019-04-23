@@ -56,7 +56,7 @@ const nextMockInput = () => {
 
   const path = nodePath.join(inputDir, site, series, `${recordTimeMs}.wav`);
   storage.copyFile('./test/mock/wav/test.wav', path);
-  const downloadUrl = path;
+  const downloadUrl = `file:${path}`;
 
   return mockInput(
     inputId,
