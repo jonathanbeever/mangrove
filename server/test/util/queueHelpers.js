@@ -3,7 +3,6 @@ const { nextMockPopulatedJob } = require('../../test/mock/mockJob');
 const Type = require('../../api/models/type');
 const Status = require('../../api/models/status');
 
-
 const initCounter = (enumType) => {
   const counter = [];
   Object.keys(enumType).forEach(() => {
@@ -11,19 +10,6 @@ const initCounter = (enumType) => {
   });
 
   return counter;
-};
-
-const printCountsWithNames = (enumType, counts) => {
-  const friendlyCounts = [];
-  let counter = 0;
-  let name;
-  counts.forEach((count) => {
-    name = Object.keys(enumType)[counter];
-    friendlyCounts.push({ [name]: count });
-    counter += 1;
-  });
-
-  console.log(friendlyCounts);
 };
 
 const getCountOfPendingJobs = (counts, maxInQueue = null) => {
@@ -59,5 +45,6 @@ const makeRandomJobs = (numJobs) => {
 
 
 module.exports = {
-  makeRandomJobs, printCountsWithNames, getCountOfPendingJobs,
+  makeRandomJobs,
+  getCountOfPendingJobs,
 };

@@ -6,6 +6,8 @@ const multer = require('multer');
 const mkdirp = require('mkdirp');
 const config = require('config');
 
+const logger = require('../../util/logger');
+
 const { arrayDiff } = require('../../util/array');
 const {
   getUploadPath,
@@ -85,7 +87,7 @@ router.put('/', (req, res) => {
   upload.single('file')(req, res, async (uploadErr) => {
     if (uploadErr) {
       if (uploadErr instanceof multer.MulterError) {
-        console.error(uploadErr);
+        logger.error(uploadErr);
         return res.status(500).json({ error: error.internal });
       }
       return res.status(400).json({
@@ -149,7 +151,7 @@ router.put('/', (req, res) => {
         downloadUrl: createResult.downloadUrl,
       });
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return res.status(500).json({ error: error.internal });
     }
   });
@@ -189,7 +191,7 @@ router.get('/:inputId', async (req, res) => {
       downloadUrl: searchResult.downloadUrl,
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -225,7 +227,7 @@ router.get('/', async (req, res) => {
       })),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -257,7 +259,7 @@ router.delete('/:inputId', async (req, res) => {
       jobs: jobsWithInput.map(job => job.id),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });

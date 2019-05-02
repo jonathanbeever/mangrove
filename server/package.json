@@ -66,6 +66,7 @@
     "r-script": "git+https://git@github.com/khamurdik/r-script.git",
     "rimraf": "2.6.3",
     "run-script-os": "1.0.3",
-    "settings-store": "1.4.1"
+    "settings-store": "1.4.1",
+    "winston": "3.2.1"
   }
 }

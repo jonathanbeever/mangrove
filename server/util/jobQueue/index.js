@@ -1,10 +1,13 @@
 const config = require('config');
 const Queue = require('bull');
 
+const logger = require('../logger');
+
 const Status = require('../../api/models/status');
 const {
   updateJob,
   getPendingJobs,
+  countRemainingJobs,
 } = require('../../api/models/job/utils');
 const settings = require('../settings');
 
@@ -43,15 +46,28 @@ function JobQueue() {
 
     this.queue.on('active', (job) => {
       updateJob(job.data, { status: Status.PROCESSING });
+      if (process.env.NODE_ENV !== 'test') {
+        logger.info(`Processing job ${job.data._id}...`);
+      }
     });
-    this.queue.on('completed', (job, result) => {
+    this.queue.on('completed', async (job, result) => {
       this.queue.clean(0, 'completed');
-      updateJob(job.data, { status: Status.FINISHED, result });
+      if (process.env.NODE_ENV !== 'test') {
+        logger.info(`Finished processing job ${job.data._id}`);
+        const jobCount = await countRemainingJobs();
+        logger.info(`${jobCount} jobs remaining`);
+      }
+      await updateJob(job.data, { status: Status.FINISHED, result });
     });
-    this.queue.on('failed', (job, err) => {
-      console.error(err);
+    this.queue.on('failed', async (job, err) => {
+      logger.error(err);
       this.queue.clean(0, 'failed');
-      updateJob(job.data, { status: Status.FAILED });
+      if (process.env.NODE_ENV !== 'test') {
+        logger.info(`Failed to process job ${job.data._id}`);
+        const jobCount = await countRemainingJobs();
+        logger.info(`${jobCount} jobs remaining`);
+      }
+      await updateJob(job.data, { status: Status.FAILED });
     });
     this.queue.on('stalled', (job) => {
       throw Error(`${job} has stalled`);

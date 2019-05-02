@@ -4,6 +4,8 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const config = require('config');
 
+const logger = require('../../util/logger');
+
 const { Spec } = require('../models/spec');
 const {
   getSpecModel,
@@ -87,7 +89,7 @@ router.put('/', async (req, res) => {
       ...getParamsFromSpec(createResult, Nyquist.user.type),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -116,7 +118,7 @@ router.get('/:specId', async (req, res) => {
       ...getParamsFromSpec(searchResult, Nyquist.user.type),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -141,7 +143,7 @@ router.get('/', async (req, res) => {
       })),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -173,7 +175,7 @@ router.delete('/:specId', async (req, res) => {
       jobs: jobsWithSpec.map(job => job.id),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });

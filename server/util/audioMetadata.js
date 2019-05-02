@@ -3,6 +3,8 @@ const fs = require('fs');
 const execa = require('execa');
 const ffprobe = require('ffprobe-static');
 
+const logger = require('./logger');
+
 const getAudioMetadata = async (path) => {
   if (!fs.existsSync(path)) {
     throw new Error(`File does not exist at path ${path}`);
@@ -26,7 +28,7 @@ const getAudioMetadata = async (path) => {
 
     return metadata;
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     throw new Error(`Failed to get metadata from file: ${path}`);
   }
 };

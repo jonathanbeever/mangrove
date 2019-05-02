@@ -98,6 +98,10 @@ const getPendingJobs = () => Job
   .then(waitingJobs => sortByStatusByTime(waitingJobs))
   .catch(() => { throw new Error('Failed to get pending jobs'); });
 
+const countRemainingJobs = () => Job
+  .countDocuments({ status: { $in: [Status.QUEUED, Status.WAITING] } })
+  .catch(() => { throw new Error('Failed to get count of remaining jobs') });
+
 // FIXME: These are listed in this order because of the R package,
 // `soundecology`. If the ordering of the output parameters changes, then this
 // should also be updated. Otherwise, do NOT change the order. If you do, the
@@ -168,6 +172,7 @@ module.exports = {
   getJobKeys,
   newJobKeys,
   getPendingJobs,
+  countRemainingJobs,
   updateJob,
   getResultKeys,
 };

@@ -4,6 +4,8 @@ const nodePath = require('path');
 const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 
+const logger = require('./logger');
+
 const settings = require('./settings');
 
 settings.load();
@@ -19,7 +21,7 @@ const copyFile = (source, dest) => {
       fs.copyFileSync(source, dest);
     }
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     throw err;
   }
 };

@@ -2,6 +2,8 @@ const http = require('http');
 
 const config = require('config');
 
+const logger = require('./util/logger');
+
 const dbConnection = require('./util/db');
 const app = require('./app');
 const jobQueue = require('./util/jobQueue');
@@ -12,16 +14,20 @@ const server = http.createServer(app);
 global.jobQueue = jobQueue;
 
 async function gracefulShutdown() {
-  process.stdout.write('Closing HTTP server...');
-  await server.close();
-  process.stdout.write('  \tOK\n');
-  process.stdout.write('Closing job queue...');
-  await global.jobQueue.destroy();
-  process.stdout.write('\t\tOK\n');
-  process.stdout.write('Closing database connection...');
-  await dbConnection.close();
-  process.stdout.write('\tOK\n');
-  process.stdout.write('Successfully exited Mangrove server\n');
+  try {
+    logger.info('Closing HTTP server...');
+    await server.close();
+    logger.info('OK');
+    logger.info('Closing job queue...');
+    await global.jobQueue.destroy();
+    logger.info('OK');
+    logger.info('Closing database connection...');
+    await dbConnection.close();
+    logger.info('OK');
+    logger.info('Successfully exited Mangrove server');
+  } catch (err) {
+    logger.error('An error occurred during shutdown', err);
+  }
 }
 
 process.on('SIGINT', async () => {
@@ -39,13 +45,13 @@ process.once('SIGUSR2', async () => {
 
 (async () => {
   try {
-    process.stdout.write('Starting Mangrove server...');
+    logger.info('Starting Mangrove server...');
     await dbConnection.open();
     await global.jobQueue.init();
 
-    server.listen(port, () => process.stdout.write(' Ready\n'));
+    server.listen(port, () => logger.info('Ready'));
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     gracefulShutdown();
     process.exitCode = 1;
   }

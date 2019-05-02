@@ -1,6 +1,8 @@
 const jwkToPem = require('jwk-to-pem');
 const jwt = require('jsonwebtoken');
 
+const logger = require('./logger');
+
 // Public key from https://cognito-idp.us-east-2.amazonaws.com/us-east-2_GP7h1WmOF/.well-known/jwks.json
 const body = {
   keys: [{
@@ -28,10 +30,9 @@ const verify = (token) => {
     pems[keyID] = jwkToPem(jwk);
   }
 
-  // console.log(token);
   const decodedJwt = jwt.decode(token, { complete: true });
   if (!decodedJwt) {
-    console.log('Not a valid JWT');
+    logger.info('Not a valid JWT');
     return false;
   }
 
@@ -39,7 +40,7 @@ const verify = (token) => {
   const pem = pems[kid];
 
   if (!pem) {
-    console.log('Key not found');
+    logger.info('Key not found');
     return false;
   }
 
@@ -54,7 +55,7 @@ const verify = (token) => {
 const getUser = (token) => {
   const decodedJwt = jwt.decode(token, { complete: true });
   if (!decodedJwt) {
-    console.log('Not a valid JWT');
+    logger.info('Not a valid JWT');
     return 'MISSINGNO.';
   }
 

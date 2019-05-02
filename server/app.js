@@ -3,7 +3,6 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const config = require('config');
 const cors = require('cors');
 
 require('./util/settings').load();
@@ -12,7 +11,7 @@ const inputRoutes = require('./api/routes/inputs');
 const jobRoutes = require('./api/routes/jobs');
 const specRoutes = require('./api/routes/specs');
 
-if (config.util.getEnv('NODE_ENV') !== 'test') app.use(morgan('dev'));
+if (process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({

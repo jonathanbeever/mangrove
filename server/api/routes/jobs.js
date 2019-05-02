@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 const config = require('config');
 
+const logger = require('../../util/logger');
+
 const { Job } = require('../models/job');
 const { Spec } = require('../models/spec');
 const Input = require('../models/input');
@@ -106,7 +108,7 @@ router.put('/', async (req, res) => {
       status: enqueueResult.status,
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -141,7 +143,7 @@ router.get('/:jobId', async (req, res) => {
       }),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -172,7 +174,7 @@ router.get('/', async (req, res) => {
       })),
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
@@ -197,7 +199,7 @@ router.delete('/:jobId', async (req, res) => {
         : `No valid entry found for jobId: ${jobId}.`,
     });
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return res.status(500).json({ error: error.internal });
   }
 });
