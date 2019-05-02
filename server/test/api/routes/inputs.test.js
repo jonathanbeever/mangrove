@@ -38,7 +38,7 @@ const inputDir = settings.value('inputDir');
 
 const testInputFile = './test/mock/wav/test.wav';
 
-const { token } = require('../../../util/testUser.js');
+const { token } = require('../../../test/testUser.js');
 
 chai.use(chaiFs);
 chai.use(chaiHttp);

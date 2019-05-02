@@ -28,7 +28,7 @@ const Type = require('../../../api/models/type');
 const Param = require('../../../api/models/spec/param');
 const Nyquist = require('../../../api/models/spec/nyquist');
 
-const { token } = require('../../../util/testUser.js');
+const { token } = require('../../../test/testUser.js');
 
 const { expect } = chai;
 

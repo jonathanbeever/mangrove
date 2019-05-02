@@ -1,7 +1,7 @@
 # Testing
 coverage
 .nyc_output
-testUser.js
+test/testUser.js
 
 # Package management
 node_modules

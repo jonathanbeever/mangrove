@@ -36,7 +36,7 @@ const statuses = Object.values(Status);
 const statusesNotFinished = statuses.slice();
 statusesNotFinished.splice(statusesNotFinished.indexOf(Status.FINISHED), 1);
 
-const { token } = require('../../../util/testUser.js');
+const { token } = require('../../../test/testUser.js');
 
 describe('Jobs', () => {
   before(async () => {

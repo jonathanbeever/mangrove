@@ -24,7 +24,7 @@ cognitoUser.authenticateUser(authenticationDetails, {
   onSuccess(result) {
     const token = result.idToken.jwtToken;
 
-    fs.writeFile('util/testUser.js', quine1 + token + quine2, (err) => {
+    fs.writeFile('test/testUser.js', quine1 + token + quine2, (err) => {
       if (err) {
         console.log(err);
       }
