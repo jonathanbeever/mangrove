@@ -28,11 +28,11 @@ $ cd ~/Desktop
 ```
 Once you're there, you can clone this repository:
 ```
-$ git clone https://github.com/ucfcs/Fall2018-Group11
+$ git clone https://github.com/jonathanbeever/mangrove
 ```
 That will create the `~/Desktop/Fall2018-Group11` directory, containing the entirety of Mangrove. We can then go into the server and install its dependencies using `npm`:
 ```
-$ cd Fall2018-Group11/server
+$ cd mangrove/server
 $ npm install
 ```
 
@@ -135,6 +135,6 @@ $ npm run lint-fix
 
 This application requires manual dependency updates. The easiest way to do this is to globally install the `npm-check-updates` package to your system and to periodically run `ncu` in this directory to find packages that are ready to be updated. Do not install this package to the project.
 ```
-$ npm install -g npm-check-update
+$ npm install -g npm-check-updates
 $ ncu
 ```
