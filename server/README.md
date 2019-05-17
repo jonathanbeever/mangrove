@@ -30,7 +30,7 @@ Once you're there, you can clone this repository:
 ```
 $ git clone https://github.com/jonathanbeever/mangrove
 ```
-That will create the `~/Desktop/Fall2018-Group11` directory, containing the entirety of Mangrove. We can then go into the server and install its dependencies using `npm`:
+That will create the `~/Desktop/mangrove` directory, containing the entirety of Mangrove. We can then go into the server and install its dependencies using `npm`:
 ```
 $ cd mangrove/server
 $ npm install
