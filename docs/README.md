@@ -5,7 +5,7 @@ Install either [TeX Live](https://www.tug.org/texlive/) or [MiKTeX](https://mikt
 
 You may also need to install one or more of the following:
 * `biber`
-* `pygmentize` (via pip)
+* `Pygments` (via pip)
 * `fvextra`
 
 Make sure that these are accessible via the terminal.
