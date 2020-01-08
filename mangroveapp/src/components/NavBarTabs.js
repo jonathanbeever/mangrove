@@ -59,10 +59,10 @@ class NavBarTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="fixed" className={classes.background}>
+        <AppBar position="static" className={classes.background}>
           <Toolbar>
             <div className="col-3">
-              <h2 className={classes.title}><span style={{float: "left"}}><a style={{ color:"#fdc907", textDecoration:'none' }} href="" onClick={this.handleMangroveClick}><img style={{filter: 'invert(1)', marginRight: 5+'px', marginBottom: 5+'px'}} src={image} alt="Mangrove Logo"/>Mangrove</a></span></h2>
+              <h2  position="relative" className={classes.title}><span style={{float: "left"}}><a style={{ color:"#fdc907", textDecoration:'none' }} href="" onClick={this.handleMangroveClick}><img style={{filter: 'invert(1)', marginRight: 5+'px', marginBottom: 5+'px'}} src={image} alt="Mangrove Logo"/></a></span></h2>
             </div>
             <div className="col-8" style={{paddingRight: 15+'%'}}>
               <Tabs value={value}
@@ -84,6 +84,12 @@ class NavBarTabs extends React.Component {
                 <Tab value={2}
                   label="Job Queue"
                   to="/jobQueue"
+                  style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
+                  activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
+                  component={NavLink} />
+                <Tab value={3}
+                  label="Log Out"
+                  to="/index.html"
                   style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
                   activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
                   component={NavLink} />
