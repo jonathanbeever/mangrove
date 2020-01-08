@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+    api:
+        build:
+            dockerfile: Dockerfile
+            context: ./server
+        volumes:
+            - /app/node_modules
+            - ./server:/app
+        ports:
+            - '34251:34251'
+            - '27017:27017'
+            - '6379:6379'
+        restart: on-failure
+        container_name: api
+        image: jgupchurch/mangrove-api-dev
+    
+    client:
+        build:
+            dockerfile: Dockerfile
+            context: ./client
+        volumes:
+            - /app/node_modules
+            - ./server:/app
+        ports:
+            - '3000:3000'
+        restart: on-failure
+        container_name: client
+        image: jgupchurch/mangrove-client-dev
