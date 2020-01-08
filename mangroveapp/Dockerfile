@@ -1,8 +1,8 @@
-FROM archlinux/base
+FROM node:10-alpine
 
-WORKDIR /app
+WORKDIR /
 
-COPY package*.json .
+COPY package*.json /
 
 RUN npm install
 
