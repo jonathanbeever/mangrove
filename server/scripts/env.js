@@ -6,7 +6,7 @@
 const settings = require('../util/settings');
 
 settings.load();
-
+console.error(process.argv[2]);
 switch (process.argv[2]) {
   case undefined:
     break;

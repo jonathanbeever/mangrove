@@ -3,7 +3,7 @@ services:
 
   mangrove:
     container_name: mangrove-server
-    build: .
+    build: ./
     environment:
       - DOCKER_MANGROVE=yes
       - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
@@ -31,3 +31,4 @@ services:
     image: redis
     ports:
       - "34253:6379"
+

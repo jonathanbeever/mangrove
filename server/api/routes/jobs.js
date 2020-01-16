@@ -22,6 +22,10 @@ const { verify, getUser } = require('../../util/verify');
 
 const error = config.get('error');
 
+router.get('/hello', async (req, res) => {
+  return res.status(200).json({ hello: 'world' });
+});
+
 // Create Job
 router.put('/', async (req, res) => {
   const token = req.get('Authorization');
@@ -115,6 +119,18 @@ router.put('/', async (req, res) => {
 
 // Get Job
 router.get('/:jobId', async (req, res) => {
+  if (jobId == '-1')
+  {
+    return res.status(200).json({
+      hello: 'world'
+    });
+  } else
+  {
+    return res.status(404).json({
+      message: 'Not -1'
+    });
+  }
+
   const { jobId } = req.params;
   const token = req.get('Authorization');
 

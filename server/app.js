@@ -7,6 +7,7 @@ const cors = require('cors');
 
 require('./util/settings').load();
 
+// TODO: Potentially add one router to house these paths
 const inputRoutes = require('./api/routes/inputs');
 const jobRoutes = require('./api/routes/jobs');
 const specRoutes = require('./api/routes/specs');
@@ -20,9 +21,14 @@ app.use(cors({
   methods: 'PUT, POST, DELETE, GET',
 }));
 
+// TODO: Potentially fix
 app.use('/inputs', inputRoutes);
 app.use('/jobs', jobRoutes);
 app.use('/specs', specRoutes);
+
+app.get('/', (req, res) => {
+  res.send("it's working");
+})
 
 app.use((req, res, next) => {
   const error = new Error('Not found');

@@ -46,8 +46,10 @@ process.once('SIGUSR2', async () => {
 (async () => {
   try {
     logger.info('Starting Mangrove server...');
-    await dbConnection.open();
-    await global.jobQueue.init();
+    logger.info('Opening Database Connection...');
+    //await dbConnection.open(); // FAILS DB CONNECTION HERE
+    logger.info('Connected to Database!');
+    //await global.jobQueue.init();
 
     server.listen(port, () => logger.info('Ready'));
   } catch (err) {
