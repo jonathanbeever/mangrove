@@ -1,23 +1,24 @@
 version: '3'
 
 services:
-    mangrove:
-        container_name: mangrove-server
-        build: 
-            context: ./server/
-        environment:
-          - DOCKER_MANGROVE=yes
-          - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
-        command:
-          - $CMD
-        volumes:
-          - $MANGROVE_INPUT_DIR:$MANGROVE_INPUT_DIR
-          - ../server/:/mangrove
-        ports:
-          - "34251:34251"
-        depends_on:
-          - mongodb
-          - redis
+    # mangrove:
+    #     container_name: mangrove-server
+    #     build: 
+    #         context: ./server/
+    #     environment:
+    #       - DOCKER_MANGROVE=yes
+    #       - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
+    #     command:
+    #       - $CMD
+    #     volumes:
+    #       - $MANGROVE_INPUT_DIR:$MANGROVE_INPUT_DIR
+    #       - ../server/:/mangrove
+    #     ports:
+    #       - "34251:34251"
+    #     depends_on:
+    #       - client
+    #       - mongodb
+    #       - redis
 
     mongodb:
         container_name: mangrove-server-mongodb
@@ -36,6 +37,7 @@ services:
     client:
         build:
             context: ./mangroveapp
+        command: npm start
         volumes:
             - /app/node_modules
             - ./mangroveapp:/app
@@ -44,5 +46,3 @@ services:
         restart: on-failure
         container_name: client
         image: jgupchurch/mangrove-client-dev
-        depends_on:
-            - mangrove
