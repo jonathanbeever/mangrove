@@ -1,6 +1,7 @@
 FROM archlinux/base
 
-RUN pacman -Syyu --noconfirm
+RUN ["pacman", "-Sy", "archlinux-keyring", "--noconfirm"]
+RUN ["pacman", "-Syyu", "--noconfirm"]
 
 RUN ["pacman", "-S", "--noconfirm", "--needed", "base-devel", "gcc-fortran"]
 
