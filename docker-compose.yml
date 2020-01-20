@@ -4,7 +4,7 @@ services:
     mangrove:
         container_name: mangrove-server
         build: 
-            context: ./server/
+            context: ./server
         environment:
           - DOCKER_MANGROVE=yes
           - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
@@ -12,13 +12,11 @@ services:
           - $CMD
         volumes:
           - $MANGROVE_INPUT_DIR:$MANGROVE_INPUT_DIR
-          - ../server/:/mangrove
+          - ./server:/mangrove
         ports:
           - "34251:34251"
         depends_on:
-          - client
           - mongodb
-          - redis
 
     mongodb:
         container_name: mangrove-server-mongodb
@@ -27,6 +25,8 @@ services:
             - $MANGROVE_HOME/db:/data/db
         ports:
             - "34252:27017"
+        depends_on: 
+          - redis
 
     redis:
         container_name: mangrove-server-redis
@@ -45,4 +45,6 @@ services:
             - '3000:3000'
         restart: on-failure
         container_name: client
-        image: jgupchurch/mangrove-client-dev
+        image: mangrove-client
+        depends_on: 
+          - mangrove
