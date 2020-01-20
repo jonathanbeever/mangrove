@@ -1,24 +1,24 @@
 version: '3'
 
 services:
-    # mangrove:
-    #     container_name: mangrove-server
-    #     build: 
-    #         context: ./server/
-    #     environment:
-    #       - DOCKER_MANGROVE=yes
-    #       - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
-    #     command:
-    #       - $CMD
-    #     volumes:
-    #       - $MANGROVE_INPUT_DIR:$MANGROVE_INPUT_DIR
-    #       - ../server/:/mangrove
-    #     ports:
-    #       - "34251:34251"
-    #     depends_on:
-    #       - client
-    #       - mongodb
-    #       - redis
+    mangrove:
+        container_name: mangrove-server
+        build: 
+            context: ./server/
+        environment:
+          - DOCKER_MANGROVE=yes
+          - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
+        command:
+          - $CMD
+        volumes:
+          - $MANGROVE_INPUT_DIR:$MANGROVE_INPUT_DIR
+          - ../server/:/mangrove
+        ports:
+          - "34251:34251"
+        depends_on:
+          - client
+          - mongodb
+          - redis
 
     mongodb:
         container_name: mangrove-server-mongodb
