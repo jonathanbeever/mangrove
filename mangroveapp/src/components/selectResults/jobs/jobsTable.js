@@ -212,9 +212,14 @@ class EnhancedTable extends React.Component {
   };
 
   componentDidMount = () => {
-    var data = this.props.filteredJobs.map(job => {
-      return createData(job.jobId, this.props.indexedSpecsById[job.spec].type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
-    })
+    var data = [];
+
+    if(this.props.filteredJobs != null){
+      data = this.props.filteredJobs.map(job => {
+        return createData(job.jobId, this.props.indexedSpecsById[job.spec].type, job.author, job.creationTimeMs, this.props.indexedFiles[job.input])
+      })
+    }
+    
     this.setState({data: data})
   }
 
