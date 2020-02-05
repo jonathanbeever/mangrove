@@ -7,7 +7,8 @@ import Catalog from './components/selectResults/catalog';
 import JobQueue from './components/jobQueue/jobQueue';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import Login from './components/login';
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col } from 'react-bootstrap';
+
 
 
 const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
