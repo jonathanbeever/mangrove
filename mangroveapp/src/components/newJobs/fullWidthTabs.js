@@ -10,6 +10,7 @@ import UploadsTable from './uploadInputsTable';
 import Button from '@material-ui/core/Button';
 import SearchInputs from './searchInputs';
 import AutomateInputProperties from './automateInputProperties';
+import { Container, Row, Col } from 'reactstrap';
 
 function TabContainer({ children, dir }) {
   return (
