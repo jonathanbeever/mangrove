@@ -6,7 +6,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "start-dev": "cd server && npm run docker-dev"
+    "start-dev": "cd server && npm run docker-dev",
+    "build-dev": "cd server && npm run docker-build"
   },
   "repository": {
     "type": "git",
@@ -17,5 +18,6 @@
   "bugs": {
     "url": "https://github.com/RyomaBF/mangrove/issues"
   },
-  "homepage": "https://github.com/RyomaBF/mangrove#readme"
+  "homepage": "https://github.com/RyomaBF/mangrove#readme",
+  "dependencies": {}
 }

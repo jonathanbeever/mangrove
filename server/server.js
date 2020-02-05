@@ -43,18 +43,19 @@ process.once('SIGUSR2', async () => {
   process.kill(process.pid, 'SIGUSR2');
 });
 
-(async () => {
-  try {
-    logger.info('Starting Mangrove server...');
-    logger.info('Opening Database Connection...');
-    //await dbConnection.open(); // FAILS DB CONNECTION HERE
-    logger.info('Connected to Database!');
-    //await global.jobQueue.init();
-
-    server.listen(port, () => logger.info('Ready'));
-  } catch (err) {
-    logger.error(err);
-    gracefulShutdown();
-    process.exitCode = 1;
-  }
-})();
+setTimeout(() => {
+  (async () => {
+    try {
+      logger.info('Starting Mangrove server...');
+      logger.info('Opening Database Connection...');
+      await dbConnection.open(); // FAILS DB CONNECTION HERE
+      logger.info('Connected to Database!');
+      await global.jobQueue.init();
+      server.listen(port, () => logger.info('Ready'));
+    } catch (err) {
+      logger.error(err);
+      gracefulShutdown();
+      process.exitCode = 1;
+    }
+  })();
+}, 2000);
