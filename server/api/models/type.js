@@ -5,6 +5,7 @@ const Type = Object.freeze({
   BI: 'bi',
   NDSI: 'ndsi',
   RMS: 'rms',
+  ML: 'ml',
 });
 
 module.exports = Type;

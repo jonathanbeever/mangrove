@@ -7,6 +7,7 @@ const JobType = Object.freeze({
   BI: `${Type.BI}Job`,
   NDSI: `${Type.NDSI}Job`,
   RMS: `${Type.RMS}Job`,
+  ML: `${Type.ML}Job`,
 });
 
 module.exports = JobType;
