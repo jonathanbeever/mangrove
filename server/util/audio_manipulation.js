@@ -1,11 +1,11 @@
-const child_process = require('child_process');
-const audio_duration = require('get-audio-duration');
+const childProcess = require('child_process');
+const audioDuration = require('get-audio-duration');
 
 // Splits file into 10 second intervals
 // Returns array of <=10 second audio files
 const splitFile = async (file) => {
-  const duration = await audio_duration.getAudioDurationInSeconds(file.path);
-  let fileSegments = [];
+  const duration = await audioDuration.getAudioDurationInSeconds(file.path);
+  const fileSegments = [];
 
   // initialize start end times for trimming
   let start = 0;
@@ -13,7 +13,7 @@ const splitFile = async (file) => {
 
   // while the current segment is not longer than the end of the file
   while (start + segLength <= duration) {
-    const soxProcess = child_process.spawn;
+    const soxProcess = childProcess.spawn;
 
     // trim the file using the start and end times
     const process = soxProcess('sox', ['--ignore-length', file.path, `${file.path}_${start}_${segLength}.wav`, 'trim', start, segLength]);
@@ -47,7 +47,7 @@ const generateSpectrograms = (files) => {
     const fileSegments = await splitFile(file);
 
     fileSegments.forEach((fileSegment) => {
-      const soxProcess = child_process.spawn;
+      const soxProcess = childProcess.spawn;
 
       // generate spectrogram
       const process = soxProcess('sox', [fileSegment, '-n', 'spectrogram', '-o', `${fileSegment}.png`]);
