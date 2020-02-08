@@ -11,6 +11,7 @@ require('./util/settings').load();
 const inputRoutes = require('./api/routes/inputs');
 const jobRoutes = require('./api/routes/jobs');
 const specRoutes = require('./api/routes/specs');
+const mlRoutes = require('./api/routes/ml');
 
 if (process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,6 +26,7 @@ app.use(cors({
 app.use('/inputs', inputRoutes);
 app.use('/jobs', jobRoutes);
 app.use('/specs', specRoutes);
+app.use('/ml', mlRoutes);
 
 app.get('/', (req, res) => {
   res.send("it's working");
