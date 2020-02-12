@@ -5,10 +5,9 @@ const dbConfig = config.get('dbConfig');
 
 const uri = () => {
   if (process.env.DOCKER_MANGROVE === 'yes') {
-    console.log("DOCKER_MANGROVE was YES");
     return `mongodb://${dbConfig.host.docker}:${dbConfig.port}/${dbConfig.dbName}`;
   }
-  console.log("DOCKER_MANGROVE was NO");
+
   return `mongodb://${dbConfig.host.local}:${dbConfig.port}/${dbConfig.dbName}`;
 };
 

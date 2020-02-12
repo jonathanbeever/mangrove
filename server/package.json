@@ -31,7 +31,8 @@
     "docker-clean": "run-script-os",
     "docker-clean:darwin:linux": "docker-compose down; docker image prune -af",
     "docker-clean:win32": "docker-compose down & docker image prune -af",
-    "docker-build": "npm run predocker cross-env-shell CMD=dev docker-compose build"
+    "docker-build": "npm run predocker cross-env-shell CMD=dev docker-compose build",
+    "debug": "nodemon --nolazy --inspect server.js"
   },
   "devDependencies": {
     "chai": "4.2.0",
