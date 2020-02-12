@@ -1,10 +1,7 @@
 const childProcess = require('child_process');
 const audioDuration = require('get-audio-duration');
 
-// Splits file into 10 second intervals
-// Returns array of <=10 second audio files
-const splitFile = async (file) => {
-  const duration = await audioDuration.getAudioDurationInSeconds(file.path);
+const createFileSegments = async (duration, file) => {
   const fileSegments = [];
 
   // initialize start end times for trimming
@@ -41,22 +38,45 @@ const splitFile = async (file) => {
   return fileSegments;
 };
 
+// Splits file into 10 second intervals
+// Returns array of <=10 second audio files
+const splitFile = async (file) => {
+  const duration = await audioDuration.getAudioDurationInSeconds(file.path);
+
+  return (async () => {
+    const data = await createFileSegments(duration, file);
+    return data;
+  })();
+};
+
+const runSoxSpectrogram = async (fileSegment) => {
+  const soxProcess = childProcess.spawn;
+
+  // generate spectrogram
+  const process = soxProcess('sox', [fileSegment, '-n', 'spectrogram', '-o', `${fileSegment}.png`]);
+
+  // output the child process outputs
+  process.stdout.on('data', data => console.log(data.toString()));
+  process.stderr.on('data', data => console.log(data.toString()));
+
+  return `${fileSegment}.png`;
+};
+
 // Creates list of spectrograms for array of sound files
-const generateSpectrograms = (files) => {
-  files.forEach(async (file) => {
-    const fileSegments = await splitFile(file);
+const generateSpectrograms = async (files) => {
+  const spectrograms = [];
 
-    fileSegments.forEach((fileSegment) => {
-      const soxProcess = childProcess.spawn;
+  for (const file of files) {
+    const fileSegments = await splitFile(file).then(value => value);
 
-      // generate spectrogram
-      const process = soxProcess('sox', [fileSegment, '-n', 'spectrogram', '-o', `${fileSegment}.png`]);
+    for (const fileSegment of fileSegments) {
+      const data = await runSoxSpectrogram(fileSegment).then(value => value);
 
-      // output the child process outputs
-      process.stdout.on('data', data => console.log(data.toString()));
-      process.stderr.on('data', data => console.log(data.toString()));
-    });
-  });
+      spectrograms.push(data);
+    }
+  }
+
+  return spectrograms;
 };
 
 module.exports = {
