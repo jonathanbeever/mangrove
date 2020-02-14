@@ -52,7 +52,7 @@
     "styled-components": "4.2.0",
     "top-bar-nav": "1.2.2",
     "wait-on": "3.2.0",
-    "yarn": "1.15.2"
+    "yarn": "1.22.0"
   },
   "main": "public/electron.js",
   "scripts": {
