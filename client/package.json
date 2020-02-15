@@ -19,7 +19,7 @@
     "@material-ui/core": "3.9.2",
     "@material-ui/icons": "3.0.2",
     "amazon-cognito-identity-js": "3.0.9",
-    "axios": "0.18.0",
+    "axios": "0.19.2",
     "concurrently": "4.1.0",
     "d3-array": "2.0.3",
     "d3-axis": "1.0.12",
