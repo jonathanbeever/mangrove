@@ -1,7 +1,6 @@
 const express = require('express');
 
 const router = express.Router();
-const mongoose = require('mongoose');
 const multer = require('multer');
 const mkdirp = require('mkdirp');
 const config = require('config');
@@ -9,14 +8,11 @@ const config = require('config');
 const logger = require('../../util/logger');
 
 const { arrayDiff } = require('../../util/array');
-const {
-  getUploadPath,
-  deleteInputFile,
-} = require('../../util/storage');
+const { getUploadPath } = require('../../util/storage');
 const { getAudioMetadata } = require('../../util/audioMetadata');
 
-const Input = require('../models/input');
-const { Job } = require('../models/job');
+const DAinputs = require('../../data_access/inputs/DAinputs');
+
 const {
   parseInputJson,
   getNewFilename,
@@ -113,43 +109,9 @@ router.put('/', (req, res) => {
         ? parsedJson.name
         : getExtensionlessFilename(req.file.originalname);
 
-      const input = new Input({
-        _id: new mongoose.Types.ObjectId(),
-        path: req.file.path,
-        site: parsedJson.site,
-        series: parsedJson.series,
-        name,
-        recordTimeMs: parsedJson.recordTimeMs,
-        durationMs: audioMetadata.durationMs,
-        sampleRateHz: audioMetadata.sampleRateHz,
-        sizeBytes: audioMetadata.sizeBytes,
-        coords: {
-          lat: parsedJson.coords.lat,
-          long: parsedJson.coords.long,
-        },
-        // TODO: Remove this attribute (from here and from Input model), but
-        // keep it in each response. Instead, generate it each time, depending
-        // on whether or not the client is local to the server.
-        downloadUrl: `file:${req.file.path}`,
-      });
+      const input = await DAinputs.CreateInput(name, req.file.path, parsedJson, audioMetadata);
 
-      const createResult = await Input.create(input);
-
-      return res.status(201).json({
-        inputId: createResult._id,
-        site: createResult.site,
-        series: createResult.series,
-        name: createResult.name,
-        recordTimeMs: createResult.recordTimeMs,
-        durationMs: createResult.durationMs,
-        sampleRateHz: createResult.sampleRateHz,
-        sizeBytes: createResult.sizeBytes,
-        coords: {
-          lat: createResult.coords.lat,
-          long: createResult.coords.long,
-        },
-        downloadUrl: createResult.downloadUrl,
-      });
+      return res.status(201).json(input);
     } catch (err) {
       logger.error(err);
       return res.status(500).json({ error: error.internal });
@@ -167,7 +129,7 @@ router.get('/:inputId', async (req, res) => {
     if (!isAllowed) {
       return res.status(401).json({ error: 'Invalid login' });
     }
-    const searchResult = await Input.findById(inputId).exec();
+    const searchResult = await DAinputs.GetInputById(inputId);
 
     if (!searchResult) {
       return res.status(404).json({
@@ -175,21 +137,7 @@ router.get('/:inputId', async (req, res) => {
       });
     }
 
-    return res.status(200).json({
-      inputId: searchResult._id,
-      site: searchResult.site,
-      series: searchResult.series,
-      name: searchResult.name,
-      recordTimeMs: searchResult.recordTimeMs,
-      durationMs: searchResult.durationMs,
-      sampleRateHz: searchResult.sampleRateHz,
-      sizeBytes: searchResult.sizeBytes,
-      coords: {
-        lat: searchResult.coords.lat,
-        long: searchResult.coords.long,
-      },
-      downloadUrl: searchResult.downloadUrl,
-    });
+    return res.status(200).json(searchResult);
   } catch (err) {
     logger.error(err);
     return res.status(500).json({ error: error.internal });
@@ -206,26 +154,9 @@ router.get('/', async (req, res) => {
       return res.status(401).json({ error: 'Invalid login' });
     }
 
-    const searchResult = await Input.find().exec();
+    const searchResult = await DAinputs.GetInputs();
 
-    return res.status(200).json({
-      count: searchResult.length,
-      inputs: searchResult.map(input => ({
-        inputId: input._id,
-        site: input.site,
-        series: input.series,
-        name: input.name,
-        recordTimeMs: input.recordTimeMs,
-        durationMs: input.durationMs,
-        sampleRateHz: input.sampleRateHz,
-        sizeBytes: input.sizeBytes,
-        coords: {
-          lat: input.coords.lat,
-          long: input.coords.long,
-        },
-        downloadUrl: input.downloadUrl,
-      })),
-    });
+    return res.status(200).json(searchResult);
   } catch (err) {
     logger.error(err);
     return res.status(500).json({ error: error.internal });
@@ -242,14 +173,9 @@ router.delete('/:inputId', async (req, res) => {
     if (!isAllowed) {
       return res.status(401).json({ error: 'Invalid login' });
     }
-    const deleteResult = await Input.findOneAndDelete({ _id: inputId }).exec();
-    if (deleteResult) deleteInputFile(deleteResult.path);
 
-    let jobsWithInput = [];
-    if (deleteResult) {
-      jobsWithInput = await Job.find({ input: inputId });
-      await Job.deleteMany({ input: inputId });
-    }
+    const deleteResults = await DAinputs.DeleteInput(inputId);
+    const { deleteResult, jobsWithInput } = deleteResults;
 
     return res.status(200).json({
       success: true,
