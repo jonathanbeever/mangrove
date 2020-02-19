@@ -4,21 +4,21 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const config = require('config');
 
-const logger = require('../../util/logger');
+const logger = require('../../../util/logger');
 
-const { Spec } = require('../models/spec');
+const { Spec } = require('../../models/spec');
 const {
   getSpecModel,
   newSpecKeys,
   getParamsFromSpec,
   fillDefaultParams,
-} = require('../models/spec/utils');
-const { getJobModel } = require('../models/job/utils');
-const Type = require('../models/type');
-const Nyquist = require('../models/spec/nyquist');
+} = require('../../models/spec/utils');
+const { getJobModel } = require('../../models/job/utils');
+const Type = require('../../models/type');
+const Nyquist = require('../../models/spec/nyquist');
 
-const { arrayDiff } = require('../../util/array');
-const { verify } = require('../../util/verify');
+const { arrayDiff } = require('../../../util/array');
+const { verify } = require('../../../util/verify');
 
 
 const error = config.get('error');

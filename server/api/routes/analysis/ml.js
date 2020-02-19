@@ -4,8 +4,8 @@ const router = express.Router();
 
 const multer = require('multer');
 
-const { generateSpectrograms } = require('../../util/audio_manipulation');
-const { runPredictions } = require('../../util/ai/runPredictions');
+const { generateSpectrograms } = require('../../../util/audio_manipulation');
+const { runPredictions } = require('../../../util/ai/runPredictions');
 
 // TODO: Fix upload destination
 const upload = multer({ dest: 'temp' });

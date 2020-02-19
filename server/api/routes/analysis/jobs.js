@@ -5,19 +5,19 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 const config = require('config');
 
-const logger = require('../../util/logger');
+const logger = require('../../../util/logger');
 
-const { Job } = require('../models/job');
-const { Spec } = require('../models/spec');
-const Input = require('../models/input');
+const { Job } = require('../../models/job');
+const { Spec } = require('../../models/spec');
+const Input = require('../../models/input');
 const {
   getJobModel,
   newJobKeys,
-} = require('../models/job/utils');
-const Status = require('../models/status');
+} = require('../../models/job/utils');
+const Status = require('../../models/status');
 
-const { arrayDiff } = require('../../util/array');
-const { verify, getUser } = require('../../util/verify');
+const { arrayDiff } = require('../../../util/array');
+const { verify, getUser } = require('../../../util/verify');
 
 const error = config.get('error');
 
