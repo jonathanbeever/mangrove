@@ -27,8 +27,6 @@ router.put('/mlJob', upload.any(), async (req, res) => {
   const predictions = runPredictions(spectrograms);
 
   res.status(200).json(predictions);
-
-  // res.status(200).json({ predictions });
 });
 
 module.exports = router;

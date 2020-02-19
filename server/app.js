@@ -7,7 +7,6 @@ const cors = require('cors');
 
 require('./util/settings').load();
 
-// TODO: Potentially add one router to house these paths
 const router = require('./api/routes/router');
 
 if (process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
