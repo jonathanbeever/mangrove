@@ -4,6 +4,7 @@ const AeiSpec = require('./aei');
 const BiSpec = require('./bi');
 const NdsiSpec = require('./ndsi');
 const RmsSpec = require('./rms');
+const MlSpec = require('./ml');
 
 const Type = require('../type');
 const Param = require('./param');
@@ -17,6 +18,7 @@ const getSpecModel = (type) => {
     case Type.BI: return BiSpec;
     case Type.NDSI: return NdsiSpec;
     case Type.RMS: return RmsSpec;
+    case Type.ML: return MlSpec;
     default: throw new Error(`Invalid \`type\` parameter (${type}).`);
   }
 };

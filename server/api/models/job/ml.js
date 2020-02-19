@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Job = require('./job');
 const JobType = require('../jobType');
 const Type = require('../type');
+const SoundType = require('./results/sounds');
 
 module.exports = Job.discriminator(JobType.ML, new mongoose.Schema({
   spec: {
@@ -9,9 +10,22 @@ module.exports = Job.discriminator(JobType.ML, new mongoose.Schema({
     ref: Type.ML,
     required: true,
   },
+
   result: {
     type: {
-      sounds: Array,
+      // Sound Type enums for the ML model to return
+      // Must include all possible classes
+      sound: {
+        type: String,
+        enum: [
+          // TODO: Add actual classes -> Plane / Train used as examples
+          SoundType.Plane,
+          SoundType.Train,
+        ],
+      },
+
+      // Number representing model's confidence in the sound type identified
+      confidence: Number,
     },
     default: null,
   },
