@@ -11,7 +11,7 @@ const { arrayDiff } = require('../../../util/array');
 const { getUploadPath } = require('../../../util/storage');
 const { getAudioMetadata } = require('../../../util/audioMetadata');
 
-const DAinputs = require('../../../data_access/inputs/DAinputs');
+const DAinputs = require('../../../data_access/inputs/daInputs');
 
 const {
   parseInputJson,
