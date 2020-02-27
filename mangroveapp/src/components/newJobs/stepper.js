@@ -569,14 +569,14 @@ class HorizontalLinearStepper extends React.Component {
           </Dialog>
           <div>
             {getStepContent(activeStep, this)}
-            <div style={{float: 'right'}}>
+            {/*<div style={{float: 'right'}}>
               <Button
                 disabled={activeStep === 0}
                 onClick={this.handleBack}
                 style={{backgroundColor:"#b6cd26", margin: 7}}
                 className={classes.button}
               >
-                Back
+                Back2
               </Button>
               <Button
                 style={{backgroundColor:"#b6cd26", margin: 7, marginRight: 17}}
@@ -594,8 +594,8 @@ class HorizontalLinearStepper extends React.Component {
                   )
                 }
               </Button>
-            </div>
-          </div>
+            </div>*/}
+              </div>
         </div>
       </div>
     );
