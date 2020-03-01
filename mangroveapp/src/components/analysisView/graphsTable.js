@@ -99,6 +99,8 @@ class GraphsTable extends React.Component {
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
                     audioCallback={this.props.audioCallback}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+                    mainJob={this.props.mainJob}
                   />}
                 />
               )
@@ -113,6 +115,7 @@ class GraphsTable extends React.Component {
                     dataKey3='aciLeftC'
                     dataKey4='aciRightC'
                     audioCallback={this.props.audioCallback}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -145,6 +148,7 @@ class GraphsTable extends React.Component {
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
                     audioCallback={this.props.audioCallback}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -175,6 +179,7 @@ class GraphsTable extends React.Component {
                   dataKey3='aciLeftC'
                   dataKey4='aciRightC'
                   audioCallback={this.props.audioCallback}
+                  initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                 />}
               />
             )
@@ -249,6 +254,7 @@ class GraphsTable extends React.Component {
                     callback={this.props.callback}
                     results={obj.data}
                     audioCallback={this.props.audioCallback}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -294,6 +300,7 @@ class GraphsTable extends React.Component {
                     callback={this.props.callback}
                     results={obj.data}
                     audioCallback={this.props.audioCallback}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )

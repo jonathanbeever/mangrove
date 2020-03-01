@@ -26,6 +26,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import ExportCsv from '../selectResults/csvExport';
 import AudioPlayer from '../infographs/components/AudioPlayer';
 import axios from 'axios';
+import AnnotationView from './annotationView';
+import Popup from 'reactjs-popup';
 var _ = require('lodash');
 
 const styles = theme => ({
@@ -204,7 +206,6 @@ class AnalysisView extends Component {
   // Then, it creates the Paper and ExpansionPanel components used
   // for displaying the graphs themselves.
   formatJob = (data) => {
-    console.log(data);
     const rows = [];
     let specRows = [];
     let graphs;
@@ -221,6 +222,7 @@ class AnalysisView extends Component {
 
       specRows = [];
       for(var spec in obj) {
+
         var csvExport = (
           <ExportCsv
             jobs={obj[spec]}
@@ -299,6 +301,7 @@ class AnalysisView extends Component {
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
+                initializeAnnotationViewData={this.initializeAnnotationViewData}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -421,6 +424,7 @@ class AnalysisView extends Component {
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
+                initializeAnnotationViewData={this.initializeAnnotationViewData}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -539,6 +543,7 @@ class AnalysisView extends Component {
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
+                initializeAnnotationViewData={this.initializeAnnotationViewData}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -743,6 +748,28 @@ class AnalysisView extends Component {
     this.setState({ showAudio: false });
   }
 
+  initializeAnnotationViewData = (data) => {
+    let mainJobId = data.mainJobId;
+    let aciLeft = data.payload.aciLeft;
+    let aciRight = data.payload.aciRight;
+    let stamp = data.payload.stamp;
+    let title;
+
+    if(data.payload.fileName) title = data.payload.fileName;
+    else title = data.payload.name;
+
+    const new_state = {
+      showAnnotationView: true,
+      aciLeft: aciLeft,
+      aciRight: aciRight,
+      stamp: stamp,
+      title: title,
+      mainJobId: mainJobId
+    }
+
+    this.setState(new_state);
+  }
+
   handleAudioPlayerOpen = (data, index) => {
     let seconds;
     let finalPath;
@@ -774,6 +801,40 @@ class AnalysisView extends Component {
     });
   }
 
+  handleCreateAnnotation = (annotationData) => {
+    const annotation = {
+      jobId: this.state.mainJobId,
+      annotation: annotationData.note,
+      dataPoint: {
+        X: annotationData.stamp,
+        Y1: annotationData.aciLeft,
+        Y2: annotationData.aciRight
+      }
+    };
+
+    console.log(annotation);
+
+    const url = 'http://127.0.0.1:34251/annotations';
+
+    axios.put(url, annotation)
+    .then(res => {
+      console.log(res);
+      console.log(res.data);
+    }).catch((err) => console.log(err));
+  }
+
+  closeAnnotationView = () => {
+    const new_state = {
+      showAnnotationView: false,
+      aciLeft: null,
+      aciRight: null,
+      stamp: null,
+      title: null
+    }
+
+    this.setState(new_state);
+  }
+
   ref = player => {
     this.player = player;
   }
@@ -783,11 +844,27 @@ class AnalysisView extends Component {
 
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
-          chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track } = this.state;
+          chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track,
+          aciLeft, aciRight, showAnnotationView, stamp, title } = this.state;
     const { classes } = this.props;
 
     return (
       <div>
+        <Popup 
+          open={showAnnotationView}
+          onClose={this.closeAnnotationView}
+          modal 
+          closeOnDocumentClick 
+          position="right center"
+        >
+          <AnnotationView 
+            aciLeft={aciLeft}
+            aciRight={aciRight}
+            stamp={stamp}
+            title={title}
+            handleCreateAnnotation={this.handleCreateAnnotation}
+          />
+        </Popup>
         <div style={{ marginBottom:25+'px', marginTop:22+'px' }}>
           {errorMode ?
           'An error occurred. ' + this.state.errorMessage
@@ -939,7 +1016,7 @@ class AnalysisView extends Component {
                   <div className="col-4 text-right" style={{ paddingRight:30+'px' }}>
                     <button style={{ background:'none', border:'none', padding:0, cursor:'pointer' }}
                            onClick={this.closeAudioPlayer}>
-                     <i class="tiny material-icons">close</i>
+                     <i className="tiny material-icons">close</i>
                     </button>
                   </div>
                 </div>
@@ -954,7 +1031,7 @@ class AnalysisView extends Component {
           </div>
           :
           ''}
-      </div>
+      </div>  
     );
   }
 }

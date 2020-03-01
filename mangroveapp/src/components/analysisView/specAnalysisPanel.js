@@ -11,6 +11,8 @@ class SpecAnalysisPanel extends Component {
           graphs={this.props.graphs}
           callback={this.props.callback}
           audioCallback={this.props.audioCallback}
+          initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+          mainJob={this.props.spec}
         />
       </div>
     )

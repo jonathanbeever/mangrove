@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 import CustomTooltip from './components/CustomTooltip';
+import ContextMenu from '../infographs/components/ContextMenu';
+import CustomActiveDot from './components/CustomActiveDot'
 
 class ACILineChart extends Component {
 
@@ -38,11 +40,16 @@ class ACILineChart extends Component {
 
     return(
       <div>
+        <ContextMenu
+          audioCallback={this.props.audioCallback}
+          initializeAnnotationViewData={this.props.initializeAnnotationViewData} 
+          mainJob={this.props.mainJob} 
+        />
         <div>
           <h5>To listen to a sound file, simply click on a datapoint dot, and an audio player will appear.</h5>
           <LineChart width={900} height={600} data={data}
             margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-            <CartesianGrid strokeDasharray="3 3"/>
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name">
               <Label value={xLabel} position="insideBottom" offset={2} />
             </XAxis>
@@ -51,11 +58,11 @@ class ACILineChart extends Component {
             </YAxis>
             <Legend />
             { customTooltip ?
-              <Tooltip content={<CustomTooltip/>}/>
+              <Tooltip content={<CustomTooltip />} />
               :
-              <Tooltip/>}
-            <Line activeDot={{ onClick: this.props.audioCallback }} type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={false} />
-            <Line activeDot={{ onClick: this.props.audioCallback }} type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={false} />
+              <Tooltip />}
+            <Line activeDot={<CustomActiveDot />} type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={false} />
+            <Line activeDot={<CustomActiveDot />} type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={false} />
             <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
           </LineChart>
         </div>
