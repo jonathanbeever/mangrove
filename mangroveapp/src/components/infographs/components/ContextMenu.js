@@ -30,11 +30,11 @@ class ContextMenu extends Component {
             title: document.elementFromPoint(clickX, clickY).getAttribute('title'),
             src: document.elementFromPoint(clickX, clickY).getAttribute('src'),
             payload: {
-                aciLeft: document.elementFromPoint(clickX, clickY).getAttribute('aciLeft'),
-                aciRight: document.elementFromPoint(clickX, clickY).getAttribute('aciRight'),
+                aciLeft: document.elementFromPoint(clickX, clickY).getAttribute('acileft'),
+                aciRight: document.elementFromPoint(clickX, clickY).getAttribute('aciright'),
                 stamp: document.elementFromPoint(clickX, clickY).getAttribute('stamp'),
                 name: document.elementFromPoint(clickX, clickY).getAttribute('name'),
-                fileName: document.elementFromPoint(clickX, clickY).getAttribute('fileName'),
+                fileName: document.elementFromPoint(clickX, clickY).getAttribute('filename'),
                 downloadUrl: document.elementFromPoint(clickX, clickY).getAttribute('downloadurl')
             }
         }

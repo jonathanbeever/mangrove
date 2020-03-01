@@ -60,7 +60,7 @@ class SimpleTabs extends React.Component {
     }
   }
 
-  componentWillMount = () => {
+  componentDidMount = () => {
     if(sessionStorage.getItem('catalogPageSave')) this.setState({value: 3});
   }
 

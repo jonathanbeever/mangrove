@@ -204,7 +204,8 @@ class Catalog extends Component {
 
     var selectedJobs = this.state.selectedJobs.filter(job => {
       if(selected.indexOf(job.input) !== -1)
-        return job
+        return job;
+      return null;
     })
     this.updateSelectedJobs(selectedJobs)
     this.setState({ jobsFiltered: filteredJobByInputs })
@@ -312,6 +313,7 @@ class Catalog extends Component {
         }).filter(id => {
           if(id !== null)
             return id
+          return null
         })
       })
     })
@@ -371,6 +373,7 @@ class Catalog extends Component {
       var selectedInputs = this.state.selectedInputs.filter(inputId => {
         if(inputs.indexOf(inputId) !== -1)
           return inputId
+        return null
       })
       this.setState({ selectedInputs: selectedInputs })
       this.updateSelectedInputs(selectedInputs)

@@ -14,11 +14,11 @@ const styles = theme => ({
     fontSize: '20px'
   },
   formControl: {
-    margin: theme.spacing.unit * 3,
+    margin: theme.spacing(3),
     fontSize: '20px'
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`,
+    margin: `${theme.spacing(1)}px 0`,
     fontSize: '20px'
   },
   label: {

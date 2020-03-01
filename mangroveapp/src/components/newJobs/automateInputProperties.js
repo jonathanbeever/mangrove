@@ -24,10 +24,10 @@ function getModalStyle() {
 const styles = theme => ({
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 110,
+    width: theme.spacing(110),
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
     outline: 'none',
   },
   buttons: {
@@ -37,10 +37,10 @@ const styles = theme => ({
     display: 'flex',
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`,
+    margin: `${theme.spacing(1)}px 0`,
   },
 });
 

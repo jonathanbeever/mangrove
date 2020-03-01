@@ -32,13 +32,9 @@ var _ = require('lodash');
 
 const styles = theme => ({
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
 });
-
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
-}
 
 class AnalysisView extends Component {
   constructor() {
@@ -952,7 +948,7 @@ class AnalysisView extends Component {
                 </div>
                 <Dialog
                   open={this.state.open}
-                  TransitionComponent={Transition}
+                  TransitionComponent={Slide}
                   keepMounted
                   onClose={this.handleClose}
                   aria-labelledby="alert-dialog-slide-title"

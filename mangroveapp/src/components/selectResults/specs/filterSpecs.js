@@ -31,7 +31,7 @@ function getModalStyle() {
 const styles = theme => ({
   root: {
     padding: 19,
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     backgroundColor: '#fafafa',
     // opacity: 0.8,
     borderRadius: 2
@@ -49,19 +49,19 @@ const styles = theme => ({
     fontWeight: 500
   },
   panels: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     marginBottom: 19
   },
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 50,
+    width: theme.spacing(1) * 50,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(1) * 4,
     outline: 'none',
   },
   buttons: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   }
 });
 

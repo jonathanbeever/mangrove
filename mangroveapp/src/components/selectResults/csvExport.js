@@ -26,10 +26,10 @@ function getModalStyle() {
 const styles = theme => ({
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 50,
+    width: theme.spacing(1) * 50,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(1) * 4,
     outline: 'none',
   },
 });
@@ -320,7 +320,8 @@ class ExportCsv extends Component {
 
     var dateFormattedJobs = _.cloneDeep(this.state.sortedJobs)
     dateFormattedJobs.map(job => {
-      job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY-HH:mm:ss')
+      job['input']['recordTimeMs'] = moment(job['input']['recordTimeMs']).format('MM/DD/YY-HH:mm:ss');
+      return job;
     })
 
     const csv = json2csvParser.parse(dateFormattedJobs);

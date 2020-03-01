@@ -10,7 +10,6 @@ import UploadsTable from './uploadInputsTable';
 import Button from '@material-ui/core/Button';
 import SearchInputs from './searchInputs';
 import AutomateInputProperties from './automateInputProperties';
-import { Container, Row, Col } from 'react-bootstrap';
 
 function TabContainer({ children, dir }) {
   return (
@@ -27,22 +26,22 @@ TabContainer.propTypes = {
 
 const styles = theme => ({
   root: {
-    paddingTop: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit * 2
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(2)
   },
   table: {
-    paddingRight: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit * 3
+    paddingRight: theme.spacing(3),
+    paddingBottom: theme.spacing(3)
   },
   search: {
-    paddingLeft: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing(3),
+    marginTop: theme.spacing(3),
   },
   buttons: {
     textAlign: 'center'
   },
   button: {
-    paddingLeft: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing(3),
     textAlign: 'center'
   }
 });

@@ -11,15 +11,15 @@ var _ = require('lodash');
 const styles = theme => ({
   root: {
     display: 'flex',
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing(1)
   },
   formControl: {
-    paddingTop: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit * 3
+    paddingTop: theme.spacing(3),
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3)
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`,
+    margin: `${theme.spacing(1)}px 0`,
   }
 });
 
@@ -69,10 +69,12 @@ class ChooseFiles extends React.Component {
       var allFiles = this.state.allFiles.filter(file => {
         if(this.props.deletedFiles.indexOf(file.inputId) === -1)
           return file
+        return null
       })
       var filteredInputs = this.state.filteredInputs.filter(file => {
         if(this.props.deletedFiles.indexOf(file.inputId) === -1)
           return file
+        return null
       })
       this.setState({
         allFiles: allFiles,

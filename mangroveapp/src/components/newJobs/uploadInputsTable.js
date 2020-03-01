@@ -129,7 +129,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(1),
   },
   highlight:
     theme.palette.type === 'light'
@@ -201,7 +201,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
   table: {
     width: '100%',
@@ -210,7 +210,7 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   selectPage: {
-    marginLeft: theme.spacing.unit * 3
+    marginLeft: theme.spacing(3)
   }
 });
 
@@ -383,13 +383,9 @@ class EnhancedTable extends React.Component {
             </Table>
           </div>
           <TablePagination
-            labelRowsPerPage={
-              <div>
-              
-              <p style={{padding: 0, fontSize:13+'px'}}>Rows per page:</p>
-              </div>
+            labelRowsPerPage={<span style={{padding: 0, fontSize:13+'px'}}>Rows per page:</span>
             }
-            labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
+            labelDisplayedRows={({ from, to , count}) => <span style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</span>}
             rowsPerPageOptions={[5, 10, 25, 50, 100]}
             component="div"
             spacer={{flex: '0 0 auto'}}

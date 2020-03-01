@@ -22,15 +22,15 @@ const styles = theme => ({
     margin: '0 auto',
   },
   button: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(1),
   },
   buttonTop: {
-    marginTop: theme.spacing.unit * 12,
+    marginTop: theme.spacing(1) * 12,
     marginRight: 15+'px'
   },
   instructions: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   stepper: {
     backgroundColor: 'rgba(54, 25, 25, .00004)',
@@ -80,10 +80,6 @@ function getStepContent(step, $this) {
     default:
       return 'Unknown step';
   }
-}
-
-function Transition(props) {
-  return <Slide direction="up" {...props} />;
 }
 
 class HorizontalLinearStepper extends React.Component {
@@ -530,7 +526,7 @@ class HorizontalLinearStepper extends React.Component {
         <div>
           <Dialog
             open={this.state.open}
-            TransitionComponent={Transition}
+            TransitionComponent={Slide}
             keepMounted
             onClose={this.handleClose}
             aria-labelledby="alert-dialog-slide-title"

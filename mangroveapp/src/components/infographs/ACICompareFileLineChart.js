@@ -11,10 +11,10 @@ import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tool
 
 const styles = theme => ({
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   button: {
-    paddingLeft: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing(3),
     textAlign: 'center'
   }
 });

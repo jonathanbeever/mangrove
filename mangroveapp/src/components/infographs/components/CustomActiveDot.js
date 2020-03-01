@@ -10,11 +10,11 @@ class CustomActiveDot extends Component {
         cx={cx} 
         cy={cy} 
         r={5}
-        aciLeft={payload.aciLeft}
-        aciRight={payload.aciRight}
+        acileft={payload.aciLeft}
+        aciright={payload.aciRight}
         stamp={payload.stamp}
         name={payload.name}
-        fileName={payload.fileName}
+        filename={payload.fileName}
         downloadurl={payload.downloadUrl}
       />
     );

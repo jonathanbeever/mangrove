@@ -13,7 +13,7 @@ import Paper from '@material-ui/core/Paper';
 const styles = theme => ({
   root: {
     padding: 19,
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
   },
   container: {
     display: 'flex',
@@ -28,7 +28,7 @@ const styles = theme => ({
     fontWeight: 500
   },
   formControl: {
-    // margin: theme.spacing.unit,
+    // margin: theme.spacing(1),
     // minWidth: 120,
   }
 });

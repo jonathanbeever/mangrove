@@ -26,6 +26,9 @@ class Login extends Component {
 			messageAnchor: null,
 			verifyopen: false,
 			step: 0,
+			userField: '',
+			passField: '',
+			registrationopen: false
 		}
 
 		this.login = this.login.bind(this);
@@ -120,8 +123,6 @@ class Login extends Component {
 			this.login();
 		}
 	}
-
-
 
 	getStepContent() {
 		const buttonStyle = {
@@ -321,24 +322,24 @@ class Login extends Component {
             			horizontal: 'center',
           			}}
 				><div style={popoverStyle}>{this.state.popoverText}</div></Popover>
-
-				<TextField
-					type="text"
-					placeholder="Username"
-					className="tfield"
-					value={this.state.userField}
-					onKeyDown={this.handleEnter}
-					onChange={this._handleUserChange}  />
-				<TextField
-					type="password"
-					placeholder="Password"
-					className="tfield"
-					value={this.state.passField}
-					onKeyDown={this.handleEnter}
-					onChange={this._handlePassChange}  />
-				<Button onClick={this.login} style={buttonStyle} >Login</Button>
-				<Button onClick={this.handleRegistrationOpen} style={buttonStyle} >Create an Account</Button>
-
+				<form>
+					<TextField
+						type="text"
+						placeholder="Username"
+						className="tfield"
+						value={this.state.userField}
+						onKeyDown={this.handleEnter}
+						onChange={this._handleUserChange}  />
+					<TextField
+						type="password"
+						placeholder="Password"
+						className="tfield"
+						value={this.state.passField}
+						onKeyDown={this.handleEnter}
+						onChange={this._handlePassChange}  />
+					<Button onClick={this.login} style={buttonStyle} >Login</Button>
+					<Button onClick={this.handleRegistrationOpen} style={buttonStyle} >Create an Account</Button>
+				</form>
 
 				<Modal open={this.state.passopen} onClose={this.handleNewPassClose}>
 					<div style={modalStyle}>

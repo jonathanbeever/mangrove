@@ -27,9 +27,9 @@ const styles = theme => ({
     backgroundColor: '#fafafa',
   },
   title: {
-    paddingLeft: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingTop: theme.spacing.unit,
+    paddingLeft: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingTop: theme.spacing(1),
     marginTop: 0
   },
   background: {
@@ -48,11 +48,6 @@ class NavBarTabs extends React.Component {
     this.setState({ value });
   };
 
-  handleMangroveClick = () => {
-    const shell = window.require('electron').shell;
-    shell.openExternal("http://jonathan.beever.org/");
-  }
-
   render() {
     const { classes } = this.props;
     const { value } = this.state;
@@ -62,7 +57,7 @@ class NavBarTabs extends React.Component {
         <AppBar position="static" className={classes.background}>
           <Toolbar>
             <div className="col-3">
-              <h2  position="relative" className={classes.title}><span style={{float: "left"}}><a style={{ color:"#fdc907", textDecoration:'none' }} href="" onClick={this.handleMangroveClick}><img style={{filter: 'invert(1)', marginRight: 5+'px', marginBottom: 5+'px'}} src={image} alt="Mangrove Logo"/></a></span></h2>
+              <h2  position="relative" className={classes.title}><span style={{float: "left"}}><a style={{ color:"#fdc907", textDecoration:'none' }} href="http://jonathan.beever.org/" target="_blank" rel="noopener noreferrer"><img style={{filter: 'invert(1)', marginRight: 5+'px', marginBottom: 5+'px'}} src={image} alt="Mangrove Logo"/></a></span></h2>
             </div>
             <div className="col-8" style={{paddingRight: 15+'%'}}>
               <Tabs value={value}

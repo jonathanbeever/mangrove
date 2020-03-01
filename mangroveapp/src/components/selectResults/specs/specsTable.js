@@ -121,7 +121,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(1),
   },
   highlight:
     theme.palette.type === 'light'
@@ -194,7 +194,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
   },
   table: {
     width: '100%',
@@ -447,8 +447,8 @@ class EnhancedTable extends React.Component {
           }
         </div>
         <TablePagination
-          labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
-          labelDisplayedRows={({ from, to , count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
+          labelRowsPerPage={<span style={{fontSize:13+'px'}}>Rows per page:</span>}
+          labelDisplayedRows={({ from, to , count}) => <span style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</span>}
           rowsPerPageOptions={[5, 10, 25, 50, 100]}
           component="div"
           count={data.length}

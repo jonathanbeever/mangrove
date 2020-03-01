@@ -11,10 +11,10 @@ import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2)
   },
   button: {
-    paddingLeft: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing(3),
     textAlign: 'center'
   }
 });

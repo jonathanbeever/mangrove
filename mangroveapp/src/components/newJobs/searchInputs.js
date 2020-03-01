@@ -10,8 +10,8 @@ import Button from '@material-ui/core/Button';
 const styles = theme => ({
   root: {
     padding: 17,
-    marginTop: theme.spacing.unit * 1,
-    marginBottom: theme.spacing.unit * 1,
+    marginTop: theme.spacing(1) * 1,
+    marginBottom: theme.spacing(1) * 1,
   },
   container: {
     display: 'flex',

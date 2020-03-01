@@ -253,45 +253,45 @@ class JobQueue extends Component {
                 <TableBody>
                 {
                   data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                   .filter(el => { return el != null; }).map(job =>
-                   {
-                     try {
-                       let date = new Date(job.creationTimeMs);
-                       date = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
-                       let jobDesc = job.input.site + " - " + job.input.series;
-                       let specDesc = job.spec.type.toUpperCase();
-                       return(
-                         <TableRow
-                         key={job.jobId}
-                         >
-                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                         {jobDesc}
-                         </TableCell>
-                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                         {job.input.name}
-                         </TableCell>
-                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                         {specDesc}
-                         </TableCell>
-                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                         {date}
-                         </TableCell>
-                         <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
-                         {job.author}
-                         </TableCell>
-                         {this.statusCell(job.status)}
-                         </TableRow>
-                       )
-                     } catch (err) {
-                       console.error(err);
-                     }
+                   .filter(el => { return el != null; }).map(job => {
+                    try {
+                      let date = new Date(job.creationTimeMs);
+                      date = ("0" + (date.getMonth() + 1)).slice(-2) + '/' + ("0" + date.getDate()).slice(-2) + '/' + date.getFullYear() + ' ' + ("0" + date.getHours()).slice(-2) + ':' + ("0" + date.getMinutes()).slice(-2);
+                      let jobDesc = job.input.site + " - " + job.input.series;
+                      let specDesc = job.spec.type.toUpperCase();
+                      return(
+                        <TableRow
+                        key={job.jobId}
+                        >
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                        {jobDesc}
+                        </TableCell>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                        {job.input.name}
+                        </TableCell>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                        {specDesc}
+                        </TableCell>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                        {date}
+                        </TableCell>
+                        <TableCell style={{ fontSize:14+'px' }} component="th" scope="row" padding="checkbox">
+                        {job.author}
+                        </TableCell>
+                        {this.statusCell(job.status)}
+                        </TableRow>
+                      )
+                    } catch (err) {
+                      console.error(err);
+                      return null;
+                    }
                    })
                 }
                 </TableBody>
               </Table>
               <TablePagination
-                labelRowsPerPage={<p style={{fontSize:13+'px'}}>Rows per page:</p>}
-                labelDisplayedRows={({ from, to, count}) => <p style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</p>}
+                labelRowsPerPage={<span style={{fontSize:13+'px'}}>Rows per page:</span>}
+                labelDisplayedRows={({ from, to, count}) => <span style={{fontSize:10+'px'}}>Displaying items {from}-{to} of total {count} items</span>}
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={data.length}
