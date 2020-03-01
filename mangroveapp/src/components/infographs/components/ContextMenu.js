@@ -77,6 +77,10 @@ class ContextMenu extends Component {
       this.props.audioCallback(this.state.data);
   }
 
+  handleMouseLeave = () => {
+      this.setState({ visible: false });
+  }
+
   _handleClick = (event) => {
       const { visible } = this.state;
       const wasOutside = !(event.target.contains === this.root);
@@ -94,7 +98,7 @@ class ContextMenu extends Component {
       const { visible } = this.state;
 
       return(visible || null) && 
-          <div ref={ref => {this.root = ref}} className="contextMenu">
+          <div ref={ref => {this.root = ref}} className="contextMenu" onMouseLeave={this.handleMouseLeave}>
               <div className="contextMenu--separator" />
               <div className="contextMenu--option" onClick={this.openAnnotationView}>
                 Annotate
