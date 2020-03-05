@@ -201,7 +201,7 @@ class AnalysisView extends Component {
   // Formats the data passed into it into a model usable by recharts.
   // Then, it creates the Paper and ExpansionPanel components used
   // for displaying the graphs themselves.
-  formatJob = (data) => {
+  formatJob = async (data) => {
     const rows = [];
     let specRows = [];
     let graphs;
@@ -298,6 +298,7 @@ class AnalysisView extends Component {
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
                 initializeAnnotationViewData={this.initializeAnnotationViewData}
+                annotations={await this.getAnnotations(spec)}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -421,6 +422,7 @@ class AnalysisView extends Component {
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
                 initializeAnnotationViewData={this.initializeAnnotationViewData}
+                annotations={this.getAnnotations(spec)}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -540,6 +542,7 @@ class AnalysisView extends Component {
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
                 initializeAnnotationViewData={this.initializeAnnotationViewData}
+                annotations={this.getAnnotations(spec)}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -804,19 +807,20 @@ class AnalysisView extends Component {
       dataPoint: {
         X: annotationData.stamp,
         Y1: annotationData.aciLeft,
-        Y2: annotationData.aciRight
+        Y2: annotationData.aciRight,
       }
     };
 
-    console.log(annotation);
-
     const url = 'http://127.0.0.1:34251/annotations';
 
-    axios.put(url, annotation)
-    .then(res => {
-      console.log(res);
-      console.log(res.data);
-    }).catch((err) => console.log(err));
+    axios.put(url, annotation).catch((err) => console.log(err));
+  }
+
+  getAnnotations = async (jobId) => {
+    const url = 'http://127.0.0.1:34251/annotations/' + jobId;
+
+    const request = await axios.get(url);
+    return request.data.annotations;
   }
 
   closeAnnotationView = () => {
