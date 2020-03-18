@@ -1,27 +1,23 @@
 const express = require('express');
 
-const router = express.Router();
+const config = require('config');
 const multer = require('multer');
 const mkdirp = require('mkdirp');
-const config = require('config');
 
+const error = config.get('error');
+
+const router = express.Router();
+
+const DaInputs = require('../../../data_access/inputs/daInputs');
 const logger = require('../../../util/logger');
-
-const { arrayDiff } = require('../../../util/array');
-const { getUploadPath } = require('../../../util/storage');
-const { getAudioMetadata } = require('../../../util/audioMetadata');
-
-const DAinputs = require('../../../data_access/inputs/daInputs');
 
 const {
   parseInputJson,
   getNewFilename,
-  getExtensionlessFilename,
 } = require('../../models/input/utils');
-
+const { arrayDiff } = require('../../../util/array');
+const { getUploadPath } = require('../../../util/storage');
 const { verify } = require('../../../util/verify');
-
-const error = config.get('error');
 
 const upload = multer({
   fileFilter(req, file, cb) {
@@ -68,53 +64,49 @@ const upload = multer({
   // limits: { fileSize: 1024 * 1024 * 1024 }, // 1 GB
 });
 
+
 // Create Input
 // FIXME: Create Input requests must be sent with the 'file' listed last and
 // 'json' listed first, so that we can be sure that we've received the necessary
 // path information from req.body.json by the time we're storing the file. This
 // is a limitation of the Multer package. See the 'upload' variable above.
-router.put('/', (req, res) => {
+router.put('/', async (req, res) => {
   const token = req.get('Authorization');
 
   const isAllowed = verify(token);
   if (!isAllowed) {
     return res.status(401).json({ error: 'Invalid login' });
   }
+
   upload.single('file')(req, res, async (uploadErr) => {
     if (uploadErr) {
       if (uploadErr instanceof multer.MulterError) {
         logger.error(uploadErr);
-        return res.status(500).json({ error: error.internal });
+        return { errorType: 'Other', error: error.internal };
       }
-      return res.status(400).json({
-        message: uploadErr.message,
-      });
+      return { errorType: 'UploadError', message: uploadErr.message };
     }
 
-    if (!req.file) { // No Multer error but still no file
-      if (typeof req.body.json === 'undefined') {
-        return res.status(400).json({
-          message: 'Missing required fields: json, file',
-        });
+    if (!req.file.path) { // No Multer error but still no file
+      if (typeof inputInfo === 'undefined') {
+        return { errorType: 'MissingFields', message: 'Missing required fields: json, file' };
       }
-      return res.status(400).json({
-        message: 'Missing required field: file',
-      });
+      return { errorType: 'MissingField', message: 'Missing required field: file' };
     }
 
-    try {
-      const parsedJson = parseInputJson(req.body.json);
-      const audioMetadata = await getAudioMetadata(req.file.path);
-      const name = 'name' in parsedJson
-        ? parsedJson.name
-        : getExtensionlessFilename(req.file.originalname);
+    const result = await DaInputs.CreateInput(req.body.json, req.file);
 
-      const input = await DAinputs.CreateInput(name, req.file.path, parsedJson, audioMetadata);
-
-      return res.status(201).json(input);
-    } catch (err) {
-      logger.error(err);
-      return res.status(500).json({ error: error.internal });
+    switch (result.errorType) {
+      case 'UploadError':
+        return res.status(500).json(result);
+      case 'MissingFields':
+        return res.status(400).json(result);
+      case 'MissingField':
+        return res.status(400).json(result);
+      case 'Other':
+        return res.status(500).json(result);
+      default:
+        return res.status(200).json(result);
     }
   });
 });
@@ -124,23 +116,18 @@ router.get('/:inputId', async (req, res) => {
   const { inputId } = req.params;
   const token = req.get('Authorization');
 
-  try {
-    const isAllowed = await verify(token);
-    if (!isAllowed) {
-      return res.status(401).json({ error: 'Invalid login' });
-    }
-    const searchResult = await DAinputs.GetInputById(inputId);
+  const isAllowed = verify(token);
+  if (!isAllowed) {
+    return res.status(401).json({ error: 'Invalid login' });
+  }
 
-    if (!searchResult) {
-      return res.status(404).json({
-        message: `No valid entry found for inputId: ${inputId}.`,
-      });
-    }
+  const result = await DaInputs.GetInputById(inputId);
 
-    return res.status(200).json(searchResult);
-  } catch (err) {
-    logger.error(err);
-    return res.status(500).json({ error: error.internal });
+  switch (result.errorType) {
+    case 'Other':
+      return res.status(500).json(result);
+    default:
+      return res.status(200).json(result);
   }
 });
 
@@ -148,18 +135,18 @@ router.get('/:inputId', async (req, res) => {
 router.get('/', async (req, res) => {
   const token = req.get('Authorization');
 
-  try {
-    const isAllowed = await verify(token);
-    if (!isAllowed) {
-      return res.status(401).json({ error: 'Invalid login' });
-    }
+  const isAllowed = verify(token);
+  if (!isAllowed) {
+    return res.status(401).json({ error: 'Invalid login' });
+  }
 
-    const searchResult = await DAinputs.GetInputs();
+  const result = await DaInputs.GetInputs();
 
-    return res.status(200).json(searchResult);
-  } catch (err) {
-    logger.error(err);
-    return res.status(500).json({ error: error.internal });
+  switch (result.errorType) {
+    case 'Other':
+      return res.status(500).json(result);
+    default:
+      return res.status(200).json(result);
   }
 });
 
@@ -168,25 +155,18 @@ router.delete('/:inputId', async (req, res) => {
   const { inputId } = req.params;
   const token = req.get('Authorization');
 
-  try {
-    const isAllowed = await verify(token);
-    if (!isAllowed) {
-      return res.status(401).json({ error: 'Invalid login' });
-    }
+  const isAllowed = verify(token);
+  if (!isAllowed) {
+    return res.status(401).json({ error: 'Invalid login' });
+  }
 
-    const deleteResults = await DAinputs.DeleteInput(inputId);
-    const { deleteResult, jobsWithInput } = deleteResults;
+  const result = await DaInputs.DeleteInput(inputId);
 
-    return res.status(200).json({
-      success: true,
-      message: deleteResult
-        ? `Successfully deleted Input with inputId: ${inputId}.`
-        : `No valid entry found for inputId: ${inputId}.`,
-      jobs: jobsWithInput.map(job => job.id),
-    });
-  } catch (err) {
-    logger.error(err);
-    return res.status(500).json({ error: error.internal });
+  switch (result.errorType) {
+    case 'Other':
+      return res.status(500).json(result);
+    default:
+      return res.status(200).json(result);
   }
 });
 

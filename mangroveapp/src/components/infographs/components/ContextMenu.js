@@ -27,7 +27,7 @@ class ContextMenu extends Component {
         const cy = document.elementFromPoint(clickX, clickY).getAttribute('cy');
         let data = {
             mainJobId: this.props.mainJob,
-            title: document.elementFromPoint(clickX, clickY).getAttribute('title'),
+            graph: document.elementFromPoint(clickX, clickY).getAttribute('graph'),
             src: document.elementFromPoint(clickX, clickY).getAttribute('src'),
             payload: {
                 aciLeft: document.elementFromPoint(clickX, clickY).getAttribute('acileft'),

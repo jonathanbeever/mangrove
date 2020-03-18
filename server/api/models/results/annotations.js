@@ -10,6 +10,7 @@ module.exports = mongoose.model('Annotation', new mongoose.Schema({
     required: 'true',
   },
   annotation: String,
+  graph: String,
 
   // Using mixed SchemaType requires that whenever a document's dataPoint changes,
   // it must use the 'markModified' function directly after

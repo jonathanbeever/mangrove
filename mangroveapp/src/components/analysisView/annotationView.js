@@ -23,7 +23,8 @@ class AnnotationView extends Component {
       note: this.state.note,
       stamp: this.props.stamp,
       aciLeft: this.props.aciLeft,
-      aciRight: this.props.aciRight
+      aciRight: this.props.aciRight,
+      graph: this.props.graph
     };
 
 		if(e.key === 'Enter') this.props.handleCreateAnnotation(annotationData);
@@ -34,7 +35,8 @@ class AnnotationView extends Component {
       note: this.state.note,
       stamp: this.props.stamp,
       aciLeft: this.props.aciLeft,
-      aciRight: this.props.aciRight
+      aciRight: this.props.aciRight,
+      graph: this.props.graph
     };
 
     this.props.handleCreateAnnotation(annotationData);

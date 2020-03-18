@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 
 class CustomActiveDot extends Component {
   render() {
-    const { cx, cy, payload } = this.props;
-
+    const { cx, cy, payload, dataKey, title } = this.props;
     return (
       <circle 
         className="recharts-dot" 
@@ -16,6 +15,8 @@ class CustomActiveDot extends Component {
         name={payload.name}
         filename={payload.fileName}
         downloadurl={payload.downloadUrl}
+        key={dataKey}
+        graph={title}
       />
     );
   }

@@ -752,6 +752,7 @@ class AnalysisView extends Component {
     let aciLeft = data.payload.aciLeft;
     let aciRight = data.payload.aciRight;
     let stamp = data.payload.stamp;
+    let graph = data.graph;
     let title;
 
     if(data.payload.fileName) title = data.payload.fileName;
@@ -763,8 +764,9 @@ class AnalysisView extends Component {
       aciRight: aciRight,
       stamp: stamp,
       title: title,
-      mainJobId: mainJobId
-    }
+      mainJobId: mainJobId,
+      graph: graph
+    };
 
     this.setState(new_state);
   }
@@ -804,13 +806,14 @@ class AnalysisView extends Component {
     const annotation = {
       jobId: this.state.mainJobId,
       annotation: annotationData.note,
+      graph: annotationData.graph,
       dataPoint: {
         X: annotationData.stamp,
         Y1: annotationData.aciLeft,
         Y2: annotationData.aciRight,
       }
     };
-
+    
     const url = 'http://127.0.0.1:34251/annotations';
 
     axios.put(url, annotation).catch((err) => console.log(err));
@@ -845,7 +848,7 @@ class AnalysisView extends Component {
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track,
-          aciLeft, aciRight, showAnnotationView, stamp, title } = this.state;
+          aciLeft, aciRight, showAnnotationView, stamp, title, graph } = this.state;
     const { classes } = this.props;
 
     return (
@@ -862,6 +865,7 @@ class AnalysisView extends Component {
             aciRight={aciRight}
             stamp={stamp}
             title={title}
+            graph={graph}
             handleCreateAnnotation={this.handleCreateAnnotation}
           />
         </Popup>
