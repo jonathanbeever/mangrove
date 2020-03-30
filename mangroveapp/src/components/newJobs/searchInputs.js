@@ -36,6 +36,8 @@ class FilterInputs extends Component {
   render() {
     const { classes } = this.props;
 
+    const isEnabled = this.props.site && this.props.series && this.props.lat && this.props.long && this.props.date && this.props.time;
+    
     return (
       <div>
         <Paper className={classes.root}>
@@ -82,7 +84,7 @@ class FilterInputs extends Component {
             ''
           }
           <div className="row filterSubmit">
-            <Button style={{margin: '0 auto', marginTop: 7}} onClick={this.onSubmit}>
+            <Button disabled={!isEnabled} style={{margin: '0 auto', marginTop: 7}} onClick={this.onSubmit}>
               Apply
             </Button>
           </div>
