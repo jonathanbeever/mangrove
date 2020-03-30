@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import CustomTooltip from './components/CustomTooltip';
 import ContextMenu from '../infographs/components/ContextMenu';
 import CustomActiveDot from './components/CustomActiveDot';
+import CustomDot from './components/CustomDot';
 import AnnotationList from '../analysisView/annotationList';
 
 class ACILineChart extends Component {
@@ -34,6 +35,8 @@ class ACILineChart extends Component {
     let secondDataKey = this.props.dataKey2;
 
     let customTooltip = this.props.custom;
+
+    let title = this.props.title;
 
     let endOfBrush;
     let len = data.length;
@@ -70,8 +73,8 @@ class ACILineChart extends Component {
                     <Tooltip content={<CustomTooltip />} />
                     :
                     <Tooltip />}
-                  <Line activeDot={<CustomActiveDot />} type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={false} />
-                  <Line activeDot={<CustomActiveDot />} type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={false} />
+                  <Line activeDot={<CustomActiveDot title={title} />} type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={<CustomDot rows={this.props.annotations} />} />
+                  <Line activeDot={<CustomActiveDot title={title} />} type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={<CustomDot rows={this.props.annotations} />} />
                   <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
                 </LineChart>
               </Paper>

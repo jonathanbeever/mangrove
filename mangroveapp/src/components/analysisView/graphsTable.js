@@ -102,6 +102,7 @@ class GraphsTable extends React.Component {
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                     mainJob={this.props.mainJob}
                     annotations={this.props.annotations}
+                    title={obj.title}
                   />}
                 />
               )
@@ -151,6 +152,7 @@ class GraphsTable extends React.Component {
                     audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                     annotations={this.props.annotations}
+                    title={obj.title}
                   />}
                 />
               )

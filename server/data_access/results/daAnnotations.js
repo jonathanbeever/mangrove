@@ -9,6 +9,7 @@ const AddAnnotation = async (annotationInfo) => {
     jobId: annotationInfo.jobId,
     annotation: annotationInfo.annotation,
     dataPoint: annotationInfo.dataPoint,
+    graph: annotationInfo.graph,
   });
 
   const createAnnotaion = await Annotation.create(annotation);
@@ -17,6 +18,7 @@ const AddAnnotation = async (annotationInfo) => {
     annotationId: createAnnotaion._id,
     jobId: createAnnotaion.jobId,
     dataPoint: createAnnotaion.dataPoint,
+    graph: createAnnotaion.graph,
   };
 
   return finalAnnotation;
@@ -30,6 +32,8 @@ const GetAnnotationsByJob = async (jobId) => {
     count: results.length,
     annotations: results.map(annotation => ({
       annotationId: annotation._id,
+      annotation: annotation.annotation,
+      annotationGraph: annotation.graph,
       jobId: annotation.jobId,
       dataPoint: annotation.dataPoint,
     })),
