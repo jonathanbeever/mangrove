@@ -125,6 +125,18 @@ class ChooseIndex extends React.Component {
         this.setState({ indexInfo: html })
         break;
       }
+      case 'ml': {
+        html = (
+          <div>
+            <h3>Machine Learning</h3>
+            <p>
+            Example Text 
+            </p>
+          </div>
+        )
+        this.setState({ indexInfo: html })
+        break;
+      }
       default:
         break;
     }
