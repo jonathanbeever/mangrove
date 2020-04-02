@@ -128,9 +128,11 @@ class ChooseIndex extends React.Component {
       case 'ml': {
         html = (
           <div>
-            <h3>Machine Learning</h3>
+            <h3>Machine Listening</h3>
             <p>
-            Example Text 
+            Machine Listening is a subfield of machine learning that works with audio data.
+             Our algorithm automatically classifies and detects different types of sounds by 
+             finding patterns in spectrograms, which are visual representations of sound.
             </p>
           </div>
         )
