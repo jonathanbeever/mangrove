@@ -325,6 +325,7 @@ class Login extends Component {
 				<form>
 					<TextField
 						type="text"
+						id = "username"
 						placeholder="Username"
 						className="tfield"
 						value={this.state.userField}
@@ -332,6 +333,7 @@ class Login extends Component {
 						onChange={this._handleUserChange}  />
 					<TextField
 						type="password"
+						id = "password"
 						placeholder="Password"
 						className="tfield"
 						value={this.state.passField}
