@@ -146,6 +146,16 @@ class ExportCsv extends Component {
           index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'},
           rmsL: {label:'RMS_L', value: 'result.rmsL', show: true, type: 'result'},
           rmsR: {label:'RMS_R', value: 'result.rmsR', show: true, type: 'result'}
+        },
+        ml: {
+          fileName: {label:'FILENAME', value: 'input.name', show: true},
+          sampleRateHz: {label:'SAMPLE_RATE', value: 'input.sampleRateHz', show: true},
+          sizeBytes: {label:'SIZE_BYTES', value: 'input.sizeBytes', show: true},
+          durationMs: {label:'DURATION', value: 'input.durationMs', show: true},
+          recordTimeMs: {label:'RECORD_TIME', value: 'input.recordTimeMs', show: true},
+          lat: {label:'LAT', value: 'input.coords.lat', show: true},
+          long: {label:'LONG', value: 'input.coords.long', show: true},
+          index: {label:'INDEX', value: 'spec.type', show: true, type: 'param'}
         }
       }
     }

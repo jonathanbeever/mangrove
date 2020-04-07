@@ -181,7 +181,7 @@ class FilterSpecs extends Component {
   }
 
   formatSpecTables = () => {
-    var expansionPanels = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms'].map(index => {
+    var expansionPanels = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms', 'ml'].map(index => {
       var panel = ''
       if(this.props.filteredSpecs[index]){
         return (

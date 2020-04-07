@@ -23,6 +23,7 @@ import ACIBarChart from '../infographs/ACIBarChart';
 import ACICompareBarChart from '../infographs/ACICompareBarChart';
 import RMSBarChart from '../infographs/RMSBarChart';
 import RMSCompareBarChart from '../infographs/RMSCompareBarChart';
+import MLLineChart from '../infographs/mlInfographs/MLLineChart';
 
 const styles = theme => ({
   root: {
@@ -39,7 +40,6 @@ class GraphsTable extends React.Component {
   render()
   {
     let { graphs, index, annotations } = this.props;
-    console.log(annotations);
 
     const aciSecondsPerFile = annotations.filter(annotation => { 
       if (annotation.annotationGraph === "ACI By Seconds Per File")
@@ -60,8 +60,24 @@ class GraphsTable extends React.Component {
       if (!graphs.hasOwnProperty(key)) continue;
 
       var obj = graphs[key];
+      
       switch(index)
       {
+        case "ml":
+          rows.push(
+            <GraphExpansionPanel
+              key={'graph'+ctr}
+              title={obj.title}
+              graph={<MLLineChart
+                results={obj.data}
+                xAxisLabel={obj.xAxisLabel}
+                yAxisLabel={obj.yAxisLabel}
+                dataKey1={obj.dataKey1}
+                title={obj.title}
+              />}
+            />
+          )
+          break;
         case "rms":
           rows.push(
             <GraphExpansionPanel

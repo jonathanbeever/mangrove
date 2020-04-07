@@ -278,12 +278,21 @@ class AnalysisView extends Component {
               this.setState({ errorMode: true });
             }
             break;
+          case "ml":
+            try{
+              graphs = utils.convertMLResults(obj[spec]);
+            }catch(error){
+              this.setState({ errorMessage: error });
+              this.setState({ errorMode: true });
+            }
+            break;
           default:
             graphs = null
         }
 
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
         if(index === 'rms') specTitle = "RMS Results";
+        else if (index === 'ml') specTitle = "Machine Listening Results";
 
         specRows.push(
           <ExpansionPanel key={index + spec}>

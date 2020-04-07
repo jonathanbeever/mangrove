@@ -70,7 +70,7 @@ class Expansion extends React.Component {
     return (
       <div className={classes.root}>
         <ExpansionPanel expanded={this.state.expanded} className={classes.panel}>
-          {this.props.index === 'rms' ?
+          {this.props.index === 'rms' || this.props.index === 'ml' ?
             <ExpansionPanelSummary>
               <FormControlLabel
                 control={
@@ -82,7 +82,7 @@ class Expansion extends React.Component {
                     style={{color: '#b6cd26'}}
                   />
                 }
-                label={<div className={classes.heading}>RMS (No Parameters)</div>}
+                label={<div className={classes.heading}>{this.props.index.toUpperCase()} (No Parameters)</div>}
               />
               {this.state.checkedRms ?
                 <Tooltip title="Delete">

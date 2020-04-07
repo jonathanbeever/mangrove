@@ -695,6 +695,52 @@ export function convertBIResults(jobs) {
   return ret;
 }
 
+export function convertMLResults(jobs) {
+  let finished = jobs.filter(x => x.status === "finished");
+  let ret;
+
+  ret = {
+    graph1:
+    {
+      data: [],
+      xAxisLabel: "Time",
+      yAxisLabel: "Sound Type",
+      dataKey1: "shouldGraph",
+      title: "Sound Types"
+    }
+  };
+  
+  // For every data point, determine if it should be graphed
+  finished[0].result.sounds.forEach(dataPoint => {
+    let tempDataPoint = dataPoint;
+    if (tempDataPoint.confidence > 0) {
+      tempDataPoint.shouldGraph = 1;
+    } else tempDataPoint.shouldGraph = 0;
+
+    ret.graph1.data.push(tempDataPoint);
+  });
+
+  for (var i = 0; i < finished[0].input.durationMs; i += 10000) {
+    const iToSeconds = i / 1000;
+    const dataPoint = {
+      soundType: '',
+      confidence: 0,
+      startTime: iToSeconds,
+      duration: 10,
+      shouldGraph: 0,
+    };
+
+    // Only add a datapoint where we don't already have a value to graph
+    if (ret.graph1.data.filter((dataPoint) => dataPoint.startTime === iToSeconds).length === 0) {
+      ret.graph1.data.push(dataPoint);
+    }
+  }
+  
+  ret.graph1.data.sort((data1, data2) => data1.startTime - data2.startTime);
+  
+  return ret;
+}
+
 /********** Comparison graph data modeling functions **********/
 
 export function convertRMSResultsBySite(jobs, sites) {
