@@ -33,6 +33,9 @@ const currParam = {
   rms: {
     // N/A
   },
+  ml: {
+    // N/A
+  },
 };
 
 const nextMockParam = (type, param) => {
