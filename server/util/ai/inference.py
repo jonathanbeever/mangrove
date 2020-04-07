@@ -3,21 +3,23 @@
 from pip._internal import main
 
 try:
-    main(["install", "tensorflow"])
+    main(["install", "-q", "tensorflow"])
 except SystemExit as e:
     pass
 
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+from numpy import newaxis
 import sys
 
 # show an image and run inference
 def inference(img):
-    classes = ["broccoli","cheese","chicken","eggs","pasta","rice","salt"]
+    classes = ["background", "train"]
+
     # run model for prediction
-    class_indx = model.predict(img)
-    print(class_indx)
+    class_indx = model.predict_classes(img)
+    print(class_indx[0][0])
 
     # Find indices of the max prediction
     max_predictions = np.where(class_indx == np.amax(class_indx))
@@ -29,11 +31,15 @@ def inference(img):
 
 # pre-process input image
 def preprocessing(img_path):
-    img = Image.open(img_path)    
-    img = img.resize((150, 150), Image.ANTIALIAS)
-    img = np.expand_dims(img, 0)
-    img = tf.cast(img, tf.float32)
-    return img
+    img = Image.open(img_path)
+    pic = np.asarray(img)
+    
+    pic = pic[25:547, 54:860]
+    pic = pic[newaxis, :, :, newaxis]
+
+    # img = img.resize((150, 150), Image.ANTIALIAS)
+    # img = tf.cast(img, tf.float32)
+    return pic
 
 if __name__ == "__main__":
     
@@ -45,7 +51,7 @@ if __name__ == "__main__":
     img = preprocessing(img_path)
     
     # load model
-    model = tf.keras.models.load_model(model_path)
+    model = tf.keras.models.load_model(model_path, custom_objects=None, compile=False)
 
     # run inference
     class_label = inference(img)
@@ -55,3 +61,5 @@ if __name__ == "__main__":
 
     # print confidence interval
     print('1.0')
+
+    exit()
