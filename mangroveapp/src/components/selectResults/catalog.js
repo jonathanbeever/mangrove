@@ -47,7 +47,9 @@ class Catalog extends Component {
           fftW: ''
         },
         rms: {
-        }
+        },
+        ml: {
+        },
       },
       selectedInputs : [],
       selectedSpecs: {
@@ -56,7 +58,8 @@ class Catalog extends Component {
         adi: [],
         aei: [],
         bi: [],
-        rms: []
+        rms: [],
+        ml: []
       },
       filteredSpecs: {
         aci: [],
@@ -64,7 +67,8 @@ class Catalog extends Component {
         adi: [],
         aei: [],
         bi: [],
-        rms: []
+        rms: [],
+        ml: []
       },
       selectedIndex: '',
       specParamsList: [['minFreq', 'Min Frequency'], ['maxFreq', 'Max Frequency'], ['j', 'J'], ['fftW', 'fft-W']],
@@ -105,7 +109,8 @@ class Catalog extends Component {
           'adi': [],
           'aei': [],
           'bi': [],
-          'rms': []
+          'rms': [],
+          'ml': [],
         }
         var indexedSpecsById = {}
         res.data.specs.forEach(spec => {
@@ -249,6 +254,10 @@ class Catalog extends Component {
         this.setState({ specParamsList: [] })
         break;
       }
+      case 'ml': {
+        this.setState({ specParamsList: [] })
+        break;
+      }
       default : {
         break;
       }
@@ -302,7 +311,7 @@ class Catalog extends Component {
     var obj = {}
     var inputs = this.state.matchingInputIds
 
-    var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms']
+    var indices = ['aci', 'ndsi', 'adi', 'aei', 'bi', 'rms', 'ml']
     indices.forEach(index => {
       specs[index].forEach(specId => {
         obj[specId] = this.state.allJobs.map(job => {
@@ -391,7 +400,8 @@ class Catalog extends Component {
       'adi': {},
       'aei': {},
       'bi': {},
-      'rms': {}
+      'rms': {},
+      'ml': {},
     }
 
     jobs.forEach(job => {
@@ -444,7 +454,7 @@ class Catalog extends Component {
   handleSubmitJobFilter = () => {
     var filteredJobs = []
     this.state.allJobs.forEach(job => {
-      ['aci', 'ndsi', 'aei', 'adi', 'bi', 'rms'].forEach(index => {
+      ['aci', 'ndsi', 'aei', 'adi', 'bi', 'rms', 'ml'].forEach(index => {
         if(this.state.selectedSpecs[index].indexOf(job.spec) !== -1) {
           if(this.state.selectedInputs.indexOf(job.input) !== -1) {
             if(!this.state.jobFiltering.author || this.state.jobFiltering.author === job.author) {

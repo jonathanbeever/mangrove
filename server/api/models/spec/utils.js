@@ -102,6 +102,10 @@ const getParamsFromSpec = (spec, nyquistType = undefined) => {
       return {
         // N/A
       };
+    case Type.ML:
+      return {
+        // N/A
+      };
     default:
       throw new Error(`Invalid \`type\` parameter (${spec.type}).`);
   }

@@ -34,10 +34,10 @@ module.exports = async (job) => {
   const populatedJob = JobModel(job.data);
   populatedJob.input = Input(job.data.input);
   populatedJob.spec = SpecModel(job.data.spec);
-
+  console.log(job.data.type);
   let jobProcess;
   config.util.getEnv('NODE_ENV') !== 'test'
-    ? jobProcess = setJobProcessor()
+    ? jobProcess = setJobProcessor(job.data.type)
     : jobProcess = mockProcessJob;
 
   const result = await jobProcess(populatedJob);

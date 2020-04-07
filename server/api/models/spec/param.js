@@ -34,6 +34,9 @@ const Param = Object.freeze({
   rms: {
     // N/A
   },
+  ml: {
+    // N/A
+  },
 });
 
 module.exports = Param;

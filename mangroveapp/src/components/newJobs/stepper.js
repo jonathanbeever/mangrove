@@ -119,6 +119,8 @@ class HorizontalLinearStepper extends React.Component {
         fftW: ''
       },
       rms: {
+      },
+      ml: {
       }
     },
     selectedSpec: [],
@@ -243,6 +245,9 @@ class HorizontalLinearStepper extends React.Component {
       case 'rms': {
         break;
       }
+      case 'ml': {
+        break;
+      }
       default:
 
     }
@@ -259,6 +264,15 @@ class HorizontalLinearStepper extends React.Component {
       this.changeIndex('aci')
     });
   }
+
+  startMl = () => {
+    this.setState({
+      index: 'ml'
+    }, () => {
+      this.submitJob();
+      this.changeIndex('aci');
+    });
+  };
 
   submitJob = () => {
     var message = (
@@ -400,7 +414,9 @@ class HorizontalLinearStepper extends React.Component {
       if(this.state.activeStep === 1 && this.state.index === 'rms') {
         this.startRms()
       }
-      else {
+      else if (this.state.activeStep === 1 && this.state.index === 'ml') {
+        this.startMl()
+      } else {
         this.setState({
           activeStep: activeStep + 1
         });
@@ -513,7 +529,7 @@ class HorizontalLinearStepper extends React.Component {
                 {activeStep === steps.length - 1 ?
                   'Finish'
                   :
-                  (activeStep === steps.length - 2 && this.state.index === 'rms' ?
+                  (activeStep === steps.length - 2 && (this.state.index === 'rms' || this.state.index === 'ml') ?
                     'Finish'
                     :
                     'Next'
