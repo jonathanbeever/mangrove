@@ -2,7 +2,7 @@ const childProcesses = require('child_process');
 const audioDuration = require('get-audio-duration');
 
 const childProcess = childProcesses.spawn;
-const childProcessSync = childProcess.spawnSync;
+const childProcessSync = childProcesses.spawnSync;
 
 // Extracts a specific section of a file into its own sound file with a specific length
 const getFileSegment = async (filepath, startTime, segLength, fileDuration) => {
@@ -17,7 +17,7 @@ const getFileSegment = async (filepath, startTime, segLength, fileDuration) => {
   childProcess('mkdir', [`${filename}/`]);
 
   const finalSegmentName = `${filename}/${startTime}_${newSegLength}.wav`;
-  const soxProcess = childProcess.spawn('sox', ['--ignore-length', filepath, finalSegmentName, 'trim', startTime, newSegLength]);
+  const soxProcess = childProcess('sox', ['--ignore-length', filepath, finalSegmentName, 'trim', startTime, newSegLength]);
 
   // output the child process outputs
   soxProcess.stdout.on('data', data => console.log(data.toString()));
@@ -34,16 +34,27 @@ const getSpectrogram = async (segment, segmentName) => {
 
 // Runs a spectrogram through the model to listen for sounds
 const classifySound = async (segmentName) => {
-  childProcessSync('python3.5', ['util/ai/inference.py', `${segmentName}.png`, 'util/ai/cnn_03-13-20.h5']);
-
-  // Convert output to an array to retrieve model results
+  const process = childProcessSync('python3.5', ['util/ai/inference.py', `${segmentName}.png`, 'util/ai/cnn_03-13-20.h5']);
   const output = process.stdout.toString().split('\n');
 
-  return {
+  // Retrieve segment information based on segmentName
+  // segmentName is in format ../filename/x_y.png
+  // Where x is the start time of the file segment in terms of the full input file
+  // and y is the duration of the file segment
+  let fileSegment = segmentName.split('/');
+  fileSegment = fileSegment[fileSegment.length - 1].split('_');
+
+  const startTime = parseFloat(fileSegment[0]);
+  const duration = parseFloat(fileSegment[1]);
+  const confidence = parseFloat(output[output.length - 2]);
+
+  const result = {
     soundType: output[output.length - 3],
-    confidence: output[output.length - 2],
-    segmentName,
+    confidence,
+    startTime,
+    duration,
   };
+  return result;
 };
 
 // Deletes a file segment and its spectrogram
@@ -100,8 +111,8 @@ const classifySounds = async (job) => {
   return Promise.all(fileSegments)
     .then(() => {
       // Remove the file's temporary directory where we saved the file segments and spectrograms
-      childProcess('rm', ['-rf', job.path.input.split('.').slice(0, -1).join('.')]);
-      return sounds;
+      childProcess('rm', ['-rf', job.input.path.split('.').slice(0, -1).join('.')]);
+      return { sounds };
     }).catch(err => console.log(err));
 };
 

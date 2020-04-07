@@ -19,13 +19,15 @@ module.exports = Job.discriminator(JobType.ML, new mongoose.Schema({
         type: String,
         enum: [
           // TODO: Add actual classes -> Plane / Train used as examples
-          SoundType.Plane,
+          SoundType.Background,
           SoundType.Train,
         ],
       },
 
       // Number representing model's confidence in the sound type identified
       confidence: Number,
+      startTime: Number,
+      duration: Number,
     },
     default: null,
   },

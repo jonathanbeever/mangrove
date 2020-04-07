@@ -165,6 +165,10 @@ const getResultKeys = (type) => {
         'rmsL',
         'rmsR',
       ];
+    case Type.ML:
+      return [
+        'sounds',
+      ];
     default:
       throw new Error(`Invalid 'type' parameter: ${type}`);
   }

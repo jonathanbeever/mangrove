@@ -1,6 +1,6 @@
 
 const SoundType = Object.freeze({
-  Plane: 'Plane',
+  Background: 'Background',
   Train: 'Train',
 });
 
