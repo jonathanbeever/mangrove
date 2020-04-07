@@ -26,9 +26,11 @@ class AnnotationList extends Component {
   componentDidMount = () => {
     let openInit = [];
     // Initialize array with false open values
-    this.props.rows.forEach(row => {
+    if (this.props.rows !== undefined)  {
+      this.props.rows.forEach(row => {
       openInit.push(false);
-    });
+      });
+    }
 
     this.setState({ open: openInit });
   }
@@ -47,6 +49,8 @@ class AnnotationList extends Component {
   }
 
   render () {
+    const { rows } = this.props;
+
     return (
       <List
         component="div"
@@ -57,7 +61,8 @@ class AnnotationList extends Component {
         }
       >
         {
-          this.props.rows.map((row, index, arrayObj) => {
+          (rows !== undefined) 
+          ? rows.map((row, index, arrayObj) => {
             return (
               <React.Fragment key={index}>
                 <ListItem button onClick={(e) => this.handleClick(index, e)} key={index}>
@@ -80,6 +85,7 @@ class AnnotationList extends Component {
               </React.Fragment>
             )
           })
+          : ''
         }
       </List>
     );
