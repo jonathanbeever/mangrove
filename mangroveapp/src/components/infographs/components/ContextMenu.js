@@ -26,18 +26,18 @@ class ContextMenu extends Component {
         const cx = document.elementFromPoint(clickX, clickY).getAttribute('cx');
         const cy = document.elementFromPoint(clickX, clickY).getAttribute('cy');
         let data = {
-            mainJobId: this.props.mainJob,
             graph: document.elementFromPoint(clickX, clickY).getAttribute('graph'),
             src: document.elementFromPoint(clickX, clickY).getAttribute('src'),
             payload: {
-                aciLeft: document.elementFromPoint(clickX, clickY).getAttribute('acileft'),
-                aciRight: document.elementFromPoint(clickX, clickY).getAttribute('aciright'),
-                stamp: document.elementFromPoint(clickX, clickY).getAttribute('stamp'),
+                X: document.elementFromPoint(clickX, clickY).getAttribute('x'),
+                Y: document.elementFromPoint(clickX, clickY).getAttribute('y'),
                 name: document.elementFromPoint(clickX, clickY).getAttribute('name'),
                 fileName: document.elementFromPoint(clickX, clickY).getAttribute('filename'),
-                downloadUrl: document.elementFromPoint(clickX, clickY).getAttribute('downloadurl')
+                downloadUrl: document.elementFromPoint(clickX, clickY).getAttribute('downloadurl'),
+                jobId: document.elementFromPoint(clickX, clickY).getAttribute('jobid')
             }
         }
+        console.log(data);
 
         this.setState({ visible: true, cx: cx, cy: cy, data: data });
 

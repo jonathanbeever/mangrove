@@ -26,8 +26,8 @@ class AnnotationList extends Component {
   componentDidMount = () => {
     let openInit = [];
     // Initialize array with false open values
-    if (this.props.rows !== undefined)  {
-      this.props.rows.forEach(row => {
+    if (this.props.annotations !== undefined)  {
+      this.props.annotations.forEach(row => {
       openInit.push(false);
       });
     }
@@ -49,7 +49,11 @@ class AnnotationList extends Component {
   }
 
   render () {
-    const { rows } = this.props;
+    const { annotations, graph } = this.props;
+
+    let annotationsFiltered;
+    if (annotations !== undefined) annotationsFiltered = annotations.filter(annotation => annotation.annotationGraph === graph);
+    else annotationsFiltered = [];
 
     return (
       <List
@@ -61,24 +65,21 @@ class AnnotationList extends Component {
         }
       >
         {
-          (rows !== undefined) 
-          ? rows.map((row, index, arrayObj) => {
+          (annotationsFiltered !== undefined) 
+          ? annotationsFiltered.map((annotation, index, arrayObj) => {
             return (
               <React.Fragment key={index}>
                 <ListItem button onClick={(e) => this.handleClick(index, e)} key={index}>
-                  <ListItemText primary={row.annotation} />
+                  <ListItemText primary={annotation.annotation} />
                   { this.state.open[index] ? <ExpandLess /> : <ExpandMore /> }
                 </ListItem>
                 <Collapse in={this.state.open[index]} timeout="auto" unmountOnExit key={10}>
                   <List component="div" disablePadding>
-                    <ListItem button key={row.dataPoint.X}>
-                      <ListItemText primary={row.dataPoint.X} />
+                    <ListItem button key={annotation.dataPoint.X}>
+                      <ListItemText primary={annotation.dataPoint.X} />
                     </ListItem>
-                    <ListItem button key={row.dataPoint.Y1}>
-                      <ListItemText primary={row.dataPoint.Y1} />
-                    </ListItem>
-                    <ListItem button key={row.dataPoint.Y2}>
-                      <ListItemText primary={row.dataPoint.Y2} />
+                    <ListItem button key={annotation.dataPoint.Y}>
+                      <ListItemText primary={annotation.dataPoint.Y} />
                     </ListItem>
                   </List>
                 </Collapse>

@@ -52,7 +52,8 @@ class ChooseSpecs extends Component {
         'adi': [],
         'aei': [],
         'bi': [],
-        'rms': []
+        'rms': [],
+        'ml': [],
       }
       res.data.specs.forEach(spec => {
         specs[spec.type].push(spec)

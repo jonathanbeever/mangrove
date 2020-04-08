@@ -4,8 +4,9 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import CustomTooltip from './components/CustomTooltip';
 import ContextMenu from '../infographs/components/ContextMenu';
-import CustomActiveDot from './components/CustomActiveDot';
-import CustomDot from './components/CustomDot';
+import CustomActiveDotACILeft from './components/customDots/CustomActiveDotACILeft';
+import CustomActiveDotACIRight from './components/customDots/CustomActiveDotACIRight';
+import CustomDot from './components/customDots/CustomDot';
 import AnnotationList from '../analysisView/annotationList';
 
 class ACILineChart extends Component {
@@ -47,8 +48,7 @@ class ACILineChart extends Component {
       <div>
         <ContextMenu
           audioCallback={this.props.audioCallback}
-          initializeAnnotationViewData={this.props.initializeAnnotationViewData} 
-          mainJob={this.props.mainJob} 
+          initializeAnnotationViewData={this.props.initializeAnnotationViewData}
         />
         <div>
           <Grid container spacing={3}>
@@ -73,8 +73,20 @@ class ACILineChart extends Component {
                     <Tooltip content={<CustomTooltip />} />
                     :
                     <Tooltip />}
-                  <Line activeDot={<CustomActiveDot title={title} />} type='monotone' dataKey={firstDataKey} stroke='#8884d8' dot={<CustomDot rows={this.props.annotations} />} />
-                  <Line activeDot={<CustomActiveDot title={title} />} type='monotone' dataKey={secondDataKey} stroke='#82ca9d' dot={<CustomDot rows={this.props.annotations} />} />
+                  <Line 
+                    activeDot={<CustomActiveDotACILeft graph={title} />} 
+                    type='monotone' 
+                    dataKey={firstDataKey} 
+                    stroke='#8884d8' 
+                    dot={<CustomDot annotations={this.props.annotations} graph={title} />} 
+                  />
+                  <Line 
+                    activeDot={<CustomActiveDotACIRight graph={title} />} 
+                    type='monotone' 
+                    dataKey={secondDataKey} 
+                    stroke='#82ca9d' 
+                    dot={<CustomDot annotations={this.props.annotations} graph={title} />}
+                  />
                   <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
                 </LineChart>
               </Paper>
@@ -82,7 +94,8 @@ class ACILineChart extends Component {
             <Grid item xs={3}>
               <Paper style={{ height: 600, width: '100%', overflow: 'auto' }}>
                 <AnnotationList
-                  rows={this.props.annotations}
+                  annotations={this.props.annotations}
+                  graph={title}
                 />
               </Paper>
             </Grid>

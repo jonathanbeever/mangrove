@@ -4,8 +4,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import CustomTooltip from '../components/CustomTooltip';
 import ContextMenu from '../../infographs/components/ContextMenu';
-import CustomActiveDot from '../components/CustomActiveDot';
-import CustomDot from '../components/CustomDot';
+import CustomActiveDot from '../components/customDots/CustomActiveDotACILeft';
+import CustomDot from '../components/customDots/CustomDot';
 import AnnotationList from '../../analysisView/annotationList';
 
 class MLLineChart extends Component {
@@ -80,7 +80,7 @@ class MLLineChart extends Component {
                     activeDot={<CustomActiveDot title={title} />} 
                     type='stepBefore' dataKey={dataKey} 
                     stroke='#8884d8' 
-                    dot={<CustomDot rows={this.props.annotations} />} 
+                    dot={<CustomDot graph={title} rows={this.props.annotations} />} 
                   />
                   <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush} />
                 </LineChart>

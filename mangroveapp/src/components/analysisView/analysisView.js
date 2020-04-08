@@ -216,6 +216,7 @@ class AnalysisView extends Component {
       // don't make a Paper if the index is empty
       if(utils.isEmpty(obj)) continue;
 
+      // Loop through specs
       specRows = [];
       for(var spec in obj) {
 
@@ -303,11 +304,11 @@ class AnalysisView extends Component {
               <SpecAnalysisPanel
                 index={index}
                 spec={spec}
+                jobs={obj[spec]}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
                 initializeAnnotationViewData={this.initializeAnnotationViewData}
-                annotations={await this.getAnnotations(spec)}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -431,7 +432,6 @@ class AnalysisView extends Component {
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
                 initializeAnnotationViewData={this.initializeAnnotationViewData}
-                annotations={this.getAnnotations(spec)}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -551,7 +551,6 @@ class AnalysisView extends Component {
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
                 initializeAnnotationViewData={this.initializeAnnotationViewData}
-                annotations={this.getAnnotations(spec)}
               />
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -757,10 +756,9 @@ class AnalysisView extends Component {
   }
 
   initializeAnnotationViewData = (data) => {
-    let mainJobId = data.mainJobId;
-    let aciLeft = data.payload.aciLeft;
-    let aciRight = data.payload.aciRight;
-    let stamp = data.payload.stamp;
+    let jobId = data.payload.jobId;
+    let X = data.payload.X;
+    let Y = data.payload.Y;
     let graph = data.graph;
     let title;
 
@@ -769,11 +767,10 @@ class AnalysisView extends Component {
 
     const new_state = {
       showAnnotationView: true,
-      aciLeft: aciLeft,
-      aciRight: aciRight,
-      stamp: stamp,
+      X,
+      Y,
       title: title,
-      mainJobId: mainJobId,
+      jobId: jobId,
       graph: graph
     };
 
@@ -813,13 +810,12 @@ class AnalysisView extends Component {
 
   handleCreateAnnotation = (annotationData) => {
     const annotation = {
-      jobId: this.state.mainJobId,
+      jobId: this.state.jobId,
       annotation: annotationData.note,
       graph: annotationData.graph,
       dataPoint: {
-        X: annotationData.stamp,
-        Y1: annotationData.aciLeft,
-        Y2: annotationData.aciRight,
+        X: annotationData.X,
+        Y: annotationData.Y
       }
     };
     
@@ -828,20 +824,13 @@ class AnalysisView extends Component {
     axios.put(url, annotation).catch((err) => console.log(err));
   }
 
-  getAnnotations = async (jobId) => {
-    const url = 'http://127.0.0.1:34251/annotations/' + jobId;
-
-    const request = await axios.get(url);
-    return request.data.annotations;
-  }
-
   closeAnnotationView = () => {
     const new_state = {
       showAnnotationView: false,
-      aciLeft: null,
-      aciRight: null,
-      stamp: null,
-      title: null
+      X: null,
+      Y: null,
+      title: null,
+      graph: null
     }
 
     this.setState(new_state);
@@ -857,7 +846,7 @@ class AnalysisView extends Component {
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track,
-          aciLeft, aciRight, showAnnotationView, stamp, title, graph } = this.state;
+          X, Y, showAnnotationView, title, graph, jobId } = this.state;
     const { classes } = this.props;
 
     return (
@@ -870,9 +859,9 @@ class AnalysisView extends Component {
           position="right center"
         >
           <AnnotationView 
-            aciLeft={aciLeft}
-            aciRight={aciRight}
-            stamp={stamp}
+            X={X}
+            Y={Y}
+            jobId={jobId}
             title={title}
             graph={graph}
             handleCreateAnnotation={this.handleCreateAnnotation}

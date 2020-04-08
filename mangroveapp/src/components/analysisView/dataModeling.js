@@ -281,7 +281,8 @@ export function convertACIResults(jobs) {
         stamp: stamp,
         downloadUrl: job.input.downloadUrl,
         aciLeft: job.result.aciOverTimeL,
-        aciRight: job.result.aciOverTimeR
+        aciRight: job.result.aciOverTimeR,
+        jobId: job.jobId
       }
 
       ret.graph1.data.push(curObject);
@@ -295,7 +296,8 @@ export function convertACIResults(jobs) {
           stamp: stamp,
           downloadUrl: job.input.downloadUrl,
           aciLeft: job.result.aciOverTimeL[i],
-          aciRight: job.result.aciOverTimeR[i]
+          aciRight: job.result.aciOverTimeR[i],
+          jobId: job.jobId
         }
 
         ret.graph1.data.push(curObject);
@@ -308,7 +310,8 @@ export function convertACIResults(jobs) {
     {
       name: job.input.name,
       aciTotAllByMinL: job.result.aciTotAllByMinL,
-      aciTotAllByMinR: job.result.aciTotAllByMinR
+      aciTotAllByMinR: job.result.aciTotAllByMinR,
+      jobId: job.jobId
     }
 
     ret.graph2.data.push(curObject);
@@ -328,7 +331,8 @@ export function convertACIResults(jobs) {
         name: last + "-" + i + "Hz",
         fileName: job.input.name,
         aciLeft: job.result.aciFlValsL[indx],
-        aciRight: job.result.aciFlValsR[indx]
+        aciRight: job.result.aciFlValsR[indx],
+        jobId: job.jobId
       }
 
       ret.graph3.data.push(curObject);
@@ -340,7 +344,8 @@ export function convertACIResults(jobs) {
     {
       name: dayDate,
       aciLeft: job.result.aciTotAllByMinL,
-      aciRight: job.result.aciTotAllByMinR
+      aciRight: job.result.aciTotAllByMinR,
+      jobId: job.jobId
     }
 
     ret.graph4.data.push(curObject);
@@ -349,7 +354,8 @@ export function convertACIResults(jobs) {
     {
       name: job.input.name,
       aciLeft: job.result.aciTotAllByMinL,
-      aciRight: job.result.aciTotAllByMinR
+      aciRight: job.result.aciTotAllByMinR,
+      jobId: job.jobId
     }
 
     ret.graph5.data.push(curObject);

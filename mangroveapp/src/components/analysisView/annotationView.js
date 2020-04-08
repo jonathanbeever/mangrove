@@ -21,9 +21,9 @@ class AnnotationView extends Component {
   handleEnter = (e) => {
     const annotationData = {
       note: this.state.note,
-      stamp: this.props.stamp,
-      aciLeft: this.props.aciLeft,
-      aciRight: this.props.aciRight,
+      jobId: this.props.jobId,
+      X: this.props.X,
+      Y: this.props.Y,
       graph: this.props.graph
     };
 
@@ -33,9 +33,9 @@ class AnnotationView extends Component {
   handleCreateAnnotation = (e) => {
     const annotationData = {
       note: this.state.note,
-      stamp: this.props.stamp,
-      aciLeft: this.props.aciLeft,
-      aciRight: this.props.aciRight,
+      jobId: this.props.jobId,
+      X: this.props.X,
+      Y: this.props.Y,
       graph: this.props.graph
     };
 

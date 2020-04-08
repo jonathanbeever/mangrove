@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
 
-class CustomActiveDot extends Component {
+class CustomActiveDotACILeft extends Component {
   render() {
-    const { cx, cy, payload, dataKey, title } = this.props;
+    const { cx, cy, payload, dataKey, graph } = this.props;
+
     return (
       <circle 
         className="recharts-dot" 
         cx={cx} 
         cy={cy} 
         r={5}
-        acileft={payload.aciLeft}
-        aciright={payload.aciRight}
-        stamp={payload.stamp}
+        x={payload.aciLeft}
+        y={payload.stamp}
+        jobid={payload.jobId}
         name={payload.name}
         filename={payload.fileName}
         downloadurl={payload.downloadUrl}
         key={dataKey}
-        graph={title}
+        graph={graph}
       />
     );
   }
 }
 
-export default CustomActiveDot;
+export default CustomActiveDotACILeft;

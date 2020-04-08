@@ -41,17 +41,17 @@ class GraphsTable extends React.Component {
   {
     let { graphs, index, annotations } = this.props;
 
-    const aciSecondsPerFile = annotations.filter(annotation => { 
-      if (annotation.annotationGraph === "ACI By Seconds Per File")
-        return true;
-      else return false;
-     });
+    // const aciSecondsPerFile = annotations.filter(annotation => { 
+    //   if (annotation.annotationGraph === "ACI By Seconds Per File")
+    //     return true;
+    //   else return false;
+    //  });
 
-     const aciByFile = annotations.filter(annotation => { 
-      if (annotation.annotationGraph === "ACI By File")
-        return true;
-      else return false;
-     });
+    //  const aciByFile = annotations.filter(annotation => { 
+    //   if (annotation.annotationGraph === "ACI By File")
+    //     return true;
+    //   else return false;
+    //  });
 
     const rows = [];
     let ctr = 1;
@@ -130,9 +130,9 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
-                    mainJob={this.props.mainJob}
-                    annotations={aciSecondsPerFile}
+                    jobs={this.props.jobs}
                     title={obj.title}
+                    annotations={annotations}
                   />}
                 />
               )
@@ -181,8 +181,9 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
-                    annotations={aciByFile}
+                    jobs={this.props.jobs}
                     title={obj.title}
+                    annotations={annotations}
                   />}
                 />
               )
