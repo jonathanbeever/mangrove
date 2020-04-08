@@ -827,6 +827,7 @@ class AnalysisView extends Component {
   closeAnnotationView = () => {
     const new_state = {
       showAnnotationView: false,
+      jobId: null,
       X: null,
       Y: null,
       title: null,

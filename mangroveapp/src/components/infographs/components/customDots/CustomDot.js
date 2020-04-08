@@ -50,6 +50,16 @@ class CustomDot extends Component {
           break;
         
         case 'NDSI By Date and Hour':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'NDSI By Date and Hour' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.ndsi ||
+                   parseFloat(annotation.dataPoint.Y) === payload.biophony ||
+                   parseFloat(annotation.dataPoint.Y) === payload.anthrophony);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
 
         case 'ADI Value By Band Range':

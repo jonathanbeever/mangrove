@@ -191,7 +191,8 @@ export function convertNDSIResults(jobs) {
       name: dayDate,
       ndsi: (job.result.ndsiL + job.result.ndsiR) / 2,
       biophony: (job.result.biophonyL + job.result.biophonyR) / 2,
-      anthrophony: (job.result.anthrophonyL + job.result.anthrophonyR) / 2
+      anthrophony: (job.result.anthrophonyL + job.result.anthrophonyR) / 2,
+      jobId: job.jobId
     }
 
     ret.graph4.data.push(curObject);
@@ -204,7 +205,8 @@ export function convertNDSIResults(jobs) {
       biophonyL: job.result.biophonyL,
       biophonyR: job.result.biophonyR,
       anthrophonyL: job.result.anthrophonyL,
-      anthrophonyR: job.result.anthrophonyR
+      anthrophonyR: job.result.anthrophonyR,
+      jobId: job.jobId
     }
 
     ret.graph5.data.push(curObject);
@@ -370,6 +372,7 @@ export function convertADIResults(jobs) {
   let ret;
 
   let arrLength;
+  let jobIds = [];
 
   if(finished.length === 0) arrLength = 0;
   else arrLength = finished[0].result.bandL.length;
@@ -382,6 +385,8 @@ export function convertADIResults(jobs) {
   finished.forEach(function(job){
     adiLTotal += job.result.adiL;
     adiRTotal += job.result.adiR;
+
+    jobIds.push(job.jobId);
 
     adiLBandTemp = adiLBandTemp.map(function(num, idx){
       return num + job.result.bandL[idx];
@@ -416,6 +421,7 @@ export function convertADIResults(jobs) {
       dataKey2: "rightBandVal",
       left: adiLAvg,
       right: adiRAvg,
+      jobIds
     },
     fileData:
     {
@@ -433,6 +439,7 @@ export function convertADIResults(jobs) {
       dataKey2: "rightADIVal",
       left: adiLAvg,
       right: adiRAvg,
+      jobIds
     },
     graph4:
     {
@@ -444,6 +451,7 @@ export function convertADIResults(jobs) {
       dataKey2: "rightADIVal",
       left: adiLAvg,
       right: adiRAvg,
+      jobIds
     }
   }
 
@@ -472,7 +480,8 @@ export function convertADIResults(jobs) {
     {
       name: dayDate,
       leftADIVal: job.result.adiL,
-      rightADIVal: job.result.adiR
+      rightADIVal: job.result.adiR,
+      jobId: job.jobId
     }
 
     ret.graph4.data.push(curObject);
@@ -481,7 +490,8 @@ export function convertADIResults(jobs) {
     {
       name: job.input.name,
       leftADIVal: job.result.adiL,
-      rightADIVal: job.result.adiR
+      rightADIVal: job.result.adiR,
+      jobId: job.jobId
     }
 
     ret.graph2.data.push(curObject);
@@ -601,7 +611,8 @@ export function convertAEIResults(jobs) {
     {
       name: dayDate,
       leftAEIVal: job.result.aeiL,
-      rightAEIVal: job.result.aeiR
+      rightAEIVal: job.result.aeiR,
+      jobId: job.jobId
     }
 
     ret.graph4.data.push(curObject);
@@ -610,7 +621,8 @@ export function convertAEIResults(jobs) {
     {
       name: job.input.name,
       leftAEIVal: job.result.aeiL,
-      rightAEIVal: job.result.aeiR
+      rightAEIVal: job.result.aeiR,
+      jobId: job.jobId
     }
 
     ret.graph2.data.push(curObject);
@@ -682,7 +694,8 @@ export function convertBIResults(jobs) {
     {
       name: dayDate,
       areaL: job.result.areaL,
-      areaR: job.result.areaR
+      areaR: job.result.areaR,
+      jobId: job.jobId
     }
 
     ret.graph4.data.push(curObject);
@@ -690,7 +703,8 @@ export function convertBIResults(jobs) {
     curObject = {
       name: job.input.name,
       areaL: job.result.areaL,
-      areaR: job.result.areaR
+      areaR: job.result.areaR,
+      jobId: job.jobId
     }
     ret.graph3.data.push(curObject);
 
@@ -716,33 +730,38 @@ export function convertMLResults(jobs) {
     }
   };
   
-  // For every data point, determine if it should be graphed
-  finished[0].result.sounds.forEach(dataPoint => {
-    let tempDataPoint = dataPoint;
-    if (tempDataPoint.confidence > 0) {
-      tempDataPoint.shouldGraph = 1;
-    } else tempDataPoint.shouldGraph = 0;
+  finished.forEach((job) => {
+    // For every data point, determine if it should be graphed
+    job.result.sounds.forEach(sound => {
+      let tempSound = sound;
+      if (tempSound.confidence > 0) {
+        tempSound.shouldGraph = 1;
+      } else tempSound.shouldGraph = 0;
 
-    ret.graph1.data.push(tempDataPoint);
-  });
+      // Assign data point to current job
+      tempSound.jobId = job.jobId;
+      ret.graph1.data.push(tempSound);
+    });
 
-  for (var i = 0; i < finished[0].input.durationMs; i += 10000) {
-    const iToSeconds = i / 1000;
-    const dataPoint = {
-      soundType: '',
-      confidence: 0,
-      startTime: iToSeconds,
-      duration: 10,
-      shouldGraph: 0,
-    };
+    for (var i = 0; i < job.input.durationMs; i += 10000) {
+      const iToSeconds = i / 1000;
+      const dataPoint = {
+        soundType: '',
+        confidence: 0,
+        startTime: iToSeconds,
+        duration: 10,
+        shouldGraph: 0,
+        jobId: job.jobId
+      };
 
-    // Only add a datapoint where we don't already have a value to graph
-    if (ret.graph1.data.filter((dataPoint) => dataPoint.startTime === iToSeconds).length === 0) {
-      ret.graph1.data.push(dataPoint);
+      // Only add a datapoint where we don't already have a value to graph
+      if (ret.graph1.data.filter((dataPoint) => dataPoint.startTime === iToSeconds).length === 0) {
+        ret.graph1.data.push(dataPoint);
+      }
+
+      ret.graph1.data.sort((data1, data2) => data1.startTime - data2.startTime);
     }
-  }
-  
-  ret.graph1.data.sort((data1, data2) => data1.startTime - data2.startTime);
+  });
   
   return ret;
 }
