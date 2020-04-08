@@ -37,7 +37,6 @@ class ContextMenu extends Component {
                 jobId: document.elementFromPoint(clickX, clickY).getAttribute('jobid')
             }
         }
-        console.log(data);
 
         this.setState({ visible: true, cx: cx, cy: cy, data: data });
 

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid} from 'recharts';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import CustomTooltip from '../components/CustomTooltip';
 import ContextMenu from '../../infographs/components/ContextMenu';
-import CustomActiveDot from '../components/customDots/CustomActiveDotACILeft';
+import CustomActiveDot from '../components/customDots/ACI/CustomActiveDotACILeft';
 import CustomDot from '../components/customDots/CustomDot';
 import AnnotationList from '../../analysisView/annotationList';
 

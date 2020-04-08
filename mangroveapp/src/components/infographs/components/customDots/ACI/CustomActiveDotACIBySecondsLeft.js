@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-class CustomActiveDotACILeft extends Component {
+class CustomActiveDotACIBySecondsLeft extends Component {
   render() {
     const { cx, cy, payload, dataKey, graph } = this.props;
-
+    
     return (
       <circle 
         className="recharts-dot" 
@@ -23,4 +23,4 @@ class CustomActiveDotACILeft extends Component {
   }
 }
 
-export default CustomActiveDotACILeft;
+export default CustomActiveDotACIBySecondsLeft;

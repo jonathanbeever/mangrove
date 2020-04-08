@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class CustomActiveDotACIRight extends Component {
+class CustomActiveDotACILeft extends Component {
   render() {
     const { cx, cy, payload, dataKey, graph } = this.props;
 
@@ -10,8 +10,8 @@ class CustomActiveDotACIRight extends Component {
         cx={cx} 
         cy={cy} 
         r={5}
-        x={payload.aciRight}
-        y={payload.stamp}
+        x={payload.name}
+        y={payload.aciLeft}
         jobid={payload.jobId}
         name={payload.name}
         filename={payload.fileName}
@@ -23,4 +23,4 @@ class CustomActiveDotACIRight extends Component {
   }
 }
 
-export default CustomActiveDotACIRight;
+export default CustomActiveDotACILeft;

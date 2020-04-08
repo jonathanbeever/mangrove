@@ -43,7 +43,6 @@ class AnnotationView extends Component {
   }
 
   render() {
-
     return (
       <div>
         <p>Annotation</p>

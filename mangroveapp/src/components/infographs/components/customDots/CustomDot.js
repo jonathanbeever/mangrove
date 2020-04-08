@@ -28,9 +28,9 @@ class CustomDot extends Component {
           if (annotations.filter((annotation) => {
             // Returns true if there is an annotation at the current point
             return  annotation.annotationGraph === 'ACI By Date And Hour' &&
-                    parseInt(annotation.dataPoint.Y) === payload.stamp &&
-                    (parseFloat(annotation.dataPoint.X) === payload.aciRight || 
-                    parseFloat(annotation.dataPoint.X) === payload.aciLeft);
+            annotation.dataPoint.X === payload.name &&
+            (parseFloat(annotation.dataPoint.Y) === payload.aciRight || 
+            parseFloat(annotation.dataPoint.Y) === payload.aciLeft);
           }).length > 0)
           {
             isVisible = true;
@@ -40,9 +40,9 @@ class CustomDot extends Component {
           if (annotations.filter((annotation) => {
             // Returns true if there is an annotation at the current point
             return  annotation.annotationGraph === 'ACI By File' &&
-                    parseInt(annotation.dataPoint.Y) === payload.stamp &&
-                    (parseFloat(annotation.dataPoint.X) === payload.aciRight || 
-                    parseFloat(annotation.dataPoint.X) === payload.aciLeft);
+                    annotation.dataPoint.X === payload.name &&
+                    (parseFloat(annotation.dataPoint.Y) === payload.aciRight || 
+                    parseFloat(annotation.dataPoint.Y) === payload.aciLeft);
           }).length > 0)
           {
             isVisible = true;

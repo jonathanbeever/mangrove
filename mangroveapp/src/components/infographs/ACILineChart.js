@@ -4,8 +4,10 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import CustomTooltip from './components/CustomTooltip';
 import ContextMenu from '../infographs/components/ContextMenu';
-import CustomActiveDotACILeft from './components/customDots/CustomActiveDotACILeft';
-import CustomActiveDotACIRight from './components/customDots/CustomActiveDotACIRight';
+import CustomActiveDotACILeft from './components/customDots/ACI/CustomActiveDotACILeft';
+import CustomActiveDotACIRight from './components/customDots/ACI/CustomActiveDotACIRight';
+import CustomActiveDotACIBySecLeft from './components/customDots/ACI/CustomActiveDotACIBySecondsLeft';
+import CustomActiveDotACIBySecRight from './components/customDots/ACI/CustomActiveDotACIBySecondsRight';
 import CustomDot from './components/customDots/CustomDot';
 import AnnotationList from '../analysisView/annotationList';
 
@@ -26,6 +28,32 @@ class ACILineChart extends Component {
     }
   }
 
+  getActiveDots = () => {
+    let activeDots;
+
+    switch (this.props.title) {
+      case 'ACI By Seconds Per File':
+        activeDots = {
+          left: (<CustomActiveDotACIBySecLeft graph={this.props.title} />),
+          right: (<CustomActiveDotACIBySecRight graph={this.props.title} />)
+        }
+        break;
+
+      case 'ACI By Date And Hour':
+      case 'ACI By File':
+        activeDots = {
+          left: <CustomActiveDotACILeft graph={this.props.title} />,
+          right: <CustomActiveDotACIRight graph={this.props.title} />
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    return activeDots;
+  }
+
   render(){
     let data = this.props.results;
 
@@ -43,6 +71,8 @@ class ACILineChart extends Component {
     let len = data.length;
     if(len > 1500) endOfBrush = 1500;
     else endOfBrush = len;
+
+    let activeDots = this.getActiveDots();
 
     return(
       <div>
@@ -74,14 +104,14 @@ class ACILineChart extends Component {
                     :
                     <Tooltip />}
                   <Line 
-                    activeDot={<CustomActiveDotACILeft graph={title} />} 
+                    activeDot={activeDots.left} 
                     type='monotone' 
                     dataKey={firstDataKey} 
                     stroke='#8884d8' 
                     dot={<CustomDot annotations={this.props.annotations} graph={title} />} 
                   />
                   <Line 
-                    activeDot={<CustomActiveDotACIRight graph={title} />} 
+                    activeDot={activeDots.right} 
                     type='monotone' 
                     dataKey={secondDataKey} 
                     stroke='#82ca9d' 

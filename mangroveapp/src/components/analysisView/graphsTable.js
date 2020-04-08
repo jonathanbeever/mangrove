@@ -248,6 +248,8 @@ class GraphsTable extends React.Component {
                   dataKey2={obj.dataKey2}
                   dataKey3={obj.dataKey3}
                   dataKey4={obj.dataKey4}
+                  title={obj.title}
+                  annotations={annotations}
                 />}
               />
             )
