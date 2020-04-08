@@ -19,33 +19,14 @@ class AnnotationList extends Component {
     super(props);
 
     this.state = {
-      open: [],
+      opened: null,
     }
-  }
-
-  componentDidMount = () => {
-    let openInit = [];
-    // Initialize array with false open values
-    if (this.props.annotations !== undefined)  {
-      this.props.annotations.forEach(row => {
-      openInit.push(false);
-      });
-    }
-
-    this.setState({ open: openInit });
   }
 
   // Modify state to toggle annotation list item opened/closed
   handleClick = (index, e) => {
-    const list = this.state.open.map((item, j) => {
-      if (j===index) {
-        return !item;
-      } else {
-        return item;
-      }
-    });
-
-    this.setState({ open: list });
+    if (this.state.opened === index) this.setState({ opened: null });
+    else this.setState({ opened: index });
   }
 
   render () {
@@ -71,15 +52,15 @@ class AnnotationList extends Component {
               <React.Fragment key={index}>
                 <ListItem button onClick={(e) => this.handleClick(index, e)} key={index}>
                   <ListItemText primary={annotation.annotation} />
-                  { this.state.open[index] ? <ExpandLess /> : <ExpandMore /> }
+                  { this.state.opened === index ? <ExpandLess /> : <ExpandMore /> }
                 </ListItem>
-                <Collapse in={this.state.open[index]} timeout="auto" unmountOnExit key={10}>
+                <Collapse in={this.state.opened === index} timeout="auto" unmountOnExit key={10}>
                   <List component="div" disablePadding>
                     <ListItem button key={annotation.dataPoint.X}>
-                      <ListItemText primary={annotation.dataPoint.X} />
+                      <ListItemText primary={`X: ${annotation.dataPoint.X}`} />
                     </ListItem>
                     <ListItem button key={annotation.dataPoint.Y}>
-                      <ListItemText primary={annotation.dataPoint.Y} />
+                      <ListItemText primary={`Y: ${annotation.dataPoint.Y}`} />
                     </ListItem>
                   </List>
                 </Collapse>
