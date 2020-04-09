@@ -30,20 +30,21 @@ class ACILineChart extends Component {
 
   getActiveDots = () => {
     let activeDots;
+    let { title, index } = this.props;
 
     switch (this.props.title) {
       case 'ACI By Seconds Per File':
         activeDots = {
-          left: (<CustomActiveDotACIBySecLeft graph={this.props.title} />),
-          right: (<CustomActiveDotACIBySecRight graph={this.props.title} />)
+          left: (<CustomActiveDotACIBySecLeft graph={title} type={index} />),
+          right: (<CustomActiveDotACIBySecRight graph={title} type={index} />)
         }
         break;
 
       case 'ACI By Date And Hour':
       case 'ACI By File':
         activeDots = {
-          left: <CustomActiveDotACILeft graph={this.props.title} />,
-          right: <CustomActiveDotACIRight graph={this.props.title} />
+          left: <CustomActiveDotACILeft graph={title} type={index} />,
+          right: <CustomActiveDotACIRight graph={title} type={index} />
         }
         break;
 

@@ -24,7 +24,8 @@ class AnnotationView extends Component {
       jobId: this.props.jobId,
       X: this.props.X,
       Y: this.props.Y,
-      graph: this.props.graph
+      graph: this.props.graph,
+      index: this.props.index,
     };
 
 		if(e.key === 'Enter') this.props.handleCreateAnnotation(annotationData);
@@ -36,7 +37,8 @@ class AnnotationView extends Component {
       jobId: this.props.jobId,
       X: this.props.X,
       Y: this.props.Y,
-      graph: this.props.graph
+      graph: this.props.graph,
+      index: this.props.index,
     };
 
     this.props.handleCreateAnnotation(annotationData);

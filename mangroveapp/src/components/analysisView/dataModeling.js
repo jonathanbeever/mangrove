@@ -420,8 +420,7 @@ export function convertADIResults(jobs) {
       dataKey1: "leftBandVal",
       dataKey2: "rightBandVal",
       left: adiLAvg,
-      right: adiRAvg,
-      jobIds
+      right: adiRAvg
     },
     fileData:
     {
@@ -438,8 +437,7 @@ export function convertADIResults(jobs) {
       dataKey1: "leftADIVal",
       dataKey2: "rightADIVal",
       left: adiLAvg,
-      right: adiRAvg,
-      jobIds
+      right: adiRAvg
     },
     graph4:
     {
@@ -450,8 +448,7 @@ export function convertADIResults(jobs) {
       dataKey1: "leftADIVal",
       dataKey2: "rightADIVal",
       left: adiLAvg,
-      right: adiRAvg,
-      jobIds
+      right: adiRAvg
     }
   }
 
@@ -461,7 +458,8 @@ export function convertADIResults(jobs) {
     {
       name: finished[0].result.bandRangeL[i],
       leftBandVal: adiLBand[i],
-      rightBandVal: adiRBand[i]
+      rightBandVal: adiRBand[i],
+      jobIds
     }
 
     ret.graph1.data.push(curObject);

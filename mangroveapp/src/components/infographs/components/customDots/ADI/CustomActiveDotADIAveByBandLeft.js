@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class CustomActiveDotBio extends Component {
+class CustomActiveDotADIAveByFileLeft extends Component {
   render() {
     const { cx, cy, payload, dataKey, graph, type } = this.props;
 
@@ -11,8 +11,8 @@ class CustomActiveDotBio extends Component {
         cy={cy} 
         r={5}
         x={payload.name}
-        y={payload.biophony}
-        jobid={payload.jobId}
+        y={payload.leftBandVal}
+        jobid={payload.jobIds}
         name={payload.name}
         filename={payload.fileName}
         downloadurl={payload.downloadUrl}
@@ -24,4 +24,4 @@ class CustomActiveDotBio extends Component {
   }
 }
 
-export default CustomActiveDotBio;
+export default CustomActiveDotADIAveByFileLeft;

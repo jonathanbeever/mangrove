@@ -760,6 +760,7 @@ class AnalysisView extends Component {
     let X = data.payload.X;
     let Y = data.payload.Y;
     let graph = data.graph;
+    let index = data.type + 'Annotation';
     let title;
 
     if(data.payload.fileName) title = data.payload.fileName;
@@ -769,9 +770,10 @@ class AnalysisView extends Component {
       showAnnotationView: true,
       X,
       Y,
-      title: title,
-      jobId: jobId,
-      graph: graph
+      title,
+      jobId,
+      graph,
+      index,
     };
 
     this.setState(new_state);
@@ -813,6 +815,7 @@ class AnalysisView extends Component {
       jobId: this.state.jobId,
       annotation: annotationData.note,
       graph: annotationData.graph,
+      type: annotationData.index,
       dataPoint: {
         X: annotationData.X,
         Y: annotationData.Y
@@ -831,7 +834,8 @@ class AnalysisView extends Component {
       X: null,
       Y: null,
       title: null,
-      graph: null
+      graph: null,
+      index: null,
     }
 
     this.setState(new_state);
@@ -847,7 +851,7 @@ class AnalysisView extends Component {
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track,
-          X, Y, showAnnotationView, title, graph, jobId } = this.state;
+          X, Y, showAnnotationView, title, graph, jobId, index } = this.state;
     const { classes } = this.props;
 
     return (
@@ -865,6 +869,7 @@ class AnalysisView extends Component {
             jobId={jobId}
             title={title}
             graph={graph}
+            index={index}
             handleCreateAnnotation={this.handleCreateAnnotation}
           />
         </Popup>

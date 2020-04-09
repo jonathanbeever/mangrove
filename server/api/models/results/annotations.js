@@ -4,11 +4,6 @@ const options = { discriminatorKey: 'type' };
 
 module.exports = mongoose.model('Annotation', new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  jobId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Job',
-    required: 'true',
-  },
   annotation: String,
   graph: String,
 

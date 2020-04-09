@@ -30,7 +30,7 @@ class NDSIValuesLineChart extends Component {
 
   render(){
 
-    let { results, xAxisLabel, title, annotations } = this.props;
+    let { results, xAxisLabel, title, annotations, index } = this.props;
 
     let endOfBrush;
     let len = results.length;
@@ -58,21 +58,21 @@ class NDSIValuesLineChart extends Component {
                 <Legend />
                 <Tooltip/>
                 <Line 
-                  activeDot={<CustomActiveDotNDSI graph={title} />} 
+                  activeDot={<CustomActiveDotNDSI graph={title} type={index} />} 
                   type='monotone' 
                   dataKey='ndsi' 
                   stroke='#8884d8' 
                   dot={<CustomDot annotations={annotations} graph={title} />} 
                 />
                 <Line 
-                  activeDot={<CustomActiveDotBio graph={title} />} 
+                  activeDot={<CustomActiveDotBio graph={title} type={index} />} 
                   type='monotone' 
                   dataKey='biophony' 
                   stroke='#82ca9d' 
                   dot={<CustomDot annotations={annotations} graph={title} />} 
                 />
                 <Line 
-                  activeDot={<CustomActiveDotAnthro graph={title} />} 
+                  activeDot={<CustomActiveDotAnthro graph={title} type={index} />} 
                   type='monotone' 
                   dataKey='anthrophony' 
                   stroke='#e79797' 

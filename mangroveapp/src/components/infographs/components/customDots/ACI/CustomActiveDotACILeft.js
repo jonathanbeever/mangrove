@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class CustomActiveDotACILeft extends Component {
   render() {
-    const { cx, cy, payload, dataKey, graph } = this.props;
+    const { cx, cy, payload, dataKey, graph, type } = this.props;
 
     return (
       <circle 
@@ -18,6 +18,7 @@ class CustomActiveDotACILeft extends Component {
         downloadurl={payload.downloadUrl}
         key={dataKey}
         graph={graph}
+        index={type}
       />
     );
   }

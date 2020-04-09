@@ -62,6 +62,7 @@ class GraphsTable extends React.Component {
                 yAxisLabel={obj.yAxisLabel}
                 dataKey1={obj.dataKey1}
                 title={obj.title}
+                index={index}
               />}
             />
           )
@@ -120,6 +121,7 @@ class GraphsTable extends React.Component {
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                     title={obj.title}
                     annotations={annotations}
+                    index={index}
                   />}
                 />
               )
@@ -170,6 +172,7 @@ class GraphsTable extends React.Component {
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                     title={obj.title}
                     annotations={annotations}
+                    index={index}
                   />}
                 />
               )
@@ -295,6 +298,7 @@ class GraphsTable extends React.Component {
                     audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                     annotations={annotations}
+                    index={index}
                   />}
                 />
               )
@@ -375,8 +379,11 @@ class GraphsTable extends React.Component {
                     yAxisLabel={obj.yAxisLabel}
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
-                    index={"ADI"}
+                    index={index}
                     vals={[obj.left, obj.right]}
+                    title={obj.title}
+                    annotations={annotations}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -392,8 +399,11 @@ class GraphsTable extends React.Component {
                     yAxisLabel={obj.yAxisLabel}
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
-                    index={"ADI"}
+                    index={index}
                     vals={[obj.left, obj.right]}
+                    title={obj.title}
+                    annotations={annotations}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -416,7 +426,7 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     dataKey3={obj.dataKey3}
                     dataKey4={obj.dataKey4}
-                    index={"ADI"}
+                    index={index}
                     vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
                   />}
                 />
@@ -448,7 +458,7 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     dataKey3={obj.dataKey3}
                     dataKey4={obj.dataKey4}
-                    index={"ADI"}
+                    index={index}
                     vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
                   />}
                 />
@@ -483,7 +493,7 @@ class GraphsTable extends React.Component {
                     yAxisLabel={obj.yAxisLabel}
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
-                    index={"AEI"}
+                    index={index}
                     vals={[obj.left, obj.right]}
                   />}
                 />
@@ -500,7 +510,7 @@ class GraphsTable extends React.Component {
                     yAxisLabel={obj.yAxisLabel}
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
-                    index={"AEI"}
+                    index={index}
                     vals={[obj.left, obj.right]}
                   />}
                 />
@@ -524,7 +534,7 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     dataKey3={obj.dataKey3}
                     dataKey4={obj.dataKey4}
-                    index={"AEI"}
+                    index={index}
                     vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
                   />}
                 />
@@ -556,7 +566,7 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     dataKey3={obj.dataKey3}
                     dataKey4={obj.dataKey4}
-                    index={"AEI"}
+                    index={index}
                     vals={[obj.left, obj.right, obj.leftC, obj.rightC]}
                   />}
                 />

@@ -26,6 +26,7 @@ class ContextMenu extends Component {
         const cx = document.elementFromPoint(clickX, clickY).getAttribute('cx');
         const cy = document.elementFromPoint(clickX, clickY).getAttribute('cy');
         let data = {
+            type: document.elementFromPoint(clickX, clickY).getAttribute('index'),
             graph: document.elementFromPoint(clickX, clickY).getAttribute('graph'),
             src: document.elementFromPoint(clickX, clickY).getAttribute('src'),
             payload: {
