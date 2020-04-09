@@ -667,16 +667,19 @@ export function convertBIResults(jobs) {
     }
   }
 
-  for(var i = 0; i < finished[0].result.freqVals.length; i++)
-  {
-    let curObject =
+  if (finished.length > 0) {
+    for(var i = 0; i < finished[0].result.freqVals.length; i++)
     {
-      name: finished[0].result.freqVals[i],
-      leftSpectrum: finished[0].result.valsNormalizedL[i],
-      rightSpectrum: finished[0].result.valsNormalizedR[i]
-    }
+      let curObject =
+      {
+        name: finished[0].result.freqVals[i],
+        leftSpectrum: finished[0].result.valsNormalizedL[i],
+        rightSpectrum: finished[0].result.valsNormalizedR[i],
+        jobId: finished[0].jobId
+      }
 
-    ret.graph1.data.push(curObject);
+      ret.graph1.data.push(curObject);
+    }
   }
 
   finished.forEach(function(job){

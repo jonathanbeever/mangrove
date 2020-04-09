@@ -83,10 +83,38 @@ class CustomDot extends Component {
         case 'Bioacoustic Value By File':
           break;
         case 'Bioacoustic Spectrum Values':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'Bioacoustic Spectrum Values' &&
+                   parseFloat(annotation.dataPoint.X) === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.leftSpectrum ||
+                   parseFloat(annotation.dataPoint.Y) === payload.rightSpectrum);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
         case 'Bioacoustic Area Value By File':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'Bioacoustic Area Value By File' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.areaL ||
+                   parseFloat(annotation.dataPoint.Y) === payload.areaR);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
+
         case 'Bioacoustic Area Value By Date And Hour':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'Bioacoustic Area Value By Date And Hour' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.areaL ||
+                   parseFloat(annotation.dataPoint.Y) === payload.areaR);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
 
         default:

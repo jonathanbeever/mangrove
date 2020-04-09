@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
 import {LineChart, Line, Label, Legend, Brush, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import ContextMenu from '../infographs/components/ContextMenu';
+import CustomActiveDotBILeft from './components/customDots/BI/CustomActiveDotBILeft';
+import CustomActiveDotBIRight from './components/customDots/BI/CustomActiveDotBIRight';
+import CustomDot from './components/customDots/CustomDot';
+import AnnotationList from '../analysisView/annotationList';
 
 class BALineChart extends Component {
 
@@ -21,7 +28,7 @@ class BALineChart extends Component {
 
   render(){
 
-    let { results, xAxisLabel, yAxisLabel } = this.props;
+    let { results, xAxisLabel, yAxisLabel, annotations, title, index } = this.props;
 
     let endOfBrush;
     let len = results.length;
@@ -30,24 +37,66 @@ class BALineChart extends Component {
 
     return(
       <div>
-          <LineChart width={900} height={600} data={results}
-            margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-            <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey="name">
-              <Label value={xAxisLabel} position="insideBottom" offset={2} />
-            </XAxis>
-            <YAxis>
-              <Label value={yAxisLabel} position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
-            </YAxis>
-            <Legend />
-            <Tooltip/>
-            <Line type='monotone' dataKey='areaL' stroke='#8884d8' dot={false} />
-            <Line type='monotone' dataKey='areaR' stroke='#82ca9d' dot={false} />
-            <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush}>
-              <Line type='monotone' dataKey='areaL' stroke='#8884d8' dot={false} />
-              <Line type='monotone' dataKey='areaR' stroke='#82ca9d' dot={false} />
-            </Brush>
-          </LineChart>
+        <ContextMenu
+          audioCallback={this.props.audioCallback}
+          initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+        />
+        <Grid container spacing={3}>
+          <Grid item xs={9}>
+            <Paper>
+              <LineChart width={750} height={600} data={results}
+                margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                <CartesianGrid strokeDasharray="3 3"/>
+                <XAxis dataKey="name">
+                  <Label value={xAxisLabel} position="insideBottom" offset={2} />
+                </XAxis>
+                <YAxis>
+                  <Label value={yAxisLabel} position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
+                </YAxis>
+                <Legend />
+                <Tooltip/>
+                <Line
+                  activeDot={<CustomActiveDotBILeft graph={title} type={index} />}
+                  type='monotone' 
+                  dataKey='areaL' 
+                  stroke='#8884d8' 
+                  dot={<CustomDot annotations={annotations} graph={title} />} 
+                />
+                <Line
+                  activeDot={<CustomActiveDotBIRight graph={title} type={index} />}
+                  type='monotone' 
+                  dataKey='areaR' 
+                  stroke='#82ca9d' 
+                  dot={<CustomDot annotations={annotations} graph={title} />} 
+                />
+                <Brush endIndex={endOfBrush - 1} onChange={this.alertBrush}>
+                  <Line
+                    activeDot={<CustomActiveDotBILeft graph={title} type={index} />}
+                    type='monotone' 
+                    dataKey='areaL' 
+                    stroke='#8884d8' 
+                    dot={<CustomDot annotations={annotations} graph={title} />} 
+                  />
+                  <Line
+                    activeDot={<CustomActiveDotBIRight graph={title} type={index} />}
+                    type='monotone' 
+                    dataKey='areaR' 
+                    stroke='#82ca9d' 
+                    dot={<CustomDot annotations={annotations} graph={title} />} 
+                  />
+                </Brush>
+              </LineChart>
+            </Paper>
+          </Grid>
+          <Grid item xs={3}>
+            <Paper style={{ height: 600, width: '100%', overflow: 'auto' }}>
+              <AnnotationList
+                annotations={annotations}
+                graph={title}
+              />
+            </Paper>
+          </Grid>
+        </Grid>
       </div>
     );
   }

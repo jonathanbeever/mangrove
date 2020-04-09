@@ -495,6 +495,9 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     index={index}
                     vals={[obj.left, obj.right]}
+                    title={obj.title}
+                    annotations={annotations}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -512,6 +515,9 @@ class GraphsTable extends React.Component {
                     dataKey2={obj.dataKey2}
                     index={index}
                     vals={[obj.left, obj.right]}
+                    title={obj.title}
+                    annotations={annotations}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -600,6 +606,10 @@ class GraphsTable extends React.Component {
                     yAxisLabel={obj.yAxisLabel}
                     dataKey1={obj.dataKey1}
                     dataKey2={obj.dataKey2}
+                    index={index}
+                    title={obj.title}
+                    annotations={annotations}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
@@ -614,6 +624,10 @@ class GraphsTable extends React.Component {
                     results={obj.data}
                     xAxisLabel={obj.xAxisLabel}
                     yAxisLabel={obj.yAxisLabel}
+                    index={index}
+                    title={obj.title}
+                    annotations={annotations}
+                    initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
               )
