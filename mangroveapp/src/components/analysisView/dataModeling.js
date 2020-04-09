@@ -506,6 +506,7 @@ export function convertAEIResults(jobs) {
   let ret;
 
   let arrLength;
+  let jobIds = [];
 
   if(finished.length === 0) arrLength = 0;
   else arrLength = finished[0].result.bandL.length;
@@ -518,6 +519,8 @@ export function convertAEIResults(jobs) {
   finished.forEach(function(job){
     aeiLTotal += job.result.aeiL;
     aeiRTotal += job.result.aeiR;
+
+    jobIds.push(job.jobId);
 
     aeiLBandTemp = aeiLBandTemp.map(function(num, idx){
       return num + job.result.bandL[idx];
@@ -590,7 +593,8 @@ export function convertAEIResults(jobs) {
     {
       name: finished[0].result.bandRangeL[i],
       leftBandVal: aeiLBand[i],
-      rightBandVal: aeiRBand[i]
+      rightBandVal: aeiRBand[i],
+      jobIds
     }
 
     ret.graph1.data.push(curObject);

@@ -8,6 +8,10 @@ import CustomActiveDotADILeft from './components/customDots/ADI/CustomActiveDotA
 import CustomActiveDotADIRight from './components/customDots/ADI/CustomActiveDotADIRight';
 import CustomActiveDotADIByBandLeft from './components/customDots/ADI/CustomActiveDotADIAveByBandLeft';
 import CustomActiveDotADIByBandRight from './components/customDots/ADI/CustomActiveDotADIAveByBandRight';
+import CustomActiveDotAEILeft from './components/customDots/AEI/CustomActiveDotAEILeft';
+import CustomActiveDotAEIRight from './components/customDots/AEI/CustomActiveDotAEIRight';
+import CustomActiveDotAEIByBandLeft from './components/customDots/AEI/CustomActiveDotAEIByBandLeft';
+import CustomActiveDotAEIByBandRight from './components/customDots/AEI/CustomActiveDotAEIByBandRight';
 import AnnotationList from '../analysisView/annotationList';
 
 
@@ -38,8 +42,17 @@ class ADIAEILineChart extends Component {
         }
         break;
 
-      default:
+      case 'AEI By Band Range':
+        activeDots = {
+          left: <CustomActiveDotAEIByBandLeft graph={title} type={index} />,
+          right: <CustomActiveDotAEIByBandRight graph={title} type={index} />
+        }
         break;
+      default:
+        activeDots = {
+          left: <CustomActiveDotAEILeft graph={title} type={index} />,
+          right: <CustomActiveDotAEIRight graph={title} type={index} />
+        }
     }
 
     return activeDots;
@@ -59,8 +72,13 @@ class ADIAEILineChart extends Component {
         <h6>{index.toUpperCase()} Left: {parseFloat(vals[0]).toFixed(2)}</h6>
         <h6>{index.toUpperCase()} Right: {parseFloat(vals[1]).toFixed(2)}</h6>
         <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper elevation={0}>
+              <h5>Right click a data point to add an annotation to the graph. </h5>
+            </Paper>
+          </Grid>
           <Grid item xs={9}>
-            <Paper>
+            <Paper elevation={0}>
               <LineChart width={750} height={600} data={results}
                 margin={{top: 10, right: 30, left: 0, bottom: 0}}>
               <CartesianGrid strokeDasharray="3 3"/>

@@ -17,11 +17,33 @@ class SpecAnalysisPanel extends Component {
     const requests = [];
     const annotations = [];
 
+    const jobIds = []
+
+    const annotationType = `${this.props.jobs[0].spec.type}Annotation`;
+
+    this.props.jobs.forEach(job => {
+      jobIds.push(job.jobId);
+    })
+
     this.props.jobs.forEach(job => {
       const url = 'http://127.0.0.1:34251/annotations/' + job.jobId;
 
-      requests.push(axios.get(url).then(res => {
-        res.data.annotations.forEach(annotation => annotations.push(annotation));
+      requests.push(axios.get(url, 
+        { params: {
+          jobIds,
+          annotationType
+        } 
+      }).then(res => {
+        res.data.annotations.forEach(annotation => {
+          let shouldAdd = true;
+
+          // Check final list of annotations to see if the returned annotation has already been found
+          annotations.forEach(element => {
+            if (annotation.annotationId === element.annotationId) shouldAdd = false;
+          });
+
+          if (shouldAdd || annotations.length === 0) annotations.push(annotation);
+        });
       }));
     });
 

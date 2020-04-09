@@ -5,7 +5,7 @@ const config = require('config');
 const DaAnnotations = require('../../../data_access/results/daAnnotations');
 const logger = require('../../../util/logger');
 const { verify } = require('../../../util/verify');
-const { ParseAnnotationJson } = require('../../models/results/utils');
+// const { ParseAnnotationJson } = require('../../models/results/utils');
 
 const error = config.get('error');
 
@@ -19,8 +19,9 @@ router.put('/', async (req, res) => {
   if (!isAllowed) return res.status(401).json({ error: 'Invalid login' });
 
   try {
-    //const parsedJson = ParseAnnotationJson(req.body);
+    // const parsedJson = ParseAnnotationJson(req.body);
     const parsedJson = req.body;
+    console.log(req.body);
     const annotation = await DaAnnotations.AddAnnotation(parsedJson);
 
     return res.status(201).json(annotation);
@@ -32,8 +33,9 @@ router.put('/', async (req, res) => {
 
 // Get all annotations associated with a given job
 router.get('/:jobId', async (req, res) => {
-  const { jobId } = req.params;
+  let { jobId } = req.params;
   const token = req.get('Authorization');
+  const { jobIds, annotationType } = req.query;
 
   try {
     const isAllowed = verify(token);
@@ -41,7 +43,26 @@ router.get('/:jobId', async (req, res) => {
       return res.status(401).json({ error: 'Invalid login' });
     }
 
-    const searchResult = await DaAnnotations.GetAnnotationsByJob(jobId);
+    let searchResult;
+
+    // ADI and AEI have specific requirements when displaying annotations.
+    // Only annotations that include the exact job ids selected in the frontend
+    // Can be displayed because the analysis is calculated using multiple jobs
+    if (jobIds !== undefined
+      && (annotationType === 'adiAnnotation' || annotationType === 'aeiAnnotation')) {
+      jobId = jobIds;
+      const query = {
+        jobId: {
+          $size: jobId.length,
+          $in: jobId,
+        },
+      };
+
+      searchResult = await DaAnnotations.GetAnnotationsByJobArray(jobId[0], query);
+    } else {
+      searchResult = await DaAnnotations.GetAnnotationsByJob(jobId);
+    }
+
 
     return res.status(200).json(searchResult);
   } catch (err) {

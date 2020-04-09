@@ -63,21 +63,78 @@ class CustomDot extends Component {
           break;
 
         case 'ADI Value By Band Range':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'ADI Value By Band Range' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.leftBandVal ||
+                   parseFloat(annotation.dataPoint.Y) === payload.rightBandVal);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
-        case 'ADI Band Range Values By File':
-          break;
+
         case 'ADI Average By File':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'ADI Average By File' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.leftADIVal ||
+                   parseFloat(annotation.dataPoint.Y) === payload.rightADIVal);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
+
         case 'ADI Average By Date And Hour':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'ADI Average By Date And Hour' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.leftADIVal ||
+                   parseFloat(annotation.dataPoint.Y) === payload.rightADIVal);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
           
         case 'AEI By Band Range':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'AEI By Band Range' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.leftBandVal ||
+                   parseFloat(annotation.dataPoint.Y) === payload.rightBandVal);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
+
         case 'AEI Band Range Values By File':
           break;
+
         case 'AEI By File':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'AEI By File' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.leftAEIVal ||
+                   parseFloat(annotation.dataPoint.Y) === payload.rightAEIVal);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
+
         case 'AEI By Date And Hour':
+          if (annotations.filter((annotation) => {
+            // Returns strue if there is an annotation at the current point
+            return annotation.annotationGraph === 'AEI By Date And Hour' &&
+                   annotation.dataPoint.X === payload.name &&
+                   (parseFloat(annotation.dataPoint.Y) === payload.leftAEIVal ||
+                   parseFloat(annotation.dataPoint.Y) === payload.rightAEIVal);
+          }).length > 0) {
+            isVisible = true;
+          }
           break;
         
         case 'Bioacoustic Value By File':

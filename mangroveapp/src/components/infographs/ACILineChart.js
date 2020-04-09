@@ -84,12 +84,12 @@ class ACILineChart extends Component {
         <div>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Paper>
-                <h5>To listen to a sound file, simply click on a datapoint dot, and an audio player will appear.</h5>
+              <Paper elevation={0}>
+                <h5>Right click a data point to add an annotation to the graph or listen to a sound file.</h5>
               </Paper>
             </Grid>
             <Grid item xs={9}>
-              <Paper>
+              <Paper elevation={0}>
                 <LineChart width={750} height={600} data={data}
                   margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                   <CartesianGrid strokeDasharray="3 3" />

@@ -44,8 +44,13 @@ class NDSIValuesLineChart extends Component {
           initializeAnnotationViewData={this.props.initializeAnnotationViewData}
         />
         <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Paper elevation={0}>
+              <h5>Right click a data point to add an annotation to the graph. </h5>
+            </Paper>
+          </Grid>
           <Grid item xs={9}>
-            <Paper>
+            <Paper elevation={0}>
               <LineChart width={750} height={600} data={results}
                 margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                 <CartesianGrid strokeDasharray="3 3"/>
