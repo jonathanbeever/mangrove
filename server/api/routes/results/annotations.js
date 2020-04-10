@@ -21,7 +21,6 @@ router.put('/', async (req, res) => {
   try {
     // const parsedJson = ParseAnnotationJson(req.body);
     const parsedJson = req.body;
-    console.log(req.body);
     const annotation = await DaAnnotations.AddAnnotation(parsedJson);
 
     return res.status(201).json(annotation);
