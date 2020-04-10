@@ -761,6 +761,7 @@ class AnalysisView extends Component {
     let Y = data.payload.Y;
     let graph = data.graph;
     let index = data.type + 'Annotation';
+    let startTime = data.payload.startTime;
     let title;
 
     if(data.payload.fileName) title = data.payload.fileName;
@@ -774,6 +775,7 @@ class AnalysisView extends Component {
       jobId,
       graph,
       index,
+      startTime,
     };
 
     this.setState(new_state);
@@ -811,15 +813,21 @@ class AnalysisView extends Component {
   }
 
   handleCreateAnnotation = (annotationData) => {
+    let author = window.localStorage.getItem('email');
+    let dataPoint = {
+      X: annotationData.X,
+      Y: annotationData.Y
+    };
+
+    if (annotationData.index === 'mlAnnotation') dataPoint.startTime = annotationData.startTime;
+
     const annotation = {
       jobId: this.state.jobId,
+      author,
       annotation: annotationData.note,
       graph: annotationData.graph,
       type: annotationData.index,
-      dataPoint: {
-        X: annotationData.X,
-        Y: annotationData.Y
-      }
+      dataPoint: dataPoint
     };
     
     const url = 'http://127.0.0.1:34251/annotations';
@@ -836,6 +844,7 @@ class AnalysisView extends Component {
       title: null,
       graph: null,
       index: null,
+      startTime: null,
     }
 
     this.setState(new_state);
@@ -851,7 +860,7 @@ class AnalysisView extends Component {
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track,
-          X, Y, showAnnotationView, title, graph, jobId, index } = this.state;
+          X, Y, showAnnotationView, title, graph, jobId, index, startTime } = this.state;
     const { classes } = this.props;
 
     return (
@@ -870,6 +879,7 @@ class AnalysisView extends Component {
             title={title}
             graph={graph}
             index={index}
+            startTime={startTime}
             handleCreateAnnotation={this.handleCreateAnnotation}
           />
         </Popup>

@@ -25,9 +25,9 @@ module.exports = Job.discriminator(JobType.ML, new mongoose.Schema({
       },
 
       // Number representing model's confidence in the sound type identified
-      confidence: Number,
+      confidence: mongoose.Decimal128,
       startTime: Number,
-      duration: Number,
+      duration: mongoose.Decimal128,
     },
     default: null,
   },

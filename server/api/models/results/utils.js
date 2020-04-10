@@ -26,6 +26,7 @@ const getParamsFromAnnotation = (annotation) => {
   switch (annotation.type) {
     case AnnotationType.ACI:
       return {
+        ...(typeof annotation.author !== 'undefined' && { author: annotation.author }),
         ...(typeof annotation.jobId !== 'undefined' && { jobId: annotation.jobId }),
         ...(typeof annotation.annotation !== 'undefined' && { annotation: annotation.annotation }),
         ...(typeof annotation.graph !== 'undefined' && { graph: annotation.graph }),
@@ -33,6 +34,7 @@ const getParamsFromAnnotation = (annotation) => {
       };
     case AnnotationType.ADI:
       return {
+        ...(typeof annotation.author !== 'undefined' && { author: annotation.author }),
         ...(typeof annotation.jobId !== 'undefined' && { jobId: annotation.jobId }),
         ...(typeof annotation.annotation !== 'undefined' && { annotation: annotation.annotation }),
         ...(typeof annotation.graph !== 'undefined' && { graph: annotation.graph }),
@@ -40,6 +42,7 @@ const getParamsFromAnnotation = (annotation) => {
       };
     case AnnotationType.AEI:
       return {
+        ...(typeof annotation.author !== 'undefined' && { author: annotation.author }),
         ...(typeof annotation.jobId !== 'undefined' && { jobId: annotation.jobId }),
         ...(typeof annotation.annotation !== 'undefined' && { annotation: annotation.annotation }),
         ...(typeof annotation.graph !== 'undefined' && { graph: annotation.graph }),
@@ -47,6 +50,7 @@ const getParamsFromAnnotation = (annotation) => {
       };
     case AnnotationType.NDSI:
       return {
+        ...(typeof annotation.author !== 'undefined' && { author: annotation.author }),
         ...(typeof annotation.jobId !== 'undefined' && { jobId: annotation.jobId }),
         ...(typeof annotation.annotation !== 'undefined' && { annotation: annotation.annotation }),
         ...(typeof annotation.graph !== 'undefined' && { graph: annotation.graph }),
@@ -54,6 +58,7 @@ const getParamsFromAnnotation = (annotation) => {
       };
     case AnnotationType.BI:
       return {
+        ...(typeof annotation.author !== 'undefined' && { author: annotation.author }),
         ...(typeof annotation.jobId !== 'undefined' && { jobId: annotation.jobId }),
         ...(typeof annotation.annotation !== 'undefined' && { annotation: annotation.annotation }),
         ...(typeof annotation.graph !== 'undefined' && { graph: annotation.graph }),
@@ -61,10 +66,12 @@ const getParamsFromAnnotation = (annotation) => {
       };
     case AnnotationType.ML:
       return {
+        ...(typeof annotation.author !== 'undefined' && { author: annotation.author }),
         ...(typeof annotation.jobId !== 'undefined' && { jobId: annotation.jobId }),
         ...(typeof annotation.annotation !== 'undefined' && { annotation: annotation.annotation }),
         ...(typeof annotation.graph !== 'undefined' && { graph: annotation.graph }),
         ...(typeof annotation.dataPoint !== 'undefined' && { dataPoint: annotation.dataPoint }),
+        ...(typeof annotation.startTime !== 'undefined' && { startTime: annotation.startTime }),
       };
     default: throw new Error(`Invalid \`type\` parameter (${annotation.type}).`);
   }

@@ -30,6 +30,7 @@ class SpecAnalysisPanel extends Component {
 
       requests.push(axios.get(url, 
         { params: {
+          author: window.localStorage.getItem('email'),
           jobIds,
           annotationType
         } 

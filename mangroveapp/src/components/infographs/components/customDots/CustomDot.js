@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SoundTypes from '../../../../constants/analysis/soundTypes'
 
 class CustomDot extends Component {
   render() {
@@ -164,11 +165,23 @@ class CustomDot extends Component {
 
         case 'Bioacoustic Area Value By Date And Hour':
           if (annotations.filter((annotation) => {
-            // Returns strue if there is an annotation at the current point
+            // Returns true if there is an annotation at the current point
             return annotation.annotationGraph === 'Bioacoustic Area Value By Date And Hour' &&
                    annotation.dataPoint.X === payload.name &&
                    (parseFloat(annotation.dataPoint.Y) === payload.areaL ||
                    parseFloat(annotation.dataPoint.Y) === payload.areaR);
+          }).length > 0) {
+            isVisible = true;
+          }
+          break;
+
+        case 'Sound Types':
+          if (annotations.filter((annotation) => {
+            // Returns true if there is an annotation at the current point
+            return annotation.annotationGraph === 'Sound Types' &&
+                   annotation.dataPoint.X === payload.name &&
+                   annotation.dataPoint.Y === SoundTypes[payload.soundType] &&
+                   parseInt(annotation.dataPoint.startTime) === payload.startTime;
           }).length > 0) {
             isVisible = true;
           }

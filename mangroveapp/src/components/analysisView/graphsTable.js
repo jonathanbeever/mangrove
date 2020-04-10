@@ -61,6 +61,9 @@ class GraphsTable extends React.Component {
                 xAxisLabel={obj.xAxisLabel}
                 yAxisLabel={obj.yAxisLabel}
                 dataKey1={obj.dataKey1}
+                audioCallback={this.props.audioCallback}
+                initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+                annotations={annotations}
                 title={obj.title}
                 index={index}
               />}

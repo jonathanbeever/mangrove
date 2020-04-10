@@ -1,3 +1,5 @@
+import SoundTypes from '../../constants/analysis/soundTypes';
+
 /********** Core helper functions **********/
 export function sortByKey(array, key) {
     return array.sort(function(a, b) {
@@ -728,46 +730,33 @@ export function convertMLResults(jobs) {
     graph1:
     {
       data: [],
-      xAxisLabel: "Time",
+      title: "Sound Types",
+      xAxisLabel: "File Name",
       yAxisLabel: "Sound Type",
-      dataKey1: "shouldGraph",
-      title: "Sound Types"
+      dataKey1: "soundType",
     }
   };
   
   finished.forEach((job) => {
-    // For every data point, determine if it should be graphed
+    const jobResult = []
+
+    // For every data point, determine Y value to graph based on sound recognized
     job.result.sounds.forEach(sound => {
-      let tempSound = sound;
-      if (tempSound.confidence > 0) {
-        tempSound.shouldGraph = 1;
-      } else tempSound.shouldGraph = 0;
-
-      // Assign data point to current job
-      tempSound.jobId = job.jobId;
-      ret.graph1.data.push(tempSound);
-    });
-
-    for (var i = 0; i < job.input.durationMs; i += 10000) {
-      const iToSeconds = i / 1000;
-      const dataPoint = {
-        soundType: '',
-        confidence: 0,
-        startTime: iToSeconds,
-        duration: 10,
-        shouldGraph: 0,
-        jobId: job.jobId
-      };
-
-      // Only add a datapoint where we don't already have a value to graph
-      if (ret.graph1.data.filter((dataPoint) => dataPoint.startTime === iToSeconds).length === 0) {
-        ret.graph1.data.push(dataPoint);
+      let curObject = {
+        name: job.input.name,
+        soundType: SoundTypes.indexOf(sound.soundType),
+        confidence: sound.confidence,
+        startTime: sound.startTime,
+        jobId: job.jobId,
       }
 
-      ret.graph1.data.sort((data1, data2) => data1.startTime - data2.startTime);
-    }
+      jobResult.push(curObject);
+    });
+
+    jobResult.sort((data1, data2) => data1.startTime - data2.startTime);
+    ret.graph1.data.push(...jobResult);
   });
-  
+
   return ret;
 }
 

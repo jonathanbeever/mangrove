@@ -27,7 +27,7 @@ const AnnotationGraphType = Object.freeze({
   BIAreaByFile: 'Bioacoustic Area Value By File',
   BIAreaByDateHour: 'Bioacoustic Area Value By Date And Hour',
   // ML Graphs
-  MLResults: 'Machine Listening Results',
+  MLResults: 'Sound Types',
 });
 
 module.exports = AnnotationGraphType;

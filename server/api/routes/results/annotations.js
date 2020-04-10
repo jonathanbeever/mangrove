@@ -35,7 +35,7 @@ router.put('/', async (req, res) => {
 router.get('/:jobId', async (req, res) => {
   let { jobId } = req.params;
   const token = req.get('Authorization');
-  const { jobIds, annotationType } = req.query;
+  const { jobIds, annotationType, author } = req.query;
 
   try {
     const isAllowed = verify(token);
@@ -56,11 +56,12 @@ router.get('/:jobId', async (req, res) => {
           $size: jobId.length,
           $in: jobId,
         },
+        author,
       };
 
       searchResult = await DaAnnotations.GetAnnotationsByJobArray(jobId[0], query);
     } else {
-      searchResult = await DaAnnotations.GetAnnotationsByJob(jobId);
+      searchResult = await DaAnnotations.GetAnnotationsByJob(jobId, author);
     }
 
 
@@ -75,13 +76,16 @@ router.get('/:jobId', async (req, res) => {
 router.delete('/:annotationId', async (req, res) => {
   const { annotationId } = req.params;
   const token = req.get('Authorization');
+  const { author } = req.query;
 
   try {
     const isAllowed = verify(token);
 
     if (!isAllowed) return res.status(401).json({ error: 'Invalid login' });
 
-    const deleteAnnotation = await DaAnnotations.DeleteAnnotation(annotationId);
+    if (author === 'undefined') return res.status(400).json({ error: 'Missing Parameter: Author' });
+
+    const deleteAnnotation = await DaAnnotations.DeleteAnnotation(annotationId, author);
 
     return res.status(200).json({
       success: true,

@@ -35,7 +35,8 @@ class ContextMenu extends Component {
                 name: document.elementFromPoint(clickX, clickY).getAttribute('name'),
                 fileName: document.elementFromPoint(clickX, clickY).getAttribute('filename'),
                 downloadUrl: document.elementFromPoint(clickX, clickY).getAttribute('downloadurl'),
-                jobId: document.elementFromPoint(clickX, clickY).getAttribute('jobid')
+                jobId: document.elementFromPoint(clickX, clickY).getAttribute('jobid'),
+                startTime: document.elementFromPoint(clickX, clickY).getAttribute('starttime'),
             }
         }
 

@@ -42,19 +42,20 @@ const AddAnnotation = async (annotationInfo) => {
 };
 
 // Gets all annotations assigned to a given job
-const GetAnnotationsByJob = async (jobId) => {
+const GetAnnotationsByJob = async (jobId, author) => {
   const job = await Job.findById(jobId).exec();
 
   // Cut off the 'Job' from job type and replace with Annotation
   const annotationType = `${job.type.slice(0, -3)}Annotation`;
   const AnnotationModel = getAnnotationModel(annotationType);
 
-  const results = await AnnotationModel.find({ jobId }).exec();
+  const results = await AnnotationModel.find({ jobId, author }).exec();
 
   const annotations = {
     count: results.length,
     annotations: results.map(annotation => ({
       annotationId: annotation._id,
+      author: annotation.author,
       annotation: annotation.annotation,
       annotationGraph: annotation.graph,
       jobId: annotation.jobId,
@@ -76,7 +77,7 @@ const GetAnnotationsByJobArray = async (jobId, query) => {
 
   query.jobId.$in.forEach(async (id) => {
     const individualAnnotations = await AnnotationModel
-      .find({ jobId: [id] })
+      .find({ jobId: [id], author: query.author })
       .where('graph')
       .ne(AnnotationGraphType.ADIByBand)
       .exec();
@@ -92,6 +93,7 @@ const GetAnnotationsByJobArray = async (jobId, query) => {
     count: results.length,
     annotations: results.map(annotation => ({
       annotationId: annotation._id,
+      author: annotation.author,
       annotation: annotation.annotation,
       annotationGraph: annotation.graph,
       jobId: annotation.jobId,
@@ -103,7 +105,16 @@ const GetAnnotationsByJobArray = async (jobId, query) => {
 };
 
 // Deletes annotation by Id
-const DeleteAnnotation = async id => Annotation.findByIdAndDelete({ _id: id }).exec();
+const DeleteAnnotation = async (id, author) => {
+  // Check if the author is deleting the annotation
+  // Throw error if deletion is unauthorized
+  const annotation = await Annotation.findById(id).exec();
+  if (annotation.author !== author) throw new Error('Permission denied. Deletion failed.');
+
+  const deleteResult = await Annotation.findByIdAndDelete({ _id: id }).exec();
+
+  return deleteResult;
+};
 
 module.exports = {
   AddAnnotation,

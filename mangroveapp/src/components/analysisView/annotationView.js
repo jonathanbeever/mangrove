@@ -26,6 +26,7 @@ class AnnotationView extends Component {
       Y: this.props.Y,
       graph: this.props.graph,
       index: this.props.index,
+      startTime: this.props.startTime,
     };
 
 		if(e.key === 'Enter') this.props.handleCreateAnnotation(annotationData);
@@ -39,6 +40,7 @@ class AnnotationView extends Component {
       Y: this.props.Y,
       graph: this.props.graph,
       index: this.props.index,
+      startTime: this.props.startTime,
     };
 
     this.props.handleCreateAnnotation(annotationData);
