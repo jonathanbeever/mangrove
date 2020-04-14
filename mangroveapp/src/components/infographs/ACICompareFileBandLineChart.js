@@ -101,7 +101,6 @@ class ACICompareFileBandLineChart extends Component {
   }
 
   mergeByBand = (chosen, compare) => {
-    console.log(chosen, compare);
     let indx = 0;
     chosen.forEach(item => {
       if(indx < compare.length)

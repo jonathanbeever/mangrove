@@ -17,7 +17,7 @@ class SpecAnalysisPanel extends Component {
     const requests = [];
     const annotations = [];
 
-    const jobIds = []
+    const jobIds = [];
 
     const annotationType = `${this.props.jobs[0].spec.type}Annotation`;
 

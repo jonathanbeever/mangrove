@@ -29,6 +29,7 @@ class ContextMenu extends Component {
             type: document.elementFromPoint(clickX, clickY).getAttribute('index'),
             graph: document.elementFromPoint(clickX, clickY).getAttribute('graph'),
             src: document.elementFromPoint(clickX, clickY).getAttribute('src'),
+            inputId: document.elementFromPoint(clickX, clickY).getAttribute('inputid'),
             payload: {
                 X: document.elementFromPoint(clickX, clickY).getAttribute('x'),
                 Y: document.elementFromPoint(clickX, clickY).getAttribute('y'),
@@ -40,7 +41,7 @@ class ContextMenu extends Component {
             }
         }
 
-        this.setState({ visible: true, cx: cx, cy: cy, data: data });
+        this.setState({ visible: true, cx, cy, data });
 
         const screenW = window.innerWidth;
         const screenH = window.innerHeight;
@@ -96,17 +97,14 @@ class ContextMenu extends Component {
   };
   
   render() {
+      const { canAnnotate, canPlaySound } = this.props;
       const { visible } = this.state;
 
       return(visible || null) && 
           <div ref={ref => {this.root = ref}} className="contextMenu" onMouseLeave={this.handleMouseLeave}>
               <div className="contextMenu--separator" />
-              <div className="contextMenu--option" onClick={this.openAnnotationView}>
-                Annotate
-              </div>
-              <div className="contextMenu--option" onClick={this.openAudioView}>
-                  Play Sound
-              </div>
+              { canAnnotate  ? <div className="contextMenu--option" onClick={this.openAnnotationView}>Annotate</div> : '' }
+              { canPlaySound ? <div className="contextMenu--option" onClick={this.openAudioView}>Play Sound</div>    : '' }
           </div>
   };
 }

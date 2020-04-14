@@ -135,7 +135,6 @@ class NavBarWrapper extends Component {
 	      pems[keyID] = jwkToPem(jwk);
 	    }
 
-	    // console.log(token);
 	    const decodedJwt = jwt.decode(token, { complete: true });
 	    if (!decodedJwt) {
 	      console.log('Not a valid JWT');

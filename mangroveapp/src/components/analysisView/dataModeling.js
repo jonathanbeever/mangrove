@@ -194,7 +194,8 @@ export function convertNDSIResults(jobs) {
       ndsi: (job.result.ndsiL + job.result.ndsiR) / 2,
       biophony: (job.result.biophonyL + job.result.biophonyR) / 2,
       anthrophony: (job.result.anthrophonyL + job.result.anthrophonyR) / 2,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph4.data.push(curObject);
@@ -208,7 +209,8 @@ export function convertNDSIResults(jobs) {
       biophonyR: job.result.biophonyR,
       anthrophonyL: job.result.anthrophonyL,
       anthrophonyR: job.result.anthrophonyR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph5.data.push(curObject);
@@ -286,7 +288,8 @@ export function convertACIResults(jobs) {
         downloadUrl: job.input.downloadUrl,
         aciLeft: job.result.aciOverTimeL,
         aciRight: job.result.aciOverTimeR,
-        jobId: job.jobId
+        jobId: job.jobId,
+        inputId: job.input.inputId
       }
 
       ret.graph1.data.push(curObject);
@@ -301,7 +304,8 @@ export function convertACIResults(jobs) {
           downloadUrl: job.input.downloadUrl,
           aciLeft: job.result.aciOverTimeL[i],
           aciRight: job.result.aciOverTimeR[i],
-          jobId: job.jobId
+          jobId: job.jobId,
+          inputId: job.input.inputId
         }
 
         ret.graph1.data.push(curObject);
@@ -315,7 +319,8 @@ export function convertACIResults(jobs) {
       name: job.input.name,
       aciTotAllByMinL: job.result.aciTotAllByMinL,
       aciTotAllByMinR: job.result.aciTotAllByMinR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph2.data.push(curObject);
@@ -336,7 +341,8 @@ export function convertACIResults(jobs) {
         fileName: job.input.name,
         aciLeft: job.result.aciFlValsL[indx],
         aciRight: job.result.aciFlValsR[indx],
-        jobId: job.jobId
+        jobId: job.jobId,
+        inputId: job.input.inputId
       }
 
       ret.graph3.data.push(curObject);
@@ -349,7 +355,8 @@ export function convertACIResults(jobs) {
       name: dayDate,
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph4.data.push(curObject);
@@ -359,7 +366,8 @@ export function convertACIResults(jobs) {
       name: job.input.name,
       aciLeft: job.result.aciTotAllByMinL,
       aciRight: job.result.aciTotAllByMinR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph5.data.push(curObject);
@@ -505,6 +513,7 @@ export function convertADIResults(jobs) {
 
 export function convertAEIResults(jobs) {
   let finished = jobs.filter(x => x.status === "finished");
+
   let ret;
 
   let arrLength;
@@ -531,7 +540,6 @@ export function convertAEIResults(jobs) {
     aeiRBandTemp = aeiRBandTemp.map(function(num, idx){
       return num + job.result.bandR[idx];
     });
-
   });
 
   let denom = finished.length > 0 ? finished.length : 1;
@@ -589,14 +597,12 @@ export function convertAEIResults(jobs) {
     }
   }
 
-  for(var i = 0; i < aeiLBand.length; i++)
-  {
-    let curObject =
-    {
+  for(var i = 0; i < aeiLBand.length; i++) {
+    const curObject = {
       name: finished[0].result.bandRangeL[i],
       leftBandVal: aeiLBand[i],
       rightBandVal: aeiRBand[i],
-      jobIds
+      jobIds: jobIds
     }
 
     ret.graph1.data.push(curObject);
@@ -616,7 +622,8 @@ export function convertAEIResults(jobs) {
       name: dayDate,
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph4.data.push(curObject);
@@ -626,7 +633,8 @@ export function convertAEIResults(jobs) {
       name: job.input.name,
       leftAEIVal: job.result.aeiL,
       rightAEIVal: job.result.aeiR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph2.data.push(curObject);
@@ -681,7 +689,8 @@ export function convertBIResults(jobs) {
         name: finished[0].result.freqVals[i],
         leftSpectrum: finished[0].result.valsNormalizedL[i],
         rightSpectrum: finished[0].result.valsNormalizedR[i],
-        jobId: finished[0].jobId
+        jobId: finished[0].jobId,
+        inputId: finished[0].input.inputId
       }
 
       ret.graph1.data.push(curObject);
@@ -702,7 +711,8 @@ export function convertBIResults(jobs) {
       name: dayDate,
       areaL: job.result.areaL,
       areaR: job.result.areaR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
 
     ret.graph4.data.push(curObject);
@@ -711,14 +721,14 @@ export function convertBIResults(jobs) {
       name: job.input.name,
       areaL: job.result.areaL,
       areaR: job.result.areaR,
-      jobId: job.jobId
+      jobId: job.jobId,
+      inputId: job.input.inputId
     }
     ret.graph3.data.push(curObject);
 
   });
 
   ret.graph4.data = sortByKey(ret.graph4.data, 'name');
-
   return ret;
 }
 
@@ -748,6 +758,7 @@ export function convertMLResults(jobs) {
         confidence: sound.confidence,
         startTime: sound.startTime,
         jobId: job.jobId,
+        inputId: job.input.inputId
       }
 
       jobResult.push(curObject);
@@ -1485,7 +1496,6 @@ export function convertAEIResultsBySite(jobs, sites) {
 }
 
 export function convertAEIResultsBySeries(jobs, series) {
-
   const chosenSeriesJobs = jobs.filter(x => x.input.series === series[0] && x.status === "finished");
   const compareSeriesJobs = jobs.filter(x => x.input.series === series[1] && x.status === "finished");
 

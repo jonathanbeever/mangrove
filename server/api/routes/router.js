@@ -7,11 +7,13 @@ const Spec = require('./analysis/specs.js');
 const Input = require('./analysis/inputs.js');
 const MachineListen = require('./analysis/ml.js');
 const Annotations = require('./results/annotations.js');
+const Audio = require('./results/audio.js');
 
 router.use('/jobs', Job);
 router.use('/specs', Spec);
 router.use('/inputs', Input);
 router.use('/ml', MachineListen);
 router.use('/annotations', Annotations);
+router.use('/audio', Audio);
 
 module.exports = router;

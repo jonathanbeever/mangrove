@@ -68,6 +68,8 @@ class ADIAEILineChart extends Component {
         <ContextMenu
           audioCallback={this.props.audioCallback}
           initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+          canAnnotate={true}
+          canPlaySound={false}
         />
         <h6>{index.toUpperCase()} Left: {parseFloat(vals[0]).toFixed(2)}</h6>
         <h6>{index.toUpperCase()} Right: {parseFloat(vals[1]).toFixed(2)}</h6>

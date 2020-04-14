@@ -8,6 +8,14 @@ const AnnotationType = Object.freeze({
   NDSI: `${Type.NDSI}Annotation`,
   RMS: `${Type.RMS}Annotation`,
   ML: `${Type.ML}Annotation`,
+  ACICompare: `${Type.ACI}-compareAnnotation`,
+  ADICompare: `${Type.ADI}-compareAnnotation`,
+  AEICompare: `${Type.AEI}-compareAnnotation`,
+  BICompare: `${Type.BI}-compareAnnotation`,
+  NDSICompare: `${Type.NDSI}-compareAnnotation`,
+  RMSCompare: `${Type.RMS}-compareAnnotation`,
+  MLCompare: `${Type.ML}-compareAnnotation`,
+
 });
 
 module.exports = AnnotationType;

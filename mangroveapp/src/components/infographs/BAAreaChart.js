@@ -23,6 +23,8 @@ class BAAreaChart extends Component {
         <ContextMenu
           audioCallback={this.props.audioCallback}
           initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+          canAnnotate={true}
+          canPlaySound={false}
         />
         <Grid container spacing={3}>
           <Grid item xs={12}>

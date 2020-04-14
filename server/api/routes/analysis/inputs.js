@@ -137,6 +137,7 @@ router.put('/', (req, res) => {
 
       return res.status(201).json({
         inputId: createResult._id,
+        path: req.file.path,
         site: createResult.site,
         series: createResult.series,
         name: createResult.name,
@@ -177,6 +178,7 @@ router.get('/:inputId', async (req, res) => {
 
     return res.status(200).json({
       inputId: searchResult._id,
+      path: searchResult.path,
       site: searchResult.site,
       series: searchResult.series,
       name: searchResult.name,
@@ -212,6 +214,7 @@ router.get('/', async (req, res) => {
       count: searchResult.length,
       inputs: searchResult.map(input => ({
         inputId: input._id,
+        path: input.path,
         site: input.site,
         series: input.series,
         name: input.name,

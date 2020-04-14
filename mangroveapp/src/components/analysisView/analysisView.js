@@ -204,6 +204,7 @@ class AnalysisView extends Component {
   formatJob = async (data) => {
     const rows = [];
     let specRows = [];
+    let inputs = [];
     let graphs;
 
     let { indexedSpecs } = this.props;
@@ -294,7 +295,8 @@ class AnalysisView extends Component {
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
         if(index === 'rms') specTitle = "RMS Results";
         else if (index === 'ml') specTitle = "Machine Listening Results";
-
+        
+        inputs.push(obj[spec].input);
         specRows.push(
           <ExpansionPanel key={index + spec}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -339,7 +341,7 @@ class AnalysisView extends Component {
       </div>
     )
 
-    this.setState({ formattedJob: formattedJob })
+    this.setState({ formattedJob: formattedJob, inputs })
   }
 
   // Formats the data passed into it into a model usable by recharts.
@@ -348,6 +350,7 @@ class AnalysisView extends Component {
   formatJobSite = (data) => {
     const rows = [];
     let specRows = [];
+    let inputs = [];
     let graphs;
 
     let { indexedSpecs } = this.props;
@@ -419,6 +422,7 @@ class AnalysisView extends Component {
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
         if(index === 'rms') specTitle = "RMS Compared By Site and Series";
 
+        inputs.push(obj[spec].input);
         specRows.push(
           <ExpansionPanel key={index + spec}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -428,6 +432,7 @@ class AnalysisView extends Component {
               <SpecAnalysisPanel
                 index={index+"-compare"}
                 spec={spec}
+                jobs={obj[spec]}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
@@ -456,7 +461,7 @@ class AnalysisView extends Component {
       </div>
     );
 
-    this.setState({ comparedJobsSite: comparedJobsSite });
+    this.setState({ comparedJobsSite: comparedJobsSite, comparedSitesInputs: inputs });
 
   }
 
@@ -466,6 +471,7 @@ class AnalysisView extends Component {
   formatJobSeries = (data) => {
     const rows = [];
     let specRows = [];
+    let inputs = [];
     let graphs;
 
     let { indexedSpecs } = this.props;
@@ -538,6 +544,7 @@ class AnalysisView extends Component {
         let specTitle = utils.createSpecTitle(indexedSpecs[spec]);
         if(index === 'rms') specTitle = "RMS Compared By Series";
 
+        inputs.push(obj[spec].input);
         specRows.push(
           <ExpansionPanel key={index + spec}>
             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -547,6 +554,7 @@ class AnalysisView extends Component {
               <SpecAnalysisPanel
                 index={index+'-compare'}
                 spec={spec}
+                jobs={obj[spec]}
                 graphs={graphs}
                 callback={this.analysisViewAlertCallback}
                 audioCallback={this.handleAudioPlayerOpen}
@@ -575,7 +583,7 @@ class AnalysisView extends Component {
       </div>
     )
 
-    this.setState({ comparedJobsSeries: comparedJobsSeries });
+    this.setState({ comparedJobsSeries: comparedJobsSeries, comparedSeriesInputs: inputs });
 
   }
 
@@ -650,7 +658,7 @@ class AnalysisView extends Component {
     }
 
     this.setState({ files: filteredChosenInputs.map(x => x.name) });
-    this.setState({ urls: filteredChosenInputs.map(x => x.downloadUrl) });
+    this.setState({ urls: filteredChosenInputs.map(x => x.downloadUrl), inputs: filteredChosenInputs.map(x => x.inputId), filepaths: filteredChosenInputs.map(x => x.path) });
   }
 
   // Handler for the site Select
@@ -783,8 +791,10 @@ class AnalysisView extends Component {
 
   handleAudioPlayerOpen = (data, index) => {
     let seconds;
-    let finalPath;
     let title;
+    let inputId;
+    const url = 'http://127.0.0.1:34251/audio';
+    // this.loadFile(url, data.src);
 
     if(data.payload)
     {
@@ -792,18 +802,21 @@ class AnalysisView extends Component {
       else seconds = 0;
       if(data.payload.fileName) title = data.payload.fileName;
       else title = data.payload.name;
-      finalPath = data.payload.downloadUrl;
+      if(data.payload.inputId) inputId = data.payload.inputId;
+      else inputId = data.inputId;
     }else
     {
       seconds = 0;
       title = data.title;
-      finalPath = data.src;
+      inputId = data.inputId;
     }
 
+
     let track = {
+      inputId,
       title: title,
       startTime: seconds,
-      src: finalPath
+      src: data.src
     }
 
     this.setState({ track });
@@ -811,6 +824,32 @@ class AnalysisView extends Component {
       if(this.player) this.player.seekTo(track.startTime);
     });
   }
+
+  getAudioContext = () => {
+    AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioContent = new AudioContext();
+    return audioContent;
+  }
+
+  loadFile = async (url, filepath) => {
+    try {
+      const res = await axios.get(url, {
+        responseType: 'arraybuffer',
+        params: { src: filepath }
+      });
+
+      const audioContext = this.getAudioContext();
+      const audioBuffer = await audioContext.decodeAudioData(res.data);
+
+      const src = audioContext.createBufferSource();
+      src.buffer = audioBuffer;
+      src.connect(audioContext.destination);
+
+      // src.start();
+
+    }
+    catch (err) { console.log(err) }
+  };
 
   handleCreateAnnotation = (annotationData) => {
     let author = window.localStorage.getItem('email');
@@ -860,12 +899,12 @@ class AnalysisView extends Component {
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
           chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track,
-          X, Y, showAnnotationView, title, graph, jobId, index, startTime } = this.state;
-    const { classes } = this.props;
+          X, Y, showAnnotationView, title, graph, jobId, index, startTime, inputs, filepaths } = this.state;
 
+    const { classes } = this.props;
     return (
       <div>
-        <Popup 
+        <Popup
           open={showAnnotationView}
           onClose={this.closeAnnotationView}
           modal 
@@ -1002,6 +1041,8 @@ class AnalysisView extends Component {
                   key="audioPlayer"
                   files={files}
                   urls={urls}
+                  filepaths={filepaths}
+                  inputs={inputs}
                   audioCallback={this.handleAudioPlayerOpen}
                 />
               </Paper>
@@ -1042,8 +1083,9 @@ class AnalysisView extends Component {
                              onError={this.audioError}
                              height='65px'
                              width='100%'
-                             url={track.src}
-                             controls />
+                             url={'http://127.0.0.1:34251/audio/'+track.inputId}
+                             controls
+                            />
               </div>
             </div>
           </div>

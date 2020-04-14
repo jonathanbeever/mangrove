@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class CustomActiveDotACIBySecondsLeft extends Component {
   render() {
     const { cx, cy, payload, dataKey, graph, type } = this.props;
-    
+
     return (
       <circle 
         className="recharts-dot" 
@@ -15,7 +15,8 @@ class CustomActiveDotACIBySecondsLeft extends Component {
         jobid={payload.jobId}
         name={payload.name}
         filename={payload.fileName}
-        downloadurl={payload.downloadUrl}
+        inputid={payload.inputId}
+        src={payload.downloadUrl}
         key={dataKey}
         graph={graph}
         index={type}

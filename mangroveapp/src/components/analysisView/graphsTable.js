@@ -386,6 +386,7 @@ class GraphsTable extends React.Component {
                     vals={[obj.left, obj.right]}
                     title={obj.title}
                     annotations={annotations}
+                    audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
@@ -406,6 +407,7 @@ class GraphsTable extends React.Component {
                     vals={[obj.left, obj.right]}
                     title={obj.title}
                     annotations={annotations}
+                    audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
@@ -500,6 +502,7 @@ class GraphsTable extends React.Component {
                     vals={[obj.left, obj.right]}
                     title={obj.title}
                     annotations={annotations}
+                    audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
@@ -520,7 +523,9 @@ class GraphsTable extends React.Component {
                     vals={[obj.left, obj.right]}
                     title={obj.title}
                     annotations={annotations}
+                    audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+
                   />}
                 />
               )
@@ -612,6 +617,7 @@ class GraphsTable extends React.Component {
                     index={index}
                     title={obj.title}
                     annotations={annotations}
+                    audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />
@@ -630,6 +636,7 @@ class GraphsTable extends React.Component {
                     index={index}
                     title={obj.title}
                     annotations={annotations}
+                    audioCallback={this.props.audioCallback}
                     initializeAnnotationViewData={this.props.initializeAnnotationViewData}
                   />}
                 />

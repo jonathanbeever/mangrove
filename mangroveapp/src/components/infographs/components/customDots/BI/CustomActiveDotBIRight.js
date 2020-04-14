@@ -14,6 +14,7 @@ class CustomActiveDotBIRight extends Component {
         jobid={payload.jobId}
         name={payload.name}
         filename={payload.fileName}
+        inputid={payload.inputId}
         downloadurl={payload.downloadUrl}
         key={dataKey}
         graph={graph}

@@ -92,6 +92,7 @@ class ACICompareFileLineChart extends Component {
   mergeByStamp = (chosen, compare) => {
     let merged = [];
     let curObject = {};
+
     for(let i = 0; i < chosen.length; i++)
     {
       curObject =
@@ -100,7 +101,9 @@ class ACICompareFileLineChart extends Component {
         aciRight: chosen[i].aciRight,
         stamp: chosen[i].stamp,
         name: chosen[i].name,
-        downloadUrl: chosen[i].downloadUrl
+        downloadUrl: chosen[i].downloadUrl,
+        jobId: chosen[i].jobId,
+        inputId: chosen[i].inputId
       }
 
       merged.push(curObject);
@@ -122,7 +125,9 @@ class ACICompareFileLineChart extends Component {
           aciRightC: compare[i].aciRight,
           stamp: compare[i].stamp,
           name: compare[i].name,
-          downloadUrl: compare[i].downloadUrl
+          downloadUrl: compare[i].downloadUrl,
+          jobId: compare[i].jobId,
+          inputId: compare[i].inputId
         }
 
         merged.push(curObject);

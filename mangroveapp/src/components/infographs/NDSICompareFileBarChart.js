@@ -89,42 +89,54 @@ class NDSICompareFileBarChart extends Component {
         fileName: chosen[0].name,
         ndsiL: chosen[0].ndsiL,
         ndsiR: chosen[0].ndsiR,
-        downloadUrl: chosen[0].downloadUrl
+        downloadUrl: chosen[0].downloadUrl,
+        jobId: chosen[0].jobId,
+        inputId: chosen[0].inputId
       },
       {
         name: 'NDSIC',
         fileName: compare[0].name,
         ndsiL: compare[0].ndsiL,
         ndsiR: compare[0].ndsiR,
-        downloadUrl: compare[0].downloadUrl
+        downloadUrl: compare[0].downloadUrl,
+        jobId: compare[0].jobId,
+        inputId: compare[0].inputId
       },
       {
         name: 'Biophony',
         fileName: chosen[0].name,
         biophonyL: chosen[0].biophonyL,
         biophonyR: chosen[0].biophonyR,
-        downloadUrl: chosen[0].downloadUrl
+        downloadUrl: chosen[0].downloadUrl,
+        jobId: chosen[0].jobId,
+        inputId: chosen[0].inputId
       },
       {
         name: 'BioC',
         fileName: compare[0].name,
         biophonyL: compare[0].biophonyL,
         biophonyR: compare[0].biophonyR,
-        downloadUrl: compare[0].downloadUrl
+        downloadUrl: compare[0].downloadUrl,
+        jobId: compare[0].jobId,
+        inputId: compare[0].inputId
       },
       {
         name: 'Anthrophony',
         fileName: chosen[0].name,
         anthrophonyL: chosen[0].anthrophonyL,
         anthrophonyR: chosen[0].anthrophonyR,
-        downloadUrl: chosen[0].downloadUrl
+        downloadUrl: chosen[0].downloadUrl,
+        jobId: chosen[0].jobId,
+        inputId: chosen[0].inputId
       },
       {
         name: 'AnthroC',
         fileName: compare[0].name,
         anthrophonyL: compare[0].anthrophonyL,
         anthrophonyR: compare[0].anthrophonyR,
-        downloadUrl: compare[0].downloadUrl
+        downloadUrl: compare[0].downloadUrl,
+        jobId: compare[0].jobId,
+        inputId: compare[0].inputId
       }
     ];
 

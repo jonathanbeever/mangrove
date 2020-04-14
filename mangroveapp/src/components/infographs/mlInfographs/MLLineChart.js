@@ -55,6 +55,8 @@ class MLLineChart extends Component {
         <ContextMenu
           audioCallback={this.props.audioCallback}
           initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+          canAnnotate={true}
+          canPlaySound={true}
         />
         <div>
           <Grid container spacing={3}>

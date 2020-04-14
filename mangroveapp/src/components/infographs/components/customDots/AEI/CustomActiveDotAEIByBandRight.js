@@ -15,6 +15,7 @@ class CustomActiveDotADEIByBandRight extends Component {
         jobid={payload.jobIds}
         name={payload.name}
         filename={payload.fileName}
+        inputid={payload.inputId}
         downloadurl={payload.downloadUrl}
         key={dataKey}
         graph={graph}

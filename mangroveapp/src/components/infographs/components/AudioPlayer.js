@@ -28,25 +28,35 @@ class AudioPlayer extends Component {
   }
 
   componentDidMount = () => {
-    let { files, urls } = this.props;
+    let { files, urls, filepaths, inputs } = this.props;
     this.setState({ files });
     this.setState({ urls });
+    this.setState({ filepaths });
+    this.setState({ inputs });
     this.setState({ chosenFile: files[0] });
-    this.setState({ chosenUrl: urls[0] })
+    this.setState({ chosenUrl: urls[0] });
+    this.setState({ chosenFilepath: filepaths[0] });
+    this.setState({ chosenInput: inputs[0] });
   }
 
   componentWillReceiveProps = (nextProps) => {
     this.setState({ files: nextProps.files });
     this.setState({ urls: nextProps.urls });
+    this.setState({ filepaths: nextProps.filepaths });
+    this.setState({ inputs: nextProps.inputs });
     this.setState({ chosenFile: nextProps.files[0] });
     this.setState({ chosenUrl: nextProps.urls[0] });
+    this.setState({ chosenFilepath: nextProps.filepaths[0] });
+    this.setState({ chosenInput: nextProps.inputs[0] });
   }
 
   // Handler for the file Select
   handleFileChange = event => {
-    let { files, urls } = this.state;
+    let { files, urls, filepaths, inputs } = this.state;
     this.setState({ chosenFile: event.target.value });
     this.setState({ chosenUrl: urls[files.indexOf(event.target.value)] });
+    this.setState({ chosenFilepath: filepaths[files.indexOf(event.target.value)] });
+    this.setState({ chosenInput: inputs[files.indexOf(event.target.value)] });
     this.setState({ [event.target.name]: event.target.value });
   }
 
@@ -60,11 +70,13 @@ class AudioPlayer extends Component {
 
   displayAudio = () => {
     let finalName = this.state.chosenFile;
-    let finalPath = this.state.chosenUrl;
+    let finalPath = this.state.chosenFilepath;
+    let finalInput = this.state.chosenInput;
 
     let track = {
       title: finalName,
-      src: finalPath
+      src: finalPath,
+      inputId: finalInput,
     }
 
     this.props.audioCallback(track);

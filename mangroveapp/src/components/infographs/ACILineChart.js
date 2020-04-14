@@ -80,6 +80,8 @@ class ACILineChart extends Component {
         <ContextMenu
           audioCallback={this.props.audioCallback}
           initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+          canAnnotate={true}
+          canPlaySound={true}
         />
         <div>
           <Grid container spacing={3}>
@@ -93,8 +95,8 @@ class ACILineChart extends Component {
                 <LineChart width={750} height={600} data={data}
                   margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name">
-                    <Label value={xLabel} position="insideBottom" offset={2} />
+                  <XAxis dataKey="name" height={45}>
+                    <Label value={xLabel} position="insideBottom" />
                   </XAxis>
                   <YAxis domain={['dataMin-1', 'dataMax+1']} tickFormatter={this.formatYAxis}>
                     <Label value={yLabel} position="insideLeft" offset={0} />

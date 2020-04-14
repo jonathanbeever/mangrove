@@ -42,11 +42,13 @@ class NDSIValuesLineChart extends Component {
         <ContextMenu
           audioCallback={this.props.audioCallback}
           initializeAnnotationViewData={this.props.initializeAnnotationViewData}
+          canAnnotate={true}
+          canPlaySound={true}
         />
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Paper elevation={0}>
-              <h5>Right click a data point to add an annotation to the graph. </h5>
+              <h5>Right click a data point to play a sound file or add an annotation to the graph. </h5>
             </Paper>
           </Grid>
           <Grid item xs={9}>
