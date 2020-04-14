@@ -911,7 +911,7 @@ class AnalysisView extends Component {
           closeOnDocumentClick 
           position="right center"
         >
-          <AnnotationView 
+          <AnnotationView style={{padding: '20px'}}
             X={X}
             Y={Y}
             jobId={jobId}
