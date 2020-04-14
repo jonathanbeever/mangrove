@@ -7,6 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import { NavLink } from 'react-router-dom';
 import { Toolbar } from '@material-ui/core';
+const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
 const image = require('./logo.1.svg')
 
 function TabContainer(props) {
@@ -48,6 +49,36 @@ class NavBarTabs extends React.Component {
     this.setState({ value });
   };
 
+  handleLogOut =(event, value) => {
+    const poolData = {
+			UserPoolId: "us-east-2_GP7h1WmOF",
+			ClientId: "36gfihuqugs2r3j2u1qm1uknna"
+		};
+
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const cognitoUser = userPool.getCurrentUser();
+    if (cognitoUser) {
+      cognitoUser.getSession((err, session) => {
+        if (err) console.log(err);
+      })
+    
+      cognitoUser.globalSignOut({
+        onFailure: e => console.log(e),
+        onSuccess: r => {
+          window.idToken = null;
+				  window.accessToken = null;
+				  window.refreshToken = null;
+				  window.localStorage.setItem('refresh', null);
+          window.localStorage.setItem('id', null);
+        }
+      });
+    } 
+    else {
+      console.log('Error: User does not exist');
+    }
+  }
+
   render() {
     const { classes } = this.props;
     const { value } = this.state;
@@ -85,6 +116,7 @@ class NavBarTabs extends React.Component {
                 <Tab value={3}
                   label="Log Out"
                   to="/index.html"
+                  onClick={this.handleLogOut}
                   style={{ color: 'white', textDecoration: 'none', fontSize: '16px' }}
                   activeStyle={{ color: '#fdc907', textDecoration: 'none' }}
                   component={NavLink} />

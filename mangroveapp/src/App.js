@@ -105,6 +105,11 @@ class NavBarWrapper extends Component {
 		cognitoUser.refreshSession(refreshToken, (err, session) => {
 			if(err) {
 				console.log(err);
+				window.idToken = null;
+				window.accessToken = null;
+				window.refreshToken = null;
+				window.localStorage.setItem('refresh', null);
+				window.localStorage.setItem('id', null);
 			} else {
 				window.idToken = session.idToken.jwtToken;
 				window.accessToken = session.accessToken.jwtToken;
@@ -162,13 +167,21 @@ class NavBarWrapper extends Component {
 		else {
 			window.localStorage.setItem('validLogin', 'false');
 		}
+
 		return window.validLogin;
 	}
 
 	render() {
-		this.renew();
+		// Only attempt to renew the token if the user already has a valid token.
+		// This will prevent users from jumping around using URLs while being unauthorized
+		if (window.idToken && this.validateToken(window.idToken))
+			this.renew();
 
-		if(window.refreshToken === null || window.refreshToken === '' || !this.validateToken(window.idToken) || window.localStorage.getItem('validLogin') !== 'true') {
+		if(window.refreshToken === null 
+			|| window.refreshToken === '' 
+			|| !window.idToken
+			|| !this.validateToken(window.idToken) 
+			|| window.localStorage.getItem('validLogin') !== 'true') {
 			return <Redirect push to="/" />;
 		}
 
