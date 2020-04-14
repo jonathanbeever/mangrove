@@ -19,12 +19,14 @@ class ADIAEICompareLineChart extends Component {
         <h6>{index} Right: {parseFloat(vals[1]).toFixed(2)}</h6>
         <h6>{index} Right Compare: {parseFloat(vals[3]).toFixed(2)}</h6>
         <LineChart width={900} height={600} data={results}
-          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          margin={{top: 10, right: 30, left: 30, bottom: 0}}>
          <CartesianGrid strokeDasharray="3 3"/>
-         <XAxis dataKey="name">
-           <Label value={xAxisLabel} position="insideBottom" offset={2} />
+         <XAxis dataKey="name" height={45}>
+           <Label value={xAxisLabel} position="insideBottom" />
          </XAxis>
-         <YAxis label={yAxisLabel} offset={0} tickFormatter={this.formatYAxis}/>
+         <YAxis tickFormatter={this.formatYAxis}>
+           <Label value={yAxisLabel} position="insideLeft" offset={-30} />
+         </YAxis>
          <Tooltip/>
          <Legend />
          <Line type="monotone" dataKey={dataKey1} stroke="#8884d8" dot={false}/>

@@ -74,7 +74,7 @@ class MLLineChart extends Component {
                     <Label value={xLabel} position="insideBottom" />
                   </XAxis>
                   <YAxis domain={[-0.5, 1.5]} tickFormatter={this.formatYAxis}>
-                    <Label value={yLabel} position="insideLeft" offset={0} />
+                    <Label value={yLabel} position="insideLeft" offset={-30} />
                   </YAxis>
                   <Tooltip />
                   <Legend />

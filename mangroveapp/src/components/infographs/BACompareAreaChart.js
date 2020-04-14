@@ -15,14 +15,14 @@ class BACompareAreaChart extends Component {
     return(
       <div>
         <AreaChart width={900} height={600} data={results} syncId="bi-compare"
-          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          margin={{top: 10, right: 30, left: 30, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3"/>
-          <XAxis dataKey="name">
-            <Label value={xAxisLabel} position="insideBottom" offset={2} />
+          <XAxis dataKey="name" height={45}>
+            <Label value={xAxisLabel} position="insideBottom" />
           </XAxis>
           <Legend />
           <YAxis domain={['dataMin', 'dataMax']}>
-            <Label value={yAxisLabel} position="insideLeft" offset={2}  tickFormatter={this.formatYAxis}/>
+            <Label value={yAxisLabel} position="insideLeft" offset={-30}  tickFormatter={this.formatYAxis}/>
           </YAxis>
           <Tooltip/>
           <Area type='monotone' dataKey={dataKey1} stackId="1" stroke='#8884d8' fill='#8884d8' />
@@ -30,14 +30,14 @@ class BACompareAreaChart extends Component {
           <Brush/>
         </AreaChart>
         <AreaChart width={900} height={600} data={results} syncId="bi-compare"
-          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          margin={{top: 10, right: 30, left: 30, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3"/>
-          <XAxis dataKey="name">
-            <Label value={xAxisLabel} position="insideBottom" offset={2} />
+          <XAxis dataKey="name" height={45}>
+            <Label value={xAxisLabel} position="insideBottom" />
           </XAxis>
           <Legend />
           <YAxis domain={['dataMin', 'dataMax']}>
-            <Label value={yAxisLabel} position="insideLeft" offset={2}  tickFormatter={this.formatYAxis}/>
+            <Label value={yAxisLabel} position="insideLeft" offset={-30}  tickFormatter={this.formatYAxis}/>
           </YAxis>
           <Tooltip/>
           <Area type='monotone' dataKey={dataKey2} stackId="1" stroke='#82ca9d' fill='#82ca9d' />

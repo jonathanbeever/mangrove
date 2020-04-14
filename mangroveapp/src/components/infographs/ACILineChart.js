@@ -87,19 +87,19 @@ class ACILineChart extends Component {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper elevation={0}>
-                <h5>Right click a data point to add an annotation to the graph or listen to a sound file.</h5>
+                <p>Right click a data point to add an annotation to the graph or listen to a sound file.</p>
               </Paper>
             </Grid>
             <Grid item xs={9}>
               <Paper elevation={0}>
                 <LineChart width={750} height={600} data={data}
-                  margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                  margin={{top: 10, right: 30, left: 30, bottom: 0}}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" height={45}>
                     <Label value={xLabel} position="insideBottom" />
                   </XAxis>
                   <YAxis domain={['dataMin-1', 'dataMax+1']} tickFormatter={this.formatYAxis}>
-                    <Label value={yLabel} position="insideLeft" offset={0} />
+                    <Label value={yLabel} position="insideLeft" offset={-30} />
                   </YAxis>
                   <Legend />
                   { customTooltip ?

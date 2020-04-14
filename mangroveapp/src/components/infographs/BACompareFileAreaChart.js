@@ -93,7 +93,7 @@ class BACompareFileAreaChart extends Component {
     let ret = {
       data: [],
       xAxisLabel: "Hz Range",
-      yAxisLabel: "BI Value",
+      yAxisLabel: "BI",
       dataKey1: "leftSpectrum",
       dataKey2: "rightSpectrum",
       dataKey3: "leftSpectrumC",

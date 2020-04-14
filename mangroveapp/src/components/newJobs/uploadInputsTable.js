@@ -60,9 +60,9 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'siteName', numeric: false, disablePadding: true, label: 'Site Name' },
-  { id: 'setName', numeric: false, disablePadding: true, label: 'File Set Name' },
-  { id: 'fileName', numeric: false, disablePadding: true, label: 'File Name' },
+  { id: 'siteName', numeric: false, disablePadding: true, label: 'Site' },
+  { id: 'setName', numeric: false, disablePadding: true, label: 'File Set' },
+  { id: 'fileName', numeric: false, disablePadding: true, label: 'File' },
   { id: 'recordTime', numeric: false, disablePadding: true, label: 'Time Recorded' },
   { id: 'latitude', numeric: true, disablePadding: true, label: 'Latitude' },
   { id: 'longitude', numeric: true, disablePadding: true, label: 'Longitude' },

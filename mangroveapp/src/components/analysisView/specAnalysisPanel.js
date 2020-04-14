@@ -21,6 +21,8 @@ class SpecAnalysisPanel extends Component {
 
     const annotationType = `${this.props.jobs[0].spec.type}Annotation`;
 
+    if (annotationType === 'rmsAnnotation') return;
+
     this.props.jobs.forEach(job => {
       jobIds.push(job.jobId);
     })

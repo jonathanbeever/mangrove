@@ -209,13 +209,13 @@ class NDSICompareFileBarChart extends Component {
         <div>
           <h5>To listen to a sound file, simply click on a bar, and an audio player will appear.</h5>
           <BarChart width={900} height={600} data={dataToShow}
-            margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+            margin={{top: 10, right: 30, left: 30, bottom: 0}}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name">
-              <Label value="NDSI Values" position="insideBottom" offset={2} />
+            <XAxis dataKey="name" height={45}>
+              <Label value="NDSI Values" position="insideBottom" />
             </XAxis>
             <YAxis tickFormatter={this.formatYAxis}>
-              <Label value="Value" position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
+              <Label value="NDSI" position="insideLeft" offset={-30} tickFormatter={this.formatYAxis} />
             </YAxis>
             <Tooltip />
             <Legend />

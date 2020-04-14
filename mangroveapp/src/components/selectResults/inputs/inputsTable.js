@@ -48,8 +48,8 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-  { id: 'siteName', numeric: false, disablePadding: false, label: 'Site Name' },
-  { id: 'setName', numeric: false, disablePadding: false, label: 'Series Name' },
+  { id: 'siteName', numeric: false, disablePadding: false, label: 'Site' },
+  { id: 'setName', numeric: false, disablePadding: false, label: 'Series' },
   { id: 'recordTime', numeric: false, disablePadding: false, label: 'Recording Date'},
   { id: 'latitude', numeric: true, disablePadding: false, label: 'Latitude' },
   { id: 'longitude', numeric: true, disablePadding: false, label: 'Longitude' },

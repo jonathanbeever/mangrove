@@ -82,7 +82,7 @@ class ADIAEICompareFileLineChart extends Component {
       else compare = {aeiL:0,aeiR:0,bandL:new Array(x).fill(undefined),bandR:new Array(x).fill(undefined),bandRangeL:chosen.bandRangeL,bandRangeR:chosen.bandRangeR};
     }
 
-    let yAxis = adi ? "ADI Value" : "AEI Value";
+    let yAxis = adi ? "ADI" : "AEI";
     let chosenValL;
     let chosenValR;
     let compareValL;

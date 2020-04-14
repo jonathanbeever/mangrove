@@ -196,13 +196,13 @@ class ACICompareFileBandLineChart extends Component {
         { showGraph ?
           <div>
             <LineChart width={900} height={600} data={dataToShow}
-              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+              margin={{top: 10, right: 30, left: 30, bottom: 0}}>
               <CartesianGrid strokeDasharray="3 3"/>
-              <XAxis dataKey="name">
-                <Label value="Hz Range" position="insideBottom" offset={2} />
+              <XAxis dataKey="name" height={45}>
+                <Label value="Hz Range" position="insideBottom" />
               </XAxis>
               <YAxis domain={['dataMin-10', 'dataMax+10']} tickFormatter={this.formatYAxis}>
-                <Label value="ACI Value" position="insideLeft" offset={0} />
+                <Label value="ACI" position="insideLeft" offset={-30} />
               </YAxis>
               <Legend />
               <Tooltip/>

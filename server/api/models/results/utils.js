@@ -73,6 +73,8 @@ const getParamsFromAnnotation = (annotation) => {
         ...(typeof annotation.dataPoint !== 'undefined' && { dataPoint: annotation.dataPoint }),
         ...(typeof annotation.startTime !== 'undefined' && { startTime: annotation.startTime }),
       };
+    case AnnotationType.RMS:
+      return {};
     default: throw new Error(`Invalid \`type\` parameter (${annotation.type}).`);
   }
 };

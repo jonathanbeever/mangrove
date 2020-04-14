@@ -19,13 +19,13 @@ class RMSCompareBarChart extends Component {
         <h5>RMS Right Channel Total: {this.formatYAxis(this.props.results.avgR)}</h5>
         <h5>RMS Right Channel Compare Total: {this.formatYAxis(this.props.results.avgRC)}</h5>
         <BarChart width={900} height={600} data={data}
-          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          margin={{top: 10, right: 30, left: 30, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name">
-            <Label value="File Name" position="insideBottom" offset={2} />
+          <XAxis dataKey="name" height={45}>
+            <Label value="File Name" position="insideBottom" />
           </XAxis>
           <YAxis>
-            <Label value="RMS Value" position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
+            <Label value="RMS" position="insideLeft" offset={-30} tickFormatter={this.formatYAxis} />
           </YAxis>
           <Tooltip />
           <Legend />

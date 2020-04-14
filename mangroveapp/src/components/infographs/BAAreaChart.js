@@ -35,14 +35,14 @@ class BAAreaChart extends Component {
           <Grid item xs={9}>
             <Paper elevation={0}>
               <AreaChart width={750} height={600} data={results} syncId="bi"
-                margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                margin={{top: 10, right: 30, left: 30, bottom: 0}}>
                 <CartesianGrid strokeDasharray="3 3"/>
-                <XAxis dataKey="name">
-                  <Label value={xAxisLabel} position="insideBottom" offset={2} />
+                <XAxis dataKey="name" height={45}>
+                  <Label value={xAxisLabel} position="insideBottom" />
                 </XAxis>
                 <Legend />
                 <YAxis domain={['dataMin', 'dataMax']}>
-                  <Label value={yAxisLabel} position="insideLeft" offset={2}  tickFormatter={this.formatYAxis}/>
+                  <Label value={yAxisLabel} position="insideLeft" offset={-30}  tickFormatter={this.formatYAxis}/>
                 </YAxis>
                 <Tooltip/>
                 <Area

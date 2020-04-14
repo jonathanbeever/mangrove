@@ -16,13 +16,13 @@ class NDSIChannelCompareBarChart extends Component {
     return(
       <div>
         <BarChart width={900} height={600} data={data}
-          margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          margin={{top: 10, right: 30, left: 30, bottom: 0}}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name">
+          <XAxis dataKey="name" height={45}>
             <Label value="NDSI Values" position="insideBottom" offset={2} />
           </XAxis>
           <YAxis tickFormatter={this.formatYAxis}>
-            <Label value="Value" position="insideLeft" offset={0} tickFormatter={this.formatYAxis} />
+            <Label value="NDSI" position="insideLeft" offset={-30} tickFormatter={this.formatYAxis} />
           </YAxis>
           <Tooltip />
           <Legend />

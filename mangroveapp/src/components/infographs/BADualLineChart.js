@@ -31,13 +31,13 @@ class BADualLineChart extends Component {
     return(
       <div>
           <LineChart width={900} height={600} data={results}
-            margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+            margin={{top: 10, right: 30, left: 50, bottom: 0}}>
             <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis dataKey="name">
-              <Label value={xAxisLabel} position="insideBottom" offset={2} />
+            <XAxis dataKey="name" height={45}>
+              <Label value={xAxisLabel} position="insideBottom" />
             </XAxis>
             <YAxis>
-              <Label value={yAxisLabel} position="insideLeft" offset={0} tickFormatter={this.formatYAxis}/>
+              <Label value={yAxisLabel} position="insideLeft" offset={-40} tickFormatter={this.formatYAxis}/>
             </YAxis>
             <Legend />
             <Tooltip/>
