@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { IconButton } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -28,6 +29,8 @@ import AudioPlayer from '../infographs/components/AudioPlayer';
 import axios from 'axios';
 import AnnotationView from './annotationView';
 import Popup from 'reactjs-popup';
+import FastForwardIcon from '@material-ui/icons/FastForward';
+import CloseIcon from '@material-ui/icons/Close';
 var _ = require('lodash');
 
 const styles = theme => ({
@@ -46,6 +49,8 @@ class AnalysisView extends Component {
       opened: false,
       checked: false,
       showAudio: false,
+      played: 0,
+      playbackRate: 1,
     };
   }
 
@@ -793,8 +798,6 @@ class AnalysisView extends Component {
     let seconds;
     let title;
     let inputId;
-    const url = 'http://127.0.0.1:34251/audio';
-    // this.loadFile(url, data.src);
 
     if(data.payload)
     {
@@ -824,32 +827,6 @@ class AnalysisView extends Component {
       if(this.player) this.player.seekTo(track.startTime);
     });
   }
-
-  getAudioContext = () => {
-    AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioContent = new AudioContext();
-    return audioContent;
-  }
-
-  loadFile = async (url, filepath) => {
-    try {
-      const res = await axios.get(url, {
-        responseType: 'arraybuffer',
-        params: { src: filepath }
-      });
-
-      const audioContext = this.getAudioContext();
-      const audioBuffer = await audioContext.decodeAudioData(res.data);
-
-      const src = audioContext.createBufferSource();
-      src.buffer = audioBuffer;
-      src.connect(audioContext.destination);
-
-      // src.start();
-
-    }
-    catch (err) { console.log(err) }
-  };
 
   handleCreateAnnotation = (annotationData) => {
     let author = window.localStorage.getItem('email');
@@ -893,13 +870,38 @@ class AnalysisView extends Component {
     this.player = player;
   }
 
+  handleFastforward = e => {
+    let newPlaybackRate;
+
+    switch (this.state.playbackRate) {
+      case 1:
+      case 1.5:
+        newPlaybackRate = this.state.playbackRate + 0.5;
+        break;
+      case 2:
+        newPlaybackRate = this.state.playbackRate + 2.0;
+        break;
+      case 4:
+        newPlaybackRate = this.state.playbackRate + 4.0;
+        break;
+      case 8:
+        newPlaybackRate = this.state.playbackRate + 8.0;
+        break;
+      case 16:
+      default:
+        newPlaybackRate = 1;
+    }
+
+    this.setState({ playbackRate: parseFloat(newPlaybackRate) })
+  }
+
   render() {
     axios.defaults.headers.common['Authorization'] = window.localStorage.getItem('id');
 
     let { errorMode, formattedJob, comparedJobsSite, files, urls,
           comparedJobsSeries, siteNames, siteNamesCompare, seriesNames, seriesNamesCompare, chosenSite,
-          chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track,
-          X, Y, showAnnotationView, title, graph, jobId, index, startTime, inputs, filepaths } = this.state;
+          chosenSeries, chosenCompareSite, chosenCompareSeries, showAudio, track, X, Y, showAnnotationView, 
+          title, graph, jobId, index, startTime, inputs, filepaths, playbackRate } = this.state;
 
     const { classes } = this.props;
     return (
@@ -1064,28 +1066,37 @@ class AnalysisView extends Component {
           }
         </div>
         { showAudio ?
-          <div style={{ width:'100%', paddingLeft:0+'px', paddingRight:0+'px' }}>
+          <div style={{ width:'100%', paddingLeft:0+'px', paddingRight:0+'px', marginLeft:10+'px', marginRight:10+'px' }}>
             <div style={{ marginTop:10+'px', display:'block', height:130+'px', width:'100%' }} />
-            <div style={{ position:'fixed', left:'auto', bottom:25+'px', height:100+'px', padding:0+'px' }}>
-              <div className="container text-center" style={{ borderStyle:'solid', borderWidth:1+'px', borderColor:'#e0e0e0', borderRadius:25+'px', width:1110+'px', backgroundColor:"#f1f3f4", margin:0+'px', padding:0+'px' }}>
+            <div style={{ position:'fixed', left:'auto', bottom:80+'px', height:100+'px', padding:0+'px' }}>
+              <div className="container text-center" style={{ borderStyle:'solid', borderWidth:1+'px', borderColor:'#e0e0e0', borderRadius:25+'px', width:1090+'px', backgroundColor:"#f1f3f4", margin:0+'px', padding:0+'px' }}>
                 <div className="row">
-                  <div className="col-8 text-right" style={{ paddingRight:70+'px' }}>
+                  <div className="col-8 text-left" style={{ paddingLeft:40+'px' }}>
                     <h5 style={{ marginTop:10+'px', marginBottom:0+'px' }}>{track.title}</h5>
                   </div>
                   <div className="col-4 text-right" style={{ paddingRight:30+'px' }}>
-                    <button style={{ background:'none', border:'none', padding:0, cursor:'pointer' }}
-                           onClick={this.closeAudioPlayer}>
-                     <i className="tiny material-icons">close</i>
-                    </button>
+                    <IconButton style={{ background:'none', border:'none', padding:0, margin:10+'px', cursor:'pointer' }}
+                           onClick={this.closeAudioPlayer} color="secondary">
+                     <CloseIcon aria-label="close" />
+                    </IconButton>
                   </div>
                 </div>
                 <ReactPlayer ref={this.ref}
                              onError={this.audioError}
                              height='65px'
                              width='100%'
-                             url={'http://127.0.0.1:34251/audio/'+track.inputId}
+                             url={[
+                                { 
+                                  src:'http://127.0.0.1:34251/audio/'+track.inputId,
+                                  type: 'audio/mpeg' 
+                                }
+                              ]}
                              controls
+                             playbackRate={this.state.playbackRate}
                             />
+                <IconButton aria-label="fastforward" onClick={this.handleFastforward}>
+                  <FastForwardIcon /> x{playbackRate}
+                </IconButton>
               </div>
             </div>
           </div>
