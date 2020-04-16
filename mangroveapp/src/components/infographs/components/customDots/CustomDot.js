@@ -192,23 +192,11 @@ class CustomDot extends Component {
       }
     }
 
-    
-
     let visibility = ( isVisible ? "visible" : "hidden" );
 
     const sideLen = 5;
     let x = cx - sideLen/2;
     let y = cy - sideLen/2;
-
-    if (typeof x !== Number) {
-      x = 0;
-      visibility = "hidden";
-    }
-
-    if (typeof y !== Number) {
-      y = 0;
-      visibility = "hidden";
-    }
     
     return (
       <rect
