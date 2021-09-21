@@ -9,6 +9,7 @@ const {
 } = require('../../util/storage');
 
 const jobProcessor = require('../../util/jobProcessor');
+const mlJobProcessor = require('../../util/jobProcessor/ML/mlJobProcessor');
 const Input = require('../../api/models/input');
 const { Spec } = require('../../api/models/spec');
 const { Job } = require('../../api/models/job');
@@ -42,6 +43,18 @@ describe('Job Processor', () => {
     } catch (err) {
       expect(err).to.be.an.instanceOf(Error);
     }
+  });
+
+  it('It should process a ML Job', async () => {
+    const populatedJob = await nextMockPopulatedJob(Type.ML);
+    const result = await mlJobProcessor(populatedJob);
+
+    expect(result).to.have.all.keys(getResultKeys(Type.ML));
+    expect(result.sounds).to.have.length.greaterThan(0);
+    expect(result.sounds[0].soundType).to.be.a('string');
+    expect(result.sounds[0].confidence).to.be.a('number');
+    expect(result.sounds[0].startTime).to.be.a('number');
+    expect(result.sounds[0].duration).to.be.a('number');
   });
 
   it('It should process an ACI Job', async () => {

@@ -1,0 +1,50 @@
+version: '3'
+
+services:
+    mangrove:
+        container_name: mangrove-server
+        build: 
+            context: ./server
+        environment:
+          - DOCKER_MANGROVE=yes
+          - MANGROVE_INPUT_DIR=$MANGROVE_INPUT_DIR
+        command:
+          - $CMD
+        volumes:
+          - $MANGROVE_INPUT_DIR:$MANGROVE_INPUT_DIR
+          - ./server:/mangrove
+        ports:
+          - "34251:34251"
+        depends_on:
+          - mongodb
+
+    mongodb:
+        container_name: mangrove-server-mongodb
+        image: mongo
+        volumes:
+            - $MANGROVE_HOME/db:/data/db
+        ports:
+            - "34252:27017"
+        depends_on: 
+          - redis
+
+    redis:
+        container_name: mangrove-server-redis
+        image: redis
+        ports:
+            - "34253:6379"
+    
+    client:
+        build:
+            context: ./mangroveapp
+        command: npm start
+        volumes:
+            - /app/node_modules
+            - ./mangroveapp:/app
+        ports:
+            - '3000:3000'
+        restart: on-failure
+        container_name: client
+        image: mangrove-client
+        depends_on: 
+          - mangrove

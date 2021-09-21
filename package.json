@@ -1,0 +1,24 @@
+{
+  "name": "mangrove",
+  "version": "2.0.0",
+  "description": "Soundscape Ecology Sound Analysis",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start-dev": "cd server && npm run docker-dev",
+    "build-dev": "cd server && npm run docker-build",
+    "debug": "cd server && npm run debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RyomaBF/mangrove.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RyomaBF/mangrove/issues"
+  },
+  "homepage": "https://github.com/RyomaBF/mangrove#readme",
+  "dependencies": {}
+}

@@ -4,6 +4,7 @@ const AeiJob = require('./aei');
 const BiJob = require('./bi');
 const NdsiJob = require('./ndsi');
 const RmsJob = require('./rms');
+const MlJob = require('./ml');
 const Job = require('./job');
 
 const Status = require('../status');
@@ -18,6 +19,7 @@ const typeToJobType = (type) => {
     case Type.BI: return JobType.BI;
     case Type.NDSI: return JobType.NDSI;
     case Type.RMS: return JobType.RMS;
+    case Type.ML: return JobType.ML;
     default: throw new Error(`Invalid 'type' parameter: ${type}`);
   }
 };
@@ -30,6 +32,7 @@ const jobTypeToType = (jobType) => {
     case JobType.BI: return Type.BI;
     case JobType.NDSI: return Type.NDSI;
     case JobType.RMS: return Type.RMS;
+    case JobType.ML: return Type.ML;
     default: throw new Error(`Invalid 'jobType' parameter: ${jobType}`);
   }
 };
@@ -42,6 +45,7 @@ const getJobModel = (type) => {
     case Type.BI: return BiJob;
     case Type.NDSI: return NdsiJob;
     case Type.RMS: return RmsJob;
+    case Type.ML: return MlJob;
     default: throw new Error(`Invalid 'type' parameter: ${type}`);
   }
 };
@@ -100,7 +104,7 @@ const getPendingJobs = () => Job
 
 const countRemainingJobs = () => Job
   .countDocuments({ status: { $in: [Status.QUEUED, Status.WAITING] } })
-  .catch(() => { throw new Error('Failed to get count of remaining jobs') });
+  .catch(() => { throw new Error('Failed to get count of remaining jobs'); });
 
 // FIXME: These are listed in this order because of the R package,
 // `soundecology`. If the ordering of the output parameters changes, then this
@@ -160,6 +164,10 @@ const getResultKeys = (type) => {
       return [
         'rmsL',
         'rmsR',
+      ];
+    case Type.ML:
+      return [
+        'sounds',
       ];
     default:
       throw new Error(`Invalid 'type' parameter: ${type}`);

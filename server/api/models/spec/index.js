@@ -6,6 +6,7 @@ const AeiSpec = require('./aei');
 const BiSpec = require('./bi');
 const NdsiSpec = require('./ndsi');
 const RmsSpec = require('./rms');
+const MlSpec = require('./ml');
 
 module.exports = {
   Spec,
@@ -15,4 +16,5 @@ module.exports = {
   BiSpec,
   NdsiSpec,
   RmsSpec,
+  MlSpec,
 };

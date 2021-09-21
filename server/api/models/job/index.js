@@ -6,6 +6,7 @@ const AeiJob = require('./aei');
 const BiJob = require('./bi');
 const NdsiJob = require('./ndsi');
 const RmsJob = require('./rms');
+const MlJob = require('./ml');
 
 module.exports = {
   Job,
@@ -15,4 +16,5 @@ module.exports = {
   BiJob,
   NdsiJob,
   RmsJob,
+  MlJob,
 };

@@ -7,6 +7,7 @@ const uri = () => {
   if (process.env.DOCKER_MANGROVE === 'yes') {
     return `mongodb://${dbConfig.host.docker}:${dbConfig.port}/${dbConfig.dbName}`;
   }
+
   return `mongodb://${dbConfig.host.local}:${dbConfig.port}/${dbConfig.dbName}`;
 };
 

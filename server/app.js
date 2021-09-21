@@ -7,9 +7,7 @@ const cors = require('cors');
 
 require('./util/settings').load();
 
-const inputRoutes = require('./api/routes/inputs');
-const jobRoutes = require('./api/routes/jobs');
-const specRoutes = require('./api/routes/specs');
+const router = require('./api/routes/router');
 
 if (process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,9 +18,8 @@ app.use(cors({
   methods: 'PUT, POST, DELETE, GET',
 }));
 
-app.use('/inputs', inputRoutes);
-app.use('/jobs', jobRoutes);
-app.use('/specs', specRoutes);
+// API endpoints / routes
+app.use('/', router);
 
 app.use((req, res, next) => {
   const error = new Error('Not found');
