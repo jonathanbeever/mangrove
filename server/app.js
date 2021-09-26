@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 app.use(cors({
   origin: '*',
   allowedHeaders: '*',
-  methods: 'PUT, POST, DELETE, GET',
+  methods: ['GET', 'POST', 'DELETE', 'UPDATE', 'PUT', 'PATCH', 'OPTIONS'],
 }));
 
 // API endpoints / routes
