@@ -65,7 +65,7 @@
     "morgan": "1.9.1",
     "multer": "1.4.1",
     "node-fetch": "2.6.1",
-    "r-script": "git+https://git@github.com/khamurdik/r-script.git",
+    "r-script": "0.0.4",
     "rimraf": "2.6.3",
     "run-script-os": "1.0.3",
     "settings-store": "1.4.1",

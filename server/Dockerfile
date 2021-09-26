@@ -1,4 +1,4 @@
-FROM archlinux/base
+FROM archlinux/archlinux:base
 
 WORKDIR /
 
@@ -6,11 +6,8 @@ COPY package*.json ./
 
 RUN ["pacman", "-Sy", "archlinux-keyring", "--noconfirm"]
 RUN ["pacman", "-Syyu", "--noconfirm"]
-
 RUN ["pacman", "-S", "--noconfirm", "--needed", "base-devel", "gcc-fortran"]
-
-RUN ["pacman", "-S", "--noconfirm", "npm", "r"]
-
+RUN ["pacman", "-S", "--noconfirm", "npm", "r", "libgit2"]
 RUN ["npm", "install"]
 
 COPY . .
