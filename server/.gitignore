@@ -6,7 +6,6 @@ test/testUser.js
 # Package management
 node_modules
 npm-debug.log*
-package-lock.json
 
 # Redis
 dump.rdb

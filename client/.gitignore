@@ -4,7 +4,6 @@ build
 # Package management
 node_modules
 npm-debug.log*
-package-lock.json
 
 # Miscellaneous
 .env.development.local

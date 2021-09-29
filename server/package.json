@@ -64,7 +64,7 @@
     "mongoose": "5.7.7",
     "morgan": "1.9.1",
     "multer": "1.4.1",
-    "node-fetch": "2.6.1",
+    "node-fetch": "2.3.0",
     "r-script": "0.0.4",
     "rimraf": "2.6.3",
     "run-script-os": "1.0.3",
