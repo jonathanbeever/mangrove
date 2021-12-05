@@ -67,7 +67,7 @@
     "node-fetch": "2.3.0",
     "r-script": "0.0.4",
     "rimraf": "2.6.3",
-    "run-script-os": "1.0.3",
+    "run-script-os": "1.1.6",
     "settings-store": "1.4.1",
     "sox": "0.1.0",
     "sox-audio": "0.3.0",
