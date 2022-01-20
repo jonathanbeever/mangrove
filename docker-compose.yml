@@ -1,7 +1,6 @@
-# For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    mangrove.local:
+    mangrove.test:
         build:
             context: ./vendor/laravel/sail/runtimes/8.1
             dockerfile: Dockerfile
@@ -24,6 +23,7 @@ services:
         depends_on:
             - mysql
             - redis
+            - selenium
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -36,7 +36,7 @@ services:
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
         volumes:
-            - 'sailmysql:/var/lib/mysql'
+            - 'sail-mysql:/var/lib/mysql'
         networks:
             - sail
         healthcheck:
@@ -48,18 +48,24 @@ services:
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sailredis:/data'
+            - 'sail-redis:/data'
         networks:
             - sail
         healthcheck:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
+    selenium:
+        image: 'selenium/standalone-chrome'
+        volumes:
+            - '/dev/shm:/dev/shm'
+        networks:
+            - sail
 networks:
     sail:
         driver: bridge
 volumes:
-    sailmysql:
+    sail-mysql:
         driver: local
-    sailredis:
+    sail-redis:
         driver: local
