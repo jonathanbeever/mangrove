@@ -31,15 +31,21 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
-                    Forgot your password?
-                </Link>
-
                 <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
                 </jet-button>
             </div>
+            <div class="flex items-center justify-center mt-4">
+                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">
+                    Forgot your password?
+                </Link>
+            </div>
         </form>
+        <div class="flex items-center justify-center mt-4">
+            <a href=register>
+                <span class="underline text-sm text-gray-600 hover:text-gray-900">Don't have an account?</span>
+            </a>
+        </div>
     </jet-authentication-card>
 </template>
 
