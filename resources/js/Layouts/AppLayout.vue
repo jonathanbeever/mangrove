@@ -18,9 +18,22 @@
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <div class="hidden space-x-32 sm:-my-px sm:ml-10 sm:flex">
                                 <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
+                                </jet-nav-link>
+                                <!--TODO: edit to fill in with routes-->
+                                <jet-nav-link :href="route('dashboard')" :active="route().current('createjobs')">
+                                    Create Jobs
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('dashboard')" :active="route().current('results')">
+                                    Results Catalog
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('dashboard')" :active="route().current('queue')">
+                                    Job Queue
+                                </jet-nav-link>
+                                <jet-nav-link :href="route('dashboard')" :active="route().current('about')">
+                                    About
                                 </jet-nav-link>
                             </div>
                         </div>
@@ -144,6 +157,18 @@
                     <div class="pt-2 pb-3 space-y-1">
                         <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
+                        </jet-responsive-nav-link>
+                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('createjobs')">
+                            Create Jobs
+                        </jet-responsive-nav-link>
+                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('results')">
+                            Results Catalog
+                        </jet-responsive-nav-link>
+                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('queue')">
+                            Job Queue
+                        </jet-responsive-nav-link>
+                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('about')">
+                            About
                         </jet-responsive-nav-link>
                     </div>
 
