@@ -1,7 +1,5 @@
 FROM ubuntu:21.04
 
-LABEL maintainer="Taylor Otwell"
-
 ARG WWWGROUP
 ARG NODE_VERSION=16
 
@@ -48,6 +46,19 @@ RUN setcap "cap_net_bind_service=+ep" /usr/bin/php8.1
 
 RUN groupadd --force -g $WWWGROUP sail
 RUN useradd -ms /bin/bash --no-user-group -g $WWWGROUP -u 1337 sail
+
+RUN apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E996735927E427A733BB653E374C7797FB006459 \
+    && echo "deb https://ppa.launchpadcontent.net/savoury1/ffmpeg4/ubuntu hirsute main" > /etc/apt/sources.list.d/ppa_ffmpeg.list \
+    && apt-get update \
+    && apt-get install -y ffmpeg
+
+RUN apt-get install -y libcurl4-gnutls-dev libxml2-dev libssl-dev dirmngr wget \
+    && wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \
+    && echo "deb https://cloud.r-project.org/bin/linux/ubuntu hirsute-cran40/" > /etc/apt/sources.list.d/r-project.list \
+    && apt-get update \
+    && apt-get install -y r-base-dev
+COPY install-deps.R /tmp/install-deps.R
+RUN Rscript /tmp/install-deps.R
 
 COPY start-container.sh /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
