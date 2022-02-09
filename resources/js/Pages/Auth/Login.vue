@@ -1,9 +1,12 @@
 <template>
     <Head title="Log in" />
 
-    <jet-authentication-card>
+   <jet-authentication-card>
         <template #logo>
             <jet-authentication-card-logo />
+        <h1 class="h-14 text-2xl flex items-center bg-gradient-to-r text-transparent bg-clip-text hover:bg-gradient-to-bl from-lime-600 to-amber-500">
+            Mangrove
+        </h1>
         </template>
 
         <jet-validation-errors class="mb-4" />
@@ -20,7 +23,7 @@
 
             <div class="mt-4">
                 <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" />
+                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" :disabled="form.processing"/>
             </div>
 
             <div class="block mt-4">
