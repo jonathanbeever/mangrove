@@ -49,3 +49,7 @@
     - [freeCodeCamp Series](https://youtu.be/FXpIoQ_rT_c)
 - [freeCodeCamp](https://www.youtube.com/c/Freecodecamp)
 - [Laracasts](https://laracasts.com/series)
+
+## Troubleshooting
+- Docker container crashing in state "undefied"
+    - Run `./vendor/bin/sail up --build`
