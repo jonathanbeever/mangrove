@@ -23,16 +23,16 @@
                                     Dashboard
                                 </jet-nav-link>
                                 <!--TODO: edit to fill in with routes-->
-                                <jet-nav-link :href="route('dashboard')" :active="route().current('createjobs')">
+                                <jet-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
                                     Create Jobs
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('dashboard')" :active="route().current('results')">
+                                <jet-nav-link :href="route('results')" :active="route().current('results')">
                                     Results Catalog
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('dashboard')" :active="route().current('queue')">
+                                <jet-nav-link :href="route('queue')" :active="route().current('queue')">
                                     Job Queue
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('dashboard')" :active="route().current('about')">
+                                <jet-nav-link :href="route('about')" :active="route().current('about')">
                                     About
                                 </jet-nav-link>
                             </div>
@@ -158,16 +158,16 @@
                         <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('createjobs')">
+                        <jet-responsive-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
                             Create Jobs
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('results')">
+                        <jet-responsive-nav-link :href="route('results')" :active="route().current('results')">
                             Results Catalog
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('queue')">
+                        <jet-responsive-nav-link :href="route('queue')" :active="route().current('queue')">
                             Job Queue
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('about')">
+                        <jet-responsive-nav-link :href="route('about')" :active="route().current('about')">
                             About
                         </jet-responsive-nav-link>
                     </div>
