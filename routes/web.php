@@ -15,6 +15,8 @@ use Inertia\Inertia;
 |
 */
 
+const AUTH = 'auth:sanctum';
+
 Route::get('/', function () {
     return Inertia::render('Auth/Login', [
         //'canLogin' => Route::has('login'),
@@ -24,6 +26,22 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+Route::middleware([AUTH, 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
+
+Route::middleware([AUTH, 'verified'])->get('/createjobs', function () {
+    return Inertia::render('CreateJobs');
+})->name('createjobs');
+
+Route::middleware([AUTH, 'verified'])->get('/results', function () {
+    return Inertia::render('Results');
+})->name('results');
+
+Route::middleware([AUTH, 'verified'])->get('/queue', function () {
+    return Inertia::render('Queue');
+})->name('queue');
+
+Route::middleware([AUTH, 'verified'])->get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
