@@ -20,5 +20,6 @@
         "redhat.vscode-yaml"
     ],
     "settings": {},
-    "remoteUser": "sail"
+    "remoteUser": "sail",
+    "overrideCommand": true
 }
