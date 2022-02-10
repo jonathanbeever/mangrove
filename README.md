@@ -51,5 +51,5 @@
 - [Laracasts](https://laracasts.com/series)
 
 ## Troubleshooting
-- Docker container crashing in state "undefied"
+- Docker container crashing in state "undefined"
     - Run `./vendor/bin/sail up --build`
