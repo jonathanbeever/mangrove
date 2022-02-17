@@ -60,10 +60,7 @@
 
 <script>
     import { defineComponent } from 'vue'
-    import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
-    import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
     import JetButton from '@/Jetstream/Button.vue'
-    import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 
 
     export default defineComponent({
