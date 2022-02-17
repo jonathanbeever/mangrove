@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\JobController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,11 +20,14 @@ const AUTH = 'auth:sanctum';
 
 Route::get('/', function () {
     return Inertia::render('Auth/Login', [
-        //'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'canRegister' => Route::has('register')
     ]);
+});
+
+Route::get('/runjob', [JobController::class, 'runJob']);
+
+Route::group(['middleware' => [AUTH, 'verified']], function () {
+    Route::resource('jobs', JobController::class);
 });
 
 Route::middleware([AUTH, 'verified'])->get('/dashboard', function () {
