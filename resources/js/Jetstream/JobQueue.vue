@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white border-b border-gray-200 flex flex-col">
         <div>
-            <jet-button class="float-left border-tl p-4 m-4 border-gray-200" :class="{ 'opacity-25': form }" v-on:click="deleteObject(0)">
+            <jet-button class="float-left border-tl p-4 m-4 border-gray-200" :class="{ 'opacity-25': form }" v-on:click="deleteArray(0)">
                 Clear Finished
             </jet-button>
             <jet-button class="float-right border-tl p-4 m-4 border-gray-200" :class="{ 'opacity-25': form }" :disabled="form">
@@ -86,15 +86,34 @@
                     timestarted: '03/34/2022, 10:02pm',
                     author: 'Aidan',
                     status: true,
+                    percent: 32
+                    },
+                    {job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    index: 'RMS',
+                    timestarted: '303030',
+                    author: 'Seth',
+                    status: false,
+                    percent: 2
+                    },
+                    {
+                    job: 'Probably Florida Zoo',
+                    name: 'probsafloridazoo.zip',
+                    index: 'Spaghetti',
+                    timestarted: '03/34/2022, 10:02pm',
+                    author: 'Aidan',
+                    status: true,
                     percent: 100
                     }]
                 }
 
             },
 
+        methods:{
         deleteArray(index){
-                this.$delete(this.items, index);
+                this.items.splice(index,50);
             }
+        }
     })
 
 

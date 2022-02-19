@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white border-b border-gray-200 flex flex-row">
+    <div class="bg-white border-b border-gray-200 flex flex-row" v-if="newUploads == true">
         <div class="px-4 py-4">
             <form class="bg-gradient-to-r from-gray-200 shadow-md rounded px-4 pt-2 pb-4 mb-2 ">
                 Filter Input Files
@@ -77,11 +77,17 @@
             </div>
         </div>
     </div>
+    <div class="bg-white border-b border-gray-200 flex flex-row" v-else>
+    <fileUpload/>
+    </div>
     <jet-button class="ml-4 float-right border-tl p-4 m-4 border-gray-200">
         Start New Jobs
     </jet-button>
-    <jet-button class="ml-4 float-right border-tl p-4 m-4 border-gray-200">
+    <jet-button v-if="newUploads == true" v-on:click="newUploads = !newUploads" class="ml-4 float-right border-tl p-4 m-4 border-gray-200" >
         Upload New Files
+    </jet-button>
+    <jet-button v-else v-on:click="newUploads = !newUploads" class="ml-4 float-right border-tl p-4 m-4 border-gray-200" >
+        Return to Dashboard
     </jet-button>
 </template>
 
@@ -92,6 +98,7 @@
     import JetCheckbox from '@/Jetstream/Checkbox.vue'
     import JetLabel from '@/Jetstream/Label.vue'
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+    import FileUpload from '@/Jetstream/FileUpload.vue'
 
     export default defineComponent({
         components: {
@@ -99,10 +106,12 @@
             JetInput,
             JetCheckbox,
             JetLabel,
+            FileUpload
 
         },
         data() {
             return {
+                newUploads: true,
                 items: [{
                     job: 'Central Florida Zoo',
                     name: 'centralfloridazoo.zip',
@@ -130,9 +139,9 @@
                     latitude: '02\'03\"40',
                     longitude: '02\'03\"40',
                     selected: false
-                    }]
+                    }],
+
                 }
             },
-
     })
 </script>
