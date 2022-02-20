@@ -1,38 +1,14 @@
 <template>
-    <div class="bg-white border-b border-gray-200 flex flex-row" v-if="newUploads == true">
-        <div class="px-4 py-4">
-            <form class="bg-gradient-to-r from-gray-200 shadow-md rounded px-4 pt-2 pb-4 mb-2 ">
-                Filter Input Files
-                <div>
-                    <jet-label for="job" value="Site Name" class="mt-5"/>
-                    <jet-input id="job" v-model="job" type="job" class="mt-1 mb-5 w-full border rounded py-2 px-3"/>
-                </div>
-                <div>
-                    <jet-label for="name" value="File Set Name"/>
-                    <jet-input id="name" type="name" class="mt-1 mb-5 w-full border rounded py-2 px-3"/>
-                </div>
-                <div>
-                    <jet-label for="latitude" value="Latitude"/>
-                    <jet-input id="latitude" type="latitude" class="mt-1 mb-5 w-full border rounded py-2 px-3"/>
-                </div>
-                <div>
-                    <jet-label for="longitude" value="Longitude"/>
-                    <jet-input id="longitude" type="longitude" class="mt-1 mb-5 w-full border rounded py-2 px-3"/>
-                </div>
-                <div class="flex items-center justify-center mt-4">
-                    <jet-button class="ml-4">
-                        Apply
-                    </jet-button>
-                </div>
-            </form>
+    <div class="bg-white border-b border-gray-200 flex flex-col" v-if="newUploads == true">
+        <div class="px-8 py-6">
+                Sound Files
         </div>
         <div class="border-t border-gray-200 md:border-t-0 md:border-l flex flex-col">
-            <div class="p-6 sm:px-5 flex">
-                Sound Files
-            </div>
-            <div class="flex flex-col items-justify px-6">
-                <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                    <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <jet-input type="text" v-model="search" placeholder="Search" class="p-4 mx-6 align-content-center"/>
+            <br/>
+            <div class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96">
+                <div class="-my-2 sm:-mx-6 lg:-mx-8">
+                    <div class="py-4 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                         <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -41,11 +17,11 @@
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Series</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recording Date</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Latitude/Longitude</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Edit</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Select</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr v-for="item in items" :key="item">
+                                    <tr v-for="(item, index) in filtered" :key="index">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-start">
                                                 <div class="">
@@ -59,13 +35,13 @@
                                             <div class="text-sm text-gray-500">{{ item.timestarted }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.date }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                                         <div class="text-sm text-gray-500">{{ item.latitude }}</div>
                                         <div class="text-sm text-gray-500">{{ item.longitude }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-8 py-4 whitespace-nowrap text-sm font-medium">
                                             <!--a href="#" class="text-indigo-600 hover:text-indigo-900">x</a-->
-                                            <input class="form-check-input appearance-none rounded-full h-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-100 align-center bg-no-repeat bg-center bg-contain float-right mr-2 cursor-pointer" type="radio" name="flexRadioDefault" id="{{count}}"/>
+                                            <input class="form-check-input appearance-none rounded-full h-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-100 align-center bg-no-repeat bg-center bg-contain cursor-pointer" type="radio" name="flexRadioDefault" id="{{count}}"/>
                                             <!--jet-checkbox name="{{item.count}}" v-model:checked="item.selected" /-->
                                         </td>
                                     </tr>
@@ -109,6 +85,27 @@
             FileUpload
 
         },
+        computed: {
+            filtered(){
+                let se = []
+                if(this.search !== '') {
+                    se = this.items.filter(p =>
+                        p.job.toLowerCase().includes(this.search.toLowerCase()) ||
+                        p.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                        p.series.toLowerCase().includes(this.search.toLowerCase()) ||
+                        p.date.toLowerCase().includes(this.search.toLowerCase()) ||
+                        p.timestarted.toLowerCase().includes(this.search.toLowerCase()) ||
+                        p.latitude.toLowerCase().includes(this.search.toLowerCase()) ||
+                        p.longitude.toLowerCase().includes(this.search.toLowerCase())
+
+
+                        )
+                    } else {
+                    se = this.items
+                    }
+                return se
+                }
+            },
         data() {
             return {
                 newUploads: true,
@@ -117,7 +114,7 @@
                     name: 'centralfloridazoo.zip',
                     series: 'That One series',
                     timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00am',
+                    date: '01/01/2011, 12:00pm',
                     latitude: '02\'03\"40',
                     longitude: '02\'03\"40',
                     selected: false
@@ -127,7 +124,52 @@
                     name: 'probsafloridazoo.zip',
                     series: 'Spaghetti',
                     timestarted: '03/34/2022, 10:02pm',
+                    date: '01/01/2041, 12:00am',
+                    latitude: '01\'03\"40',
+                    longitude: '52\'03\"40'
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2021, 12:00am',
+                    latitude: '41\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/03/2011, 12:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },
+                    {
+                    job: 'Oregano Florida Zoo',
+                    name: 'probsafloridazoo.zip',
+                    series: 'Spaghetti',
+                    timestarted: '03/34/2022, 10:02pm',
                     date: '01/01/2011, 12:00am',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40'
+                    },{
+                    job: 'Central Arkansas Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2011, 12:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },
+                    {
+                    job: 'Probably Florida Zoo',
+                    name: 'probsafloridazoo.zip',
+                    series: 'Spaghetti',
+                    timestarted: '03/34/2022, 10:02pm',
+                    date: '01/01/2011, 6:00am',
                     latitude: '02\'03\"40',
                     longitude: '02\'03\"40'
                     },{
@@ -135,12 +177,111 @@
                     name: 'centralfloridazoo.zip',
                     series: 'That One series',
                     timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00am',
+                    date: '01/01/2011, 4:00pm',
                     latitude: '02\'03\"40',
                     longitude: '02\'03\"40',
                     selected: false
-                    }],
-
+                    },
+                    {
+                    job: 'Not Florida Zoo',
+                    name: 'probsafloridazoo.zip',
+                    series: 'Spaghetti',
+                    timestarted: '03/34/2022, 10:02pm',
+                    date: '01/01/2011, 7:00am',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40'
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2011, 12:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2011, 12:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2011, 12:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    }, {
+                    job: 'Probably Florida Zoo',
+                    name: 'probsafloridazoo.zip',
+                    series: 'Spaghetti',
+                    timestarted: '03/34/2022, 10:02pm',
+                    date: '01/01/2041, 12:00am',
+                    latitude: '01\'03\"40',
+                    longitude: '52\'03\"40'
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2021, 12:00am',
+                    latitude: '41\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/03/2011, 12:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },
+                    {
+                    job: 'Oregano Florida Zoo',
+                    name: 'probsafloridazoo.zip',
+                    series: 'Spaghetti',
+                    timestarted: '03/34/2022, 10:02pm',
+                    date: '01/01/2011, 12:00am',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40'
+                    },{
+                    job: 'Central Arkansas Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2011, 12:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },
+                    {
+                    job: 'Probably Florida Zoo',
+                    name: 'probsafloridazoo.zip',
+                    series: 'Spaghetti',
+                    timestarted: '03/34/2022, 10:02pm',
+                    date: '01/01/2011, 6:00am',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40'
+                    },{
+                    job: 'Central Florida Zoo',
+                    name: 'centralfloridazoo.zip',
+                    series: 'That One series',
+                    timestarted: '02/07/2022, 10:25pm',
+                    date: '01/01/2011, 4:00pm',
+                    latitude: '02\'03\"40',
+                    longitude: '02\'03\"40',
+                    selected: false
+                    },
+                    ],
+                search: ''
                 }
             },
     })

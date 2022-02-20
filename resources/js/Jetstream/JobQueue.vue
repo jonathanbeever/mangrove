@@ -1,10 +1,10 @@
 <template>
     <div class="bg-white border-b border-gray-200 flex flex-col">
         <div>
-            <jet-button class="float-left border-tl p-4 m-4 border-gray-200" :class="{ 'opacity-25': form }" v-on:click="deleteArray(0)">
+            <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="deleteFinished(items.progress == 100)">
                 Clear Finished
             </jet-button>
-            <jet-button class="float-right border-tl p-4 m-4 border-gray-200" :class="{ 'opacity-25': form }" :disabled="form">
+            <jet-button class="float-right border-tl p-4 m-4 border-gray-200" v-on:click="deleteArray(0)">
                 Delete Caching
             </jet-button>
         </div>
@@ -38,13 +38,11 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.author }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <div class="flex justify-between mb-1">
-                                                <span v-if="item.percent==100" class="text-sm font-medium text-green-600 dark:text-white">{{item.percent}}%</span>
-                                                <span v-else class="text-sm font-medium text-blue-700 dark:text-white">{{item.percent}}%</span>
-                                            </div>
-                                            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                                                <div v-if="item.percent==100" class="bg-green-600 h-2.5 rounded-full" style="width=100%"/>
-                                                <div v-else class="bg-blue-600 h-2.5 rounded-full" :style="{'width' :'${item.percent}'}"></div>
+                                            <div class="flex justify-between">
+                                                <progress class="bg-blue-600 h-2.5 rounded-full mt-3" :value="item.percent" :max="100"/>
+                                                <span v-if="item.percent==100" class="text-xl font-medium text-green-600 dark:text-white">Done</span>
+                                                <span v-else class="text-xl font-medium text-blue-700 dark:text-white">{{item.percent}}%</span>
+                                                <!--progress v-if="item.percent==100" class="bg-green-600 h-2.5 rounded-full" /-->
                                             </div>
                                         </td>
                                     </tr>
@@ -61,7 +59,6 @@
 <script>
     import { defineComponent } from 'vue'
     import JetButton from '@/Jetstream/Button.vue'
-
 
     export default defineComponent({
         components: {
@@ -112,7 +109,10 @@
         methods:{
         deleteArray(index){
                 this.items.splice(index,50);
-            }
+            },
+        deleteFinished(index){
+            this.items.remove(index);
+        }
         }
     })
 
