@@ -1,9 +1,12 @@
 <template>
     <app-layout title="Results">
         <template #header>
+            <script>
+            </script>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Results
             </h2>
+            <div><div id="wave"></div></div>
         </template>
 
         <div class="py-12">
@@ -20,11 +23,21 @@
     import { defineComponent } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
     import Welcome from '@/Jetstream/Welcome.vue'
+    import WaveSurfer from "wavesurfer.js";
 
     export default defineComponent({
         components: {
             AppLayout,
-            Welcome,
+            WaveSurfer
         },
+        mounted() {
+            this.wavesurfer = WaveSurfer.create({
+                container: "#wave"
+            });
+            this.wavesurfer.load("sound");
+            this.wavesurfer.on("ready", function() {
+                this.wavesurfer.play();
+            });
+        }
     })
 </script>
