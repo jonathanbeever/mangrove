@@ -1,7 +1,6 @@
 <template>
     <app-layout title="Results">
         <template #header>
-        <script></script>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Results
         </h2>

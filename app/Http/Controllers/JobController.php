@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreJobRequest;
-use App\Http\Requests\UpdateJobRequest;
+use App\Contracts\Job\CreateJobContract;
+use App\Contracts\Job\CreateJobResponseContract;
+use App\Contracts\Job\DeleteJobContract;
+use App\Contracts\Job\DeleteJobResponseContract;
+use App\Contracts\Job\UpdateJobContract;
+use App\Contracts\Job\UpdateJobResponseContract;
+use App\Http\Requests\Job\StoreJobRequest;
+use App\Http\Requests\Job\UpdateJobRequest;
+use App\Jobs\ProcessSingleSoundFile;
 use App\Models\Job;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,7 +26,9 @@ class JobController extends Controller
     {
         $jobs = auth()->user()->jobs;
 
-        return Inertia::render('Jobs', $jobs);
+        return Inertia::render('Jobs', [
+            'jobs' => $jobs
+        ]);
     }
 
     /**
@@ -31,71 +38,46 @@ class JobController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Jobs/create');
+        return Inertia::render('Jobs/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param StoreJobRequest $request
-     * @return RedirectResponse
+     * @param CreateJobContract $contract
+     * @return CreateJobResponseContract
      */
-    public function store(StoreJobRequest $request): RedirectResponse
+    public function store(StoreJobRequest $request, CreateJobContract $contract): CreateJobResponseContract
     {
-        $validated = $request->validated();
+        $contract->create($request->validated());
 
-        $job = new Job($validated);
-
-        if ($job->save()) {
-            session()->flash('success', 'Successfully created job!');
-        } else {
-            session()->flash('failure', 'Failed to create job.');
-        }
-
-        return redirect()->route('jobs');
+        return app(CreateJobResponseContract::class);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Job $id
-     * @return Response|RedirectResponse
+     * @param Job $job
+     * @return Response
      */
-    public function show(Job $id): Response|RedirectResponse
+    public function show(Job $job): Response
     {
-        $jobs = auth()->user()?->jobs();
-
-        try {
-            $job = $jobs->findOrFail($id);
-        } catch (ModelNotFoundException) {
-            session()->flash('failure', 'Could not find job.');
-            return redirect()->route('jobs');
-        }
-
-        return Inertia::render('Jobs/create', [
-            'job' => $job,
+        return Inertia::render('Jobs/Show', [
+            'jobs' => $job
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Job $id
-     * @return Response|RedirectResponse
+     * @param Job $job
+     * @return Response
      */
-    public function edit(Job $id): Response|RedirectResponse
+    public function edit(Job $job): Response
     {
-        $jobs = auth()->user()?->jobs();
-
-        try {
-            $job = $jobs->findOrFail($id);
-        } catch (ModelNotFoundException) {
-            session()->flash('failure', 'Could not find job.');
-            return redirect()->route('jobs');
-        }
-
-        return Inertia::render('Jobs/edit', [
-            'job' => $job,
+        return Inertia::render('Jobs/Edit', [
+            'jobs' => $job
         ]);
     }
 
@@ -103,95 +85,47 @@ class JobController extends Controller
      * Update the specified resource in storage.
      *
      * @param UpdateJobRequest $request
-     * @param Job $id
-     * @return RedirectResponse
+     * @param Job $job
+     * @param UpdateJobContract $contract
+     * @return UpdateJobResponseContract
      */
-    public function update(UpdateJobRequest $request, Job $id): RedirectResponse
+    public function update(UpdateJobRequest $request, Job $job, UpdateJobContract $contract): UpdateJobResponseContract
     {
-        $validated = $request->validated();
-        $jobs = auth()->user()?->jobs();
-
-        try {
-            $job = $jobs->findOrFail($id);
-        } catch (ModelNotFoundException) {
-            session()->flash('failure', 'Could not find job.');
-            return redirect()->route('jobs');
-        }
-
-        $job->fill($validated);
-
-        if ($job->save()) {
-            session()->flash('success', 'Successfully created job!');
+        if ($contract->update($request->validated(), $job)) {
+            session()->flash('success', 'Successfully updated job!');
         } else {
-            session()->flash('failure', 'Failed to create job.');
+            session()->flash('failure', 'Failed to update job.');
         }
 
-        return redirect()->route('jobs');
+        return app(UpdateJobResponseContract::class);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Job $id
-     * @return RedirectResponse
+     * @param Job $job
+     * @param DeleteJobContract $contract
+     * @return DeleteJobResponseContract
      */
-    public function destroy(Job $id): RedirectResponse
+    public function destroy(Job $job, DeleteJobContract $contract): DeleteJobResponseContract
     {
-        $jobs = auth()->user()?->jobs();
-
-        try {
-            $job = $jobs->findOrFail($id);
-        } catch (ModelNotFoundException) {
-            session()->flash('failure', 'Could not find job.');
-            return redirect()->route('jobs');
-        }
-
-        if ($job->delete()) {
-            session()->flash('success', 'Successfully deleted job!');
+        if ($contract->delete($job)) {
+            session()->flash('success', 'Successfully deleted promotion!');
         } else {
-            session()->flash('failure', 'Failed to delete job.');
+            session()->flash('failure', 'Failed to delete promotion.');
         }
 
-        return redirect()->route('jobs');
+        return app(DeleteJobResponseContract::class);
     }
 
-    public function runJob(Job $id): void
+    /**
+     * Execute the specified resource.
+     *
+     * @param Job $job
+     * @return void
+     */
+    public function execute(Job $job): void
     {
-        $aci_job = [
-            'input' => [
-                'path' => 'wav/test.wav',
-                'site' => 'UCF Arboretum',
-                'series' => 'Hurricane Irma',
-                'name' => 'Test Input',
-                'recordTimeMs' => 1505016000000,
-                'durationMs' => 30000,
-                'sampleRateHz' => 44100,
-                'sizeBytes' => 5292044,
-                'coords' => [
-                    'lat' => 28.596238,
-                    'long' => -81.191381
-                ],
-                'downloadUrl' => 'file:wav/test.wav'
-            ],
-            'spec' => [
-                'type' => 'bi',
-                'minFreq' => 2000,
-                'maxFreq' => 8000,
-                'fftW' => 32,
-            ],
-        ];
-
-        try {
-            $json = json_encode($aci_job, JSON_THROW_ON_ERROR);
-
-            $handle = popen('Rscript ../scripts/Rscripts/processJob.R \'' . $json . '\' 2>&1', "r");
-            while(!feof($handle)) {
-                echo '<pre>' . fread($handle, 4096) . '</pre>';
-                ob_flush();
-            }
-            pclose($handle);
-        } catch (\Exception ) {
-            dd('Input could not be parsed to JSON');
-        }
+        ProcessSingleSoundFile::dispatch($job);
     }
 }

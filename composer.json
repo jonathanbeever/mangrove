@@ -11,6 +11,7 @@
         "laravel/jetstream": "^2.6",
         "laravel/sanctum": "^2.14",
         "laravel/tinker": "^2.7",
+        "pbmedia/laravel-ffmpeg": "^8.0",
         "pestphp/pest": "^1.16",
         "pestphp/pest-plugin-laravel": "^1.1",
         "tightenco/ziggy": "^1.0"

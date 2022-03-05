@@ -25,7 +25,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/runjob', [JobController::class, 'runJob']);
+Route::get('/run/{type}', [JobController::class, 'runJob']);
 
 Route::group(['middleware' => [AUTH, 'verified']], function () {
     Route::resource('jobs', JobController::class);
