@@ -1,18 +1,19 @@
 <template>
     <app-layout title="Results">
         <template #header>
-            <script>
-            </script>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Results
-            </h2>
-            <div><div id="wave"></div></div>
+        <script type="text/javascript" src="script.js"></script>
+        <script></script>
+
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Results
+        </h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <welcome />
+                    <div><div id="wave"></div></div>
                 </div>
             </div>
         </div>
@@ -32,12 +33,13 @@
         },
         mounted() {
             this.wavesurfer = WaveSurfer.create({
-                container: "#wave"
+                container: "#wave",
+                waveColor: '#D2EDD4',
+                progressColor: '#46B54D',
+                backend: 'MediaElement'
             });
             this.wavesurfer.load("sound");
-            this.wavesurfer.on("ready", function() {
-                this.wavesurfer.play();
-            });
+            this.wavesurfer.play();
         }
     })
 </script>
