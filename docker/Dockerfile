@@ -56,7 +56,7 @@ RUN apt-get install -y libcurl4-gnutls-dev libxml2-dev libssl-dev libgit2-dev di
     && echo "deb https://ppa.launchpadcontent.net/c2d4u.team/c2d4u4.0+/ubuntu focal main" > /etc/apt/sources.list.d/r-project-packages.list \
     && apt-get update \
     && apt-get install -y r-base r-base-dev r-cran-tuner r-cran-devtools r-cran-rjson
-COPY ../scripts/Rscripts/install-deps.R /tmp/install-deps.R
+COPY install-deps.R /tmp/install-deps.R
 RUN Rscript /tmp/install-deps.R
 
 COPY start-container.sh /usr/local/bin/start-container
