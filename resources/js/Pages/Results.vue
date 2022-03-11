@@ -50,6 +50,18 @@
                             </template>
                         </Chart>
                     </div>
+                    <div class="pl-5">
+                        <select id="selectStartDateAci" v-model="aciStartDate">
+                            <option v-bind:value="aciStartDate">Start Date</option>
+                        </select>
+                        <select id="selectEndDateAci" v-model="aciEndDate">
+                            <option v-bind:value="aciEndDate">End Date</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAciSeries">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected Time Range: {{aciStartDate + " - " + aciEndDate}}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,6 +89,25 @@
                         </Chart>
                     </div>
                     <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
+                    <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
+                        <Chart :data="ndsiSeriesRecordings" :size="{ width: 1200, height: 320 }">
+                            <template #layers>
+                                <Line :dataKeys="['DATE', 'NDSI']" type="natural"/>
+                            </template>
+                        </Chart>
+                    </div>
+                    <div class="pl-5">
+                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
+                            <option v-bind:value="ndsiStartDate">Start Date</option>
+                        </select>
+                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
+                            <option v-bind:value="ndsiEndDate">End Date</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAci">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
+                    </div>
                     <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
                         <Chart :data="ndsiSeriesRecordings" :size="{ width: 1200, height: 320 }">
                             <template #layers>
@@ -119,6 +150,10 @@
             return {
                 aciFile: '',
                 ndsiFile: '',
+                aciStartDate: '',
+                ndsiStartDate: '',
+                aciEndDate: '',
+                ndsiEndDate: '',
                 recordings: [],
                 aciFileRecordings: [],
                 ndsiFileRecordings: [],
@@ -142,6 +177,10 @@
                 this.ndsiFileRecordings = this.filterRecordingsByFile(this.ndsiFile);
                 this.ndsiSeriesRecordings = this.filterRecordingsBySeries(this.ndsiFile.substring(0, 8));
             },
+            plotAciSeries: function() {
+                console.log(this.aciStart);
+                console.log(this.aciEnd);
+            },
             extractRecording: function(recording) {
                 var folder = recording.FOLDER;
                 var file = recording.IN_FILE;
@@ -160,17 +199,28 @@
                 if (extractedRecordings) {
                     extractedRecordings.then((d) => this.updateDropdown(d, "selectFileAci"));
                     extractedRecordings.then((d) => this.updateDropdown(d, "selectFileNdsi"));
+                    extractedRecordings.then((d) => this.updateDropdown(d, "selectStartDateAci"));
+                    extractedRecordings.then((d) => this.updateDropdown(d, "selectEndDateAci"));
+                    extractedRecordings.then((d) => this.updateDropdown(d, "selectStartDateNdsi"));
+                    extractedRecordings.then((d) => this.updateDropdown(d, "selectEndDateNdsi"));
                 }
             },
             updateDropdown: function(extractedRecordings, dropdown) {
                 var select = document.getElementById(dropdown);
+                var options = new Set();
                 for (var i = 0; i < extractedRecordings.length; i++) {
                     this.recordings.push(extractedRecordings[i]);
-                    var file = extractedRecordings[i]["IN_FILE"];
+                    // handle both file and date dropdowns
+                    var field = extractedRecordings[i]["IN_FILE"];
+                    if (dropdown.indexOf("Date") > -1) {
+                        field = extractedRecordings[i]["DATE"];
+                    }
                     var el = document.createElement("option");
-                    el.textContent = file;
-                    el.value = file;
+                    el.textContent = field;
+                    el.value = field;
+                    if (options.has(field)) continue;
                     select.appendChild(el);
+                    options.add(field);
                 }
             },
             getExtractedRecordings: function() {
