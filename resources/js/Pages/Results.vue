@@ -34,9 +34,17 @@
                         <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAci">Visualize</jet-button>
                         <div class="pl-20 pt-5">Selected File: {{aciFile}}</div>
                     </div>
+                    <div v-if="aciFileRecordings.length > 0" class="pt-5">
+                        <Chart :data="aciFileRecordings">
+                            <template #layers>
+                                <Line :dataKeys="['DATE', 'ACI']" type="step"/>
+                            </template>
+                        </Chart>
+                    </div>
                 </div>
             </div>
         </div>
+
 
         <div class="py-12 pt-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
@@ -51,6 +59,13 @@
                         <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
                         <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
                     </div>
+                    <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
+                        <Chart :data="aciFileRecordings">
+                            <template #layers>
+                                <Line :dataKeys="['DATE', 'NDSI']" type="step"/>
+                            </template>
+                        </Chart>
+                    </div>
                 </div>
             </div>
         </div>
@@ -58,7 +73,7 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
+    import { defineComponent, ref } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
     import Welcome from '@/Jetstream/Welcome.vue'
     import WaveSurfer from "wavesurfer.js"
@@ -66,21 +81,32 @@
     import JetButton from "@/Jetstream/Button.vue";
     import TrendChart from "vue-trend-chart";
     import * as d3 from "d3";
+    import { Chart, Grid, Bar, Line, Marker, Tooltip, linearGradient } from 'vue3-charts';
 
     export default defineComponent({
         components: {
             AppLayout,
             JetButton,
             TrendChart,
-            WaveSurfer
+            WaveSurfer,
+            Chart,
+            Line,
+            Grid,
+            Bar,
+            Marker,
+            Tooltip,
+            linearGradient
         },
         data() {
             return {
                 aciFile: '',
                 ndsiFile: '',
-                recordings: []
+                recordings: [],
+                aciFileRecordings: [],
+                ndsiFileRecordings: []
             }
         },
+
         methods: {
             play: function() {
                 this.wavesurfer.play();
@@ -89,15 +115,15 @@
                 this.wavesurfer.pause();
             },
             plotAci: function() {
-                var aciFileRecordings = this.filterRecordingsByFile(this.aciFile);
-                if (aciFileRecordings) {
-                    console.log(aciFileRecordings);
+                this.aciFileRecordings = this.filterRecordingsByFile(this.aciFile);
+                if (this.aciFileRecordings) {
+                    console.log(this.aciFileRecordings);
                 }
             },
             plotNdsi: function() {
-                var ndsiFileRecordings = this.filterRecordingsByFile(this.ndsiFile);
-                if (ndsiFileRecordings) {
-                    console.log(ndsiFileRecordings);
+                this.ndsiFileRecordings = this.filterRecordingsByFile(this.ndsiFile);
+                if (this.ndsiFileRecordings) {
+                    console.log(this.ndsiFileRecordings);
                 }
             },
             extractRecording: function(recording) {
