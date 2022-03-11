@@ -43,13 +43,6 @@
                         </Chart>
                     </div>
                     <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
-                    <div v-if="aciFileRecordings.length > 0" class="pt-5">
-                        <Chart :data="aciSeriesRecordings" :size="{ width: 1200, height: 320 }">
-                            <template #layers>
-                                <Line :dataKeys="['DATE', 'ACI']" type="natural"/>
-                            </template>
-                        </Chart>
-                    </div>
                     <div class="pl-5">
                         <select id="selectStartDateAci" v-model="aciStartDate">
                             <option v-bind:value="aciStartDate">Start Date</option>
@@ -61,6 +54,13 @@
                     <div>
                         <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAciSeries">Visualize</jet-button>
                         <div class="pl-20 pt-5">Selected Time Range: {{aciStartDate + " - " + aciEndDate}}</div>
+                    </div>
+                    <div v-if="aciSeriesRecordings.length > 0" class="pt-5">
+                        <Chart :data="aciSeriesRecordings" :size="{ width: 1200, height: 320 }">
+                            <template #layers>
+                                <Bar :dataKeys="['DATE', 'ACI']" :barStyle="{ fill: '#93C572' }"/>
+                            </template>
+                        </Chart>
                     </div>
                 </div>
             </div>
@@ -89,13 +89,6 @@
                         </Chart>
                     </div>
                     <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
-                    <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
-                        <Chart :data="ndsiSeriesRecordings" :size="{ width: 1200, height: 320 }">
-                            <template #layers>
-                                <Line :dataKeys="['DATE', 'NDSI']" type="natural"/>
-                            </template>
-                        </Chart>
-                    </div>
                     <div class="pl-5">
                         <select id="selectStartDateNdsi" v-model="ndsiStartDate">
                             <option v-bind:value="ndsiStartDate">Start Date</option>
@@ -105,13 +98,13 @@
                         </select>
                     </div>
                     <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAci">Visualize</jet-button>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
                         <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
                     </div>
-                    <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
+                    <div v-if="ndsiSeriesRecordings.length > 0" class="pt-5">
                         <Chart :data="ndsiSeriesRecordings" :size="{ width: 1200, height: 320 }">
                             <template #layers>
-                                <Line :dataKeys="['DATE', 'NDSI']" type="natural"/>
+                                <Bar :dataKeys="['DATE', 'NDSI']" :barStyle="{ fill: '#93C572' }"/>
                             </template>
                         </Chart>
                     </div>
@@ -171,15 +164,15 @@
             },
             plotAci: function() {
                 this.aciFileRecordings = this.filterRecordingsByFile(this.aciFile);
-                this.aciSeriesRecordings = this.filterRecordingsBySeries(this.aciFile.substring(0, 8));
             },
             plotNdsi: function() {
                 this.ndsiFileRecordings = this.filterRecordingsByFile(this.ndsiFile);
-                this.ndsiSeriesRecordings = this.filterRecordingsBySeries(this.ndsiFile.substring(0, 8));
             },
             plotAciSeries: function() {
-                console.log(this.aciStart);
-                console.log(this.aciEnd);
+                this.aciSeriesRecordings = this.filterRecordingsBySeries("ACI");
+            },
+            plotNdsiSeries: function() {
+                this.ndsiSeriesRecordings = this.filterRecordingsBySeries("NDSI");
             },
             extractRecording: function(recording) {
                 var folder = recording.FOLDER;
@@ -229,8 +222,31 @@
             filterRecordingsByFile: function(file) {
                 return this.recordings.filter((d) => d["IN_FILE"] == file);
             },
-            filterRecordingsBySeries: function(series) {
-                return this.recordings.filter((d) => d["IN_FILE"].indexOf(series) > -1);
+            filterRecordingsBySeries: function(index) {
+                // handle ACI
+                if (index == "ACI") {
+                    if (this.aciStartDate === "" && this.aciEndDate === "") {
+                        return this.recordings;
+                    }
+                    if (this.aciStartDate === "") {
+                        return this.recordings.filter((d) => d["DATE"] <= this.aciEndDate);
+                    }
+                    if (this.aciEndDate === "") {
+                        return this.recordings.filter((d) => this.aciStartDate <= d["DATE"]);
+                    }
+                    return this.recordings.filter((d) => this.aciStartDate <= d["DATE"] && d["DATE"] <= this.aciEndDate);
+                }
+                // handle NDSI
+                if (this.ndsiStartDate === "" && this.ndsiEndDate === "") {
+                    return this.recordings;
+                }
+                if (this.ndsiStartDate === "") {
+                    return this.recordings.filter((d) => d["DATE"] <= this.ndsiEndDate);
+                }
+                if (this.ndsiEndDate === "") {
+                    return this.recordings.filter((d) => this.ndsiStartDate <= d["DATE"]);
+                }
+                return this.recordings.filter((d) => this.ndsiStartDate <= d["DATE"] && d["DATE"] <= this.ndsiEndDate);
             }
         },
 
