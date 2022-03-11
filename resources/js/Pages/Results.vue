@@ -29,6 +29,7 @@
     import WaveSurfer from "wavesurfer.js"
     import SpectrogramPlugin from 'wavesurfer.js/src/plugin/spectrogram'
     import JetButton from "@/Jetstream/Button.vue";
+    import * as d3 from "d3";
 
     export default defineComponent({
         components: {
@@ -58,6 +59,39 @@
             },
             pause: function() {
                 this.wavesurfer.pause();
+            },
+            adi: function() {
+                d3.csv("sound")
+                  .then(plotAci());
+            },
+            ndi: function() {
+                d3.csv("sound")
+                  .then(plotNdi());
+            },
+            plotAci: function(recordings, file) {
+                var fields = filterByFile(extractRecordings(recordings), file);
+                var aci = fields[9];
+
+            },
+            plotNdi: function(recordings) {
+                var fields = filterByFile(extractRecordings(recordings), file);
+                var ndsi = fields[8];
+            },
+            extractRecordings: function(recordings) {
+                var folder = recordings.map(function(d) {return d.FOLDER});
+                var file = recordings.map(function(d) {return d.IN_FILE});
+                var channel = recordings.map(function(d) {return d.CHANNEL});
+                var offset = recordings.map(function(d) {return d.OFFSET});
+                var duration = recordings.map(function(d) {return d.DURATION});
+                var date = recordings.map(function(d) {return d.DATE});
+                var time = recordings.map(function(d) {return d.TIME});
+                var hour = recordings.map(function(d) {return d.HOUR});
+                var ndsi = recordings.map(function(d) {return d.NDSI});
+                var aci = recordings.map(function(d) {return d.ACI});
+                return [folder, file, channel, offset, duration, date, time, hour, ndsi, aci];
+            },
+            filterByFile: function(recordings, file) {
+                return recordings.filter(recording => recording[1].indexOf(file) > -1);
             }
         }
     })
