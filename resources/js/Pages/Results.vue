@@ -5,6 +5,7 @@
             Results
         </h2>
         </template>
+        <script src="script.js"></script>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -12,6 +13,8 @@
                     <welcome />
                     <div><div id="wave"></div></div>
                 </div>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2" v-on:click="play">Play</button>
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2 mt-2" v-on:click="pause">Pause</button>
             </div>
         </div>
     </app-layout>
@@ -44,7 +47,14 @@
                 ]
             });
             this.wavesurfer.load("sound");
-            this.wavesurfer.play();
+        },
+        methods: {
+            play: function() {
+                this.wavesurfer.play();
+            },
+            pause: function() {
+                this.wavesurfer.pause();
+            }
         }
     })
 </script>
