@@ -25,6 +25,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
                     <div class="pb-4 pl-2 pt-2">ACI</div>
+                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
                     <div class="pl-5">
                         <select id="selectFileAci" v-model="aciFile">
                             <option v-bind:value="aciFile">Select File</option>
@@ -37,7 +38,15 @@
                     <div v-if="aciFileRecordings.length > 0" class="pt-5">
                         <Chart :data="aciFileRecordings">
                             <template #layers>
-                                <Line :dataKeys="['DATE', 'ACI']" type="step"/>
+                                <Bar :dataKeys="['DATE', 'ACI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
+                            </template>
+                        </Chart>
+                    </div>
+                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
+                    <div v-if="aciFileRecordings.length > 0" class="pt-5">
+                        <Chart :data="aciSeriesRecordings" :size="{ width: 1200, height: 320 }">
+                            <template #layers>
+                                <Line :dataKeys="['DATE', 'ACI']" type="natural"/>
                             </template>
                         </Chart>
                     </div>
@@ -50,6 +59,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
                     <div class="pb-4 pl-2 pt-2">NDSI</div>
+                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
                     <div class="pl-5">
                         <select id="selectFileNdsi" v-model="ndsiFile">
                             <option v-bind:value="ndsiFile">Select File</option>
@@ -60,9 +70,17 @@
                         <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
                     </div>
                     <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
-                        <Chart :data="aciFileRecordings">
+                        <Chart :data="ndsiFileRecordings">
                             <template #layers>
-                                <Line :dataKeys="['DATE', 'NDSI']" type="step"/>
+                                <Bar :dataKeys="['DATE', 'NDSI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
+                            </template>
+                        </Chart>
+                    </div>
+                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
+                    <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
+                        <Chart :data="ndsiSeriesRecordings" :size="{ width: 1200, height: 320 }">
+                            <template #layers>
+                                <Line :dataKeys="['DATE', 'NDSI']" type="natural"/>
                             </template>
                         </Chart>
                     </div>
@@ -103,7 +121,9 @@
                 ndsiFile: '',
                 recordings: [],
                 aciFileRecordings: [],
-                ndsiFileRecordings: []
+                ndsiFileRecordings: [],
+                aciSeriesRecordings: [],
+                ndsiSeriesRecordings: []
             }
         },
 
@@ -116,15 +136,11 @@
             },
             plotAci: function() {
                 this.aciFileRecordings = this.filterRecordingsByFile(this.aciFile);
-                if (this.aciFileRecordings) {
-                    console.log(this.aciFileRecordings);
-                }
+                this.aciSeriesRecordings = this.filterRecordingsBySeries(this.aciFile.substring(0, 8));
             },
             plotNdsi: function() {
                 this.ndsiFileRecordings = this.filterRecordingsByFile(this.ndsiFile);
-                if (this.ndsiFileRecordings) {
-                    console.log(this.ndsiFileRecordings);
-                }
+                this.ndsiSeriesRecordings = this.filterRecordingsBySeries(this.ndsiFile.substring(0, 8));
             },
             extractRecording: function(recording) {
                 var folder = recording.FOLDER;
@@ -162,6 +178,9 @@
             },
             filterRecordingsByFile: function(file) {
                 return this.recordings.filter((d) => d["IN_FILE"] == file);
+            },
+            filterRecordingsBySeries: function(series) {
+                return this.recordings.filter((d) => d["IN_FILE"].indexOf(series) > -1);
             }
         },
 
