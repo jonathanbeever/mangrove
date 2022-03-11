@@ -60,20 +60,20 @@
             pause: function() {
                 this.wavesurfer.pause();
             },
-            adi: function() {
+            aci: function(file) {
                 d3.csv("sound")
-                  .then(plotAci());
+                  .then(function(d, file) {plotAci(d, file)});
             },
-            ndi: function() {
+            ndsi: function(file) {
                 d3.csv("sound")
-                  .then(plotNdi());
+                  .then(function(d, file) {plotNdi(d, file)});
             },
             plotAci: function(recordings, file) {
                 var fields = filterByFile(extractRecordings(recordings), file);
                 var aci = fields[9];
 
             },
-            plotNdi: function(recordings) {
+            plotNdsi: function(recordings, file) {
                 var fields = filterByFile(extractRecordings(recordings), file);
                 var ndsi = fields[8];
             },
