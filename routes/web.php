@@ -54,3 +54,7 @@ Route::middleware([AUTH, 'verified'])->get('/about', function () {
 Route::middleware([AUTH, 'verified'])->get('/sound', function () {
     return File::get('../sounds/pigeons.mp3');
 })->name('sound');
+
+Route::middleware([AUTH, 'verified'])->get('/index', function () {
+    return File::get('../sounds/acousticindex.csv');
+})->name('index');
