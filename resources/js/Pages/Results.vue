@@ -77,7 +77,8 @@
         data() {
             return {
                 aciFile: '',
-                ndsiFile: ''
+                ndsiFile: '',
+                recordings: []
             }
         },
         methods: {
@@ -88,10 +89,16 @@
                 this.wavesurfer.pause();
             },
             plotAci: function() {
-
+                var aciFileRecordings = this.filterRecordingsByFile(this.aciFile);
+                if (aciFileRecordings) {
+                    console.log(aciFileRecordings);
+                }
             },
             plotNdsi: function() {
-
+                var ndsiFileRecordings = this.filterRecordingsByFile(this.ndsiFile);
+                if (ndsiFileRecordings) {
+                    console.log(ndsiFileRecordings);
+                }
             },
             extractRecording: function(recording) {
                 var folder = recording.FOLDER;
@@ -116,6 +123,7 @@
             updateDropdown: function(extractedRecordings, dropdown) {
                 var select = document.getElementById(dropdown);
                 for (var i = 0; i < extractedRecordings.length; i++) {
+                    this.recordings.push(extractedRecordings[i]);
                     var file = extractedRecordings[i]["IN_FILE"];
                     var el = document.createElement("option");
                     el.textContent = file;
@@ -125,6 +133,9 @@
             },
             getExtractedRecordings: function() {
                 return d3.csv("index");
+            },
+            filterRecordingsByFile: function(file) {
+                return this.recordings.filter((d) => d["IN_FILE"] == file);
             }
         },
 
