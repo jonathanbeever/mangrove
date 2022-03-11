@@ -14,7 +14,7 @@
                     <div><div id="wave"></div></div>
                     <div>
                         <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="play">Play</jet-button>
-                    <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="pause">Pause</jet-button>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="pause">Pause</jet-button>
                     </div>
                 </div>
 
@@ -25,14 +25,16 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
                     <div class="pb-4 pl-2 pt-2">ACI</div>
-
-                    <select id="selectFileAci">
-                        <option>Select File</option>
-                    </select>
-
-
+                    <div class="pl-5">
+                        <select id="selectFileAci" v-model="aciFile">
+                            <option v-bind:value="aciFile">Select File</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAci">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected File: {{aciFile}}</div>
+                    </div>
                 </div>
-
             </div>
         </div>
 
@@ -40,13 +42,16 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
                     <div class="pb-4 pl-2 pt-2">NDSI</div>
-
-                    <select id="selectFileNdsi">
-                        <option>Select File</option>
-                    </select>
-
+                    <div class="pl-5">
+                        <select id="selectFileNdsi" v-model="ndsiFile">
+                            <option v-bind:value="ndsiFile">Select File</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </app-layout>
@@ -69,12 +74,24 @@
             TrendChart,
             WaveSurfer
         },
+        data() {
+            return {
+                aciFile: '',
+                ndsiFile: ''
+            }
+        },
         methods: {
             play: function() {
                 this.wavesurfer.play();
             },
             pause: function() {
                 this.wavesurfer.pause();
+            },
+            plotAci: function() {
+
+            },
+            plotNdsi: function() {
+
             },
             extractRecording: function(recording) {
                 var folder = recording.FOLDER;
