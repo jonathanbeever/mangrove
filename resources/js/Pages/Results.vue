@@ -8,13 +8,14 @@
         <script src="script.js"></script>
 
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <welcome />
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
                     <div><div id="wave"></div></div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="play">Play</jet-button>
+                    <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="pause">Pause</jet-button>
+                    </div>
                 </div>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2" v-on:click="play">Play</button>
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2 mt-2" v-on:click="pause">Pause</button>
             </div>
         </div>
     </app-layout>
@@ -26,10 +27,12 @@
     import Welcome from '@/Jetstream/Welcome.vue'
     import WaveSurfer from "wavesurfer.js"
     import SpectrogramPlugin from 'wavesurfer.js/src/plugin/spectrogram'
+    import JetButton from "@/Jetstream/Button.vue";
 
     export default defineComponent({
         components: {
             AppLayout,
+            JetButton,
             WaveSurfer
         },
         mounted() {
