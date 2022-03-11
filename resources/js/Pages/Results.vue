@@ -10,6 +10,7 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
+                    <div class="pb-4 pl-2 pt-2">2D Waveform Spectrogram</div>
                     <div><div id="wave"></div></div>
                     <div>
                         <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="play">Play</jet-button>
