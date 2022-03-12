@@ -19,6 +19,8 @@
         "axios": "^0.25",
         "browser-sync": "^2.27.7",
         "browser-sync-webpack-plugin": "^2.3.0",
+        "chartjs": "^0.3.24",
+        "d3": "^7.3.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
@@ -26,6 +28,7 @@
         "tailwindcss": "^3.0.0",
         "vue": "^3.0.5",
         "vue-loader": "^16.1.2",
+        "vue3-charts": "^1.1.31",
         "wavesurfer.js": "^6.0.4"
     }
 }
