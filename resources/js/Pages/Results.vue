@@ -111,6 +111,99 @@
                 </div>
             </div>
         </div>
+
+        <div class="py-12 pt-10">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
+                    <div class="pb-4 pl-2 pt-2">ADI</div>
+                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
+                    <div class="pl-5">
+                        <select id="selectFileNdsi" v-model="ndsiFile">
+                            <option v-bind:value="ndsiFile">Select File</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
+                    </div>
+                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
+                    <div class="pl-5">
+                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
+                            <option v-bind:value="ndsiStartDate">Start Date</option>
+                        </select>
+                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
+                            <option v-bind:value="ndsiEndDate">End Date</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-12 pt-10">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
+                    <div class="pb-4 pl-2 pt-2">AEI</div>
+                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
+                    <div class="pl-5">
+                        <select id="selectFileNdsi" v-model="ndsiFile">
+                            <option v-bind:value="ndsiFile">Select File</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
+                    </div>
+                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
+                    <div class="pl-5">
+                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
+                            <option v-bind:value="ndsiStartDate">Start Date</option>
+                        </select>
+                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
+                            <option v-bind:value="ndsiEndDate">End Date</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="py-12 pt-10">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
+                    <div class="pb-4 pl-2 pt-2">BI</div>
+                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
+                    <div class="pl-5">
+                        <select id="selectFileNdsi" v-model="ndsiFile">
+                            <option v-bind:value="ndsiFile">Select File</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
+                    </div>
+                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
+                    <div class="pl-5">
+                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
+                            <option v-bind:value="ndsiStartDate">Start Date</option>
+                        </select>
+                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
+                            <option v-bind:value="ndsiEndDate">End Date</option>
+                        </select>
+                    </div>
+                    <div>
+                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
+                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </app-layout>
 </template>
 
