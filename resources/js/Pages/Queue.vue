@@ -15,9 +15,7 @@
                         <div>
                             <jet-button
                                 class="float-left border-tl p-4 m-4 border-gray-200"
-                                v-on:click="
-                                    deleteFinished(items.progress == 100)
-                                "
+                                v-on:click="deleteFinished(sortedArray)"
                             >
                                 Clear Finished
                             </jet-button>
@@ -76,7 +74,7 @@
                                                     class="bg-white divide-y divide-gray-200"
                                                 >
                                                     <tr
-                                                        v-for="item in items"
+                                                        v-for="item in sortedArray"
                                                         :key="item"
                                                     >
                                                         <td
@@ -131,7 +129,7 @@
                                                                 class="flex justify-between"
                                                             >
                                                                 <progress
-                                                                    class="bg-blue-600 h-2.5 rounded-full mt-3"
+                                                                    class="h-2.5 rounded-full mt-3"
                                                                     :value="
                                                                         item.percent
                                                                     "
@@ -142,12 +140,12 @@
                                                                         item.percent ==
                                                                         100
                                                                     "
-                                                                    class="text-xl font-medium text-green-600 dark:text-white"
+                                                                    class="text-xl font-medium text-green-600"
                                                                     >Done</span
                                                                 >
                                                                 <span
                                                                     v-else
-                                                                    class="text-xl font-medium text-blue-700 dark:text-white"
+                                                                    class="text-xl font-medium text-blue-700"
                                                                     >{{
                                                                         item.percent
                                                                     }}%</span
@@ -223,12 +221,33 @@ export default defineComponent({
         };
     },
 
+    computed: {
+        sortedArray: function () {
+            function compare(a, b) {
+                if (a.percent < b.percent) return -1;
+                if (a.percent > b.percent) return 1;
+                return 0;
+            }
+
+            return this.items.sort(compare);
+        },
+    },
+
     methods: {
         deleteArray(index) {
-            this.items.splice(index, 50);
+            this.items.splice(index, 100);
         },
-        deleteFinished(index) {
-            this.items.remove(index);
+        deleteFinished(e) {
+            let temp = 1000;
+            for (let i = 0; i < e.length; i++) {
+                if (e[i].percent == 100) {
+                    temp = i;
+                    console.log(temp);
+                    break;
+                }
+            }
+
+            if (temp != 1000) this.items.splice(temp, 100);
         },
     },
 });

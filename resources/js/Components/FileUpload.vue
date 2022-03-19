@@ -190,23 +190,19 @@
             </div>
         </div>
         <div class="p-8">
-            <div v-if="success != ''" class="alert alert-success" role="alert">
-                {{ success }}
-            </div>
             <form @submit.prevent="formSubmit" enctype="multipart/form-data">
-                <strong class="flex pt-4">File:</strong>
+                <strong class="flex pt-4">Upload New Files:</strong>
                 <input
                     type="file"
                     class="form-control"
                     v-on:change="onFileChange"
                     multiple
                 />
-                <div class="float-right justify-content-between">
-                    <jet-button class="btn btn-success" @click="saveInfo"
-                        >Save</jet-button
-                    >
-                    <jet-button class="btn btn-success mx-4">Submit</jet-button>
-                </div>
+                <jet-button
+                    class="float-right btn btn-success"
+                    @click="saveInfo"
+                    >Save</jet-button
+                >
             </form>
         </div>
     </div>
@@ -215,7 +211,6 @@
 <script>
 import { defineComponent } from "vue";
 import JetButton from "@/Jetstream/Button.vue";
-
 
 export default defineComponent({
     components: {
@@ -228,49 +223,8 @@ export default defineComponent({
 
     data() {
         return {
-            items: [
-                {
-                    job: "Florida zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "That One series",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Florida zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "That One series",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Florida zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "That One series",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "",
-                    name: "centralfloridazoo.zip",
-                    series: "That One series",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-            ],
-
+            items: [],
+            files: [],
         };
     },
 
@@ -288,11 +242,11 @@ export default defineComponent({
             };
         },
         uploadFile(event) {
-            this.items = event.target.items;
+            this.files = event.target.file;
 
             let formData = new FormData();
             for (const i of Object.keys(this.items)) {
-                formData.append("files", this.items[i]);
+                formData.append("files", this.files[i]);
             }
             //I need that crisp laravel for the post function
             // axios
@@ -303,6 +257,13 @@ export default defineComponent({
             //     .catch(function (error) {
             //         currentObj.output = error;
             //     });
+        },
+
+        saveInfo(event) {
+            this.items = event.target.items;
+            for (const i of Object.keys(this.items)) {
+                formData.append("files", this.items[i]);
+            }
         },
     },
 });
