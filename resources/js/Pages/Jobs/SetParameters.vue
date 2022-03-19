@@ -2,7 +2,7 @@
     <div class="w-full">
         <div class="flex flex-col p-6 sm:px-20 bg-white border-b border-gray-200 w-full h-full flex justify-center">
             <div class="flex flex-row justify-between content-center w-full">
-                <jet-button v-on:click="onBack()" class="mr-[15px] float-left">
+                <jet-button v-on:click="onBack" class="mr-[15px] float-left">
                     Back
                 </jet-button>
                 <div class="flex flex-row w-full items-center justify-center">
