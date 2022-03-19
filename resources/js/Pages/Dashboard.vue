@@ -19,14 +19,14 @@
 <script>
     import { defineComponent } from 'vue'
     import AppLayout from '@/Layouts/AppLayout.vue'
-    import JobCreation from '@/Pages/JobCreation.vue'
-    import SetParameters from '@/Pages/SetParameters.vue'
+    import Welcome from '@/Jetstream/Welcome.vue'
+    import JobCreation from '@/Pages/Jobs/JobCreation.vue'
 
     export default defineComponent({
         components: {
             AppLayout,
-            JobCreation,
-            SetParameters
+            Welcome,
+            JobCreation
         },
     })
 </script>

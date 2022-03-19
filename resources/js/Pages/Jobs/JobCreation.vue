@@ -2,7 +2,7 @@
     <div v-if="displayIndexSelection" class="w-full">
         <div class="flex flex-col p-6 sm:px-20 bg-white border-b border-gray-200 w-full flex justify-center">
             <div class="flex flex-row justify-between content-center w-full">
-                <jet-button class="mr-[15px] float-left">
+                <jet-button v-on:click="onRemoveRender" class="mr-[15px] float-left">
                     Back
                 </jet-button>
                 <div class="flex flex-row w-full items-center justify-center">
@@ -87,7 +87,7 @@
     import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
     import JetButton from '@/Jetstream/Button.vue'
     import JetLabel from '@/Jetstream/Label.vue'
-    import SetParameters from '@/Pages/SetParameters.vue'
+    import SetParameters from '@/Pages/Jobs/SetParameters.vue'
 
     let selectedIndex = 'ACI'
     let displayIndexSelection = true
@@ -130,6 +130,10 @@
                 this.displayIndexSelection = true
                 this.selectedIndex = 'ACI'
                 this.descriptionText = indexText["ACI"]
+                return
+            },
+            onRemoveRender: function () {
+                this.$emit('goToFileSelection')
                 return
             }
         }
