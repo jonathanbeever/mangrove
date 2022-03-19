@@ -2,7 +2,7 @@
     <app-layout title="CreateJobs">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                CreateJobs
+                Create Jobs
             </h2>
         </template>
 

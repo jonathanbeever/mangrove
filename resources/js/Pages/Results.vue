@@ -36,8 +36,10 @@
                         <div class="pl-20 pt-5">Selected File: {{aciFile}}</div>
                     </div>
                     <div v-if="aciFileRecordings.length > 0" class="pt-5">
+                        <div>x-axis: date, y-axis: ACI</div>
                         <Chart :data="aciFileRecordings">
                             <template #layers>
+                                <Grid strokeDasharray="2,2" />
                                 <Bar :dataKeys="['DATE', 'ACI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
                             </template>
                         </Chart>
@@ -56,8 +58,10 @@
                         <div class="pl-20 pt-5">Selected Time Range: {{aciStartDate + " - " + aciEndDate}}</div>
                     </div>
                     <div v-if="aciSeriesRecordings.length > 0" class="pt-5">
+                        <div>x-axis: date, y-axis: ACI</div>
                         <Chart :data="aciSeriesRecordings" :size="{ width: 1200, height: 320 }">
                             <template #layers>
+                                <Grid strokeDasharray="2,2" />
                                 <Bar :dataKeys="['DATE', 'ACI']" :barStyle="{ fill: '#93C572' }"/>
                             </template>
                         </Chart>
@@ -82,8 +86,10 @@
                         <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
                     </div>
                     <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
+                        <div>x-axis: date, y-axis: NDSI</div>
                         <Chart :data="ndsiFileRecordings">
                             <template #layers>
+                                <Grid strokeDasharray="2,2" />
                                 <Bar :dataKeys="['DATE', 'NDSI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
                             </template>
                         </Chart>
@@ -102,8 +108,10 @@
                         <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
                     </div>
                     <div v-if="ndsiSeriesRecordings.length > 0" class="pt-5">
+                        <div>x-axis: date, y-axis: NDSI</div>
                         <Chart :data="ndsiSeriesRecordings" :size="{ width: 1200, height: 320 }">
                             <template #layers>
+                                <Grid strokeDasharray="2,2" />
                                 <Bar :dataKeys="['DATE', 'NDSI']" :barStyle="{ fill: '#93C572' }"/>
                             </template>
                         </Chart>

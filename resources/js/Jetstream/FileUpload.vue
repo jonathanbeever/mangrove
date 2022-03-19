@@ -6,7 +6,7 @@
             <form @submit="formSubmit" enctype="multipart/form-data">
             <strong class="flex">Name:</strong>
             <input type="text" class="form-control" v-model="name">
-            <strong>File:</strong>
+            <strong> File: </strong>
             <input type="file" class="form-control" v-on:change="onFileChange">
             <jet-button class="btn btn-success">Submit</jet-button>
             </form>
