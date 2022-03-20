@@ -5,7 +5,6 @@
             Results
         </h2>
         </template>
-        <script src="script.js"></script>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
@@ -222,23 +221,20 @@
     import WaveSurfer from "wavesurfer.js"
     import SpectrogramPlugin from 'wavesurfer.js/src/plugin/spectrogram'
     import JetButton from "@/Jetstream/Button.vue";
-    import TrendChart from "vue-trend-chart";
     import * as d3 from "d3";
-    import { Chart, Grid, Bar, Line, Marker, Tooltip, linearGradient } from 'vue3-charts';
+    import { Chart, Grid, Bar, Line, Marker, Tooltip } from 'vue3-charts';
 
     export default defineComponent({
         components: {
             AppLayout,
             JetButton,
-            TrendChart,
             WaveSurfer,
             Chart,
             Line,
             Grid,
             Bar,
             Marker,
-            Tooltip,
-            linearGradient
+            Tooltip
         },
         data() {
             return {
