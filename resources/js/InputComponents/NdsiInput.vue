@@ -166,10 +166,10 @@
                 return
             },
             validateMw: function () {
-                if (isNaN(this.biomW)) {
+                if (isNaN(this.mW)) {
                     this.mwError = true
                     return
-                } else if (this.biomW < 0) {
+                } else if (this.mW < 0) {
                     this.mwError = true
                     return
                 }

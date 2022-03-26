@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <canvas id="id" width="600" height="400"></canvas>
+        <canvas v-bind:id="id" width="600" height="400"></canvas>
     </div>
 </template>
 
