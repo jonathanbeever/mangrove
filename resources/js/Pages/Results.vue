@@ -1,212 +1,160 @@
 <template>
     <app-layout title="Results">
         <template #header>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Results
-        </h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Results
+            </h2>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
-                    <div class="pb-4 pl-2 pt-2">2D Waveform Spectrogram</div>
-                    <div><div id="wave"></div></div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="play">Play</jet-button>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="pause">Pause</jet-button>
+        <div class="flex flex-col">
+            <div class="py-4 flex flex-row">
+                <div class="w-1/3 sm:px-6 lg:px-4">
+                    <div class="bg-white shadow-xl sm:rounded-lg">
+                        <div class="pb-16 pl-2 pt-2">
+                            2D Waveform Spectrogram
+
+                            <div id="wave" class="p-2"></div>
+
+                            <jet-button
+                                class="float-left border-tl p-4 m-4 border-gray-200 bg-white"
+                                v-on:click="play"
+                                >Play</jet-button
+                            >
+                            <jet-button
+                                class="float-right border-tl p-4 m-4 border-gray-200"
+                                v-on:click="pause"
+                                >Pause</jet-button
+                            >
+                        </div>
+                    </div>
+                    <div class="bg-white shadow-xl sm:rounded-lg mt-4">
+                        <div class="pt-2 px-4">Range-Based Analysis</div>
+                        <div class="space-x-4 pt-4 flex justify-center">
+                            <select id="selectStartDate" v-model="startDate">
+                                <option v-bind:value="''" disabled>
+                                    Start Date
+                                </option>
+                            </select>
+                            <select id="selectEndDate" v-model="endDate">
+                                <option v-bind:value="''" disabled>
+                                   End Date
+                                </option>
+                            </select>
+                        </div>
+                        <div class="p-4">
+                            Selected Time Range:
+                            {{ startDate + " - " + endDate }}
+                        </div>
                     </div>
                 </div>
+                <div class="flex flex-col grow pr-4">
+                    <div
+                        class="p-4 h-1/3 flex bg-white shadow-xl sm:rounded-lg flex grow self-center"
+                    >
+                        <div class="pr-2 float-left self-end">
+                            <jet-button
+                                class="btn btn-success"
+                                @click="singleFile = !singleFile"
+                                v-show="singleFile == true"
+                                >Single File Analysis</jet-button
+                            >
+                            <jet-button
+                                class="btn btn-success"
+                                @click="singleFile = !singleFile"
+                                v-show="singleFile == false"
+                                >Multi File Analysis</jet-button
+                            >
+                        </div>
 
-            </div>
-        </div>
+                        <div class="flex-row px-4">
+                            Site:
+                            <select
+                                class="flex"
+                                id="selectFile"
+                                v-model="sFile"
+                            >
+                                <option v-bind:value="sFile">
+                                    {{ sFile }}
+                                </option>
+                            </select>
+                        </div>
 
-        <div class="py-12 pt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
-                    <div class="pb-4 pl-2 pt-2">ACI</div>
-                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectFileAci" v-model="aciFile">
-                            <option v-bind:value="aciFile">Select File</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAci">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected File: {{aciFile}}</div>
-                    </div>
-                    <div v-if="aciFileRecordings.length > 0" class="pt-5">
-                        <div>x-axis: date, y-axis: ACI</div>
-                        <Chart :data="aciFileRecordings">
-                            <template #layers>
-                                <Grid strokeDasharray="2,2" />
-                                <Bar :dataKeys="['DATE', 'ACI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
-                            </template>
-                        </Chart>
-                    </div>
-                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectStartDateAci" v-model="aciStartDate">
-                            <option v-bind:value="aciStartDate">Start Date</option>
-                        </select>
-                        <select id="selectEndDateAci" v-model="aciEndDate">
-                            <option v-bind:value="aciEndDate">End Date</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotAciSeries">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected Time Range: {{aciStartDate + " - " + aciEndDate}}</div>
-                    </div>
-                    <div v-if="aciSeriesRecordings.length > 0" class="pt-5">
-                        <div>x-axis: date, y-axis: ACI</div>
-                        <Chart :data="aciSeriesRecordings" :size="{ width: 1200, height: 320 }">
-                            <template #layers>
-                                <Grid strokeDasharray="2,2" />
-                                <Bar :dataKeys="['DATE', 'ACI']" :barStyle="{ fill: '#93C572' }"/>
-                            </template>
-                        </Chart>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <div class="flex-row pr-4" v-show="singleFile == false">
+                            Compared Site:
+                            <select
+                                class="flex"
+                                id="compareFile"
+                                v-model="cFile"
+                            >
+                                <option v-bind:value="cFile">
+                                    {{ cFile }}
+                                </option>
+                            </select>
+                        </div>
 
+                        <div class="flex-row pr-4">
+                            Series:
+                            <select
+                                class="flex"
+                                id="selectSeries"
+                                v-model="currentIndex"
+                            >
+                                <option
+                                    v-bind:value="ind"
+                                    v-for="ind in indices"
+                                >
+                                    {{ ind }}
+                                </option>
+                            </select>
+                        </div>
 
-        <div class="py-12 pt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
-                    <div class="pb-4 pl-2 pt-2">NDSI</div>
-                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectFileNdsi" v-model="ndsiFile">
-                            <option v-bind:value="ndsiFile">Select File</option>
-                        </select>
+                        <div class="flex-row pr-4" v-show="singleFile == false">
+                            Compare Series:
+                            <select
+                                class="flex"
+                                id="compareSeries"
+                                v-model="compareIndex"
+                            >
+                                <option
+                                    v-bind:value="ind"
+                                    v-for="ind in indices"
+                                >
+                                    {{ ind }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="float-right self-end">
+                            <jet-button
+                                class="btn btn-success"
+                                @click="showGraphs"
+                                >Show Graphs</jet-button
+                            >
+                        </div>
+                    </div>
+                    <!--debugger box to be removed later. It helps me verify data.-->
+                    <div
+                        class="flex-col-grow bg-white shadow-xl sm:rounded-lg p-4 mt-4"
+                    >
+                    <div>
+                    Site: {{sFile}}
                     </div>
                     <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
-                    </div>
-                    <div v-if="ndsiFileRecordings.length > 0" class="pt-5">
-                        <div>x-axis: date, y-axis: NDSI</div>
-                        <Chart :data="ndsiFileRecordings">
-                            <template #layers>
-                                <Grid strokeDasharray="2,2" />
-                                <Bar :dataKeys="['DATE', 'NDSI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
-                            </template>
-                        </Chart>
-                    </div>
-                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
-                            <option v-bind:value="ndsiStartDate">Start Date</option>
-                        </select>
-                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
-                            <option v-bind:value="ndsiEndDate">End Date</option>
-                        </select>
+                    Series: {{currentIndex}}
                     </div>
                     <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
+                    Compared Site: {{cFile}}
                     </div>
-                    <div v-if="ndsiSeriesRecordings.length > 0" class="pt-5">
-                        <div>x-axis: date, y-axis: NDSI</div>
-                        <Chart :data="ndsiSeriesRecordings" :size="{ width: 1200, height: 320 }">
-                            <template #layers>
-                                <Grid strokeDasharray="2,2" />
-                                <Bar :dataKeys="['DATE', 'NDSI']" :barStyle="{ fill: '#93C572' }"/>
-                            </template>
-                        </Chart>
+                    <div>
+                    Compared Series: {{compareIndex}}
                     </div>
-                </div>
-            </div>
-        </div>
+                    </div>
+                    <div
+                        class="flex-col-grow bg-white shadow-xl sm:rounded-lg p-4 mt-4"
+                    >
 
-        <div class="py-12 pt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
-                    <div class="pb-4 pl-2 pt-2">ADI</div>
-                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectFileNdsi" v-model="ndsiFile">
-                            <option v-bind:value="ndsiFile">Select File</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
-                    </div>
-                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
-                            <option v-bind:value="ndsiStartDate">Start Date</option>
-                        </select>
-                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
-                            <option v-bind:value="ndsiEndDate">End Date</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <!--Graphy bois go here-->
 
-        <div class="py-12 pt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
-                    <div class="pb-4 pl-2 pt-2">AEI</div>
-                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectFileNdsi" v-model="ndsiFile">
-                            <option v-bind:value="ndsiFile">Select File</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
-                    </div>
-                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
-                            <option v-bind:value="ndsiStartDate">Start Date</option>
-                        </select>
-                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
-                            <option v-bind:value="ndsiEndDate">End Date</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="py-12 pt-10">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 box-border h-400 w-600">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg box-content">
-                    <div class="pb-4 pl-2 pt-2">BI</div>
-                    <div class="pb-4 pl-2 pt-2">Single File Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectFileNdsi" v-model="ndsiFile">
-                            <option v-bind:value="ndsiFile">Select File</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsi">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected File: {{ndsiFile}}</div>
-                    </div>
-                    <div class="pb-4 pl-2 pt-10">Range-Based Analysis</div>
-                    <div class="pl-5">
-                        <select id="selectStartDateNdsi" v-model="ndsiStartDate">
-                            <option v-bind:value="ndsiStartDate">Start Date</option>
-                        </select>
-                        <select id="selectEndDateNdsi" v-model="ndsiEndDate">
-                            <option v-bind:value="ndsiEndDate">End Date</option>
-                        </select>
-                    </div>
-                    <div>
-                        <jet-button class="float-left border-tl p-4 m-4 border-gray-200" v-on:click="plotNdsiSeries">Visualize</jet-button>
-                        <div class="pl-20 pt-5">Selected Time Range: {{ndsiStartDate + " - " + ndsiEndDate}}</div>
+                        <VisualizationsDemo />
                     </div>
                 </div>
             </div>
@@ -215,154 +163,160 @@
 </template>
 
 <script>
-    import { defineComponent, ref } from 'vue'
-    import AppLayout from '@/Layouts/AppLayout.vue'
-    import Welcome from '@/Jetstream/Welcome.vue'
-    import WaveSurfer from "wavesurfer.js"
-    import SpectrogramPlugin from 'wavesurfer.js/src/plugin/spectrogram'
-    import JetButton from "@/Jetstream/Button.vue";
-    import * as d3 from "d3";
-    import { Chart, Grid, Bar, Line, Marker, Tooltip } from 'vue3-charts';
+import { defineComponent, ref } from "vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import Welcome from "@/Jetstream/Welcome.vue";
+import WaveSurfer from "wavesurfer.js";
+import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
+import JetButton from "@/Jetstream/Button.vue";
+import * as d3 from "d3";
+import { Chart, Grid, Bar, Line, Marker, Tooltip } from "vue3-charts";
+import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 
-    export default defineComponent({
-        components: {
-            AppLayout,
-            JetButton,
-            WaveSurfer,
-            Chart,
-            Line,
-            Grid,
-            Bar,
-            Marker,
-            Tooltip
+let singleFile = true;
+let currentIndex = "";
+let compareIndex = "";
+
+export default defineComponent({
+    components: {
+        AppLayout,
+        JetButton,
+        WaveSurfer,
+        Chart,
+        Line,
+        Grid,
+        Bar,
+        Marker,
+        Tooltip,
+        VisualizationsDemo,
+    },
+    data() {
+        return {
+            sFile: "",
+            cFile: "",
+            startDate: "",
+            endDate: "",
+            recordings: [],
+            singleFile,
+            indices: ["ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"],
+            currentIndex,
+            compareIndex,
+        };
+    },
+
+    methods: {
+        play: function () {
+            this.wavesurfer.play();
         },
-        data() {
-            return {
-                aciFile: '',
-                ndsiFile: '',
-                aciStartDate: '',
-                ndsiStartDate: '',
-                aciEndDate: '',
-                ndsiEndDate: '',
-                recordings: [],
-                aciFileRecordings: [],
-                ndsiFileRecordings: [],
-                aciSeriesRecordings: [],
-                ndsiSeriesRecordings: []
+
+        pause: function () {
+            this.wavesurfer.pause();
+        },
+
+        showGraphs: function () {
+            // console.log("Site File: " + this.sFile);
+            // console.log("Compare File: " + this.cFile);
+            // console.log("Site Index: " + this.currentIndex);
+            // console.log("Compared Site Index: " + this.compareIndex);
+            // console.log("Start Date: " + this.startDate);
+            // console.log("End Date: " + this.endDate);
+
+            //V i s u a l i z e
+            //logic for ya bois here
+        },
+
+        plotSeries: function (index) {
+            this.recordings = this.filterRecordingsBySeries(index);
+        },
+
+        extractRecording: function (recording) {
+            var folder = recording.FOLDER;
+            var file = recording.IN_FILE;
+            var channel = recording.CHANNEL;
+            var offset = recording.OFFSET;
+            var duration = recording.DURATION;
+            var date = recording.DATE;
+            var time = recording.TIME;
+            var hour = recording.HOUR;
+            return [folder, file, channel, offset, duration, date, time, hour];
+        },
+        populateDropdown: function () {
+            var extractedRecordings = this.getExtractedRecordings();
+            if (extractedRecordings) {
+                extractedRecordings.then((d) =>
+                    this.updateDropdown(d, "selectFile")
+                );
+                extractedRecordings.then((d) =>
+                    this.updateDropdown(d, "compareFile")
+                );
+                 extractedRecordings.then((d) =>
+                    this.updateDropdown(d, "selectStartDate")
+                );
+                 extractedRecordings.then((d) =>
+                    this.updateDropdown(d, "selectEndDate")
+                );
             }
         },
-
-        methods: {
-            play: function() {
-                this.wavesurfer.play();
-            },
-            pause: function() {
-                this.wavesurfer.pause();
-            },
-            plotAci: function() {
-                this.aciFileRecordings = this.filterRecordingsByFile(this.aciFile);
-            },
-            plotNdsi: function() {
-                this.ndsiFileRecordings = this.filterRecordingsByFile(this.ndsiFile);
-            },
-            plotAciSeries: function() {
-                this.aciSeriesRecordings = this.filterRecordingsBySeries("ACI");
-            },
-            plotNdsiSeries: function() {
-                this.ndsiSeriesRecordings = this.filterRecordingsBySeries("NDSI");
-            },
-            extractRecording: function(recording) {
-                var folder = recording.FOLDER;
-                var file = recording.IN_FILE;
-                var channel = recording.CHANNEL;
-                var offset = recording.OFFSET;
-                var duration = recording.DURATION;
-                var date = recording.DATE;
-                var time = recording.TIME;
-                var hour = recording.HOUR;
-                var ndsi = recording.NDSI;
-                var aci = recording.ACI;
-                return [folder, file, channel, offset, duration, date, time, hour, ndsi, aci];
-            },
-            populateDropdown: function() {
-                var extractedRecordings = this.getExtractedRecordings();
-                if (extractedRecordings) {
-                    extractedRecordings.then((d) => this.updateDropdown(d, "selectFileAci"));
-                    extractedRecordings.then((d) => this.updateDropdown(d, "selectFileNdsi"));
-                    extractedRecordings.then((d) => this.updateDropdown(d, "selectStartDateAci"));
-                    extractedRecordings.then((d) => this.updateDropdown(d, "selectEndDateAci"));
-                    extractedRecordings.then((d) => this.updateDropdown(d, "selectStartDateNdsi"));
-                    extractedRecordings.then((d) => this.updateDropdown(d, "selectEndDateNdsi"));
+        updateDropdown: function (extractedRecordings, dropdown) {
+            var select = document.getElementById(dropdown);
+            var options = new Set();
+            for (var i = 0; i < extractedRecordings.length; i++) {
+                this.recordings.push(extractedRecordings[i]);
+                // handle both file and date dropdowns
+                var field = extractedRecordings[i]["IN_FILE"];
+                if (dropdown.indexOf("Date") > -1) {
+                    field = extractedRecordings[i]["DATE"];
                 }
-            },
-            updateDropdown: function(extractedRecordings, dropdown) {
-                var select = document.getElementById(dropdown);
-                var options = new Set();
-                for (var i = 0; i < extractedRecordings.length; i++) {
-                    this.recordings.push(extractedRecordings[i]);
-                    // handle both file and date dropdowns
-                    var field = extractedRecordings[i]["IN_FILE"];
-                    if (dropdown.indexOf("Date") > -1) {
-                        field = extractedRecordings[i]["DATE"];
-                    }
-                    var el = document.createElement("option");
-                    el.textContent = field;
-                    el.value = field;
-                    if (options.has(field)) continue;
-                    select.appendChild(el);
-                    options.add(field);
-                }
-            },
-            getExtractedRecordings: function() {
-                return d3.csv("index");
-            },
-            filterRecordingsByFile: function(file) {
-                return this.recordings.filter((d) => d["IN_FILE"] == file);
-            },
-            filterRecordingsBySeries: function(index) {
-                // handle ACI
-                if (index == "ACI") {
-                    if (this.aciStartDate === "" && this.aciEndDate === "") {
-                        return this.recordings;
-                    }
-                    if (this.aciStartDate === "") {
-                        return this.recordings.filter((d) => d["DATE"] <= this.aciEndDate);
-                    }
-                    if (this.aciEndDate === "") {
-                        return this.recordings.filter((d) => this.aciStartDate <= d["DATE"]);
-                    }
-                    return this.recordings.filter((d) => this.aciStartDate <= d["DATE"] && d["DATE"] <= this.aciEndDate);
-                }
-                // handle NDSI
-                if (this.ndsiStartDate === "" && this.ndsiEndDate === "") {
-                    return this.recordings;
-                }
-                if (this.ndsiStartDate === "") {
-                    return this.recordings.filter((d) => d["DATE"] <= this.ndsiEndDate);
-                }
-                if (this.ndsiEndDate === "") {
-                    return this.recordings.filter((d) => this.ndsiStartDate <= d["DATE"]);
-                }
-                return this.recordings.filter((d) => this.ndsiStartDate <= d["DATE"] && d["DATE"] <= this.ndsiEndDate);
+                var el = document.createElement("option");
+                el.textContent = field;
+                el.value = field;
+                if (options.has(field)) continue;
+                select.appendChild(el);
+                options.add(field);
             }
         },
-
-        mounted() {
-            this.wavesurfer = WaveSurfer.create({
-                container: "#wave",
-                waveColor: '#D2EDD4',
-                progressColor: '#46B54D',
-                backend: 'MediaElement',
-                plugins: [
-                    SpectrogramPlugin.create({
-                        container: '#wave',
-                        labels: true,
-                        colorMap: this.colorMap,
-                    }),
-                ]
-            });
-            this.wavesurfer.load("sound");
-            this.populateDropdown();
+        getExtractedRecordings: function () {
+            return d3.csv("index");
         },
-    })
+        filterRecordingsByFile: function (file) {
+            return this.recordings.filter((d) => d["IN_FILE"] == file);
+        },
+        filterRecordingsBySeries: function (index) {
+            // handle "ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"
+            // Build a sort that takes into account selected index from the series
+            if (this.startDate === "" && this.endDate === "") {
+                return this.recordings;
+            }
+            if (this.startDate === "") {
+                return this.recordings.filter((d) => d["DATE"] <= this.endDate);
+            }
+            if (this.startDate === "") {
+                return this.recordings.filter(
+                    (d) => this.startDate <= d["DATE"]
+                );
+            }
+            return this.recordings.filter(
+                (d) => this.startDate <= d["DATE"] && d["DATE"] <= this.endDate
+            );
+        },
+    },
+
+    mounted() {
+        this.wavesurfer = WaveSurfer.create({
+            container: "#wave",
+            waveColor: "#D2EDD4",
+            progressColor: "#46B54D",
+            backend: "MediaElement",
+            plugins: [
+                SpectrogramPlugin.create({
+                    container: "#wave",
+                    labels: true,
+                    colorMap: this.colorMap,
+                }),
+            ],
+        });
+        this.wavesurfer.load("sound");
+        this.populateDropdown();
+    },
+});
 </script>

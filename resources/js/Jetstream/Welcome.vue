@@ -74,7 +74,7 @@
     import JetCheckbox from '@/Jetstream/Checkbox.vue'
     import JetLabel from '@/Jetstream/Label.vue'
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
-    import FileUpload from '@/Jetstream/FileUpload.vue'
+    import FileUpload from '@/Components/FileUpload.vue'
 
     export default defineComponent({
         components: {

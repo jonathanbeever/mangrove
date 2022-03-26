@@ -19,7 +19,7 @@
         "axios": "^0.25",
         "browser-sync": "^2.27.7",
         "browser-sync-webpack-plugin": "^2.3.0",
-        "chartjs": "^0.3.24",
+        "chart.js": "^3.7.1",
         "d3": "^7.3.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
