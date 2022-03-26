@@ -15,13 +15,13 @@
                                         scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                     >
-                                        Site
+                                        Name
                                     </th>
                                     <th
                                         scope="col"
                                         class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
                                     >
-                                        Series
+                                        Size
                                     </th>
                                     <th
                                         scope="col"
@@ -33,7 +33,7 @@
                                         scope="col"
                                         class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
                                     >
-                                        Latitude/Longitude
+                                        File Type
                                     </th>
                                 </tr>
                             </thead>
@@ -42,25 +42,32 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-start">
                                             <div>
-                                                <input
+                                                <!--input
                                                     type="text"
                                                     v-model="item.job"
-                                                    v-if="item.edit0"
+                                                    v-if="edit == true"
                                                     v-on:blur="
-                                                        item.edit0 = false;
+                                                        edit = !edit;
                                                         $emit('update');
                                                     "
-                                                />
+                                                /-->
                                                 <div
-                                                    class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                                    @click="item.edit0 = true"
-                                                    v-else-if="item.job != ''"
+                                                    class="text-sm font-medium text-gray-900"
+                                                    @click="edit = !edit"
+                                                    v-if="item.job != ''"
                                                 >
-                                                    {{ item.job }}
+                                                    {{
+                                                        (item.job =
+                                                            item.name.split(
+                                                                "."
+                                                            )[0])
+                                                    }}
                                                 </div>
                                                 <div
                                                     class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                                    @click="item.edit0 = true"
+                                                    @click="
+                                                        item.edit = !item.edit
+                                                    "
                                                     v-else
                                                 >
                                                     empty
@@ -77,28 +84,17 @@
                                         class="px-6 py-4 whitespace-nowrap text-right"
                                     >
                                         <div>
-                                            <input
-                                                type="text"
-                                                v-model="item.series"
-                                                v-if="item.edit1"
-                                                v-on:blur="
-                                                    item.edit1 = false;
-                                                    $emit('update');
-                                                "
-                                            />
                                             <div
-                                                class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                                @click="item.edit1 = true"
-                                                v-else-if="item.series != ''"
+                                                class="text-sm font-medium text-gray-900"
+                                                v-if="item.size != ''"
                                             >
-                                                {{ item.series }}
+                                                {{ item.size / 1e6 + "MB" }}
                                             </div>
                                             <div
-                                                class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                                @click="item.edit1 = true"
+                                                class="text-sm font-medium text-gray-900"
                                                 v-else
                                             >
-                                                empty
+                                                undefined
                                             </div>
                                         </div>
                                         <div class="text-sm text-gray-500">
@@ -108,78 +104,33 @@
                                     <td
                                         class="py-4 whitespace-nowrap text-center text-sm text-gray-500"
                                     >
-                                        <input
-                                            type="text"
-                                            v-model="item.date"
-                                            v-if="item.edit2"
-                                            v-on:blur="
-                                                item.edit2 = false;
-                                                $emit('update');
-                                            "
-                                        />
                                         <div
-                                            class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                            @click="item.edit2 = true"
-                                            v-else-if="item.date != ''"
+                                            class="text-sm font-medium text-gray-900"
+                                            v-if="item.date != ''"
                                         >
-                                            {{ item.date }}
+                                            {{ new Date(item.lastModified) }}
                                         </div>
                                         <div
-                                            class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                            @click="item.edit2 = true"
+                                            class="text-sm font-medium text-gray-900"
                                             v-else
                                         >
-                                            empty
+                                            Today
                                         </div>
                                     </td>
                                     <td
-                                        class="py-4 px-2 whitespace-nowrap text-right text-sm font-medium"
+                                        class="py-4 px-6 whitespace-nowrap text-right text-sm font-medium"
                                     >
-                                        <input
-                                            type="text"
-                                            v-model="item.latitude"
-                                            v-if="item.edit3"
-                                            v-on:blur="
-                                                item.edit3 = false;
-                                                $emit('update');
-                                            "
-                                        />
                                         <div
-                                            class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                            @click="item.edit3 = true"
-                                            v-else-if="item.latitude != ''"
+                                            class="text-sm font-medium text-gray-900"
+                                            v-if="item.type != ''"
                                         >
-                                            {{ item.latitude }}
+                                            {{ item.type }}
                                         </div>
                                         <div
-                                            class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                            @click="item.edit3 = true"
+                                            class="text-sm font-medium text-gray-900"
                                             v-else
                                         >
-                                            empty
-                                        </div>
-                                        <input
-                                            type="text"
-                                            v-model="item.longitude"
-                                            v-if="item.edit4"
-                                            v-on:blur="
-                                                item.edit4 = false;
-                                                $emit('update');
-                                            "
-                                        />
-                                        <div
-                                            class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                            @click="item.edit4 = true"
-                                            v-else-if="item.longitude != ''"
-                                        >
-                                            {{ item.longitude }}
-                                        </div>
-                                        <div
-                                            class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                            @click="item.edit4 = true"
-                                            v-else
-                                        >
-                                            empty
+                                            unknown
                                         </div>
                                     </td>
                                 </tr>
@@ -191,7 +142,7 @@
         </div>
         <div class="p-8">
             <form @submit.prevent="formSubmit" enctype="multipart/form-data">
-                <strong class="flex pt-4">Upload New Files:</strong>
+                <strong class="flex pt-4">Select New Files:</strong>
                 <input
                     type="file"
                     class="form-control"
@@ -201,7 +152,7 @@
                 <jet-button
                     class="float-right btn btn-success"
                     @click="saveInfo"
-                    >Save</jet-button
+                    >Upload</jet-button
                 >
             </form>
         </div>
@@ -224,14 +175,18 @@ export default defineComponent({
     data() {
         return {
             items: [],
-            files: [],
+            edit: false,
         };
     },
 
     methods: {
         onFileChange(e) {
-            console.log(e.target.files[0]);
-            this.file = e.target.files[0];
+            this.file = e.target.files;
+            console.log(this.file);
+
+            for (const i of Object.keys(this.file)) {
+                this.items.push(this.file[i]);
+            }
         },
 
         formSubmit(e) {
@@ -241,29 +196,15 @@ export default defineComponent({
                 headers: { "content-type": "multipart/form-data" },
             };
         },
-        uploadFile(event) {
-            this.files = event.target.file;
-
-            let formData = new FormData();
-            for (const i of Object.keys(this.items)) {
-                formData.append("files", this.files[i]);
-            }
-            //I need that crisp laravel for the post function
-            // axios
-            //     .post("/formSubmit", formData, config)
-            //     .then(function (response) {
-            //         currentObj.success = response.data.success;
-            //     })
-            //     .catch(function (error) {
-            //         currentObj.output = error;
-            //     });
-        },
 
         saveInfo(event) {
+            //console.log(event);
             this.items = event.target.items;
             for (const i of Object.keys(this.items)) {
                 formData.append("files", this.items[i]);
             }
+
+
         },
     },
 });
