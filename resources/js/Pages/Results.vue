@@ -143,9 +143,15 @@
                     </div>
                     </div>
                     <div class="flex-col-grow bg-white shadow-xl sm:rounded-lg p-4 mt-4">
-                        <!--Graphy bois go here-->
-                        <div v-if="recordings.length > 0" class="pt-5">
-                            <Chart :data="recordings">
+                        <div v-if="selectRecordings.length > 0 && ready" class="pt-5">
+                            <Chart :data="selectRecordings">
+                                <template #layers>
+                                    <Bar :dataKeys="['DATE', 'ACI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
+                                </template>
+                            </Chart>
+                        </div>
+                        <div v-if="compareRecordings.length > 0 && ready && !singleFile" class="pt-5">
+                            <Chart :data="compareRecordings">
                                 <template #layers>
                                     <Bar :dataKeys="['DATE', 'ACI']" :size="{ width: 500, height: 100 }" :barStyle="{ fill: '#93C572' }"/>
                                 </template>
@@ -191,11 +197,13 @@ export default defineComponent({
             cFile: "",
             startDate: "",
             endDate: "",
-            recordings: [],
+            compareRecordings: [],
+            selectRecordings: [],
             singleFile,
             indices: ["ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"],
             currentIndex,
             compareIndex,
+            ready: false,
         };
     },
     methods: {
@@ -207,28 +215,13 @@ export default defineComponent({
         },
         showGraphs: function () {
             this.plotSeries(this.currentIndex);
-            // if (this.cFile === "" && this.sFile == "") return;
-            // // single file analysis
-            // if (this.cFile === "" || this.sFile === this.cFile) {
-            //     this.plotSeries(this.currentIndex);
-            // } //else {
-              //  this.filterRecordingsByFile(this.cFile);
-              //  this.filterRecordingsByFile(this.sFile);
-           // }
-            // multi file analysis
-
-
-            // console.log("Site File: " + this.sFile);
-            // console.log("Compare File: " + this.cFile);
-            // console.log("Site Index: " + this.currentIndex);
-            // console.log("Compared Site Index: " + this.compareIndex);
-            // console.log("Start Date: " + this.startDate);
-            // console.log("End Date: " + this.endDate);
-            //V i s u a l i z e
-            //logic for ya bois here
         },
         plotSeries: function (index) {
-            this.recordings = this.filterRecordingsBySeries(index);
+            this.ready = true;
+            this.selectRecordings = this.filterRecordingsBySeries(index, 's');
+            if (!this.singleFile) {
+                this.compareRecordings = this.filterRecordingsBySeries(index, 'c');
+            }
         },
         extractRecording: function (recording) {
             var folder = recording.FOLDER;
@@ -250,10 +243,10 @@ export default defineComponent({
                 extractedRecordings.then((d) =>
                     this.updateDropdown(d, "compareFile")
                 );
-                 extractedRecordings.then((d) =>
+                extractedRecordings.then((d) =>
                     this.updateDropdown(d, "selectStartDate")
                 );
-                 extractedRecordings.then((d) =>
+                extractedRecordings.then((d) =>
                     this.updateDropdown(d, "selectEndDate")
                 );
             }
@@ -262,7 +255,11 @@ export default defineComponent({
             var select = document.getElementById(dropdown);
             var options = new Set();
             for (var i = 0; i < extractedRecordings.length; i++) {
-                this.recordings.push(extractedRecordings[i]);
+                if (dropdown.indexOf("select") > -1) {
+                    this.selectRecordings.push(extractedRecordings[i]);
+                } else {
+                    this.compareRecordings.push(extractedRecordings[i]);
+                }
                 // handle both file and date dropdowns
                 var field = extractedRecordings[i]["IN_FILE"];
                 if (dropdown.indexOf("Date") > -1) {
@@ -279,24 +276,28 @@ export default defineComponent({
         getExtractedRecordings: function () {
             return d3.csv("index");
         },
-        filterRecordingsByFile: function (file) {
-            return this.recordings.filter((d) => d["IN_FILE"] == file);
+        filterRecordingsByFile: function (file, siteType) {
+            if (siteType === "single") {
+                return this.selectRecordings.filter((d) => d["IN_FILE"] == file);
+            }
+            return this.compareRecordings.filter((d) => d["IN_FILE"] == file);
         },
-        filterRecordingsBySeries: function (index) {
+        filterRecordingsBySeries: function (index, siteType) {
+            var recordings = this.selectRecordings;
             // handle "ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"
             // Build a sort that takes into account selected index from the series
             if (this.startDate === "" && this.endDate === "") {
-                return this.recordings;
+                return recordings;
             }
             if (this.startDate === "") {
-                return this.recordings.filter((d) => d["DATE"] <= this.endDate);
+                return recordings.filter((d) => d["DATE"] <= this.endDate);
             }
             if (this.startDate === "") {
-                return this.recordings.filter(
+                return recordings.filter(
                     (d) => this.startDate <= d["DATE"]
                 );
             }
-            return this.recordings.filter(
+            return recordings.filter(
                 (d) => this.startDate <= d["DATE"] && d["DATE"] <= this.endDate
             );
         },
