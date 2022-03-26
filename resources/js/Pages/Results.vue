@@ -1,10 +1,5 @@
 <template>
     <app-layout title="Results">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Results
-            </h2>
-        </template>
 
         <div class="flex flex-col">
             <div class="py-4 flex flex-row">
@@ -12,6 +7,18 @@
                     <div class="bg-white shadow-xl sm:rounded-lg">
                         <div class="pb-16 pl-2 pt-2">
                             2D Waveform Spectrogram
+
+                            <div class="flex-row px-4">
+                                File Path:
+                                <input v-model="spFile" placeholder="">
+                                <p>Selected: {{ spFile }}</p>
+                            </div>
+
+                            <jet-button
+                                class="float-left border-tl p-4 m-4 border-gray-200 bg-white"
+                                v-on:click="createSpectrogram"
+                                >Show Graphs</jet-button
+                            >
 
                             <div id="wave" class="p-2"></div>
 
@@ -192,6 +199,7 @@ export default defineComponent({
     },
     data() {
         return {
+            spFile: "",
             sFile: "",
             cFile: "",
             startDate: "",
@@ -205,6 +213,11 @@ export default defineComponent({
     },
 
     methods: {
+
+        createSpectrogram() {
+            this.wavesurfer.load("/sound/" + this.spFile);
+        },
+
         play: function () {
             this.wavesurfer.play();
         },
@@ -315,7 +328,6 @@ export default defineComponent({
                 }),
             ],
         });
-        this.wavesurfer.load("sound");
         this.populateDropdown();
     },
 });

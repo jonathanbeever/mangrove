@@ -4,6 +4,7 @@ use App\Http\Controllers\JobController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Input;
 use Inertia\Inertia;
 
 /*
@@ -51,8 +52,8 @@ Route::middleware([AUTH, 'verified'])->get('/about', function () {
     return Inertia::render('About');
 })->name('about');
 
-Route::middleware([AUTH, 'verified'])->get('/sound', function () {
-    return File::get('../sounds/pigeons.mp3');
+Route::middleware([AUTH, 'verified'])->get('/sound/{file}', function ($file) {
+    return File::get('../sounds/' . $file);
 })->name('sound');
 
 Route::middleware([AUTH, 'verified'])->get('/index', function () {
