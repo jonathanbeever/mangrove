@@ -30,5 +30,8 @@
         "vue-loader": "^16.1.2",
         "vue3-charts": "^1.1.31",
         "wavesurfer.js": "^6.0.4"
+    },
+    "dependencies": {
+        "chart.js": "^3.7.1"
     }
 }
