@@ -76,6 +76,7 @@
                                 color: 'black',
                                 size: 20
                             }
+                    }
                 },
                 scales: {
                     x: {

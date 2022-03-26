@@ -80,6 +80,7 @@
                                 color: 'black',
                                 size: 20
                             }
+                    }
                 },
                 scales: {
                     y: {
