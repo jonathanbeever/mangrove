@@ -29,12 +29,12 @@
                         <div class="pt-2 px-4">Range-Based Analysis</div>
                         <div class="space-x-4 pt-4 flex justify-center">
                             <select id="selectStartDate" v-model="startDate">
-                                <option v-bind:value="''" disabled>
+                                <option v-bind:value="''" disabled class="flex">
                                     Start Date
                                 </option>
                             </select>
                             <select id="selectEndDate" v-model="endDate">
-                                <option v-bind:value="''" disabled>
+                                <option v-bind:value="''" disabled class="flex">
                                    End Date
                                 </option>
                             </select>
@@ -48,7 +48,7 @@
 
                 <div class="flex flex-col grow pr-4">
                     <div
-                        class="p-4 h-1/3 flex bg-white shadow-xl sm:rounded-lg flex grow self-center"
+                        class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full"
                     >
                         <div class="pr-2 float-left self-end">
                             <jet-button
@@ -68,7 +68,7 @@
                         <div class="flex-row px-4">
                             Site:
                             <select
-                                class="flex"
+                                class="flex grow"
                                 id="selectFile"
                                 v-model="sFile"
                             >
@@ -81,7 +81,7 @@
                         <div class="flex-row pr-4" v-show="singleFile == false">
                             Compared Site:
                             <select
-                                class="flex"
+                                class="flex grow"
                                 id="compareFile"
                                 v-model="cFile"
                             >
@@ -94,7 +94,7 @@
                         <div class="flex-row pr-4">
                             Series:
                             <select
-                                class="flex"
+                                class="flex grow"
                                 id="selectSeries"
                                 v-model="currentIndex"
                             >
@@ -107,16 +107,16 @@
                             </select>
                         </div>
 
-                        <div class="flex-row pr-4" v-show="singleFile == false">
-                            Compare Series:
+                        <div class="flex-row pr-4">
+                            Select Chart:
                             <select
-                                class="flex"
-                                id="compareSeries"
-                                v-model="compareIndex"
+                                class="flex grow"
+                                id="chartSelect"
+                                v-model="selectedChart"
                             >
                                 <option
                                     v-bind:value="ind"
-                                    v-for="ind in indices"
+                                    v-for="ind in chartSelection"
                                 >
                                     {{ ind }}
                                 </option>
@@ -130,30 +130,55 @@
                             >
                         </div>
                     </div>
-                    <!--debugger box to be removed later. It helps me verify data.-->
+
                     <div
-                        class="flex-col-grow bg-white shadow-xl sm:rounded-lg p-4 mt-4"
-                    >
-                    <div>
-                    Site: {{sFile}}
-                    </div>
-                    <div>
-                    Series: {{currentIndex}}
-                    </div>
-                    <div>
-                    Compared Site: {{cFile}}
-                    </div>
-                    <div>
-                    Compared Series: {{compareIndex}}
-                    </div>
-                    </div>
-                    <div
-                        class="flex-col-grow bg-white shadow-xl sm:rounded-lg p-4 mt-4"
+                        class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
+                        v-if="upGraphs != ''"
                     >
 
-                        <!--Graphy bois go here-->
+                        <div v-show="upGraphs == 'ACI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'ACI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ACI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ACI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ACI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                        </div>
 
-                        <VisualizationsDemo />
+                        <div v-show="upGraphs == 'NDSI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                        </div>
+
+                        <div v-show="upGraphs == 'AEI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'AEI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[[graphInput[1].data.aeiL, graphInput[6].data.aeiL, graphInput[11].data.aeiL, graphInput[16].data.aeiL]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'AEI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'AEI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[graphInput[1].data.aeiL]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'AEI'" :xBarLabels="'noodles'" :dataSetLabels="['label1', 'label2']" :dataSetData="[graphInput[1].data.aeiL, graphInput[1].data.aeiR]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                        </div>
+
+                        <div v-show="upGraphs == 'ADI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, cFile]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                        </div>
+
+                        <div v-show="upGraphs == 'BIO'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                        </div>
+
+                        <div v-show="upGraphs == 'RMS'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                        </div>
+
+                        <!--DualLine :id="'0'" :xBarLabels="[1, 2, 3, 4]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/-->
                     </div>
                 </div>
             </div>
@@ -174,27 +199,32 @@ import WaveSurfer from "wavesurfer.js";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
 import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
 import JetButton from "@/Jetstream/Button.vue";
-import * as d3 from "d3";
-import { Chart, Grid, Bar, Line, Marker, Tooltip } from "vue3-charts";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
+import CompareBar from '@/Pages/ChartVisualizations/SingleBar.vue';
+import DualLine from '@/Pages/ChartVisualizations/DualLine.vue';
+import SingleBar from '@/Pages/ChartVisualizations/SingleBar.vue';
+import SingleLine from '@/Pages/ChartVisualizations/SingleLine.vue';
+import * as Papa from 'papaparse';
 
 let singleFile = true;
 let currentIndex = "";
 let compareIndex = "";
+let upGraphs = "";
+let selectedChart = "";
+let sFile, cFile, graphInput;
 
 export default defineComponent({
     components: {
         AppLayout,
         JetButton,
         WaveSurfer,
-        Chart,
-        Line,
-        Grid,
-        Bar,
-        Marker,
-        Tooltip,
         VisualizationsDemo,
+        CompareBar,
+        DualLine,
+        SingleBar,
+        SingleLine,
     },
+
     data() {
         return {
             spFile: "",
@@ -205,8 +235,12 @@ export default defineComponent({
             recordings: [],
             singleFile,
             indices: ["ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"],
+            chartSelection: ["Single Line", "Single Bar", "Dual Line", "Compare Bar"],
+            selectedChart,
             currentIndex,
             compareIndex,
+            upGraphs,
+            graphInput,
         };
     },
 
@@ -229,32 +263,22 @@ export default defineComponent({
         },
 
         showGraphs: function () {
-            // console.log("Site File: " + this.sFile);
-            // console.log("Compare File: " + this.cFile);
-            // console.log("Site Index: " + this.currentIndex);
-            // console.log("Compared Site Index: " + this.compareIndex);
-            // console.log("Start Date: " + this.startDate);
-            // console.log("End Date: " + this.endDate);
+            let objec = this.filterRecordingsByFile(this.sFile);
+            console.log(objec);
 
-            //V i s u a l i z e
-            //logic for ya bois here
+            let end = Number(objec[0].duration);
+            let range = Array(end - 0 + 1).fill().map((_, idx) => 0 + idx);
+
+            objec = {...objec, range: range};
+
+            this.upGraphs = this.currentIndex;
+            this.graphInput = objec;
         },
 
         plotSeries: function (index) {
             this.recordings = this.filterRecordingsBySeries(index);
         },
 
-        extractRecording: function (recording) {
-            var folder = recording.FOLDER;
-            var file = recording.IN_FILE;
-            var channel = recording.CHANNEL;
-            var offset = recording.OFFSET;
-            var duration = recording.DURATION;
-            var date = recording.DATE;
-            var time = recording.TIME;
-            var hour = recording.HOUR;
-            return [folder, file, channel, offset, duration, date, time, hour];
-        },
         populateDropdown: function () {
             var extractedRecordings = this.getExtractedRecordings();
             if (extractedRecordings) {
@@ -278,10 +302,10 @@ export default defineComponent({
             for (var i = 0; i < extractedRecordings.length; i++) {
                 this.recordings.push(extractedRecordings[i]);
                 // handle both file and date dropdowns
-                var field = extractedRecordings[i]["IN_FILE"];
-                if (dropdown.indexOf("Date") > -1) {
-                    field = extractedRecordings[i]["DATE"];
-                }
+                var field = extractedRecordings[i]["file"];
+                // if (dropdown.indexOf("Date") > -1) {
+                //     field = extractedRecordings[i]["DATE"];
+                // }
                 var el = document.createElement("option");
                 el.textContent = field;
                 el.value = field;
@@ -291,10 +315,30 @@ export default defineComponent({
             }
         },
         getExtractedRecordings: function () {
-            return d3.csv("index");
+            return new Promise((resolve, reject) => {
+                Papa.parse("sound-data", {
+                    download: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        let newData = [];
+                        results.data.forEach((data) => {
+                            newData = [
+                            ...newData,
+                            {
+                                file: data[0],
+                                type: data[1],
+                                duration: data[2],
+                                data: JSON.parse(atob(data[3]))
+                            }];
+                        });
+
+                        resolve(newData);
+                    }
+                });
+            });
         },
         filterRecordingsByFile: function (file) {
-            return this.recordings.filter((d) => d["IN_FILE"] == file);
+            return this.recordings.filter((d) => d["file"] == file);
         },
         filterRecordingsBySeries: function (index) {
             // handle "ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"

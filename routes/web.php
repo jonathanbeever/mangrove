@@ -56,6 +56,6 @@ Route::middleware([AUTH, 'verified'])->get('/sound/{file}', function ($file) {
     return File::get('../sounds/' . $file);
 })->name('sound');
 
-Route::middleware([AUTH, 'verified'])->get('/index', function () {
+Route::middleware([AUTH, 'verified'])->get('/sound-data', function () {
     return File::get('../sounds/acousticindex.csv');
 })->name('index');
