@@ -21,8 +21,17 @@
                             >
 
                             <div id="wave" class="p-2"></div>
-                            <div id="wave-timeline"></div>
 
+                            <jet-button
+                                class="float-left border-tl p-4 m-4 border-gray-200 bg-white"
+                                v-on:click="play"
+                                >Play</jet-button
+                            >
+                            <jet-button
+                                class="float-right border-tl p-4 m-4 border-gray-200"
+                                v-on:click="pause"
+                                >Pause</jet-button
+                            >
                         </div>
                     </div>
                     <div class="bg-white shadow-xl sm:rounded-lg mt-4">
@@ -45,7 +54,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="flex flex-col grow pr-4">
                     <div
                         class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full"
@@ -182,11 +190,6 @@
                     </div>
                 </div>
             </div>
-            <div class="w-100 h-36 bg-gray p-4 h-1/3 shadow-xl sm:rounded-lg flex self-center fixed inset-x-0 bottom-0">
-                <jet-button class="float-right border-tl p-4 m-4 border-gray-200" v-on:click="rewind">Rewind</jet-button>
-                <jet-button class="float-left border-tl p-4 m-4 border-gray-200 bg-white" v-on:click="play"> Play</jet-button>
-                <jet-button class="float-right border-tl p-4 m-4 border-gray-200" v-on:click="pause">Pause</jet-button>
-            </div>
         </div>
     </app-layout>
 </template>
@@ -197,7 +200,6 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
 import WaveSurfer from "wavesurfer.js";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
-import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
 import JetButton from "@/Jetstream/Button.vue";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 import CompareBar from '@/Pages/ChartVisualizations/SingleBar.vue';
@@ -256,10 +258,6 @@ export default defineComponent({
 
         pause: function () {
             this.wavesurfer.pause();
-        },
-
-        rewind: function () {
-            this.wavesurfer.skipBackward();
         },
 
         showGraphs: function () {
@@ -372,9 +370,6 @@ export default defineComponent({
                     labels: true,
                     colorMap: this.colorMap,
                 }),
-                TimelinePlugin.create({
-                    container: "#wave-timeline",
-                })
             ],
         });
         this.populateDropdown();
