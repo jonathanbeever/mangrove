@@ -4,7 +4,7 @@
         <canvas id="adiVisualization" width="600" height="400"></canvas>
     </div>
     <div class="w-full">
-        <jet-label class="text-2xl">Bio Example Visualization</jet-label>
+        <jet-label class="text-2xl">{{biExampleData.Output}}</jet-label>
         <canvas id="biVisualization" width="600" height="400"></canvas>
     </div>
     <div class="w-full">
@@ -73,7 +73,7 @@
             var dataFirst = {
                 label: "L Frequency Band Values",
                 data: adiExampleData.Output.bandL,
-                lineTension: 0,
+                lineTension: 1,
                 fill: false,
                 borderColor: 'green'
             };
@@ -81,7 +81,7 @@
             var dataSecond = {
                 label: "R Frequency Band Values",
                 data: adiExampleData.Output.bandR,
-                lineTension: 0,
+                lineTension: 1,
                 fill: false,
                 borderColor: 'red'
             };
