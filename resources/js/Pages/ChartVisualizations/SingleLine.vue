@@ -23,7 +23,7 @@
             JetLabel,
             JetInput
         },
-        props: ['xBarLabels', 'dataSetLabels', 'dataSetData', 'yLabel', 'xLabel', 'title', id],
+        props: ['xBarLabels', 'dataSetLabels', 'dataSetData', 'yLabel', 'xLabel', 'title', 'id'],
         data: function () {
             return {
             }
