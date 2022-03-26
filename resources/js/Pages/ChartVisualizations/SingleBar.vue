@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <canvas id="visualization" width="600" height="400"></canvas>
+        <canvas id="id" width="600" height="400"></canvas>
     </div>
 </template>
 
@@ -17,7 +17,7 @@
     }
 
     export default defineComponent({
-        props: ['xBarLabels', 'dataSetData', 'yLabel', 'xLabel'],
+        props: ['xBarLabels', 'dataSetData', 'yLabel', 'xLabel', 'title', 'id'],
         components: {
             JetApplicationLogo,
             JetButton,
@@ -30,7 +30,7 @@
         },
         mounted: function () {
             Chart.register(LineController, Title, Legend, BarController, CategoryScale, LinearScale, PointElement, LineElement, BarElement)
-            var ctx = document.getElementById("visualization").getContext('2d')
+            var ctx = document.getElementById(this.id).getContext('2d')
 
             const chartLabels = this.xBarLabels;
             const chartData = {
@@ -61,7 +61,14 @@
                                 size: 20
                             }
                         }
-                    }
+                    },
+                    title: {
+                            display: true,
+                            text: this.title,
+                            font: {
+                                color: 'black',
+                                size: 20
+                            }
                 },
                 scales: {
                     y: {
