@@ -67,6 +67,7 @@
                                 color: 'black',
                                 size: 20
                             }
+                    }
                 },
                 scales: {
                     x: {
@@ -98,8 +99,6 @@
                 data: chartData,
                 options: chartOptions
             })
-        },
-        methods: {
         }
     } )
 </script>
