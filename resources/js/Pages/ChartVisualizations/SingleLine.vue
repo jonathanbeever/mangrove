@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <canvas id="visualization" width="600" height="400"></canvas>
+        <canvas id="id" width="600" height="400"></canvas>
     </div>
 </template>
 
@@ -23,14 +23,14 @@
             JetLabel,
             JetInput
         },
-        props: ['xBarLabels', 'dataSetLabels', 'dataSetData', 'yLabel', 'xLabel'],
+        props: ['xBarLabels', 'dataSetLabels', 'dataSetData', 'yLabel', 'xLabel', 'title', id],
         data: function () {
             return {
             }
         },
         mounted: function () {
             Chart.register(LineController, Title, Legend, BarController, CategoryScale, LinearScale, PointElement, LineElement, BarElement)
-            var ctx = document.getElementById("visualization").getContext('2d')
+            var ctx = document.getElementById(this.id).getContext('2d')
             var dataFirst = {
                 label: this.dataSetLabels[0],
                 data: this.dataSetData[0],
@@ -59,7 +59,14 @@
                                 size: 20
                             }
                         }
-                    }
+                    },
+                    title: {
+                            display: true,
+                            text: this.title,
+                            font: {
+                                color: 'black',
+                                size: 20
+                            }
                 },
                 scales: {
                     x: {
