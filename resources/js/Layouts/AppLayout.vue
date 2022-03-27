@@ -18,9 +18,11 @@
                             </div>
 
                             <!-- Navigation Links -->
+
                             <div class="hidden space-x-48 sm:-my-px sm:ml-10 sm:flex">
                                 <!--TODO: edit to fill in with routes-->
-                                <jet-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
+                                <jet-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
+
                                     Create Jobs
                                 </jet-nav-link>
                                 <jet-nav-link :href="route('results')" :active="route().current('results')">
@@ -152,7 +154,11 @@
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <jet-responsive-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
+                        <jet-responsive-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
+                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
+                            Dashboard
+                        </jet-responsive-nav-link>
+                        <jet-responsive-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
                             Create Jobs
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link :href="route('results')" :active="route().current('results')">
