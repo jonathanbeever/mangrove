@@ -12,16 +12,13 @@
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('createjobs')">
                                     <jet-application-mark class="block h-9 w-auto" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-32 sm:-my-px sm:ml-10 sm:flex">
-                                <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </jet-nav-link>
+                            <div class="hidden space-x-48 sm:-my-px sm:ml-10 sm:flex">
                                 <!--TODO: edit to fill in with routes-->
                                 <jet-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
                                     Create Jobs
@@ -155,9 +152,6 @@
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </jet-responsive-nav-link>
                         <jet-responsive-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
                             Create Jobs
                         </jet-responsive-nav-link>

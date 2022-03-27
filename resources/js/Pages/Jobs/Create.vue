@@ -119,7 +119,7 @@
                 items: [{
                     job: 'Central Florida Zoo',
                     name: 'centralfloridazoo.zip',
-                    series: 'That One series',
+                    series: 'AEI',
                     timestarted: '02/07/2022, 10:25pm',
                     date: '01/01/2011, 12:00pm',
                     latitude: '02\'03\"40',
@@ -127,162 +127,11 @@
                     selected: false
                     },
                     {
-                    job: 'Probably Florida Zoo',
-                    name: 'probsafloridazoo.zip',
-                    series: 'Spaghetti',
-                    timestarted: '03/34/2022, 10:02pm',
-                    date: '01/01/2041, 12:00am',
-                    latitude: '01\'03\"40',
-                    longitude: '52\'03\"40'
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2021, 12:00am',
-                    latitude: '41\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/03/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },
-                    {
-                    job: 'Oregano Florida Zoo',
-                    name: 'probsafloridazoo.zip',
-                    series: 'Spaghetti',
-                    timestarted: '03/34/2022, 10:02pm',
-                    date: '01/01/2011, 12:00am',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40'
-                    },{
-                    job: 'Central Arkansas Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
+                    job: 'Arizona Northern Zoo',
+                    name: 'Arizonazoo.zip',
+                    series: 'BIO',
                     timestarted: '02/07/2022, 10:25pm',
                     date: '01/01/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },
-                    {
-                    job: 'Probably Florida Zoo',
-                    name: 'probsafloridazoo.zip',
-                    series: 'Spaghetti',
-                    timestarted: '03/34/2022, 10:02pm',
-                    date: '01/01/2011, 6:00am',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40'
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 4:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },
-                    {
-                    job: 'Not Florida Zoo',
-                    name: 'probsafloridazoo.zip',
-                    series: 'Spaghetti',
-                    timestarted: '03/34/2022, 10:02pm',
-                    date: '01/01/2011, 7:00am',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40'
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    }, {
-                    job: 'Probably Florida Zoo',
-                    name: 'probsafloridazoo.zip',
-                    series: 'Spaghetti',
-                    timestarted: '03/34/2022, 10:02pm',
-                    date: '01/01/2041, 12:00am',
-                    latitude: '01\'03\"40',
-                    longitude: '52\'03\"40'
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2021, 12:00am',
-                    latitude: '41\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/03/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },
-                    {
-                    job: 'Oregano Florida Zoo',
-                    name: 'probsafloridazoo.zip',
-                    series: 'Spaghetti',
-                    timestarted: '03/34/2022, 10:02pm',
-                    date: '01/01/2011, 12:00am',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40'
-                    },{
-                    job: 'Central Arkansas Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },
-                    {
-                    job: 'Probably Florida Zoo',
-                    name: 'probsafloridazoo.zip',
-                    series: 'Spaghetti',
-                    timestarted: '03/34/2022, 10:02pm',
-                    date: '01/01/2011, 6:00am',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40'
-                    },{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'That One series',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 4:00pm',
                     latitude: '02\'03\"40',
                     longitude: '02\'03\"40',
                     selected: false
