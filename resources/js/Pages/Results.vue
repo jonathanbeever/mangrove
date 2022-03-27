@@ -222,7 +222,6 @@ export default defineComponent({
             compareIndex,
             upGraphs,
             graphInput,
-            currentTime: 0.0,
         };
     },
     methods: {
@@ -239,8 +238,6 @@ export default defineComponent({
         },
 
         timeUpdate: function() {
-            //this.currentTime = this.wavesurfer.getCurrentTime();
-            console.log(this.$refs);
             this.wavesurfer.setCurrentTime(this.$refs.player.currentTime);
         },
 
