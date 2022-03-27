@@ -3,9 +3,9 @@
 
         <div class="flex flex-col">
             <div class="py-4 flex flex-row">
-                <div class="w-1/3 sm:px-6 lg:px-4">
-                    <div class="bg-white shadow-xl sm:rounded-lg">
-                        <div class="pb-16 pl-2 pt-2">
+                <div class="w-1/3 sm:px-6 lg:px-4 h-screen">
+                    <div class="bg-white shadow-xl sm:rounded-lg h-full">
+                        <div class="pb-2 pl-2 pt-2 h-full">
                             2D Waveform Spectrogram
 
                             <div class="flex-row px-4">
@@ -19,40 +19,15 @@
                                 v-on:click="createSpectrogram"
                                 >Show Graphs</jet-button
                             >
-
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
                             <div id="wave" class="p-2"></div>
+                        </div>
+                    </div>
 
-                            <jet-button
-                                class="float-left border-tl p-4 m-4 border-gray-200 bg-white"
-                                v-on:click="play"
-                                >Play</jet-button
-                            >
-                            <jet-button
-                                class="float-right border-tl p-4 m-4 border-gray-200"
-                                v-on:click="pause"
-                                >Pause</jet-button
-                            >
-                        </div>
-                    </div>
-                    <div class="bg-white shadow-xl sm:rounded-lg mt-4">
-                        <div class="pt-2 px-4">Range-Based Analysis</div>
-                        <div class="space-x-4 pt-4 flex justify-center">
-                            <select id="selectStartDate" v-model="startDate">
-                                <option v-bind:value="''" disabled class="flex">
-                                    Start Date
-                                </option>
-                            </select>
-                            <select id="selectEndDate" v-model="endDate">
-                                <option v-bind:value="''" disabled class="flex">
-                                   End Date
-                                </option>
-                            </select>
-                        </div>
-                        <div class="p-4">
-                            Selected Time Range:
-                            {{ startDate + " - " + endDate }}
-                        </div>
-                    </div>
                 </div>
                 <div class="flex flex-col grow pr-4">
                     <div
@@ -137,8 +112,7 @@
                             <jet-button
                                 class="btn btn-success"
                                 @click="showGraphs"
-                                >Show Graphs</jet-button
-                            >
+                                >Show Graphs</jet-button>
                         </div>
                     </div>
 
@@ -186,6 +160,12 @@
                     </div>
                 </div>
             </div>
+
+            <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
+                <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @timeupdate="timeUpdate">
+                    <source src="/sound/pigeons.mp3"> Audio playback is not supported.
+                </audio>
+            </div>
         </div>
     </app-layout>
 </template>
@@ -195,6 +175,8 @@ import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import WaveSurfer from "wavesurfer.js";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
+import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
+
 import JetButton from "@/Jetstream/Button.vue";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 import CompareBar from '@/Pages/ChartVisualizations/SingleBar.vue';
@@ -229,7 +211,8 @@ export default defineComponent({
             cFile: "",
             startDate: "",
             endDate: "",
-            recordings: [],
+            compareRecordings: [],
+            selectRecordings: [],
             singleFile,
             indices: ["ACI", "NDSI", "AEI", "ADI", "BI", "RMS"],
             chartSelection: ["Single Line", "Single Bar", "Dual Line", "Compare Bar"],
@@ -240,7 +223,6 @@ export default defineComponent({
             graphInput,
         };
     },
-
     methods: {
 
         createSpectrogram() {
@@ -250,9 +232,12 @@ export default defineComponent({
         play: function () {
             this.wavesurfer.play();
         },
-
         pause: function () {
             this.wavesurfer.pause();
+        },
+
+        timeUpdate: function() {
+            this.wavesurfer.setCurrentTime(this.$refs.player.currentTime);
         },
 
         alterIndices: function () {
@@ -290,11 +275,13 @@ export default defineComponent({
 
             this.selectedChart = 'Single Line'
         },
-
         plotSeries: function (index) {
-            this.recordings = this.filterRecordingsBySeries(index);
+            this.ready = true;
+            this.selectRecordings = this.filterRecordingsBySeries(index, 's');
+            if (!this.singleFile) {
+                this.compareRecordings = this.filterRecordingsBySeries(index, 'c');
+            }
         },
-
         populateDropdown: function () {
             var extractedRecordings = this.getExtractedRecordings();
             if (extractedRecordings) {
@@ -307,12 +294,13 @@ export default defineComponent({
             var select = document.getElementById(dropdown);
             var options = new Set();
             for (var i = 0; i < extractedRecordings.length; i++) {
-                this.recordings.push(extractedRecordings[i]);
+                if (dropdown.indexOf("select") > -1) {
+                    this.selectRecordings.push(extractedRecordings[i]);
+                } else {
+                    this.compareRecordings.push(extractedRecordings[i]);
+                }
                 // handle both file and date dropdowns
                 var field = extractedRecordings[i]["file"];
-                // if (dropdown.indexOf("Date") > -1) {
-                //     field = extractedRecordings[i]["DATE"];
-                // }
                 var el = document.createElement("option");
                 el.textContent = field;
                 el.value = field;
@@ -345,40 +333,43 @@ export default defineComponent({
             });
         },
         filterRecordingsByFile: function (file) {
-            return this.recordings.filter((d) => d["file"] == file);
+            return this.selectRecordings.filter((d) => d["file"] == file);
         },
-        filterRecordingsBySeries: function (index) {
+        filterRecordingsBySeries: function (index, siteType) {
+            var recordings = this.selectRecordings;
             // handle "ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"
             // Build a sort that takes into account selected index from the series
             if (this.startDate === "" && this.endDate === "") {
-                return this.recordings;
+                return recordings;
             }
             if (this.startDate === "") {
-                return this.recordings.filter((d) => d["DATE"] <= this.endDate);
+                return recordings.filter((d) => d["DATE"] <= this.endDate);
             }
             if (this.startDate === "") {
-                return this.recordings.filter(
+                return recordings.filter(
                     (d) => this.startDate <= d["DATE"]
                 );
             }
-            return this.recordings.filter(
+            return recordings.filter(
                 (d) => this.startDate <= d["DATE"] && d["DATE"] <= this.endDate
             );
         },
     },
-
     mounted() {
         this.wavesurfer = WaveSurfer.create({
+
+            height:500,
             container: "#wave",
             waveColor: "#D2EDD4",
             progressColor: "#46B54D",
             backend: "MediaElement",
             plugins: [
                 SpectrogramPlugin.create({
+                    height:500,
                     container: "#wave",
                     labels: true,
                     colorMap: this.colorMap,
-                }),
+                })
             ],
         });
         this.populateDropdown();
