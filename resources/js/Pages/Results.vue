@@ -162,7 +162,7 @@
             </div>
 
             <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
-                <audio controls volume="0.1" id="audio-player" class="audio-player" style="width: 40%; display: inline-block;" @play="play" @pause="pause">
+                <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @timeupdate="timeUpdate">
                     <source src="/sound/pigeons.mp3"> Audio playback is not supported.
                 </audio>
             </div>
@@ -222,6 +222,7 @@ export default defineComponent({
             compareIndex,
             upGraphs,
             graphInput,
+            currentTime: 0.0,
         };
     },
     methods: {
@@ -235,6 +236,12 @@ export default defineComponent({
         },
         pause: function () {
             this.wavesurfer.pause();
+        },
+
+        timeUpdate: function() {
+            //this.currentTime = this.wavesurfer.getCurrentTime();
+            console.log(this.$refs);
+            this.wavesurfer.setCurrentTime(this.$refs.player.currentTime);
         },
 
         alterIndices: function () {
@@ -354,6 +361,7 @@ export default defineComponent({
     },
     mounted() {
         this.wavesurfer = WaveSurfer.create({
+
             height:500,
             container: "#wave",
             waveColor: "#D2EDD4",
