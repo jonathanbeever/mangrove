@@ -3,9 +3,9 @@
 
         <div class="flex flex-col">
             <div class="py-4 flex flex-row">
-                <div class="w-1/3 sm:px-6 lg:px-4">
-                    <div class="bg-white shadow-xl sm:rounded-lg">
-                        <div class="pb-16 pl-2 pt-2">
+                <div class="w-1/3 sm:px-6 lg:px-4 h-screen">
+                    <div class="bg-white shadow-xl sm:rounded-lg h-full">
+                        <div class="pb-2 pl-2 pt-2 h-full">
                             2D Waveform Spectrogram
 
                             <div class="flex-row px-4">
@@ -19,40 +19,15 @@
                                 v-on:click="createSpectrogram"
                                 >Show Graphs</jet-button
                             >
-
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
                             <div id="wave" class="p-2"></div>
+                        </div>
+                    </div>
 
-                            <jet-button
-                                class="float-left border-tl p-4 m-4 border-gray-200 bg-white"
-                                v-on:click="play"
-                                >Play</jet-button
-                            >
-                            <jet-button
-                                class="float-right border-tl p-4 m-4 border-gray-200"
-                                v-on:click="pause"
-                                >Pause</jet-button
-                            >
-                        </div>
-                    </div>
-                    <div class="bg-white shadow-xl sm:rounded-lg mt-4">
-                        <div class="pt-2 px-4">Range-Based Analysis</div>
-                        <div class="space-x-4 pt-4 flex justify-center">
-                            <select id="selectStartDate" v-model="startDate">
-                                <option v-bind:value="startDate" disabled class="flex">
-                                    Start Date
-                                </option>
-                            </select>
-                            <select id="selectEndDate" v-model="endDate">
-                                <option v-bind:value="endDate" disabled class="flex">
-                                   End Date
-                                </option>
-                            </select>
-                        </div>
-                        <div class="p-4">
-                            Selected Time Range:
-                            {{ startDate + " - " + endDate }}
-                        </div>
-                    </div>
                 </div>
                 <div class="flex flex-col grow pr-4">
                     <div
@@ -190,6 +165,12 @@
                     </div>
                 </div>
             </div>
+
+            <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center;">
+                <audio controls volume="0.1" id="audio-player" class="audio-player" style="width: 40%; display: inline-block;" onplay="play" v-on:click="play">
+                    <source src="/sound/pigeons.mp3"> Audio playback is not supported.
+                </audio>
+            </div>
         </div>
     </app-layout>
 </template>
@@ -200,6 +181,8 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Welcome from "@/Jetstream/Welcome.vue";
 import WaveSurfer from "wavesurfer.js";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
+import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
+
 import JetButton from "@/Jetstream/Button.vue";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 import CompareBar from '@/Pages/ChartVisualizations/SingleBar.vue';
@@ -260,6 +243,14 @@ export default defineComponent({
             this.wavesurfer.pause();
         },
 
+        rewind: function () {
+            this.wavesurfer.skipBackward();
+        },
+
+        volume: function () {
+            this.wavesurfer.skipBackward();
+        },
+
         showGraphs: function () {
             let objec = this.filterRecordingsByFile(this.sFile);
             console.log(objec);
@@ -287,12 +278,6 @@ export default defineComponent({
                 extractedRecordings.then((d) =>
                     this.updateDropdown(d, "compareFile")
                 );
-                extractedRecordings.then((d) =>
-                    this.updateDropdown(d, "selectStartDate")
-                );
-                extractedRecordings.then((d) =>
-                    this.updateDropdown(d, "selectEndDate")
-                );
             }
         },
         updateDropdown: function (extractedRecordings, dropdown) {
@@ -302,9 +287,9 @@ export default defineComponent({
                 this.recordings.push(extractedRecordings[i]);
                 // handle both file and date dropdowns
                 var field = extractedRecordings[i]["file"];
-                if (dropdown.indexOf("Date") > -1) {
-                    field = extractedRecordings[i]["file"].slice(9, 17);
-                }
+                // if (dropdown.indexOf("Date") > -1) {
+                //     field = extractedRecordings[i]["file"].slice(9, 17);
+                // }
                 var el = document.createElement("option");
                 el.textContent = field;
                 el.value = field;
@@ -361,16 +346,18 @@ export default defineComponent({
 
     mounted() {
         this.wavesurfer = WaveSurfer.create({
+            height:500,
             container: "#wave",
             waveColor: "#D2EDD4",
             progressColor: "#46B54D",
             backend: "MediaElement",
             plugins: [
                 SpectrogramPlugin.create({
+                    height:500,
                     container: "#wave",
                     labels: true,
                     colorMap: this.colorMap,
-                }),
+                })
             ],
         });
         this.populateDropdown();
