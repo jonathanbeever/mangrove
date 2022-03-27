@@ -38,12 +38,12 @@
                         <div class="pt-2 px-4">Range-Based Analysis</div>
                         <div class="space-x-4 pt-4 flex justify-center">
                             <select id="selectStartDate" v-model="startDate">
-                                <option v-bind:value="''" disabled class="flex">
+                                <option v-bind:value="startDate" disabled class="flex">
                                     Start Date
                                 </option>
                             </select>
                             <select id="selectEndDate" v-model="endDate">
-                                <option v-bind:value="''" disabled class="flex">
+                                <option v-bind:value="endDate" disabled class="flex">
                                    End Date
                                 </option>
                             </select>
@@ -279,6 +279,7 @@ export default defineComponent({
 
         populateDropdown: function () {
             var extractedRecordings = this.getExtractedRecordings();
+            console.log(extractedRecordings);
             if (extractedRecordings) {
                 extractedRecordings.then((d) =>
                     this.updateDropdown(d, "selectFile")
@@ -286,10 +287,10 @@ export default defineComponent({
                 extractedRecordings.then((d) =>
                     this.updateDropdown(d, "compareFile")
                 );
-                 extractedRecordings.then((d) =>
+                extractedRecordings.then((d) =>
                     this.updateDropdown(d, "selectStartDate")
                 );
-                 extractedRecordings.then((d) =>
+                extractedRecordings.then((d) =>
                     this.updateDropdown(d, "selectEndDate")
                 );
             }
@@ -301,9 +302,9 @@ export default defineComponent({
                 this.recordings.push(extractedRecordings[i]);
                 // handle both file and date dropdowns
                 var field = extractedRecordings[i]["file"];
-                // if (dropdown.indexOf("Date") > -1) {
-                //     field = extractedRecordings[i]["DATE"];
-                // }
+                if (dropdown.indexOf("Date") > -1) {
+                    field = extractedRecordings[i]["file"].slice(9, 17);
+                }
                 var el = document.createElement("option");
                 el.textContent = field;
                 el.value = field;
