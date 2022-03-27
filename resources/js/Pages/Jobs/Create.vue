@@ -1,5 +1,15 @@
 <template>
-    <div class="bg-white border-b border-gray-200 flex flex-col" v-if="newUploads && !goToJobCreation">
+    <app-layout title="Create Jobs">
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Create Jobs
+            </h2>
+        </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                    <div class="bg-white border-b border-gray-200 flex flex-col" v-if="newUploads && !goToJobCreation">
         <div class="px-8 py-6">
                 Sound Files
         </div>
@@ -66,10 +76,16 @@
     <jet-button v-if="newUploads == false" v-on:click="newUploads = !newUploads" class="ml-4 float-right border-tl p-4 m-4 border-gray-200" >
         Return to Dashboard
     </jet-button>
+                </div>
+            </div>
+        </div>
+    </app-layout>
 </template>
 
 <script>
     import { defineComponent } from 'vue'
+    import AppLayout from '@/Layouts/AppLayout.vue'
+    import Create from '@/Pages/Jobs/Create.vue'
     import JetButton from '@/Jetstream/Button.vue'
     import JetInput from '@/Jetstream/Input.vue'
     import JetCheckbox from '@/Jetstream/Checkbox.vue'
@@ -83,12 +99,13 @@
 
     export default defineComponent({
         components: {
+            AppLayout,
             JetButton,
             JetInput,
             JetCheckbox,
             JetLabel,
             FileUpload,
-            JobCreation
+            JobCreation,
 
         },
         computed: {
