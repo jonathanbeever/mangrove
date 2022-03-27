@@ -193,7 +193,6 @@
 <script>
 import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Welcome from "@/Jetstream/Welcome.vue";
 import WaveSurfer from "wavesurfer.js";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
 import JetButton from "@/Jetstream/Button.vue";
