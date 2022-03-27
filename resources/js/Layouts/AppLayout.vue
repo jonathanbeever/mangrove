@@ -22,8 +22,7 @@
                                 <jet-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </jet-nav-link>
-                                <!--TODO: edit to fill in with routes-->
-                                <jet-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
+                                <jet-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
                                     Create Jobs
                                 </jet-nav-link>
                                 <jet-nav-link :href="route('results')" :active="route().current('results')">
@@ -158,7 +157,7 @@
                         <jet-responsive-nav-link :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('createjobs')" :active="route().current('createjobs')">
+                        <jet-responsive-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
                             Create Jobs
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link :href="route('results')" :active="route().current('results')">

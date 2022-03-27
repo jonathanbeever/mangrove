@@ -1,10 +1,8 @@
 <?php
 
 use App\Http\Controllers\JobController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
 use Inertia\Inertia;
 
 /*
@@ -20,42 +18,40 @@ use Inertia\Inertia;
 
 const AUTH = 'auth:sanctum';
 
-Route::get('/', function () {
-    return Inertia::render('Auth/Login', [
-        'canRegister' => Route::has('register')
-    ]);
+Route::get('/', static function () {
+    if(auth()->check()) {
+        return redirect()->route('jobs.create');
+    }
+
+    return Inertia::render('Auth/Login');
 });
 
-Route::get('/run/{type}', [JobController::class, 'runJob']);
-
-Route::group(['middleware' => [AUTH, 'verified']], function () {
+Route::group(['middleware' => [AUTH, 'verified']], static function () {
     Route::resource('jobs', JobController::class);
+
+    Route::get('/about', static function () {
+        return Inertia::render('About');
+    })->name('about');
+
+    Route::get('/dashboard', static function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::get('/results', static function () {
+        return Inertia::render('Results');
+    })->name('results');
+
+    Route::get('/queue', static function () {
+        return Inertia::render('Queue');
+    })->name('queue');
+
+    Route::get('/sound/{file}', static function ($file) {
+        return File::get('../sounds/' . $file);
+    })->name('sound');
+
+    Route::get('/sound-data', static function () {
+        return File::get('../sounds/acousticindex.csv');
+    })->name('sound-data');
 });
 
-Route::middleware([AUTH, 'verified'])->get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
-
-Route::middleware([AUTH, 'verified'])->get('/createjobs', function () {
-    return Inertia::render('CreateJobs');
-})->name('createjobs');
-
-Route::middleware([AUTH, 'verified'])->get('/results', function () {
-    return Inertia::render('Results');
-})->name('results');
-
-Route::middleware([AUTH, 'verified'])->get('/queue', function () {
-    return Inertia::render('Queue');
-})->name('queue');
-
-Route::middleware([AUTH, 'verified'])->get('/about', function () {
-    return Inertia::render('About');
-})->name('about');
-
-Route::middleware([AUTH, 'verified'])->get('/sound/{file}', function ($file) {
-    return File::get('../sounds/' . $file);
-})->name('sound');
-
-Route::middleware([AUTH, 'verified'])->get('/sound-data', function () {
-    return File::get('../sounds/acousticindex.csv');
-})->name('index');
+Route::get('/run', [JobController::class, 'queueSingleFileJob']);
