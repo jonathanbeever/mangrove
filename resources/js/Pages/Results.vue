@@ -105,6 +105,7 @@
                                 class="flex grow"
                                 id="selectSeries"
                                 v-model="currentIndex"
+                                v-on:change="showGraphs()"
                             >
                                 <option
                                     v-bind:value="ind"
@@ -118,6 +119,7 @@
                         <div class="flex-row pr-4">
                             Select Chart:
                             <select
+                                :disabled="upGraphs == 'NDSI' || upGraphs == 'RMS'"
                                 class="flex grow"
                                 id="chartSelect"
                                 v-model="selectedChart"
@@ -152,38 +154,32 @@
                         </div>
 
                         <div v-show="upGraphs == 'NDSI'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'NDSI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar :id="sFile+'CB'+'NDSI'" :xBarLabels="['Biophony', 'Anthrophony']" :dataSetLabels="['', '']" :dataSetData="[[graphInput[8].data.biophonyL], [graphInput[8].data.anthrophonyL]]" :xLabel="'Biological VS Human Generated Sound'" :yLabel="'Computed Value'"/>
                         </div>
 
                         <div v-show="upGraphs == 'AEI'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'AEI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[[graphInput[1].data.aeiL, graphInput[6].data.aeiL, graphInput[11].data.aeiL, graphInput[16].data.aeiL]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'AEI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'AEI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[graphInput[1].data.aeiL]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'AEI'" :xBarLabels="'noodles'" :dataSetLabels="['label1', 'label2']" :dataSetData="[graphInput[1].data.aeiL, graphInput[1].data.aeiR]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'AEI'" :xBarLabels="graphInput[1].data.bandRangeL" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput[1].data.bandL]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'AEI'" :xBarLabels="graphInput[1].data.bandRangeL" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput[1].data.bandL, graphInput[1].data.bandR]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'AEI'" :xBarLabels="['L Band Aei']" :dataSetLabels="[]" :dataSetData="[graphInput[1].data.aeiL]" :xLabel="'Frequency Band'" :yLabel="'Aei Index Computed Value'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'AEI'" :xBarLabels="['L Band Aei', 'R Band Aei']" :dataSetLabels="['', '']" :dataSetData="[[graphInput[1].data.aeiL], [graphInput[1].data.aeiR]]" :xLabel="'Frequency Band'" :yLabel="'Aei Computed Value'"/>
                         </div>
 
                         <div v-show="upGraphs == 'ADI'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, cFile]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ADI'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'ADI'" :xBarLabels="graphInput[0].data.bandRangeL" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput[0].data.bandL]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ADI'" :xBarLabels="graphInput[0].data.bandRangeL" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput[0].data.bandL, graphInput[0].data.bandR]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ADI'" :xBarLabels="['L Band Adi']" :dataSetLabels="[]" :dataSetData="[graphInput[0].data.adiL]" :xLabel="'Frequency Band'" :yLabel="'Adi Index Computed Value'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ADI'" :xBarLabels="['L Band Adi', 'R Band Adi']" :dataSetLabels="['', '']" :dataSetData="[[graphInput[0].data.adiL], [graphInput[0].data.adiR]]" :xLabel="'Frequency Band'" :yLabel="'Adi Computed Value'"/>
                         </div>
 
                         <div v-show="upGraphs == 'BIO'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'BIO'" :xBarLabels="graphInput[2].data.freqVals" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput[2].data.valsL]" :xLabel="'Frequency'" :yLabel="'Bio Index Value'"/>
+                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'BIO'" :xBarLabels="graphInput[2].data.freqVals" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput[2].data.valsL, graphInput[2].data.valsR]" :xLabel="'Frequency Range'" :yLabel="'Bio Index Value'"/>
+                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'BIO'" :xBarLabels="['L Band Bio']" :dataSetLabels="[]" :dataSetData="[graphInput[2].data.areaL]" :xLabel="'Frequency Band'" :yLabel="'Bio Index Computed Value'"/>
+                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'BIO'" :xBarLabels="['L Band Bio', 'R Band Bio']" :dataSetLabels="['', '']" :dataSetData="[[graphInput[2].data.areaL], [graphInput[2].data.areaR]]" :xLabel="'Frequency Band'" :yLabel="'Bio Computed Value'"/>
                         </div>
 
                         <div v-show="upGraphs == 'RMS'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'RMS'" :xBarLabels="graphInput.range" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar :id="sFile+'CB'+'RMS'" :xBarLabels="['Band L RMS', 'Band R RMS']" :dataSetLabels="['', '']" :dataSetData="[[graphInput[4].data.rmsL], [graphInput[4].data.rmsR]]" :xLabel="'Root Mean Square L Band and R Band'" :yLabel="'Root Mean Square'"/>
                         </div>
 
                         <!--DualLine :id="'0'" :xBarLabels="[1, 2, 3, 4]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/-->
@@ -261,7 +257,7 @@ export default defineComponent({
         },
 
         showGraphs: function () {
-            let objec = this.filterRecordingsByFile(this.sFile);
+            let objec = this.filterRecordingsByFile('S4A04633_20180110_160000.wav');
             console.log(objec);
 
             let end = Number(objec[0].duration);
