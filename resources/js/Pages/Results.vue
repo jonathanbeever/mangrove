@@ -166,7 +166,7 @@
                 </div>
             </div>
 
-            <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center;">
+            <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
                 <audio controls volume="0.1" id="audio-player" class="audio-player" style="width: 40%; display: inline-block;" onplay="play" v-on:click="play">
                     <source src="/sound/pigeons.mp3"> Audio playback is not supported.
                 </audio>
@@ -243,14 +243,6 @@ export default defineComponent({
             this.wavesurfer.pause();
         },
 
-        rewind: function () {
-            this.wavesurfer.skipBackward();
-        },
-
-        volume: function () {
-            this.wavesurfer.skipBackward();
-        },
-
         showGraphs: function () {
             let objec = this.filterRecordingsByFile(this.sFile);
             console.log(objec);
@@ -270,7 +262,6 @@ export default defineComponent({
 
         populateDropdown: function () {
             var extractedRecordings = this.getExtractedRecordings();
-            console.log(extractedRecordings);
             if (extractedRecordings) {
                 extractedRecordings.then((d) =>
                     this.updateDropdown(d, "selectFile")
@@ -287,9 +278,6 @@ export default defineComponent({
                 this.recordings.push(extractedRecordings[i]);
                 // handle both file and date dropdowns
                 var field = extractedRecordings[i]["file"];
-                // if (dropdown.indexOf("Date") > -1) {
-                //     field = extractedRecordings[i]["file"].slice(9, 17);
-                // }
                 var el = document.createElement("option");
                 el.textContent = field;
                 el.value = field;
