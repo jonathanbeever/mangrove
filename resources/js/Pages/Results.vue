@@ -112,8 +112,7 @@
                             <jet-button
                                 class="btn btn-success"
                                 @click="showGraphs"
-                                >Show Graphs</jet-button
-                            >
+                                >Show Graphs</jet-button>
                         </div>
                     </div>
 
@@ -213,7 +212,8 @@ export default defineComponent({
             cFile: "",
             startDate: "",
             endDate: "",
-            recordings: [],
+            compareRecordings: [],
+            selectRecordings: [],
             singleFile,
             indices: ["ACI", "NDSI", "AEI", "ADI", "BI", "RMS"],
             chartSelection: ["Single Line", "Single Bar", "Dual Line", "Compare Bar"],
@@ -224,7 +224,6 @@ export default defineComponent({
             graphInput,
         };
     },
-
     methods: {
 
         createSpectrogram() {
@@ -234,7 +233,6 @@ export default defineComponent({
         play: function () {
             this.wavesurfer.play();
         },
-
         pause: function () {
             this.wavesurfer.pause();
         },
@@ -274,11 +272,13 @@ export default defineComponent({
 
             this.selectedChart = 'Single Line'
         },
-
         plotSeries: function (index) {
-            this.recordings = this.filterRecordingsBySeries(index);
+            this.ready = true;
+            this.selectRecordings = this.filterRecordingsBySeries(index, 's');
+            if (!this.singleFile) {
+                this.compareRecordings = this.filterRecordingsBySeries(index, 'c');
+            }
         },
-
         populateDropdown: function () {
             var extractedRecordings = this.getExtractedRecordings();
             if (extractedRecordings) {
@@ -291,7 +291,11 @@ export default defineComponent({
             var select = document.getElementById(dropdown);
             var options = new Set();
             for (var i = 0; i < extractedRecordings.length; i++) {
-                this.recordings.push(extractedRecordings[i]);
+                if (dropdown.indexOf("select") > -1) {
+                    this.selectRecordings.push(extractedRecordings[i]);
+                } else {
+                    this.compareRecordings.push(extractedRecordings[i]);
+                }
                 // handle both file and date dropdowns
                 var field = extractedRecordings[i]["file"];
                 var el = document.createElement("option");
@@ -328,26 +332,26 @@ export default defineComponent({
         filterRecordingsByFile: function (file) {
             return this.recordings.filter((d) => d["file"] == file);
         },
-        filterRecordingsBySeries: function (index) {
+        filterRecordingsBySeries: function (index, siteType) {
+            var recordings = this.selectRecordings;
             // handle "ACI", "NDSI", "AEI", "ADI", "BIO", "RMS"
             // Build a sort that takes into account selected index from the series
             if (this.startDate === "" && this.endDate === "") {
-                return this.recordings;
+                return recordings;
             }
             if (this.startDate === "") {
-                return this.recordings.filter((d) => d["DATE"] <= this.endDate);
+                return recordings.filter((d) => d["DATE"] <= this.endDate);
             }
             if (this.startDate === "") {
-                return this.recordings.filter(
+                return recordings.filter(
                     (d) => this.startDate <= d["DATE"]
                 );
             }
-            return this.recordings.filter(
+            return recordings.filter(
                 (d) => this.startDate <= d["DATE"] && d["DATE"] <= this.endDate
             );
         },
     },
-
     mounted() {
         this.wavesurfer = WaveSurfer.create({
             height:500,
