@@ -162,7 +162,7 @@
             </div>
 
             <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
-                <audio controls volume="0.1" id="audio-player" class="audio-player" style="width: 40%; display: inline-block;" onplay="play" v-on:click="play">
+                <audio controls volume="0.1" id="audio-player" class="audio-player" style="width: 40%; display: inline-block;" @play="play" @pause="pause">
                     <source src="/sound/pigeons.mp3"> Audio playback is not supported.
                 </audio>
             </div>
