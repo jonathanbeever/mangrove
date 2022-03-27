@@ -20,10 +20,7 @@
         "browser-sync": "^2.27.7",
         "browser-sync-webpack-plugin": "^2.3.0",
         "chart.js": "^3.7.1",
-<<<<<<< HEAD
         "chartjs": "^0.3.24",
-=======
->>>>>>> 0028a5dc0ab7617cdd46502e179747061361bd6b
         "d3": "^7.3.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",

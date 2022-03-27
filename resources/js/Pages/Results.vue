@@ -330,7 +330,7 @@ export default defineComponent({
             });
         },
         filterRecordingsByFile: function (file) {
-            return this.recordings.filter((d) => d["file"] == file);
+            return this.selectRecordings.filter((d) => d["file"] == file);
         },
         filterRecordingsBySeries: function (index, siteType) {
             var recordings = this.selectRecordings;
