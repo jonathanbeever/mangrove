@@ -9,73 +9,228 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <div class="bg-white border-b border-gray-200 flex flex-col" v-if="newUploads && !goToJobCreation">
-        <div class="px-8 py-6">
-                Sound Files
-        </div>
-        <div class="border-t border-gray-200 md:border-t-0 md:border-l flex flex-col">
-            <jet-input type="text" v-model="search" placeholder="Search" class="p-4 mx-6 align-content-center"/>
-            <br/>
-            <div class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96">
-                <div class="-my-2 sm:-mx-6 lg:-mx-8">
-                    <div class="py-4 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Site</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Series</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recording Date</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Latitude/Longitude</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Select</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr v-for="(item, index) in filtered" :key="index">
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-start">
-                                                <div class="">
-                                                    <div class="text-sm font-medium text-gray-900">{{ item.job }}</div>
-                                                    <div class="text-sm text-gray-500">{{ item.name }}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900">{{ item.series }}</div>
-                                            <div class="text-sm text-gray-500">{{ item.timestarted }}</div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ item.date }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                        <div class="text-sm text-gray-500">{{ item.latitude }}</div>
-                                        <div class="text-sm text-gray-500">{{ item.longitude }}</div>
-                                        </td>
-                                        <td class="px-8 py-4 whitespace-nowrap text-sm font-medium">
-                                            <!--a href="#" class="text-indigo-600 hover:text-indigo-900">x</a-->
-                                            <input class="form-check-input appearance-none rounded-full h-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-100 align-center bg-no-repeat bg-center bg-contain cursor-pointer" type="radio" name="flexRadioDefault" id="{{count}}"/>
-                                            <!--jet-checkbox name="{{item.count}}" v-model:checked="item.selected" /-->
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div
+                        class="bg-white border-b border-gray-200 flex flex-col"
+                        v-if="newUploads && !goToJobCreation"
+                    >
+                        <div class="px-8 py-6">Sound Files</div>
+                        <div
+                            class="border-t border-gray-200 md:border-t-0 md:border-l flex flex-col"
+                        >
+                            <jet-input
+                                type="text"
+                                v-model="search"
+                                placeholder="Search"
+                                class="p-4 mx-6 align-content-center"
+                            />
+                            <br />
+                            <div
+                                class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96"
+                            >
+                                <div class="-my-2 sm:-mx-6 lg:-mx-8">
+                                    <div
+                                        class="py-4 align-middle inline-block min-w-full sm:px-6 lg:px-8"
+                                    >
+                                        <div
+                                            class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+                                        >
+                                            <table
+                                                class="min-w-full divide-y divide-gray-200"
+                                            >
+                                                <thead class="bg-gray-50">
+                                                    <tr>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Site
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Series
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Recording Date
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Latitude/Longitude
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Select
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <Modal
+                                                    v-show="editPop == true"
+                                                    :selected="selected"
+                                                    :items="items"
+                                                />
+                                                <tbody
+                                                    class="bg-white divide-y divide-gray-200"
+                                                    v-show="editPop == false"
+                                                >
+                                                    <tr
+                                                        v-for="(
+                                                            item, index
+                                                        ) in filtered"
+                                                        :key="index"
+                                                    >
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap"
+                                                        >
+                                                            <div
+                                                                class="flex items-start"
+                                                            >
+                                                                <div class="">
+                                                                    <div
+                                                                        class="text-sm font-medium text-gray-900"
+                                                                    >
+                                                                        {{
+                                                                            item.job
+                                                                        }}
+                                                                    </div>
+                                                                    <div
+                                                                        class="text-sm text-gray-500"
+                                                                    >
+                                                                        {{
+                                                                            item.name
+                                                                        }}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap"
+                                                        >
+                                                            <div
+                                                                class="text-sm text-gray-900"
+                                                            >
+                                                                {{
+                                                                    item.series
+                                                                }}
+                                                            </div>
+                                                            <div
+                                                                class="text-sm text-gray-500"
+                                                            >
+                                                                {{
+                                                                    item.timestarted
+                                                                }}
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                                        >
+                                                            {{ item.date }}
+                                                        </td>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium"
+                                                        >
+                                                            <div
+                                                                class="text-sm text-gray-500"
+                                                            >
+                                                                {{
+                                                                    item.latitude
+                                                                }}
+                                                            </div>
+                                                            <div
+                                                                class="text-sm text-gray-500"
+                                                            >
+                                                                {{
+                                                                    item.longitude
+                                                                }}
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-8 py-4 whitespace-nowrap text-sm font-medium"
+                                                        >
+                                                            <!--a href="#" class="text-indigo-600 hover:text-indigo-900">x</a-->
+                                                            <input
+                                                                class="form-check-input appearance-none rounded-full h-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-100 align-center bg-no-repeat bg-center bg-contain cursor-pointer"
+                                                                type="checkbox"
+                                                                name="flexRadioDefault"
+                                                                id="{{item.job}}"
+                                                                v-on:click="
+                                                                    item.selected =
+                                                                        !item.selected
+                                                                "
+                                                            />
+                                                            <!--jet-checkbox name="{{item.count}}" v-model:checked="item.selected" /-->
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <JobCreation v-if="goToJobCreation" @goToFileSelection="onBackJobCreation"/>
-    <div class="bg-white border-b border-gray-200 flex flex-row" v-if="newUploads == false">
-        <fileUpload/>
-    </div>
-    <jet-button v-if="newUploads == true && goToJobCreation == false" v-on:click="renderJobCreation" class="ml-4 float-right border-tl p-4 m-4 border-gray-200">
-        Start New Jobs
-    </jet-button>
-    <jet-button v-if="newUploads == true && goToJobCreation == false" v-on:click="newUploads = !newUploads" class="ml-4 float-right border-tl p-4 m-4 border-gray-200" >
-        Upload New Files
-    </jet-button>
-    <jet-button v-if="newUploads == false" v-on:click="newUploads = !newUploads" class="ml-4 float-right border-tl p-4 m-4 border-gray-200" >
-        Return to Dashboard
-    </jet-button>
+                    <JobCreation
+                        v-if="goToJobCreation"
+                        @goToFileSelection="onBackJobCreation"
+                    />
+                    <div
+                        class="bg-white border-b border-gray-200 flex flex-row"
+                        v-if="newUploads == false"
+                    >
+                        <fileUpload />
+                    </div>
+                    <jet-button
+                        v-if="newUploads == true && goToJobCreation == false && editPop == false"
+                        v-on:click="renderJobCreation"
+                        class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
+                        :disabled="anySelected"
+                    >
+                        Start New Jobs
+                    </jet-button>
+                    <jet-button
+                        v-if="newUploads == true && goToJobCreation == false"
+                        v-on:click="newUploads = !newUploads"
+                        class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
+                    >
+                        Upload New Files
+                    </jet-button>
+                    <jet-button
+                        v-if="
+                            newUploads == true &&
+                            goToJobCreation == false &&
+                            editPop == false
+                        "
+                        v-on:click="edit"
+                        class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
+                        :disabled="anySelected"
+                    >
+                        Edit Selected Files
+                    </jet-button>
+                    <jet-button
+                        v-if="
+                            newUploads == true &&
+                            goToJobCreation == false &&
+                            editPop == true
+                        "
+                        v-on:click="pushEdits"
+                        class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
+                    >
+                        Save
+                    </jet-button>
+                    <jet-button
+                        v-if="newUploads == false"
+                        v-on:click="newUploads = !newUploads"
+                        class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
+                    >
+                        Return to Dashboard
+                    </jet-button>
                 </div>
             </div>
         </div>
@@ -83,90 +238,127 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
-    import AppLayout from '@/Layouts/AppLayout.vue'
-    import Create from '@/Pages/Jobs/Create.vue'
-    import JetButton from '@/Jetstream/Button.vue'
-    import JetInput from '@/Jetstream/Input.vue'
-    import JetCheckbox from '@/Jetstream/Checkbox.vue'
-    import JetLabel from '@/Jetstream/Label.vue'
-    import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
-    import FileUpload from '@/Components/FileUpload.vue'
-    import JobCreation from '@/Pages/Jobs/JobCreation.vue'
+import { defineComponent } from "vue";
+import AppLayout from "@/Layouts/AppLayout.vue";
+import Modal from "@/Pages/Partial/Modal.vue";
+import JetButton from "@/Jetstream/Button.vue";
+import JetInput from "@/Jetstream/Input.vue";
+import JetCheckbox from "@/Jetstream/Checkbox.vue";
+import JetLabel from "@/Jetstream/Label.vue";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+import FileUpload from "@/Components/FileUpload.vue";
+import JobCreation from "@/Pages/Jobs/JobCreation.vue";
 
-    let goToJobCreation = false
-    let newUploads = true
+let goToJobCreation = false;
+let newUploads = true;
+let editPop = false;
+let selected = [];
 
-    export default defineComponent({
-        components: {
-            AppLayout,
-            JetButton,
-            JetInput,
-            JetCheckbox,
-            JetLabel,
-            FileUpload,
-            JobCreation,
+export default defineComponent({
+    components: {
+        AppLayout,
+        JetButton,
+        JetInput,
+        JetCheckbox,
+        JetLabel,
+        FileUpload,
+        JobCreation,
+        Modal,
+    },
+    computed: {
+        filtered() {
+            let se = [];
+            if (this.search !== "") {
+                se = this.items.filter(
+                    (p) =>
+                        p.job
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase()) ||
+                        p.name
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase()) ||
+                        p.series
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase()) ||
+                        p.date
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase()) ||
+                        p.timestarted
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase()) ||
+                        p.latitude
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase()) ||
+                        p.longitude
+                            .toLowerCase()
+                            .includes(this.search.toLowerCase())
+                );
+            } else {
+                se = this.items;
+            }
+            return se;
+        },
+        anySelected() {
+            let e = this.items.filter((p) => p.selected == true);
+            if (e.length > 0) {
+                this.selected = e;
+                //console.log(this.selected);
+                return false;
+            } else return true;
+        },
+    },
+    data() {
+        return {
+            newUploads,
+            goToJobCreation,
+            items: [
+                {
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+            ],
+            search: "",
+            editPop,
+            selected,
+
+        };
+    },
+    methods: {
+        onBackJobCreation: function () {
+            this.goToJobCreation = false;
+            this.newUploads = true;
+            return;
+        },
+        renderJobCreation: function () {
+            this.goToJobCreation = true;
+            return;
+        },
+        edit: function () {
+            this.$emit("editPop");
+            this.editPop = !this.editPop;
+            return;
+        },
+        pushEdits: function () {
+            console.log("savepls");
+            this.editPop = !this.editPop;
 
         },
-        computed: {
-            filtered(){
-                let se = []
-                if(this.search !== '') {
-                    se = this.items.filter(p =>
-                        p.job.toLowerCase().includes(this.search.toLowerCase()) ||
-                        p.name.toLowerCase().includes(this.search.toLowerCase()) ||
-                        p.series.toLowerCase().includes(this.search.toLowerCase()) ||
-                        p.date.toLowerCase().includes(this.search.toLowerCase()) ||
-                        p.timestarted.toLowerCase().includes(this.search.toLowerCase()) ||
-                        p.latitude.toLowerCase().includes(this.search.toLowerCase()) ||
-                        p.longitude.toLowerCase().includes(this.search.toLowerCase())
-
-
-                        )
-                    } else {
-                    se = this.items
-                    }
-                return se
-                }
-            },
-        data() {
-            return {
-                newUploads,
-                goToJobCreation,
-                items: [{
-                    job: 'Central Florida Zoo',
-                    name: 'centralfloridazoo.zip',
-                    series: 'AEI',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },
-                    {
-                    job: 'Arizona Northern Zoo',
-                    name: 'Arizonazoo.zip',
-                    series: 'BIO',
-                    timestarted: '02/07/2022, 10:25pm',
-                    date: '01/01/2011, 12:00pm',
-                    latitude: '02\'03\"40',
-                    longitude: '02\'03\"40',
-                    selected: false
-                    },
-                    ],
-                search: ''
-                }
-            },
-            methods: {
-                onBackJobCreation: function () {
-                    this.goToJobCreation = false
-                    this.newUploads = true
-                    return;
-                },
-                renderJobCreation: function () {
-                    this.goToJobCreation = true
-                    return
-                }
-            }
-    })
+    },
+});
 </script>
