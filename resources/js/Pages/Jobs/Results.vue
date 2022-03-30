@@ -9,7 +9,7 @@
 
                             2D Waveform Spectrogram
 
-                            <div class="flex-row px-4 pt-2">
+                            <div class="flex-row px-4 pt-2 mb-8">
                                 <input
                                 type="file"
                                 class="form-control"
@@ -19,7 +19,7 @@
                                 single
                                 />
                                 <jet-button
-                                class="flex border-tl p-4 border-gray-200 bg-white float-right"
+                                class="flex border-tl pr-4 border-gray-200 bg-white float-right"
                                 v-on:click="createSpectrogram"
                                 >Show Graphs</jet-button
                             >
@@ -339,7 +339,7 @@ export default defineComponent({
 
             //overflow:hidden,
             height: 200,
-            width: 400,
+            width: 600,
             container: "#wave",
             waveColor: "#D2EDD4",
             progressColor: "#46B54D",
