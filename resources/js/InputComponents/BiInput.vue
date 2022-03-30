@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <div class="flex flex-col h-full">
+        <div class="flex flex-col h-full dark:text-black">
             <jet-label class="text-2xl mb-[10px]">
                 BIO Specifications
             </jet-label>

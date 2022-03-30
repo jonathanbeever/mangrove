@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <div class="flex flex-col h-full">
+        <div class="flex flex-col h-full dark:text-black">
             <jet-label class="text-2xl mb-[10px]">
                 NDSI Specifications
             </jet-label>
@@ -188,8 +188,8 @@
                 return
             },
             onChange: function () {
-                if (!this.anthroMaxError && !this.anthroMinError 
-                && !this.bioMaxError && !this.bioMinError 
+                if (!this.anthroMaxError && !this.anthroMinError
+                && !this.bioMaxError && !this.bioMinError
                 && !this.fftWError)
                 {
                     let ndsi = {
