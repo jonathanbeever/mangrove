@@ -49,7 +49,7 @@
                                                             scope="col"
                                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                         >
-                                                            Series
+                                                            Series &amp; Size
                                                         </th>
                                                         <th
                                                             scope="col"
@@ -111,44 +111,56 @@
                                                             </div>
                                                         </td>
                                                         <td
-                                                            class="px-6 py-4 whitespace-nowrap"
+                                                            class="px-6 py-4 whitespace-nowrap dark:text-black"
                                                         >
                                                             <div
                                                                 class="text-sm text-gray-900"
+
                                                             >
                                                                 {{
-                                                                    item.series
+                                                                    item.series || 'N/A'
                                                                 }}
                                                             </div>
+
                                                             <div
                                                                 class="text-sm text-gray-500"
                                                             >
                                                                 {{
-                                                                    item.timestarted
+                                                                    item.size / 1e6 + "MB"
                                                                 }}
                                                             </div>
                                                         </td>
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                                                         >
-                                                            {{ item.date }}
+                                                            {{ new Date(item.lastModified) }}
                                                         </td>
                                                         <td
-                                                            class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium"
+                                                            class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium dark:text-black"
                                                         >
                                                             <div
                                                                 class="text-sm text-gray-500"
+                                                                v-if="item.latitude != null"
                                                             >
                                                                 {{
                                                                     item.latitude
                                                                 }}
                                                             </div>
                                                             <div
+                                                            v-else>
+                                                            0'00"00
+                                                            </div>
+                                                            <div
                                                                 class="text-sm text-gray-500"
+                                                                v-if="item.longitude != null"
                                                             >
                                                                 {{
                                                                     item.longitude
                                                                 }}
+                                                            </div>
+                                                            <div
+                                                            v-else>
+                                                            0'00"00
                                                             </div>
                                                         </td>
                                                         <td
@@ -185,7 +197,7 @@
                         class="bg-white border-b border-gray-200 flex flex-row"
                         v-if="newUploads == false"
                     >
-                        <fileUpload />
+                        <fileUpload :items="items" />
                     </div>
                     <jet-button
                         v-if="newUploads == true && goToJobCreation == false && editPop == false"
@@ -277,22 +289,19 @@ export default defineComponent({
                             .includes(this.search.toLowerCase()) ||
                         p.name
                             .toLowerCase()
-                            .includes(this.search.toLowerCase()) ||
-                        p.series
-                            .toLowerCase()
-                            .includes(this.search.toLowerCase()) ||
-                        p.date
-                            .toLowerCase()
-                            .includes(this.search.toLowerCase()) ||
-                        p.timestarted
-                            .toLowerCase()
-                            .includes(this.search.toLowerCase()) ||
-                        p.latitude
-                            .toLowerCase()
-                            .includes(this.search.toLowerCase()) ||
-                        p.longitude
-                            .toLowerCase()
-                            .includes(this.search.toLowerCase())
+                            .includes(this.search.toLowerCase()) //||
+                        // p.series
+                        //     .toLowerCase()
+                        //     .includes(this.search.toLowerCase()) ||
+                        // new Date(p.lastModified)
+                        //     .toLowerCase()
+                        //     .includes(this.search.toLowerCase()) ||
+                        // p.latitude
+                        //     .toLowerCase()
+                        //     .includes(this.search.toLowerCase()) ||
+                        // p.longitude
+                        //     .toLowerCase()
+                        //     .includes(this.search.toLowerCase())
                 );
             } else {
                 se = this.items;
@@ -305,181 +314,7 @@ export default defineComponent({
             newUploads,
             goToJobCreation,
             somethingSelected: false,
-            items: [
-                {
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },{
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },{
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },{
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },{
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },{
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },{
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },{
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    series: "AEI",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-                {
-                    job: "Arizona Northern Zoo",
-                    name: "Arizonazoo.zip",
-                    series: "BIO",
-                    timestarted: "02/07/2022, 10:25pm",
-                    date: "01/01/2011, 12:00pm",
-                    latitude: "02'03\"40",
-                    longitude: "02'03\"40",
-                    selected: false,
-                },
-            ],
+            items: [],
             search: "",
             editPop,
             selected

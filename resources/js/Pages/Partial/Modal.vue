@@ -3,11 +3,11 @@
         <tr v-for="(item, index) in selected" :key="index">
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-start">
-                    <div class="dark:text-black">
+                    <div class="text-violet-600 dark:text-violet-600">
                         <input
                             v-model="item.job"
                             :placeholder="item.job"
-                            class="text-sm"
+                            class="text-sm "
                         />
                         <div class="text-sm text-gray-500">
                             {{ item.name }}
@@ -15,34 +15,37 @@
                     </div>
                 </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td class="px-6 py-4 whitespace-nowrap dark:text-violet-600">
                 <input
                     v-model="item.series"
-                    :placeholder="item.series"
-                    class="text-sm text-gray-900"
+                    :placeholder="item.series || 'Series'"
+                    class="text-sm text-violet-600 dark:text-violet-600"
                 />
 
                 <div class="text-sm text-gray-500">
-                    {{ item.timestarted }}
+                    {{ item.size / 1e6 + "MB" }}
                 </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{ item.date }}
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+                ---
             </td>
             <td
                 class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium"
             >
+            <div class="flex flex-col">
+            <div class="pb-2">
                 <input
                     v-model="item.latitude"
-                    :placeholder="item.latitude"
-                    class="text-sm text-gray-500"
+                    :placeholder="item.latitude || 'Latitude' "
+                    class="text-sm text-violet-600 dark:text-violet-600"
                 />
-
+            </div>
                 <input
                     v-model="item.longitude"
-                    :placeholder="item.longitude"
-                    class="text-sm text-gray-500"
+                    :placeholder="item.longitude || 'Longitude'"
+                    class="text-sm text-violet-600 dark:text-violet-600"
                 />
+            </div>
             </td>
             <td class="px-8 py-4 whitespace-nowrap text-sm font-medium">
                 <!--a href="#" class="text-indigo-600 hover:text-indigo-900">x</a-->
