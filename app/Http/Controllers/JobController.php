@@ -133,6 +133,6 @@ class JobController extends Controller
      */
     public function queueJob(JobInput $job): void
     {
-        ProcessSoundData::dispatch($job);
+        ProcessSoundData::dispatch($job, auth()->user());
     }
 }
