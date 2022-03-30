@@ -12,20 +12,6 @@
                     <div
                         class="bg-white border-b border-gray-200 flex flex-col"
                     >
-                        <div>
-                            <jet-button
-                                class="float-left border-tl p-4 m-4 border-gray-200"
-                                v-on:click="deleteFinished(sortedArray)"
-                            >
-                                Clear Finished
-                            </jet-button>
-                            <jet-button
-                                class="float-right border-tl p-4 m-4 border-gray-200"
-                                v-on:click="deleteArray(0)"
-                            >
-                                Delete Caching
-                            </jet-button>
-                        </div>
                         <div
                             class="p-6 border-t border-gray-200 md:border-t-0 md:border-l col-span-4"
                         >
@@ -48,25 +34,18 @@
                                                             scope="col"
                                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                         >
-                                                            Job Description
+                                                            Job Name
                                                         </th>
                                                         <th
                                                             scope="col"
                                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                         >
-                                                            Index Used
+                                                            Indices Used
                                                         </th>
                                                         <th
                                                             scope="col"
                                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                         >
-                                                            Author
-                                                        </th>
-                                                        <th
-                                                            scope="col"
-                                                            class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
-                                                        >
-                                                            Status
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -74,7 +53,7 @@
                                                     class="bg-white divide-y divide-gray-200"
                                                 >
                                                     <tr
-                                                        v-for="item in sortedArray"
+                                                        v-for="item in items"
                                                         :key="item"
                                                     >
                                                         <td
@@ -84,13 +63,6 @@
                                                                 class="flex items-start"
                                                             >
                                                                 <div class="">
-                                                                    <div
-                                                                        class="text-sm font-medium text-gray-900"
-                                                                    >
-                                                                        {{
-                                                                            item.job
-                                                                        }}
-                                                                    </div>
                                                                     <div
                                                                         class="text-sm text-gray-500"
                                                                     >
@@ -107,50 +79,14 @@
                                                             <div
                                                                 class="text-sm text-gray-900"
                                                             >
-                                                                {{ item.index }}
-                                                            </div>
-                                                            <div
-                                                                class="text-sm text-gray-500"
-                                                            >
-                                                                {{
-                                                                    item.timestarted
-                                                                }}
+                                                                {{item.indicesUsed.join(", ")}}
                                                             </div>
                                                         </td>
                                                         <td
-                                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                                            class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            {{ item.author }}
-                                                        </td>
-                                                        <td
-                                                            class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
-                                                        >
-                                                            <div
-                                                                class="flex justify-between"
-                                                            >
-                                                                <progress
-                                                                    class="h-2.5 rounded-full mt-3"
-                                                                    :value="
-                                                                        item.percent
-                                                                    "
-                                                                    :max="100"
-                                                                />
-                                                                <span
-                                                                    v-if="
-                                                                        item.percent ==
-                                                                        100
-                                                                    "
-                                                                    class="text-xl font-medium text-green-600"
-                                                                    >Done</span
-                                                                >
-                                                                <span
-                                                                    v-else
-                                                                    class="text-xl font-medium text-blue-700"
-                                                                    >{{
-                                                                        item.percent
-                                                                    }}%</span
-                                                                >
-                                                                <!--progress v-if="item.percent==100" class="bg-green-600 h-2.5 rounded-full" /-->
+                                                            <div class="flex justify-end">
+                                                                <jet-button v-on:click="jobClicked(item)">See Results</jet-button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -172,6 +108,8 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Jetstream/Button.vue";
+import { usePage } from '@inertiajs/inertia-vue3'
+
 
 export default defineComponent({
     components: {
@@ -180,75 +118,42 @@ export default defineComponent({
     },
     data() {
         return {
-            items: [
-                {
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    index: "RMS",
-                    timestarted: "303030",
-                    author: "Seth",
-                    status: false,
-                    percent: 43,
-                },
-                {
-                    job: "Probably Florida Zoo",
-                    name: "probsafloridazoo.zip",
-                    index: "Spaghetti",
-                    timestarted: "03/34/2022, 10:02pm",
-                    author: "Aidan",
-                    status: true,
-                    percent: 32,
-                },
-                {
-                    job: "Central Florida Zoo",
-                    name: "centralfloridazoo.zip",
-                    index: "RMS",
-                    timestarted: "303030",
-                    author: "Seth",
-                    status: false,
-                    percent: 2,
-                },
-                {
-                    job: "Probably Florida Zoo",
-                    name: "probsafloridazoo.zip",
-                    index: "Spaghetti",
-                    timestarted: "03/34/2022, 10:02pm",
-                    author: "Aidan",
-                    status: true,
-                    percent: 100,
-                },
-            ],
+            items: []
         };
     },
-
-    computed: {
-        sortedArray: function () {
-            function compare(a, b) {
-                if (a.percent < b.percent) return -1;
-                if (a.percent > b.percent) return 1;
-                return 0;
-            }
-
-            return this.items.sort(compare);
-        },
-    },
-
-    methods: {
-        deleteArray(index) {
-            this.items.splice(index, 100);
-        },
-        deleteFinished(e) {
-            let temp = 1000;
-            for (let i = 0; i < e.length; i++) {
-                if (e[i].percent == 100) {
-                    temp = i;
-                    console.log(temp);
-                    break;
+    mounted() {
+        const findIndicesUsed = (object) => {
+            let indicesUsed = []
+            Object.keys(object).map(key => {
+                if (key.includes('aci') && object[key] != null && !indicesUsed.includes('ACI')) {
+                    indicesUsed.push('ACI')
                 }
-            }
+                if (key.includes('adi') && object[key] != null && !indicesUsed.includes('ADI')) {
+                    indicesUsed.push('ADI')
+                }
+                if (key.includes('aei') && object[key] != null && !indicesUsed.includes('AEI')) {
+                    indicesUsed.push('AEI')
+                }
+                if (key.includes('bi') && object[key] != null && !indicesUsed.includes('BIO')) {
+                    indicesUsed.push('BIO')
+                }
+                if (key.includes('ndsi') && object[key] != null && !indicesUsed.includes('NDSI')) {
+                    indicesUsed.push('NDSI')
+                }
+                if (key.includes('rms') && object[key] != null && !indicesUsed.includes('RMS')) {
+                    indicesUsed.push('RMS')
+                }
+            })
+            return indicesUsed
+        };
 
-            if (temp != 1000) this.items.splice(temp, 100);
-        },
+        this.items = usePage().props.value.jobs
+        this.items.forEach((element, ind) => this.items[ind]['indicesUsed'] = findIndicesUsed(element));
     },
+    methods: {
+        jobClicked: function (item) {
+            window.location.replace(route('jobs.show', item.id))
+        }
+    }
 });
 </script>
