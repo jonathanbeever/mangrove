@@ -2,15 +2,15 @@
     <div class="w-full">
         <div class="flex flex-col h-full">
             <jet-label class="text-2xl mb-[10px]">
-                Set Specifications
+                BIO Specifications
             </jet-label>
             <jet-label class="mt-[10px]">
                 minFreq
             </jet-label>
-            <jet-label v-on:blur="validateFreq()" v-if="minError" class="text-red-500">
+            <jet-label v-if="minError" class="text-red-500">
                 {{errorMessages.minFreq}}
             </jet-label>
-            <jet-input :value="minFreq" v-model="minFreq">
+            <jet-input :value="minFreq" v-on:blur="validateFreq()" v-model="minFreq">
 
             </jet-input>
             <jet-label class="mt-[10px]">
@@ -89,10 +89,14 @@
                 this.minFreq = specificationDefaults.minFreq;
                 this.maxFreq = specificationDefaults.maxFreq;
                 this.fftW = specificationDefaults.fftW;
+                this.minError = false
+                this.maxError = false
+                this.fftwError = false
+                this.onChange()
                 return
             },
             validateFreq: function () {
-                if (isNaN(minFreq)) {
+                if (isNaN(this.minFreq)) {
                     this.minError = true
                     return
                 } else if (this.minFreq < 0 || this.minFreq >= this.maxFreq) {
@@ -108,6 +112,7 @@
                 }
                 this.maxError = false;
                 this.minError = false;
+                this.onChange()
                 return
             },
             validateFftw: function () {
@@ -119,6 +124,19 @@
                     return
                 }
                 this.fftwError = false;
+                this.onChange()
+                return
+            },
+            onChange: function () {
+                if (!this.minError && !this.maxError && !this.fftwError)
+                {
+                    let bi = {
+                        fftw: this.fftW,
+                        max_freq: this.maxFreq,
+                        min_freq: this.minFreq
+                    }
+                    this.$emit('biChanged', bi)
+                }
                 return
             }
         }

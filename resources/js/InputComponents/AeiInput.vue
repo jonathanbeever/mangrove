@@ -2,19 +2,19 @@
     <div class="w-full">
         <div class="flex flex-col h-full">
             <jet-label class="text-2xl mb-[10px]">
-                Set Specifications
+                AEI Specifications
             </jet-label>
             <jet-label class="mt-[10px]">
                 maxFreq
             </jet-label>
-            <jet-label v-if="maxError" class="text-red-500">
+            <jet-label v-if="maxFreqError" class="text-red-500">
                 {{errorMessages.maxFreq}}
             </jet-label>
             <jet-input v-on:blur="validateFreq()" :value="maxFreq" v-model="maxFreq">
 
             </jet-input>
             <jet-label class="mt-[10px]">
-                dbtThreshhold
+                dbThreshhold
             </jet-label>
             <jet-input :value="dbtThreshhold" v-model="dbtThreshhold">
 
@@ -89,14 +89,13 @@
             },
             validateFreq: function () {
                 if (isNaN(this.maxFreq)) {
-                    this.maxError = true
+                    this.maxFreqError = true
                     return
                 } else if (this.maxFreq < 0) {
-                    this.maxError = true
+                    this.maxFreqError = true
                     return
                 }
-                this.maxError = false;
-                onChange()
+                this.maxFreqError = false;
                 return
             },
             validateFreqStep: function () {
