@@ -10,7 +10,7 @@
     import JetButton from '@/Jetstream/Button.vue'
     import JetLabel from '@/Jetstream/Label.vue'
     import JetInput from '@/Jetstream/Input.vue'
-    import { Chart, Legend, BarController, LineController, Title, CategoryScale, LinearScale, PointElement, LineElement, BarElement } from 'chart.js'
+    import { Chart, Legend, BarController, LineController, Title, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip } from 'chart.js'
 
     const makeRange = (start, end) => {
         return Array(end - start + 1).fill().map((_, idx) => start + idx)
@@ -29,7 +29,7 @@
             }
         },
         mounted: function () {
-            Chart.register(LineController, Title, Legend, BarController, CategoryScale, LinearScale, PointElement, LineElement, BarElement)
+            Chart.register(LineController, Title, Legend, BarController, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip)
             var ctx = document.getElementById(this.id).getContext('2d')
 
             const chartLabels = this.xBarLabels;
@@ -49,6 +49,12 @@
                 }]
             }
             var chartOptions = {
+                tooltips:{
+                    mode: 'index'
+                },
+                hover: {
+                    mode: 'index'
+                },
                 plugins: {
                     legend: {
                         display: false,
