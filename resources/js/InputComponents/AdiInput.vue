@@ -83,6 +83,8 @@
                 this.maxFreq = specificationDefaults.maxFreq
                 this.dbtThreshhold = specificationDefaults.dbtThreshhold
                 this.freqStep = specificationDefaults.freqStep
+                this.maxFreqError = false
+                this.freqStepError = false
                 onChange();
             },
             validateFreq: function () {
