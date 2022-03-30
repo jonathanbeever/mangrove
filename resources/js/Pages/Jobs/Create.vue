@@ -8,9 +8,9 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800 ">
                     <div
-                        class="bg-white border-b border-gray-200 flex flex-col"
+                        class="bg-white border-b border-gray-200 flex flex-col dark:bg-slate-800"
                         v-if="newUploads && !goToJobCreation"
                     >
                         <div class="px-8 py-6">Sound Files</div>
@@ -27,9 +27,9 @@
                             <div
                                 class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96"
                             >
-                                <div class="-my-2 sm:-mx-6 lg:-mx-8">
+                                <div class="">
                                     <div
-                                        class="py-4 align-middle inline-block min-w-full sm:px-6 lg:px-8"
+                                        class="py-4 align-middle inline-block min-w-full"
                                     >
                                         <div
                                             class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
@@ -313,6 +313,159 @@ export default defineComponent({
             goToJobCreation,
             items: [
                 {
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },{
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },{
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },{
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },{
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },{
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },{
+                    job: "Central Florida Zoo",
+                    name: "centralfloridazoo.zip",
+                    series: "AEI",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },
+                {
+                    job: "Arizona Northern Zoo",
+                    name: "Arizonazoo.zip",
+                    series: "BIO",
+                    timestarted: "02/07/2022, 10:25pm",
+                    date: "01/01/2011, 12:00pm",
+                    latitude: "02'03\"40",
+                    longitude: "02'03\"40",
+                    selected: false,
+                },{
                     job: "Central Florida Zoo",
                     name: "centralfloridazoo.zip",
                     series: "AEI",
