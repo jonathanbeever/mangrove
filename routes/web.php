@@ -32,12 +32,4 @@ Route::group(['middleware' => [AUTH, 'verified']], static function () {
     Route::get('/about', static function () {
         return Inertia::render('About');
     })->name('about');
-
-    Route::get('/sound/{file}', static function ($file) {
-        return File::get('../sounds/' . $file);
-    })->name('sound');
-
-    Route::get('/sound-data', static function () {
-        return File::get('../sounds/acousticindex.csv');
-    })->name('sound-data');
 });
