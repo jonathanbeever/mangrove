@@ -65,8 +65,8 @@ class CreateJob implements CreateJobContract
             $job->ndsiInput()->save(NdsiInput::create($input['ndsi']));
         }
 
-        if (isset($input['rms'])) {
-            $job->rmsInput()->save(RmsInput::create($input['rms']));
+        if (isset($input['rms']) && $input['rms'] === TRUE) {
+            $job->rmsInput()->save(RmsInput::create());
         }
     }
 
