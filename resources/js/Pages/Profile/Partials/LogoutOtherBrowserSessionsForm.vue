@@ -5,7 +5,9 @@
         </template>
 
         <template #description>
+        <div class="dark:text-white">
             Manage and log out your active sessions on other browsers and devices.
+            </div>
         </template>
 
         <template #content>

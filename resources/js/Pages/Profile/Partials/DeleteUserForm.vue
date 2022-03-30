@@ -5,7 +5,9 @@
         </template>
 
         <template #description>
+        <div class="dark:text-white">
             Permanently delete your account.
+        </div>
         </template>
 
         <template #content>

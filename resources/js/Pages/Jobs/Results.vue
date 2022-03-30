@@ -1,14 +1,15 @@
 <template>
     <app-layout title="Results">
 
-        <div class="flex flex-col">
+        <div class="flex flex-col dark:text-black">
             <div class="py-4 flex flex-row">
-                <div class="w-1/3 sm:px-6 lg:px-4 h-screen">
+                <div class="w-1/3 px-4">
                     <div class="bg-white shadow-xl sm:rounded-lg h-full">
                         <div class="pb-2 pl-2 pt-2 h-full">
+
                             2D Waveform Spectrogram
 
-                            <div class="flex-row px-4">
+                            <div class="flex-row px-4 pt-2">
                                 <input
                                 type="file"
                                 class="form-control"
@@ -17,18 +18,13 @@
                                 v-on:change="onFileChange($event)"
                                 single
                                 />
-                            </div>
-                            <jet-button
-                                class="float-left border-tl p-4 m-4 border-gray-200 bg-white"
+                                <jet-button
+                                class="flex border-tl p-4 border-gray-200 bg-white float-right"
                                 v-on:click="createSpectrogram"
                                 >Show Graphs</jet-button
                             >
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <div id="wave" class="p-2"></div>
+                            </div>
+                            <div id="wave" class="p-2"/>
                         </div>
                     </div>
 
@@ -341,14 +337,18 @@ export default defineComponent({
     mounted() {
         this.wavesurfer = WaveSurfer.create({
 
-            height:500,
+            //overflow:hidden,
+            height: 200,
+            width: 400,
             container: "#wave",
             waveColor: "#D2EDD4",
             progressColor: "#46B54D",
             backend: "MediaElement",
+
             plugins: [
                 SpectrogramPlugin.create({
-                    height:500,
+                    height:600,
+                    width:600,
                     container: "#wave",
                     labels: true,
                     colorMap: this.colorMap,
