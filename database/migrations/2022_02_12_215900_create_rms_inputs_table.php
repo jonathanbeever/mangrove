@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('rms_inputs', static function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignIdFor(JobInput::class)->constrained();
+            $table->foreignIdFor(JobInput::class)->nullable()->constrained();
             $table->json('results')->nullable();
         });
     }

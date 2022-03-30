@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('adi_inputs', static function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignIdFor(JobInput::class)->constrained();
+            $table->foreignIdFor(JobInput::class)->nullable()->constrained();
             $table->integer('db_threshold');
             $table->integer('freq_step');
             $table->integer('max_freq');

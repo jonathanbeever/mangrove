@@ -78,6 +78,6 @@ class CreateJob implements CreateJobContract
      */
     public function saveJobToUser(JobInput $job): void
     {
-        auth()->user()->jobs->save($job);
+        auth()->user()?->jobs()->save($job);
     }
 }
