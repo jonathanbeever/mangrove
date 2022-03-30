@@ -27,8 +27,8 @@
                     </div>
                     <NdsiInput v-if="indexCurrent == 'NDSI'" @ndsiChanged="ndsiChanged($event)"/>
                     <AciInput v-if="indexCurrent == 'ACI'"/>
-                    <AdiInput v-if="indexCurrent == 'ADI'"/>
-                    <AeiInput v-if="indexCurrent == 'AEI'"/>
+                    <AdiInput v-if="indexCurrent == 'ADI'" @adiChanged="adiChanged($event)"/>
+                    <AeiInput v-if="indexCurrent == 'AEI'" @aeiChanged="aeiChanged($event)"/>
                     <BiInput v-if="indexCurrent == 'BIO'" @biChanged="biChanged($event)"/>
                 </div>
                 <div class="w-2/3 flex flex-col align-end h-[500px]">
@@ -39,7 +39,7 @@
                         {{descriptionText}}
                     </jet-label>
                     <div class="flex w-full justify-end content-end align-bottom">
-                        <jet-button class="flex w-1/3 justify-center align-bottom" :disabled="finishDisabled">
+                        <jet-button class="flex w-1/3 justify-center align-bottom" v-on:click="postJobData()" :disabled="finishDisabled">
                             Finish
                         </jet-button>
                     </div>
@@ -60,11 +60,18 @@
     import AdiInput from '@/InputComponents/AdiInput.vue'
     import AeiInput from '@/InputComponents/AeiInput.vue'
     import BiInput from '@/InputComponents/BiInput.vue'
+    import { Inertia } from '@inertiajs/inertia'
 
     let descriptionText = 'The selected specifications will influence the ouput of the job to reflect the values selected. Specifications are job specific and cannot be altered after the creation of a job.  Default values have been pre-selected to provide general output.'
     let nextDisabled = false
     let prevDisabled = true
     let finishDisabled = true
+    let aci = null
+    let ndsi = null
+    let bi = null
+    let aei = null
+    let adi = null
+    let rms = null
 
     export default defineComponent({
         components: {
@@ -90,10 +97,54 @@
         },
         mounted() {
             this.indexCurrent = this.index[0];
-            if (this.index.length == 1) {   
+            this.aci = null
+            if (this.index.length == 1) {
                 this.nextDisabled = true
                 this.prevDisabled = true
                 this.finishDisabled = false
+            }
+            if (this.index.includes('NDSI')) {
+                this.ndsi = {
+                    anthro_max: 2000,
+                    anthro_min: 1000,
+                    bio_max: 11000,
+                    bio_min: 2000,
+                    fftw: 1024
+                }
+            } else {
+                this.ndsi = null
+            }
+            if (this.index.includes('BIO')) {
+                this.bi = {
+                    fftw: 512,
+                    max_freq: 8000,
+                    min_freq: 2000
+                }
+            } else {
+                this.bi = null
+            }
+            if (this.index.includes('AEI')) {
+                this.aei = {
+                    db_threshhold: -50,
+                    freq_step: 1000,
+                    max_freq: 10000
+                }
+            } else {
+                this.aei = null
+            }
+            if (this.index.includes('ADI')) {
+                this.adi = {
+                    db_threshhold: -50,
+                    freq_step: 1000,
+                    max_freq: 10000
+                }
+            } else {
+                this.adi = null
+            }
+            if (this.index.includes('RMS')) {
+                this.rms = true
+            } else {
+                this.rms = null
             }
         },
         methods: {
@@ -117,10 +168,28 @@
                 this.nextDisabled = false
             },
             ndsiChanged: function (ndsi) {
-                console.log(ndsi)
+                this.ndsi = ndsi
             },
             biChanged: function (bi) {
-                console.log(bi)
+                this.bi = bi
+            },
+            adiChanged: function (adi) {
+                this.adi = adi
+            },
+            aeiChanged: function (aei) {
+                this.aei = aei
+            },
+            postJobData: function () {
+                let request = {
+                    name: "she do be named",
+                    aci: this.aci,
+                    adi: this.adi,
+                    aei: this.aei,
+                    bi: this.bi,
+                    ndsi: this.ndsi,
+                    rms: this.rms
+                }
+                Inertia.post(route('jobs.store'), request)
             }
         }
     } )
