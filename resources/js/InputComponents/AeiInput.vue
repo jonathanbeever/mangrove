@@ -16,7 +16,7 @@
             <jet-label class="mt-[10px]">
                 dbThreshhold
             </jet-label>
-            <jet-input :value="dbtThreshhold" v-model="dbtThreshhold">
+            <jet-input :value="dbtThreshhold" v-on:change="onChange()" v-model="dbtThreshhold">
 
             </jet-input>
             <jet-label class="mt-[10px]">
@@ -85,7 +85,7 @@
                 this.freqStep = specificationDefaults.freqStep
                 this.maxFreqError = false
                 this.freqStepError = false
-                onChange();
+                this.onChange();
             },
             validateFreq: function () {
                 if (isNaN(this.maxFreq)) {
@@ -96,6 +96,7 @@
                     return
                 }
                 this.maxFreqError = false;
+                this.onChange();
                 return
             },
             validateFreqStep: function () {
@@ -107,7 +108,7 @@
                     return
                 }
                 this.freqStepError = false;
-                onChange()
+                this.onChange();
                 return
             },
              onChange: function(){
@@ -115,7 +116,7 @@
                 {
                     let aei = {
                         db_threshhold: this.dbtThreshhold,
-                        freqStep: this.freqStep,
+                        freq_step: this.freqStep,
                         max_freq: this.maxFreq,
                     }
                     this.$emit("aeiChanged", aei)
