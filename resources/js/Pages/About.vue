@@ -8,7 +8,7 @@
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800">
                     <div class="border-gray-200 flex flex-row">
                         <div class="p-4 m-4 flex flex-col">
                             <logo />

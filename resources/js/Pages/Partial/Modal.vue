@@ -3,7 +3,7 @@
         <tr v-for="(item, index) in selected" :key="index">
             <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-start">
-                    <div class="">
+                    <div class="dark:text-black">
                         <input
                             v-model="item.job"
                             :placeholder="item.job"
@@ -53,7 +53,7 @@
                     id="{{item.job}}"
                     v-on:click="item.selected = !item.selected"
                 /-->
-                <div class="text-center cursor-pointer" v-on:click="removeItem(index)">
+                <div class="text-center cursor-pointer dark:text-red-900" v-on:click="removeItem(index)">
                 x
                 </div>
                 <!--jet-checkbox name="{{item.count}}" v-model:checked="item.selected" /-->

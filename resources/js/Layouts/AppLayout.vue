@@ -4,8 +4,8 @@
 
         <jet-banner />
 
-        <div class="min-h-screen bg-gray-100">
-            <nav class="bg-white border-b border-gray-100">
+        <div class="min-h-screen bg-gray-100 dark:bg-slate-900 dark:text-white">
+            <nav class="bg-white border-b border-gray-100 dark:bg-slate-800">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -17,17 +17,18 @@
                                 </Link>
                             </div>
 
+
                             <!-- Navigation Links -->
 
                             <div class="hidden space-x-48 sm:-my-px sm:ml-10 sm:flex">
                                 <!--TODO: edit to fill in with routes-->
-                                <jet-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
+                                <jet-nav-link class="dark:text-gray-200" :href="route('jobs.create')" :active="route().current('jobs.create')">
                                     Create Jobs
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('jobs.index')" :active="route().current('jobs.index')">
+                                <jet-nav-link class="dark:text-gray-200" :href="route('jobs.index')" :active="route().current('jobs.index')">
                                     Job Queue
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('about')" :active="route().current('about')">
+                                <jet-nav-link class="dark:text-gray-200" :href="route('about')" :active="route().current('about')">
                                     About
                                 </jet-nav-link>
                             </div>
