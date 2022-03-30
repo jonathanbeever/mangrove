@@ -63,7 +63,7 @@
     import { Inertia } from '@inertiajs/inertia'
 
     let descriptionText = 'The selected specifications will influence the ouput of the job to reflect the values selected. Specifications are job specific and cannot be altered after the creation of a job.  Default values have been pre-selected to provide general output.'
-    let nextDisabled = false
+    let nextDisabled = true
     let prevDisabled = true
     let finishDisabled = true
     let aci = null
@@ -102,6 +102,8 @@
                 this.nextDisabled = true
                 this.prevDisabled = true
                 this.finishDisabled = false
+            } else {
+                this.nextDisabled = false
             }
             if (this.index.includes('NDSI')) {
                 this.ndsi = {
