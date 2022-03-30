@@ -12,9 +12,9 @@ return new class extends Migration
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('rjobs', function (Blueprint $table) {
+        Schema::create('job_inputs', static function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->foreignIdFor(User::class)->constrained();
@@ -28,8 +28,8 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('rjobs');
+        Schema::dropIfExists('job_inputs');
     }
 };

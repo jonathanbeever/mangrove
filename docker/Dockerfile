@@ -55,7 +55,8 @@ RUN apt-get install -y libcurl4-gnutls-dev libxml2-dev libssl-dev libgit2-dev di
     && apt-key adv --homedir ~/.gnupg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys F142A4D99F16EB04 \
     && echo "deb https://ppa.launchpadcontent.net/c2d4u.team/c2d4u4.0+/ubuntu focal main" > /etc/apt/sources.list.d/r-project-packages.list \
     && apt-get update \
-    && apt-get install -y r-base r-base-dev r-cran-tuner r-cran-devtools r-cran-rjson
+    && apt-get install -y r-base r-base-dev r-cran-tuner r-cran-devtools r-cran-rjson r-cran-vegan r-cran-seewave r-cran-permute \
+     r-cran-rcpp r-cran-gsw r-cran-ineq r-cran-oce r-cran-pracma
 COPY install-deps.R /tmp/install-deps.R
 RUN Rscript /tmp/install-deps.R
 

@@ -2,15 +2,15 @@
 
 namespace App\Contracts\Job;
 
-use App\Models\Job;
+use App\Models\JobInput;
 
 interface DeleteJobContract
 {
     /**
-     * Delete a Job.
+     * Delete a JobInput.
      *
-     * @param Job $job
+     * @param JobInput $job
      * @return bool
      */
-    public function delete(Job $job): bool;
+    public function delete(JobInput $job): bool;
 }

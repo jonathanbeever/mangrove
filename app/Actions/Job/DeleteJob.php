@@ -3,7 +3,7 @@
 namespace App\Actions\Job;
 
 use App\Contracts\Job\DeleteJobContract;
-use App\Models\Job;
+use App\Models\JobInput;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -13,13 +13,13 @@ class DeleteJob implements DeleteJobContract
     /**
      * Delete a promotion and cascade delete references.
      *
-     * @param Job $job
+     * @param JobInput $job
      * @return bool
      */
-    public function delete(Job $job): bool
+    public function delete(JobInput $job): bool
     {
         try {
-            DB::transaction(function () use ($job) {
+            DB::transaction(static function () use ($job) {
                 $job->delete();
             });
         } catch (Throwable) {

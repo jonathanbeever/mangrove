@@ -10,8 +10,8 @@ use App\Contracts\Job\UpdateJobContract;
 use App\Contracts\Job\UpdateJobResponseContract;
 use App\Http\Requests\Job\StoreJobRequest;
 use App\Http\Requests\Job\UpdateJobRequest;
-use App\Jobs\ProcessSingleSoundFile;
-use App\Models\Job;
+use App\Jobs\ProcessSoundData;
+use App\Models\JobInput;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -50,7 +50,14 @@ class JobController extends Controller
      */
     public function store(StoreJobRequest $request, CreateJobContract $contract): CreateJobResponseContract
     {
-        $contract->create($request->validated());
+        $job = $contract->create($request->validated());
+
+        if ($job !== NULL) {
+            $this->queueJob($job);
+            session()->flash('success', 'Successfully created and queued job!');
+        } else {
+            session()->flash('failure', 'Failed to create job.');
+        }
 
         return app(CreateJobResponseContract::class);
     }
@@ -58,10 +65,10 @@ class JobController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Job $job
+     * @param JobInput $job
      * @return Response
      */
-    public function show(Job $job): Response
+    public function show(JobInput $job): Response
     {
         return Inertia::render('Jobs/Show', [
             'jobs' => $job
@@ -71,10 +78,10 @@ class JobController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Job $job
+     * @param JobInput $job
      * @return Response
      */
-    public function edit(Job $job): Response
+    public function edit(JobInput $job): Response
     {
         return Inertia::render('Jobs/Edit', [
             'jobs' => $job
@@ -85,11 +92,11 @@ class JobController extends Controller
      * Update the specified resource in storage.
      *
      * @param UpdateJobRequest $request
-     * @param Job $job
+     * @param JobInput $job
      * @param UpdateJobContract $contract
      * @return UpdateJobResponseContract
      */
-    public function update(UpdateJobRequest $request, Job $job, UpdateJobContract $contract): UpdateJobResponseContract
+    public function update(UpdateJobRequest $request, JobInput $job, UpdateJobContract $contract): UpdateJobResponseContract
     {
         if ($contract->update($request->validated(), $job)) {
             session()->flash('success', 'Successfully updated job!');
@@ -103,29 +110,29 @@ class JobController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Job $job
+     * @param JobInput $job
      * @param DeleteJobContract $contract
      * @return DeleteJobResponseContract
      */
-    public function destroy(Job $job, DeleteJobContract $contract): DeleteJobResponseContract
+    public function destroy(JobInput $job, DeleteJobContract $contract): DeleteJobResponseContract
     {
         if ($contract->delete($job)) {
-            session()->flash('success', 'Successfully deleted promotion!');
+            session()->flash('success', 'Successfully deleted job!');
         } else {
-            session()->flash('failure', 'Failed to delete promotion.');
+            session()->flash('failure', 'Failed to delete job.');
         }
 
         return app(DeleteJobResponseContract::class);
     }
 
     /**
-     * Execute the specified resource.
+     * Queue the specified job to be executed.
      *
-     * @param Job $job
+     * @param JobInput $job
      * @return void
      */
-    public function execute(Job $job): void
+    public function queueJob(JobInput $job): void
     {
-        ProcessSingleSoundFile::dispatch($job);
+        ProcessSoundData::dispatch($job);
     }
 }

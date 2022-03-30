@@ -2,15 +2,15 @@
 
 namespace App\Contracts\Job;
 
-use App\Models\Job;
+use App\Models\JobInput;
 
 interface CreateJobContract
 {
     /**
-     * Create a Job.
+     * Create a JobInput.
      *
      * @param array $input
-     * @return Job|null
+     * @return JobInput|null
      */
-    public function create(array $input): ?Job;
+    public function create(array $input): ?JobInput;
 }

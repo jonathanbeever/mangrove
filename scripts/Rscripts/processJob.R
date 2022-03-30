@@ -1,51 +1,57 @@
 library("rjson")
 library("tuneR")
+library("soundecology")
 
 runJob <- function(job) {
-    if (job$spec$type != "rms") {
-      devtools::install_github("jonathanbeever/soundecology", ref="a78393ab9929955a0151e5766a08bfbdef168ecd", subdir="soundecology", quiet = TRUE)
-      library("soundecology")
-    }
+    result <- list("aci" = NULL, "adi" = NULL, "aei" = NULL, "bi" = NULL, "ndsi" = NULL, "rms" = NULL)
 
-    soundfile <- readWave(job$input$path)
-
-    if (job$spec$type == "aci") {
-      maxFreq <- if (job$spec$maxFreq >= 0) job$spec$maxFreq else job$input$sampleRateHz / 2
-      result <- acoustic_complexity(soundfile,
-                                    minFreq = job$spec$minFreq,
-                                    maxFreq = maxFreq,
-                                    j = job$spec$j,
-                                    fft_w = job$spec$fftW,
-                                    matrix = FALSE,
-                                    bands = TRUE)
-    } else if (job$spec$type == "adi") {
-      result <- acoustic_diversity(soundfile,
-                                   max_freq = job$spec$maxFreq,
-                                   db_threshold = job$spec$dbThreshold,
-                                   freq_step = job$spec$freqStep,
-                                   shannon = job$spec$shannon)
-    } else if (job$spec$type == "aei") {
-      result <- acoustic_evenness(soundfile,
-                                  max_freq = job$spec$maxFreq,
-                                  db_threshold = job$spec$dbThreshold,
-                                  freq_step = job$spec$freqStep)
-    } else if (job$spec$type == "bi") {
-      result <- bioacoustic_index(soundfile,
-                                  min_freq = job$spec$minFreq,
-                                  max_freq = job$spec$maxFreq,
-                                  fft_w = job$spec$fftW)
-    } else if (job$spec$type == "ndsi") {
-      result <- ndsi(soundfile,
-                     fft_w = 1024,
-                     anthro_min = 1000,
-                     anthro_max = 2000,
-                     bio_min = 2000,
-                     bio_max = 11000)
-    } else if (job$spec$type == "rms") {
-        rmsL <- sqrt(mean(soundfile@left^2))
-        rmsR <- sqrt(mean(soundfile@right^2))
-
-        result <- list(rmsL = rmsL, rmsR = rmsR)
+    for (input in job$inputs) {
+        if (input$type == "aci") {
+            result[["aci"]] <- multiple_sounds(directory = job$meta$path,
+                                               soundindex = input$name,
+                                               no_cores = job$meta$cores,
+                                               min_freq = input$min_freq,
+                                               max_freq = input$max_freq,
+                                               j = input$j,
+                                               fft_w = input$fftw,
+                                               matrix = FALSE,
+                                               bands = TRUE)
+        } else if (input$type == "adi") {
+            result[["adi"]] <- multiple_sounds(directory = job$meta$path,
+                                               soundindex = input$name,
+                                               no_cores = job$meta$cores,
+                                               max_freq = input$max_freq,
+                                               db_threshold = input$db_threshold,
+                                               freq_step = input$freq_step,
+                                               shannon = input$shannon)
+        } else if (input$type == "aei") {
+            result[["aei"]] <- multiple_sounds(directory = job$meta$path,
+                                               soundindex = input$name,
+                                               no_cores = job$meta$cores,
+                                               max_freq = input$max_freq,
+                                               db_threshold = input$db_threshold,
+                                               freq_step = input$freq_step)
+        } else if (input$type == "bi") {
+            result[["bi"]] <- multiple_sounds(directory = job$meta$path,
+                                              soundindex = input$name,
+                                              no_cores = job$meta$cores,
+                                              min_freq = input$min_freq,
+                                              max_freq = input$max_freq,
+                                              fft_w = input$fftw)
+        } else if (input$type == "ndsi") {
+            result[["ndsi"]] <- multiple_sounds(directory = job$meta$path,
+                                                soundindex = input$name,
+                                                no_cores = job$meta$cores,
+                                                fft_w = input$fftw,
+                                                anthro_min = input$anthro_min,
+                                                anthro_max = input$anthro_max,
+                                                bio_min = input$bio_min,
+                                                bio_max = input$bio_max)
+        } else if (input$type == "rms") {
+            result[["rms"]] <- multiple_sounds(directory = job$meta$path,
+                                                soundindex = input$name,
+                                                no_cores = job$meta$cores)
+        }
     }
 
     return(result)

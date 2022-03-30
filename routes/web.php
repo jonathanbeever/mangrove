@@ -53,5 +53,3 @@ Route::group(['middleware' => [AUTH, 'verified']], static function () {
         return File::get('../sounds/acousticindex.csv');
     })->name('sound-data');
 });
-
-Route::get('/run', [JobController::class, 'queueSingleFileJob']);

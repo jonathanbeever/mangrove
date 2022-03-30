@@ -2,15 +2,15 @@
 
 namespace App\Contracts\Job;
 
-use App\Models\Job;
+use App\Models\JobInput;
 
 interface ExecuteJobContract
 {
     /**
-     * Execute a Job.
+     * Execute a JobInput.
      *
-     * @param Job $job
-     * @return void
+     * @param JobInput $job
+     * @return bool
      */
-    public function execute(Job $job): void;
+    public function execute(JobInput $job): bool;
 }

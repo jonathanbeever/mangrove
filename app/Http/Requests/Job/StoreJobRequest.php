@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Job;
 
 use App\Http\Rules\Job\JobValidationRules;
-use App\Models\Job;
+use App\Models\JobInput;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreJobRequest extends FormRequest
@@ -17,7 +17,7 @@ class StoreJobRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->can('create', Job::class);
+        return $this->user()->can('create', JobInput::class);
     }
 
     /**

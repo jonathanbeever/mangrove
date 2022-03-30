@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Job;
+use App\Models\JobInput;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Auth\Access\Response;
 
-class JobPolicy
+class JobInputPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class JobPolicy
      * Determine whether the user can view the model.
      *
      * @param User $user
-     * @param Job $job
+     * @param JobInput $job
      * @return bool
      */
-    public function view(User $user, Job $job): bool
+    public function view(User $user, JobInput $job): bool
     {
         return $user->id === $job->user_id;
     }
@@ -49,10 +49,10 @@ class JobPolicy
      * Determine whether the user can update the model.
      *
      * @param User $user
-     * @param Job $job
+     * @param JobInput $job
      * @return bool
      */
-    public function update(User $user, Job $job): bool
+    public function update(User $user, JobInput $job): bool
     {
         return $user->id === $job->user_id;
     }
@@ -61,10 +61,10 @@ class JobPolicy
      * Determine whether the user can delete the model.
      *
      * @param User $user
-     * @param Job $job
+     * @param JobInput $job
      * @return bool
      */
-    public function delete(User $user, Job $job): bool
+    public function delete(User $user, JobInput $job): bool
     {
         return $user->id === $job->user_id;
     }
@@ -73,10 +73,10 @@ class JobPolicy
      * Determine whether the user can restore the model.
      *
      * @param User $user
-     * @param Job $job
+     * @param JobInput $job
      * @return bool
      */
-    public function restore(User $user, Job $job): bool
+    public function restore(User $user, JobInput $job): bool
     {
         return false;
     }
@@ -85,10 +85,10 @@ class JobPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param User $user
-     * @param Job $job
+     * @param JobInput $job
      * @return bool
      */
-    public function forceDelete(User $user, Job $job): bool
+    public function forceDelete(User $user, JobInput $job): bool
     {
         return false;
     }
