@@ -62,6 +62,7 @@ RUN Rscript /tmp/install-deps.R
 
 COPY start-container.sh /usr/local/bin/start-container
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY supervisord-worker.conf /etc/supervisor/conf.d/supervisord-worker.conf
 COPY php.ini /etc/php/8.1/cli/conf.d/99-sail.ini
 RUN chmod +x /usr/local/bin/start-container
 

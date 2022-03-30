@@ -3,7 +3,7 @@
     "dockerComposeFile": [
         "../docker-compose.yml"
     ],
-    "service": "mangrove.test",
+    "service": "mangrove",
     "workspaceFolder": "/var/www/html",
     "extensions": [
         "felixfbecker.php-debug",
