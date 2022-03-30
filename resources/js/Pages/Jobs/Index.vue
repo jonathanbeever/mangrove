@@ -46,6 +46,25 @@
                                                             scope="col"
                                                             class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                                                         >
+                                                            Created On
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Updated On
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+                                                            Status
+                                                        </th>
+                                                        <th
+                                                            scope="col"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                        >
+
                                                         </th>
                                                     </tr>
                                                 </thead>
@@ -85,8 +104,35 @@
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
+                                                            <div
+                                                                class="text-sm text-gray-900"
+                                                            >
+                                                                {{item.created_at.substring(0, 10)}}
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap"
+                                                        >
+                                                            <div
+                                                                class="text-sm text-gray-900"
+                                                            >
+                                                                {{(item.updated_at) ? item.updated_at.substring(0, 10) : ''}}
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap"
+                                                        >
+                                                            <div
+                                                                class="text-sm text-gray-900"
+                                                            >
+                                                                {{(item.finished) ? 'Completed' : 'Running'}}
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap"
+                                                        >
                                                             <div class="flex justify-end">
-                                                                <jet-button v-on:click="jobClicked(item)">See Results</jet-button>
+                                                                <jet-button v-on:click="jobClicked(item)" :disabled="!item.finished">See Results</jet-button>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -124,31 +170,55 @@ export default defineComponent({
     mounted() {
         const findIndicesUsed = (object) => {
             let indicesUsed = []
+            let finished = true
             Object.keys(object).map(key => {
                 if (key.includes('aci') && object[key] != null && !indicesUsed.includes('ACI')) {
                     indicesUsed.push('ACI')
+                    if (object[key].results == null || object[key].results == '') {
+                        finished = false
+                    }
                 }
                 if (key.includes('adi') && object[key] != null && !indicesUsed.includes('ADI')) {
                     indicesUsed.push('ADI')
+                    if (object[key].results == null || object[key].results == '') {
+                        finished = false
+                    }
                 }
                 if (key.includes('aei') && object[key] != null && !indicesUsed.includes('AEI')) {
                     indicesUsed.push('AEI')
+                    if (object[key].results == null || object[key].results == '') {
+                        finished = false
+                    }
                 }
                 if (key.includes('bi') && object[key] != null && !indicesUsed.includes('BIO')) {
                     indicesUsed.push('BIO')
+                    if (object[key].results == null || object[key].results == '') {
+                        finished = false
+                    }
                 }
                 if (key.includes('ndsi') && object[key] != null && !indicesUsed.includes('NDSI')) {
                     indicesUsed.push('NDSI')
+                    if (object[key].results == null || object[key].results == '') {
+                        finished = false
+                    }
                 }
                 if (key.includes('rms') && object[key] != null && !indicesUsed.includes('RMS')) {
                     indicesUsed.push('RMS')
+                    if (object[key].results == null || object[key].results == '') {
+                        finished = false
+                    }
                 }
             })
-            return indicesUsed
+            return { indices: indicesUsed, done: finished }
         };
 
         this.items = usePage().props.value.jobs
-        this.items.forEach((element, ind) => this.items[ind]['indicesUsed'] = findIndicesUsed(element));
+        console.log(this.items)
+        this.items.forEach((element, ind) => {
+            let result = findIndicesUsed(element)
+            this.items[ind]['indicesUsed'] = result.indices
+            this.items[ind]['finished'] = result.done
+        });
     },
     methods: {
         jobClicked: function (item) {

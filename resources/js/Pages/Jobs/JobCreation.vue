@@ -24,14 +24,13 @@
                 <div class="flex flex-col w-1/2">
                     <jet-label class="text-2xl mb-[10px]"> Index </jet-label>
                     <div>
-                        <div class="form-check mb-[10px]">
+                        <div class="form-check mb-[10px]" v-if="false">
                             <input
                                 class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                                 v-on:click="onChange($event)"
                                 type="checkbox"
                                 name="indexRadio"
                                 id="aci"
-                                checked
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -47,6 +46,7 @@
                                 type="checkbox"
                                 name="indexRadio"
                                 id="ndsi"
+                                checked
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -148,7 +148,7 @@ import JetButton from "@/Jetstream/Button.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import SetParameters from "@/Pages/Jobs/SetParameters.vue";
 
-let selectedIndex = ["ACI"];
+let selectedIndex = ["NDSI"];
 let displayIndexSelection = true;
 let indexText = {
     ACI: "The accoustic complexity index is an algorithm used to determine the complexity of natural sound. It was initially developed for computing the complexity of bird song. Variability in sound intensities are measured and compared to provide a measured complexity.",
@@ -158,7 +158,7 @@ let indexText = {
     BIO: "the bioacoustic index is an algoirithm used to determine the sound level and number of frequency bands occupied in a soundscape. It is used as a general determinant of occupied frequencies to investigate the abundance of biological sound.",
     RMS: "RMS is the root mean square or quadratic mean",
 };
-let descriptionText = indexText["ACI"];
+let descriptionText = indexText["NDSI"];
 
 export default defineComponent({
     components: {
@@ -195,8 +195,8 @@ export default defineComponent({
         },
         onBackParameters: function (value) {
             this.displayIndexSelection = true;
-            this.selectedIndex = ["ACI"];
-            this.descriptionText = indexText["ACI"];
+            this.selectedIndex = ["NDSI"];
+            this.descriptionText = indexText["NDSI"];
             return;
         },
         onRemoveRender: function () {
