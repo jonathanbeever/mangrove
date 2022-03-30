@@ -24,10 +24,7 @@
                                 <jet-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
                                     Create Jobs
                                 </jet-nav-link>
-                                <jet-nav-link :href="route('results')" :active="route().current('results')">
-                                    Results Catalog
-                                </jet-nav-link>
-                                <jet-nav-link :href="route('queue')" :active="route().current('queue')">
+                                <jet-nav-link :href="route('jobs.index')" :active="route().current('queue')">
                                     Job Queue
                                 </jet-nav-link>
                                 <jet-nav-link :href="route('about')" :active="route().current('about')">
@@ -156,10 +153,7 @@
                         <jet-responsive-nav-link :href="route('jobs.create')" :active="route().current('jobs.create')">
                             Create Jobs
                         </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('results')" :active="route().current('results')">
-                            Results Catalog
-                        </jet-responsive-nav-link>
-                        <jet-responsive-nav-link :href="route('queue')" :active="route().current('queue')">
+                        <jet-responsive-nav-link :href="route('jobs.index')" :active="route().current('queue')">
                             Job Queue
                         </jet-responsive-nav-link>
                         <jet-responsive-nav-link :href="route('about')" :active="route().current('about')">

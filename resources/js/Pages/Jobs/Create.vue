@@ -229,7 +229,7 @@
                         v-on:click="newUploads = !newUploads"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                     >
-                        Return to Dashboard
+                        Return to Files
                     </jet-button>
                 </div>
             </div>

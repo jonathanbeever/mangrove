@@ -33,18 +33,6 @@ Route::group(['middleware' => [AUTH, 'verified']], static function () {
         return Inertia::render('About');
     })->name('about');
 
-    Route::get('/dashboard', static function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
-
-    Route::get('/results', static function () {
-        return Inertia::render('Results');
-    })->name('results');
-
-    Route::get('/queue', static function () {
-        return Inertia::render('Queue');
-    })->name('queue');
-
     Route::get('/sound/{file}', static function ($file) {
         return File::get('../sounds/' . $file);
     })->name('sound');

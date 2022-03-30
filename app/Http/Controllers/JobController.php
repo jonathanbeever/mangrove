@@ -26,7 +26,7 @@ class JobController extends Controller
     {
         $jobs = auth()->user()->jobs;
 
-        return Inertia::render('Jobs', [
+        return Inertia::render('Jobs/Index', [
             'jobs' => $jobs
         ]);
     }
@@ -70,7 +70,7 @@ class JobController extends Controller
      */
     public function show(JobInput $job): Response
     {
-        return Inertia::render('Jobs/Show', [
+        return Inertia::render('Jobs/Results', [
             'jobs' => $job
         ]);
     }
