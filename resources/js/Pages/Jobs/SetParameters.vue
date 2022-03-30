@@ -108,7 +108,6 @@
             this.indexCurrent = this.index[0];
             this.aci = null
             this.name = ''
-            console.log(this.index)
 
             if (this.index.includes('RMS')) {
                 this.rms = true

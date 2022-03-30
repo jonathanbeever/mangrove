@@ -322,8 +322,10 @@ export default defineComponent({
             Object.keys(items).forEach(x => {
                 if (items[x] != null && x.includes("input")) {
                     Object.keys(JSON.parse(items[x].results)).forEach(y => {
-                        selectionList.push(y)
-                        })
+                        if (!selectionList.includes(y)) {
+                            selectionList.push(y)
+                        }
+                    })
                 }
             })
             this.selectionList = selectionList

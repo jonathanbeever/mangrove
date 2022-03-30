@@ -327,7 +327,6 @@ export default defineComponent({
             this.newUploads = true;
             this.selected = []
             this.somethingSelected = false
-            return;
         },
         removeAllSelected: function () {
             this.items.forEach(x => x.selected = false)
@@ -335,15 +334,11 @@ export default defineComponent({
         renderJobCreation: function () {
             this.removeAllSelected()
             this.goToJobCreation = true;
-            return;
         },
         edit: function () {
-            this.$emit("editPop");
             this.editPop = !this.editPop;
-            return;
         },
         pushEdits: function () {
-            console.log("savepls");
             this.editPop = !this.editPop;
 
         },
@@ -351,7 +346,6 @@ export default defineComponent({
             let e = this.items.filter((p) => p.selected == true);
             if (e.length > 0) {
                 this.selected = e;
-                //console.log(this.selected);
                 this.somethingSelected = true;
                 return false;
             } else {
