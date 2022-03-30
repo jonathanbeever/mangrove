@@ -51,7 +51,7 @@
                     shannon: true
                 };
     const errorMessages = {
-        maxFreq: "maxFreq must be an integer greater than or equa to 0",
+        maxFreq: "maxFreq must be an integer greater than or equal to 0",
         freqStep: "freqStep must be an integer greater than or equal to 1",
     }
     let maxFreq = specificationDefaults.maxFreq
@@ -83,6 +83,7 @@
                 this.maxFreq = specificationDefaults.maxFreq
                 this.dbtThreshhold = specificationDefaults.dbtThreshhold
                 this.freqStep = specificationDefaults.freqStep
+                onChange();
             },
             validateFreq: function () {
                 if (isNaN(this.maxFreq)) {
@@ -93,6 +94,7 @@
                     return
                 }
                 this.maxError = false;
+                onChange();
                 return
             },
             validateFreqStep: function () {
@@ -104,8 +106,22 @@
                     return
                 }
                 this.freqStepError = false;
+                onChange();
+                return
+            },
+            onChange: function(){
+                if(!this.maxFreqError && !this.freqStepError)
+                {
+                    let adi = {
+                        db_threshhold: this.dbtThreshhold,
+                        freqStep: this.freqStep,
+                        max_freq: this.maxFreq,
+                    }
+                    this.$emit("adiChanged", adi)
+                }
                 return
             }
+
         }
     } )
 
