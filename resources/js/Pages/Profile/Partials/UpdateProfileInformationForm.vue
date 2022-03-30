@@ -5,7 +5,9 @@
         </template>
 
         <template #description>
+        <div class="dark:text-white">
             Update your account's profile information and email address.
+        </div>
         </template>
 
         <template #form>

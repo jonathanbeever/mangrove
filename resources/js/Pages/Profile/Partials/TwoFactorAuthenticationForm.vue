@@ -5,7 +5,9 @@
         </template>
 
         <template #description>
+        <div class="dark:text-white">
             Add additional security to your account using two factor authentication.
+            </div>
         </template>
 
         <template #content>

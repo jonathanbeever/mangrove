@@ -5,7 +5,9 @@
         </template>
 
         <template #description>
+        <div class="dark:text-white">
             Ensure your account is using a long, random password to stay secure.
+        </div>
         </template>
 
         <template #form>
