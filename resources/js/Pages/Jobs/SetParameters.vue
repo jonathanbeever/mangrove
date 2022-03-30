@@ -98,8 +98,8 @@
             return {
                 descriptionText,
                 indexCurrent: [],
-                nextDisabled,
-                prevDisabled,
+                nextDisabled: nextDisabled,
+                prevDisabled: prevDisabled,
                 finishDisabled,
                 name: name
             }
@@ -108,6 +108,7 @@
             this.indexCurrent = this.index[0];
             this.aci = null
             this.name = ''
+            console.log(this.index)
 
             if (this.index.includes('RMS')) {
                 this.rms = true
@@ -115,7 +116,7 @@
             } else {
                 this.rms = null
             }
-            if (this.index.length == 1) {
+            if (this.index.length <= 1) {
                 this.nextDisabled = true
                 this.prevDisabled = true
                 this.finishDisabled = false
