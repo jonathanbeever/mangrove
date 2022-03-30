@@ -79,6 +79,7 @@
                         <div class="flex-row pr-4">
                             Series:
                             <select
+                                :disabled="(sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile)"
                                 class="flex grow"
                                 id="selectSeries"
                                 v-model="currentIndex"
@@ -96,7 +97,7 @@
                         <div class="flex-row pr-4">
                             Select Chart:
                             <select
-                                :disabled="upGraphs == 'NDSI' || upGraphs == 'RMS'"
+                                :disabled="upGraphs == 'NDSI' || upGraphs == 'RMS' || (sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile)"
                                 class="flex grow"
                                 id="chartSelect"
                                 v-model="selectedChart"
@@ -109,17 +110,11 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="float-right self-end">
-                            <jet-button
-                                class="btn btn-success"
-                                @click="showGraphs"
-                                >Show Graphs</jet-button>
-                        </div>
                     </div>
 
                     <div
                         class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
-                        v-if="upGraphs != '' && selectedChart != '' && singleFile == true"
+                        v-if="upGraphs != '' && (selectedChart != '' || (selectedChart == '' && (upGraphs == 'NDSI' || upGraphs == 'RMS'))) && singleFile == true"
                     >
 
                         <div v-show="upGraphs == 'ACI'" :key="upGraphs" class="w-4/5">
@@ -161,7 +156,7 @@
                     </div>
                     <div
                         class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
-                        v-if="upGraphs != '' && selectedChart != '' && singleFile == false && cFile != null && cFile != ''"
+                        v-if="upGraphs != '' && (selectedChart != '' || (selectedChart == '' && (upGraphs == 'NDSI' || upGraphs == 'RMS'))) && singleFile == false && cFile != null && cFile != ''"
                     >
                     <div v-show="upGraphs == 'ACI'" :key="upGraphs" class="w-4/5">
                             <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ACI'+cFile" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
@@ -308,11 +303,11 @@ export default defineComponent({
                 }
 
                 if (this.upGraphs == 'BI') {
-                this.chartSelection = ["Single Line", "Single Bar", "Dual Line", "Compare Bar", "Frequency Over Time"]
+                    this.chartSelection = ["Single Line", "Single Bar", "Dual Line", "Compare Bar", "Frequency Over Time"]
 
-                let end = this.graphInput.freqVals.length;
-                let range = Array(end - 0 + 1).fill().map((_, idx) => 0 + idx);
-                this.graphInput = {...this.graphInput, range: range}
+                    let end = this.graphInput.freqVals.length;
+                    let range = Array(end - 0 + 1).fill().map((_, idx) => 0 + idx);
+                    this.graphInput = {...this.graphInput, range: range}
                 } else {
                     this.chartSelection = ["Single Line", "Single Bar", "Dual Line", "Compare Bar"]
                 }
