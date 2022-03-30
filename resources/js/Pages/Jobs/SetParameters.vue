@@ -170,16 +170,16 @@
                 this.nextDisabled = false
             },
             ndsiChanged: function (ndsi) {
-                this.ndsi = ndsi
+                this.ndsi = {...ndsi}
             },
             biChanged: function (bi) {
-                this.bi = bi
+                this.bi = {...bi}
             },
             adiChanged: function (adi) {
-                this.adi = adi
+                this.adi = {...adi}
             },
             aeiChanged: function (aei) {
-                this.aei = aei
+                this.aei = {...aei}
             },
             postJobData: function () {
                 let request = {
