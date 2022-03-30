@@ -127,7 +127,7 @@
             }
             if (this.index.includes('AEI')) {
                 this.aei = {
-                    db_threshhold: -50,
+                    db_threshold: -50,
                     freq_step: 1000,
                     max_freq: 10000
                 }
@@ -136,7 +136,7 @@
             }
             if (this.index.includes('ADI')) {
                 this.adi = {
-                    db_threshhold: -50,
+                    db_threshold: -50,
                     freq_step: 1000,
                     max_freq: 10000
                 }

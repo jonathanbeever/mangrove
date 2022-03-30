@@ -14,9 +14,9 @@
 
             </jet-input>
             <jet-label class="mt-[10px]">
-                dbThreshhold
+                dbThreshold
             </jet-label>
-            <jet-input :value="dbtThreshhold" v-on:change="onChange()" v-model="dbtThreshhold">
+            <jet-input :value="dbThreshold" v-on:change="onChange()" v-model="dbThreshold">
 
             </jet-input>
             <jet-label class="mt-[10px]">
@@ -46,7 +46,7 @@
 
     const specificationDefaults = {
                     maxFreq: 10000,
-                    dbtThreshhold: -50,
+                    dbThreshold: -50,
                     freqStep: 1000,
                     shannon: true
                 };
@@ -55,7 +55,7 @@
         freqStep: "freqStep must be an integer greater than or equal to 1",
     }
     let maxFreq = specificationDefaults.maxFreq
-    let dbtThreshhold = specificationDefaults.dbtThreshhold
+    let dbThreshold = specificationDefaults.dbThreshold
     let freqStep = specificationDefaults.freqStep
     let maxFreqError = false
     let freqStepError = false
@@ -71,7 +71,7 @@
             return {
                 specificationDefaults,
                 maxFreq,
-                dbtThreshhold,
+                dbThreshold,
                 freqStep,
                 freqStepError,
                 maxFreqError,
@@ -81,7 +81,7 @@
         methods: {
             onRestoreDefault: function (event) {
                 this.maxFreq = specificationDefaults.maxFreq
-                this.dbtThreshhold = specificationDefaults.dbtThreshhold
+                this.dbThreshold = specificationDefaults.dbThreshold
                 this.freqStep = specificationDefaults.freqStep
                 this.maxFreqError = false
                 this.freqStepError = false
@@ -115,7 +115,7 @@
                 if(!this.maxFreqError && !this.freqStepError)
                 {
                     let aei = {
-                        db_threshhold: this.dbtThreshhold,
+                        db_threshold: this.dbThreshold,
                         freq_step: this.freqStep,
                         max_freq: this.maxFreq,
                     }

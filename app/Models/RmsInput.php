@@ -11,6 +11,24 @@ class RmsInput extends Model
     use HasFactory;
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'results',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'results' => 'object',
+    ];
+
+    /**
      * Get the job input that owns the input.
      */
     public function jobInput(): BelongsTo

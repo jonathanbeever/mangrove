@@ -18,7 +18,17 @@ class BiInput extends Model
     protected $fillable = [
         'max_freq',
         'min_freq',
-        'fftw'
+        'fftw',
+        'results',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'results' => 'object',
     ];
 
     /**

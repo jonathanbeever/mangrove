@@ -152,7 +152,7 @@ class JobInput extends Model
         }
 
         if ($this->rmsInput !== NULL) {
-            $jobInput['inputs']['rms']['name'] = 'rms';
+            $jobInput['inputs']['rms']['name'] = 'root_mean_square';
             $jobInput['inputs']['rms']['type'] = 'rms';
         }
 

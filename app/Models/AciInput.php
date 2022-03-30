@@ -19,7 +19,17 @@ class AciInput extends Model
         'max_freq',
         'min_freq',
         'fftw',
-        'j'
+        'j',
+        'results',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'results' => 'object',
     ];
 
     /**

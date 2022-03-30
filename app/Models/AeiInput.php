@@ -18,7 +18,17 @@ class AeiInput extends Model
     protected $fillable = [
         'max_freq',
         'db_threshold',
-        'freq_step'
+        'freq_step',
+        'results',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'results' => 'object',
     ];
 
     /**

@@ -20,7 +20,17 @@ class NdsiInput extends Model
         'anthro_max',
         'bio_min',
         'bio_max',
-        'fftw'
+        'fftw',
+        'results',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'results' => 'object',
     ];
 
     /**
