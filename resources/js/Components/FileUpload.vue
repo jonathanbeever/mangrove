@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col grow">
+    <div class="flex flex-col grow dark:bg-slate-800">
         <div class="grow p-6 overflow-y-auto overflow-x-hidden max-h-96">
             <div class="-my-2 sm:-mx-6 lg:-mx-8">
                 <div
@@ -58,9 +58,7 @@
                                                 >
                                                     {{
                                                         (item.job =
-                                                            item.name.split(
-                                                                "."
-                                                            )[0])
+                                                            item.name.split(".")[0])
                                                     }}
                                                 </div>
                                                 <div
@@ -96,9 +94,6 @@
                                             >
                                                 undefined
                                             </div>
-                                        </div>
-                                        <div class="text-sm text-gray-500">
-                                            {{ item.timestarted }}
                                         </div>
                                     </td>
                                     <td
@@ -168,13 +163,14 @@ export default defineComponent({
         JetButton,
     },
 
+    props: ["items"],
+
     mounted() {
-        console.log("Component mounted.");
+        //console.log("Component mounted.");
     },
 
     data() {
         return {
-            items: [],
             edit: false,
         };
     },
@@ -182,7 +178,7 @@ export default defineComponent({
     methods: {
         onFileChange(e) {
             this.file = e.target.files;
-            console.log(this.file);
+            //console.log(this.file);
 
             for (const i of Object.keys(this.file)) {
                 this.items.push(this.file[i]);
