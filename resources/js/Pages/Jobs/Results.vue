@@ -9,11 +9,15 @@
                             2D Waveform Spectrogram
 
                             <div class="flex-row px-4">
-                                File Path:
-                                <input v-model="spFile" placeholder="">
-                                <p>Selected: {{ spFile }}</p>
+                                <input
+                                type="file"
+                                class="form-control"
+                                id="file-input"
+                                accept="audio/*"
+                                v-on:change="onFileChange($event)"
+                                single
+                                />
                             </div>
-
                             <jet-button
                                 class="float-left border-tl p-4 m-4 border-gray-200 bg-white"
                                 v-on:click="createSpectrogram"
@@ -194,11 +198,11 @@
                 </div>
             </div>
 
-            <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
+            <!-- <div v-if="spFile != ''" class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
                 <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @timeupdate="timeUpdate">
-                    <source src="/sound/pigeons.mp3"> Audio playback is not supported.
+                    <source src="{{spFile}}"> Audio playback is not supported.
                 </audio>
-            </div>
+            </div> -->
         </div>
     </app-layout>
 </template>
@@ -257,9 +261,12 @@ export default defineComponent({
         };
     },
     methods: {
+        onFileChange: function (e) {
+            this.spFile = URL.createObjectURL(e.target.files[0]);
+        },
 
         createSpectrogram() {
-            this.wavesurfer.load("/sound/" + this.spFile);
+            this.wavesurfer.load(this.spFile);
         },
 
         play: function () {
