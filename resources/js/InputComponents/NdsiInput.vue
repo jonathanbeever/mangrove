@@ -2,7 +2,7 @@
     <div class="w-full">
         <div class="flex flex-col h-full">
             <jet-label class="text-2xl mb-[10px]">
-                Set Specifications
+                NDSI Specifications
             </jet-label>
             <jet-label class="mt-[10px]">
                 anthroMin
@@ -41,12 +41,12 @@
 
             </jet-input>
             <jet-label class="mt-[10px]">
-                MW
+                FFTW
             </jet-label>
-            <jet-label v-if="mwError" class="text-red-500">
-                {{errorMessages.mW}}
+            <jet-label v-if="fftWError" class="text-red-500">
+                {{errorMessages.fftW}}
             </jet-label>
-            <jet-input v-on:blur="validateMw()" :value="mW" v-model="mW">
+            <jet-input v-on:blur="validatefftW()" :value="fftW" v-model="fftW">
 
             </jet-input>
             <div class="flex w-full justify-start align-baselien content-end">
@@ -70,25 +70,25 @@
                     anthroMax: 2000,
                     bioMin: 2000,
                     bioMax: 11000,
-                    mW: 1024
+                    fftW: 1024
                 };
     const errorMessages = {
         anthroMin: "anthroMin must be an integer greater than 0",
         anthroMax: "anthroMax must be an integer greater than 0",
         bioMin: "bioMin must be an integer greater than 0",
         bioMax: "bioMax must be an integer greater than 0",
-        mW: "MW must be an integer greater than 0"
+        fftW: "fftW must be an integer greater than 0"
     }
     let anthroMin = specificationDefaults.anthroMin
     let anthroMax = specificationDefaults.anthroMax
     let bioMin = specificationDefaults.bioMin
     let bioMax = specificationDefaults.bioMax
-    let mW = specificationDefaults.mW
+    let fftW = specificationDefaults.fftW
     let anthroMinError = false
     let anthroMaxError = false
     let bioMinError = false
     let bioMaxError = false
-    let mwError = false
+    let fftWError = false
 
     export default defineComponent({
         components: {
@@ -104,12 +104,12 @@
                 anthroMax,
                 bioMin,
                 bioMax,
-                mW,
+                fftW,
                 anthroMinError,
                 anthroMaxError,
                 bioMinError,
                 bioMaxError,
-                mwError,
+                fftWError,
                 errorMessages
             }
         },
@@ -119,7 +119,13 @@
                 this.anthroMax = specificationDefaults.anthroMax
                 this.bioMin = specificationDefaults.bioMin
                 this.bioMax = specificationDefaults.bioMax
-                this.mW = specificationDefaults.mW
+                this.fftW = specificationDefaults.fftW
+                this.anthroMinError = false
+                this.anthroMaxError = false
+                this.bioMinError = false
+                this.bioMaxError = false
+                this.fftWError = false
+                this.onChange()
             },
             validateAnthroMin: function () {
                 if (isNaN(this.anthroMin)) {
@@ -130,6 +136,7 @@
                     return
                 }
                 this.anthroMinError = false;
+                this.onChange()
                 return
             },
             validateAnthroMax: function () {
@@ -141,6 +148,7 @@
                     return
                 }
                 this.anthroMaxError = false;
+                this.onChange()
                 return
             },
             validateBioMin: function () {
@@ -152,6 +160,7 @@
                     return
                 }
                 this.bioMinError = false;
+                this.onChange()
                 return
             },
             validateBioMax: function () {
@@ -163,17 +172,35 @@
                     return
                 }
                 this.bioMaxError = false;
+                this.onChange()
                 return
             },
-            validateMw: function () {
-                if (isNaN(this.mW)) {
-                    this.mwError = true
+            validatefftW: function () {
+                if (isNaN(this.fftW)) {
+                    this.fftWError = true
                     return
-                } else if (this.mW < 0) {
-                    this.mwError = true
+                } else if (this.fftW < 0) {
+                    this.fftWError = true
                     return
                 }
-                this.mwError = false;
+                this.fftWError = false;
+                this.onChange()
+                return
+            },
+            onChange: function () {
+                if (!this.anthroMaxError && !this.anthroMinError 
+                && !this.bioMaxError && !this.bioMinError 
+                && !this.fftWError)
+                {
+                    let ndsi = {
+                    anthro_max: this.anthroMax,
+                    anthro_min: this.anthroMin,
+                    bio_max: this.bioMax,
+                    bio_min: this.bioMin,
+                    fftw: this.fftW
+                }
+                    this.$emit('ndsiChanged', ndsi)
+                }
                 return
             }
         }

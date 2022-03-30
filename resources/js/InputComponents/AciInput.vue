@@ -2,7 +2,7 @@
     <div class="w-full">
         <div class="flex flex-col h-full">
             <jet-label class="text-2xl mb-[10px]">
-                Set Specifications
+                ACI Specifications
             </jet-label>
             <jet-label class="mt-[10px]">
                 minFreq
