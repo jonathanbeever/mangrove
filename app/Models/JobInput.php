@@ -18,6 +18,15 @@ class JobInput extends Model
     protected $with = ['aciInput', 'adiInput', 'aeiInput', 'biInput', 'ndsiInput', 'rmsInput'];
 
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<string>
+     */
+    protected $fillable = [
+        'name',
+    ];
+
+    /**
      * Get the user that owns the job.
      */
     public function user(): BelongsTo

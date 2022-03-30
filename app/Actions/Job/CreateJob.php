@@ -26,7 +26,7 @@ class CreateJob implements CreateJobContract
     {
         try {
             return DB::transaction(function () use ($input) {
-                return tap(new JobInput(), function (JobInput $job) use ($input) {
+                return tap(new JobInput($input), function (JobInput $job) use ($input) {
                     $this->saveJobToUser($job);
                     $this->saveInputs($job, $input);
                 });
