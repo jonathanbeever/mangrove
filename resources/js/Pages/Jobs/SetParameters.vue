@@ -38,7 +38,14 @@
                     <jet-label class="text-xl h-full">
                         {{descriptionText}}
                     </jet-label>
-                    <div class="flex w-full justify-end content-end align-bottom">
+                    <div class="flex w-full justify-between content-end align-bottom">
+                        <input
+                                class="form-text-input"
+                                type="text"
+                                v-model="name"
+                                id="NameInput"
+                                placeholder='Name this Job'
+                        />
                         <jet-button class="flex w-1/3 justify-center align-bottom" v-on:click="postJobData()" :disabled="finishDisabled">
                             Finish
                         </jet-button>
@@ -72,6 +79,7 @@
     let aei = null
     let adi = null
     let rms = null
+    let name = ''
 
     export default defineComponent({
         components: {
@@ -92,12 +100,14 @@
                 indexCurrent: [],
                 nextDisabled,
                 prevDisabled,
-                finishDisabled
+                finishDisabled,
+                name: name
             }
         },
         mounted() {
             this.indexCurrent = this.index[0];
             this.aci = null
+            this.name = ''
 
             if (this.index.includes('RMS')) {
                 this.rms = true
@@ -184,8 +194,11 @@
                 this.aei = {...aei}
             },
             postJobData: function () {
+                if (this.name == '' || this.name == null) {
+                    this.name = Date().toString().substring(0, 10)
+                }
                 let request = {
-                    name: "she do be named",
+                    name: this.name,
                     aci: this.aci,
                     adi: this.adi,
                     aei: this.aei,
