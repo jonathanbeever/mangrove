@@ -98,6 +98,13 @@
         mounted() {
             this.indexCurrent = this.index[0];
             this.aci = null
+
+            if (this.index.includes('RMS')) {
+                this.rms = true
+                this.index.splice(this.index.indexOf('RMS'), 1)
+            } else {
+                this.rms = null
+            }
             if (this.index.length == 1) {
                 this.nextDisabled = true
                 this.prevDisabled = true
@@ -142,11 +149,6 @@
                 }
             } else {
                 this.adi = null
-            }
-            if (this.index.includes('RMS')) {
-                this.rms = true
-            } else {
-                this.rms = null
             }
         },
         methods: {
