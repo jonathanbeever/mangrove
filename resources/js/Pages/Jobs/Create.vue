@@ -160,9 +160,10 @@
                                                                 type="checkbox"
                                                                 name="flexRadioDefault"
                                                                 id="{{item.job}}"
-                                                                v-on:click="
-                                                                    item.selected =
-                                                                        !item.selected
+                                                                v-on:click="() => {
+                                                                    item.selected = !item.selected
+                                                                    anySelected()
+                                                                }
                                                                 "
                                                             />
                                                             <!--jet-checkbox name="{{item.count}}" v-model:checked="item.selected" /-->
@@ -178,7 +179,7 @@
                     </div>
                     <JobCreation
                         v-if="goToJobCreation"
-                        @goToFileSelection="onBackJobCreation"
+                        @goToFileSelection="onBackJobCreation()"
                     />
                     <div
                         class="bg-white border-b border-gray-200 flex flex-row"
@@ -190,7 +191,7 @@
                         v-if="newUploads == true && goToJobCreation == false && editPop == false"
                         v-on:click="renderJobCreation"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
-                        :disabled="anySelected"
+                        :disabled="!somethingSelected"
                     >
                         Start New Jobs
                     </jet-button>
@@ -209,7 +210,7 @@
                         "
                         v-on:click="edit"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
-                        :disabled="anySelected"
+                        :disabled="!somethingSelected"
                     >
                         Edit Selected Files
                     </jet-button>
@@ -253,7 +254,7 @@ let goToJobCreation = false;
 let newUploads = true;
 let editPop = false;
 let selected = [];
-
+let somethingSelected = false;
 export default defineComponent({
     components: {
         AppLayout,
@@ -297,20 +298,13 @@ export default defineComponent({
                 se = this.items;
             }
             return se;
-        },
-        anySelected() {
-            let e = this.items.filter((p) => p.selected == true);
-            if (e.length > 0) {
-                this.selected = e;
-                //console.log(this.selected);
-                return false;
-            } else return true;
-        },
+        }
     },
     data() {
         return {
             newUploads,
             goToJobCreation,
+            somethingSelected: false,
             items: [
                 {
                     job: "Central Florida Zoo",
@@ -488,7 +482,7 @@ export default defineComponent({
             ],
             search: "",
             editPop,
-            selected,
+            selected
 
         };
     },
@@ -496,9 +490,15 @@ export default defineComponent({
         onBackJobCreation: function () {
             this.goToJobCreation = false;
             this.newUploads = true;
+            this.selected = []
+            this.somethingSelected = false
             return;
         },
+        removeAllSelected: function () {
+            this.items.forEach(x => x.selected = false)
+        },
         renderJobCreation: function () {
+            this.removeAllSelected()
             this.goToJobCreation = true;
             return;
         },
@@ -512,6 +512,18 @@ export default defineComponent({
             this.editPop = !this.editPop;
 
         },
+        anySelected: function () {
+            let e = this.items.filter((p) => p.selected == true);
+            if (e.length > 0) {
+                this.selected = e;
+                //console.log(this.selected);
+                this.somethingSelected = true;
+                return false;
+            } else {
+                this.somethingSelected = false;
+                return true;
+            }
+        }
     },
 });
 </script>
