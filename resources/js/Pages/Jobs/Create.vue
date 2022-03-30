@@ -21,7 +21,7 @@
                                 type="text"
                                 v-model="search"
                                 placeholder="Search"
-                                class="p-4 mx-6 align-content-center"
+                                class="p-4 mx-6 align-content-center dark:text-black"
                             />
                             <br />
                             <div
