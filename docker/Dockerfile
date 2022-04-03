@@ -39,7 +39,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y mysql-client \
     && apt-get install -y postgresql-client \
-    && apt-get install -y r-base r-base-dev r-cran-tuner r-cran-devtools r-cran-rjson r-cran-vegan r-cran-seewave r-cran-permute \
+    && apt-get install -y --no-install-recommends r-base r-base-dev r-cran-tuner r-cran-devtools r-cran-rjson r-cran-vegan r-cran-seewave r-cran-permute \
     r-cran-rcpp r-cran-gsw r-cran-ineq r-cran-oce r-cran-pracma \
     && apt-get -y autoremove \
     && apt-get clean \
