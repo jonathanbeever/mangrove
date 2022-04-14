@@ -10,26 +10,24 @@
         "production": "mix --production"
     },
     "devDependencies": {
-        "@inertiajs/inertia": "^0.10.0",
-        "@inertiajs/inertia-vue3": "^0.5.1",
-        "@inertiajs/progress": "^0.2.6",
-        "@tailwindcss/forms": "^0.4.0",
-        "@tailwindcss/typography": "^0.5.0",
-        "@vue/compiler-sfc": "^3.0.5",
+        "@inertiajs/inertia": "^0.11.0",
+        "@inertiajs/inertia-vue3": "^0.6.0",
+        "@inertiajs/progress": "^0.2.7",
+        "@tailwindcss/forms": "^0.5.0",
+        "@tailwindcss/typography": "^0.5.2",
+        "@vue/compiler-sfc": "^3.2.31",
         "axios": "^0.25",
-        "browser-sync": "^2.27.7",
+        "browser-sync": "^2.27.9",
         "browser-sync-webpack-plugin": "^2.3.0",
         "chart.js": "^3.7.1",
-        "d3": "^7.3.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "papaparse": "^5.3.2",
         "postcss": "^8.1.14",
-        "postcss-import": "^12.0.1",
+        "postcss-import": "^14.0.2",
         "tailwindcss": "^3.0.0",
-        "vue": "^3.0.5",
-        "vue-loader": "^16.1.2",
-        "vue3-charts": "^1.1.31",
-        "wavesurfer.js": "^6.0.4"
+        "vue": "^3.2.31",
+        "vue-loader": "^17.0.0",
+        "wavesurfer.js": "^6.1.0"
     }
 }

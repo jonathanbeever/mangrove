@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
 /*
@@ -16,8 +15,6 @@ use Inertia\Inertia;
 |
 */
 
-const AUTH = 'auth:sanctum';
-
 Route::get('/', static function () {
     if(auth()->check()) {
         return redirect()->route('jobs.create');
@@ -26,7 +23,11 @@ Route::get('/', static function () {
     return Inertia::render('Auth/Login');
 });
 
-Route::group(['middleware' => [AUTH, 'verified']], static function () {
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(static function () {
     Route::resource('jobs', JobController::class);
 
     Route::get('/about', static function () {

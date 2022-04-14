@@ -7,11 +7,9 @@
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.5.2",
         "laravel/framework": "^9.2",
-        "laravel/jetstream": "^2.6",
+        "laravel/jetstream": "^2.7",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
-        "pestphp/pest": "^1.16",
-        "pestphp/pest-plugin-laravel": "^1.1",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
@@ -58,10 +56,7 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
+        "sort-packages": true
     },
     "minimum-stability": "dev",
     "prefer-stable": true
