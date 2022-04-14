@@ -26,6 +26,11 @@ const switchToTeam = (team) => {
 const logout = () => {
     Inertia.post(route('logout'));
 };
+
+const stopImpersonation = () => {
+    Inertia.delete(route('admin.impersonate.destroy'));
+}
+
 </script>
 
 <template>
@@ -57,6 +62,9 @@ const logout = () => {
                                 </JetNavLink>
                                 <JetNavLink class="dark:text-gray-200" :href="route('about')" :active="route().current('about')">
                                     About
+                                </JetNavLink>
+                                <JetNavLink v-if="$page.props.user.role === 1" class="dark:text-gray-200" :href="route('admin.index')" :active="route().current('admin.index')">
+                                    Admin Panel
                                 </JetNavLink>
                             </div>
                         </div>
@@ -172,6 +180,12 @@ const logout = () => {
                                         <div class="border-t border-gray-100" />
 
                                         <!-- Authentication -->
+                                        <form v-if="$page.props.impersonating" @submit.prevent="stopImpersonation">
+                                            <JetDropdownLink as="button">
+                                                Stop Impersonating
+                                            </JetDropdownLink>
+                                        </form>
+
                                         <form @submit.prevent="logout">
                                             <JetDropdownLink as="button">
                                                 Log Out

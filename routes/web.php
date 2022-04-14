@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ImpersonateController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,6 +24,7 @@ Route::get('/', static function () {
     return Inertia::render('Auth/Login');
 });
 
+// Default Role Routes
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -33,4 +35,16 @@ Route::middleware([
     Route::get('/about', static function () {
         return Inertia::render('About');
     })->name('about');
+});
+
+// Admin Role Routes
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+    'admin'
+])->group(static function () {
+    Route::get('admin', [ImpersonateController::class, 'index'])->name('admin.index');
+    Route::post('admin/impersonate', [ImpersonateController::class, 'store'])->name('admin.impersonate.store');
+    Route::delete('admin/impersonate', [ImpersonateController::class, 'destroy'])->name('admin.impersonate.destroy');
 });
