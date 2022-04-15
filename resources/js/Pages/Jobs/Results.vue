@@ -110,14 +110,9 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="w-100 h-36 bg-gray p-4 h-1/3 shadow-xl sm:rounded-lg flex self-center fixed inset-x-0 bottom-0 d-flex">
-                            <jet-button class="float-left border-tl p-4 m-4 border-gray-200 bg-white w-40 h-12 px-6" v-on:click="play"><center>Play</center></jet-button>
-                            <jet-button class="float-right border-tl p-4 m-4 border-gray-200 w-40 h-12 px-6" v-on:click="pause"><center>Pause</center></jet-button>
-                        </div>
-
                         <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
-                            <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause">
-                                <source v-bind:src="spFile" type="audio/mpeg"> Audio playback is not supported.
+                            <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @seeked="updateSpectrogramTime" v-bind:currentTime="currTime">
+                                <source v-bind:src="spFile"> Audio playback is not supported.
                             </audio>
                         </div>
                     </div>
@@ -198,12 +193,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div v-if="spFile != ''" class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
-                <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @timeupdate="timeUpdate">
-                    <source src="{{spFile}}"> Audio playback is not supported.
-                </audio>
-            </div> -->
         </div>
     </app-layout>
 </template>
@@ -262,7 +251,8 @@ export default defineComponent({
             graphInput,
             graphInputC,
             items: [],
-            selectionList: ['']
+            selectionList: [''],
+            currTime: 0.0
         };
     },
     methods: {
@@ -281,10 +271,6 @@ export default defineComponent({
         },
         pause: function () {
             this.wavesurfer.pause();
-        },
-
-        timeUpdate: function() {
-            this.wavesurfer.setCurrentTime(this.$refs.player.currentTime);
         },
 
         alterIndices: function () {
@@ -343,8 +329,18 @@ export default defineComponent({
             })
             this.selectionList = selectionList
         },
+
+        updateSpectrogramTime: function() {
+            this.currTime = this.$refs['player'].currentTime;
+            var timeDelta = this.currTime - this.wavesurfer.getCurrentTime();
+            if (timeDelta > 0.1) {
+                this.wavesurfer.seekTo(this.currTime / this.wavesurfer.getDuration());
+            }
+        },
     },
     mounted() {
+        const self = this;
+
         this.wavesurfer = WaveSurfer.create({
 
             //overflow:hidden,
@@ -364,6 +360,13 @@ export default defineComponent({
                     colorMap: this.colorMap,
                 })
             ],
+        });
+        this.wavesurfer.on('seek', function() {
+            self.currTime = self.wavesurfer.getCurrentTime();
+            var timeDelta = self.currTime - self.wavesurfer.getCurrentTime();
+            if (timeDelta > 0.1) {
+                self.wavesurfer.seekTo(self.currTime / self.wavesurfer.getDuration());
+            }
         });
 
         const findIndicesUsed = (object) => {
