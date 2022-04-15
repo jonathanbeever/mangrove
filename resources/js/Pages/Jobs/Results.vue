@@ -332,7 +332,7 @@ export default defineComponent({
 
         updateSpectrogramTime: function() {
             this.currTime = this.$refs['player'].currentTime;
-            var timeDelta = this.currTime - this.wavesurfer.getCurrentTime();
+            var timeDelta = Math.abs(this.currTime - this.wavesurfer.getCurrentTime());
             if (timeDelta > 0.1) {
                 this.wavesurfer.seekTo(this.currTime / this.wavesurfer.getDuration());
             }
@@ -363,7 +363,7 @@ export default defineComponent({
         });
         this.wavesurfer.on('seek', function() {
             self.currTime = self.wavesurfer.getCurrentTime();
-            var timeDelta = self.currTime - self.wavesurfer.getCurrentTime();
+            var timeDelta = Math.abs(self.currTime - self.wavesurfer.getCurrentTime());
             if (timeDelta > 0.1) {
                 self.wavesurfer.seekTo(self.currTime / self.wavesurfer.getDuration());
             }

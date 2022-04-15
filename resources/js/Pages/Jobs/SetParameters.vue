@@ -45,6 +45,7 @@
                                 v-model="name"
                                 id="NameInput"
                                 placeholder='Name this Job'
+                                style="color:#041014;"
                         />
                         <jet-button class="flex w-1/3 justify-center align-bottom" v-on:click="postJobData()" :disabled="finishDisabled">
                             Finish
