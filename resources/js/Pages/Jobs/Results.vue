@@ -111,7 +111,7 @@
                             </select>
                         </div>
                         <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
-                            <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @seeked="updateTime" v-bind:currentTime="currTime">
+                            <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @seeked="updateSpectrogramTime" v-bind:currentTime="currTime">
                                 <source v-bind:src="spFile"> Audio playback is not supported.
                             </audio>
                         </div>
@@ -273,10 +273,6 @@ export default defineComponent({
             this.wavesurfer.pause();
         },
 
-        timeUpdate: function() {
-            this.wavesurfer.setCurrentTime(this.$refs.player.currentTime);
-        },
-
         alterIndices: function () {
             this.selectedChart = ''
             this.upGraphs = ''
@@ -334,12 +330,17 @@ export default defineComponent({
             this.selectionList = selectionList
         },
 
-        updateTime: function() {
+        updateSpectrogramTime: function() {
             this.currTime = this.$refs['player'].currentTime;
-            this.wavesurfer.seekTo(this.currTime);
-        }
+            var timeDelta = this.currTime - this.wavesurfer.getCurrentTime();
+            if (timeDelta > 0.1) {
+                this.wavesurfer.seekTo(this.currTime / this.wavesurfer.getDuration());
+            }
+        },
     },
     mounted() {
+        const self = this;
+
         this.wavesurfer = WaveSurfer.create({
 
             //overflow:hidden,
@@ -359,6 +360,13 @@ export default defineComponent({
                     colorMap: this.colorMap,
                 })
             ],
+        });
+        this.wavesurfer.on('seek', function() {
+            self.currTime = self.wavesurfer.getCurrentTime();
+            var timeDelta = self.currTime - self.wavesurfer.getCurrentTime();
+            if (timeDelta > 0.1) {
+                self.wavesurfer.seekTo(self.currTime / self.wavesurfer.getDuration());
+            }
         });
 
         const findIndicesUsed = (object) => {
