@@ -20,10 +20,10 @@
                             <br>
                             <br>
                             <br>
-                            <div class="loading pt-2" id="loading" ref="loading" v-bind:v-show="loading">
-                                <vue-element-loading v-bind:active="loading" spinner="bar-fade-scale" size="100"/>
+                            <div class="loading pt-2" id="loading" ref="loading">
+                                <vue-element-loading ref="animation" :active="loading" spinner="bar-fade-scale" size="100" v-if="loading === true"/>
+                                <div id="wave" class="p-2"/>
                             </div>
-                            <div id="wave" class="p-2"/>
                         </div>
                     </div>
 
@@ -260,11 +260,8 @@ export default defineComponent({
 
         onFileChange: function (e) {
             this.spFile = URL.createObjectURL(e.target.files[0]);
-            this.loading = true;
             this.$refs.player.load();
             this.createSpectrogram();
-            this.loading = false;
-            this.$refs.loading.show = false;
         },
 
         createSpectrogram() {
@@ -367,8 +364,8 @@ export default defineComponent({
             ],
         });
         this.wavesurfer.on('ready', function() {
+            self.$refs['animation'].show = false;
             self.loading = false;
-            self.$refs.loading.active = false;
         });
         this.wavesurfer.on('seek', function() {
             self.currTime = self.wavesurfer.getCurrentTime();
