@@ -6,9 +6,7 @@
                 <div class="w-1/4 px-4 h-screen">
                     <div class="bg-white shadow-xl sm:rounded-lg h-full">
                         <div class="pb-2 pl-2 pt-2 h-full">
-
                             2D Waveform Spectrogram
-
                             <div class="flex-row px-4 pt-2 mb-8">
                                 <input
                                 type="file"
@@ -18,11 +16,12 @@
                                 v-on:change="onFileChange($event)"
                                 single
                                 />
-                                <jet-button
-                                class="flex border-tl pr-4 border-gray-200 bg-white float-right"
-                                v-on:click="createSpectrogram"
-                                >Show Graphs</jet-button
-                            >
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="loading pt-2" id="loading" ref="loading" v-bind:v-show="loading">
+                                <vue-element-loading v-bind:active="loading" spinner="bar-fade-scale" size="100"/>
                             </div>
                             <div id="wave" class="p-2"/>
                         </div>
@@ -203,7 +202,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import WaveSurfer from "wavesurfer.js";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
 import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
-
+import VueElementLoading from "vue-element-loading";
 import JetButton from "@/Jetstream/Button.vue";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 import CompareBar from '@/Pages/ChartVisualizations/CompareBar.vue';
@@ -231,6 +230,7 @@ export default defineComponent({
         DualLine,
         SingleBar,
         SingleLine,
+        VueElementLoading
     },
 
     data() {
@@ -252,14 +252,19 @@ export default defineComponent({
             graphInputC,
             items: [],
             selectionList: [''],
-            currTime: 0.0
+            currTime: 0.0,
+            loading: true
         };
     },
     methods: {
 
         onFileChange: function (e) {
             this.spFile = URL.createObjectURL(e.target.files[0]);
+            this.loading = true;
             this.$refs.player.load();
+            this.createSpectrogram();
+            this.loading = false;
+            this.$refs.loading.show = false;
         },
 
         createSpectrogram() {
@@ -360,6 +365,10 @@ export default defineComponent({
                     colorMap: this.colorMap,
                 })
             ],
+        });
+        this.wavesurfer.on('ready', function() {
+            self.loading = false;
+            self.$refs.loading.active = false;
         });
         this.wavesurfer.on('seek', function() {
             self.currTime = self.wavesurfer.getCurrentTime();
