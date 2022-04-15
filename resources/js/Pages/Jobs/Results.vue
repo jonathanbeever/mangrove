@@ -3,7 +3,7 @@
 
         <div class="flex flex-col dark:text-black">
             <div class="py-4 flex flex-row">
-                <div class="w-1/3 px-4">
+                <div class="w-1/4 px-4 h-screen">
                     <div class="bg-white shadow-xl sm:rounded-lg h-full">
                         <div class="pb-2 pl-2 pt-2 h-full">
 
@@ -110,6 +110,16 @@
                                 </option>
                             </select>
                         </div>
+                        <div class="w-100 h-36 bg-gray p-4 h-1/3 shadow-xl sm:rounded-lg flex self-center fixed inset-x-0 bottom-0 d-flex">
+                            <jet-button class="float-left border-tl p-4 m-4 border-gray-200 bg-white w-40 h-12 px-6" v-on:click="play"><center>Play</center></jet-button>
+                            <jet-button class="float-right border-tl p-4 m-4 border-gray-200 w-40 h-12 px-6" v-on:click="pause"><center>Pause</center></jet-button>
+                        </div>
+
+                        <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
+                            <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause">
+                                <source v-bind:src="spFile" type="audio/mpeg"> Audio playback is not supported.
+                            </audio>
+                        </div>
                     </div>
 
                     <div
@@ -214,6 +224,7 @@ import SingleLine from '@/Pages/ChartVisualizations/SingleLine.vue';
 import * as Papa from 'papaparse';
 import { usePage } from '@inertiajs/inertia-vue3'
 
+
 let singleFile = true;
 let currentIndex = "";
 let compareIndex = "";
@@ -235,7 +246,7 @@ export default defineComponent({
 
     data() {
         return {
-            spFile: "",
+            spFile: "#",
             sFile: "",
             cFile: "",
             startDate: "",
@@ -255,8 +266,10 @@ export default defineComponent({
         };
     },
     methods: {
+
         onFileChange: function (e) {
             this.spFile = URL.createObjectURL(e.target.files[0]);
+            this.$refs.player.load();
         },
 
         createSpectrogram() {
