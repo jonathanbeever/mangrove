@@ -6,9 +6,7 @@
                 <div class="w-1/4 px-4 h-screen">
                     <div class="bg-white shadow-xl sm:rounded-lg h-full">
                         <div class="pb-2 pl-2 pt-2 h-full">
-
                             2D Waveform Spectrogram
-
                             <div class="flex-row px-4 pt-2 mb-8">
                                 <input
                                 type="file"
@@ -18,13 +16,14 @@
                                 v-on:change="onFileChange($event)"
                                 single
                                 />
-                                <jet-button
-                                class="flex border-tl pr-4 border-gray-200 bg-white float-right"
-                                v-on:click="createSpectrogram"
-                                >Show Graphs</jet-button
-                            >
                             </div>
-                            <div id="wave" class="p-2"/>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="loading pt-2" id="loading" ref="loading">
+                                <vue-element-loading ref="animation" :active="loading" spinner="bar-fade-scale" size="100" v-if="loading === true"/>
+                                <div id="wave" class="p-2"/>
+                            </div>
                         </div>
                     </div>
 
@@ -203,7 +202,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import WaveSurfer from "wavesurfer.js";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
 import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
-
+import VueElementLoading from "vue-element-loading";
 import JetButton from "@/Jetstream/Button.vue";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 import CompareBar from '@/Pages/ChartVisualizations/CompareBar.vue';
@@ -231,6 +230,7 @@ export default defineComponent({
         DualLine,
         SingleBar,
         SingleLine,
+        VueElementLoading
     },
 
     data() {
@@ -252,7 +252,8 @@ export default defineComponent({
             graphInputC,
             items: [],
             selectionList: [''],
-            currTime: 0.0
+            currTime: 0.0,
+            loading: true
         };
     },
     methods: {
@@ -260,6 +261,7 @@ export default defineComponent({
         onFileChange: function (e) {
             this.spFile = URL.createObjectURL(e.target.files[0]);
             this.$refs.player.load();
+            this.createSpectrogram();
         },
 
         createSpectrogram() {
@@ -332,7 +334,7 @@ export default defineComponent({
 
         updateSpectrogramTime: function() {
             this.currTime = this.$refs['player'].currentTime;
-            var timeDelta = this.currTime - this.wavesurfer.getCurrentTime();
+            var timeDelta = Math.abs(this.currTime - this.wavesurfer.getCurrentTime());
             if (timeDelta > 0.1) {
                 this.wavesurfer.seekTo(this.currTime / this.wavesurfer.getDuration());
             }
@@ -361,9 +363,13 @@ export default defineComponent({
                 })
             ],
         });
+        this.wavesurfer.on('ready', function() {
+            self.$refs['animation'].show = false;
+            self.loading = false;
+        });
         this.wavesurfer.on('seek', function() {
             self.currTime = self.wavesurfer.getCurrentTime();
-            var timeDelta = self.currTime - self.wavesurfer.getCurrentTime();
+            var timeDelta = Math.abs(self.currTime - self.wavesurfer.getCurrentTime());
             if (timeDelta > 0.1) {
                 self.wavesurfer.seekTo(self.currTime / self.wavesurfer.getDuration());
             }

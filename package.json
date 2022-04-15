@@ -30,5 +30,8 @@
         "vue": "^3.2.31",
         "vue-loader": "^17.0.0",
         "wavesurfer.js": "^6.1.0"
+    },
+    "dependencies": {
+        "vue-element-loading": "^3.0.1"
     }
 }
