@@ -259,6 +259,8 @@ export default defineComponent({
     methods: {
 
         onFileChange: function (e) {
+            this.loading = true;
+            this.$refs['animation'].show = true;
             this.spFile = URL.createObjectURL(e.target.files[0]);
             this.$refs.player.load();
             this.createSpectrogram();
