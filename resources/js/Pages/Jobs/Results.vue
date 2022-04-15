@@ -110,14 +110,9 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="w-100 h-36 bg-gray p-4 h-1/3 shadow-xl sm:rounded-lg flex self-center fixed inset-x-0 bottom-0 d-flex">
-                            <jet-button class="float-left border-tl p-4 m-4 border-gray-200 bg-white w-40 h-12 px-6" v-on:click="play"><center>Play</center></jet-button>
-                            <jet-button class="float-right border-tl p-4 m-4 border-gray-200 w-40 h-12 px-6" v-on:click="pause"><center>Pause</center></jet-button>
-                        </div>
-
                         <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
-                            <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause">
-                                <source v-bind:src="spFile" type="audio/mpeg"> Audio playback is not supported.
+                            <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @seeked="updateTime" v-bind:currentTime="currTime">
+                                <source v-bind:src="spFile"> Audio playback is not supported.
                             </audio>
                         </div>
                     </div>
@@ -198,12 +193,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div v-if="spFile != ''" class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
-                <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @timeupdate="timeUpdate">
-                    <source src="{{spFile}}"> Audio playback is not supported.
-                </audio>
-            </div> -->
         </div>
     </app-layout>
 </template>
@@ -262,7 +251,8 @@ export default defineComponent({
             graphInput,
             graphInputC,
             items: [],
-            selectionList: ['']
+            selectionList: [''],
+            currTime: 0.0
         };
     },
     methods: {
@@ -343,6 +333,11 @@ export default defineComponent({
             })
             this.selectionList = selectionList
         },
+
+        updateTime: function() {
+            this.currTime = this.$refs['player'].currentTime;
+            this.wavesurfer.seekTo(this.currTime);
+        }
     },
     mounted() {
         this.wavesurfer = WaveSurfer.create({
