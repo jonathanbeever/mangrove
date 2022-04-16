@@ -152,7 +152,7 @@
                                                                 class="flex items-start"
                                                             >
                                                                 <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-button>Use This Site</jet-button>
+                                                                    <jet-button v-onClick="onClickCreateSite(item)">Use This Site</jet-button>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -265,7 +265,7 @@ export default defineComponent({
             this.selectedLocation = item.name
             this.selectedName = item.location
             this.siteId = item.site_id
-            
+
             this.siteSelected = true
         }
     },

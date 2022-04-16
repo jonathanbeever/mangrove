@@ -210,7 +210,7 @@ export default defineComponent({
     methods: {
         onFileChange(e) {
             if (this.items.length > 0)
-                this.items.forEach(x => this.items.pop())
+                this.items.splice(0, this.items.length)
 
             const file = e.target.files;
 
@@ -221,7 +221,7 @@ export default defineComponent({
         },
         onMetaChange(e) {
             if (this.meta && this.meta.length > 0)
-                this.meta.forEach(x => this.meta.pop())
+                this.meta.splice(0, this.meta.length)
 
             const file = e.target.files;
             const fileExtension = file[0].name.split('.').pop();
