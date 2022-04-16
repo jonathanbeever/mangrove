@@ -17,9 +17,6 @@
                                 single
                                 />
                             </div>
-                            <br>
-                            <br>
-                            <br>
                             <div class="loading pt-2" id="loading" ref="loading">
                                 <vue-element-loading ref="animation" :active="loading" color="#b0b" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"/>
                                 <div id="wave" class="p-2"/>
@@ -50,7 +47,7 @@
                         <div class="flex-row px-4">
                             Site:
                             <select
-                                class="flex grow"
+                                class="flex grow dark:text-black"
                                 id="selectFile"
                                 v-model="sFile"
                                 v-on:change="alterIndices()"
@@ -64,7 +61,7 @@
                         <div class="flex-row pr-4" v-show="singleFile == false">
                             Compared Site:
                             <select
-                                class="flex grow"
+                                class="flex grow dark:text-black"
                                 id="compareFile"
                                 v-model="cFile"
                                 v-on:change="alterIndices()"
@@ -79,7 +76,7 @@
                             Series:
                             <select
                                 :disabled="(sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile)"
-                                class="flex grow"
+                                class="flex grow dark:text-black"
                                 id="selectSeries"
                                 v-model="currentIndex"
                                 v-on:change="showGraphs()"
@@ -97,7 +94,7 @@
                             Select Chart:
                             <select
                                 :disabled="upGraphs == 'NDSI' || upGraphs == 'RMS' || (sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile)"
-                                class="flex grow"
+                                class="flex grow dark:text-black"
                                 id="chartSelect"
                                 v-model="selectedChart"
                             >
@@ -354,6 +351,7 @@ export default defineComponent({
             waveColor: "#D2EDD4",
             progressColor: "#46B54D",
             backend: "MediaElement",
+            mediaControls: true,
 
             plugins: [
                 SpectrogramPlugin.create({
@@ -365,7 +363,7 @@ export default defineComponent({
                 })
             ],
         });
-        this.wavesurfer.on('ready', function() {
+        this.wavesurfer.on('waveform-ready', function() {
             self.$refs['animation'].show = false;
             self.loading = false;
         });
