@@ -252,7 +252,7 @@ export default defineComponent({
             items: [],
             selectionList: [''],
             currTime: 0.0,
-            loading: false
+            loading: true
         };
     },
     methods: {
