@@ -63,7 +63,7 @@ const stopImpersonation = () => {
                                 <JetNavLink class="dark:text-gray-200" :href="route('about')" :active="route().current('about')">
                                     About
                                 </JetNavLink>
-                                <JetNavLink v-if="$page.props.user.role === 0" class="dark:text-gray-200" :href="route('admin.index')" :active="route().current('admin.index')">
+                                <JetNavLink v-if="$page.props.user.role === 1" class="dark:text-gray-200" :href="route('admin.index')" :active="route().current('admin.index')">
                                     Admin Panel
                                 </JetNavLink>
                             </div>
