@@ -1,7 +1,7 @@
 <template>
     <app-layout title="About">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
                 About
             </h2>
         </template>

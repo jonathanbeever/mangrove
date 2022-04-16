@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <div class="flex flex-col p-6 sm:px-20 bg-white border-b border-gray-200 w-full h-full flex justify-center">
+        <div class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full h-full flex justify-center">
             <div class="flex flex-row justify-between content-center w-full">
                 <jet-button v-on:click="onBack" class="mr-[15px] float-left">
                     Back
@@ -21,33 +21,36 @@
             </div>
             <div class="flex flex-row w-full h-full mt-[40px]">
                 <div class="w-1/3" v-if="index">
-                    <div class="flex flex-row w-full mb-[15px] justify-between">
-                        <jet-button class="w-1/3 justify-center ml-[5px]" v-on:click="nextIndex()" :disabled="nextDisabled">Next</jet-button>
-                        <jet-button class="w-1/3 justify-center mr-[5px]" v-on:click="prevIndex()" :disabled="prevDisabled">Previous</jet-button>
-                    </div>
                     <NdsiInput v-if="indexCurrent == 'NDSI'" @ndsiChanged="ndsiChanged($event)"/>
                     <AciInput v-if="indexCurrent == 'ACI'"/>
                     <AdiInput v-if="indexCurrent == 'ADI'" @adiChanged="adiChanged($event)"/>
                     <AeiInput v-if="indexCurrent == 'AEI'" @aeiChanged="aeiChanged($event)"/>
                     <BiInput v-if="indexCurrent == 'BIO'" @biChanged="biChanged($event)"/>
+                    <div class="flex pt-20 justify-between">
+                    <jet-button class="justify-center mr-[5px]" v-on:click="prevIndex()" :disabled="prevDisabled">Previous Index</jet-button>
+                    <jet-button class="justify-center ml-[5px]" v-on:click="nextIndex()" :disabled="nextDisabled">Next Index</jet-button>
+                    </div>
                 </div>
-                <div class="w-2/3 flex flex-col align-end h-[500px]">
+                <div class="w-2/3 pl-2 flex flex-col align-end h-[500px]">
                     <jet-label class="font-bold text-3xl">
                         Usage of Specifications
                     </jet-label>
+
                     <jet-label class="text-xl h-full">
                         {{descriptionText}}
                     </jet-label>
-                    <div class="flex w-full justify-between content-end align-bottom">
+
+                    <div class="flex justify-between">
+                        <div class="w-1/3"/>
                         <input
-                                class="form-text-input"
+                                class="flex form-text-input appearance-none bg-slate-300 w-1/3 border-none leading-tight focus:outline-none rounded"
                                 type="text"
                                 v-model="name"
                                 id="NameInput"
                                 placeholder='Name this Job'
                                 style="color:#041014;"
                         />
-                        <jet-button class="flex w-1/3 justify-center align-bottom" v-on:click="postJobData()" :disabled="finishDisabled">
+                        <jet-button class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()" :disabled="finishDisabled">
                             Finish
                         </jet-button>
                     </div>

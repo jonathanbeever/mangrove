@@ -1,7 +1,7 @@
 <template>
     <app-layout title="Create Jobs">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
                 Create Jobs
             </h2>
         </template>
@@ -15,7 +15,7 @@
                     >
                         <div class="px-8 py-6">Sound Files</div>
                         <div
-                            class="border-t border-gray-200 md:border-t-0 md:border-l flex flex-col"
+                            class="flex flex-col"
                         >
                             <jet-input
                                 type="text"
