@@ -18,8 +18,9 @@
                                 />
                             </div>
                             <div class="loading pt-2" id="loading" ref="loading">
-                                <vue-element-loading ref="animation" :active="loading" color="#b0b" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"/>
                                 <div id="wave" class="p-2"/>
+                                <vue-element-loading ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"
+                                v-bind:display="none"/>
                             </div>
                         </div>
                     </div>
@@ -106,7 +107,7 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important;">
+                        <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important; display: none;">
                             <audio controls volume="0.1" ref="player" id="player" class="player" style="width: 40%; display: inline-block;" @play="play" @pause="pause" @seeked="updateSpectrogramTime" v-bind:currentTime="currTime">
                                 <source v-bind:src="spFile"> Audio playback is not supported.
                             </audio>
@@ -197,6 +198,7 @@
 import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import WaveSurfer from "wavesurfer.js";
+import RegionsPlugin from "wavesurfer.js/src/plugin/regions";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
 import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
 import VueElementLoading from "vue-element-loading";
@@ -250,14 +252,14 @@ export default defineComponent({
             items: [],
             selectionList: [''],
             currTime: 0.0,
-            loading: false
+            loading: true
         };
     },
     methods: {
 
         onFileChange: function (e) {
             this.loading = true;
-            //this.$refs['animation'].show = true;
+            //this.$refs['animation'].display = "inline";
             this.spFile = URL.createObjectURL(e.target.files[0]);
             this.$refs.player.load();
             this.createSpectrogram();
@@ -360,10 +362,26 @@ export default defineComponent({
                     container: "#wave",
                     labels: true,
                     colorMap: this.colorMap,
+                }),
+                RegionsPlugin.create({
+                    regionsMinLength: 2,
+                    regions: [
+                        {
+                            start: 1,
+                            end: 3,
+                            loop: false,
+                            color: 'hsla(400, 100%, 30%, 0.5)'
+                        },
+                    ],
+                    dragSelection: {
+                        slop: 5
+                    }
                 })
             ],
         });
         this.wavesurfer.on('waveform-ready', function() {
+            //self.$refs['animation'].active = false;
+            self.$refs['animation'].display = "none";
             self.$refs['animation'].show = false;
             self.loading = false;
         });
