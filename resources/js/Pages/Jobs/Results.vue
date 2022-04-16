@@ -371,14 +371,7 @@ export default defineComponent({
                             end: 3,
                             loop: false,
                             color: 'hsla(400, 100%, 30%, 0.5)'
-                        }, {
-                            start: 5,
-                            end: 7,
-                            loop: false,
-                            color: 'hsla(200, 50%, 70%, 0.4)',
-                            minLength: 1,
-                            drag:true
-                        }
+                        },
                     ],
                     dragSelection: {
                         slop: 5
