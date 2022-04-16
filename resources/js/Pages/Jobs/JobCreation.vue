@@ -1,7 +1,7 @@
 <template>
     <div v-if="displayIndexSelection" class="w-full">
         <div
-            class="flex flex-col p-6 sm:px-20 bg-white border-b border-gray-200 w-full flex justify-center"
+            class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full flex justify-center"
         >
             <div class="flex flex-row justify-between content-center w-full">
                 <jet-button

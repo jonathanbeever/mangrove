@@ -63,13 +63,13 @@ const stopImpersonation = () => {
                                 <JetNavLink class="dark:text-gray-200" :href="route('about')" :active="route().current('about')">
                                     About
                                 </JetNavLink>
-                                <JetNavLink v-if="$page.props.user.role === 1" class="dark:text-gray-200" :href="route('admin.index')" :active="route().current('admin.index')">
+                                <JetNavLink v-if="$page.props.user.role === 0" class="dark:text-gray-200" :href="route('admin.index')" :active="route().current('admin.index')">
                                     Admin Panel
                                 </JetNavLink>
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ml-6">
+                        <div class="hidden sm:flex sm:items-center sm:ml-6 ">
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
                                 <JetDropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
@@ -322,7 +322,7 @@ const stopImpersonation = () => {
             </nav>
 
             <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow">
+            <header v-if="$slots.header" class="bg-white shadow dark:bg-slate-800 dark:text-white rounded-b-full">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

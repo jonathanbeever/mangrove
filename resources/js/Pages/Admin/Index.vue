@@ -1,7 +1,7 @@
 <template>
     <app-layout title="Admin Panel">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
                 Admin Panel
             </h2>
         </template>
@@ -10,15 +10,14 @@
                 <div
                     class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800"
                 >
-                    <div class="border-gray-200 flex flex-row p-4">
-                        <div class="py-4 align-middle inline-block min-w-full">
+                        <div class="align-middle inline-block min-w-full h-3/5">
                             <div
-                                class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+                                class="shadow overflow-hidden sm:rounded-lg overflow-y-auto overflow-x-hidden"
                             >
                                 <table
                                     class="min-w-full divide-y divide-gray-200"
                                 >
-                                    <thead class="bg-gray-50">
+                                    <thead class="bg-gray-50 sticky top-0">
                                         <tr>
                                             <th
                                                 scope="col"
@@ -44,7 +43,7 @@
                                         class="bg-white divide-y divide-gray-200"
                                     >
                                         <tr
-                                            v-for="(item, index) in userTable"
+                                            v-for="(item, index) in userTable.data"
                                             :key="index"
                                         >
                                             <td
@@ -69,13 +68,43 @@
                                             <td
                                                 class="px-4 py-4 whitespace-nowrap text-sm font-medium float-right"
                                             >
-                                                <JetButton v-on:click="loginUser(item.id)">Login</JetButton>
+                                                <JetButton
+                                                    v-on:click="
+                                                        loginUser(item.id)
+                                                    "
+                                                    >Login</JetButton
+                                                >
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
+
+                                    <div class="flex flex-wrap">
+                                        <template
+                                            v-for="(link, p) in userTable.links"
+                                            :key="p"
+                                        >
+                                            <div
+                                                v-if="link.url === null"
+                                                class="m-4 px-4 py-3 text-sm leading-4 text-gray-400 border rounded"
+                                                v-html="link.label"
+                                            />
+                                            <Button
+                                                v-else
+                                                class="m-4 px-4 py-3 text-sm border rounded dark:bg-white dark:text-black dark:hover:bg-slate-900 hover:bg-white focus:border-indigo-500 focus:text-indigo-500"
+                                                :class="{
+                                                    'bg-blue-700 text-black':
+                                                        link.active,
+                                                }"
+                                                :href="link.url"
+                                                v-html="link.label"
+                                                v-on:click="nextPage(link.url)"
+                                            />
+                                        </template>
+
+                                </div>
                             </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -89,6 +118,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Jetstream/Button.vue";
 
 let userTable = {};
+let nextPage;
 
 export default defineComponent({
     components: {
@@ -105,22 +135,25 @@ export default defineComponent({
         this.userTable = await this.getTable();
     },
     methods: {
-        getTable: async function() {
+        nextPage: async function(e) {
+            //console.log(e)
+            this.userTable = await this.getTable(e);
+        },
+        getTable: async function (page = "/admin/users/paginate") {
             try {
-                const response = await axios.get('/admin/users/paginate');
-                return response.data.data;
+                const response = await axios.get(page);
+                return response.data;
             } catch (error) {
                 console.error(error);
             }
 
             return null;
         },
-        loginUser: async function(user_id) {
-            if (typeof user_id !== 'undefined' && user_id !== null) {
-                window.location.replace(route('impersonate', user_id));
+        loginUser: async function (user_id) {
+            if (typeof user_id !== "undefined" && user_id !== null) {
+                window.location.replace(route("impersonate", user_id));
             }
-        }
+        },
     },
-
 });
 </script>
