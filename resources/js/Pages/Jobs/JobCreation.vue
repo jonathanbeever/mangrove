@@ -185,8 +185,6 @@ export default defineComponent({
                 this.selectedIndex.push(event.target.id.toUpperCase());
                 this.descriptionText = indexText[event.target.id.toUpperCase()];
             }
-            //console.log(this.selectedIndex);
-            //this.descriptionText = indexText[event.target.id.toUpperCase()];
             return;
         },
         onNext: function (event) {

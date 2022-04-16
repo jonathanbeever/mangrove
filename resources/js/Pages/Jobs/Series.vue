@@ -9,22 +9,18 @@
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800 ">
-                    <JobCreation
-                        v-if="goToJobCreation"
-                        @goToFileSelection="onBackJobCreation()"
-                    />
                     <div
                         class="bg-white border-b border-gray-200 flex flex-row"
                     >
-                        <fileUpload :items="items" :meta="meta"/>
+                        <fileUpload :items="items" :meta="meta" v-if="newUploads"/>
                     </div>
                     <jet-button
-                        v-if="newUploads == true && goToJobCreation == false && editPop == false"
-                        v-on:click="renderJobCreation"
+                        v-if="newUploads == true && editPop == false"
+                        v-on:click="postSiteSeries()"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                         :disabled="seriesName.length == 0"
                     >
-                        Start New Jobs
+                        Import Series
                     </jet-button>
                     <input
                 class="m-4 flex form-text-input border-none leading-tight rounded"
@@ -52,12 +48,11 @@ import JetLabel from "@/Jetstream/Label.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import FileUpload from "@/Components/FileUpload.vue";
 import JobCreation from "@/Pages/Jobs/JobCreation.vue";
+import { Inertia } from '@inertiajs/inertia'
 
-let goToJobCreation = false;
 let newUploads = true;
 let editPop = false;
 let selected = [];
-let somethingSelected = false;
 let seriesName = "";
 
 export default defineComponent({
@@ -96,7 +91,6 @@ export default defineComponent({
     data() {
         return {
             newUploads,
-            goToJobCreation,
             somethingSelected: false,
             items: [],
             meta: [],
@@ -108,18 +102,8 @@ export default defineComponent({
         };
     },
     methods: {
-        onBackJobCreation: function () {
-            this.goToJobCreation = false;
-            this.newUploads = true;
-            this.selected = []
-            this.somethingSelected = false
-        },
-        removeAllSelected: function () {
-            this.items.forEach(x => x.selected = false)
-        },
         renderJobCreation: function () {
             this.removeAllSelected()
-            this.goToJobCreation = true;
             this.newUploads = false;
         },
         edit: function () {
@@ -129,16 +113,27 @@ export default defineComponent({
             this.editPop = !this.editPop;
 
         },
-        anySelected: function () {
-            let e = this.items.filter((p) => p.selected == true);
-            if (e.length > 0) {
-                this.selected = e;
-                this.somethingSelected = true;
-                return false;
-            } else {
-                this.somethingSelected = false;
-                return true;
-            }
+        ConvertFilesForPost: function () {
+            let files = [];
+            this.items.forEach(x => files.push({name: x.name, path: x.path, size: x.size}))
+            return files;
+        },
+        ConvertMetaForPost: function () {
+            let files = [];
+            if (this.meta.length == 0) 
+                return null
+
+            this.meta.forEach(x => files.push({name: x.name, path: x.path, size: x.size}))
+            return files;
+        },
+        postSiteSeries: function () {
+            let request = {
+                    site: this.siteName,
+                    series: this.seriesName,
+                    files: this.ConvertFilesForPost(),
+                    metadata: this.ConvertMetaForPost()
+                }
+                Inertia.post(route('import.save'), request)
         }
     },
 });
