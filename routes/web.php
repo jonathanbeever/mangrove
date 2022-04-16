@@ -44,7 +44,8 @@ Route::middleware([
     'verified',
     'admin'
 ])->group(static function () {
-    Route::get('admin', [ImpersonateController::class, 'index'])->name('admin.index');
-    Route::post('admin/impersonate', [ImpersonateController::class, 'store'])->name('admin.impersonate.store');
-    Route::delete('admin/impersonate', [ImpersonateController::class, 'destroy'])->name('admin.impersonate.destroy');
+    Route::get('/admin', [ImpersonateController::class, 'index'])->name('admin.index');
+    Route::get('/admin/users/paginate', [ImpersonateController::class, 'paginate'])->name('admin.users.paginate');
+    Route::post('/admin/impersonate', [ImpersonateController::class, 'store'])->name('admin.impersonate.store');
+    Route::delete('/admin/impersonate', [ImpersonateController::class, 'destroy'])->name('admin.impersonate.destroy');
 });

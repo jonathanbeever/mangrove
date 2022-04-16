@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -20,9 +21,17 @@ class ImpersonateController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Index', [
-            'users' => User::paginate()
-        ]);
+        return Inertia::render('Admin/Index');
+    }
+
+    /**
+     * Get a paginated object of users.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function paginate(): LengthAwarePaginator
+    {
+        return User::paginate()->withPath('/admin/users/paginate');
     }
 
     public function store(Request $request)
