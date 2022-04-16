@@ -3,11 +3,11 @@
 
         <div class="flex flex-col dark:text-black">
             <div class="py-4 flex flex-row">
-                <div class="w-1/4 px-4 h-screen">
-                    <div class="bg-white shadow-xl sm:rounded-lg h-full">
+                <div class="w-1/4 px-4 h-1/2">
+                    <div class="bg-white shadow-xl sm:rounded-lg h-full dark:bg-slate-800 dark:text-white">
                         <div class="pb-2 pl-2 pt-2 h-full">
                             2D Waveform Spectrogram
-                            <div class="flex-row px-4 pt-2 mb-8">
+                            <div class="flex-row pr-2 pt-2 mb-8">
                                 <input
                                 type="file"
                                 class="form-control"
@@ -21,7 +21,7 @@
                             <br>
                             <br>
                             <div class="loading pt-2" id="loading" ref="loading">
-                                <vue-element-loading ref="animation" :active="loading" spinner="bar-fade-scale" size="100" v-if="loading === true"/>
+                                <vue-element-loading ref="animation" :active="loading" color="#b0b" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"/>
                                 <div id="wave" class="p-2"/>
                             </div>
                         </div>
@@ -30,17 +30,17 @@
                 </div>
                 <div class="flex flex-col grow pr-4">
                     <div
-                        class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full"
+                        class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full dark:bg-slate-800 dark:text-white"
                     >
                         <div class="pr-2 float-left self-end">
                             <jet-button
-                                class="btn btn-success"
+                                class="btn btn-success border-gray-200"
                                 @click="switchMode()"
                                 v-show="singleFile == true"
                                 >Single File Analysis</jet-button
                             >
                             <jet-button
-                                class="btn btn-success"
+                                class="btn btn-success border-gray-200"
                                 @click="switchMode()"
                                 v-show="singleFile == false"
                                 >Multi File Analysis</jet-button
@@ -253,14 +253,14 @@ export default defineComponent({
             items: [],
             selectionList: [''],
             currTime: 0.0,
-            loading: true
+            loading: false
         };
     },
     methods: {
 
         onFileChange: function (e) {
             this.loading = true;
-            this.$refs['animation'].show = true;
+            //this.$refs['animation'].show = true;
             this.spFile = URL.createObjectURL(e.target.files[0]);
             this.$refs.player.load();
             this.createSpectrogram();
