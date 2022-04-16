@@ -40,7 +40,9 @@ const stopImpersonation = () => {
         <JetBanner />
 
         <div class="min-h-screen bg-gray-100 dark:bg-slate-900 dark:text-white">
+        
             <nav class="bg-white border-b border-gray-100 dark:bg-slate-800">
+                
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -66,6 +68,8 @@ const stopImpersonation = () => {
                                 <JetNavLink v-if="$page.props.user.role === 1" class="dark:text-gray-200" :href="route('admin.index')" :active="route().current('admin.index')">
                                     Admin Panel
                                 </JetNavLink>
+                                <!-- Navigation -->
+                                
                             </div>
                         </div>
 
@@ -193,6 +197,15 @@ const stopImpersonation = () => {
                                         </form>
                                     </template>
                                 </JetDropdown>
+                            </div>
+
+                            <div class="inline-flex pl-5">
+                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l" onclick="history.back()">
+                                Back
+                            </button>
+                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r" onclick="history.back()">
+                                Forward
+                            </button>
                             </div>
                         </div>
 

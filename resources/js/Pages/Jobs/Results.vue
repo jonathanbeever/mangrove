@@ -198,6 +198,7 @@
 import { defineComponent, ref } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import WaveSurfer from "wavesurfer.js";
+import RegionsPlugin from "wavesurfer.js/src/plugin/regions";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
 import TimelinePlugin from "wavesurfer.js/src/plugin/timeline";
 import VueElementLoading from "vue-element-loading";
@@ -361,6 +362,9 @@ export default defineComponent({
                     container: "#wave",
                     labels: true,
                     colorMap: this.colorMap,
+                }),
+                RegionsPlugin.create({
+                    // plugin options ...
                 })
             ],
         });
