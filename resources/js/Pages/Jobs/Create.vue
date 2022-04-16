@@ -175,7 +175,7 @@
             </div>
         </div>
     </app-layout>
-    <Series :siteName="selectedName" :location="selectedLocation" v-else/>
+    <Series :newSite="newSite" :siteID="siteID" :siteName="selectedName" :location="selectedLocation" v-else/>
 </template>
 
 <script>
@@ -224,7 +224,6 @@ export default defineComponent({
     },
     mounted() {
         this.items = usePage().props.value.sites
-        console.log(this.items)
     },
     data() {
         return {
@@ -238,7 +237,9 @@ export default defineComponent({
             closeMenu: 'Close Site Creation',
             siteSelected: false,
             selectedName: '',
-            selectedLocation:''
+            selectedLocation:'',
+            newSite: false,
+            siteID: '',
         };
     },
     methods: {
@@ -253,15 +254,18 @@ export default defineComponent({
             this.siteCreationEnabled = !this.siteCreationEnabled
         },
         onClickSiteSelectedNew: function () {
+            this.newSite = true;
             this.selectedLocation = this.siteCreationLocation
             this.selectedName = this.siteCreationName
 
             this.siteSelected = true;
         },
         onClickSiteSelected: function (item) {
+            this.newSite = false
             this.selectedLocation = item.name
             this.selectedName = item.location
-
+            this.siteId = item.site_id
+            
             this.siteSelected = true
         }
     },

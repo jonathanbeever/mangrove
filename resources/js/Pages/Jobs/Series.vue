@@ -66,7 +66,7 @@ export default defineComponent({
         JobCreation,
         Modal,
     },
-    props: ["siteName", "location"],
+    props: ["siteName", "location", "newSite", "siteID"],
 
     computed: {
         filtered() {
@@ -127,12 +127,33 @@ export default defineComponent({
             return files;
         },
         postSiteSeries: function () {
-            let request = {
+            let request = {}
+            var siteLocation
+
+            if (this.location.length > 0) {
+                siteLocation = this.location
+            } else {
+                siteLocation = null;
+            }
+
+            if (this.newSite) {
+            request = {
+                    location: siteLocation,
+                    site_id: this.siteID,
+                    series: this.seriesName,
+                    files: this.ConvertFilesForPost(),
+                    metadata: this.ConvertMetaForPost()
+                }
+            }
+            else {
+                request = {
+                    location: siteLocation,
                     site: this.siteName,
                     series: this.seriesName,
                     files: this.ConvertFilesForPost(),
                     metadata: this.ConvertMetaForPost()
                 }
+            }
                 Inertia.post(route('import.save'), request)
         }
     },
