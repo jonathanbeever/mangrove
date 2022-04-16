@@ -144,11 +144,17 @@
                     v-on:change="onFileChange"
                     multiple
                 />
-                <jet-button
-                    class="float-right btn btn-success"
-                    @click="saveInfo"
-                    >Upload</jet-button
-                >
+                </form>
+                <form @submit.prevent="formSubmit" enctype="multipart/form-data">
+                <strong class="flex pt-4">Select New Folders:</strong>
+                <input
+                    type="file"
+                    class="form-control"
+                    v-on:change="onFileChange"
+                    multiple
+                    webkitdirectory
+                    directory
+                />
             </form>
         </div>
     </div>
@@ -161,6 +167,7 @@ import JetButton from "@/Jetstream/Button.vue";
 export default defineComponent({
     components: {
         JetButton,
+
     },
 
     props: ["items"],
@@ -178,7 +185,8 @@ export default defineComponent({
     methods: {
         onFileChange(e) {
             this.file = e.target.files;
-            //console.log(this.file);
+            console.log(URL.createObjectURL(e.target.files[0]));
+            console.log(this.file);
 
             for (const i of Object.keys(this.file)) {
                 this.items.push(this.file[i]);
