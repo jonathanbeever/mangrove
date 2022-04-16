@@ -1,3 +1,6 @@
+/.idea
+/.vscode
+/dist
 /node_modules
 /public/hot
 /public/storage
@@ -12,8 +15,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-/.idea
-/.vscode
 .phpstorm.meta.php
 _ide_helper.php
 sounds/wav/black_bear
