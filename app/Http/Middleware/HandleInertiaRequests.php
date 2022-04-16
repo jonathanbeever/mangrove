@@ -36,8 +36,10 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $manager = app('impersonate');
+
         return array_merge(parent::share($request), [
-            'impersonating' => session()->has('impersonate'),
+            'impersonating' => $manager->isImpersonating(),
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'failure' => fn () => $request->session()->get('failure'),

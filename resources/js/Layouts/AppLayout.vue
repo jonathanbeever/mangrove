@@ -28,7 +28,7 @@ const logout = () => {
 };
 
 const stopImpersonation = () => {
-    Inertia.delete(route('admin.impersonate.destroy'));
+    window.location.replace(route('impersonate.leave'));
 }
 
 </script>

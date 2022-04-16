@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Lab404\Impersonate\Models\Impersonate;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
@@ -19,6 +20,7 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use Impersonate;
     use Notifiable;
     use TwoFactorAuthenticatable;
     use SoftDeletes;
@@ -65,6 +67,15 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    /**
+     * Define permissions for impersonating another user.
+     *
+     * @return bool
+     */
+    public function canImpersonate(): bool
+    {
+        return $this->role === UserRoleEnum::ADMIN;
+    }
 
     /**
      * Users can have many jobs.

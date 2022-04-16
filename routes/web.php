@@ -26,7 +26,7 @@ Route::get('/', static function () {
 
 // Default Role Routes
 Route::middleware([
-    'auth:sanctum',
+    'auth:web',
     config('jetstream.auth_session'),
     'verified',
 ])->group(static function () {
@@ -35,6 +35,8 @@ Route::middleware([
     Route::get('/about', static function () {
         return Inertia::render('About');
     })->name('about');
+
+    Route::impersonate();
 });
 
 // Admin Role Routes
@@ -46,6 +48,4 @@ Route::middleware([
 ])->group(static function () {
     Route::get('/admin', [ImpersonateController::class, 'index'])->name('admin.index');
     Route::get('/admin/users/paginate', [ImpersonateController::class, 'paginate'])->name('admin.users.paginate');
-    Route::post('/admin/impersonate', [ImpersonateController::class, 'store'])->name('admin.impersonate.store');
-    Route::delete('/admin/impersonate', [ImpersonateController::class, 'destroy'])->name('admin.impersonate.destroy');
 });

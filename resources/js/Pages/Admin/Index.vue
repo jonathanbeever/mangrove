@@ -74,7 +74,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -118,13 +117,7 @@ export default defineComponent({
         },
         loginUser: async function(user_id) {
             if (typeof user_id !== 'undefined' && user_id !== null) {
-                try {
-                    await axios.post('/admin/impersonate', {
-                        user_id: user_id
-                    });
-                } catch (error) {
-                    console.error(error);
-                }
+                window.location.replace(route('impersonate', user_id));
             }
         }
     },
