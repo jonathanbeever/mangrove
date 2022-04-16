@@ -3,10 +3,8 @@
 namespace App\Models;
 
 use App\Enums\User\UserRoleEnum;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -75,6 +73,36 @@ class User extends Authenticatable
     public function canImpersonate(): bool
     {
         return $this->role === UserRoleEnum::ADMIN;
+    }
+
+    /**
+     * Users can have many sites.
+     *
+     * @return HasMany
+     */
+    public function sites(): HasMany
+    {
+        return $this->hasMany(Site::class);
+    }
+
+    /**
+     * Users can have many series.
+     *
+     * @return HasMany
+     */
+    public function series(): HasMany
+    {
+        return $this->hasMany(Series::class);
+    }
+
+    /**
+     * Users can have many files.
+     *
+     * @return HasMany
+     */
+    public function files(): HasMany
+    {
+        return $this->hasMany(File::class);
     }
 
     /**
