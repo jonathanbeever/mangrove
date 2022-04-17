@@ -32,7 +32,6 @@ Route::middleware([
     'verified',
 ])->group(static function () {
     Route::resource('jobs', JobController::class)->except(['show', 'edit', 'update']);
-    Route::get('/import', [ImportController::class, 'create'])->name('import.create');
     Route::post('/import', [ImportController::class, 'import'])->name('import.save');
 
     Route::get('/about', static function () {

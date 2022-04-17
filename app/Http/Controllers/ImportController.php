@@ -11,25 +11,6 @@ use Inertia\Response;
 class ImportController extends Controller
 {
     /**
-     * Show the form for creating a new import.
-     *
-     * @return Response
-     */
-    public function create(): Response
-    {
-        $user = auth()->user();
-        if ($user !== null) {
-            $sites = $user->sites();
-            $series = $user->series();
-        }
-
-        return Inertia::render('Jobs/Series', [
-            'sites' => $sites ?? [],
-            'series' => $series ?? [],
-        ]);
-    }
-
-    /**
      * Store all the imported data to the database.
      *
      * @param  ImportRequest  $request
