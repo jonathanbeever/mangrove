@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="show === true">
         <div class="flex flex-col absolute bottom-10 right-10">
             <div class="bg-green-500 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3" id="static-example" role="alert" aria-live="assertive" aria-atomic="true" data-mdb-autohide="false">
                 <div class="bg-green-500 flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-green-400 rounded-t-lg">
@@ -11,7 +11,7 @@
                     </p>
                 <div class="flex items-center">
                     <p class="text-white opacity-90 text-xs">0 mins ago</p>
-                    <button type="button" class="btn-close btn-close-white box-content w-4 h-4 ml-2 text-white border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-white hover:opacity-75 hover:no-underline" data-mdb-dismiss="toast" aria-label="Close"></button>
+                    <jet-button class='close m-2' @click="hide()" style="cursor: pointer;">X</jet-button>
                 </div>
             </div>
             <div class="p-3 bg-green-500 rounded-b-lg break-words text-white">
@@ -19,13 +19,22 @@
             </div>
         </div>
     </div>
+    </div>
 </template>
 <script>
 import { usePage } from '@inertiajs/inertia-vue3';
 
 export default {
     props: [],
+    data() {
+        return {
+            show: true
+        };
+    },
     methods: {
-  }
+        hide: function () {
+            this.show = false;
+        }
+    }
 };
 </script>
