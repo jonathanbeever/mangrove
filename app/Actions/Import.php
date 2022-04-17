@@ -13,9 +13,9 @@ use Throwable;
 class Import implements ImportContract
 {
 
-    private Site $site;
-    private Series $series;
-    private User $user;
+    private Site|null $site;
+    private Series|null $series;
+    private User|null $user;
 
     /**
      * Import site, series, files, and metadata into database.
@@ -52,9 +52,7 @@ class Import implements ImportContract
                     'name' => $input['series'],
                 ]);
 
-                $this->importFiles($input);
-
-                return true;
+                return $this->importFiles($input);
             });
         } catch (Throwable) {
             return false;
@@ -65,11 +63,16 @@ class Import implements ImportContract
      * Import files into database.
      *
      * @param  array  $input
-     * @return void
+     * @return bool
      */
-    private function importFiles(array $input): void
+    private function importFiles(array $input): bool
     {
         foreach ($input['files'] as $file) {
+            $normalizedPath = normalize_path($file['path']);
+            if($normalizedPath === null) {
+                return false;
+            }
+
             $this->series->files()->firstOrCreate([
                 'user_id' => $this->user->id,
                 'name' => $file['name'],
@@ -78,23 +81,31 @@ class Import implements ImportContract
                 'user_id' => $this->user->id,
                 'site_id' => $this->site->id,
                 'name' => $file['name'],
-                'path' => normalize_path($file['path']),
+                'path' => $normalizedPath,
                 'size' => $file['size'],
             ]);
         }
 
         if (isset($input['metadata'])) {
-            $this->parseRecorderMetadata($input['metadata']);
+            return $this->parseRecorderMetadata($input['metadata']);
         }
+
+        return true;
     }
 
     /**
      * @param  array  $file
-     * @return void
+     * @return bool
      */
-    private function parseRecorderMetadata(array $file): void
+    private function parseRecorderMetadata(array $file): bool
     {
-        $realFilePath = rootfs_path(normalize_path($file['path']));
+        $normalizedPath = normalize_path($file['path']);
+
+        if ($normalizedPath === null) {
+            return false;
+        }
+
+        $realFilePath = rootfs_path($normalizedPath);
         $metadataFile = file($realFilePath);
 
         if ($metadataFile !== FALSE) {
@@ -128,5 +139,7 @@ class Import implements ImportContract
                 }
             }
         }
+
+        return true;
     }
 }

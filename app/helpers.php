@@ -23,7 +23,7 @@ if (!function_exists('normalize_path')) {
      * @param $path
      * @return string
      */
-    function normalize_path($path): string
+    function normalize_path($path): ?string
     {
         $wrapper = '';
         $scheme_separator = strpos($path, '://');
@@ -42,10 +42,20 @@ if (!function_exists('normalize_path')) {
         $path = preg_replace('|(?<=.)/+|', '/', $path);
 
         // Windows paths should lowercase the drive letter because
-        // they will be accessed through WSL /mnt folder.
+        // they will be accessed through WSL mnt folder.
         if (':' === $path[1]) {
             $path = lcfirst($path);
-            $path = '/mnt/' . $path[0] . substr($path, 2);
+
+            // Some WSL installations had the mount path set to /mnt_host during testing.
+            if (is_dir('/mnt/' . $path[0])) {
+                $mount_path = '/mnt/';
+            } else if (is_dir('/mnt_host/' . $path[0])) {
+                $mount_path = '/mnt_host/';
+            } else {
+                return null;
+            }
+
+            $path = $mount_path . $path[0] . substr($path, 2);
         }
 
         return $wrapper.$path;
