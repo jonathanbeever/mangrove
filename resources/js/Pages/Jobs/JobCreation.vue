@@ -198,7 +198,7 @@ export default defineComponent({
             return;
         },
         onRemoveRender: function () {
-            this.$emit("goToFileSelection");
+            this.$emit("goToSeriesSelection");
             return;
         },
     },
