@@ -10,7 +10,8 @@
         "prod": "npm run production",
         "production": "mix --production",
         "start": "electron .",
-        "build": "electron-packager . mangrove --out=dist"
+        "build": "npm run prod && electron-packager . mangrove --out=dist",
+        "build:all": "npm run build -- --all"
     },
     "devDependencies": {
         "@inertiajs/inertia": "^0.11.0",

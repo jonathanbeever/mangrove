@@ -9,15 +9,14 @@ const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: width,
         height: height,
-        show: false,
+        show: true,
         autoHideMenuBar: true
     });
 
-    mainWindow.loadURL('http://localhost');
-
-    mainWindow.webContents.once('dom-ready', () => {
-        mainWindow.show();
-        mainWindow.maximize();
+    mainWindow.loadURL('http://localhost').catch(() => {
+        mainWindow.loadFile('error.html').catch(() => {
+            app.quit();
+        });
     });
 };
 
