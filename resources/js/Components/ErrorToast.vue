@@ -14,7 +14,7 @@
             </div>
             </div>
             <div class="p-3 bg-red-600 rounded-b-lg break-words text-white">
-                Processing failed. Please try to re-run your job.
+                Processing failed (Error: {$page.props.jetstream.flash.failure}) Please try to re-run your job.
             </div>
             </div>
         </div>
