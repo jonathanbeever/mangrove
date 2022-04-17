@@ -81,7 +81,7 @@ class Import implements ImportContract
                 'user_id' => $this->user->id,
                 'site_id' => $this->site->id,
                 'name' => $file['name'],
-                'path' => $normalizedPath,
+                'path' => rootfs_path($normalizedPath),
                 'size' => $file['size'],
             ]);
         }
@@ -100,13 +100,13 @@ class Import implements ImportContract
     private function parseRecorderMetadata(array $file): bool
     {
         $normalizedPath = normalize_path($file['path']);
-
         if ($normalizedPath === null) {
             return false;
         }
 
         $realFilePath = rootfs_path($normalizedPath);
         $metadataFile = file($realFilePath);
+        dd($metadataFile);
 
         if ($metadataFile !== FALSE) {
             // Read all CSV rows into array.
