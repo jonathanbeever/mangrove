@@ -12,6 +12,7 @@
         "publish": "electron-forge publish",
         "lint": "echo \"No linting configured\""
     },
+    "license": "GPL-3.0",
     "config": {
         "forge": {
             "packagerConfig": {},
