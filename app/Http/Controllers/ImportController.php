@@ -11,6 +11,25 @@ use Inertia\Response;
 class ImportController extends Controller
 {
     /**
+     * Show the form for importing new data.
+     *
+     * @return Response
+     */
+    public function index(): Response
+    {
+        $user = auth()->user();
+        if ($user !== null) {
+            $sites = $user->sites->toArray();
+            $series = $user->series->toArray();
+        }
+
+        return Inertia::render('Import/Index', [
+            'sites' => $sites ?? [],
+            'series' => $series ?? [],
+        ]);
+    }
+
+    /**
      * Store all the imported data to the database.
      *
      * @param  ImportRequest  $request
