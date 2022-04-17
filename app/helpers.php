@@ -48,14 +48,14 @@ if (!function_exists('normalize_path')) {
 
             // Some WSL installations had the mount path set to /mnt_host during testing.
             if (is_dir(rootfs_path('/mnt/' . $path[0]))) {
-                $mount_path = '/mnt/';
-            } else if (is_dir(rootfs_path('/mnt_host/' . $path[0]))) {
-                $mount_path = '/mnt_host/';
+                $mount_path = '/mnt/' . $path[0];
+            } else if (is_dir(rootfs_path('/host_mnt/' . $path[0]))) {
+                $mount_path = '/host_mnt/' . $path[0];
             } else {
                 return null;
             }
 
-            $path = $mount_path . $path[0] . substr($path, 2);
+            $path = $mount_path . substr($path, 2);
         }
 
         return $wrapper.$path;

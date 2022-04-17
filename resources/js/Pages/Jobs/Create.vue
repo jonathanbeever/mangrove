@@ -107,7 +107,7 @@
                     <div
                         class="bg-white border-b border-gray-200 flex flex-col dark:bg-slate-800"
                     >
-                        <JobCreation @goToSeriesSelection="onBackJobCreation()"/>
+                        <JobCreation :seriesID="seriesID" @goToSeriesSelection="onBackJobCreation()"/>
                     </div>
                 </div>
             </div>
@@ -145,12 +145,13 @@ export default defineComponent({
             items: [],
             search: "",
             filteredItems: [],
-            renderJobCreation: true
+            renderJobCreation: true,
+            seriesID: ''
         };
     },
     methods: {
         onClickUseSeries: function (item) {
-            console.log(item)
+            this.seriesID = item.id
             this.renderJobCreation = false
         },
         onBackJobCreation: function () {
