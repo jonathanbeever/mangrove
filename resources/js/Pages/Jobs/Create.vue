@@ -41,31 +41,31 @@
                                                     <tr>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Site
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Series &amp; Size
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Recording Date
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Latitude/Longitude
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Select
                                                         </th>
@@ -101,7 +101,7 @@
                                                                         }}
                                                                     </div>
                                                                     <div
-                                                                        class="text-sm text-gray-500"
+                                                                        class="text-sm text-neutral-900"
                                                                     >
                                                                         {{
                                                                             item.name
@@ -123,7 +123,7 @@
                                                             </div>
 
                                                             <div
-                                                                class="text-sm text-gray-500"
+                                                                class="text-sm text-neutral-900"
                                                             >
                                                                 {{
                                                                     item.size / 1e6 + "MB"
@@ -131,7 +131,7 @@
                                                             </div>
                                                         </td>
                                                         <td
-                                                            class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                                                            class="px-6 py-4 whitespace-nowrap text-sm text-neutral-900"
                                                         >
                                                             {{ new Date(item.lastModified) }}
                                                         </td>
@@ -139,7 +139,7 @@
                                                             class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium dark:text-black"
                                                         >
                                                             <div
-                                                                class="text-sm text-gray-500"
+                                                                class="text-sm text-neutral-900"
                                                                 v-if="item.latitude != null"
                                                             >
                                                                 {{
@@ -151,7 +151,7 @@
                                                             0'00"00
                                                             </div>
                                                             <div
-                                                                class="text-sm text-gray-500"
+                                                                class="text-sm text-neutral-900"
                                                                 v-if="item.longitude != null"
                                                             >
                                                                 {{
