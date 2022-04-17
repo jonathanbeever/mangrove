@@ -25,24 +25,30 @@ class Import implements ImportContract
             return DB::transaction(function () use ($input) {
                 $user = auth()->user();
 
-                if ($user !== null) {
+                if ($user === null) {
                     return false;
                 }
 
-                $site = $user->sites()->firstOrCreate([
-                    'id' => $input['site_id'],
-                ], [
-                    'name' => $input['site'],
-                    'location' => $input['location'],
-                ]);
+                if (isset($input['site_id'])) {
+                    $site = $user->sites()->find($input['site_id']);
+                } else if (isset($input['site'])) {
+                    $site = $user->sites()->firstOrCreate([
+                        'name' => $input['site'],
+                        'location' => $input['location'],
+                    ], [
+                        'name' => $input['site'],
+                        'location' => $input['location'],
+                    ]);
+                } else {
+                    return false;
+                }
 
-                $series = $site->series()->firstOrCreate([
-                    'id' => $input['series_id'],
-                ], [
+                $series = $site->series()->create([
+                    'user_id' => $user->id,
                     'name' => $input['series'],
                 ]);
 
-                $this->importFiles($series, $input);
+                $this->importFiles($series, $user, $input);
 
                 return true;
             });
@@ -58,15 +64,15 @@ class Import implements ImportContract
      * @param  array  $input
      * @return void
      */
-    private function importFiles(Series $series, array $input): void
+    private function importFiles(Series $series, User $user, array $input): void
     {
-        $fileModels = [];
-
         foreach ($input['files'] as $file) {
-            $fileModels[] = $series->files()->firstOrNew([
+            $series->files()->firstOrCreate([
+                'user_id' => $user->id,
                 'name' => $file['name'],
                 'size' => $file['size'],
             ], [
+                'user_id' => $user->id,
                 'name' => $file['name'],
                 'path' => $file['path'],
                 'size' => $file['size'],
@@ -76,8 +82,6 @@ class Import implements ImportContract
         if (isset($input['metadata'])) {
             $this->parseRecorderMetadata($series, $input['metadata']);
         }
-
-        $series->files()->createMany($fileModels);
     }
 
     /**
@@ -88,8 +92,6 @@ class Import implements ImportContract
     private function parseRecorderMetadata(Series $series, array $file): void
     {
         $realFilePath = rootfs_path($file['path']);
-        $metadata = [];
-
         $metadataFile = file($realFilePath);
 
         if ($metadataFile !== FALSE) {
@@ -97,31 +99,31 @@ class Import implements ImportContract
             $rows = array_map('str_getcsv', $metadataFile);
             // Remove header from CSV array.
             unset($rows[0]);
-
             // Create new model for each CSV row.
             foreach ($rows as $row) {
-                $metadata[] = $series->fileMetadata()->firstOrNew([
-                    'site' => $series->site()->id,
-                    'series' => $series->id,
-                    'recorded' => $row[0] . ' ' . $row[1],
-                ], [
-                    'site' => $series->site()->id,
-                    'series' => $series->id,
-                    'recorded' => $row[0] . ' ' . $row[1],
-                    'latitude' => $row[2],
-                    'latitude_direction' => $row[3],
-                    'longitude' => $row[4],
-                    'longitude_direction' => $row[5],
-                    'battery_voltage' => $row[6],
-                    'internal_temperature' => $row[7],
-                    'files' => $row[8],
-                    'mic0_type' => $row[9],
-                    'mic1_type' => $row[10],
-                ]);
-            }
+                $recordedAt = strtotime($row[0] . ' ' . $row[1]);
 
-            // Save all CSV rows to database.
-            $series->fileMetadata()->createMany($metadata);
+                if ($recordedAt !== false) {
+                    $series->fileMetadata()->firstOrCreate([
+                        'site_id' => $series->site->id,
+                        'series_id' => $series->id,
+                        'recorded' => $recordedAt,
+                    ], [
+                        'site_id' => $series->site->id,
+                        'series_id' => $series->id,
+                        'recorded' => $recordedAt,
+                        'latitude' => $row[2],
+                        'latitude_direction' => $row[3],
+                        'longitude' => $row[4],
+                        'longitude_direction' => $row[5],
+                        'battery_voltage' => $row[6],
+                        'internal_temperature' => $row[7],
+                        'files' => $row[8],
+                        'mic0_type' => $row[9],
+                        'mic1_type' => $row[10],
+                    ]);
+                }
+            }
         }
     }
 }

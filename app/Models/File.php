@@ -23,6 +23,7 @@ class File extends Model
         'name',
         'path',
         'size',
+        'user_id'
     ];
 
     /**

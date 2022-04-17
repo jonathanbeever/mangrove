@@ -18,6 +18,8 @@ class FileMetadata extends Model
      * @var string[]
      */
     protected $fillable = [
+        'site_id',
+        'series_id',
         'recorded',
         'latitude',
         'latitude_direction',
