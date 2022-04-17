@@ -13,6 +13,10 @@ use Throwable;
 class Import implements ImportContract
 {
 
+    private Site $site;
+    private Series $series;
+    private User $user;
+
     /**
      * Import site, series, files, and metadata into database.
      *
@@ -23,16 +27,16 @@ class Import implements ImportContract
     {
         try {
             return DB::transaction(function () use ($input) {
-                $user = auth()->user();
+                $this->user = auth()->user();
 
-                if ($user === null) {
+                if ($this->user === null) {
                     return false;
                 }
 
                 if (isset($input['site_id'])) {
-                    $site = $user->sites()->find($input['site_id']);
+                    $this->site = $this->user->sites()->find($input['site_id']);
                 } else if (isset($input['site'])) {
-                    $site = $user->sites()->firstOrCreate([
+                    $this->site = $this->user->sites()->firstOrCreate([
                         'name' => $input['site'],
                         'location' => $input['location'],
                     ], [
@@ -43,12 +47,12 @@ class Import implements ImportContract
                     return false;
                 }
 
-                $series = $site->series()->create([
-                    'user_id' => $user->id,
+                $this->series = $this->site->series()->create([
+                    'user_id' => $this->user->id,
                     'name' => $input['series'],
                 ]);
 
-                $this->importFiles($series, $user, $input);
+                $this->importFiles($input);
 
                 return true;
             });
@@ -60,19 +64,19 @@ class Import implements ImportContract
     /**
      * Import files into database.
      *
-     * @param  Series  $series
      * @param  array  $input
      * @return void
      */
-    private function importFiles(Series $series, User $user, array $input): void
+    private function importFiles(array $input): void
     {
         foreach ($input['files'] as $file) {
-            $series->files()->firstOrCreate([
-                'user_id' => $user->id,
+            $this->series->files()->firstOrCreate([
+                'user_id' => $this->user->id,
                 'name' => $file['name'],
                 'size' => $file['size'],
             ], [
-                'user_id' => $user->id,
+                'user_id' => $this->user->id,
+                'site_id' => $this->site->id,
                 'name' => $file['name'],
                 'path' => $file['path'],
                 'size' => $file['size'],
@@ -80,16 +84,15 @@ class Import implements ImportContract
         }
 
         if (isset($input['metadata'])) {
-            $this->parseRecorderMetadata($series, $input['metadata']);
+            $this->parseRecorderMetadata($input['metadata']);
         }
     }
 
     /**
-     * @param  Series  $series
      * @param  array  $file
      * @return void
      */
-    private function parseRecorderMetadata(Series $series, array $file): void
+    private function parseRecorderMetadata(array $file): void
     {
         $realFilePath = rootfs_path($file['path']);
         $metadataFile = file($realFilePath);
@@ -104,13 +107,13 @@ class Import implements ImportContract
                 $recordedAt = strtotime($row[0] . ' ' . $row[1]);
 
                 if ($recordedAt !== false) {
-                    $series->fileMetadata()->firstOrCreate([
-                        'site_id' => $series->site->id,
-                        'series_id' => $series->id,
+                    $this->series->fileMetadata()->firstOrCreate([
+                        'site_id' => $this->series->site->id,
+                        'series_id' => $this->series->id,
                         'recorded' => $recordedAt,
                     ], [
-                        'site_id' => $series->site->id,
-                        'series_id' => $series->id,
+                        'site_id' => $this->series->site->id,
+                        'series_id' => $this->series->id,
                         'recorded' => $recordedAt,
                         'latitude' => $row[2],
                         'latitude_direction' => $row[3],
