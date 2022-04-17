@@ -3,6 +3,7 @@
     "private": true,
     "productName": "mangrove",
     "version": "1.0.0",
+    "author": "Mangrove Team",
     "description": "Mangrove is a soundscape ecology analysis tool built to provide a user interface for analytical algorithms written in the R programming language.",
     "main": "src/index.js",
     "scripts": {

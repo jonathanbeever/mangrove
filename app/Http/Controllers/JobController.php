@@ -6,10 +6,7 @@ use App\Contracts\Job\CreateJobContract;
 use App\Contracts\Job\CreateJobResponseContract;
 use App\Contracts\Job\DeleteJobContract;
 use App\Contracts\Job\DeleteJobResponseContract;
-use App\Contracts\Job\UpdateJobContract;
-use App\Contracts\Job\UpdateJobResponseContract;
 use App\Http\Requests\Job\StoreJobRequest;
-use App\Http\Requests\Job\UpdateJobRequest;
 use App\Jobs\ProcessSoundData;
 use App\Models\JobInput;
 use Inertia\Inertia;
@@ -38,7 +35,16 @@ class JobController extends Controller
      */
     public function create(): Response
     {
-        return Inertia::render('Jobs/Create');
+        $user = auth()->user();
+        if ($user !== null) {
+            $sites = $user->sites();
+            $series = $user->series();
+        }
+
+        return Inertia::render('Jobs/Create', [
+            'sites' => $sites ?? [],
+            'series' => $series ?? [],
+        ]);
     }
 
     /**
@@ -60,51 +66,6 @@ class JobController extends Controller
         }
 
         return app(CreateJobResponseContract::class);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param JobInput $job
-     * @return Response
-     */
-    public function show(JobInput $job): Response
-    {
-        return Inertia::render('Jobs/Results', [
-            'jobs' => $job
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param JobInput $job
-     * @return Response
-     */
-    public function edit(JobInput $job): Response
-    {
-        return Inertia::render('Jobs/Edit', [
-            'jobs' => $job
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateJobRequest $request
-     * @param JobInput $job
-     * @param UpdateJobContract $contract
-     * @return UpdateJobResponseContract
-     */
-    public function update(UpdateJobRequest $request, JobInput $job, UpdateJobContract $contract): UpdateJobResponseContract
-    {
-        if ($contract->update($request->validated(), $job)) {
-            session()->flash('success', 'Successfully updated job!');
-        } else {
-            session()->flash('failure', 'Failed to update job.');
-        }
-
-        return app(UpdateJobResponseContract::class);
     }
 
     /**

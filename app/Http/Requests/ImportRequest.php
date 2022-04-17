@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Rules\Job\ImportValidationRules;
+use App\Http\Rules\ImportValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ImportRequest extends FormRequest

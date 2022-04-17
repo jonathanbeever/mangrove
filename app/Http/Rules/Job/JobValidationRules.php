@@ -49,14 +49,6 @@ class JobValidationRules implements ValidationRuleContract
      */
     public function forUpdate(): array
     {
-        $ruleSet = $this->forCreate();
-
-        foreach ($ruleSet as &$rules) {
-            if (!in_array('sometimes', $rules, true)) {
-                array_unshift($rules, 'sometimes');
-            }
-        }
-
-        return $ruleSet;
+        return [];
     }
 }
