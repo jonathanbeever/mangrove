@@ -19,8 +19,8 @@ return new class extends Migration
         Schema::create('files', static function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(Site::class)->nullable()->constrained();
-            $table->foreignIdFor(Series::class)->nullable()->constrained();
+            $table->foreignIdFor(Site::class)->constrained();
+            $table->foreignIdFor(Series::class)->constrained();
             $table->text('name');
             $table->text('path');
             $table->bigInteger('size');

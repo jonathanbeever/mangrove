@@ -23,13 +23,13 @@
                         Import Series
                     </jet-button>
                     <input
-                class="m-4 flex form-text-input border-none leading-tight rounded"
-                type="text"
-                v-model="seriesName"
-                id="NameInput"
-                placeholder="Name this Series"
-                style="color: #041014"
-            />
+                        class="m-4 flex form-text-input border-none leading-tight rounded"
+                        type="text"
+                        v-model="seriesName"
+                        id="NameInput"
+                        placeholder="Name this Series"
+                        style="color: #041014"
+                    />
 
                 </div>
             </div>
@@ -38,17 +38,16 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Modal from "@/Pages/Partial/Modal.vue";
 import JetButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetCheckbox from "@/Jetstream/Checkbox.vue";
 import JetLabel from "@/Jetstream/Label.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import FileUpload from "@/Components/FileUpload.vue";
 import JobCreation from "@/Pages/Jobs/JobCreation.vue";
-import { Inertia } from '@inertiajs/inertia'
+import {Inertia} from '@inertiajs/inertia'
 
 let newUploads = true;
 let editPop = false;
@@ -80,7 +79,6 @@ export default defineComponent({
                         p.name
                             .toLowerCase()
                             .includes(this.search.toLowerCase())
-
                 );
             } else {
                 se = this.items;
@@ -103,7 +101,7 @@ export default defineComponent({
     },
     methods: {
         renderJobCreation: function () {
-            this.removeAllSelected()
+            this.removeAllSelected();
             this.newUploads = false;
         },
         edit: function () {
@@ -119,18 +117,19 @@ export default defineComponent({
             return files;
         },
         ConvertMetaForPost: function () {
-            let files = [];
-            if (this.meta.length == 0) 
+            if (this.meta.length === 0) {
                 return null
+            }
 
-            files.push(this.meta[0].name)
-            files.push(this.meta[0].path)
-            files.push(this.meta[0].size)
-            return files;
+            return {
+                'name': this.meta[0].name,
+                'path': this.meta[0].path,
+                'size': this.meta[0].size,
+            };
         },
         postSiteSeries: function () {
-            let request = {}
-            var siteLocation
+            let request = {};
+            let siteLocation;
 
             if (this.location.length > 0) {
                 siteLocation = this.location
@@ -139,15 +138,6 @@ export default defineComponent({
             }
 
             if (this.newSite) {
-            request = {
-                    location: siteLocation,
-                    site_id: this.siteID,
-                    series: this.seriesName,
-                    files: this.ConvertFilesForPost(),
-                    metadata: this.ConvertMetaForPost()
-                }
-            }
-            else {
                 request = {
                     location: siteLocation,
                     site: this.siteName,
@@ -155,8 +145,16 @@ export default defineComponent({
                     files: this.ConvertFilesForPost(),
                     metadata: this.ConvertMetaForPost()
                 }
+            } else {
+                request = {
+                    location: siteLocation,
+                    site_id: this.siteID,
+                    series: this.seriesName,
+                    files: this.ConvertFilesForPost(),
+                    metadata: this.ConvertMetaForPost()
+                }
             }
-                Inertia.post(route('import.save'), request)
+            Inertia.post(route('import.save'), request)
         }
     },
 });
