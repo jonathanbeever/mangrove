@@ -203,12 +203,8 @@ const stopImpersonation = () => {
                             </div>
 
                             <div class="inline-flex pl-5">
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l" onclick="history.back()">
-                                Back
-                            </button>
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r" onclick="history.forward()">
-                                Forward
-                            </button>
+                            <jet-button class='close m-2 bg-transparent hover:bg-white-500 text-white-700 font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' @click="history.forward()" style="cursor: pointer;">Back</jet-button>
+                            <jet-button class='close m-2 bg-transparent hover:bg-white-500 text-white-700 font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' @click="history.forward()" style="cursor: pointer;">Forward</jet-button>
                             </div>
                         </div>
 
