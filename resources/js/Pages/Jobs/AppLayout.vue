@@ -201,14 +201,10 @@ const stopImpersonation = () => {
 
                             <div class="inline-flex pl-5">
                                 <div class="pr-5">
-                                    <button class="btn btn-outline-light m-2" onclick="history.back()">
-                                        Back
-                                    </button>
+                                    <jet-button class="btn btn-success border-gray-200" onclick="history.back()">Back</jet-button>
                                 </div>
                                 <div class="pl-5">
-                                    <button class="btn btn-outline-light m-2" onclick="history.forward()">
-                                        Forward
-                                    </button>
+                                    <jet-button class="btn btn-success border-gray-200" onclick="history.forward()">Forward</jet-button>
                                 </div>
                             </div>
                         </div>
