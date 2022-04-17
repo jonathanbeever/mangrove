@@ -17,6 +17,8 @@
                                 single
                                 />
                             </div>
+                            <jet-label class="text-white-500">File Path</jet-label><br>
+                            <input type="text" id="fname" name="fname" v-bind:value="spFile" v-on:submit="onFileChange($event)" style="color:black;"><br>
                             <div class="loading pt-2" id="loading" ref="loading">
                                 <div id="wave" class="p-2"/>
                                 <vue-element-loading ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"
