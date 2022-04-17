@@ -18,7 +18,15 @@
                                 />
                             </div>
                             <jet-label class="text-white-500">File Path</jet-label><br>
-                            <input type="text" id="fname" name="fname" v-bind:value="spFile" v-on:submit="onFileChange($event)" style="color:black;"><br>
+                            <form>
+                                <input type="text" id="fname" name="fname" v-model="spFile" v-on:submit="onFileChange($event)" style="color:black;">
+                                <jet-button
+                                    class="btn btn-success border-gray-200 m-2"
+                                    @click="setSpFilePath()"
+                                    v-show="singleFile == true">
+                                    Submit
+                                </jet-button>
+                            </form>
                             <div class="loading pt-2" id="loading" ref="loading">
                                 <div id="wave" class="p-2"/>
                                 <vue-element-loading ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"
@@ -237,7 +245,7 @@ export default defineComponent({
 
     data() {
         return {
-            spFile: "#",
+            spFile: "",
             sFile: "",
             cFile: "",
             startDate: "",
@@ -260,9 +268,14 @@ export default defineComponent({
     },
     methods: {
 
+        setSpFilePath: function() {
+            this.loading = true;
+            this.$refs.player.load();
+            this.createSpectrogram();
+        },
+
         onFileChange: function (e) {
             this.loading = true;
-            //this.$refs['animation'].display = "inline";
             this.spFile = URL.createObjectURL(e.target.files[0]);
             this.$refs.player.load();
             this.createSpectrogram();
@@ -327,7 +340,7 @@ export default defineComponent({
             Object.keys(items).forEach(x => {
                 if (items != null && items[x] != null && x.includes("input")) {
                     Object.keys(JSON.parse(items[x].results)).forEach(y => {
-                        if (!selectionList.includes(y)) {
+                        if (selectionList != null && !selectionList.includes(y)) {
                             selectionList.push(y)
                         }
                     })
