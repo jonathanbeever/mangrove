@@ -57,14 +57,8 @@
                                                         </th>
                                                     </tr>
                                                 </thead>
-                                                <Modal
-                                                    v-show="editPop == true"
-                                                    :selected="[]"
-                                                    :items="items"
-                                                />
                                                 <tbody
                                                     class="bg-white divide-y divide-gray-200"
-                                                    v-show="editPop == false"
                                                 >
                                                     <tr v-if="siteCreationEnabled">
                                                         <td
@@ -181,7 +175,6 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Modal from "@/Pages/Partial/Modal.vue";
 import JetButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetCheckbox from "@/Jetstream/Checkbox.vue";
@@ -189,10 +182,7 @@ import JetLabel from "@/Jetstream/Label.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import Series from "@/Pages/Jobs/Series.vue"
 import { usePage } from '@inertiajs/inertia-vue3'
-
-let editPop = false;
 let siteCreationEnabled = false;
-
 export default defineComponent({
     components: {
         AppLayout,
@@ -200,7 +190,6 @@ export default defineComponent({
         JetInput,
         JetCheckbox,
         JetLabel,
-        Modal,
         Series
     },
     computed: {
@@ -223,13 +212,13 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.items = usePage().props.value.sites
+        // this.items = usePage().props.value.sites
+        console.log(this.items)
     },
     data() {
         return {
             items: [],
             search: "",
-            editPop,
             siteCreationEnabled: siteCreationEnabled,
             siteCreationName: '',
             siteCreationLocation: '',
@@ -243,13 +232,6 @@ export default defineComponent({
         };
     },
     methods: {
-        edit: function () {
-            this.editPop = !this.editPop;
-        },
-        pushEdits: function () {
-            this.editPop = !this.editPop;
-
-        },
         onClickCreateSite: function () {
             this.siteCreationEnabled = !this.siteCreationEnabled
         },
@@ -257,15 +239,13 @@ export default defineComponent({
             this.newSite = true;
             this.selectedLocation = this.siteCreationLocation
             this.selectedName = this.siteCreationName
-
             this.siteSelected = true;
         },
         onClickSiteSelected: function (item) {
             this.newSite = false
             this.selectedLocation = item.name
             this.selectedName = item.location
-            this.siteId = item.site_id
-
+            this.siteId = item.id
             this.siteSelected = true
         }
     },
