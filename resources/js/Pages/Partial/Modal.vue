@@ -9,7 +9,7 @@
                             :placeholder="item.job"
                             class="text-sm "
                         />
-                        <div class="text-sm text-gray-500">
+                        <div class="text-sm text-neutral-900">
                             {{ item.name }}
                         </div>
                     </div>
@@ -22,11 +22,11 @@
                     class="text-sm text-violet-600 dark:text-violet-600"
                 />
 
-                <div class="text-sm text-gray-500">
+                <div class="text-sm text-neutral-900">
                     {{ item.size / 1e6 + "MB" }}
                 </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-neutral-900">
                 ---
             </td>
             <td

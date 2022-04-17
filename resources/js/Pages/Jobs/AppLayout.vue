@@ -169,8 +169,8 @@ const stopImpersonation = () => {
 
                                     <template #content>
                                         <!-- Account Management -->
-                                        <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Account
+                                        <div class="block px-4 py-2 text-xs text-gray-600">
+                                            text-neutral-900
                                         </div>
 
                                         <JetDropdownLink :href="route('profile.show')">
@@ -200,12 +200,12 @@ const stopImpersonation = () => {
                             </div>
 
                             <div class="inline-flex pl-5">
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l" onclick="history.back()">
-                                Back
-                            </button>
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r" onclick="history.forward()">
-                                Forward
-                            </button>
+                                <div class="pr-5">
+                                    <jet-button class="btn btn-success border-gray-200" onclick="history.back()">Back</jet-button>
+                                </div>
+                                <div class="pl-5">
+                                    <jet-button class="btn btn-success border-gray-200" onclick="history.forward()">Forward</jet-button>
+                                </div>
                             </div>
                         </div>
 

@@ -19,25 +19,25 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     Name
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-right text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     Size
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-center text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     Recording Date
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                    class="px-6 py-3 text-right text-xs font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     File Type
                                 </th>
@@ -74,7 +74,7 @@
                                             >
                                                 empty
                                             </div>
-                                            <div class="text-sm text-gray-500">
+                                            <div class="text-sm text-neutral-900">
                                                 {{ item.name }}
                                             </div>
                                         </div>
@@ -99,7 +99,7 @@
                                     </div>
                                 </td>
                                 <td
-                                    class="py-4 whitespace-nowrap text-center text-sm text-gray-500"
+                                    class="py-4 whitespace-nowrap text-center text-sm text-neutral-900"
                                 >
                                     <div
                                         class="text-sm font-medium text-gray-900"

@@ -7,7 +7,7 @@
                     <div class="bg-white shadow-xl sm:rounded-lg h-full dark:bg-slate-800 dark:text-white">
                         <div class="pb-2 pl-2 pt-2 h-full">
                             2D Waveform Spectrogram
-                            <div class="flex-row pr-2 pt-2 mb-8">
+                            <div class="flex-row pr-2 pt-2 mb-8" style="max-width: 15ch;">
                                 <input
                                 type="file"
                                 class="form-control"
@@ -21,6 +21,7 @@
                                 <div id="wave" class="p-2"/>
                                 <vue-element-loading ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"
                                 v-bind:display="none"/>
+                                <input id="slider" ref="slider" type="range" min="1" max="200" value="1" style="width: 100%" @input="slideView"/>
                             </div>
                         </div>
                     </div>
@@ -322,7 +323,7 @@ export default defineComponent({
         populateDropdown: function (items) {
             let selectionList = []
             Object.keys(items).forEach(x => {
-                if (items[x] != null && x.includes("input")) {
+                if (items != null && items[x] != null && x.includes("input")) {
                     Object.keys(JSON.parse(items[x].results)).forEach(y => {
                         if (!selectionList.includes(y)) {
                             selectionList.push(y)
@@ -339,6 +340,10 @@ export default defineComponent({
             if (timeDelta > 0.1) {
                 this.wavesurfer.seekTo(this.currTime / this.wavesurfer.getDuration());
             }
+        },
+
+        slideView: function() {
+            this.wavesurfer.zoom(Number(this.$refs.slider.value));
         },
     },
     mounted() {
@@ -364,7 +369,6 @@ export default defineComponent({
                     colorMap: this.colorMap,
                 }),
                 RegionsPlugin.create({
-                    regionsMinLength: 2,
                     regions: [
                         {
                             start: 1,
