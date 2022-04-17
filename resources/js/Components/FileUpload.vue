@@ -159,8 +159,7 @@
                 <input
                     type="file"
                     class="form-control"
-                    v-on:change="onMetaChange"
-
+                    v-on:change="onMetaChange($event)"
                 />
             </form>
 
@@ -184,8 +183,6 @@ export default defineComponent({
     props: ["items", "meta"],
 
     mounted() {
-        //this.meta = [];
-        //console.log("Component mounted.");
     },
 
     data() {
