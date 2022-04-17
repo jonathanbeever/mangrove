@@ -1,21 +1,23 @@
 <template>
     <app-layout title="Create Jobs" v-if="!siteSelected">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
+            <h2
+                class="font-semibold text-xl text-gray-800 leading-tight dark:text-white"
+            >
                 Create Jobs
             </h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800 ">
+                <div
+                    class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800"
+                >
                     <div
                         class="bg-white border-b border-gray-200 flex flex-col dark:bg-slate-800"
                     >
                         <div class="px-8 py-6">Select or Create a Site</div>
-                        <div
-                            class="flex flex-col"
-                        >
+                        <div class="flex flex-col">
                             <jet-input
                                 type="text"
                                 v-model="search"
@@ -36,25 +38,26 @@
                                             <table
                                                 class="min-w-full divide-y divide-gray-200"
                                             >
-                                                <thead class="bg-gray-50">
+                                                <thead
+                                                    class="bg-gray-50 justify-between"
+                                                >
                                                     <tr>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Site
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Location
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
-                                                        >
-                                                        </th>
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
+                                                        ></th>
                                                     </tr>
                                                 </thead>
                                                 <Modal
@@ -66,43 +69,47 @@
                                                     class="bg-white divide-y divide-gray-200"
                                                     v-show="editPop == false"
                                                 >
-                                                    <tr v-if="siteCreationEnabled">
+                                                    <tr
+                                                        v-if="
+                                                            siteCreationEnabled
+                                                        "
+                                                    >
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-label class="mr-[10px]">Name: </jet-label>
-                                                                    <jet-input :value="siteCreationName" v-model="siteCreationName">
-                                                                    </jet-input>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                         <td
-                                                            class="px-6 py-4 whitespace-nowrap"
-                                                        >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-label class="mr-[10px]">Location: </jet-label>
-                                                                    <jet-input :value="siteCreationLocation" v-model="siteCreationLocation">
-                                                                    </jet-input>
-                                                                </div>
-                                                            </div>
+                                                            <input
+                                                                v-model="
+                                                                    siteCreationName
+                                                                "
+                                                                placeholder="Name"
+                                                                class="px-4 py-2 form-text-input leading-tight rounded border border-b-gray-400"
+                                                            />
                                                         </td>
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
+                                                            <input
+                                                                v-model="
+                                                                    siteCreationLocation
+                                                                "
+                                                                placeholder="Location"
+                                                                class="px-4 py-2 form-text-input leading-tight rounded border border-b-gray-400"
+                                                            />
+                                                        </td>
+                                                        <td
+                                                            class="px-6 py-4 whitespace-nowrap text-right"
+                                                        >
+                                                            <jet-button
+                                                                v-on:click="
+                                                                    onClickSiteSelectedNew()
+                                                                "
+                                                                :disabled="
+                                                                    siteCreationName.length ==
+                                                                    0
+                                                                "
+                                                                >Use This
+                                                                Site</jet-button
                                                             >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-button v-on:click="onClickSiteSelectedNew()" :disabled="siteCreationName.length == 0">Use This Site</jet-button>
-                                                                </div>
-                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <tr
@@ -148,13 +155,15 @@
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
+                                                            <jet-button
+                                                                v-onClick="
+                                                                    onClickCreateSite(
+                                                                        item
+                                                                    )
+                                                                "
+                                                                >Use This
+                                                                Site</jet-button
                                                             >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-button v-onClick="onClickCreateSite(item)">Use This Site</jet-button>
-                                                                </div>
-                                                            </div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -169,13 +178,19 @@
                         v-on:click="onClickCreateSite()"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                     >
-                        {{(!siteCreationEnabled) ? createNewSite : closeMenu}}
+                        {{ !siteCreationEnabled ? createNewSite : closeMenu }}
                     </jet-button>
                 </div>
             </div>
         </div>
     </app-layout>
-    <Series :newSite="newSite" :siteID="siteID" :siteName="selectedName" :location="selectedLocation" v-else/>
+    <Series
+        :newSite="newSite"
+        :siteID="siteID"
+        :siteName="selectedName"
+        :location="selectedLocation"
+        v-else
+    />
 </template>
 
 <script>
@@ -187,8 +202,8 @@ import JetInput from "@/Jetstream/Input.vue";
 import JetCheckbox from "@/Jetstream/Checkbox.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-import Series from "@/Pages/Jobs/Series.vue"
-import { usePage } from '@inertiajs/inertia-vue3'
+import Series from "@/Pages/Jobs/Series.vue";
+import { usePage } from "@inertiajs/inertia-vue3";
 
 let editPop = false;
 let siteCreationEnabled = false;
@@ -201,7 +216,7 @@ export default defineComponent({
         JetCheckbox,
         JetLabel,
         Modal,
-        Series
+        Series,
     },
     computed: {
         filtered() {
@@ -220,10 +235,10 @@ export default defineComponent({
                 se = this.items;
             }
             return se;
-        }
+        },
     },
     mounted() {
-        this.items = usePage().props.value.sites
+        this.items = usePage().props.value.sites;
     },
     data() {
         return {
@@ -231,15 +246,15 @@ export default defineComponent({
             search: "",
             editPop,
             siteCreationEnabled: siteCreationEnabled,
-            siteCreationName: '',
-            siteCreationLocation: '',
-            createNewSite: 'Create New Site',
-            closeMenu: 'Close Site Creation',
+            siteCreationName: "",
+            siteCreationLocation: "",
+            createNewSite: "Create New Site",
+            closeMenu: "Close Site Creation",
             siteSelected: false,
-            selectedName: '',
-            selectedLocation:'',
+            selectedName: "",
+            selectedLocation: "",
             newSite: false,
-            siteID: '',
+            siteID: "",
         };
     },
     methods: {
@@ -248,26 +263,25 @@ export default defineComponent({
         },
         pushEdits: function () {
             this.editPop = !this.editPop;
-
         },
         onClickCreateSite: function () {
-            this.siteCreationEnabled = !this.siteCreationEnabled
+            this.siteCreationEnabled = !this.siteCreationEnabled;
         },
         onClickSiteSelectedNew: function () {
             this.newSite = true;
-            this.selectedLocation = this.siteCreationLocation
-            this.selectedName = this.siteCreationName
+            this.selectedLocation = this.siteCreationLocation;
+            this.selectedName = this.siteCreationName;
 
             this.siteSelected = true;
         },
         onClickSiteSelected: function (item) {
-            this.newSite = false
-            this.selectedLocation = item.name
-            this.selectedName = item.location
-            this.siteId = item.site_id
+            this.newSite = false;
+            this.selectedLocation = item.name;
+            this.selectedName = item.location;
+            this.siteId = item.site_id;
 
-            this.siteSelected = true
-        }
+            this.siteSelected = true;
+        },
     },
 });
 </script>

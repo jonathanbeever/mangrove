@@ -23,7 +23,7 @@
                         Import Series
                     </jet-button>
                     <input
-                class="m-4 flex form-text-input border-none leading-tight rounded"
+                class="p-2 m-4 form-text-input leading-tight rounded border border-b-gray-400"
                 type="text"
                 v-model="seriesName"
                 id="NameInput"
@@ -120,7 +120,7 @@ export default defineComponent({
         },
         ConvertMetaForPost: function () {
             let files = [];
-            if (this.meta.length == 0) 
+            if (this.meta.length == 0)
                 return null
 
             files.push(this.meta[0].name)
