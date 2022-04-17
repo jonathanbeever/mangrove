@@ -172,7 +172,7 @@
                 <SuccessToast></SuccessToast>
             </div>
 
-            <div v-if="$page.props.jetstream.flash.failure != null">
+            <div>
                 <ErrorToast></ErrorToast>
             </div>
 
