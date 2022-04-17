@@ -54,7 +54,7 @@ class JobInputPolicy
      */
     public function update(User $user, JobInput $job): bool
     {
-        return $user->id === $job->user_id;
+        return false;
     }
 
     /**

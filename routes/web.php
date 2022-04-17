@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ImpersonateController;
+use App\Http\Controllers\ImportController;
 use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -30,7 +31,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(static function () {
-    Route::resource('jobs', JobController::class);
+    Route::resource('jobs', JobController::class)->except(['show', 'edit', 'update']);
+    Route::get('/import', [ImportController::class, 'create']);
+    Route::post('/import', [ImportController::class, 'import']);
 
     Route::get('/about', static function () {
         return Inertia::render('About');
