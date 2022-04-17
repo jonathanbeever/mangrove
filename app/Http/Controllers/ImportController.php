@@ -23,7 +23,7 @@ class ImportController extends Controller
             $series = $user->series();
         }
 
-        return Inertia::render('Import/Index', [
+        return Inertia::render('Jobs/Series', [
             'sites' => $sites ?? [],
             'series' => $series ?? [],
         ]);
