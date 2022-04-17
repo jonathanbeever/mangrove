@@ -23,13 +23,13 @@
                         Import Series
                     </jet-button>
                     <input
-                        class="m-4 flex form-text-input border-none leading-tight rounded"
-                        type="text"
-                        v-model="seriesName"
-                        id="NameInput"
-                        placeholder="Name this Series"
-                        style="color: #041014"
-                    />
+                class="p-2 m-4 form-text-input leading-tight rounded border border-b-gray-400"
+                type="text"
+                v-model="seriesName"
+                id="NameInput"
+                placeholder="Name this Series"
+                style="color: #041014"
+            />
 
                 </div>
             </div>
@@ -117,7 +117,9 @@ export default defineComponent({
             return files;
         },
         ConvertMetaForPost: function () {
+
             if (this.meta.length === 0) {
+
                 return null
             }
 
