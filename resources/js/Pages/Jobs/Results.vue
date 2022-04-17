@@ -21,6 +21,7 @@
                                 <div id="wave" class="p-2"/>
                                 <vue-element-loading ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"
                                 v-bind:display="none"/>
+                                <input id="slider" ref="slider" type="range" min="1" max="200" value="1" style="width: 100%" @input="slideView"/>
                             </div>
                         </div>
                     </div>
@@ -339,6 +340,10 @@ export default defineComponent({
             if (timeDelta > 0.1) {
                 this.wavesurfer.seekTo(this.currTime / this.wavesurfer.getDuration());
             }
+        },
+
+        slideView: function() {
+            this.wavesurfer.zoom(Number(this.$refs.slider.value));
         },
     },
     mounted() {

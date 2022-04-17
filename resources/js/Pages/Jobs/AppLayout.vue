@@ -200,12 +200,16 @@ const stopImpersonation = () => {
                             </div>
 
                             <div class="inline-flex pl-5">
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l" onclick="history.back()">
-                                Back
-                            </button>
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r" onclick="history.forward()">
-                                Forward
-                            </button>
+                            <div class="pr-5">
+                                <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l" onclick="history.back()">
+                                    Back
+                                </button>
+                            </div>
+                            <div class="pl-5">
+                                <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r" onclick="history.forward()">
+                                    Forward
+                                </button>
+                            </div>
                             </div>
                         </div>
 
