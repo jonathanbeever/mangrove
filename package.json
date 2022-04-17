@@ -1,5 +1,4 @@
 {
-    "main": "main.js",
     "private": true,
     "scripts": {
         "dev": "npm run development",
@@ -8,10 +7,7 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production",
-        "start": "electron .",
-        "build": "npm run prod && electron-packager . mangrove --out=dist",
-        "build:all": "npm run build -- --all"
+        "production": "mix --production"
     },
     "devDependencies": {
         "@inertiajs/inertia": "^0.11.0",
@@ -25,8 +21,6 @@
         "browser-sync-webpack-plugin": "^2.3.0",
         "chart.js": "^3.7.1",
         "chartjs-plugin-zoom": "^1.2.1",
-        "electron": "^18.0.4",
-        "electron-packager": "^15.4.0",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "papaparse": "^5.3.2",
