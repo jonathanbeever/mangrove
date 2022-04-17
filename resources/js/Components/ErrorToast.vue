@@ -14,12 +14,10 @@
             </div>
             </div>
             <div class="p-3 bg-red-600 rounded-b-lg break-words text-white">
-                {$page.props.jetstream.flash.failure}
+                {{ $page.props.jetstream.flash.failure }}
             </div>
             </div>
         </div>
-    </div>
-    </div>
 </template>
 <script>
 import { usePage } from '@inertiajs/inertia-vue3';
