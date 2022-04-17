@@ -19,7 +19,7 @@ use Inertia\Inertia;
 
 Route::get('/', static function () {
     if(auth()->check()) {
-        return redirect()->route('jobs.create');
+        return redirect()->route('import.index');
     }
 
     return Inertia::render('Auth/Login');
@@ -32,6 +32,7 @@ Route::middleware([
     'verified',
 ])->group(static function () {
     Route::resource('jobs', JobController::class)->except(['show', 'edit', 'update']);
+    Route::get('/import', [ImportController::class, 'index'])->name('import.index');
     Route::post('/import', [ImportController::class, 'import'])->name('import.save');
 
     Route::get('/about', static function () {

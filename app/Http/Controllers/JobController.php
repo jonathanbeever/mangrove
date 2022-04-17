@@ -37,8 +37,8 @@ class JobController extends Controller
     {
         $user = auth()->user();
         if ($user !== null) {
-            $sites = $user->sites();
-            $series = $user->series();
+            $sites = $user->sites->toArray();
+            $series = $user->series->toArray();
         }
 
         return Inertia::render('Jobs/Create', [
