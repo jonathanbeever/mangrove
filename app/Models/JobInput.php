@@ -24,6 +24,7 @@ class JobInput extends Model
      */
     protected $fillable = [
         'name',
+        'series_id',
     ];
 
     /**

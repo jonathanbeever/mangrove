@@ -78,7 +78,7 @@ class Import implements ImportContract
                 'user_id' => $this->user->id,
                 'site_id' => $this->site->id,
                 'name' => $file['name'],
-                'path' => $file['path'],
+                'path' => normalize_path($file['path']),
                 'size' => $file['size'],
             ]);
         }
@@ -94,7 +94,7 @@ class Import implements ImportContract
      */
     private function parseRecorderMetadata(array $file): void
     {
-        $realFilePath = rootfs_path($file['path']);
+        $realFilePath = rootfs_path(normalize_path($file['path']));
         $metadataFile = file($realFilePath);
 
         if ($metadataFile !== FALSE) {

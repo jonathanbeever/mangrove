@@ -65,10 +65,10 @@ class Series extends Model
 
         if (isset($path)) {
             $directory = pathinfo($path, PATHINFO_DIRNAME);
-            $rootfs_path = rootfs_path($directory);
-            // Debug and die for now until we can test on each OS.
-            dd($rootfs_path);
+            return rootfs_path($directory);
         }
+
+        return null;
     }
 
     /**
