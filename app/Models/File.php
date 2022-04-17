@@ -6,6 +6,7 @@ use App\Enums\User\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
@@ -20,6 +21,7 @@ class File extends Model
      */
     protected $fillable = [
         'name',
+        'path',
         'size',
     ];
 
@@ -60,5 +62,15 @@ class File extends Model
     public function site(): BelongsTo
     {
         return $this->belongsTo(Site::class);
+    }
+
+    /**
+     * Get the results for the file.
+     *
+     * @return HasOne
+     */
+    public function results(): HasOne
+    {
+        return $this->hasOne(Result::class);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class NdsiInput extends Model
+class Result extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -15,21 +15,24 @@ class NdsiInput extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var string[]
      */
     protected $fillable = [
-        'anthro_min',
-        'anthro_max',
-        'bio_min',
-        'bio_max',
-        'fftw',
+        'aci_results',
+        'adi_results',
+        'aei_results',
+        'bi_results',
+        'ndsi_results',
+        'rms_results',
     ];
 
     /**
-     * Get the job input that owns the input.
+     * Get the file the results are for.
+     *
+     * @return BelongsTo
      */
-    public function jobInput(): BelongsTo
+    public function file(): BelongsTo
     {
-        return $this->belongsTo(JobInput::class);
+        return $this->belongsTo(File::class);
     }
 }

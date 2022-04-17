@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Series extends Model
@@ -50,6 +51,23 @@ class Series extends Model
     public function files(): HasMany
     {
         return $this->hasMany(File::class);
+    }
+
+    /**
+     * Get the path where the sound files are located for the series.
+     *
+     * @return ?string
+     */
+    public function path(): ?string
+    {
+        $path = $this->hasOne(File::class)->latestOfMany()->path;
+
+        if (isset($path)) {
+            $directory = pathinfo($path, PATHINFO_DIRNAME);
+            $rootfs_path = rootfs_path($directory);
+            // Debug and die for now until we can test on each OS.
+            dd($rootfs_path);
+        }
     }
 
     /**

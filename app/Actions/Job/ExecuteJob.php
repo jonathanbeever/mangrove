@@ -55,48 +55,24 @@ class ExecuteJob implements ExecuteJobContract
      *
      * Save job results to database.
      *
-     * @param JobInput $job
-     * @param array $result
+     * @param  JobInput  $job
+     * @param  array  $results
      * @return void
      */
     protected function saveJobResults(JobInput $job, array $results): void
     {
         try {
-            if (isset($results['aci'])) {
-                $job->aciInput->update([
-                    'results' => json_encode($results['aci'], JSON_THROW_ON_ERROR)
-                ]);
+            $resultsToImport = [];
+
+            foreach(['aci', 'adi', 'aei', 'bi', 'ndsi', 'rms'] as $index) {
+                if (isset($results[$index])) {
+                    foreach($results[$index] as $fileName => $data) {
+                        $resultsToImport[$fileName][$index . '_results'] = json_encode($data, JSON_THROW_ON_ERROR);
+                    }
+                }
             }
 
-            if (isset($results['adi'])) {
-                $job->adiInput->update([
-                    'results' => json_encode($results['adi'], JSON_THROW_ON_ERROR)
-                ]);
-            }
-
-            if (isset($results['aei'])) {
-                $job->aeiInput->update([
-                    'results' => json_encode($results['aei'], JSON_THROW_ON_ERROR)
-                ]);
-            }
-
-            if (isset($results['bi'])) {
-                $job->biInput->update([
-                    'results' => json_encode($results['bi'], JSON_THROW_ON_ERROR)
-                ]);
-            }
-
-            if (isset($results['ndsi'])) {
-                $job->ndsiInput->update([
-                    'results' => json_encode($results['ndsi'], JSON_THROW_ON_ERROR)
-                ]);
-            }
-
-            if (isset($results['rms'])) {
-                $job->rmsInput->update([
-                    'results' => json_encode($results['rms'], JSON_THROW_ON_ERROR)
-                ]);
-            }
+            dd($resultsToImport);
         } catch (JsonException) {}
     }
 

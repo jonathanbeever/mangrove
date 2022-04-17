@@ -16,13 +16,14 @@ return new class extends Migration
     {
         Schema::create('aci_inputs', static function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->foreignIdFor(JobInput::class)->nullable()->constrained();
             $table->integer('fftw');
             $table->integer('j');
             $table->integer('max_freq');
             $table->integer('min_freq');
-            $table->json('results')->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
