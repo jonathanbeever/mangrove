@@ -123,7 +123,9 @@ export default defineComponent({
             if (this.meta.length == 0) 
                 return null
 
-            this.meta.forEach(x => files.push({name: x.name, path: x.path, size: x.size}))
+            files.push(this.meta[0].name)
+            files.push(this.meta[0].path)
+            files.push(this.meta[0].size)
             return files;
         },
         postSiteSeries: function () {
