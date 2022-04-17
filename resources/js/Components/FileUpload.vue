@@ -154,6 +154,7 @@
                 @submit.prevent="formSubmit"
                 enctype="multipart/form-data"
                 class=""
+                accept=".txt, .csv"
             >
                 <strong class="flex pt-4">Upload Meta-Data:</strong>
                 <input
@@ -208,22 +209,25 @@ export default defineComponent({
 
     methods: {
         onFileChange(e) {
-            this.file = e.target.files;
-            //console.log(URL.createObjectURL(e.target.files[0]));
-            //console.log(this.file);
+            if (this.items.length > 0)
+                this.items.forEach(x => this.items.pop())
 
-            for (const i of Object.keys(this.file)) {
-                this.items.push(this.file[i]);
+            const file = e.target.files;
+
+            for (const i of Object.keys(file)) {
+                if (file[i].name.split('.').pop() == "wav")
+                    this.items.push(file[i]);
             }
         },
         onMetaChange(e) {
+            if (this.meta && this.meta.length > 0)
+                this.meta.forEach(x => this.meta.pop())
 
             const file = e.target.files;
-            //console.log(URL.createObjectURL(e.target.files[0]));
-            //console.log(file[0]);
+            const fileExtension = file[0].name.split('.').pop();
 
+            if ( fileExtension == "txt" || fileExtension == "csv")
                 this.meta.push(file[0]);
-
         },
         formSubmit(e) {
             e.preventDefault();
