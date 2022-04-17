@@ -49,7 +49,7 @@ const stopImpersonation = () => {
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <Link :href="route('jobs.create')">
+                                <Link :href="route('import.index')">
                                     <JetApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>

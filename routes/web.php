@@ -19,7 +19,7 @@ use Inertia\Inertia;
 
 Route::get('/', static function () {
     if(auth()->check()) {
-        return redirect()->route('jobs.create');
+        return redirect()->route('import.index');
     }
 
     return Inertia::render('Auth/Login');
