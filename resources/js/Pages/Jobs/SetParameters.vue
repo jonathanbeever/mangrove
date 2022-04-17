@@ -97,7 +97,7 @@
             AeiInput,
             BiInput
         },
-        props: ['index'],
+        props: ['index', 'seriesID'],
         data: function () {
             return {
                 descriptionText,
@@ -208,7 +208,8 @@
                     aei: this.aei,
                     bi: this.bi,
                     ndsi: this.ndsi,
-                    rms: this.rms
+                    rms: this.rms,
+                    series_id: this.seriesID
                 }
                 Inertia.post(route('jobs.store'), request)
             }

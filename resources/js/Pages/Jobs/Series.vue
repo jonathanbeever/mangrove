@@ -156,6 +156,7 @@ export default defineComponent({
                     metadata: this.ConvertMetaForPost()
                 }
             }
+            console.log(request)
             Inertia.post(route('import.save'), request)
         }
     },

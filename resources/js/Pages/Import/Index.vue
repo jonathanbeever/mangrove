@@ -21,6 +21,7 @@
                                 v-model="search"
                                 placeholder="Search"
                                 class="p-4 mx-6 align-content-center dark:text-black"
+                                v-on:change="filtered()"
                             />
                             <br />
                             <div
@@ -57,8 +58,14 @@
                                                         </th>
                                                     </tr>
                                                 </thead>
+                                                <Modal
+                                                    v-show="editPop == true"
+                                                    :selected="[]"
+                                                    :items="items"
+                                                />
                                                 <tbody
                                                     class="bg-white divide-y divide-gray-200"
+                                                    v-show="editPop == false"
                                                 >
                                                     <tr v-if="siteCreationEnabled">
                                                         <td
@@ -102,7 +109,7 @@
                                                     <tr
                                                         v-for="(
                                                             item, index
-                                                        ) in filtered"
+                                                        ) in filteredItems"
                                                         :key="index"
                                                     >
                                                         <td
@@ -146,7 +153,7 @@
                                                                 class="flex items-start"
                                                             >
                                                                 <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-button v-onClick="onClickCreateSite(item)">Use This Site</jet-button>
+                                                                    <jet-button v-on:click="onClickSiteSelected(item)">Use This Site</jet-button>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -184,6 +191,7 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
+import Modal from "@/Pages/Partial/Modal.vue";
 import JetButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 import JetCheckbox from "@/Jetstream/Checkbox.vue";
@@ -194,7 +202,10 @@ import { usePage } from '@inertiajs/inertia-vue3'
 import ErrorToast from "@/Components/ErrorToast.vue";
 import SuccessToast from "@/Components/SuccessToast.vue";
 
+
+let editPop = false;
 let siteCreationEnabled = false;
+
 export default defineComponent({
     components: {
         AppLayout,
@@ -202,11 +213,61 @@ export default defineComponent({
         JetInput,
         JetCheckbox,
         JetLabel,
+        Modal,
         Series,
         ErrorToast,
         SuccessToast
     },
     computed: {
+    },
+    mounted() {
+        this.items = usePage().props.value.sites
+        this.filtered()
+    },
+    data() {
+        return {
+            items: [],
+            search: "",
+            editPop,
+            siteCreationEnabled: siteCreationEnabled,
+            siteCreationName: '',
+            siteCreationLocation: '',
+            createNewSite: 'Create New Site',
+            closeMenu: 'Close Site Creation',
+            siteSelected: false,
+            selectedName: '',
+            selectedLocation:'',
+            newSite: false,
+            siteID: '',
+            filteredItems: []
+        };
+    },
+    methods: {
+        edit: function () {
+            this.editPop = !this.editPop;
+        },
+        pushEdits: function () {
+            this.editPop = !this.editPop;
+
+        },
+        onClickCreateSite: function () {
+            this.siteCreationEnabled = !this.siteCreationEnabled
+        },
+        onClickSiteSelectedNew: function () {
+            this.newSite = true;
+            this.selectedLocation = this.siteCreationLocation
+            this.selectedName = this.siteCreationName
+
+            this.siteSelected = true;
+        },
+        onClickSiteSelected: function (item) {
+            this.newSite = false
+            this.selectedLocation = item.name
+            this.selectedName = item.location
+            this.siteID = item.id
+
+            this.siteSelected = true
+        },
         filtered() {
             let se = [];
             if (this.search !== "") {
@@ -222,45 +283,7 @@ export default defineComponent({
             } else {
                 se = this.items;
             }
-            return se;
-        }
-    },
-    mounted() {
-        // this.items = usePage().props.value.sites
-        console.log(this.items)
-    },
-    data() {
-        return {
-            items: [],
-            search: "",
-            siteCreationEnabled: siteCreationEnabled,
-            siteCreationName: '',
-            siteCreationLocation: '',
-            createNewSite: 'Create New Site',
-            closeMenu: 'Close Site Creation',
-            siteSelected: false,
-            selectedName: '',
-            selectedLocation:'',
-            newSite: false,
-            siteID: '',
-        };
-    },
-    methods: {
-        onClickCreateSite: function () {
-            this.siteCreationEnabled = !this.siteCreationEnabled
-        },
-        onClickSiteSelectedNew: function () {
-            this.newSite = true;
-            this.selectedLocation = this.siteCreationLocation
-            this.selectedName = this.siteCreationName
-            this.siteSelected = true;
-        },
-        onClickSiteSelected: function (item) {
-            this.newSite = false
-            this.selectedLocation = item.name
-            this.selectedName = item.location
-            this.siteId = item.id
-            this.siteSelected = true
+            this.filteredItems = se;
         }
     },
 });

@@ -138,7 +138,7 @@
             </div>
         </div>
     </div>
-    <SetParameters @back="onBackParameters" :index="selectedIndex" v-else />
+    <SetParameters @back="onBackParameters" :seriesID="seriesID" :index="selectedIndex" v-else />
 </template>
 
 <script>
@@ -174,6 +174,7 @@ export default defineComponent({
             displayIndexSelection,
         };
     },
+    props: ["seriesID"],
     methods: {
         onChange: function (event) {
             let e = this.selectedIndex.indexOf(event.target.id.toUpperCase());
@@ -198,7 +199,7 @@ export default defineComponent({
             return;
         },
         onRemoveRender: function () {
-            this.$emit("goToFileSelection");
+            this.$emit("goToSeriesSelection");
             return;
         },
     },
