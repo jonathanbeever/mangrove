@@ -398,6 +398,9 @@ export default defineComponent({
                 })
             ],
         });
+        this.wavesurfer.on('ready', function() {
+            self.$refs['animation'].display = "inline";
+        });
         this.wavesurfer.on('waveform-ready', function() {
             //self.$refs['animation'].active = false;
             self.$refs['animation'].display = "none";
