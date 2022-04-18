@@ -153,7 +153,6 @@ export default defineComponent({
     mounted() {
         const findIndicesUsed = (object) => {
             let indicesUsed = [];
-            let finished = true;
             Object.keys(object).map((key) => {
                 if (
                     key.includes("aci") &&
@@ -161,12 +160,6 @@ export default defineComponent({
                     !indicesUsed.includes("ACI")
                 ) {
                     indicesUsed.push("ACI");
-                    if (
-                        object[key].results == null ||
-                        object[key].results == ""
-                    ) {
-                        finished = false;
-                    }
                 }
                 if (
                     key.includes("adi") &&
@@ -174,12 +167,6 @@ export default defineComponent({
                     !indicesUsed.includes("ADI")
                 ) {
                     indicesUsed.push("ADI");
-                    if (
-                        object[key].results == null ||
-                        object[key].results == ""
-                    ) {
-                        finished = false;
-                    }
                 }
                 if (
                     key.includes("aei") &&
@@ -187,12 +174,6 @@ export default defineComponent({
                     !indicesUsed.includes("AEI")
                 ) {
                     indicesUsed.push("AEI");
-                    if (
-                        object[key].results == null ||
-                        object[key].results == ""
-                    ) {
-                        finished = false;
-                    }
                 }
                 if (
                     key.includes("bi") &&
@@ -200,12 +181,6 @@ export default defineComponent({
                     !indicesUsed.includes("BIO")
                 ) {
                     indicesUsed.push("BIO");
-                    if (
-                        object[key].results == null ||
-                        object[key].results == ""
-                    ) {
-                        finished = false;
-                    }
                 }
                 if (
                     key.includes("ndsi") &&
@@ -213,12 +188,6 @@ export default defineComponent({
                     !indicesUsed.includes("NDSI")
                 ) {
                     indicesUsed.push("NDSI");
-                    if (
-                        object[key].results == null ||
-                        object[key].results == ""
-                    ) {
-                        finished = false;
-                    }
                 }
                 if (
                     key.includes("rms") &&
@@ -226,24 +195,21 @@ export default defineComponent({
                     !indicesUsed.includes("RMS")
                 ) {
                     indicesUsed.push("RMS");
-                    if (
-                        object[key].results == null ||
-                        object[key].results == ""
-                    ) {
-                        finished = false;
-                    }
                 }
             });
-            return {indices: indicesUsed, done: finished};
+            return {indices: indicesUsed};
         };
 
         this.items = usePage().props.value.jobs;
         this.items.forEach((element, ind) => {
             let result = findIndicesUsed(element);
             this.items[ind]["indicesUsed"] = result.indices;
-            this.items[ind]["finished"] = result.done;
+            if (element.series.results.length == 0) {
+                this.items[ind]["finished"] = false
+            } else {
+                this.items[ind]["finished"] = true
+            }
         });
-        console.log(this.items);
     },
     methods: {},
 });
