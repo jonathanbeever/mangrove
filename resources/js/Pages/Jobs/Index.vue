@@ -17,7 +17,7 @@
                                 class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"
                             >
                                 <div
-                                    class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+                                    class="shadow overflow-y-auto overflow-x-hidden max-h-96 border-b border-gray-200 sm:rounded-lg"
                                 >
                                     <table
                                         class="min-w-full divide-y divide-gray-200"
@@ -48,10 +48,7 @@
                                             >
                                                 Status
                                             </th>
-                                            <th
-                                                scope="col"
-                                                class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                                            ></th>
+
                                         </tr>
                                         </thead>
                                         <tbody
@@ -111,7 +108,7 @@
                                                             "
                                                         color="#b0b"
                                                         background-color="dark:rgba(0,0,0,.9);"
-                                                        spinner="line-down"
+                                                        spinner="mini-spinner"
                                                         duration="2"
                                                         size="50"
                                                     />
