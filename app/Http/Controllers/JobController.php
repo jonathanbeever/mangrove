@@ -21,7 +21,7 @@ class JobController extends Controller
      */
     public function index(): Response
     {
-        $jobs = auth()->user()->jobs;
+        $jobs = auth()->user()?->jobs()->with(['series.results'])->get()->toArray();
 
         return Inertia::render('Jobs/Index', [
             'jobs' => $jobs
