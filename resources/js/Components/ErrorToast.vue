@@ -10,12 +10,11 @@
                     ERROR
                 </p>
             <div class="flex items-center">
-                <p class="text-white opacity-90 text-xs">0 mins ago</p>
                 <button class='close m-2' @click="hide()" style="cursor: pointer;">X</button>
             </div>
             </div>
             <div class="p-3 bg-red-600 rounded-b-lg break-words text-white">
-                {{ $page.props.jetstream.flash.failure }}
+                {{ $page.props.flash.failure }}
             </div>
             </div>
         </div>
