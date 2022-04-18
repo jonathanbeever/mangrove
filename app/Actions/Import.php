@@ -47,8 +47,15 @@ class Import implements ImportContract
                     return false;
                 }
 
+                if(isset($input['files'][0]['path'])) {
+                    $seriesPath = pathinfo($input['files'][0]['path'], PATHINFO_DIRNAME);
+                } else {
+                    return false;
+                }
+
                 $this->series = $this->site->series()->create([
                     'user_id' => $this->user->id,
+                    'path' => $seriesPath,
                     'name' => $input['series'],
                 ]);
 
@@ -106,7 +113,6 @@ class Import implements ImportContract
 
         $realFilePath = rootfs_path($normalizedPath);
         $metadataFile = file($realFilePath);
-        dd($metadataFile);
 
         if ($metadataFile !== FALSE) {
             // Read all CSV rows into array.

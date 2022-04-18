@@ -16,6 +16,6 @@ class ImportResponse implements ImportResponseContract
      */
     public function toResponse($request): Response
     {
-        return redirect()->to('jobs');
+        return redirect()->to(route('jobs.create'));
     }
 }

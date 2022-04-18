@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('bi_inputs', static function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(JobInput::class)->nullable()->constrained();
+            $table->foreignIdFor(JobInput::class)->constrained();
             $table->integer('fftw');
             $table->integer('max_freq');
             $table->integer('min_freq');

@@ -21,6 +21,7 @@ class Series extends Model
      */
     protected $fillable = [
         'name',
+        'path',
         'user_id',
     ];
 
@@ -55,20 +56,14 @@ class Series extends Model
     }
 
     /**
-     * Get the path where the sound files are located for the series.
+     * Get file by name.
      *
-     * @return ?string
+     * @param  string  $fileName
+     * @return mixed
      */
-    public function path(): ?string
+    public function fileByName(string $fileName): mixed
     {
-        $path = $this->hasOne(File::class)->latestOfMany()->path;
-
-        if (isset($path)) {
-            $directory = pathinfo($path, PATHINFO_DIRNAME);
-            return rootfs_path($directory);
-        }
-
-        return null;
+        return File::where(['name' => $fileName, 'series_id' => $this->id])->first();
     }
 
     /**

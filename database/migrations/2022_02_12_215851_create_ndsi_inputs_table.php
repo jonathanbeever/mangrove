@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('ndsi_inputs', static function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(JobInput::class)->nullable()->constrained();
+            $table->foreignIdFor(JobInput::class)->constrained();
             $table->integer('anthro_max');
             $table->integer('anthro_min');
             $table->integer('bio_max');

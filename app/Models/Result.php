@@ -18,6 +18,7 @@ class Result extends Model
      * @var string[]
      */
     protected $fillable = [
+        'series_id',
         'aci_results',
         'adi_results',
         'aei_results',

@@ -3,6 +3,7 @@
 namespace App\Actions\Job;
 
 use App\Contracts\Job\ExecuteJobContract;
+use App\Models\File;
 use App\Models\JobInput;
 use Illuminate\Support\Facades\Log;
 use JsonException;
@@ -19,36 +20,33 @@ class ExecuteJob implements ExecuteJobContract
     {
         $jobInput = $job->getInput();
 
-        if($jobInput !== FALSE) {
-            $process = proc_open(
-                'Rscript processJob.R 2>&1',
-                [1 => ["pipe", "w"]],
-                $pipes,
-                base_path('scripts/Rscripts'),
-                ["input" => $jobInput]
-            );
+        $process = proc_open(
+            'Rscript processJob.R 2>&1',
+            [1 => ["pipe", "w"]],
+            $pipes,
+            base_path('scripts/Rscripts'),
+            ["input" => $jobInput]
+        );
 
-            if ($process !== FALSE && is_resource($process) && isset($pipes[1]) && is_resource($pipes[1])) {
-                $output = stream_get_contents($pipes[1]);
-            }
-            proc_close($process);
-
-            if (isset($output) && $output !== FALSE) {
-                try {
-                    $json_output = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
-                    if ($json_output !== NULL) {
-                        $this->saveJobResults($job, $json_output);
-                        return true;
-                    }
-                } catch (JsonException $e) {
-                    Log::error("R Script output could not be decoded" . $this->rawRScriptLog($jobInput, $output));
-                    return false;
-                }
-            }
-
-            Log::error("No output from R Script" . $this->rawRScriptLog($jobInput, ""));
-            return false;
+        if ($process !== FALSE && is_resource($process) && isset($pipes[1]) && is_resource($pipes[1])) {
+            $output = stream_get_contents($pipes[1]);
         }
+        proc_close($process);
+
+        if (isset($output) && $output !== FALSE) {
+            try {
+                $json_output = json_decode($output, true, 512, JSON_THROW_ON_ERROR);
+                if ($json_output !== NULL) {
+                    return $this->saveJobResults($job, $json_output);
+                }
+            } catch (JsonException $e) {
+                Log::error("R Script output could not be decoded" . $this->rawRScriptLog($jobInput, $output));
+                return false;
+            }
+        }
+
+        Log::error("No output from R Script" . $this->rawRScriptLog($jobInput, ""));
+        return false;
     }
 
     /**
@@ -57,23 +55,28 @@ class ExecuteJob implements ExecuteJobContract
      *
      * @param  JobInput  $job
      * @param  array  $results
-     * @return void
+     * @return bool
      */
-    protected function saveJobResults(JobInput $job, array $results): void
+    protected function saveJobResults(JobInput $job, array $results): bool
     {
         try {
-            $resultsToImport = [];
-
             foreach(['aci', 'adi', 'aei', 'bi', 'ndsi', 'rms'] as $index) {
                 if (isset($results[$index])) {
                     foreach($results[$index] as $fileName => $data) {
-                        $resultsToImport[$fileName][$index . '_results'] = json_encode($data, JSON_THROW_ON_ERROR);
+                        $job->series->fileByName($fileName)?->results()->updateOrCreate([
+                            'series_id' => $job->series->id
+                        ], [
+                            'series_id' => $job->series->id,
+                            $index . '_results' => json_encode($data, JSON_THROW_ON_ERROR)
+                        ]);
                     }
                 }
             }
 
-            dd($resultsToImport);
-        } catch (JsonException) {}
+            return true;
+        } catch (JsonException) {
+            return false;
+        }
     }
 
     /**

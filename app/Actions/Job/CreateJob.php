@@ -46,27 +46,27 @@ class CreateJob implements CreateJobContract
     public function saveInputs(JobInput $job, array $input): void
     {
         if (isset($input['aci'])) {
-            $job->aciInput()->save(AciInput::create($input['aci']));
+            $job->aciInput()->create($input['aci']);
         }
 
         if (isset($input['adi'])) {
-            $job->adiInput()->save(AdiInput::create($input['adi']));
+            $job->adiInput()->create($input['adi']);
         }
 
         if (isset($input['aei'])) {
-            $job->aeiInput()->save(AeiInput::create($input['aei']));
+            $job->aeiInput()->create($input['aei']);
         }
 
         if (isset($input['bi'])) {
-            $job->biInput()->save(BiInput::create($input['bi']));
+            $job->biInput()->create($input['bi']);
         }
 
         if (isset($input['ndsi'])) {
-            $job->ndsiInput()->save(NdsiInput::create($input['ndsi']));
+            $job->ndsiInput()->create($input['ndsi']);
         }
 
         if (isset($input['rms']) && $input['rms'] === TRUE) {
-            $job->rmsInput()->save(RmsInput::create());
+            $job->rmsInput()->create();
         }
     }
 

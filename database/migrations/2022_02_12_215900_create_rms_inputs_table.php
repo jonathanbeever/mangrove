@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('rms_inputs', static function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(JobInput::class)->nullable()->constrained();
+            $table->foreignIdFor(JobInput::class)->constrained();
 
             $table->timestamps();
             $table->softDeletes();

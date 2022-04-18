@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->foreignIdFor(Site::class)->constrained();
             $table->string('name');
+            $table->string('path');
 
             $table->timestamps();
             $table->softDeletes();
