@@ -6,6 +6,7 @@ import JetApplicationMark from '@/Jetstream/ApplicationMark.vue';
 import JetBanner from '@/Jetstream/Banner.vue';
 import JetDropdown from '@/Jetstream/Dropdown.vue';
 import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
+import JetButton from '@/Jetstream/Button.vue';
 import JetNavLink from '@/Jetstream/NavLink.vue';
 import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
 
@@ -39,9 +40,9 @@ const stopImpersonation = () => {
 
         <JetBanner />
 
-        <div class="min-h-screen bg-gradient-to-b from-sky-200 to-sky-50 dark:from-slate-900 dark:via-sky-900 dark:to-slate-700 dark:text-white">
+        <div class="min-h-screen bg-gradient-to-t from-orange-50 to-sky-200 dark:from-slate-900 dark:via-sky-900 dark:to-slate-900 dark:text-white">
 
-            <nav class="bg-white border-b border-gray-100 dark:bg-slate-900">
+            <nav class="bg-white border-b dark:border-cyan-500 dark:bg-slate-900">
 
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -206,8 +207,8 @@ const stopImpersonation = () => {
                             </div>
 
                             <div class="inline-flex pl-5">
-                            <jet-button class='close m-2 bg-transparent hover:bg-white-500 text-white-700 font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' @click="history.forward()" style="cursor: pointer;">Back</jet-button>
-                            <jet-button class='close m-2 bg-transparent hover:bg-white-500 text-white-700 font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' @click="history.forward()" style="cursor: pointer;">Forward</jet-button>
+                            <JetButton class='close m-2 bg-transparent hover:bg-white-500 text-black dark:text-white font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' @click="history.forward()" style="cursor: pointer;">Back</JetButton>
+                            <JetButton class='close m-2 bg-transparent hover:bg-white-500 text-black dark:text-white font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' @click="history.forward()" style="cursor: pointer;">Forward</JetButton>
                             </div>
                         </div>
 
@@ -343,7 +344,7 @@ const stopImpersonation = () => {
             </nav>
 
             <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow-xl dark:shadow-sky-400 dark:bg-slate-900 dark:text-white rounded-b-full">
+            <header v-if="$slots.header" >
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

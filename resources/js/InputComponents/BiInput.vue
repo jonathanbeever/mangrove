@@ -32,9 +32,9 @@
 
             </jet-input>
             <div class="flex w-full justify-start align-baselien content-end">
-                <jet-button class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
+                <JetButton class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
                     Restore Defaults
-                </jet-button>
+                </JetButton>
             </div>
         </div>
     </div>

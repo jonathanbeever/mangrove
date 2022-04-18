@@ -20,12 +20,12 @@
                             <jet-label class="text-white-500">File Path</jet-label><br>
                             <form>
                                 <input type="text" id="fname" name="fname" v-model="spFile" v-on:submit="onFileChange($event)" style="color:black;">
-                                <jet-button
+                                <JetButton
                                     class="btn btn-success border-gray-200 m-2"
                                     @click="setSpFilePath()"
                                     v-if="singleFile == true">
                                     Submit
-                                </jet-button>
+                                </JetButton>
                             </form>
                             <div class="loading pt-2" id="loading" ref="loading">
                                 <div id="wave" class="p-2"/>
@@ -42,17 +42,17 @@
                         class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full dark:bg-slate-800 dark:text-white"
                     >
                         <div class="pr-2 float-left self-end">
-                            <jet-button
+                            <JetButton
                                 class="btn btn-success border-gray-200"
                                 @click="switchMode()"
-                                v-if="singleFile == true"
-                                >Single File Analysis</jet-button
+                                v-show="singleFile == true"
+                                >Single File Analysis</JetButton
                             >
-                            <jet-button
+                            <JetButton
                                 class="btn btn-success border-gray-200"
                                 @click="switchMode()"
-                                v-if="singleFile == false"
-                                >Multi File Analysis</jet-button
+                                v-show="singleFile == false"
+                                >Multi File Analysis</JetButton
                             >
                         </div>
 
@@ -461,7 +461,7 @@ export default defineComponent({
             })
 
             this.indices = findIndicesUsed(this.firstFileData)
-        
+
         },
 
         updateSpectrogramTime: function() {

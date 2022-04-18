@@ -41,13 +41,13 @@
                                                     <tr>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Series
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                         </th>
                                                     </tr>
@@ -64,30 +64,24 @@
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="">
                                                                     <div
                                                                         class="text-sm font-medium text-gray-900"
                                                                     >
                                                                         {{
                                                                             item.name
                                                                         }}
-                                                                    </div>
-                                                                </div>
+
+
                                                             </div>
                                                         </td>
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="flex flex-row justify-end align-middle items-end">
-                                                                    <jet-button v-on:click="onClickUseSeries(item)">Use This Series</jet-button>
-                                                                </div>
-                                                            </div>
+
+                                                                    <JetButton v-on:click="onClickUseSeries(item)" class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
+                        >Use This Series</JetButton>
+
+
                                                         </td>
                                                     </tr>
                                                 </tbody>

@@ -14,14 +14,14 @@
                     >
                         <fileUpload :items="items" :meta="meta" v-if="newUploads"/>
                     </div>
-                    <jet-button
+                    <JetButton
                         v-if="newUploads == true && editPop == false"
                         v-on:click="postSiteSeries()"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                         :disabled="seriesName.length == 0"
                     >
                         Import Series
-                    </jet-button>
+                    </JetButton>
                     <jet-input
                 class="p-2 m-4 form-text-input leading-tight border-rounded-half border-b border-bg-slate-50"
                 type="text"
