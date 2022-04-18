@@ -107,7 +107,9 @@ const disableTwoFactorAuthentication = () => {
 <template>
     <JetActionSection>
         <template #title>
+        <div class="dark:text-white">
             Two Factor Authentication
+        </div>
         </template>
 
         <template #description>

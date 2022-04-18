@@ -40,7 +40,9 @@ const closeModal = () => {
 <template>
     <JetActionSection>
         <template #title>
+        <div class="dark:text-white">
             Delete Account
+        </div>
         </template>
 
         <template #description>

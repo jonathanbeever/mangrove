@@ -4,12 +4,12 @@
             class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full flex justify-center"
         >
             <div class="flex flex-row justify-between content-center w-full">
-                <jet-button
+                <JetButton
                     v-on:click="onRemoveRender"
                     class="mr-[15px] float-left"
                 >
                     Back
-                </jet-button>
+                </JetButton>
                 <div class="flex flex-row w-full items-center justify-center">
                     <jet-label class="mr-[5px]"> Choose Audio Files </jet-label>
                     <hr class="flex flex-grow" />
@@ -127,12 +127,12 @@
                     <div
                         class="flex w-full justify-end content-end align-end mt-[150px]"
                     >
-                        <jet-button
+                        <JetButton
                             v-on:click="onNext($event)"
                             class="flex w-1/3 justify-center"
                         >
                             Next
-                        </jet-button>
+                        </JetButton>
                     </div>
                 </div>
             </div>

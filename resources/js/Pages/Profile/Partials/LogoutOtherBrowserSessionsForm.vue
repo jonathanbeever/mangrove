@@ -45,7 +45,9 @@ const closeModal = () => {
 <template>
     <JetActionSection>
         <template #title>
+        <div class="dark:text-white">
             Browser Sessions
+        </div>
         </template>
 
         <template #description>
