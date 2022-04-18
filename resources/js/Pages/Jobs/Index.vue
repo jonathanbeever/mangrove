@@ -26,37 +26,37 @@
                                             <tr>
                                                 <th
                                                     scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                                                 >
                                                     Job Name
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                                                 >
                                                     Indices Used
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                                                 >
                                                     Created On
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                                                 >
                                                     Updated On
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                    class="px-6 py-3 text-center font-medium text-gray-500 uppercase tracking-wider"
                                                 >
                                                     Status
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                                                 ></th>
                                             </tr>
                                         </thead>

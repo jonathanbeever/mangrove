@@ -27,7 +27,6 @@
                             <div
                                 class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96"
                             >
-                                <div class="">
                                     <div
                                         class="py-4 align-middle inline-block min-w-full"
                                     >
@@ -41,29 +40,24 @@
                                                     <tr>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Site
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                             Location
                                                         </th>
                                                         <th
                                                             scope="col"
-                                                            class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                                         >
                                                         </th>
                                                     </tr>
                                                 </thead>
-                                                <Modal
-                                                    v-show="editPop == true"
-                                                    :selected="[]"
-                                                    :items="items"
-                                                />
-                                                <tbody
+                                               <tbody
                                                     class="bg-white divide-y divide-gray-200"
                                                     v-show="editPop == false"
                                                 >
@@ -71,39 +65,18 @@
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-label class="mr-[10px]">Name: </jet-label>
-                                                                    <jet-input :value="siteCreationName" v-model="siteCreationName">
-                                                                    </jet-input>
-                                                                </div>
-                                                            </div>
+                                                                    <jet-input class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" :value="siteCreationName" v-model="siteCreationName" placeholder="Site Name"/>
+
                                                         </td>
                                                          <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-label class="mr-[10px]">Location: </jet-label>
-                                                                    <jet-input :value="siteCreationLocation" v-model="siteCreationLocation">
-                                                                    </jet-input>
-                                                                </div>
-                                                            </div>
+                                                                    <jet-input class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" :value="siteCreationLocation" v-model="siteCreationLocation" placeholder="Location"/>
                                                         </td>
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-button v-on:click="onClickSiteSelectedNew()" :disabled="siteCreationName.length == 0">Use This Site</jet-button>
-                                                                </div>
-                                                            </div>
+                                                                    <jet-button v-on:click="onClickSiteSelectedNew()" :disabled="siteCreationName.length == 0" class="float-right">Use This Site</jet-button>
                                                         </td>
                                                     </tr>
                                                     <tr
@@ -161,7 +134,6 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

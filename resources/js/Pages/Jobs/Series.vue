@@ -1,7 +1,7 @@
 <template>
     <app-layout title="Series">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
+            <h2 class="font-semibold text-xxl text-gray-800 leading-tight dark:text-white">
                 Series
             </h2>
         </template>
@@ -10,7 +10,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800 ">
                     <div
-                        class="bg-white border-b border-gray-200 flex flex-row"
+                        class="bg-white border-b border-gray-400 flex flex-row"
                     >
                         <fileUpload :items="items" :meta="meta" v-if="newUploads"/>
                     </div>
@@ -22,8 +22,8 @@
                     >
                         Import Series
                     </jet-button>
-                    <input
-                class="p-2 m-4 form-text-input leading-tight rounded border border-b-gray-400"
+                    <jet-input
+                class="p-2 m-4 form-text-input leading-tight border-rounded-half border-b border-bg-slate-50"
                 type="text"
                 v-model="seriesName"
                 id="NameInput"
