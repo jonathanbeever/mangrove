@@ -1,7 +1,7 @@
 <template>
     <app-layout title="Series">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
+            <h2 class="font-semibold text-xxl text-gray-800 leading-tight dark:text-white">
                 Series
             </h2>
         </template>
@@ -22,8 +22,8 @@
                     >
                         Import Series
                     </jet-button>
-                    <input
-                class="p-2 m-4 form-text-input leading-tight rounded border border-b-gray-400"
+                    <jet-input
+                class="p-2 m-4 form-text-input leading-tight border-rounded-half border-b border-bg-slate-50"
                 type="text"
                 v-model="seriesName"
                 id="NameInput"
