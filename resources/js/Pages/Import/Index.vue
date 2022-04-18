@@ -122,13 +122,8 @@
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                            <div
-                                                                class="flex items-start"
-                                                            >
-                                                                <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <JetButton v-on:click="onClickSiteSelected(item)">Use This Site</JetButton>
-                                                                </div>
-                                                            </div>
+                                                                    <JetButton v-on:click="onClickSiteSelected(item)" class="ml-4 float-right border-tl p-4 m-4 border-gray-200">Use This Site</JetButton>
+
                                                         </td>
                                                     </tr>
                                                 </tbody>
