@@ -374,6 +374,14 @@ export default defineComponent({
             secondSite: {}
         };
     },
+    watch: {
+        sFile: function (file) {
+            this.loading = true;
+            this.spFile = URL.createObjectURL(file);
+            this.$refs.player.load();
+            this.createSpectrogram();
+        }
+    },
     methods: {
 
         setSpFilePath: function() {
@@ -621,6 +629,9 @@ export default defineComponent({
                     }
                 })
             ],
+        });
+        this.wavesurfer.on('ready', function() {
+            self.$refs['animation'].display = "inline";
         });
         this.wavesurfer.on('waveform-ready', function() {
             //self.$refs['animation'].active = false;

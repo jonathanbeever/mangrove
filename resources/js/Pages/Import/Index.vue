@@ -146,15 +146,6 @@
                     </JetButton>
                 </div>
             </div>
-
-            <div v-if="$page.props.jetstream.flash.success != null">
-                <SuccessToast></SuccessToast>
-            </div>
-
-            <div v-if="$page.props.jetstream.flash.failure != null">
-                <ErrorToast></ErrorToast>
-            </div>
-
         </div>
     </app-layout>
     <Series :newSite="newSite" :siteID="siteID" :siteName="selectedName" :location="selectedLocation" v-else/>
@@ -171,8 +162,6 @@ import JetLabel from "@/Jetstream/Label.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import Series from "@/Pages/Jobs/Series.vue"
 import { usePage } from '@inertiajs/inertia-vue3'
-import ErrorToast from "@/Components/ErrorToast.vue";
-import SuccessToast from "@/Components/SuccessToast.vue";
 
 
 let editPop = false;
@@ -186,9 +175,7 @@ export default defineComponent({
         JetCheckbox,
         JetLabel,
         Modal,
-        Series,
-        ErrorToast,
-        SuccessToast
+        Series
     },
     computed: {
     },
