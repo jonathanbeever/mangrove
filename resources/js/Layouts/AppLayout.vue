@@ -42,11 +42,11 @@ const stopImpersonation = () => {
 
         <JetBanner />
 
-        <div div v-if="$page.props.jetstream.flash.success != null">
+        <div v-if="$page.props.flash.success">
             <SuccessToast></SuccessToast>
         </div>
 
-        <div v-if="$page.props.jetstream.flash.failure != null">
+        <div v-if="$page.props.flash.failure">
             <ErrorToast></ErrorToast>
         </div>
 

@@ -23,146 +23,106 @@
                                         class="min-w-full divide-y divide-gray-200"
                                     >
                                         <thead class="bg-gray-50">
-                                            <tr>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Job Name
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Indices Used
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Created On
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Updated On
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-center font-medium text-gray-500 uppercase tracking-wider"
-                                                >
-                                                    Status
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
-                                                ></th>
-                                            </tr>
+                                        <tr>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Job Name
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Indices Used
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Created On
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-center font-medium text-gray-500 uppercase tracking-wider"
+                                            >
+                                                Status
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                                            ></th>
+                                        </tr>
                                         </thead>
                                         <tbody
                                             class="bg-white divide-y divide-gray-200"
                                         >
-                                            <tr
-                                                v-for="item in items"
-                                                :key="item"
+                                        <tr
+                                            v-for="item in items"
+                                            :key="item"
+                                        >
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap"
                                             >
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap"
+                                                <div
+                                                    class="text-sm text-gray-500"
                                                 >
-                                                    <div
-                                                        class="text-sm text-gray-500"
-                                                    >
-                                                        {{ item.name }}
-                                                    </div>
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap"
+                                                    {{ item.name }}
+                                                </div>
+                                            </td>
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap"
+                                            >
+                                                <div
+                                                    class="text-sm text-gray-900"
                                                 >
-                                                    <div
-                                                        class="text-sm text-gray-900"
-                                                    >
-                                                        {{
-                                                            item.indicesUsed.join(
-                                                                ", "
-                                                            )
-                                                        }}
-                                                    </div>
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap"
+                                                    {{
+                                                        item.indicesUsed.join(
+                                                            ", "
+                                                        )
+                                                    }}
+                                                </div>
+                                            </td>
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap"
+                                            >
+                                                <div
+                                                    class="text-sm text-gray-900"
                                                 >
-                                                    <div
-                                                        class="text-sm text-gray-900"
-                                                    >
-                                                        {{
-                                                            item.created_at.substring(
-                                                                0,
-                                                                10
-                                                            )
-                                                        }}
-                                                    </div>
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap"
+                                                    {{
+                                                        item.created_at.substring(
+                                                            0,
+                                                            10
+                                                        )
+                                                    }}
+                                                </div>
+                                            </td>
+                                            <td
+                                                class="px-6 py-4 whitespace-nowrap text-center"
+                                            >
+                                                <div
+                                                    class="text-sm text-gray-900"
                                                 >
-                                                    <div
-                                                        class="text-sm text-gray-900"
-                                                    >
-                                                        {{
-                                                            item.updated_at
-                                                                ? item.updated_at.substring(
-                                                                      0,
-                                                                      10
-                                                                  )
-                                                                : ""
-                                                        }}
-                                                    </div>
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap text-center"
-                                                >
-                                                    <div
-                                                        class="text-sm text-gray-900"
-                                                    >
-                                                        <vue-element-loading
-                                                            ref="animation"
-                                                            :active="
+                                                    <vue-element-loading
+                                                        ref="animation"
+                                                        :active="
                                                                 item.finished !=
                                                                 true
                                                             "
-                                                            color="#b0b"
-                                                            background-color="dark:rgba(0,0,0,.9);"
-                                                            spinner="line-down"
-                                                            duration="2"
-                                                            size="50"
-                                                        />
-                                                        {{
-                                                            item.finished
-                                                                ? "Completed"
-                                                                : ""
-                                                        }}
-                                                    </div>
-                                                </td>
-                                                <td
-                                                    class="px-6 py-4 whitespace-nowrap"
-                                                >
-                                                    <div
-                                                        class="flex justify-end"
-                                                    >
-                                                        <JetButton
-                                                            v-on:click="
-                                                                jobClicked(item)
-                                                            "
-                                                            :disabled="
-                                                                !item.finished
-                                                            "
-                                                            >See
-                                                            Results</JetButton
-                                                        >
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                        color="#b0b"
+                                                        background-color="dark:rgba(0,0,0,.9);"
+                                                        spinner="line-down"
+                                                        duration="2"
+                                                        size="50"
+                                                    />
+                                                    {{
+                                                        item.finished
+                                                            ? "Completed"
+                                                            : ""
+                                                    }}
+                                                </div>
+                                            </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -176,10 +136,10 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Jetstream/Button.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import {usePage} from "@inertiajs/inertia-vue3";
 import VueElementLoading from "vue-element-loading";
 
 export default defineComponent({
@@ -189,7 +149,9 @@ export default defineComponent({
         VueElementLoading,
     },
     data() {
-        return {};
+        return {
+            items: []
+        };
     },
     mounted() {
         const findIndicesUsed = (object) => {
@@ -275,23 +237,17 @@ export default defineComponent({
                     }
                 }
             });
-            return { indices: indicesUsed, done: finished };
+            return {indices: indicesUsed, done: finished};
         };
 
         this.items = usePage().props.value.jobs;
-        console.log(this.items);
         this.items.forEach((element, ind) => {
             let result = findIndicesUsed(element);
             this.items[ind]["indicesUsed"] = result.indices;
             this.items[ind]["finished"] = result.done;
-
         });
-
+        console.log(this.items);
     },
-    methods: {
-        jobClicked: function (item) {
-            window.location.replace(route("jobs.show", item.id));
-        },
-    },
+    methods: {},
 });
 </script>
