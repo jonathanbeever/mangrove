@@ -2,9 +2,9 @@
     <div class="w-full">
         <div class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full h-full flex justify-center">
             <div class="flex flex-row justify-between content-center w-full">
-                <jet-button v-on:click="onBack" class="mr-[15px] float-left">
+                <JetButton v-on:click="onBack" class="mr-[15px] float-left">
                     Back
-                </jet-button>
+                </JetButton>
                 <div class="flex flex-row w-full items-center justify-center">
                     <jet-label class="mr-[5px]">
                         Choose Audio Files
@@ -27,8 +27,8 @@
                     <AeiInput v-if="indexCurrent == 'AEI'" @aeiChanged="aeiChanged($event)"/>
                     <BiInput v-if="indexCurrent == 'BIO'" @biChanged="biChanged($event)"/>
                     <div class="flex pt-20 justify-between">
-                    <jet-button class="justify-center mr-[5px]" v-on:click="prevIndex()" :disabled="prevDisabled">Previous Index</jet-button>
-                    <jet-button class="justify-center ml-[5px]" v-on:click="nextIndex()" :disabled="nextDisabled">Next Index</jet-button>
+                    <JetButton class="justify-center mr-[5px]" v-on:click="prevIndex()" :disabled="prevDisabled">Previous Index</JetButton>
+                    <JetButton class="justify-center ml-[5px]" v-on:click="nextIndex()" :disabled="nextDisabled">Next Index</JetButton>
                     </div>
                 </div>
                 <div class="w-2/3 pl-2 flex flex-col align-end h-[500px]">
@@ -50,9 +50,9 @@
                                 placeholder='Name this Job'
                                 style="color:#041014;"
                         />
-                        <jet-button class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()" :disabled="finishDisabled">
+                        <JetButton class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()" :disabled="finishDisabled">
                             Finish
-                        </jet-button>
+                        </JetButton>
                     </div>
                 </div>
             </div>

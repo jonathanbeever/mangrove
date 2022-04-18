@@ -76,7 +76,7 @@
                                                         <td
                                                             class="px-6 py-4 whitespace-nowrap"
                                                         >
-                                                                    <jet-button v-on:click="onClickSiteSelectedNew()" :disabled="siteCreationName.length == 0" class="float-right">Use This Site</jet-button>
+                                                                    <JetButton v-on:click="onClickSiteSelectedNew()" :disabled="siteCreationName.length == 0" class="float-right">Use This Site</JetButton>
                                                         </td>
                                                     </tr>
                                                     <tr
@@ -126,7 +126,7 @@
                                                                 class="flex items-start"
                                                             >
                                                                 <div class="flex flex-row justify-center align-middle items-center">
-                                                                    <jet-button v-on:click="onClickSiteSelected(item)">Use This Site</jet-button>
+                                                                    <JetButton v-on:click="onClickSiteSelected(item)">Use This Site</JetButton>
                                                                 </div>
                                                             </div>
                                                         </td>
@@ -138,12 +138,12 @@
                             </div>
                         </div>
                     </div>
-                    <jet-button
+                    <JetButton
                         v-on:click="onClickCreateSite()"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                     >
                         {{(!siteCreationEnabled) ? createNewSite : closeMenu}}
-                    </jet-button>
+                    </JetButton>
                 </div>
             </div>
         </div>

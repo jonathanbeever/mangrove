@@ -20,12 +20,12 @@
                             <jet-label class="text-white-500">File Path</jet-label><br>
                             <form>
                                 <input type="text" id="fname" name="fname" v-model="spFile" v-on:submit="onFileChange($event)" style="color:black;">
-                                <jet-button
+                                <JetButton
                                     class="btn btn-success border-gray-200 m-2"
                                     @click="setSpFilePath()"
                                     v-if="singleFile == true">
                                     Submit
-                                </jet-button>
+                                </JetButton>
                             </form>
                             <div class="loading pt-2" id="loading" ref="loading">
                                 <div id="wave" class="p-2"/>
@@ -42,21 +42,33 @@
                         class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full dark:bg-slate-800 dark:text-white"
                     >
                         <div class="pr-2 float-left self-end">
-                            <jet-button
+                            <JetButton
                                 class="btn btn-success border-gray-200"
                                 @click="switchMode()"
-                                v-if="singleFile == true"
-                                >Single File Analysis</jet-button
+                                v-if="evaluateSingleFile()"
+                                >Single File Analysis</JetButton
+                            >
+                            <JetButton
+                                class="btn btn-success border-gray-200"
+                                @click="switchModeSeries()"
+                                v-if="evaluateMultiFile()"
+                                >Multi File Analysis</JetButton
                             >
                             <jet-button
                                 class="btn btn-success border-gray-200"
-                                @click="switchMode()"
-                                v-if="singleFile == false"
-                                >Multi File Analysis</jet-button
+                                @click="switchModeMultiSeries()"
+                                v-if="evaluateSingleSeries()"
+                                >Single Series Analysis</jet-button
+                            >
+                            <jet-button
+                                class="btn btn-success border-gray-200"
+                                @click="switchModeBackToSingle()"
+                                v-if="evaluateMultiSeries()"
+                                >Multi Series Analysis</jet-button
                             >
                         </div>
 
-                        <div class="flex-row px-4">
+                        <div class="flex-row px-4" v-if="!seriesComparison">
                             Site:
                             <select
                                 class="flex grow dark:text-black"
@@ -70,7 +82,7 @@
                             </select>
                         </div>
 
-                        <div class="flex-row px-4">
+                        <div class="flex-row px-4" v-if="!seriesComparison">
                             Series:
                             <select
                                 class="flex grow dark:text-black"
@@ -84,7 +96,63 @@
                             </select>
                         </div>
 
-                        <div class="flex-row pr-4">
+                        <div class="flex-row px-4" v-if="seriesComparison">
+                            Site:
+                            <select
+                                class="flex grow dark:text-black"
+                                id="selectFile"
+                                v-model="selectedSite"
+                                v-on:change="populateSeriesDropdown()"
+                            >
+                                <option v-bind:value="ind" v-for="ind in siteSelectionList">
+                                    {{ind}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex-row px-4" v-if="seriesComparison">
+                            Series:
+                            <select
+                                class="flex grow dark:text-black"
+                                id="selectFile"
+                                v-model="selectedSeries"
+                                v-on:change="populateSingleFileDropdown()"
+                            >
+                                <option v-bind:value="ind" v-for="ind in seriesSelectionList">
+                                    {{ind}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex-row px-4" v-if="multiSeries">
+                            Site 2:
+                            <select
+                                class="flex grow dark:text-black"
+                                id="selectFile"
+                                v-model="selectedSiteComparison"
+                                v-on:change="populateSecondSeriesDropdown()"
+                            >
+                                <option v-bind:value="ind" v-for="ind in siteSelectionList">
+                                    {{ind}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex-row px-4" v-if="multiSeries">
+                            Series 2:
+                            <select
+                                class="flex grow dark:text-black"
+                                id="selectFile"
+                                v-model="selectedSeriesComparison"
+                                v-on:change="populateSecondSeriesDropdown()"
+                            >
+                                <option v-bind:value="ind" v-for="ind in secondSeriesSelectionList">
+                                    {{ind}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex-row pr-4" v-if="!seriesComparison">
                             Select File:
                             <select
                                 class="flex grow dark:text-black"
@@ -98,7 +166,7 @@
                             </select>
                         </div>
 
-                        <div class="flex-row pr-4" v-if="!singleFile">
+                        <div class="flex-row pr-4" v-if="evaluateMultiFile()">
                             Select File:
                             <select
                                 class="flex grow dark:text-black"
@@ -250,13 +318,11 @@ import SingleLine from '@/Pages/ChartVisualizations/SingleLine.vue';
 import * as Papa from 'papaparse';
 import { usePage } from '@inertiajs/inertia-vue3'
 
-
-let singleFile = true;
 let currentIndex = "";
 let compareIndex = "";
 let upGraphs = "";
 let selectedChart = "";
-let sFile, cFile, graphInput, graphInputC;
+let graphInput, graphInputC;
 
 export default defineComponent({
     components: {
@@ -279,7 +345,7 @@ export default defineComponent({
             startDate: "",
             endDate: "",
             selectRecordings: [],
-            singleFile,
+            singleFile: true,
             indices: ["ACI", "NDSI", "AEI", "ADI", "BI", "RMS"],
             chartSelection: ["Single Line", "Single Bar", "Dual Line", "Compare Bar"],
             selectedChart,
@@ -300,7 +366,12 @@ export default defineComponent({
             selectedSeries: '',
             series: {},
             firstFileData: {},
-            secondFileData: {}
+            secondFileData: {},
+            seriesComparison: false,
+            multiSeries: false,
+            secondSeriesSelectionList: [],
+            selectedSiteComparison: '',
+            secondSite: {}
         };
     },
     watch: {
@@ -370,6 +441,37 @@ export default defineComponent({
             this.singleFile = !this.singleFile
             this.selectedChart = ''
         },
+        switchModeSeries: function () {
+            this.seriesComparison = true
+        },
+        switchModeMultiSeries: function () {
+            this.multiSeries = true
+        },
+        switchModeBackToSingle: function () {
+            this.singleFile = true
+            this.seriesComparison = false
+            this.multiSeries = false
+        },
+        evaluateSingleFile: function () {
+            if (this.singleFile)
+                return true
+            return false
+        },
+        evaluateMultiFile: function () {
+            if (!this.singleFile && !this.seriesComparison)
+                return true
+            return false
+        },
+        evaluateSingleSeries: function () {
+            if (!this.singleFile && this.seriesComparison && !this.multiSeries)
+                return true
+            return false
+        },
+        evaluateMultiSeries: function () {
+            if (!this.singleFile && !this.singleSeries && this.multiSeries)
+                return true
+            return false
+        },
         populateDropdown: function (items) {
             let selectionList = []
             Object.keys(items).forEach(x => {
@@ -398,6 +500,13 @@ export default defineComponent({
 
             this.site.series.forEach(x => seriesList.push(x.name))
             this.seriesSelectionList = seriesList;
+        },
+        populateSecondSeriesDropdown: function () {
+            let seriesList = []
+            this.secondSite = this.sites.find(x => x.name == this.selectedSiteComparison)
+
+            this.secondSite.series.forEach(x => seriesList.push(x.name))
+            this.secondSeriesSelectionList = seriesList;
         },
         populateSingleFileDropdown: function () {
             let fileList = []

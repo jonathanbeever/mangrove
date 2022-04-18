@@ -150,7 +150,7 @@
                                                     <div
                                                         class="flex justify-end"
                                                     >
-                                                        <jet-button
+                                                        <JetButton
                                                             v-on:click="
                                                                 jobClicked(item)
                                                             "
@@ -158,7 +158,7 @@
                                                                 !item.finished
                                                             "
                                                             >See
-                                                            Results</jet-button
+                                                            Results</JetButton
                                                         >
                                                     </div>
                                                 </td>

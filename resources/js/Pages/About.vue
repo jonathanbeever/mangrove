@@ -68,7 +68,6 @@
 <script>
 import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import JetButton from "@/Jetstream/Button.vue";
 import Logo from "@/Jetstream/ApplicationLogo.vue";
 
 
@@ -76,8 +75,9 @@ export default defineComponent({
 
     components: {
         AppLayout,
-        JetButton,
-        Logo
+        Logo,
+        ErrorToast,
+        SuccessToast
     },
 });
 </script>
