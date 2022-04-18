@@ -75,9 +75,7 @@ export default defineComponent({
 
     components: {
         AppLayout,
-        Logo,
-        ErrorToast,
-        SuccessToast
+        Logo
     },
 });
 </script>
