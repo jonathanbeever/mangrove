@@ -266,6 +266,14 @@ export default defineComponent({
             loading: true
         };
     },
+    watch: {
+        sFile: function (file) {
+            this.loading = true;
+            this.spFile = URL.createObjectURL(file);
+            this.$refs.player.load();
+            this.createSpectrogram();
+        }
+    },
     methods: {
 
         setSpFilePath: function() {
