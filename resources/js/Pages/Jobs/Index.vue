@@ -2,7 +2,7 @@
     <app-layout title="Queue">
         <template #header>
             <h2
-                class="font-semibold text-xl text-gray-800 leading-tight dark:text-white"
+                class="font-semibold text-xl text-gray-800 leading-tight dark:text-white pl-8"
             >
                 Queue
             </h2>
@@ -284,7 +284,9 @@ export default defineComponent({
             let result = findIndicesUsed(element);
             this.items[ind]["indicesUsed"] = result.indices;
             this.items[ind]["finished"] = result.done;
+
         });
+
     },
     methods: {
         jobClicked: function (item) {
