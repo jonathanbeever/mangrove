@@ -96,4 +96,21 @@ class JobController extends Controller
     {
         ProcessSoundData::dispatch($job, auth()->user());
     }
+
+    /**
+     * Show the results page.
+     *
+     * @return Response
+     */
+    public function results(): Response
+    {
+        $user = auth()->user();
+        if ($user !== null) {
+            $sites = $user->sites()->with(['series.results'])->get()->toArray();
+        }
+
+        return Inertia::render('Jobs/Results', [
+            'sites' => $sites ?? [],
+        ]);
+    }
 }

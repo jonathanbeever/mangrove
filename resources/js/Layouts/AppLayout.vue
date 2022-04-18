@@ -65,6 +65,9 @@ const stopImpersonation = () => {
                                 <JetNavLink class="dark:text-gray-200" :href="route('jobs.index')" :active="route().current('jobs.index')">
                                     Job Queue
                                 </JetNavLink>
+                                <JetNavLink class="dark:text-gray-200" :href="route('results.index')" :active="route().current('results.index')">
+                                    Results
+                                </JetNavLink>
                                 <JetNavLink class="dark:text-gray-200" :href="route('about')" :active="route().current('about')">
                                     About
                                 </JetNavLink>

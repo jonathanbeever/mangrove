@@ -34,6 +34,7 @@ Route::middleware([
     Route::resource('jobs', JobController::class)->except(['show', 'edit', 'update']);
     Route::get('/import', [ImportController::class, 'index'])->name('import.index');
     Route::post('/import', [ImportController::class, 'import'])->name('import.save');
+    Route::get('/results', [JobController::class, 'results'])->name('results.index');
 
     Route::get('/about', static function () {
         return Inertia::render('About');

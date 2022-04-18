@@ -56,6 +56,16 @@ class Series extends Model
     }
 
     /**
+     * Get the results for the serires.
+     *
+     * @return HasMany
+     */
+    public function results(): HasMany
+    {
+        return $this->hasMany(Result::class);
+    }
+
+    /**
      * Get file by name.
      *
      * @param  string  $fileName

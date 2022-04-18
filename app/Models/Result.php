@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\User\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,6 +12,8 @@ class Result extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $with = ['file'];
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +29,21 @@ class Result extends Model
         'ndsi_results',
         'rms_results',
     ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'aci_results' => 'object',
+        'adi_results' => 'object',
+        'aei_results' => 'object',
+        'bi_results' => 'object',
+        'ndsi_results' => 'object',
+        'rms_results' => 'object',
+    ];
+
 
     /**
      * Get the file the results are for.
