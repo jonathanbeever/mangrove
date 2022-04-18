@@ -23,7 +23,7 @@
                                 <jet-button
                                     class="btn btn-success border-gray-200 m-2"
                                     @click="setSpFilePath()"
-                                    v-show="singleFile == true">
+                                    v-if="singleFile == true">
                                     Submit
                                 </jet-button>
                             </form>
@@ -45,13 +45,13 @@
                             <jet-button
                                 class="btn btn-success border-gray-200"
                                 @click="switchMode()"
-                                v-show="singleFile == true"
+                                v-if="singleFile == true"
                                 >Single File Analysis</jet-button
                             >
                             <jet-button
                                 class="btn btn-success border-gray-200"
                                 @click="switchMode()"
-                                v-show="singleFile == false"
+                                v-if="singleFile == false"
                                 >Multi File Analysis</jet-button
                             >
                         </div>
@@ -61,31 +61,45 @@
                             <select
                                 class="flex grow dark:text-black"
                                 id="selectFile"
-                                v-model="sFile"
-                                v-on:change="alterIndices()"
+                                v-model="selectedSite"
+                                v-on:change="populateSeriesDropdown()"
                             >
-                                <option v-bind:value="ind" v-for="ind in selectionList">
+                                <option v-bind:value="ind" v-for="ind in siteSelectionList">
                                     {{ind}}
                                 </option>
                             </select>
                         </div>
 
-                        <div class="flex-row pr-4" v-show="singleFile == false">
-                            Compared Site:
+                        <div class="flex-row px-4">
+                            Series:
+                            <select
+                                class="flex grow dark:text-black"
+                                id="selectFile"
+                                v-model="selectedSeries"
+                                v-on:change="populateSingleFileDropdown()"
+                            >
+                                <option v-bind:value="ind" v-for="ind in seriesSelectionList">
+                                    {{ind}}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex-row pr-4">
+                            Select File:
                             <select
                                 class="flex grow dark:text-black"
                                 id="compareFile"
-                                v-model="cFile"
-                                v-on:change="alterIndices()"
+                                v-model="sFile"
+                                v-on:change="populateIndicesDropdown()"
                             >
-                                <option v-bind:value="ind" v-for="ind in selectionList">
+                                <option v-bind:value="ind" v-for="ind in singleFileSelectionList">
                                     {{ ind }}
                                 </option>
                             </select>
                         </div>
 
                         <div class="flex-row pr-4">
-                            Series:
+                            Indices:
                             <select
                                 :disabled="(sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile)"
                                 class="flex grow dark:text-black"
@@ -130,40 +144,40 @@
                         v-if="upGraphs != '' && (selectedChart != '' || (selectedChart == '' && (upGraphs == 'NDSI' || upGraphs == 'RMS'))) && singleFile == true"
                     >
 
-                        <div v-show="upGraphs == 'ACI'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <SingleBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                        <div v-if="upGraphs == 'ACI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-if="selectedChart == 'Single Line'" :id="sFile+'SL'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-if="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[sFile, [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <SingleBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ACI'" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'NDSI'" :key="upGraphs" class="w-4/5">
+                        <div v-if="upGraphs == 'NDSI'" :key="upGraphs" class="w-4/5">
                             <SingleBar :id="sFile+'CB'+'NDSI'" :xBarLabels="['Biophony', 'Anthrophony']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.biophonyL], [graphInput.anthrophonyL]]" :xLabel="'Biological VS Human Generated Sound'" :yLabel="'Computed Value'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'AEI'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'AEI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput.bandL]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'AEI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput.bandL, graphInput.bandR]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'AEI'" :xBarLabels="['L Band Aei']" :dataSetLabels="[]" :dataSetData="[graphInput.aeiL]" :xLabel="'Frequency Band'" :yLabel="'Aei Index Computed Value'"/>
-                            <SingleBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'AEI'" :xBarLabels="['L Band Aei', 'R Band Aei']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.aeiL], [graphInput.aeiR]]" :xLabel="'Frequency Band'" :yLabel="'Aei Computed Value'"/>
+                        <div v-if="upGraphs == 'AEI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-if="selectedChart == 'Single Line'" :id="sFile+'SL'+'AEI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput.bandL]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'AEI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput.bandL, graphInput.bandR]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
+                            <SingleBar v-if="selectedChart == 'Single Bar'" :id="sFile+'SB'+'AEI'" :xBarLabels="['L Band Aei']" :dataSetLabels="[]" :dataSetData="[graphInput.aeiL]" :xLabel="'Frequency Band'" :yLabel="'Aei Index Computed Value'"/>
+                            <SingleBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'AEI'" :xBarLabels="['L Band Aei', 'R Band Aei']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.aeiL], [graphInput.aeiR]]" :xLabel="'Frequency Band'" :yLabel="'Aei Computed Value'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'ADI'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'ADI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput.bandL]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ADI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput.bandL, graphInput.bandR]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ADI'" :xBarLabels="['L Band Adi']" :dataSetLabels="[]" :dataSetData="[graphInput.adiL]" :xLabel="'Frequency Band'" :yLabel="'Adi Index Computed Value'"/>
-                            <SingleBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ADI'" :xBarLabels="['L Band Adi', 'R Band Adi']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.adiL], [graphInput.adiR]]" :xLabel="'Frequency Band'" :yLabel="'Adi Computed Value'"/>
+                        <div v-if="upGraphs == 'ADI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-if="selectedChart == 'Single Line'" :id="sFile+'SL'+'ADI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput.bandL]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ADI'" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput.bandL, graphInput.bandR]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
+                            <SingleBar v-if="selectedChart == 'Single Bar'" :id="sFile+'SB'+'ADI'" :xBarLabels="['L Band Adi']" :dataSetLabels="[]" :dataSetData="[graphInput.adiL]" :xLabel="'Frequency Band'" :yLabel="'Adi Index Computed Value'"/>
+                            <SingleBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ADI'" :xBarLabels="['L Band Adi', 'R Band Adi']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.adiL], [graphInput.adiR]]" :xLabel="'Frequency Band'" :yLabel="'Adi Computed Value'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'BI'" :key="upGraphs" class="w-4/5">
-                            <SingleLine v-show="selectedChart == 'Single Line'" :id="sFile+'SL'+'BIO'" :xBarLabels="graphInput.freqVals" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput.valsL]" :xLabel="'Frequency'" :yLabel="'Bio Index Value'"/>
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'BIO'" :xBarLabels="graphInput.freqVals" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput.valsL, graphInput.valsR]" :xLabel="'Frequency Range'" :yLabel="'Bio Index Value'"/>
-                            <SingleBar v-show="selectedChart == 'Single Bar'" :id="sFile+'SB'+'BIO'" :xBarLabels="['L Band Bio']" :dataSetLabels="[]" :dataSetData="[graphInput.areaL]" :xLabel="'Frequency Band'" :yLabel="'Bio Index Computed Value'"/>
-                            <SingleBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'BIO'" :xBarLabels="['L Band Bio', 'R Band Bio']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.areaL], [graphInput.areaR]]" :xLabel="'Frequency Band'" :yLabel="'Bio Computed Value'"/>
-                            <SingleLine v-show="selectedChart == 'Frequency Over Time'" :id="sFile+'SLOT'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['Frequency']" :dataSetData="[graphInput.freqVals]" :xLabel="'Time (Minutes)'" :yLabel="'Frequency (Hz)'"/>
+                        <div v-if="upGraphs == 'BI'" :key="upGraphs" class="w-4/5">
+                            <SingleLine v-if="selectedChart == 'Single Line'" :id="sFile+'SL'+'BIO'" :xBarLabels="graphInput.freqVals" :dataSetLabels="['L Band Values']" :dataSetData="[graphInput.valsL]" :xLabel="'Frequency'" :yLabel="'Bio Index Value'"/>
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'BIO'" :xBarLabels="graphInput.freqVals" :dataSetLabels="['L Band Values', 'R Band Values']" :dataSetData="[graphInput.valsL, graphInput.valsR]" :xLabel="'Frequency Range'" :yLabel="'Bio Index Value'"/>
+                            <SingleBar v-if="selectedChart == 'Single Bar'" :id="sFile+'SB'+'BIO'" :xBarLabels="['L Band Bio']" :dataSetLabels="[]" :dataSetData="[graphInput.areaL]" :xLabel="'Frequency Band'" :yLabel="'Bio Index Computed Value'"/>
+                            <SingleBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'BIO'" :xBarLabels="['L Band Bio', 'R Band Bio']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.areaL], [graphInput.areaR]]" :xLabel="'Frequency Band'" :yLabel="'Bio Computed Value'"/>
+                            <SingleLine v-if="selectedChart == 'Frequency Over Time'" :id="sFile+'SLOT'+'BIO'" :xBarLabels="graphInput.range" :dataSetLabels="['Frequency']" :dataSetData="[graphInput.freqVals]" :xLabel="'Time (Minutes)'" :yLabel="'Frequency (Hz)'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'RMS'" :key="upGraphs" class="w-4/5">
+                        <div v-if="upGraphs == 'RMS'" :key="upGraphs" class="w-4/5">
                             <SingleBar :id="sFile+'CB'+'RMS'" :xBarLabels="['Band L RMS', 'Band R RMS']" :dataSetLabels="['', '']" :dataSetData="[[graphInput.rmsL], [graphInput.rmsR]]" :xLabel="'Root Mean Square L Band and R Band'" :yLabel="'Root Mean Square'"/>
                         </div>
                     </div>
@@ -171,31 +185,31 @@
                         class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
                         v-if="upGraphs != '' && (selectedChart != '' || (selectedChart == '' && (upGraphs == 'NDSI' || upGraphs == 'RMS'))) && singleFile == false && cFile != null && cFile != ''"
                     >
-                    <div v-show="upGraphs == 'ACI'" :key="upGraphs" class="w-4/5">
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ACI'+cFile" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ACI'+cFile" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                    <div v-if="upGraphs == 'ACI'" :key="upGraphs" class="w-4/5">
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ACI'+cFile" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
+                            <CompareBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ACI'+cFile" :xBarLabels="[]" :dataSetLabels="['label1', 'label2']" :dataSetData="[[1, 2, 3, 4], [2, 4, 5, 6]]" :xLabel="'Time'" :yLabel="'yLabel'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'NDSI'" :key="upGraphs" class="w-4/5">
+                        <div v-if="upGraphs == 'NDSI'" :key="upGraphs" class="w-4/5">
                             <CompareBar :id="sFile+'CB'+'NDSI'+cFile" :xBarLabels="[sFile, cFile]" :dataSetLabels="['Biophony', 'Anthrophony']" :dataSetData="[[graphInput.biophonyL, graphInputC.biophonyL], [graphInput.anthrophonyL, graphInputC.anthrophonyL]]" :xLabel="'Biological VS Human Generated Sound'" :yLabel="'Computed Value'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'AEI'" :key="upGraphs" class="w-4/5">
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'AEI'+cFile" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="[sFile, cFile]" :dataSetData="[graphInput.bandL, graphInputC.bandL]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'AEI'+cFile" :xBarLabels="[sFile, cFile]" :dataSetLabels="['L Band Aei', 'R Band Aei']" :dataSetData="[[graphInput.aeiL, graphInputC.aeiL], [graphInput.aeiR, graphInputC.aeiR]]" :xLabel="'Frequency Band'" :yLabel="'Aei Computed Value'"/>
+                        <div v-if="upGraphs == 'AEI'" :key="upGraphs" class="w-4/5">
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'AEI'+cFile" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="[sFile, cFile]" :dataSetData="[graphInput.bandL, graphInputC.bandL]" :xLabel="'Frequency Range'" :yLabel="'Aei Index Value'"/>
+                            <CompareBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'AEI'+cFile" :xBarLabels="[sFile, cFile]" :dataSetLabels="['L Band Aei', 'R Band Aei']" :dataSetData="[[graphInput.aeiL, graphInputC.aeiL], [graphInput.aeiR, graphInputC.aeiR]]" :xLabel="'Frequency Band'" :yLabel="'Aei Computed Value'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'ADI'" :key="upGraphs" class="w-4/5">
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ADI'+cFile" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="[sFile, cFile]" :dataSetData="[graphInput.bandL, graphInputC.bandL]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ADI'+cFile" :xBarLabels="[sFile, cFile]" :dataSetLabels="['L Band Adi', 'R Band Adi']" :dataSetData="[[graphInput.adiL, graphInputC.adiL], [graphInputC.adiR, graphInputC.adiR]]" :xLabel="'Frequency Band'" :yLabel="'Adi Computed Value'"/>
+                        <div v-if="upGraphs == 'ADI'" :key="upGraphs" class="w-4/5">
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'ADI'+cFile" :xBarLabels="graphInput.bandRangeL" :dataSetLabels="[sFile, cFile]" :dataSetData="[graphInput.bandL, graphInputC.bandL]" :xLabel="'Frequency Range'" :yLabel="'Adi Index Value'"/>
+                            <CompareBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'ADI'+cFile" :xBarLabels="[sFile, cFile]" :dataSetLabels="['L Band Adi', 'R Band Adi']" :dataSetData="[[graphInput.adiL, graphInputC.adiL], [graphInputC.adiR, graphInputC.adiR]]" :xLabel="'Frequency Band'" :yLabel="'Adi Computed Value'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'BI'" :key="upGraphs" class="w-4/5">
-                            <DualLine v-show="selectedChart == 'Dual Line'" :id="sFile+'DL'+'BIO'+cFile" :xBarLabels="graphInput.freqVals" :dataSetLabels="[sFile, cFile]" :dataSetData="[graphInput.valsL, graphInputC.valsL]" :xLabel="'Frequency Range'" :yLabel="'Bio Index Value'"/>
-                            <CompareBar v-show="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'BIO'+cFile" :xBarLabels="[sFile, cFile]" :dataSetLabels="['L Band Bio', 'R Band Bio']" :dataSetData="[[graphInput.areaL, graphInputC.areaL], [graphInput.areaR, graphInputC.areaR]]" :xLabel="'Frequency Band'" :yLabel="'Bio Computed Value'"/>
+                        <div v-if="upGraphs == 'BI'" :key="upGraphs" class="w-4/5">
+                            <DualLine v-if="selectedChart == 'Dual Line'" :id="sFile+'DL'+'BIO'+cFile" :xBarLabels="graphInput.freqVals" :dataSetLabels="[sFile, cFile]" :dataSetData="[graphInput.valsL, graphInputC.valsL]" :xLabel="'Frequency Range'" :yLabel="'Bio Index Value'"/>
+                            <CompareBar v-if="selectedChart == 'Compare Bar'" :id="sFile+'CB'+'BIO'+cFile" :xBarLabels="[sFile, cFile]" :dataSetLabels="['L Band Bio', 'R Band Bio']" :dataSetData="[[graphInput.areaL, graphInputC.areaL], [graphInput.areaR, graphInputC.areaR]]" :xLabel="'Frequency Band'" :yLabel="'Bio Computed Value'"/>
                         </div>
 
-                        <div v-show="upGraphs == 'RMS'" :key="upGraphs" class="w-4/5">
+                        <div v-if="upGraphs == 'RMS'" :key="upGraphs" class="w-4/5">
                             <CompareBar :id="sFile+'CB'+'RMS'" :xBarLabels="[sFile, cFile]" :dataSetLabels="['L Band Rms', 'R Band Rms']" :dataSetData="[[graphInput.rmsL, graphInputC.rmsL], [graphInput.rmsR, graphInputC.rmsR]]" :xLabel="'Root Mean Square L Band and R Band'" :yLabel="'Root Mean Square'"/>
                         </div>
                     </div>
@@ -261,9 +275,17 @@ export default defineComponent({
             graphInput,
             graphInputC,
             items: [],
-            selectionList: [''],
+            siteSelectionList: [],
             currTime: 0.0,
-            loading: true
+            loading: true,
+            sites: [],
+            seriesSelectionList: [],
+            site: {},
+            selectedSite: '',
+            singleFileSelectionList: [],
+            selectedSeries: '',
+            series: {},
+            firstFileData: {}
         };
     },
     methods: {
@@ -303,11 +325,10 @@ export default defineComponent({
 
         showGraphs: function () {
             this.upGraphs = this.currentIndex;
-
-            this.graphInput = JSON.parse(this.items[`${this.currentIndex.toLowerCase() + '_input'}`].results)[this.sFile]
+            this.graphInput = JSON.parse(this.firstFileData[`${this.currentIndex.toLowerCase() + '_results'}`])
 
             if (this.singleFile == false) {
-                this.graphInputC = JSON.parse(this.items[`${this.currentIndex.toLowerCase() + '_input'}`].results)[this.cFile]
+                this.graphInputC = this.items[`${this.currentIndex.toLowerCase() + '_input'}`].results[this.cFile]
                 this.chartSelection = ["Dual Line", "Compare Bar"]
 
                 if (this.selectedChart)
@@ -347,6 +368,64 @@ export default defineComponent({
                 }
             })
             this.selectionList = selectionList
+        },
+
+        populateSiteDropdown: function () {
+            let siteList = []
+            this.sites.forEach(x => {
+                siteList.push(x.name)
+            })
+            this.siteSelectionList = siteList;
+        },
+
+        populateSeriesDropdown: function () {
+            let seriesList = []
+            this.site = this.sites.find(x => x.name == this.selectedSite)
+
+            this.site.series.forEach(x => seriesList.push(x.name))
+            this.seriesSelectionList = seriesList;
+        },
+
+        populateSingleFileDropdown: function () {
+            let fileList = []
+            this.series = this.site.series.find(x => x.name == this.selectedSeries)
+            this.series.results.forEach(x => fileList.push(x.file.name))
+            this.singleFileSelectionList = fileList
+        },
+        populateIndicesDropdown: function () {
+            const findIndicesUsed = (object) => {
+                let indicesUsed = []
+                Object.keys(object).map(key => {
+                    if (key.includes('aci') && object[key] != null && !indicesUsed.includes('ACI')) {
+                        indicesUsed.push('ACI')
+                    }
+                    if (key.includes('adi') && object[key] != null && !indicesUsed.includes('ADI')) {
+                        indicesUsed.push('ADI')
+                    }
+                    if (key.includes('aei') && object[key] != null && !indicesUsed.includes('AEI')) {
+                        indicesUsed.push('AEI')
+                    }
+                    if (key.includes('bi') && object[key] != null && !indicesUsed.includes('BI')) {
+                        indicesUsed.push('BI')
+                    }
+                    if (key.includes('ndsi') && object[key] != null && !indicesUsed.includes('NDSI')) {
+                        indicesUsed.push('NDSI')
+                    }
+                    if (key.includes('rms') && object[key] != null && !indicesUsed.includes('RMS')) {
+                        indicesUsed.push('RMS')
+                    }
+                })
+                return indicesUsed
+            };
+
+            this.firstFileData = {}
+            this.series.results.forEach(x => {
+                if (x.file.name == this.sFile)
+                    this.firstFileData = x
+            })
+
+            this.indices = findIndicesUsed(this.firstFileData)
+        
         },
 
         updateSpectrogramTime: function() {
@@ -412,35 +491,8 @@ export default defineComponent({
             }
         });
 
-        const findIndicesUsed = (object) => {
-            let indicesUsed = []
-            Object.keys(object).map(key => {
-                if (key.includes('aci') && object[key] != null && !indicesUsed.includes('ACI')) {
-                    indicesUsed.push('ACI')
-                }
-                if (key.includes('adi') && object[key] != null && !indicesUsed.includes('ADI')) {
-                    indicesUsed.push('ADI')
-                }
-                if (key.includes('aei') && object[key] != null && !indicesUsed.includes('AEI')) {
-                    indicesUsed.push('AEI')
-                }
-                if (key.includes('bi') && object[key] != null && !indicesUsed.includes('BI')) {
-                    indicesUsed.push('BI')
-                }
-                if (key.includes('ndsi') && object[key] != null && !indicesUsed.includes('NDSI')) {
-                    indicesUsed.push('NDSI')
-                }
-                if (key.includes('rms') && object[key] != null && !indicesUsed.includes('RMS')) {
-                    indicesUsed.push('RMS')
-                }
-            })
-            return indicesUsed
-        };
-
-        this.items = usePage().props.value.jobs
-        this.indices = findIndicesUsed(this.items)
-
-        this.populateDropdown(this.items);
+        this.sites = usePage().props.value.sites
+        this.populateSiteDropdown()
     },
 });
 </script>
