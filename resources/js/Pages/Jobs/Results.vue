@@ -88,9 +88,23 @@
                             Select File:
                             <select
                                 class="flex grow dark:text-black"
-                                id="compareFile"
+                                id="File"
                                 v-model="sFile"
                                 v-on:change="populateIndicesDropdown()"
+                            >
+                                <option v-bind:value="ind" v-for="ind in singleFileSelectionList">
+                                    {{ ind }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="flex-row pr-4" v-if="!singleFile">
+                            Select File:
+                            <select
+                                class="flex grow dark:text-black"
+                                id="compareFile"
+                                v-model="cFile"
+                                v-on:change="populateComparisonFileData()"
                             >
                                 <option v-bind:value="ind" v-for="ind in singleFileSelectionList">
                                     {{ ind }}
@@ -285,7 +299,8 @@ export default defineComponent({
             singleFileSelectionList: [],
             selectedSeries: '',
             series: {},
-            firstFileData: {}
+            firstFileData: {},
+            secondFileData: {}
         };
     },
     methods: {
@@ -313,22 +328,13 @@ export default defineComponent({
         pause: function () {
             this.wavesurfer.pause();
         },
-
-        alterIndices: function () {
-            this.selectedChart = ''
-            this.upGraphs = ''
-            if (this.currentIndex) {
-                this.showGraphs()
-            }
-            this.$forceUpdate()
-        },
-
         showGraphs: function () {
-            this.upGraphs = this.currentIndex;
+            this.upGraphs = this.currentIndex
+            console.log(this.currentIndex)
             this.graphInput = JSON.parse(this.firstFileData[`${this.currentIndex.toLowerCase() + '_results'}`])
 
             if (this.singleFile == false) {
-                this.graphInputC = this.items[`${this.currentIndex.toLowerCase() + '_input'}`].results[this.cFile]
+                this.graphInputC = JSON.parse(this.secondFileData[`${this.currentIndex.toLowerCase() + '_results'}`])
                 this.chartSelection = ["Dual Line", "Compare Bar"]
 
                 if (this.selectedChart)
@@ -385,12 +391,42 @@ export default defineComponent({
             this.site.series.forEach(x => seriesList.push(x.name))
             this.seriesSelectionList = seriesList;
         },
-
         populateSingleFileDropdown: function () {
             let fileList = []
             this.series = this.site.series.find(x => x.name == this.selectedSeries)
             this.series.results.forEach(x => fileList.push(x.file.name))
             this.singleFileSelectionList = fileList
+        },
+        populateComparisonFileData: function () {
+            this.secondFileData = {}
+            this.series.results.forEach(x => {
+                if (x.file.name == this.sFile)
+                    this.secondFileData = x
+            })
+
+            this.graphInputC = JSON.parse(this.secondFileData[`${this.currentIndex.toLowerCase() + '_results'}`])
+
+            if (this.currentIndex != null && this.currentIndex != '') {
+                if (this.singleFile == false) {
+                this.chartSelection = ["Dual Line", "Compare Bar"]
+
+                if (this.selectedChart)
+                {
+                    this.selectedChart = 'Dual Line'
+                }
+            } else {
+                if (this.selectedChart)
+                {
+                    this.selectedChart = 'Single Line'
+                }
+
+                if (this.upGraphs == 'BI') {
+                    this.chartSelection = ["Single Line", "Single Bar", "Dual Line", "Compare Bar", "Frequency Over Time"]
+                } else {
+                    this.chartSelection = ["Single Line", "Single Bar", "Dual Line", "Compare Bar"]
+                }
+            }
+            }
         },
         populateIndicesDropdown: function () {
             const findIndicesUsed = (object) => {
