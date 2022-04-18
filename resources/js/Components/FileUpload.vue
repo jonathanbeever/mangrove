@@ -1,7 +1,7 @@
 <template>
 
-    <div class="flex flex-col grow dark:bg-slate-800">
-        <div class="border-b border-gray-200 p-4 mb-2">
+    <div class="flex flex-col grow dark:bg-slate-900 shadow-inner shadow-sky-200 dark:shadow-cyan-500">
+        <div class="p-4 mb-2">
             <h2
                 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white"
             >
@@ -19,25 +19,25 @@
                             <tr>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-left text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                    class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     Name
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-right text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                    class="px-6 py-3 text-right font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     Size
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-center text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                    class="px-6 py-3 text-center font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     Recording Date
                                 </th>
                                 <th
                                     scope="col"
-                                    class="px-6 py-3 text-right text-xs font-medium text-neutral-900 uppercase tracking-wider"
+                                    class="px-6 py-3 text-right font-medium text-neutral-900 uppercase tracking-wider"
                                 >
                                     File Type
                                 </th>

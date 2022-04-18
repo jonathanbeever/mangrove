@@ -1,21 +1,21 @@
 <template>
     <app-layout title="About">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white pl-8">
                 About
             </h2>
         </template>
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg dark:bg-slate-800">
+                <div class="bg-white overflow-hidden shadow-inner shadow-sky-200 dark:shadow-cyan-500 dark:opacity-75 sm:rounded-lg bg-sky-50 dark:bg-slate-900">
                     <div class="border-gray-200 flex flex-row">
                         <div class="p-4 m-4 flex flex-col">
                             <logo />
                         </div>
                         <div div class="pt-4">
                             <div
-                                class="pt-12 pb-4 text-5xl self-center bg-gradient-to-t text-transparent bg-clip-text hover:bg-gradient-to-bl from-lime-600 to-amber-300 font-semibold"
+                                class="pt-12 pb-4 text-5xl self-center bg-gradient-to-t text-transparent bg-clip-text hover:bg-gradient-to-bl from-lime-400 to-amber-300 font-semibold"
                             >
                                 Mangrove
                             </div>

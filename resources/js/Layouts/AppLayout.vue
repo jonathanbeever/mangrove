@@ -39,9 +39,9 @@ const stopImpersonation = () => {
 
         <JetBanner />
 
-        <div class="min-h-screen bg-gray-100 dark:bg-slate-900 dark:text-white">
+        <div class="min-h-screen bg-gradient-to-b from-sky-200 to-sky-50 dark:from-slate-900 dark:via-sky-900 dark:to-slate-700 dark:text-white">
 
-            <nav class="bg-white border-b border-gray-100 dark:bg-slate-800">
+            <nav class="bg-white border-b border-gray-100 dark:bg-slate-900">
 
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,7 +55,7 @@ const stopImpersonation = () => {
                             </div>
 
                             <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <div class="hidden space-x-8 sm:ml-10 sm:flex">
                                 <JetNavLink class="dark:text-gray-200" :href="route('import.index')" :active="route().current('import.index')">
                                     Import Data
                                 </JetNavLink>
@@ -64,9 +64,6 @@ const stopImpersonation = () => {
                                 </JetNavLink>
                                 <JetNavLink class="dark:text-gray-200" :href="route('jobs.index')" :active="route().current('jobs.index')">
                                     Job Queue
-                                </JetNavLink>
-                                <JetNavLink class="dark:text-gray-200" :href="route('results.index')" :active="route().current('results.index')">
-                                    Results
                                 </JetNavLink>
                                 <JetNavLink class="dark:text-gray-200" :href="route('about')" :active="route().current('about')">
                                     About
@@ -340,7 +337,7 @@ const stopImpersonation = () => {
             </nav>
 
             <!-- Page Heading -->
-            <header v-if="$slots.header" class="bg-white shadow dark:bg-slate-800 dark:text-white rounded-b-full">
+            <header v-if="$slots.header" class="bg-white shadow-xl dark:shadow-sky-400 dark:bg-slate-900 dark:text-white rounded-b-full">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>

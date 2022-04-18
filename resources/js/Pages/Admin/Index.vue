@@ -1,7 +1,7 @@
 <template>
     <app-layout title="Admin Panel">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight dark:text-white pl-8">
                 Admin Panel
             </h2>
         </template>
