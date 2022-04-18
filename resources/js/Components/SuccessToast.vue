@@ -15,7 +15,7 @@
                 </div>
             </div>
             <div class="p-3 bg-green-500 rounded-b-lg break-words text-white">
-                Job succeeded. Results now available.
+                {{ $page.props.flash.success }}
             </div>
         </div>
     </div>
