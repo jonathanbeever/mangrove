@@ -192,6 +192,7 @@
                                 id="selectSeries"
                                 v-model="seriesIndex"
                                 v-on:change="showGraphsSeries()"
+                                :disabled="(this.selectedSeries == '' && !multiSeries) || (this.selectedSeries == '' && this.selectedSeriesComparison == '' && multiSeries)"
                             >
                                 <option
                                     v-bind:value="ind"
@@ -670,6 +671,7 @@ export default defineComponent({
         },
 
         populateSeriesDropdown: function () {
+            this.selectedSeries = ''
             let seriesList = []
             this.site = this.sites.find(x => x.name == this.selectedSite)
 
@@ -677,6 +679,7 @@ export default defineComponent({
             this.seriesSelectionList = seriesList;
         },
         populateSecondSeriesDropdown: function () {
+            this.selectedSeriesComparison = ''
             let seriesList = []
             this.secondSite = this.sites.find(x => x.name == this.selectedSiteComparison)
 
