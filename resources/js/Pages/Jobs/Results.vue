@@ -2,12 +2,12 @@
     <app-layout title="Results">
 
         <div class="flex flex-col dark:text-black">
-            <div class="py-4 flex flex-row">
-                <div class="w-1/4 px-4 h-1/2">
-                    <div class="bg-white shadow-xl sm:rounded-lg h-full dark:bg-slate-800 dark:text-white">
-                        <div class="pb-2 pl-2 pt-2 h-full">
+            <div class="py-4 flex flex-row flex-shrink">
+                <div class="w-1/4 px-4">
+                    <div class="bg-white shadow-xl sm:rounded-lg dark:bg-slate-800 dark:text-white">
+                        <div class="p-2">
                             2D Waveform Spectrogram
-                            <div class="flex-row pr-2 pt-2 mb-8" style="max-width: 15ch;">
+                            <div class="flex-row pr-2 pt-2" style="max-width: 15ch;">
                                 <input
                                     type="file"
                                     class="form-control"
@@ -17,17 +17,6 @@
                                     single
                                 />
                             </div>
-                            <jet-label class="text-white-500">File Path</jet-label>
-                            <br>
-                            <form>
-                                <input type="text" id="fname" name="fname" v-model="spFile" v-on:submit="onFileChange($event)" style="color:black;">
-                                <jet-button
-                                    class="btn btn-success border-gray-200 m-2"
-                                    @click="setSpFilePath()"
-                                    v-if="singleFile == true">
-                                    Submit
-                                </jet-button>
-                            </form>
                             <div class="loading pt-2" id="loading" ref="loading">
                                 <div id="wave" class="p-2"/>
                                 <vue-element-loading ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" spinner="bar-fade-scale" size="100" v-if="loading === true"
@@ -338,12 +327,12 @@
 
                         <div v-if="seriesIndex == 'ADI'" :key="seriesIndex" class="w-4/5">
                             <DualLine :id="selectedSeries+'DL'+'ADI'+selectedSeriesTwo" :xBarLabels="seriesGraphRange" :dataSetLabels="['ADI L', 'ADI R']" :dataSetData="[seriesGraphInput.adiL, seriesGraphInput.adiR]" :xLabel="'Date'" :yLabel="'Adi Index Value'"/>
-                            
+
                         </div>
 
                         <div v-if="seriesIndex == 'BI'" :key="seriesIndex" class="w-4/5">
                             <DualLine :id="selectedSeries+'DL'+'BIO'+selectedSeriesTwo" :xBarLabels="seriesGraphRange" :dataSetLabels="['BI L', 'BI R']" :dataSetData="[seriesGraphInput.areaL, seriesGraphInput.areaR]" :xLabel="'Date'" :yLabel="'Bio Index Value'"/>
-                            
+
                         </div>
 
                         <div v-if="seriesIndex == 'RMS'" :key="seriesIndex" class="w-4/5">
@@ -364,12 +353,12 @@
 
                         <div v-if="seriesIndex == 'ADI'" :key="seriesIndex" class="w-4/5">
                             <QuadLine :id="selectedSeries+'DL'+'ADI'+selectedSeriesTwo" :xBarLabels="seriesGraphRange" :dataSetLabels="['Series 1 ADI L', 'Series 1 ADI R', 'Series 2 ADI L', 'Series 2 ADI R']" :dataSetData="[seriesGraphInput.adiL, seriesGraphInput.adiR, seriesGraphInputC.adiL, seriesGraphInputC.adiR]" :xLabel="'Date'" :yLabel="'Adi Index Value'"/>
-                            
+
                         </div>
 
                         <div v-if="seriesIndex == 'BI'" :key="seriesIndex" class="w-4/5">
                             <QuadLine :id="selectedSeries+'DL'+'BIO'+selectedSeriesTwo" :xBarLabels="seriesGraphRange" :dataSetLabels="['Series 1 BI L', 'Series 1 BI R', 'Series 2 BI L', 'Series 2 BI R']" :dataSetData="[seriesGraphInput.areaL, seriesGraphInput.areaR, seriesGraphInputC.areaL, seriesGraphInputC.areaR]" :xLabel="'Date'" :yLabel="'Bio Index Value'"/>
-                            
+
                         </div>
 
                         <div v-if="seriesIndex == 'RMS'" :key="seriesIndex" class="w-4/5">
@@ -437,7 +426,7 @@ export default defineComponent({
             items: [],
             siteSelectionList: [],
             currTime: 0.0,
-            loading: true,
+            loading: false,
             sites: [],
             seriesSelectionList: [],
             site: {},
@@ -458,7 +447,7 @@ export default defineComponent({
             selectedSeriesComparison: '',
             selectedSeriesOne: {},
             selectedSeriesTwo: {},
-            seriesIndices: [], 
+            seriesIndices: [],
             seriesGraphRange: []
         };
     },
@@ -602,7 +591,7 @@ export default defineComponent({
             this.seriesGraphRange = this.seriesGraphInput.range
 
             if (this.multiSeries)
-            {   
+            {
                 let range = this.seriesGraphInput.range
                 this.seriesGraphInputC = buildIndicesData(this.selectedSeriesTwo)
                 this.seriesGraphInputC.range.forEach(x => {
@@ -823,19 +812,17 @@ export default defineComponent({
 
         this.wavesurfer = WaveSurfer.create({
 
-            //overflow:hidden,
-            height: 200,
-            width: 600,
+            hideScrollbar: true,
             container: "#wave",
             waveColor: "#D2EDD4",
             progressColor: "#46B54D",
             backend: "MediaElement",
             mediaControls: true,
+            responsive: true,
 
             plugins: [
                 SpectrogramPlugin.create({
-                    height: 600,
-                    width: 600,
+                    responsive: true,
                     container: "#wave",
                     labels: true,
                     colorMap: this.colorMap,
