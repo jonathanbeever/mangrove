@@ -469,7 +469,7 @@ export default defineComponent({
             })
 
             this.indices = findIndicesUsed(this.firstFileData)
-        
+
         },
 
         updateSpectrogramTime: function() {

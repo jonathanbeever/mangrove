@@ -8,6 +8,8 @@ import JetDropdown from '@/Jetstream/Dropdown.vue';
 import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
 import JetNavLink from '@/Jetstream/NavLink.vue';
 import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
+import ErrorToast from "@/Components/ErrorToast.vue";
+import SuccessToast from "@/Components/SuccessToast.vue";
 
 defineProps({
     title: String,
@@ -38,6 +40,14 @@ const stopImpersonation = () => {
         <Head :title="title" />
 
         <JetBanner />
+
+        <div div v-if="$page.props.jetstream.flash.success != null">
+            <SuccessToast></SuccessToast>
+        </div>
+
+        <div v-if="$page.props.jetstream.flash.failure != null">
+            <ErrorToast></ErrorToast>
+        </div>
 
         <div class="min-h-screen bg-gradient-to-b from-sky-200 to-sky-50 dark:from-slate-900 dark:via-sky-900 dark:to-slate-700 dark:text-white">
 

@@ -61,15 +61,6 @@
                     </div>
                 </div>
             </div>
-
-        <div v-if="$page.props.jetstream.flash.success != null">
-            <SuccessToast></SuccessToast>
-        </div>
-
-        <div v-if="$page.props.jetstream.flash.failure != null">
-            <ErrorToast></ErrorToast>
-        </div>
-
         </div>
     </app-layout>
 </template>
@@ -79,8 +70,6 @@ import { defineComponent } from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import JetButton from "@/Jetstream/Button.vue";
 import Logo from "@/Jetstream/ApplicationLogo.vue";
-import ErrorToast from "@/Components/ErrorToast.vue";
-import SuccessToast from "@/Components/SuccessToast.vue";
 
 
 export default defineComponent({
@@ -88,9 +77,7 @@ export default defineComponent({
     components: {
         AppLayout,
         JetButton,
-        Logo,
-        ErrorToast,
-        SuccessToast
+        Logo
     },
 });
 </script>
