@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import {ref} from 'vue';
+import {useForm} from '@inertiajs/inertia-vue3';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
 import JetActionSection from '@/Jetstream/ActionSection.vue';
 import JetButton from '@/Jetstream/Button.vue';
@@ -45,9 +45,9 @@ const closeModal = () => {
 <template>
     <JetActionSection>
         <template #title>
-        <div class="dark:text-white">
-            Browser Sessions
-        </div>
+            <div class="dark:text-white">
+                Browser Sessions
+            </div>
         </template>
 
         <template #description>
@@ -67,35 +67,37 @@ const closeModal = () => {
                     <div>
                         <svg
                             v-if="session.agent.is_desktop"
+                            class="w-8 h-8 text-neutral-900"
                             fill="none"
+                            stroke="currentColor"
                             stroke-linecap="round"
                             stroke-linejoin="round"
                             stroke-width="2"
                             viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            class="w-8 h-8 text-neutral-900"
                         >
-                            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                         </svg>
 
                         <svg
                             v-else
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            stroke-width="2"
-                            stroke="currentColor"
+                            class="w-8 h-8 text-neutral-900"
                             fill="none"
+                            stroke="currentColor"
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            class="w-8 h-8 text-neutral-900"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
                         >
-                            <path d="M0 0h24v24H0z" stroke="none" /><rect
-                                x="7"
-                                y="4"
-                                width="10"
+                            <path d="M0 0h24v24H0z" stroke="none"/>
+                            <rect
                                 height="16"
                                 rx="1"
-                            /><path d="M11 5h2M12 17v.01" />
+                                width="10"
+                                x="7"
+                                y="4"
+                            />
+                            <path d="M11 5h2M12 17v.01"/>
                         </svg>
                     </div>
 
@@ -139,13 +141,13 @@ const closeModal = () => {
                         <JetInput
                             ref="passwordInput"
                             v-model="form.password"
-                            type="password"
                             class="mt-1 block w-3/4"
                             placeholder="Password"
+                            type="password"
                             @keyup.enter="logoutOtherBrowserSessions"
                         />
 
-                        <JetInputError :message="form.errors.password" class="mt-2" />
+                        <JetInputError :message="form.errors.password" class="mt-2"/>
                     </div>
                 </template>
 
@@ -155,9 +157,9 @@ const closeModal = () => {
                     </JetSecondaryButton>
 
                     <JetButton
-                        class="ml-3"
                         :class="{ 'opacity-25': form.processing }"
                         :disabled="form.processing"
+                        class="ml-3"
                         @click="logoutOtherBrowserSessions"
                     >
                         Log Out Other Browser Sessions

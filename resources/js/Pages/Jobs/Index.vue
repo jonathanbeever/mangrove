@@ -25,26 +25,26 @@
                                         <thead class="bg-gray-50">
                                         <tr>
                                             <th
-                                                scope="col"
                                                 class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                                                scope="col"
                                             >
                                                 Job Name
                                             </th>
                                             <th
-                                                scope="col"
                                                 class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                                                scope="col"
                                             >
                                                 Indices Used
                                             </th>
                                             <th
-                                                scope="col"
                                                 class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
+                                                scope="col"
                                             >
                                                 Created On
                                             </th>
                                             <th
-                                                scope="col"
                                                 class="px-6 py-3 text-center font-medium text-gray-500 uppercase tracking-wider"
+                                                scope="col"
                                             >
                                                 Status
                                             </th>
@@ -106,11 +106,11 @@
                                                                 item.finished !=
                                                                 true
                                                             "
-                                                        color="#b0b"
                                                         background-color="dark:rgba(0,0,0,.9);"
-                                                        spinner="mini-spinner"
+                                                        color="#b0b"
                                                         duration="2"
                                                         size="50"
+                                                        spinner="mini-spinner"
                                                     />
                                                     {{
                                                         item.finished

@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue';
-import { useForm } from '@inertiajs/inertia-vue3';
+import {ref} from 'vue';
+import {useForm} from '@inertiajs/inertia-vue3';
 import JetActionMessage from '@/Jetstream/ActionMessage.vue';
 import JetActionSection from '@/Jetstream/ActionSection.vue';
 import JetButton from '@/Jetstream/Button.vue';
@@ -87,25 +87,25 @@ const deleteApiToken = () => {
             <template #form>
                 <!-- Token Name -->
                 <div class="col-span-6 sm:col-span-4">
-                    <JetLabel for="name" value="Name" />
+                    <JetLabel for="name" value="Name"/>
                     <JetInput
                         id="name"
                         v-model="createApiTokenForm.name"
-                        type="text"
-                        class="mt-1 block w-full"
                         autofocus
+                        class="mt-1 block w-full"
+                        type="text"
                     />
-                    <JetInputError :message="createApiTokenForm.errors.name" class="mt-2" />
+                    <JetInputError :message="createApiTokenForm.errors.name" class="mt-2"/>
                 </div>
 
                 <!-- Token Permissions -->
                 <div v-if="availablePermissions.length > 0" class="col-span-6">
-                    <JetLabel for="permissions" value="Permissions" />
+                    <JetLabel for="permissions" value="Permissions"/>
 
                     <div class="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div v-for="permission in availablePermissions" :key="permission">
                             <label class="flex items-center">
-                                <JetCheckbox v-model:checked="createApiTokenForm.permissions" :value="permission" />
+                                <JetCheckbox v-model:checked="createApiTokenForm.permissions" :value="permission"/>
                                 <span class="ml-2 text-sm text-gray-600">{{ permission }}</span>
                             </label>
                         </div>
@@ -125,7 +125,7 @@ const deleteApiToken = () => {
         </JetFormSection>
 
         <div v-if="tokens.length > 0">
-            <JetSectionBorder />
+            <JetSectionBorder/>
 
             <!-- Manage API Tokens -->
             <div class="mt-10 sm:mt-0">
@@ -203,7 +203,7 @@ const deleteApiToken = () => {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div v-for="permission in availablePermissions" :key="permission">
                         <label class="flex items-center">
-                            <JetCheckbox v-model:checked="updateApiTokenForm.permissions" :value="permission" />
+                            <JetCheckbox v-model:checked="updateApiTokenForm.permissions" :value="permission"/>
                             <span class="ml-2 text-sm text-gray-600">{{ permission }}</span>
                         </label>
                     </div>
@@ -216,9 +216,9 @@ const deleteApiToken = () => {
                 </JetSecondaryButton>
 
                 <JetButton
-                    class="ml-3"
                     :class="{ 'opacity-25': updateApiTokenForm.processing }"
                     :disabled="updateApiTokenForm.processing"
+                    class="ml-3"
                     @click="updateApiToken"
                 >
                     Save
@@ -242,9 +242,9 @@ const deleteApiToken = () => {
                 </JetSecondaryButton>
 
                 <JetDangerButton
-                    class="ml-3"
                     :class="{ 'opacity-25': deleteApiTokenForm.processing }"
                     :disabled="deleteApiTokenForm.processing"
+                    class="ml-3"
                     @click="deleteApiToken"
                 >
                     Delete

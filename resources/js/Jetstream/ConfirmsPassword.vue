@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, nextTick } from 'vue';
+import {nextTick, reactive, ref} from 'vue';
 import JetButton from './Button.vue';
 import JetDialogModal from './DialogModal.vue';
 import JetInput from './Input.vue';
@@ -73,7 +73,7 @@ const closeModal = () => {
 <template>
     <span>
         <span @click="startConfirmingPassword">
-            <slot />
+            <slot/>
         </span>
 
         <JetDialogModal :show="confirmingPassword" @close="closeModal">
@@ -88,13 +88,13 @@ const closeModal = () => {
                     <JetInput
                         ref="passwordInput"
                         v-model="form.password"
-                        type="password"
                         class="mt-1 block w-3/4"
                         placeholder="Password"
+                        type="password"
                         @keyup.enter="confirmPassword"
                     />
 
-                    <JetInputError :message="form.error" class="mt-2" />
+                    <JetInputError :message="form.error" class="mt-2"/>
                 </div>
             </template>
 
@@ -104,9 +104,9 @@ const closeModal = () => {
                 </JetSecondaryButton>
 
                 <JetButton
-                    class="ml-3"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
+                    class="ml-3"
                     @click="confirmPassword"
                 >
                     {{ button }}

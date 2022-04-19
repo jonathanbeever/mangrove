@@ -11,17 +11,17 @@
                 <div class="bg-white overflow-hidden shadow-inner shadow-sky-200 dark:shadow-cyan-500 dark:opacity-75 sm:rounded-lg bg-sky-50 dark:bg-slate-900">
                     <div class="border-gray-200 flex flex-row">
                         <div class="p-4 m-4 flex flex-col">
-                            <logo />
+                            <logo/>
                         </div>
-                        <div div class="pt-4">
+                        <div class="pt-4" div>
                             <div
                                 class="pt-12 pb-4 text-5xl self-center bg-gradient-to-t text-transparent bg-clip-text hover:bg-gradient-to-bl from-lime-400 to-amber-300 font-semibold"
                             >
                                 Mangrove
                             </div>
                             <div
-                                div
                                 class="pl-4 pr-20 font-semibold text-justify"
+                                div
                             >
                                 Mangrove is a soundscape ecology analysis tool
                                 built to provide a user interface for analytical
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Logo from "@/Jetstream/ApplicationLogo.vue";
 

@@ -16,121 +16,121 @@
                 >
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
-                                >
-                                    Name
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-right font-medium text-neutral-900 uppercase tracking-wider"
-                                >
-                                    Size
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-center font-medium text-neutral-900 uppercase tracking-wider"
-                                >
-                                    Recording Date
-                                </th>
-                                <th
-                                    scope="col"
-                                    class="px-6 py-3 text-right font-medium text-neutral-900 uppercase tracking-wider"
-                                >
-                                    File Type
-                                </th>
-                            </tr>
+                        <tr>
+                            <th
+                                class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
+                                scope="col"
+                            >
+                                Name
+                            </th>
+                            <th
+                                class="px-6 py-3 text-right font-medium text-neutral-900 uppercase tracking-wider"
+                                scope="col"
+                            >
+                                Size
+                            </th>
+                            <th
+                                class="px-6 py-3 text-center font-medium text-neutral-900 uppercase tracking-wider"
+                                scope="col"
+                            >
+                                Recording Date
+                            </th>
+                            <th
+                                class="px-6 py-3 text-right font-medium text-neutral-900 uppercase tracking-wider"
+                                scope="col"
+                            >
+                                File Type
+                            </th>
+                        </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="(item, index) in filtered" :key="index">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-start">
-                                        <div>
-                                            <!--input
-                                                    type="text"
-                                                    v-model="item.job"
-                                                    v-if="edit == true"
-                                                    v-on:blur="
-                                                        edit = !edit;
-                                                        $emit('update');
-                                                    "
-                                                /-->
-                                            <div
-                                                class="text-sm font-medium text-gray-900"
-                                                @click="edit = !edit"
-                                                v-if="item.job != ''"
-                                            >
-                                                {{
-                                                    (item.job =
-                                                        item.name.split(".")[0])
-                                                }}
-                                            </div>
-                                            <div
-                                                class="text-sm font-medium text-gray-900 hover:text-violet-600"
-                                                @click="item.edit = !item.edit"
-                                                v-else
-                                            >
-                                                empty
-                                            </div>
-                                            <div class="text-sm text-neutral-900">
-                                                {{ item.name }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-right"
-                                >
+                        <tr v-for="(item, index) in filtered" :key="index">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-start">
                                     <div>
+                                        <!--input
+                                                type="text"
+                                                v-model="item.job"
+                                                v-if="edit == true"
+                                                v-on:blur="
+                                                    edit = !edit;
+                                                    $emit('update');
+                                                "
+                                            /-->
                                         <div
+                                            v-if="item.job != ''"
                                             class="text-sm font-medium text-gray-900"
-                                            v-if="item.size != ''"
+                                            @click="edit = !edit"
                                         >
-                                            {{ item.size / 1e6 + "MB" }}
+                                            {{
+                                                (item.job =
+                                                    item.name.split(".")[0])
+                                            }}
                                         </div>
                                         <div
-                                            class="text-sm font-medium text-gray-900"
                                             v-else
+                                            class="text-sm font-medium text-gray-900 hover:text-violet-600"
+                                            @click="item.edit = !item.edit"
                                         >
-                                            undefined
+                                            empty
+                                        </div>
+                                        <div class="text-sm text-neutral-900">
+                                            {{ item.name }}
                                         </div>
                                     </div>
-                                </td>
-                                <td
-                                    class="py-4 whitespace-nowrap text-center text-sm text-neutral-900"
-                                >
+                                </div>
+                            </td>
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-right"
+                            >
+                                <div>
                                     <div
+                                        v-if="item.size != ''"
                                         class="text-sm font-medium text-gray-900"
-                                        v-if="item.date != ''"
                                     >
-                                        {{ new Date(item.lastModified) }}
+                                        {{ item.size / 1e6 + "MB" }}
                                     </div>
                                     <div
-                                        class="text-sm font-medium text-gray-900"
                                         v-else
+                                        class="text-sm font-medium text-gray-900"
                                     >
-                                        Today
+                                        undefined
                                     </div>
-                                </td>
-                                <td
-                                    class="py-4 px-6 whitespace-nowrap text-right text-sm font-medium"
+                                </div>
+                            </td>
+                            <td
+                                class="py-4 whitespace-nowrap text-center text-sm text-neutral-900"
+                            >
+                                <div
+                                    v-if="item.date != ''"
+                                    class="text-sm font-medium text-gray-900"
                                 >
-                                    <div
-                                        class="text-sm font-medium text-gray-900"
-                                        v-if="item.type != ''"
-                                    >
-                                        {{ item.type }}
-                                    </div>
-                                    <div
-                                        class="text-sm font-medium text-gray-900"
-                                        v-else
-                                    >
-                                        unknown
-                                    </div>
-                                </td>
-                            </tr>
+                                    {{ new Date(item.lastModified) }}
+                                </div>
+                                <div
+                                    v-else
+                                    class="text-sm font-medium text-gray-900"
+                                >
+                                    Today
+                                </div>
+                            </td>
+                            <td
+                                class="py-4 px-6 whitespace-nowrap text-right text-sm font-medium"
+                            >
+                                <div
+                                    v-if="item.type != ''"
+                                    class="text-sm font-medium text-gray-900"
+                                >
+                                    {{ item.type }}
+                                </div>
+                                <div
+                                    v-else
+                                    class="text-sm font-medium text-gray-900"
+                                >
+                                    unknown
+                                </div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -138,28 +138,28 @@
         </div>
         <div class="p-12 flex flex-row justify-between">
             <!--Folder file submission-->
-            <form @submit.prevent="formSubmit" enctype="multipart/form-data">
+            <form enctype="multipart/form-data" @submit.prevent="formSubmit">
                 <strong class="flex pt-4">Select New Folders:</strong>
                 <input
-                    type="file"
                     class="form-control"
-                    v-on:change="onFileChange"
-                    multiple
-                    webkitdirectory
                     directory
+                    multiple
+                    type="file"
+                    webkitdirectory
+                    v-on:change="onFileChange"
                 />
             </form>
             <!--Meta-Data file submission-->
             <form
-                @submit.prevent="formSubmit"
-                enctype="multipart/form-data"
-                class=""
                 accept=".txt, .csv"
+                class=""
+                enctype="multipart/form-data"
+                @submit.prevent="formSubmit"
             >
                 <strong class="flex pt-4">Upload Meta-Data:</strong>
                 <input
-                    type="file"
                     class="form-control"
+                    type="file"
                     v-on:change="onMetaChange($event)"
                 />
             </form>
@@ -169,7 +169,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import JetButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 
@@ -226,14 +226,14 @@ export default defineComponent({
             const file = e.target.files;
             const fileExtension = file[0].name.split('.').pop();
 
-            if ( fileExtension == "txt" || fileExtension == "csv")
+            if (fileExtension == "txt" || fileExtension == "csv")
                 this.meta.push(file[0]);
         },
         formSubmit(e) {
             e.preventDefault();
             let currentObj = this;
             const config = {
-                headers: { "content-type": "multipart/form-data" },
+                headers: {"content-type": "multipart/form-data"},
             };
         },
 

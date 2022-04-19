@@ -1,6 +1,6 @@
 <script setup>
-import { computed } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
+import {computed} from 'vue';
+import {Head, Link, useForm} from '@inertiajs/inertia-vue3';
 import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
 import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
 import JetButton from '@/Jetstream/Button.vue';
@@ -19,11 +19,11 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 </script>
 
 <template>
-    <Head title="Email Verification" />
+    <Head title="Email Verification"/>
 
     <JetAuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo />
+            <JetAuthenticationCardLogo/>
         </template>
 
         <div class="mb-4 text-sm text-gray-600">
@@ -42,9 +42,9 @@ const verificationLinkSent = computed(() => props.status === 'verification-link-
 
                 <Link
                     :href="route('logout')"
-                    method="post"
                     as="button"
                     class="underline text-sm text-gray-600 hover:text-gray-900"
+                    method="post"
                 >
                     Log Out
                 </Link>

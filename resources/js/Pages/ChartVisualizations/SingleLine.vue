@@ -1,6 +1,6 @@
 <template>
     <div class="w-full">
-        <canvas v-bind:id="id" width="600" height="400"></canvas>
+        <canvas v-bind:id="id" height="400" width="600"></canvas>
     </div>
 </template>
 
@@ -10,7 +10,7 @@ import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
 import JetButton from '@/Jetstream/Button.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetInput from '@/Jetstream/Input.vue'
-import {Chart, Legend, BarController, LineController, Title, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Tooltip} from 'chart.js'
+import {BarController, BarElement, CategoryScale, Chart, Legend, LinearScale, LineController, LineElement, PointElement, Title} from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom';
 
 const makeRange = (start, end) => {

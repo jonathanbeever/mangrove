@@ -5,32 +5,32 @@
         >
             <div class="flex flex-row justify-between content-center w-full">
                 <JetButton
-                    v-on:click="onRemoveRender"
                     class="mr-[15px] float-left"
+                    v-on:click="onRemoveRender"
                 >
                     Back
                 </JetButton>
                 <div class="flex flex-row w-full items-center justify-center">
-                    <jet-label class="mr-[5px]"> Choose Audio Files </jet-label>
-                    <hr class="flex flex-grow" />
+                    <jet-label class="mr-[5px]"> Choose Audio Files</jet-label>
+                    <hr class="flex flex-grow"/>
                     <jet-label class="mr-[5px] ml-[5px] font-bold">
                         Select R index
                     </jet-label>
-                    <hr class="flex flex-grow" />
-                    <jet-label class="ml-[5px]"> Set Parameters </jet-label>
+                    <hr class="flex flex-grow"/>
+                    <jet-label class="ml-[5px]"> Set Parameters</jet-label>
                 </div>
             </div>
             <div class="flex flex-row w-full mt-[50px]">
                 <div class="flex flex-col w-1/2">
-                    <jet-label class="text-2xl mb-[10px]"> Index </jet-label>
+                    <jet-label class="text-2xl mb-[10px]"> Index</jet-label>
                     <div>
-                        <div class="form-check mb-[10px]" v-if="false">
+                        <div v-if="false" class="form-check mb-[10px]">
                             <input
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                v-on:click="onChange($event)"
-                                type="checkbox"
-                                name="indexRadio"
                                 id="aci"
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -41,12 +41,12 @@
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                v-on:click="onChange($event)"
-                                type="checkbox"
-                                name="indexRadio"
                                 id="ndsi"
                                 checked
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -57,11 +57,11 @@
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                v-on:click="onChange($event)"
-                                type="checkbox"
-                                name="indexRadio"
                                 id="aei"
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -72,11 +72,11 @@
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                v-on:click="onChange($event)"
-                                type="checkbox"
-                                name="indexRadio"
                                 id="adi"
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -87,11 +87,11 @@
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                v-on:click="onChange($event)"
-                                type="checkbox"
-                                name="indexRadio"
                                 id="bio"
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -102,11 +102,11 @@
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                v-on:click="onChange($event)"
-                                type="checkbox"
-                                name="indexRadio"
                                 id="rms"
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
                             />
                             <jet-label
                                 class="form-check-label inline-block text-gray-800 text-1xl"
@@ -128,8 +128,8 @@
                         class="flex w-full justify-end content-end align-end mt-[150px]"
                     >
                         <JetButton
-                            v-on:click="onNext($event)"
                             class="flex w-1/3 justify-center"
+                            v-on:click="onNext($event)"
                         >
                             Next
                         </JetButton>
@@ -138,11 +138,11 @@
             </div>
         </div>
     </div>
-    <SetParameters @back="onBackParameters" :seriesID="seriesID" :index="selectedIndex" v-else />
+    <SetParameters v-else :index="selectedIndex" :seriesID="seriesID" @back="onBackParameters"/>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import JetApplicationLogo from "@/Jetstream/ApplicationLogo.vue";
 import JetButton from "@/Jetstream/Button.vue";
 import JetLabel from "@/Jetstream/Label.vue";
@@ -181,7 +181,7 @@ export default defineComponent({
 
             if (e != -1) {
                 this.selectedIndex.splice(e, 1);
-                this.descriptionText = indexText[this.selectedIndex[this.selectedIndex.length-1]];
+                this.descriptionText = indexText[this.selectedIndex[this.selectedIndex.length - 1]];
             } else {
                 this.selectedIndex.push(event.target.id.toUpperCase());
                 this.descriptionText = indexText[event.target.id.toUpperCase()];

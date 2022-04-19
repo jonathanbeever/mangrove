@@ -33,9 +33,9 @@
     - [Laracasts Series](https://laracasts.com/series/laravel-8-from-scratch)
     - [Artisan](https://laravel.com/docs/8.x/artisan)
     - [Sail](https://laravel.com/docs/8.x/sail)
-      - Docker Management
-      - To share your local site with others, or to enable https on your local site, see [this](https://laravel.com/docs/8.x/sail#sharing-your-site) section.
-      - To set up Xdebug, see [this](https://laravel.com/docs/8.x/sail#debugging-with-xdebug) section.
+        - Docker Management
+        - To share your local site with others, or to enable https on your local site, see [this](https://laravel.com/docs/8.x/sail#sharing-your-site) section.
+        - To set up Xdebug, see [this](https://laravel.com/docs/8.x/sail#debugging-with-xdebug) section.
 - Inertia.js
     - [Documentation](https://inertiajs.com/)
     - [Laracasts Series](https://laracasts.com/series/build-modern-laravel-apps-using-inertia-js)
@@ -51,5 +51,6 @@
 - [Laracasts](https://laracasts.com/series)
 
 ## Troubleshooting
+
 - Docker container crashing in state "undefined"
     - Run `./vendor/bin/sail up --build`

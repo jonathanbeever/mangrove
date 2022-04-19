@@ -1,7 +1,7 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { Inertia } from '@inertiajs/inertia';
-import { useForm, usePage } from '@inertiajs/inertia-vue3';
+import {computed, ref, watch} from 'vue';
+import {Inertia} from '@inertiajs/inertia';
+import {useForm, usePage} from '@inertiajs/inertia-vue3';
 import JetActionSection from '@/Jetstream/ActionSection.vue';
 import JetButton from '@/Jetstream/Button.vue';
 import JetConfirmsPassword from '@/Jetstream/ConfirmsPassword.vue';
@@ -27,11 +27,11 @@ const confirmationForm = useForm({
 });
 
 const twoFactorEnabled = computed(
-    () => ! enabling.value && usePage().props.value.user?.two_factor_enabled,
+    () => !enabling.value && usePage().props.value.user?.two_factor_enabled,
 );
 
 watch(twoFactorEnabled, () => {
-    if (! twoFactorEnabled.value) {
+    if (!twoFactorEnabled.value) {
         confirmationForm.reset();
         confirmationForm.clearErrors();
     }
@@ -107,9 +107,9 @@ const disableTwoFactorAuthentication = () => {
 <template>
     <JetActionSection>
         <template #title>
-        <div class="dark:text-white">
-            Two Factor Authentication
-        </div>
+            <div class="dark:text-white">
+                Two Factor Authentication
+            </div>
         </template>
 
         <template #description>
@@ -149,30 +149,30 @@ const disableTwoFactorAuthentication = () => {
                         </p>
                     </div>
 
-                    <div class="mt-4" v-html="qrCode" />
+                    <div class="mt-4" v-html="qrCode"/>
 
-                    <div class="mt-4 max-w-xl text-sm text-gray-600" v-if="setupKey">
+                    <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600">
                         <p class="font-semibold">
                             Setup Key: <span v-html="setupKey"></span>
                         </p>
                     </div>
 
                     <div v-if="confirming" class="mt-4">
-                        <JetLabel for="code" value="Code" />
+                        <JetLabel for="code" value="Code"/>
 
                         <JetInput
                             id="code"
                             v-model="confirmationForm.code"
-                            type="text"
-                            name="code"
+                            autocomplete="one-time-code"
+                            autofocus
                             class="block mt-1 w-1/2"
                             inputmode="numeric"
-                            autofocus
-                            autocomplete="one-time-code"
+                            name="code"
+                            type="text"
                             @keyup.enter="confirmTwoFactorAuthentication"
                         />
 
-                        <JetInputError :message="confirmationForm.errors.code" class="mt-2" />
+                        <JetInputError :message="confirmationForm.errors.code" class="mt-2"/>
                     </div>
                 </div>
 
@@ -194,7 +194,7 @@ const disableTwoFactorAuthentication = () => {
             <div class="mt-5">
                 <div v-if="! twoFactorEnabled">
                     <JetConfirmsPassword @confirmed="enableTwoFactorAuthentication">
-                        <JetButton type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
+                        <JetButton :class="{ 'opacity-25': enabling }" :disabled="enabling" type="button">
                             Enable
                         </JetButton>
                     </JetConfirmsPassword>
@@ -204,10 +204,10 @@ const disableTwoFactorAuthentication = () => {
                     <JetConfirmsPassword @confirmed="confirmTwoFactorAuthentication">
                         <JetButton
                             v-if="confirming"
-                            type="button"
-                            class="mr-3"
                             :class="{ 'opacity-25': enabling }"
                             :disabled="enabling"
+                            class="mr-3"
+                            type="button"
                         >
                             Confirm
                         </JetButton>

@@ -12,24 +12,24 @@
                     <div
                         class="bg-white border-b border-gray-400 flex flex-row"
                     >
-                        <fileUpload :items="items" :meta="meta" v-if="newUploads"/>
+                        <fileUpload v-if="newUploads" :items="items" :meta="meta"/>
                     </div>
                     <JetButton
                         v-if="newUploads == true && editPop == false"
-                        v-on:click="postSiteSeries()"
-                        class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                         :disabled="seriesName.length == 0"
+                        class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
+                        v-on:click="postSiteSeries()"
                     >
                         Import Series
                     </JetButton>
                     <jet-input
-                class="p-2 m-4 form-text-input leading-tight border-rounded-half border-b border-bg-slate-50"
-                type="text"
-                v-model="seriesName"
-                id="NameInput"
-                placeholder="Name this Series"
-                style="color: #041014"
-            />
+                        id="NameInput"
+                        v-model="seriesName"
+                        class="p-2 m-4 form-text-input leading-tight border-rounded-half border-b border-bg-slate-50"
+                        placeholder="Name this Series"
+                        style="color: #041014"
+                        type="text"
+                    />
 
                 </div>
             </div>

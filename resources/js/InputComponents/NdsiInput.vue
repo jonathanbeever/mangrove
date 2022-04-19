@@ -8,45 +8,45 @@
                 anthroMin
             </jet-label>
             <jet-label v-if="anthroMinError" class="text-red-500">
-                {{errorMessages.anthroMin}}
+                {{ errorMessages.anthroMin }}
             </jet-label>
-            <jet-input v-on:blur="validateAnthroMin()" :value="anthroMin" v-model="anthroMin">
+            <jet-input v-model="anthroMin" :value="anthroMin" v-on:blur="validateAnthroMin()">
 
             </jet-input>
             <jet-label class="mt-[10px]">
                 anthroMax
             </jet-label>
             <jet-label v-if="anthroMaxError" class="text-red-500">
-                {{errorMessages.anthroMax}}
+                {{ errorMessages.anthroMax }}
             </jet-label>
-            <jet-input v-on:blur="validateAnthroMax()" :value="anthroMax" v-model="anthroMax">
+            <jet-input v-model="anthroMax" :value="anthroMax" v-on:blur="validateAnthroMax()">
 
             </jet-input>
             <jet-label class="mt-[10px]">
                 bioMin
             </jet-label>
             <jet-label v-if="bioMinError" class="text-red-500">
-                {{errorMessages.biomin}}
+                {{ errorMessages.biomin }}
             </jet-label>
-            <jet-input v-on:blur="validateBioMin()" :value="bioMin" v-model="bioMin">
+            <jet-input v-model="bioMin" :value="bioMin" v-on:blur="validateBioMin()">
 
             </jet-input>
             <jet-label class="mt-[10px]">
                 bioMax
             </jet-label>
             <jet-label v-if="bioMaxError" class="text-red-500">
-                {{errorMessages.bioMax}}
+                {{ errorMessages.bioMax }}
             </jet-label>
-            <jet-input v-on:blur="validateBioMax()" :value="bioMax" v-model="bioMax">
+            <jet-input v-model="bioMax" :value="bioMax" v-on:blur="validateBioMax()">
 
             </jet-input>
             <jet-label class="mt-[10px]">
                 FFTW
             </jet-label>
             <jet-label v-if="fftWError" class="text-red-500">
-                {{errorMessages.fftW}}
+                {{ errorMessages.fftW }}
             </jet-label>
-            <jet-input v-on:blur="validatefftW()" :value="fftW" v-model="fftW">
+            <jet-input v-model="fftW" :value="fftW" v-on:blur="validatefftW()">
 
             </jet-input>
             <div class="flex w-full justify-start align-baselien content-end">
@@ -59,151 +59,150 @@
 </template>
 
 <script>
-    import { defineComponent } from 'vue'
-    import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
-    import JetButton from '@/Jetstream/Button.vue'
-    import JetLabel from '@/Jetstream/Label.vue'
-    import JetInput from '@/Jetstream/Input.vue'
+import {defineComponent} from 'vue'
+import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
+import JetButton from '@/Jetstream/Button.vue'
+import JetLabel from '@/Jetstream/Label.vue'
+import JetInput from '@/Jetstream/Input.vue'
 
-    const specificationDefaults = {
-                    anthroMin: 1000,
-                    anthroMax: 2000,
-                    bioMin: 2000,
-                    bioMax: 11000,
-                    fftW: 1024
-                };
-    const errorMessages = {
-        anthroMin: "anthroMin must be an integer greater than 0",
-        anthroMax: "anthroMax must be an integer greater than 0",
-        bioMin: "bioMin must be an integer greater than 0",
-        bioMax: "bioMax must be an integer greater than 0",
-        fftW: "fftW must be an integer greater than 0"
-    }
-    let anthroMin = specificationDefaults.anthroMin
-    let anthroMax = specificationDefaults.anthroMax
-    let bioMin = specificationDefaults.bioMin
-    let bioMax = specificationDefaults.bioMax
-    let fftW = specificationDefaults.fftW
-    let anthroMinError = false
-    let anthroMaxError = false
-    let bioMinError = false
-    let bioMaxError = false
-    let fftWError = false
+const specificationDefaults = {
+    anthroMin: 1000,
+    anthroMax: 2000,
+    bioMin: 2000,
+    bioMax: 11000,
+    fftW: 1024
+};
+const errorMessages = {
+    anthroMin: "anthroMin must be an integer greater than 0",
+    anthroMax: "anthroMax must be an integer greater than 0",
+    bioMin: "bioMin must be an integer greater than 0",
+    bioMax: "bioMax must be an integer greater than 0",
+    fftW: "fftW must be an integer greater than 0"
+}
+let anthroMin = specificationDefaults.anthroMin
+let anthroMax = specificationDefaults.anthroMax
+let bioMin = specificationDefaults.bioMin
+let bioMax = specificationDefaults.bioMax
+let fftW = specificationDefaults.fftW
+let anthroMinError = false
+let anthroMaxError = false
+let bioMinError = false
+let bioMaxError = false
+let fftWError = false
 
-    export default defineComponent({
-        components: {
-            JetApplicationLogo,
-            JetButton,
-            JetLabel,
-            JetInput
+export default defineComponent({
+    components: {
+        JetApplicationLogo,
+        JetButton,
+        JetLabel,
+        JetInput
+    },
+    data: function () {
+        return {
+            specificationDefaults,
+            anthroMin,
+            anthroMax,
+            bioMin,
+            bioMax,
+            fftW,
+            anthroMinError,
+            anthroMaxError,
+            bioMinError,
+            bioMaxError,
+            fftWError,
+            errorMessages
+        }
+    },
+    methods: {
+        onRestoreDefault: function (event) {
+            this.anthroMin = specificationDefaults.anthroMin
+            this.anthroMax = specificationDefaults.anthroMax
+            this.bioMin = specificationDefaults.bioMin
+            this.bioMax = specificationDefaults.bioMax
+            this.fftW = specificationDefaults.fftW
+            this.anthroMinError = false
+            this.anthroMaxError = false
+            this.bioMinError = false
+            this.bioMaxError = false
+            this.fftWError = false
+            this.onChange()
         },
-        data: function () {
-            return {
-                specificationDefaults,
-                anthroMin,
-                anthroMax,
-                bioMin,
-                bioMax,
-                fftW,
-                anthroMinError,
-                anthroMaxError,
-                bioMinError,
-                bioMaxError,
-                fftWError,
-                errorMessages
+        validateAnthroMin: function () {
+            if (isNaN(this.anthroMin)) {
+                this.anthroMinError = true
+                return
+            } else if (this.anthroMin < 0) {
+                this.anthroMinError = true
+                return
             }
+            this.anthroMinError = false;
+            this.onChange()
+            return
         },
-        methods: {
-            onRestoreDefault: function (event) {
-                this.anthroMin = specificationDefaults.anthroMin
-                this.anthroMax = specificationDefaults.anthroMax
-                this.bioMin = specificationDefaults.bioMin
-                this.bioMax = specificationDefaults.bioMax
-                this.fftW = specificationDefaults.fftW
-                this.anthroMinError = false
-                this.anthroMaxError = false
-                this.bioMinError = false
-                this.bioMaxError = false
-                this.fftWError = false
-                this.onChange()
-            },
-            validateAnthroMin: function () {
-                if (isNaN(this.anthroMin)) {
-                    this.anthroMinError = true
-                    return
-                } else if (this.anthroMin < 0) {
-                    this.anthroMinError = true
-                    return
-                }
-                this.anthroMinError = false;
-                this.onChange()
+        validateAnthroMax: function () {
+            if (isNaN(this.anthroMax)) {
+                this.anthroMaxError = true
                 return
-            },
-            validateAnthroMax: function () {
-                if (isNaN(this.anthroMax)) {
-                    this.anthroMaxError = true
-                    return
-                } else if (this.anthroMax < 0) {
-                    this.anthroMaxError = true
-                    return
-                }
-                this.anthroMaxError = false;
-                this.onChange()
+            } else if (this.anthroMax < 0) {
+                this.anthroMaxError = true
                 return
-            },
-            validateBioMin: function () {
-                if (isNaN(this.bioMin)) {
-                    this.bioMinError = true
-                    return
-                } else if (this.bioMin < 0) {
-                    this.bioMinError = true
-                    return
-                }
-                this.bioMinError = false;
-                this.onChange()
+            }
+            this.anthroMaxError = false;
+            this.onChange()
+            return
+        },
+        validateBioMin: function () {
+            if (isNaN(this.bioMin)) {
+                this.bioMinError = true
                 return
-            },
-            validateBioMax: function () {
-                if (isNaN(this.bioMax)) {
-                    this.bioMaxError = true
-                    return
-                } else if (this.bioMax < 0) {
-                    this.bioMaxError = true
-                    return
-                }
-                this.bioMaxError = false;
-                this.onChange()
+            } else if (this.bioMin < 0) {
+                this.bioMinError = true
                 return
-            },
-            validatefftW: function () {
-                if (isNaN(this.fftW)) {
-                    this.fftWError = true
-                    return
-                } else if (this.fftW < 0) {
-                    this.fftWError = true
-                    return
-                }
-                this.fftWError = false;
-                this.onChange()
+            }
+            this.bioMinError = false;
+            this.onChange()
+            return
+        },
+        validateBioMax: function () {
+            if (isNaN(this.bioMax)) {
+                this.bioMaxError = true
                 return
-            },
-            onChange: function () {
-                if (!this.anthroMaxError && !this.anthroMinError
+            } else if (this.bioMax < 0) {
+                this.bioMaxError = true
+                return
+            }
+            this.bioMaxError = false;
+            this.onChange()
+            return
+        },
+        validatefftW: function () {
+            if (isNaN(this.fftW)) {
+                this.fftWError = true
+                return
+            } else if (this.fftW < 0) {
+                this.fftWError = true
+                return
+            }
+            this.fftWError = false;
+            this.onChange()
+            return
+        },
+        onChange: function () {
+            if (!this.anthroMaxError && !this.anthroMinError
                 && !this.bioMaxError && !this.bioMinError
-                && !this.fftWError)
-                {
-                    let ndsi = {
+                && !this.fftWError) {
+                let ndsi = {
                     anthro_max: this.anthroMax,
                     anthro_min: this.anthroMin,
                     bio_max: this.bioMax,
                     bio_min: this.bioMin,
                     fftw: this.fftW
                 }
-                    this.$emit('ndsiChanged', ndsi)
-                }
-                return
+                this.$emit('ndsiChanged', ndsi)
             }
+            return
         }
-    } )
+    }
+})
 
 </script>
