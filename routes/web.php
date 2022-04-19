@@ -18,7 +18,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', static function () {
-    if(auth()->check()) {
+    if (auth()->check()) {
         return redirect()->route('import.index');
     }
 

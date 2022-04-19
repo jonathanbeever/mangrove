@@ -13,7 +13,7 @@ class DeleteJob implements DeleteJobContract
     /**
      * Delete a promotion and cascade delete references.
      *
-     * @param JobInput $job
+     * @param  JobInput  $job
      * @return bool
      */
     public function delete(JobInput $job): bool

@@ -23,7 +23,7 @@ class StoreJobRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @param JobValidationRules $rules
+     * @param  JobValidationRules  $rules
      * @return array
      */
     public function rules(JobValidationRules $rules): array

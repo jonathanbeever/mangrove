@@ -9,7 +9,7 @@ interface DeleteJobContract
     /**
      * Delete a JobInput.
      *
-     * @param JobInput $job
+     * @param  JobInput  $job
      * @return bool
      */
     public function delete(JobInput $job): bool;

@@ -9,7 +9,7 @@ interface CreateJobContract
     /**
      * Create a JobInput.
      *
-     * @param array $input
+     * @param  array  $input
      * @return JobInput|null
      */
     public function create(array $input): ?JobInput;

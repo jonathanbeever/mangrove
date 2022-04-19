@@ -3,13 +3,7 @@
 namespace App\Actions\Job;
 
 use App\Contracts\Job\CreateJobContract;
-use App\Models\AciInput;
-use App\Models\AdiInput;
-use App\Models\AeiInput;
-use App\Models\BiInput;
 use App\Models\JobInput;
-use App\Models\NdsiInput;
-use App\Models\RmsInput;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -19,7 +13,7 @@ class CreateJob implements CreateJobContract
     /**
      * Create a new job and save it to authenticated user.
      *
-     * @param array $input
+     * @param  array  $input
      * @return JobInput|null
      */
     public function create(array $input): ?JobInput
@@ -37,10 +31,21 @@ class CreateJob implements CreateJobContract
     }
 
     /**
+     * Save the job to the user.
+     *
+     * @param  JobInput  $job
+     * @return void
+     */
+    public function saveJobToUser(JobInput $job): void
+    {
+        auth()->user()?->jobs()->save($job);
+    }
+
+    /**
      * Save the related input models for this job.
      *
-     * @param JobInput $job
-     * @param array $input
+     * @param  JobInput  $job
+     * @param  array  $input
      * @return void
      */
     public function saveInputs(JobInput $job, array $input): void
@@ -65,19 +70,8 @@ class CreateJob implements CreateJobContract
             $job->ndsiInput()->create($input['ndsi']);
         }
 
-        if (isset($input['rms']) && $input['rms'] === TRUE) {
+        if (isset($input['rms']) && $input['rms'] === true) {
             $job->rmsInput()->create();
         }
-    }
-
-    /**
-     * Save the job to the user.
-     *
-     * @param JobInput $job
-     * @return void
-     */
-    public function saveJobToUser(JobInput $job): void
-    {
-        auth()->user()?->jobs()->save($job);
     }
 }

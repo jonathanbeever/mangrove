@@ -9,7 +9,7 @@ interface ExecuteJobContract
     /**
      * Execute a JobInput.
      *
-     * @param JobInput $job
+     * @param  JobInput  $job
      * @return bool
      */
     public function execute(JobInput $job): bool;

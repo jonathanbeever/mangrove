@@ -22,7 +22,7 @@ class ImportRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @param ImportValidationRules $rules
+     * @param  ImportValidationRules  $rules
      * @return array
      */
     public function rules(ImportValidationRules $rules): array

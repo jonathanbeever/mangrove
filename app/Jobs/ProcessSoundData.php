@@ -35,7 +35,7 @@ class ProcessSoundData implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param ExecuteJobContract $contract
+     * @param  ExecuteJobContract  $contract
      * @return void
      */
     public function handle(ExecuteJobContract $contract): void

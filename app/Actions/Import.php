@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Contracts\Import\ImportContract;
-use App\Models\File;
 use App\Models\Series;
 use App\Models\Site;
 use App\Models\User;
@@ -20,7 +19,7 @@ class Import implements ImportContract
     /**
      * Import site, series, files, and metadata into database.
      *
-     * @param array $input
+     * @param  array  $input
      * @return bool
      */
     public function import(array $input): bool
@@ -35,19 +34,21 @@ class Import implements ImportContract
 
                 if (isset($input['site_id'])) {
                     $this->site = $this->user->sites()->find($input['site_id']);
-                } else if (isset($input['site'])) {
-                    $this->site = $this->user->sites()->firstOrCreate([
-                        'name' => $input['site'],
-                        'location' => $input['location'],
-                    ], [
-                        'name' => $input['site'],
-                        'location' => $input['location'],
-                    ]);
                 } else {
-                    return false;
+                    if (isset($input['site'])) {
+                        $this->site = $this->user->sites()->firstOrCreate([
+                            'name' => $input['site'],
+                            'location' => $input['location'],
+                        ], [
+                            'name' => $input['site'],
+                            'location' => $input['location'],
+                        ]);
+                    } else {
+                        return false;
+                    }
                 }
 
-                if(isset($input['files'][0]['path'])) {
+                if (isset($input['files'][0]['path'])) {
                     $seriesPath = pathinfo($input['files'][0]['path'], PATHINFO_DIRNAME);
                 } else {
                     return false;
@@ -76,7 +77,7 @@ class Import implements ImportContract
     {
         foreach ($input['files'] as $file) {
             $normalizedPath = normalize_path($file['path']);
-            if($normalizedPath === null) {
+            if ($normalizedPath === null) {
                 return false;
             }
 
@@ -114,14 +115,14 @@ class Import implements ImportContract
         $realFilePath = rootfs_path($normalizedPath);
         $metadataFile = file($realFilePath);
 
-        if ($metadataFile !== FALSE) {
+        if ($metadataFile !== false) {
             // Read all CSV rows into array.
             $rows = array_map('str_getcsv', $metadataFile);
             // Remove header from CSV array.
             unset($rows[0]);
             // Create new model for each CSV row.
             foreach ($rows as $row) {
-                $recordedAt = strtotime($row[0] . ' ' . $row[1]);
+                $recordedAt = strtotime($row[0].' '.$row[1]);
 
                 if ($recordedAt !== false) {
                     $this->series->fileMetadata()->firstOrCreate([

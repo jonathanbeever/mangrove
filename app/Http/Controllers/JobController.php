@@ -29,6 +29,27 @@ class JobController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  StoreJobRequest  $request
+     * @param  CreateJobContract  $contract
+     * @return CreateJobResponseContract
+     */
+    public function store(StoreJobRequest $request, CreateJobContract $contract): CreateJobResponseContract
+    {
+        $job = $contract->create($request->validated());
+
+        if ($job !== null) {
+            $this->queueJob($job);
+            session()->flash('success', 'Successfully created and queued job!');
+        } else {
+            session()->flash('failure', 'Failed to create job.');
+        }
+
+        return app(CreateJobResponseContract::class);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return Response
@@ -48,31 +69,21 @@ class JobController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Queue the specified job to be executed.
      *
-     * @param StoreJobRequest $request
-     * @param CreateJobContract $contract
-     * @return CreateJobResponseContract
+     * @param  JobInput  $job
+     * @return void
      */
-    public function store(StoreJobRequest $request, CreateJobContract $contract): CreateJobResponseContract
+    public function queueJob(JobInput $job): void
     {
-        $job = $contract->create($request->validated());
-
-        if ($job !== NULL) {
-            $this->queueJob($job);
-            session()->flash('success', 'Successfully created and queued job!');
-        } else {
-            session()->flash('failure', 'Failed to create job.');
-        }
-
-        return app(CreateJobResponseContract::class);
+        ProcessSoundData::dispatch($job, auth()->user());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param JobInput $job
-     * @param DeleteJobContract $contract
+     * @param  JobInput  $job
+     * @param  DeleteJobContract  $contract
      * @return DeleteJobResponseContract
      */
     public function destroy(JobInput $job, DeleteJobContract $contract): DeleteJobResponseContract
@@ -84,17 +95,6 @@ class JobController extends Controller
         }
 
         return app(DeleteJobResponseContract::class);
-    }
-
-    /**
-     * Queue the specified job to be executed.
-     *
-     * @param JobInput $job
-     * @return void
-     */
-    public function queueJob(JobInput $job): void
-    {
-        ProcessSoundData::dispatch($job, auth()->user());
     }
 
     /**
