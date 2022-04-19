@@ -37,14 +37,8 @@ RUN apt-get update \
     && curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
     && apt-get install -y nodejs \
     && npm install -g npm \
-    && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
-    && echo "deb http://apt.postgresql.org/pub/repos/apt impish-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
-    && curl --silent -o - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt-get update \
-    && apt-get install -y yarn \
     && apt-get install -y mysql-client \
-    && apt-get install -y postgresql-client \
     && apt-get install -y --no-install-recommends r-base r-base-dev r-cran-tuner r-cran-devtools r-cran-rjson r-cran-vegan r-cran-seewave r-cran-permute \
     r-cran-rcpp r-cran-gsw r-cran-ineq r-cran-oce r-cran-pracma \
     && apt-get -y autoremove \
