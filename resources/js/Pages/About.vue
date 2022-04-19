@@ -13,7 +13,7 @@
                         <div class="p-4 m-4 flex flex-col">
                             <logo/>
                         </div>
-                        <div class="pt-4" div>
+                        <div class="pt-4">
                             <div
                                 class="pt-12 pb-4 text-5xl self-center bg-gradient-to-t text-transparent bg-clip-text hover:bg-gradient-to-bl from-lime-400 to-amber-300 font-semibold"
                             >
@@ -21,22 +21,19 @@
                             </div>
                             <div
                                 class="pl-4 pr-20 font-semibold text-justify"
-                                div
                             >
                                 Mangrove is a soundscape ecology analysis tool
                                 built to provide a user interface for analytical
                                 algorithms written in the R programming
-                                language. There is not currently a soundscape
-                                ecology analysis tool available to the public.
-                                Soundscape ecology is an emerging field that
+                                language. Soundscape ecology is an emerging field that
                                 often times has a high-bar entry for individuals
                                 interested in the study. Therefore, Mangrove was
-                                developed to provide an open source web
+                                developed to provide an open source
                                 application that is intuitive and easy to use.
-                                Dr. Jonathan Beever, the project sponsor, has
-                                seen Mangrove through three iterations, in which
-                                users can visualize 2D and 3D graphical outputs
-                                alongside listening to this data to more
+                                Dr. Jonathan Beever, the project sponsor,
+                                has seen Mangrove through three
+                                iterations, in which users can visualize graphical
+                                outputs alongside listening to this data to more
                                 effectively analyze, communicate, and share
                                 data. Mangrove has a vast set of tools that can
                                 be utilized by biologists and analysts alike to
