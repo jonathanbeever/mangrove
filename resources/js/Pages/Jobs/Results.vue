@@ -56,13 +56,18 @@
                             <jet-button
                                 v-if="evaluateMultiSeries()"
                                 class="btn btn-success border-gray-200"
-                                @click="switchModeBackToSingle()"
+                                @click="switchModeAllInSite()"
                             >Multi Series Analysis
-                            </jet-button
-                            >
+                            </jet-button>
+                            <jet-button
+                                v-if="allInSite"
+                                class="btn btn-success border-gray-200"
+                                @click="switchModeBackToSingle()"
+                            >All Series
+                            </jet-button>
                         </div>
 
-                        <div v-if="!seriesComparison" class="flex-row px-4">
+                        <div v-if="!allInSite" class="flex-row px-4">
                             Site:
                             <select
                                 id="selectFile"
@@ -76,7 +81,21 @@
                             </select>
                         </div>
 
-                        <div v-if="!seriesComparison" class="flex-row px-4">
+                        <div v-if="allInSite" class="flex-row px-4">
+                            Site:
+                            <select
+                                id="selectFile"
+                                v-model="selectedSite"
+                                class="flex grow dark:text-black"
+                                v-on:change="populateAllIndicesDropdown()"
+                            >
+                                <option v-for="ind in siteSelectionList" v-bind:value="ind">
+                                    {{ ind }}
+                                </option>
+                            </select>
+                        </div>
+
+                        <div v-if="!seriesComparison && !allInSite" class="flex-row px-4">
                             Series:
                             <select
                                 id="selectFile"
@@ -90,21 +109,7 @@
                             </select>
                         </div>
 
-                        <div v-if="seriesComparison" class="flex-row px-4">
-                            Site:
-                            <select
-                                id="selectFile"
-                                v-model="selectedSite"
-                                class="flex grow dark:text-black"
-                                v-on:change="populateSeriesDropdown()"
-                            >
-                                <option v-for="ind in siteSelectionList" v-bind:value="ind">
-                                    {{ ind }}
-                                </option>
-                            </select>
-                        </div>
-
-                        <div v-if="seriesComparison" class="flex-row px-4">
+                        <div v-if="seriesComparison && !allInSite" class="flex-row px-4">
                             Series:
                             <select
                                 id="selectFile"
@@ -146,7 +151,7 @@
                             </select>
                         </div>
 
-                        <div v-if="!seriesComparison" class="flex-row pr-4">
+                        <div v-if="!seriesComparison && !allInSite" class="flex-row pr-4">
                             Select File:
                             <select
                                 id="File"
@@ -174,7 +179,7 @@
                             </select>
                         </div>
 
-                        <div v-if="seriesComparison" class="flex-row pr-4">
+                        <div v-if="seriesComparison && !allInSite" class="flex-row pr-4">
                             Indices:
                             <select
                                 id="selectSeries"
@@ -192,7 +197,7 @@
                             </select>
                         </div>
 
-                        <div v-if="!seriesComparison" class="flex-row pr-4">
+                        <div v-if="!seriesComparison && !allInSite" class="flex-row pr-4">
                             Indices:
                             <select
                                 id="selectSeries"
@@ -209,13 +214,30 @@
                                 </option>
                             </select>
                         </div>
+                        <div v-if="allInSite" class="flex-row pr-4">
+                            Indices:
+                            <select
+                                id="selectSeries"
+                                v-model="allIndex"
+                                :disabled="(selectedSite == '')"
+                                class="flex grow dark:text-black"
+                                v-on:change="showGraphAllInSite()"
+                            >
+                                <option
+                                    v-for="ind in allIndices"
+                                    v-bind:value="ind"
+                                >
+                                    {{ ind }}
+                                </option>
+                            </select>
+                        </div>
 
-                        <div v-if="!seriesComparison" class="flex-row pr-4">
+                        <div v-if="!seriesComparison && !allInSite" class="flex-row pr-4">
                             Select Chart:
                             <select
                                 id="chartSelect"
                                 v-model="selectedChart"
-                                :disabled="upGraphs == 'NDSI' || upGraphs == 'RMS' || (sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile)"
+                                :disabled="upGraphs == 'NDSI' || upGraphs == 'RMS' || (sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile) || this.currentIndex == ''"
                                 class="flex grow dark:text-black"
                             >
                                 <option
@@ -318,25 +340,25 @@
                         class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
                     >
                         <div v-if="seriesIndex == 'NDSI'" :key="seriesIndex" class="w-4/5">
-                            <DualLine :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.anthrophonyL, seriesGraphInput.biophonyL]" :dataSetLabels="['Anthrophony', 'biophony']" :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'NDSI'"/>
+                            <DualLinexy :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.anthrophonyL, seriesGraphInput.biophonyL]" :dataSetLabels="['Anthrophony', 'biophony']" :xLabel="'Date'" :yLabel="'NDSI'"/>
                         </div>
 
                         <div v-if="seriesIndex == 'AEI'" :key="seriesIndex" class="w-4/5">
-                            <DualLine :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.aeiL, seriesGraphInput.aeiR]" :dataSetLabels="['AEI L', 'AEI R']" :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'Aei Index Value'"/>
+                            <DualLinexy :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.aeiL, seriesGraphInput.aeiR]" :dataSetLabels="['AEI L', 'AEI R']" :xLabel="'Date'" :yLabel="'Aei Index Value'"/>
                         </div>
 
                         <div v-if="seriesIndex == 'ADI'" :key="seriesIndex" class="w-4/5">
-                            <DualLine :id="selectedSeries+'DL'+'ADI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.adiL, seriesGraphInput.adiR]" :dataSetLabels="['ADI L', 'ADI R']" :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'Adi Index Value'"/>
+                            <DualLinexy :id="selectedSeries+'DL'+'ADI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.adiL, seriesGraphInput.adiR]" :dataSetLabels="['ADI L', 'ADI R']" :xLabel="'Date'" :yLabel="'Adi Index Value'"/>
 
                         </div>
 
                         <div v-if="seriesIndex == 'BI'" :key="seriesIndex" class="w-4/5">
-                            <DualLine :id="selectedSeries+'DL'+'BIO'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.areaL, seriesGraphInput.areaR]" :dataSetLabels="['BI L', 'BI R']" :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'Bio Index Value'"/>
+                            <DualLinexy :id="selectedSeries+'DL'+'BIO'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.areaL, seriesGraphInput.areaR]" :dataSetLabels="['BI L', 'BI R']" :xLabel="'Date'" :yLabel="'Bio Index Value'"/>
 
                         </div>
 
                         <div v-if="seriesIndex == 'RMS'" :key="seriesIndex" class="w-4/5">
-                            <DualLine :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.rmsL, seriesGraphInput.rmsR]" :dataSetLabels="['RMS L', 'RMS R']" :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'rms Index Value'"/>
+                            <DualLinexy :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.rmsL, seriesGraphInput.rmsR]" :dataSetLabels="['RMS L', 'RMS R']" :xLabel="'Date'" :yLabel="'rms Index Value'"/>
                         </div>
                     </div>
                     <div
@@ -345,29 +367,38 @@
                     >
                         <div v-if="seriesIndex == 'NDSI'" :key="seriesIndex" class="w-4/5">
                             <QuadLine :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.anthrophonyL, seriesGraphInput.biophonyL, seriesGraphInputC.anthrophonyL, seriesGraphInputC.biophonyL]" :dataSetLabels="['Series 1 Anthro', 'Series 1 Bio', 'Series 2 Anthro', 'Series 2 Bio']"
-                                      :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'NDSI'"/>
+                                    :xLabel="'Date'" :yLabel="'NDSI'"/>
                         </div>
 
                         <div v-if="seriesIndex == 'AEI'" :key="seriesIndex" class="w-4/5">
                             <QuadLine :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.aeiL, seriesGraphInput.aeiR, seriesGraphInputC.aeiL, seriesGraphInputC.aeiR]" :dataSetLabels="['Series 1 AEI L', 'Series 1 AEI R', 'Series 2 AEI L', 'Series 2 AEI R']"
-                                      :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'Aei Index Value'"/>
+                                    :xLabel="'Date'" :yLabel="'Aei Index Value'"/>
                         </div>
 
                         <div v-if="seriesIndex == 'ADI'" :key="seriesIndex" class="w-4/5">
                             <QuadLine :id="selectedSeries+'DL'+'ADI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.adiL, seriesGraphInput.adiR, seriesGraphInputC.adiL, seriesGraphInputC.adiR]" :dataSetLabels="['Series 1 ADI L', 'Series 1 ADI R', 'Series 2 ADI L', 'Series 2 ADI R']"
-                                      :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'Adi Index Value'"/>
+                                    :xLabel="'Date'" :yLabel="'Adi Index Value'"/>
 
                         </div>
 
                         <div v-if="seriesIndex == 'BI'" :key="seriesIndex" class="w-4/5">
                             <QuadLine :id="selectedSeries+'DL'+'BIO'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.areaL, seriesGraphInput.areaR, seriesGraphInputC.areaL, seriesGraphInputC.areaR]" :dataSetLabels="['Series 1 BI L', 'Series 1 BI R', 'Series 2 BI L', 'Series 2 BI R']"
-                                      :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'Bio Index Value'"/>
+                                    :xLabel="'Date'" :yLabel="'Bio Index Value'"/>
 
                         </div>
 
                         <div v-if="seriesIndex == 'RMS'" :key="seriesIndex" class="w-4/5">
                             <QuadLine :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.rmsL, seriesGraphInput.rmsR, seriesGraphInputC.rmsL, seriesGraphInputC.rmsR]" :dataSetLabels="['Series 1 RMS L', 'Series 1 RMS R', 'Series 2 RMS L', 'Series 2 RMS R']"
-                                      :xBarLabels="seriesGraphRange" :xLabel="'Date'" :yLabel="'rms Index Value'"/>
+                                    :xLabel="'Date'" :yLabel="'rms Index Value'"/>
+                        </div>
+                    </div>
+                    <div
+                        v-if="allInSite && selectedSite != '' && allIndex != ''"
+                        class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
+                    >
+                        <div :key="allIndex" class="w-4/5">
+                            <AllInSiteChart :id="selectedSite+allIndex+'AllInSite'" :dataSetData="allInSiteData" :dataSetLabels="seriesSelectionList"
+                                    :xLabel="'Date'" :yLabel="allIndex"/>
                         </div>
                     </div>
                 </div>
@@ -387,15 +418,14 @@ import JetButton from "@/Jetstream/Button.vue";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 import CompareBar from '@/Pages/ChartVisualizations/CompareBar.vue';
 import DualLine from '@/Pages/ChartVisualizations/DualLine.vue';
+import DualLinexy from '@/Pages/ChartVisualizations/DualLinexy.vue';
 import SingleBar from '@/Pages/ChartVisualizations/SingleBar.vue';
 import SingleLine from '@/Pages/ChartVisualizations/SingleLine.vue';
+import AllInSiteChart from '@/Pages/ChartVisualizations/AllInSiteChart.vue';
 import QuadLine from '@/Pages/ChartVisualizations/QuadLine.vue'
 import {usePage} from '@inertiajs/inertia-vue3'
 
-let currentIndex = "";
 let compareIndex = "";
-let upGraphs = "";
-let selectedChart = "";
 let graphInput, graphInputC;
 
 export default defineComponent({
@@ -409,7 +439,9 @@ export default defineComponent({
         SingleBar,
         SingleLine,
         VueElementLoading,
-        QuadLine
+        QuadLine,
+        DualLinexy,
+        AllInSiteChart
     },
     data() {
         return {
@@ -422,10 +454,10 @@ export default defineComponent({
             singleFile: true,
             indices: ["ACI", "NDSI", "AEI", "ADI", "BI", "RMS"],
             chartSelection: ["Single Line", "Single Bar", "Dual Line", "Compare Bar"],
-            selectedChart,
-            currentIndex,
+            selectedChart: '',
+            currentIndex: '',
             compareIndex,
-            upGraphs,
+            upGraphs: '',
             graphInput,
             graphInputC,
             items: [],
@@ -453,7 +485,11 @@ export default defineComponent({
             selectedSeriesOne: {},
             selectedSeriesTwo: {},
             seriesIndices: [],
-            seriesGraphRange: []
+            seriesGraphRange: [],
+            allInSite: false,
+            allIndex: '',
+            allInSiteData: [],
+            allIndices: [],
         };
     },
     methods: {
@@ -482,7 +518,6 @@ export default defineComponent({
         },
         showGraphs: function () {
             this.upGraphs = this.currentIndex
-            console.log(this.currentIndex)
             this.graphInput = JSON.parse(this.firstFileData[`${this.currentIndex.toLowerCase() + '_results'}`])
 
             if (this.singleFile == false) {
@@ -508,126 +543,169 @@ export default defineComponent({
                 }
             }
         },
-        showGraphsSeries: function () {
-            const buildIndicesData = (item) => {
-                let resultsOne = []
-                let range = []
-                let data = {}
-                let seriesIndex = this.seriesIndex
-                item.results.forEach(x => {
-                    resultsOne.push(JSON.parse(x[`${this.seriesIndex.toLowerCase() + '_results'}`]))
-
-                    let fileName = x.file.name.split('_')
-                    range.push(fileName[1] + fileName[2])
-                })
-
-
-                if (seriesIndex == 'ADI') {
-                    let array = []
-                    resultsOne.forEach(x => {
-                        array.push(x.adiL)
-                    })
-                    data['adiL'] = array
-
-                    let array2 = []
-                    resultsOne.forEach(x => {
-                        array2.push(x.adiR)
-                    })
-                    data['adiR'] = array2
-                }
-                if (seriesIndex == 'AEI') {
-                    let array = []
-                    resultsOne.forEach(x => {
-                        array.push(x.aeiL)
-                    })
-                    data['aeiL'] = array
-
-                    let array2 = []
-                    resultsOne.forEach(x => {
-                        array2.push(x.aeiR)
-                    })
-                    data['aeiR'] = array2
-                }
-                if (seriesIndex == 'BI') {
-                    let array = []
-                    resultsOne.forEach(x => {
-                        array.push(x.areaL)
-                    })
-                    data['areaL'] = array
-
-                    let array2 = []
-                    resultsOne.forEach(x => {
-                        array2.push(x.areaL)
-                    })
-                    data['areaR'] = array2
-                }
-                if (seriesIndex == 'RMS') {
-                    let array = []
-                    resultsOne.forEach(x => {
-                        array.push(x.rmsL)
-                    })
-                    data['rmsL'] = array
-
-                    let array2 = []
-                    resultsOne.forEach(x => {
-                        array2.push(x.rmsR)
-                    })
-                    data['rmsR'] = array2
-                }
-                if (seriesIndex == 'NDSI') {
-                    let array = []
-                    resultsOne.forEach(x => {
-                        array.push(x.anthrophonyL)
-                    })
-                    data['anthrophonyL'] = array
-
-                    let array2 = []
-                    resultsOne.forEach(x => {
-                        array2.push(x.biophonyL)
-                    })
-                    data['biophonyL'] = array2
-                }
-
-                data['range'] = range.sort()
-                return data
+        buildIndicesData: function (item, index) {
+            const prettyUpYear = (item) => {
+                let prettyYear = item
+                return prettyYear.slice(4, 6) + '/' + prettyYear.slice(6) + '/' + prettyYear.slice(0, 4)
+            }
+            const prettyUpTime = (item) => {
+                let prettyTime = item
+                prettyTime = prettyTime.slice(0, 2) + ':' + prettyTime.slice(2)
+                return prettyTime.slice(0, 5)
             }
 
-            this.seriesGraphInput = buildIndicesData(this.selectedSeriesOne)
-            this.seriesGraphRange = this.seriesGraphInput.range
+            let resultsOne = []
+            let range = []
+            let data = {}
+            let seriesIndex = index
+            item.results.forEach(x => {
+                resultsOne.push(JSON.parse(x[`${seriesIndex.toLowerCase() + '_results'}`]))
+
+                let fileName = x.file.name.split('_')
+                range.push(prettyUpYear(fileName[1]) + ' - ' + prettyUpTime(fileName[2].split('.')[0]))
+            })
+
+
+            if (seriesIndex == 'ADI') {
+                let array = []
+                resultsOne.forEach(x => {
+                    array.push(x.adiL)
+                })
+                data['adiL'] = array
+
+                let array2 = []
+                resultsOne.forEach(x => {
+                    array2.push(x.adiR)
+                })
+                data['adiR'] = array2
+            }
+            if (seriesIndex == 'AEI') {
+                let array = []
+                resultsOne.forEach(x => {
+                    array.push(x.aeiL)
+                })
+                data['aeiL'] = array
+
+                let array2 = []
+                resultsOne.forEach(x => {
+                    array2.push(x.aeiR)
+                })
+                data['aeiR'] = array2
+            }
+            if (seriesIndex == 'BI') {
+                let array = []
+                resultsOne.forEach(x => {
+                    array.push(x.areaL)
+                })
+                data['areaL'] = array
+
+                let array2 = []
+                resultsOne.forEach(x => {
+                    array2.push(x.areaR)
+                })
+                data['areaR'] = array2
+            }
+            if (seriesIndex == 'RMS') {
+                let array = []
+                resultsOne.forEach(x => {
+                    array.push(x.rmsL)
+                })
+                data['rmsL'] = array
+
+                let array2 = []
+                resultsOne.forEach(x => {
+                    array2.push(x.rmsR)
+                })
+                data['rmsR'] = array2
+            }
+            if (seriesIndex == 'NDSI') {
+                let array = []
+                resultsOne.forEach(x => {
+                    array.push(x.anthrophonyL)
+                })
+                data['anthrophonyL'] = array
+
+                let array2 = []
+                resultsOne.forEach(x => {
+                    array2.push(x.biophonyL)
+                })
+                data['biophonyL'] = array2
+            }
+
+            let output = {}
+
+            Object.keys(data).forEach(x => {
+                output[x] = []
+                data[x].forEach(y => {
+                    output[x].push({ x: range[data[x].indexOf(y)], y: y})
+                })
+                output[x].sort((a, b) => a.y > b.y)
+            })
+
+            return output
+        },
+        showGraphsSeries: function () {
+            this.seriesGraphInput = this.buildIndicesData(this.selectedSeriesOne, this.seriesIndex)
 
             if (this.multiSeries) {
-                let range = this.seriesGraphInput.range
-                this.seriesGraphInputC = buildIndicesData(this.selectedSeriesTwo)
-                this.seriesGraphInputC.range.forEach(x => {
-                    if (!this.seriesGraphRange.includes(x)) {
-                        range.push(x)
-                    }
-                })
-                this.seriesGraphRange = range.sort()
+                this.seriesGraphInputC = this.buildIndicesData(this.selectedSeriesTwo, this.seriesIndex)
             }
         },
+        showGraphAllInSite: function () {
+            let allSeries = this.site.series
+            let data = []
+
+            allSeries.forEach(x => {
+                data.push(this.buildIndicesData(x, this.allIndex))
+            })
+
+            this.allInSiteData = data
+        },
         switchMode: function () {
-            this.singleFile = !this.singleFile
+            this.currentIndex = ''
+            this.upGraphs = ''
             this.selectedChart = ''
+            this.singleFile = false
         },
         switchModeSeries: function () {
+            this.upGraphs = ''
+            this.sFile = ''
+            this.cFile = ''
+            this.selectedSeries = ''
             this.seriesComparison = true
         },
         switchModeMultiSeries: function () {
+            this.seriesIndex = ''
             this.multiSeries = true
         },
-        switchModeBackToSingle: function () {
-            this.singleFile = true
+        switchModeAllInSite: function () {
+            this.selectedSite = ''
+            this.selectedSeries = ''
             this.seriesComparison = false
             this.multiSeries = false
+            this.allInSite = true
+        },
+        switchModeBackToSingle: function () {
+            this.allIndex = ''
+            this.currentIndex = ''
+            this.selectedSeries = ''
+            this.selectedChart = ''
+            this.upGraphs = ''
+            this.seriesIndex = ''
+            this.selectedSeriesComparison = ''
+            this.selectedSiteComparison = ''
+            this.selectedChart = ''
+            this.selectedSite = ''
+            this.allInSite = false
+            this.singleFile = true
         },
         evaluateSingleFile: function () {
-            if (this.singleFile)
+            if (this.singleFile && !this.allInSite)
                 return true
             return false
         },
         evaluateMultiFile: function () {
-            if (!this.singleFile && !this.seriesComparison)
+            if (!this.singleFile && !this.seriesComparison && !this.allInSite)
                 return true
             return false
         },
@@ -637,108 +715,96 @@ export default defineComponent({
             return false
         },
         evaluateMultiSeries: function () {
-            if (!this.singleFile && !this.singleSeries && this.multiSeries)
+            if (!this.singleFile && this.seriesComparison && this.multiSeries)
                 return true
             return false
         },
-        populateDropdown: function (items) {
-            let selectionList = []
-            Object.keys(items).forEach(x => {
-                if (items != null && items[x] != null && x.includes("input")) {
-                    Object.keys(JSON.parse(items[x].results)).forEach(y => {
-                        if (selectionList != null && !selectionList.includes(y)) {
-                            selectionList.push(y)
-                        }
-                    })
-                }
-            })
-            this.selectionList = selectionList
-        },
-
         populateSiteDropdown: function () {
             let siteList = []
             this.sites.forEach(x => {
-                siteList.push(x.name)
+                if (x.series != [])
+                    siteList.push(x.name)
             })
             this.siteSelectionList = siteList;
         },
 
         populateSeriesDropdown: function () {
             this.selectedSeries = ''
+            this.currentIndex = ''
+            this.seriesIndex = ''
+            this.upGraphs = ''
+            this.selectedChart = ''
             let seriesList = []
             this.site = this.sites.find(x => x.name == this.selectedSite)
 
-            this.site.series.forEach(x => seriesList.push(x.name))
+            this.site.series.forEach(x => {
+                if (x.results != [])
+                    seriesList.push(x.name)
+            })
             this.seriesSelectionList = seriesList;
         },
         populateSecondSeriesDropdown: function () {
             this.selectedSeriesComparison = ''
+            this.currentIndex = ''
+            this.seriesIndex = ''
+            this.upGraphs = ''
+            this.selectedChart = ''
             let seriesList = []
             this.secondSite = this.sites.find(x => x.name == this.selectedSiteComparison)
 
-            this.secondSite.series.forEach(x => seriesList.push(x.name))
+            this.secondSite.series.forEach(x => {
+                if (x.results != [])
+                    seriesList.push(x.name)
+            })
             this.secondSeriesSelectionList = seriesList;
         },
         populateSingleFileDropdown: function () {
+            this.currentIndex = ''
+            this.upGraphs = ''
+            this.selectedChart = ''
             let fileList = []
             this.series = this.site.series.find(x => x.name == this.selectedSeries)
             this.series.results.forEach(x => fileList.push(x.file.name))
             this.singleFileSelectionList = fileList
         },
         populateComparisonFileData: function () {
+            this.currentIndex = ''
+            this.upGraphs = ''
+            this.selectedChart = ''
             this.secondFileData = {}
             this.series.results.forEach(x => {
-                if (x.file.name == this.sFile)
+                if (x.file.name == this.cFile)
                     this.secondFileData = x
             })
-
-            this.graphInputC = JSON.parse(this.secondFileData[`${this.currentIndex.toLowerCase() + '_results'}`])
-
-            if (this.currentIndex != null && this.currentIndex != '') {
-                if (this.singleFile == false) {
-                    this.chartSelection = ["Dual Line", "Compare Bar"]
-
-                    if (this.selectedChart) {
-                        this.selectedChart = 'Dual Line'
-                    }
-                } else {
-                    if (this.selectedChart) {
-                        this.selectedChart = 'Single Line'
-                    }
-
-                    if (this.upGraphs == 'BI') {
-                        this.chartSelection = ["Single Line", "Single Bar", "Dual Line", "Compare Bar", "Frequency Over Time"]
-                    } else {
-                        this.chartSelection = ["Single Line", "Single Bar", "Dual Line", "Compare Bar"]
-                    }
+        },
+        findIndicesUsed: function (object) {
+            let indicesUsed = []
+            Object.keys(object).map(key => {
+                if (key.includes('aci') && object[key] != null && !indicesUsed.includes('ACI')) {
+                    indicesUsed.push('ACI')
                 }
-            }
+                if (key.includes('adi') && object[key] != null && !indicesUsed.includes('ADI')) {
+                    indicesUsed.push('ADI')
+                }
+                if (key.includes('aei') && object[key] != null && !indicesUsed.includes('AEI')) {
+                    indicesUsed.push('AEI')
+                }
+                if (key.includes('bi') && object[key] != null && !indicesUsed.includes('BI')) {
+                    indicesUsed.push('BI')
+                }
+                if (key.includes('ndsi') && object[key] != null && !indicesUsed.includes('NDSI')) {
+                    indicesUsed.push('NDSI')
+                }
+                if (key.includes('rms') && object[key] != null && !indicesUsed.includes('RMS')) {
+                    indicesUsed.push('RMS')
+                }
+            })
+            return indicesUsed
         },
         populateIndicesDropdown: function () {
-            const findIndicesUsed = (object) => {
-                let indicesUsed = []
-                Object.keys(object).map(key => {
-                    if (key.includes('aci') && object[key] != null && !indicesUsed.includes('ACI')) {
-                        indicesUsed.push('ACI')
-                    }
-                    if (key.includes('adi') && object[key] != null && !indicesUsed.includes('ADI')) {
-                        indicesUsed.push('ADI')
-                    }
-                    if (key.includes('aei') && object[key] != null && !indicesUsed.includes('AEI')) {
-                        indicesUsed.push('AEI')
-                    }
-                    if (key.includes('bi') && object[key] != null && !indicesUsed.includes('BI')) {
-                        indicesUsed.push('BI')
-                    }
-                    if (key.includes('ndsi') && object[key] != null && !indicesUsed.includes('NDSI')) {
-                        indicesUsed.push('NDSI')
-                    }
-                    if (key.includes('rms') && object[key] != null && !indicesUsed.includes('RMS')) {
-                        indicesUsed.push('RMS')
-                    }
-                })
-                return indicesUsed
-            };
+            this.currentIndex = '',
+            this.upGraphs = '',
+            this.selectedChart = ''
 
             this.firstFileData = {}
             this.series.results.forEach(x => {
@@ -746,34 +812,27 @@ export default defineComponent({
                     this.firstFileData = x
             })
 
-            this.indices = findIndicesUsed(this.firstFileData)
+            this.indices = this.findIndicesUsed(this.firstFileData)
+        },
+        populateAllIndicesDropdown: function () {
+            this.allIndex = ''
 
+            this.site = this.sites.find(x => x.name == this.selectedSite)
+
+            let data = this.site.series[0].results[0]
+            let seriesList = []
+
+            this.allIndices = this.findIndicesUsed(data)
+
+            this.site.series.forEach(x => {
+                if (x.results != [])
+                    seriesList.push(x.name)
+            })
+            this.seriesSelectionList = seriesList;
         },
         populateSeriesIndices: function () {
-            const findIndicesUsed = (object) => {
-                let indicesUsed = []
-                Object.keys(object).map(key => {
-                    if (key.includes('aci') && object[key] != null && !indicesUsed.includes('ACI')) {
-                        indicesUsed.push('ACI')
-                    }
-                    if (key.includes('adi') && object[key] != null && !indicesUsed.includes('ADI')) {
-                        indicesUsed.push('ADI')
-                    }
-                    if (key.includes('aei') && object[key] != null && !indicesUsed.includes('AEI')) {
-                        indicesUsed.push('AEI')
-                    }
-                    if (key.includes('bi') && object[key] != null && !indicesUsed.includes('BI')) {
-                        indicesUsed.push('BI')
-                    }
-                    if (key.includes('ndsi') && object[key] != null && !indicesUsed.includes('NDSI')) {
-                        indicesUsed.push('NDSI')
-                    }
-                    if (key.includes('rms') && object[key] != null && !indicesUsed.includes('RMS')) {
-                        indicesUsed.push('RMS')
-                    }
-                })
-                return indicesUsed
-            };
+            this.seriesIndex = ''
+
             if (this.selectedSeries != '') {
                 this.selectedSeriesOne = this.site.series.find(x => x.name == this.selectedSeries)
             }
@@ -782,8 +841,8 @@ export default defineComponent({
             }
 
             if (this.selectedSeries != '' && this.selectedSeriesComparison != '') {
-                let firstIndicesSet = findIndicesUsed(this.selectedSeriesOne.results[0])
-                let secondIndicesSet = findIndicesUsed(this.selectedSeriesTwo.results[0])
+                let firstIndicesSet = this.findIndicesUsed(this.selectedSeriesOne.results[0])
+                let secondIndicesSet = this.findIndicesUsed(this.selectedSeriesTwo.results[0])
                 let indicesSet = []
                 firstIndicesSet.forEach(x => {
                     if (secondIndicesSet.includes(x)) {
@@ -793,7 +852,7 @@ export default defineComponent({
 
                 this.seriesIndices = indicesSet
             } else if (this.selectedSeries != '' && this.seriesComparison && !this.multiSeries) {
-                let firstIndicesSet = findIndicesUsed(this.selectedSeriesOne.results[0])
+                let firstIndicesSet = this.findIndicesUsed(this.selectedSeriesOne.results[0])
 
                 this.seriesIndices = firstIndicesSet
             }

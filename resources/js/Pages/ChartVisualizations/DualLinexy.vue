@@ -10,7 +10,7 @@ import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
 import JetButton from '@/Jetstream/Button.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetInput from '@/Jetstream/Input.vue'
-import {BarController, BarElement, CategoryScale, Chart, Legend, TimeScale, LinearScale, LineController, LineElement, PointElement, Title} from 'chart.js'
+import {BarController, BarElement, CategoryScale, Chart, Legend, LinearScale, LineController, LineElement, PointElement, TimeScale, Title} from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom';
 import 'chartjs-adapter-moment';
 
@@ -30,8 +30,18 @@ export default defineComponent({
         return {}
     },
     mounted: function () {
-        Chart.register(LineController, Title, Legend, BarController, TimeScale, CategoryScale, LinearScale, PointElement, LineElement, BarElement, zoomPlugin)
+        Chart.register(LineController, Title, Legend, BarController, CategoryScale, LinearScale, PointElement, TimeScale, LineElement, BarElement, zoomPlugin)
         var ctx = document.getElementById(this.id).getContext('2d')
+
+        let bottomAxis = []
+
+        this.dataSetData[0].forEach(element => {
+            bottomAxis.push(element.x)
+        });
+        this.dataSetData[1].forEach(element => {
+            bottomAxis.push(element.x)
+        });
+
         var dataFirst = {
             label: this.dataSetLabels[0],
             data: this.dataSetData[0],
@@ -48,28 +58,10 @@ export default defineComponent({
             borderColor: 'red'
         };
 
-        var dataThird = {
-            label: this.dataSetLabels[2],
-            data: this.dataSetData[2],
-            lineTension: 1,
-            fill: false,
-            borderColor: 'blue'
-        };
-
-        var dataFourth = {
-            label: this.dataSetLabels[3],
-            data: this.dataSetData[3],
-            lineTension: 1,
-            fill: false,
-            borderColor: 'black'
-        };
-
         var chartData = {
             datasets: [
                 dataFirst,
-                dataSecond,
-                dataThird,
-                dataFourth
+                dataSecond
             ]
         }
 

@@ -10,9 +10,11 @@ import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
 import JetButton from '@/Jetstream/Button.vue'
 import JetLabel from '@/Jetstream/Label.vue'
 import JetInput from '@/Jetstream/Input.vue'
-import {BarController, BarElement, CategoryScale, Chart, Legend, TimeScale, LinearScale, LineController, LineElement, PointElement, Title} from 'chart.js'
+import {BarController, BarElement, CategoryScale, Chart, TimeScale, Legend, LinearScale, LineController, LineElement, PointElement, Title} from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom';
+import autocolors from 'chartjs-plugin-autocolors';
 import 'chartjs-adapter-moment';
+
 
 const makeRange = (start, end) => {
     return Array(end - start + 1).fill().map((_, idx) => start + idx)
@@ -30,47 +32,24 @@ export default defineComponent({
         return {}
     },
     mounted: function () {
-        Chart.register(LineController, Title, Legend, BarController, TimeScale, CategoryScale, LinearScale, PointElement, LineElement, BarElement, zoomPlugin)
+        Chart.register(LineController, Title, Legend, TimeScale, BarController, CategoryScale, LinearScale, PointElement, LineElement, BarElement, zoomPlugin, autocolors)
         var ctx = document.getElementById(this.id).getContext('2d')
-        var dataFirst = {
-            label: this.dataSetLabels[0],
-            data: this.dataSetData[0],
-            lineTension: 1,
-            fill: false,
-            borderColor: 'green'
-        };
 
-        var dataSecond = {
-            label: this.dataSetLabels[1],
-            data: this.dataSetData[1],
-            lineTension: 1,
-            fill: false,
-            borderColor: 'red'
-        };
+        let datasets = []
 
-        var dataThird = {
-            label: this.dataSetLabels[2],
-            data: this.dataSetData[2],
-            lineTension: 1,
-            fill: false,
-            borderColor: 'blue'
-        };
-
-        var dataFourth = {
-            label: this.dataSetLabels[3],
-            data: this.dataSetData[3],
-            lineTension: 1,
-            fill: false,
-            borderColor: 'black'
-        };
+        this.dataSetData.forEach(x => {
+                Object.keys(x).forEach(z => {
+                    let dataset = {}
+                    dataset['data'] = x[z]
+                    dataset['label'] = this.dataSetLabels[this.dataSetData.indexOf(x)] + ' ' + z
+                    dataset['fill'] = false
+                    dataset['lineTension'] = 1
+                    datasets.push(dataset)
+                })
+        })
 
         var chartData = {
-            datasets: [
-                dataFirst,
-                dataSecond,
-                dataThird,
-                dataFourth
-            ]
+            datasets
         }
 
         var chartOptions = {
@@ -111,6 +90,9 @@ export default defineComponent({
                         },
                         mode: 'x',
                     }
+                },
+                autocolors: {
+                    mode: 'data'
                 }
             },
             scales: {
@@ -123,7 +105,6 @@ export default defineComponent({
                             size: 20
                         }
                     },
-                    type: 'time',
                     time: {
                         parser: 'MM/DD/YYYY - HH:mm',
                         unit: 'day',
