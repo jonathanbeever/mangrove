@@ -14,8 +14,8 @@ class JobValidationRules implements ValidationRuleContract
     public function forCreate(): array
     {
         return [
-            'name' => ['required', 'string', 'max:15'],
-            'series_id' => ['required', 'numeric'],
+            'name' => ['required', 'string', 'max:50'],
+            'series_id' => ['required', 'numeric', 'exists:App\Models\Series,id'],
             'aci' => ['nullable'],
             'aci.fftw' => ['sometimes', 'numeric', 'required_with:aci.min_freq,aci.max_freq,aci.j', 'min:1', 'max:2147483647'],
             'aci.j' => ['sometimes', 'numeric', 'required_with:aci.min_freq,aci.max_freq,aci.fftw', 'min:1', 'max:2147483647'],

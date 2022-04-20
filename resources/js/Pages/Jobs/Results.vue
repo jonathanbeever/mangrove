@@ -239,7 +239,7 @@
                             </select>
                         </div>
 
-                        <div v-if="!seriesComparison && !allInSite" class="flex-row pr-4">
+                        <div v-if="!seriesComparison && !allInSite && (currentIndex != 'RMS' && currentIndex != 'NDSI')" class="flex-row pr-4">
                             Select Chart:
                             <select
                                 id="chartSelect"
@@ -347,7 +347,7 @@
                         class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
                     >
                         <div v-if="seriesIndex == 'NDSI'" :key="seriesIndex" class="w-4/5">
-                            <DualLinexy :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.anthrophonyL, seriesGraphInput.biophonyL]" :dataSetLabels="['Anthrophony', 'biophony']" :xLabel="'Date'" :yLabel="'NDSI'"/>
+                            <DualLinexy :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.anthrophonyL, seriesGraphInput.biophonyL]" :dataSetLabels="['Anthrophony', 'biophony']" :xLabel="'Date'" :yLabel="'Ndsi Index Value'"/>
                         </div>
 
                         <div v-if="seriesIndex == 'AEI'" :key="seriesIndex" class="w-4/5">
@@ -365,7 +365,7 @@
                         </div>
 
                         <div v-if="seriesIndex == 'RMS'" :key="seriesIndex" class="w-4/5">
-                            <DualLinexy :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.rmsL, seriesGraphInput.rmsR]" :dataSetLabels="['RMS L', 'RMS R']" :xLabel="'Date'" :yLabel="'rms Index Value'"/>
+                            <DualLinexy :id="selectedSeries+'DL'+'AEI'+selectedSeriesTwo" :dataSetData="[seriesGraphInput.rmsL, seriesGraphInput.rmsR]" :dataSetLabels="['RMS L', 'RMS R']" :xLabel="'Date'" :yLabel="'Rms Index Value'"/>
                         </div>
                     </div>
                     <div

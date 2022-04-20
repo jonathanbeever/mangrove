@@ -49,8 +49,9 @@
                             placeholder='Name this Job'
                             style="color:#041014;"
                             type="text"
+                            :maxlength="50"
                         />
-                        <JetButton :disabled="finishDisabled" class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()">
+                        <JetButton :disabled="finishDisabled || name == ''" class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()">
                             Finish
                         </JetButton>
                     </div>
@@ -74,16 +75,6 @@ import BiInput from '@/InputComponents/BiInput.vue'
 import {Inertia} from '@inertiajs/inertia'
 
 let descriptionText = 'The selected specifications will influence the ouput of the job to reflect the values selected. Specifications are job specific and cannot be altered after the creation of a job.  Default values have been pre-selected to provide general output.'
-let nextDisabled = true
-let prevDisabled = true
-let finishDisabled = true
-let aci = null
-let ndsi = null
-let bi = null
-let aei = null
-let adi = null
-let rms = null
-let name = ''
 
 export default defineComponent({
     components: {
@@ -100,12 +91,12 @@ export default defineComponent({
     props: ['index', 'seriesID'],
     data: function () {
         return {
-            descriptionText,
+            descriptionText: descriptionText,
             indexCurrent: [],
-            nextDisabled: nextDisabled,
-            prevDisabled: prevDisabled,
-            finishDisabled,
-            name: name
+            nextDisabled: true,
+            prevDisabled: true,
+            finishDisabled: true,
+            name: ''
         }
     },
     mounted() {
