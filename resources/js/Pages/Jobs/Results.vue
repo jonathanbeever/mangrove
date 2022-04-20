@@ -163,7 +163,7 @@
                             <select
                                 id="File"
                                 v-model="sFile"
-                                class="flex grow dark:text-black rounded"
+                                class="flex grow dark:text-black rounded w-24"
                                 v-on:change="populateIndicesDropdown()"
                             >
                                 <option v-for="ind in singleFileSelectionList" v-bind:value="ind">
@@ -177,7 +177,7 @@
                             <select
                                 id="compareFile"
                                 v-model="cFile"
-                                class="flex grow dark:text-black rounded"
+                                class="flex dark:text-black rounded w-24"
                                 v-on:change="populateComparisonFileData()"
                             >
                                 <option v-for="ind in singleFileSelectionList" v-bind:value="ind">

@@ -22,7 +22,7 @@
                                     <table
                                         class="min-w-full divide-y divide-gray-200"
                                     >
-                                        <thead class="bg-gray-50">
+                                        <thead class="bg-gray-50 sticky top-0">
                                         <tr>
                                             <th
                                                 class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
