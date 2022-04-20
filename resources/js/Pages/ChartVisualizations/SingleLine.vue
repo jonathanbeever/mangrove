@@ -34,7 +34,7 @@ export default defineComponent({
         var dataFirst = {
             label: this.dataSetLabels[0],
             data: this.dataSetData[0],
-            lineTension: 1,
+            lineTension: 1/3,
             fill: false,
             borderColor: 'green'
         };
@@ -83,6 +83,9 @@ export default defineComponent({
                             enabled: true
                         },
                         mode: 'x',
+                    },
+                    pan: {
+                        enabled: true
                     }
                 }
             },

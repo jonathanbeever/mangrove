@@ -189,6 +189,7 @@ export default defineComponent({
             this.aei = {...aei}
         },
         postJobData: function () {
+            this.finishDisabled = true
             if (this.name == '' || this.name == null) {
                 this.name = Date().toString().substring(0, 10)
             }
