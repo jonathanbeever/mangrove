@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Job\JobStatusEnum;
+use App\Enums\User\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,7 +26,17 @@ class JobInput extends Model
      */
     protected $fillable = [
         'name',
+        'status',
         'series_id',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'status' => JobStatusEnum::class,
     ];
 
     /**
