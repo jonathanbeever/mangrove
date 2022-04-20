@@ -220,11 +220,6 @@ const stopImpersonation = () => {
                                     </template>
                                 </JetDropdown>
                             </div>
-
-                            <div class="inline-flex pl-5">
-                                <JetButton class='close m-2 bg-transparent hover:bg-white-500 text-black dark:text-white font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' style="cursor: pointer;" @click="history.forward()">Back</JetButton>
-                                <JetButton class='close m-2 bg-transparent hover:bg-white-500 text-black dark:text-white font-semibold hover:text-white py-2 px-4 border border-white-500 hover:border-transparent rounded' style="cursor: pointer;" @click="history.forward()">Forward</JetButton>
-                            </div>
                         </div>
 
                         <!-- Hamburger -->
