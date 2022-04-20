@@ -65,13 +65,13 @@
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap"
                                                 >
-                                                    <jet-input v-model="siteCreationName" :value="siteCreationName" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Site Name"/>
+                                                    <jet-input v-model="siteCreationName" :value="siteCreationName" :maxlength="50" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Site Name"/>
 
                                                 </td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap"
                                                 >
-                                                    <jet-input v-model="siteCreationLocation" :value="siteCreationLocation" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Location"/>
+                                                    <jet-input v-model="siteCreationLocation" :value="siteCreationLocation" :maxlength="50" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Location"/>
                                                 </td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap"

@@ -49,6 +49,7 @@
                             placeholder='Name this Job'
                             style="color:#041014;"
                             type="text"
+                            :maxlength="50"
                         />
                         <JetButton :disabled="finishDisabled || name == ''" class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()">
                             Finish

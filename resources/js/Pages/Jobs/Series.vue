@@ -29,6 +29,7 @@
                         placeholder="Name this Series"
                         style="color: #041014"
                         type="text"
+                        :maxlength="50"
                     />
 
                 </div>
