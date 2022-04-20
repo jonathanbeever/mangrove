@@ -7,12 +7,12 @@
                 Queue
             </h2>
         </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="mt-12 bg-white overflow-hidden shadow-inner shadow-sky-200 dark:shadow-cyan-500 sm:rounded-lg dark:bg-slate-900">
+            <div class="p-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <div class="flex flex-col">
-                        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="-my-2 sm:-mx-6 lg:-mx-8">
                             <div
                                 class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8"
                             >
@@ -125,6 +125,7 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </div>
