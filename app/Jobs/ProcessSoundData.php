@@ -45,8 +45,8 @@ class ProcessSoundData implements ShouldQueue
         Auth::login($this->user);
 
         $this->jobInput->update(['status' => JobStatusEnum::RUNNING]);
-        $contract->execute($this->jobInput);
-        $this->jobInput->update(['status' => JobStatusEnum::SUCCEEDED]);
+        $job = $contract->execute($this->jobInput);
+        $this->jobInput->update(['status' => $job ? JobStatusEnum::SUCCEEDED : JobStatusEnum::FAILED]);
     }
 
     /**
