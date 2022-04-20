@@ -129,6 +129,7 @@
                     >
                         <JetButton
                             class="flex w-1/3 justify-center"
+                            :disabled="this.selectedIndex.length == 0"
                             v-on:click="onNext($event)"
                         >
                             Next
@@ -148,8 +149,6 @@ import JetButton from "@/Jetstream/Button.vue";
 import JetLabel from "@/Jetstream/Label.vue";
 import SetParameters from "@/Pages/Jobs/SetParameters.vue";
 
-let selectedIndex = ["NDSI"];
-let displayIndexSelection = true;
 let indexText = {
     ACI: "The accoustic complexity index is an algorithm used to determine the complexity of natural sound. It was initially developed for computing the complexity of bird song. Variability in sound intensities are measured and compared to provide a measured complexity.",
     NDSI: "NDSI is an algorithm used to determine the level of anthropogenic disturbance in an area. It computes the ratio of human-generated sound to natural sound in the soundscape.",
@@ -158,7 +157,6 @@ let indexText = {
     BIO: "the bioacoustic index is an algoirithm used to determine the sound level and number of frequency bands occupied in a soundscape. It is used as a general determinant of occupied frequencies to investigate the abundance of biological sound.",
     RMS: "RMS is the root mean square or quadratic mean",
 };
-let descriptionText = indexText["NDSI"];
 
 export default defineComponent({
     components: {
@@ -169,9 +167,9 @@ export default defineComponent({
     },
     data: function () {
         return {
-            descriptionText,
-            selectedIndex,
-            displayIndexSelection,
+            descriptionText: indexText['NDSI'],
+            selectedIndex: ['NDSI'],
+            displayIndexSelection: true,
         };
     },
     props: ["seriesID"],
