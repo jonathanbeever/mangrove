@@ -19,9 +19,9 @@ return new class extends Migration {
             $table->foreignIdFor(Site::class)->constrained();
             $table->foreignIdFor(Series::class)->constrained();
             $table->dateTime('recorded');
-            $table->decimal('latitude');
+            $table->decimal('latitude', 10, 8);
             $table->text('latitude_direction');
-            $table->decimal('longitude');
+            $table->decimal('longitude', 11, 8);
             $table->text('longitude_direction');
             $table->float('battery_voltage');
             $table->float('internal_temperature');
