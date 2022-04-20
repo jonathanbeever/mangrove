@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Contracts\Job\ExecuteJobContract;
+use App\Enums\Job\JobStatusEnum;
 use App\Models\JobInput;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -11,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class ProcessSoundData implements ShouldQueue
 {
@@ -41,6 +43,20 @@ class ProcessSoundData implements ShouldQueue
     public function handle(ExecuteJobContract $contract): void
     {
         Auth::login($this->user);
+
+        $this->jobInput->update(['status' => JobStatusEnum::RUNNING]);
         $contract->execute($this->jobInput);
+        $this->jobInput->update(['status' => JobStatusEnum::SUCCEEDED]);
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @param  Throwable  $exception
+     * @return void
+     */
+    public function failed(Throwable $exception): void
+    {
+        $this->jobInput->update(['status' => JobStatusEnum::FAILED]);
     }
 }
