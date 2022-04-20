@@ -106,7 +106,7 @@ class JobController extends Controller
     {
         $user = auth()->user();
         if ($user !== null) {
-            $sites = $user->sites()->with(['series.results'])->get()->toArray();
+            $sites = $user->sites()->with(['series.results, series.fileMetadata'])->get()->toArray();
         }
 
         return Inertia::render('Jobs/Results', [

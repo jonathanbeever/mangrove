@@ -2,7 +2,6 @@ FROM ubuntu:20.04
 
 ARG WWWGROUP
 ARG NODE_VERSION=16
-ARG POSTGRES_VERSION=14
 
 WORKDIR /var/www/html
 
@@ -35,12 +34,13 @@ RUN apt-get update \
        php8.1-memcached php8.1-pcov php8.1-xdebug \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && curl -sL https://deb.nodesource.com/setup_$NODE_VERSION.x | bash - \
+    && apt-get update \
     && apt-get install -y nodejs \
     && npm install -g npm \
-    && apt-get update \
     && apt-get install -y mysql-client \
     && apt-get install -y --no-install-recommends r-base r-base-dev r-cran-tuner r-cran-devtools r-cran-rjson r-cran-vegan r-cran-seewave r-cran-permute \
     r-cran-rcpp r-cran-gsw r-cran-ineq r-cran-oce r-cran-pracma \
+    && apt-get -y dist-upgrade \
     && apt-get -y autoremove \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*

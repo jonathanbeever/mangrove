@@ -2,18 +2,20 @@
 
 namespace App\Providers;
 
-use App\Actions\Import;
+use App\Actions\Import\Import;
+use App\Actions\Import\ImportMetadata;
 use App\Actions\Job\CreateJob;
 use App\Actions\Job\DeleteJob;
 use App\Actions\Job\ExecuteJob;
 use App\Contracts\Import\ImportContract;
+use App\Contracts\Import\ImportMetadataContract;
 use App\Contracts\Import\ImportResponseContract;
 use App\Contracts\Job\CreateJobContract;
 use App\Contracts\Job\CreateJobResponseContract;
 use App\Contracts\Job\DeleteJobContract;
 use App\Contracts\Job\DeleteJobResponseContract;
 use App\Contracts\Job\ExecuteJobContract;
-use App\Http\Responses\ImportResponse;
+use App\Http\Responses\Import\ImportResponse;
 use App\Http\Responses\Job\CreateJobResponse;
 use App\Http\Responses\Job\DeleteJobResponse;
 use Illuminate\Support\ServiceProvider;
@@ -37,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
         // Import
         $this->app->singleton(ImportContract::class, Import::class);
         $this->app->singleton(ImportResponseContract::class, ImportResponse::class);
+        $this->app->singleton(ImportMetadataContract::class, ImportMetadata::class);
     }
 
     /**

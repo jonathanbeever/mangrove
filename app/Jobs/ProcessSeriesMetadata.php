@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Contracts\Job\ExecuteJobContract;
-use App\Models\JobInput;
+use App\Contracts\Import\ImportMetadataContract;
+use App\Models\Series;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,13 +12,14 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 
-class ProcessSoundData implements ShouldQueue
+class ProcessSeriesMetadata implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $timeout = 0;
+    public int $timeout = 300;
 
-    private JobInput $jobInput;
+    private array $metadataFile;
+    private Series $series;
     private User $user;
 
     /**
@@ -26,21 +27,22 @@ class ProcessSoundData implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(JobInput $job, User $user)
+    public function __construct(array $metadataFile, Series $series, User $user)
     {
-        $this->jobInput = $job;
+        $this->metadataFile = $metadataFile;
+        $this->series = $series;
         $this->user = $user;
     }
 
     /**
      * Execute the job.
      *
-     * @param  ExecuteJobContract  $contract
+     * @param  ImportMetadataContract  $contract
      * @return void
      */
-    public function handle(ExecuteJobContract $contract): void
+    public function handle(ImportMetadataContract $contract): void
     {
         Auth::login($this->user);
-        $contract->execute($this->jobInput);
+        $contract->import($this->series, $this->metadataFile);
     }
 }

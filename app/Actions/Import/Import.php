@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Import;
 
 use App\Contracts\Import\ImportContract;
+use App\Jobs\ProcessSeriesMetadata;
 use App\Models\Series;
 use App\Models\Site;
 use App\Models\User;
@@ -95,60 +96,9 @@ class Import implements ImportContract
         }
 
         if (isset($input['metadata'])) {
-            return $this->parseRecorderMetadata($input['metadata']);
+            ProcessSeriesMetadata::dispatch($input['metadata'], $this->series, auth()->user());
         }
 
         return true;
-    }
-
-    /**
-     * @param  array  $file
-     * @return bool
-     */
-    private function parseRecorderMetadata(array $file): bool
-    {
-        $normalizedPath = normalize_path($file['path']);
-        if ($normalizedPath === null) {
-            return false;
-        }
-
-        $realFilePath = rootfs_path($normalizedPath);
-        $metadataFile = file($realFilePath);
-
-        if ($metadataFile !== false) {
-            // Read all CSV rows into array.
-            $rows = array_map('str_getcsv', $metadataFile);
-            // Remove header from CSV array.
-            unset($rows[0]);
-            // Create new model for each CSV row.
-            foreach ($rows as $row) {
-                $recordedAt = strtotime($row[0].' '.$row[1]);
-
-                if ($recordedAt !== false) {
-                    $this->series->fileMetadata()->firstOrCreate([
-                        'site_id' => $this->series->site->id,
-                        'series_id' => $this->series->id,
-                        'recorded' => $recordedAt,
-                    ], [
-                        'site_id' => $this->series->site->id,
-                        'series_id' => $this->series->id,
-                        'recorded' => $recordedAt,
-                        'latitude' => $row[2],
-                        'latitude_direction' => $row[3],
-                        'longitude' => $row[4],
-                        'longitude_direction' => $row[5],
-                        'battery_voltage' => $row[6],
-                        'internal_temperature' => $row[7],
-                        'files' => $row[8],
-                        'mic0_type' => $row[9],
-                        'mic1_type' => $row[10],
-                    ]);
-                }
-            }
-
-            return true;
-        }
-
-        return false;
     }
 }

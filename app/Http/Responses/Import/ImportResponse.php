@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Responses;
+namespace App\Http\Responses\Import;
 
 use App\Contracts\Import\ImportResponseContract;
 use Illuminate\Http\Request;
