@@ -1,7 +1,7 @@
 {
     "name": "mangrove",
     "private": true,
-    "productName": "mangrove",
+    "productName": "Mangrove",
     "version": "1.0.0",
     "author": "Mangrove Team",
     "description": "Mangrove is a soundscape ecology analysis tool built to provide a user interface for analytical algorithms written in the R programming language.",
@@ -16,7 +16,10 @@
     "license": "GPL-3.0",
     "config": {
         "forge": {
-            "packagerConfig": {},
+            "packagerConfig": {
+                "executableName": "mangrove",
+                "icon": "src/icons/mangrove.png"
+            },
             "makers": [
                 {
                     "name": "@electron-forge/maker-squirrel",
@@ -32,11 +35,15 @@
                 },
                 {
                     "name": "@electron-forge/maker-deb",
-                    "config": {}
+                    "config": {
+                        "icon": "src/icons/mangrove.png"
+                    }
                 },
                 {
                     "name": "@electron-forge/maker-rpm",
-                    "config": {}
+                    "config": {
+                        "icon": "src/icons/mangrove.png"
+                    }
                 }
             ]
         }
