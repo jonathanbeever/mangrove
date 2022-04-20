@@ -23,30 +23,29 @@
                                 type="text"
                                 v-on:change="filtered()"
                             />
-                            <br/>
                             <div
-                                class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96"
+                                class="flex flex-col p-6 overflow-hidden max-h-96 rounded"
                             >
-                                <div class="">
+                                <div class="overflow-y-auto rounded">
                                     <div
-                                        class="py-4 align-middle inline-block min-w-full"
+                                        class="align-middle inline-block min-w-full"
                                     >
                                         <div
-                                            class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg"
+                                            class="shadow border-b border-gray-200 sm:rounded-lg"
                                         >
                                             <table
-                                                class="min-w-full divide-y divide-gray-200"
+                                                class="min-w-full divide-y divide-gray-200 rounded"
                                             >
-                                                <thead class="bg-gray-50">
+                                                <thead class="bg-gray-50 sticky top-0 pt-2 rounded">
                                                 <tr>
                                                     <th
-                                                        class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
+                                                        class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                                                         scope="col"
                                                     >
                                                         Series
                                                     </th>
                                                     <th
-                                                        class="px-6 py-3 text-left font-medium text-neutral-900 uppercase tracking-wider"
+                                                        class="px-6 py-3 text-left font-medium text-gray-500 uppercase tracking-wider"
                                                         scope="col"
                                                     >
                                                     </th>
