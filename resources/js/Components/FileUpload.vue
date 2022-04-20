@@ -173,8 +173,6 @@ import {defineComponent} from "vue";
 import JetButton from "@/Jetstream/Button.vue";
 import JetInput from "@/Jetstream/Input.vue";
 
-let fileMeta = [];
-
 export default defineComponent({
     components: {
         JetButton,
@@ -238,7 +236,6 @@ export default defineComponent({
         },
 
         saveInfo(event) {
-            //console.log(event);
             this.items = event.target.items;
             for (const i of Object.keys(this.items)) {
                 formData.append("files", this.items[i]);

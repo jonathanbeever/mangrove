@@ -16,7 +16,7 @@
                     </div>
                     <JetButton
                         v-if="newUploads == true && editPop == false"
-                        :disabled="seriesName.length == 0"
+                        :disabled="seriesName.length == 0 || items.length == 0 || importClicked"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                         v-on:click="postSiteSeries()"
                     >
@@ -52,7 +52,6 @@ import {Inertia} from '@inertiajs/inertia'
 
 let newUploads = true;
 let editPop = false;
-let selected = [];
 let seriesName = "";
 
 export default defineComponent({
@@ -95,9 +94,8 @@ export default defineComponent({
             meta: [],
             search: "",
             editPop,
-            selected,
-            seriesName
-
+            seriesName,
+            importClicked: false
         };
     },
     methods: {
@@ -131,6 +129,7 @@ export default defineComponent({
             };
         },
         postSiteSeries: function () {
+            this.importClicked = true
             let request = {};
             let siteLocation;
 
