@@ -82,6 +82,6 @@ class Series extends Model
      */
     public function fileMetadata(): HasMany
     {
-        return $this->hasMany(FileMetadata::class);
+        return $this->hasMany(FileMetadata::class)->where('files', '>', '0');
     }
 }

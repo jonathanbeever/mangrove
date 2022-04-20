@@ -39,8 +39,8 @@ class FileMetadata extends Model
      */
     protected $casts = [
         'recorded' => 'datetime',
-        'latitude' => 'decimal',
-        'longitude' => 'decimal',
+        'latitude' => 'decimal:8',
+        'longitude' => 'decimal:8',
         'battery_voltage' => 'float',
         'internal_temperature' => 'float',
         'files' => 'integer',
