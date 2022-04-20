@@ -14,10 +14,10 @@ class ImportValidationRules implements ValidationRuleContract
     public function forCreate(): array
     {
         return [
-            'site' => ['required_without:site_id', 'string'],
-            'site_id' => ['required_without:site', 'numeric'],
-            'series' => ['required_without:series_id', 'string'],
-            'series_id' => ['required_without:series', 'numeric'],
+            'site' => ['required_without:site_id', 'string', 'max:50'],
+            'site_id' => ['required_without:site', 'numeric', 'exists:App\Models\Site,id'],
+            'series' => ['required_without:series_id', 'string', 'max:50'],
+            'series_id' => ['required_without:series', 'numeric', 'exists:App\Models\Series,id'],
             'location' => ['sometimes', 'nullable', 'string'],
             'files' => ['required', 'array'],
             'files.*' => ['required', 'array:name,size,path'],
