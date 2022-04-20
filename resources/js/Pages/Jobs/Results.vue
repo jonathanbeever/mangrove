@@ -660,7 +660,8 @@ export default defineComponent({
             let data = []
 
             allSeries.forEach(x => {
-                data.push(this.buildIndicesData(x, this.allIndex))
+                if(x.results.length != 0)
+                    data.push(this.buildIndicesData(x, this.allIndex))
             })
 
             this.allInSiteData = data
@@ -742,7 +743,7 @@ export default defineComponent({
             this.site = this.sites.find(x => x.name == this.selectedSite)
 
             this.site.series.forEach(x => {
-                if (x.results != [])
+                if (x.results.length != 0)
                     seriesList.push(x.name)
             })
             this.seriesSelectionList = seriesList;
@@ -757,7 +758,7 @@ export default defineComponent({
             this.secondSite = this.sites.find(x => x.name == this.selectedSiteComparison)
 
             this.secondSite.series.forEach(x => {
-                if (x.results != [])
+                if (x.results.length != 0)
                     seriesList.push(x.name)
             })
             this.secondSeriesSelectionList = seriesList;
@@ -830,7 +831,7 @@ export default defineComponent({
             this.allIndices = this.findIndicesUsed(data)
 
             this.site.series.forEach(x => {
-                if (x.results != [])
+                if (x.results.length != 0)
                     seriesList.push(x.name)
             })
             this.seriesSelectionList = seriesList;

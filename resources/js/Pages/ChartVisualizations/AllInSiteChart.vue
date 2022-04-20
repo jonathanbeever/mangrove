@@ -43,7 +43,7 @@ export default defineComponent({
                     dataset['data'] = x[z]
                     dataset['label'] = this.dataSetLabels[this.dataSetData.indexOf(x)] + ' ' + z
                     dataset['fill'] = false
-                    dataset['lineTension'] = 1
+                    dataset['lineTension'] = 1/3
                     datasets.push(dataset)
                 })
         })
@@ -83,13 +83,13 @@ export default defineComponent({
                 zoom: {
                     zoom: {
                         wheel: {
-                            enabled: true,
+                            enabled: false,
                         },
                         pinch: {
                             enabled: true
                         },
                         mode: 'x',
-                    }
+                    },
                 },
                 autocolors: {
                     mode: 'data'

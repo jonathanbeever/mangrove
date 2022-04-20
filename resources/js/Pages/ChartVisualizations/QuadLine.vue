@@ -35,7 +35,7 @@ export default defineComponent({
         var dataFirst = {
             label: this.dataSetLabels[0],
             data: this.dataSetData[0],
-            lineTension: 1,
+            lineTension: 1/3,
             fill: false,
             borderColor: 'green'
         };
@@ -43,7 +43,7 @@ export default defineComponent({
         var dataSecond = {
             label: this.dataSetLabels[1],
             data: this.dataSetData[1],
-            lineTension: 1,
+            lineTension: 1/3,
             fill: false,
             borderColor: 'red'
         };
@@ -51,7 +51,7 @@ export default defineComponent({
         var dataThird = {
             label: this.dataSetLabels[2],
             data: this.dataSetData[2],
-            lineTension: 1,
+            lineTension: 1/3,
             fill: false,
             borderColor: 'blue'
         };
@@ -59,7 +59,7 @@ export default defineComponent({
         var dataFourth = {
             label: this.dataSetLabels[3],
             data: this.dataSetData[3],
-            lineTension: 1,
+            lineTension: 1/3,
             fill: false,
             borderColor: 'black'
         };
@@ -110,6 +110,9 @@ export default defineComponent({
                             enabled: true
                         },
                         mode: 'x',
+                    },
+                    pan: {
+                        enabled: true
                     }
                 }
             },
