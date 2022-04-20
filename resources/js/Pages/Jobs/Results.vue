@@ -1,13 +1,19 @@
 <template>
     <app-layout title="Results">
-
+        <div class="absolute bottom-0 left-0 p-4 border-gray-200 invisible">
+        <jet-button
+            class="btn btn-success border-gray-200"
+            @click="exportToCSV()"
+        >Export To CSV
+        </jet-button>
+        </div>
         <div class="flex flex-col dark:text-black">
             <div class="py-4 flex flex-row flex-shrink">
                 <div class="w-1/4 px-4">
-                    <div class="bg-white shadow-xl sm:rounded-lg dark:bg-slate-800 dark:text-white">
+                    <div class="bg-white shadow-xl sm:rounded-lg dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white" >
                         <div class="p-2">
                             2D Waveform Spectrogram
-                            <div class="flex-row pr-2 pt-2" style="max-width: 15ch;">
+                            <div class="flex-row pr-2 pt-2 overflow-hidden">
                                 <input
                                     id="file-input"
                                     accept="audio/*"
@@ -15,21 +21,22 @@
                                     single
                                     type="file"
                                     v-on:change="onFileChange($event)"
+                                    :disabled="loading === true"
                                 />
                             </div>
                             <div id="loading" ref="loading" class="loading pt-2">
                                 <div id="wave" class="p-2"/>
-                                <vue-element-loading v-if="loading === true" ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" size="100" spinner="bar-fade-scale"
+                                <vue-element-loading ref="animation" :active="loading" background-color="dark:rgba(0,0,0,.9);" size="100" spinner="bar-fade-scale"
                                                      v-bind:display="none"/>
                                 <input id="slider" ref="slider" max="200" min="1" style="width: 100%" type="range" value="1" @input="slideView"/>
                             </div>
                         </div>
                     </div>
 
-                </div>
+                    </div>
                 <div class="flex flex-col grow pr-4">
                     <div
-                        class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full dark:bg-slate-800 dark:text-white"
+                        class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white"
                     >
                         <div class="pr-2 float-left self-end">
                             <jet-button
@@ -72,7 +79,7 @@
                             <select
                                 id="selectFile"
                                 v-model="selectedSite"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateSeriesDropdown()"
                             >
                                 <option v-for="ind in siteSelectionList" v-bind:value="ind">
@@ -86,7 +93,7 @@
                             <select
                                 id="selectFile"
                                 v-model="selectedSite"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateAllIndicesDropdown()"
                             >
                                 <option v-for="ind in siteSelectionList" v-bind:value="ind">
@@ -100,7 +107,7 @@
                             <select
                                 id="selectFile"
                                 v-model="selectedSeries"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateSingleFileDropdown()"
                             >
                                 <option v-for="ind in seriesSelectionList" v-bind:value="ind">
@@ -114,7 +121,7 @@
                             <select
                                 id="selectFile"
                                 v-model="selectedSeries"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateSeriesIndices()"
                             >
                                 <option v-for="ind in seriesSelectionList" v-bind:value="ind">
@@ -128,7 +135,7 @@
                             <select
                                 id="selectFile"
                                 v-model="selectedSiteComparison"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateSecondSeriesDropdown()"
                             >
                                 <option v-for="ind in siteSelectionList" v-bind:value="ind">
@@ -142,7 +149,7 @@
                             <select
                                 id="selectFile"
                                 v-model="selectedSeriesComparison"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateSeriesIndices()"
                             >
                                 <option v-for="ind in secondSeriesSelectionList" v-bind:value="ind">
@@ -156,7 +163,7 @@
                             <select
                                 id="File"
                                 v-model="sFile"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateIndicesDropdown()"
                             >
                                 <option v-for="ind in singleFileSelectionList" v-bind:value="ind">
@@ -170,7 +177,7 @@
                             <select
                                 id="compareFile"
                                 v-model="cFile"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="populateComparisonFileData()"
                             >
                                 <option v-for="ind in singleFileSelectionList" v-bind:value="ind">
@@ -185,7 +192,7 @@
                                 id="selectSeries"
                                 v-model="seriesIndex"
                                 :disabled="(this.selectedSeries == '' && !multiSeries) || (this.selectedSeries == '' && this.selectedSeriesComparison == '' && multiSeries)"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="showGraphsSeries()"
                             >
                                 <option
@@ -203,7 +210,7 @@
                                 id="selectSeries"
                                 v-model="currentIndex"
                                 :disabled="(sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile)"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="showGraphs()"
                             >
                                 <option
@@ -220,7 +227,7 @@
                                 id="selectSeries"
                                 v-model="allIndex"
                                 :disabled="(selectedSite == '')"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                                 v-on:change="showGraphAllInSite()"
                             >
                                 <option
@@ -238,7 +245,7 @@
                                 id="chartSelect"
                                 v-model="selectedChart"
                                 :disabled="upGraphs == 'NDSI' || upGraphs == 'RMS' || (sFile == '' || sFile == null) || ((cFile == '' || cFile == null) && !singleFile) || this.currentIndex == ''"
-                                class="flex grow dark:text-black"
+                                class="flex grow dark:text-black rounded"
                             >
                                 <option
                                     v-for="ind in chartSelection"
@@ -502,6 +509,8 @@ export default defineComponent({
         onFileChange: function (e) {
             this.loading = true;
             this.spFile = URL.createObjectURL(e.target.files[0]);
+            //this.spFile = "file:" + this.firstFileData.file.path;
+            //console.log(this.spFile);
             this.$refs.player.load();
             this.createSpectrogram();
         },
@@ -510,12 +519,7 @@ export default defineComponent({
             this.wavesurfer.load(this.spFile);
         },
 
-        play: function () {
-            this.wavesurfer.play();
-        },
-        pause: function () {
-            this.wavesurfer.pause();
-        },
+
         showGraphs: function () {
             this.upGraphs = this.currentIndex
             this.graphInput = JSON.parse(this.firstFileData[`${this.currentIndex.toLowerCase() + '_results'}`])
@@ -813,6 +817,7 @@ export default defineComponent({
             })
 
             this.indices = this.findIndicesUsed(this.firstFileData)
+            //this.onFileChange();
         },
         populateAllIndicesDropdown: function () {
             this.allIndex = ''
@@ -868,6 +873,19 @@ export default defineComponent({
 
         slideView: function () {
             this.wavesurfer.zoom(Number(this.$refs.slider.value));
+        },
+          exportToCSV: function () {
+            let csv = "";
+            this.series.results.forEach((row) => {
+                csv += row.join(',');
+                csv += "\n";
+            });
+            const anchor = document.createElement('a');
+            anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+            anchor.target = '_blank';
+            anchor.download = 'results.csv';
+            anchor.click();
+
         },
     },
     mounted() {
