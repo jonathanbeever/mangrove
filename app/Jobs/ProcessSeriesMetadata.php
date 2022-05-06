@@ -16,7 +16,7 @@ class ProcessSeriesMetadata implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $timeout = 300;
+    public int $timeout = 0;
 
     private array $metadataFile;
     private Series $series;
