@@ -1,0 +1,24 @@
+{
+    "name": "Mangrove Development Environment",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "mangrove",
+    "workspaceFolder": "/var/www/html",
+    "extensions": [
+        "felixfbecker.php-debug",
+        "ms-vsliveshare.vsliveshare",
+        "eamodio.gitlens",
+        "bmewburn.vscode-intelephense-client",
+        "mikestead.dotenv",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "ryannaddy.laravel-artisan",
+        "onecentlin.laravel5-snippets",
+        "onecentlin.laravel-blade",
+        "EditorConfig.EditorConfig",
+        "jcbuisson.vue",
+        "redhat.vscode-yaml"
+    ],
+    "settings": {},
+    "remoteUser": "sail"
+}

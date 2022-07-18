@@ -1,8 +1,0 @@
-{
-  "dbConfig": {
-    "dbName": "mangrove-test"
-  },
-  "storage": {
-    "root": ".mangrove-server-test"
-  }
-}
