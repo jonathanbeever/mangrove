@@ -2,21 +2,21 @@
     <div class="w-full">
         <div class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full h-full flex justify-center">
             <div class="flex flex-row justify-between content-center w-full">
-                <JetButton class="mr-[15px] float-left" v-on:click="onBack">
+                <PrimaryButton class="mr-[15px] float-left" v-on:click="onBack">
                     Back
-                </JetButton>
+                </PrimaryButton>
                 <div class="flex flex-row w-full items-center justify-center">
-                    <jet-label class="mr-[5px]">
+                    <InputLabel class="mr-[5px]">
                         Choose Audio Files
-                    </jet-label>
+                    </InputLabel>
                     <hr class="flex flex-grow">
-                    <jet-label class="mr-[5px] ml-[5px]">
+                    <InputLabel class="mr-[5px] ml-[5px]">
                         Select R index
-                    </jet-label>
+                    </InputLabel>
                     <hr class="flex flex-grow">
-                    <jet-label class="ml-[5px] font-bold">
+                    <InputLabel class="ml-[5px] font-bold">
                         Set Parameters
-                    </jet-label>
+                    </InputLabel>
                 </div>
             </div>
             <div class="flex flex-row w-full h-full mt-[40px]">
@@ -27,18 +27,18 @@
                     <AeiInput v-if="indexCurrent == 'AEI'" @aeiChanged="aeiChanged($event)"/>
                     <BiInput v-if="indexCurrent == 'BIO'" @biChanged="biChanged($event)"/>
                     <div class="flex pt-20 justify-between">
-                        <JetButton :disabled="prevDisabled" class="justify-center mr-[5px]" v-on:click="prevIndex()">Previous Index</JetButton>
-                        <JetButton :disabled="nextDisabled" class="justify-center ml-[5px]" v-on:click="nextIndex()">Next Index</JetButton>
+                        <PrimaryButton :disabled="prevDisabled" class="justify-center mr-[5px]" v-on:click="prevIndex()">Previous Index</PrimaryButton>
+                        <PrimaryButton :disabled="nextDisabled" class="justify-center ml-[5px]" v-on:click="nextIndex()">Next Index</PrimaryButton>
                     </div>
                 </div>
                 <div class="w-2/3 pl-2 flex flex-col align-end h-[500px]">
-                    <jet-label class="font-bold text-3xl">
+                    <InputLabel class="font-bold text-3xl">
                         Usage of Specifications
-                    </jet-label>
+                    </InputLabel>
 
-                    <jet-label class="text-xl h-full">
+                    <InputLabel class="text-xl h-full">
                         {{ descriptionText }}
-                    </jet-label>
+                    </InputLabel>
 
                     <div class="flex justify-between">
                         <div class="w-1/3"/>
@@ -51,9 +51,9 @@
                             type="text"
                             :maxlength="50"
                         />
-                        <JetButton :disabled="finishDisabled || name == ''" class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()">
+                        <PrimaryButton :disabled="finishDisabled || name == ''" class="flex justify-center align-bottom flex-shrink-0" v-on:click="postJobData()">
                             Finish
-                        </JetButton>
+                        </PrimaryButton>
                     </div>
                 </div>
             </div>
@@ -63,25 +63,25 @@
 
 <script>
 import {defineComponent} from 'vue'
-import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetInput from '@/Jetstream/Input.vue'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import TextInput from '@/Components/TextInput.vue'
 import NdsiInput from '@/InputComponents/NdsiInput.vue'
 import AciInput from '@/InputComponents/AciInput.vue'
 import AdiInput from '@/InputComponents/AdiInput.vue'
 import AeiInput from '@/InputComponents/AeiInput.vue'
 import BiInput from '@/InputComponents/BiInput.vue'
-import {Inertia} from '@inertiajs/inertia'
+import {router} from '@inertiajs/vue3'
 
 let descriptionText = 'The selected specifications will influence the ouput of the job to reflect the values selected. Specifications are job specific and cannot be altered after the creation of a job.  Default values have been pre-selected to provide general output.'
 
 export default defineComponent({
     components: {
-        JetApplicationLogo,
-        JetButton,
-        JetLabel,
-        JetInput,
+        ApplicationLogo,
+        PrimaryButton,
+        InputLabel,
+        TextInput,
         NdsiInput,
         AciInput,
         AdiInput,
@@ -203,7 +203,7 @@ export default defineComponent({
                 rms: this.rms,
                 series_id: this.seriesID
             }
-            Inertia.post(route('jobs.store'), request)
+            router.post(route('jobs.store'), request)
         }
     }
 })

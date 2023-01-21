@@ -68,12 +68,12 @@
                                     <td
                                         class="px-4 py-4 whitespace-nowrap text-sm font-medium float-right"
                                     >
-                                        <JetButton
+                                        <PrimaryButton
                                             v-on:click="
                                                         loginUser(item.id)
                                                     "
                                         >Login
-                                        </JetButton
+                                        </PrimaryButton
                                         >
                                     </td>
                                 </tr>
@@ -116,7 +116,7 @@
 <script>
 import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import JetButton from "@/Jetstream/Button.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 
 let userTable = {};
 let nextPage;
@@ -124,7 +124,7 @@ let nextPage;
 export default defineComponent({
     components: {
         AppLayout,
-        JetButton,
+        PrimaryButton,
     },
     data() {
         return {

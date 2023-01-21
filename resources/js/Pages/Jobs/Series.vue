@@ -14,15 +14,15 @@
                     >
                         <fileUpload v-if="newUploads" :items="items" :meta="meta"/>
                     </div>
-                    <JetButton
+                    <PrimaryButton
                         v-if="newUploads == true && editPop == false"
                         :disabled="seriesName.length == 0 || items.length == 0 || importClicked"
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                         v-on:click="postSiteSeries()"
                     >
                         Import Series
-                    </JetButton>
-                    <jet-input
+                    </PrimaryButton>
+                    <TextInput
                         id="NameInput"
                         v-model="seriesName"
                         class="p-2 m-4 form-text-input leading-tight border-rounded-half border-b border-bg-slate-50"
@@ -42,13 +42,13 @@
 import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Modal from "@/Pages/Partial/Modal.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetCheckbox from "@/Jetstream/Checkbox.vue";
-import JetLabel from "@/Jetstream/Label.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import Checkbox from "@/Components/Checkbox.vue";
+import InputLabel from "@/Components/InputLabel.vue";
 import FileUpload from "@/Components/FileUpload.vue";
 import JobCreation from "@/Pages/Jobs/JobCreation.vue";
-import {Inertia} from '@inertiajs/inertia'
+import {router} from '@inertiajs/vue3'
 
 let newUploads = true;
 let editPop = false;
@@ -57,10 +57,10 @@ let seriesName = "";
 export default defineComponent({
     components: {
         AppLayout,
-        JetButton,
-        JetInput,
-        JetCheckbox,
-        JetLabel,
+        PrimaryButton,
+        TextInput,
+        Checkbox,
+        InputLabel,
         FileUpload,
         JobCreation,
         Modal,
@@ -157,7 +157,7 @@ export default defineComponent({
                 }
             }
             console.log(request)
-            Inertia.post(route('import.save'), request)
+            router.post(route('import.save'), request)
         }
     },
 });

@@ -1,24 +1,24 @@
 <template>
     <div class="w-full">
-        <jet-label class="text-2xl"> Adi Example Visualization</jet-label>
+        <InputLabel class="text-2xl"> Adi Example Visualization</InputLabel>
         <canvas id="adiVisualization" height="400" width="600"></canvas>
     </div>
     <div class="w-full">
-        <jet-label class="text-2xl">{{ biExampleData.Output }}</jet-label>
+        <InputLabel class="text-2xl">{{ biExampleData.Output }}</InputLabel>
         <canvas id="biVisualization" height="400" width="600"></canvas>
     </div>
     <div class="w-full">
-        <jet-label class="text-2xl">Rms Example Visualization</jet-label>
+        <InputLabel class="text-2xl">Rms Example Visualization</InputLabel>
         <canvas id="rmsVisualization" height="400" width="600"></canvas>
     </div>
 </template>
 
 <script>
 import {defineComponent} from 'vue'
-import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetInput from '@/Jetstream/Input.vue'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import TextInput from '@/Components/TextInput.vue'
 import {BarController, BarElement, CategoryScale, Chart, LinearScale, LineController, LineElement, PointElement} from 'chart.js'
 
 let adiOutput = JSON.parse(atob("eyJhZGlMIjowLjE3MDA4NCwiYWRpUiI6MC4xOTUwNjUsImJhbmRMIjpbMC40OTgzMDIsMC4wMTIyODcsMC4wMDEyNTYsMC4wMDAyMDUsNS4yZS0wNSwwLjAwMDM4NywwLjAwMTAzNiwwLjAwMDcyMiwwLjAwMDI2NCw2ZS0wNl0sImJhbmRSIjpbMC40Njc3OSwwLjAxNTI5MiwwLjAwMDgxNSwwLjAwMDExLDYuN2UtMDUsMC4wMDAyNjksMC4wMDA4OSwwLjAwMDk5MywwLjAwMDQxNCw4ZS0wNl0sImJhbmRSYW5nZUwiOlsiMC0xMDAwIEh6IiwiMTAwMC0yMDAwIEh6IiwiMjAwMC0zMDAwIEh6IiwiMzAwMC00MDAwIEh6IiwiNDAwMC01MDAwIEh6IiwiNTAwMC02MDAwIEh6IiwiNjAwMC03MDAwIEh6IiwiNzAwMC04MDAwIEh6IiwiODAwMC05MDAwIEh6IiwiOTAwMC0xMDAwMCBIeiJdLCJiYW5kUmFuZ2VSIjpbIjAtMTAwMCBIeiIsIjEwMDAtMjAwMCBIeiIsIjIwMDAtMzAwMCBIeiIsIjMwMDAtNDAwMCBIeiIsIjQwMDAtNTAwMCBIeiIsIjUwMDAtNjAwMCBIeiIsIjYwMDAtNzAwMCBIeiIsIjcwMDAtODAwMCBIeiIsIjgwMDAtOTAwMCBIeiIsIjkwMDAtMTAwMDAgSHoiXX0="))
@@ -52,10 +52,10 @@ const makeRange = (start, end) => {
 
 export default defineComponent({
     components: {
-        JetApplicationLogo,
-        JetButton,
-        JetLabel,
-        JetInput
+        ApplicationLogo,
+        PrimaryButton,
+        InputLabel,
+        TextInput
     },
     data: function () {
         return {

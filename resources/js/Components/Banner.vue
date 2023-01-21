@@ -1,10 +1,10 @@
 <script setup>
 import {computed, ref} from 'vue';
-import {usePage} from '@inertiajs/inertia-vue3';
+import {usePage} from '@inertiajs/vue3';
 
 const show = ref(true);
-const style = computed(() => usePage().props.value.jetstream.flash?.bannerStyle || 'success');
-const message = computed(() => usePage().props.value.jetstream.flash?.banner || '');
+const style = computed(() => usePage().props.jetstream.flash?.bannerStyle || 'success');
+const message = computed(() => usePage().props.jetstream.flash?.banner || '');
 </script>
 
 <template>
