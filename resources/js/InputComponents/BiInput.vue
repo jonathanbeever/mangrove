@@ -1,40 +1,40 @@
 <template>
     <div class="w-full">
         <div class="flex flex-col h-full dark:text-black">
-            <jet-label class="text-2xl mb-[10px]">
+            <InputLabel class="text-2xl mb-[10px]">
                 BIO Specifications
-            </jet-label>
-            <jet-label class="mt-[10px]">
+            </InputLabel>
+            <InputLabel class="mt-[10px]">
                 minFreq
-            </jet-label>
-            <jet-label v-if="minError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="minError" class="text-red-500">
                 {{ errorMessages.minFreq }}
-            </jet-label>
-            <jet-input v-model="minFreq" :value="minFreq" v-on:blur="validateFreq()">
+            </InputLabel>
+            <TextInput v-model="minFreq" :value="minFreq" v-on:blur="validateFreq()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 maxFreq
-            </jet-label>
-            <jet-label v-if="maxError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="maxError" class="text-red-500">
                 {{ errorMessages.maxFreq }}
-            </jet-label>
-            <jet-input v-model="maxFreq" :value="maxFreq" v-on:blur="validateFreq()">
+            </InputLabel>
+            <TextInput v-model="maxFreq" :value="maxFreq" v-on:blur="validateFreq()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 fftW
-            </jet-label>
-            <jet-label v-if="fftwError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="fftwError" class="text-red-500">
                 {{ errorMessages.fftw }}
-            </jet-label>
-            <jet-input v-model="fftW" :value="fftW" v-on:blur="validateFftw()">
+            </InputLabel>
+            <TextInput v-model="fftW" :value="fftW" v-on:blur="validateFftw()">
 
-            </jet-input>
+            </TextInput>
             <div class="flex w-full justify-start align-baselien content-end">
-                <JetButton class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
+                <PrimaryButton class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
                     Restore Defaults
-                </JetButton>
+                </PrimaryButton>
             </div>
         </div>
     </div>
@@ -42,10 +42,10 @@
 
 <script>
 import {defineComponent} from 'vue'
-import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetInput from '@/Jetstream/Input.vue'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import TextInput from '@/Components/TextInput.vue'
 
 const specificationDefaults = {
     minFreq: 2000,
@@ -67,10 +67,10 @@ let fftwError = false
 
 export default defineComponent({
     components: {
-        JetApplicationLogo,
-        JetButton,
-        JetLabel,
-        JetInput
+        ApplicationLogo,
+        PrimaryButton,
+        InputLabel,
+        TextInput
     },
     data: function () {
         return {

@@ -1,12 +1,12 @@
 <script setup>
-import {Head, useForm} from '@inertiajs/inertia-vue3';
-import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue';
-import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetInput from '@/Jetstream/Input.vue';
-import JetCheckbox from '@/Jetstream/Checkbox.vue';
-import JetLabel from '@/Jetstream/Label.vue';
-import JetValidationErrors from '@/Jetstream/ValidationErrors.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import AuthenticationCard from '@/Components/AuthenticationCard.vue';
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
+import Checkbox from '@/Components/Checkbox.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import TextInput from '@/Components/TextInput.vue';
 
 defineProps({
     canResetPassword: Boolean,
@@ -30,17 +30,15 @@ const submit = () => {
 </script>
 
 <template>
-    <Head title="Log in"/>
+    <Head title="Log in" />
 
-    <JetAuthenticationCard>
+    <AuthenticationCard>
         <template #logo>
-            <JetAuthenticationCardLogo/>
+            <AuthenticationCardLogo />
             <h1 class="h-14 text-2xl flex items-center bg-gradient-to-r text-transparent bg-clip-text hover:bg-gradient-to-bl from-lime-600 to-amber-500">
                 Mangrove
             </h1>
         </template>
-
-        <JetValidationErrors class="mb-4"/>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
             {{ status }}
@@ -48,44 +46,46 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <JetLabel for="email" value="Email"/>
-                <JetInput
+                <InputLabel for="email" value="Email" />
+                <TextInput
                     id="email"
                     v-model="form.email"
-                    autofocus
+                    type="email"
                     class="mt-1 block w-full"
                     required
-                    type="email"
+                    autofocus
                 />
+                <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <JetLabel for="password" value="Password"/>
-                <JetInput
+                <InputLabel for="password" value="Password" />
+                <TextInput
                     id="password"
                     v-model="form.password"
-                    autocomplete="current-password"
+                    type="password"
                     class="mt-1 block w-full"
                     required
-                    type="password"
+                    autocomplete="current-password"
                 />
+                <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="block mt-4">
                 <label class="flex items-center">
-                    <JetCheckbox v-model:checked="form.remember" name="remember"/>
+                    <Checkbox v-model:checked="form.remember" name="remember" />
                     <span class="ml-2 text-sm text-gray-600">Remember me</span>
                 </label>
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <!--                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">-->
-                <!--                    Forgot your password?-->
-                <!--                </Link>-->
+<!--                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900">-->
+<!--                    Forgot your password?-->
+<!--                </Link>-->
 
-                <JetButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" class="ml-4">
+                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
-                </JetButton>
+                </PrimaryButton>
             </div>
         </form>
         <div class="flex items-center justify-center mt-4">
@@ -93,5 +93,5 @@ const submit = () => {
                 <span class="underline text-sm text-gray-600 hover:text-gray-900">Don't have an account?</span>
             </a>
         </div>
-    </JetAuthenticationCard>
+    </AuthenticationCard>
 </template>

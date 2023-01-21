@@ -6,10 +6,10 @@
 
 <script>
 import {defineComponent} from 'vue'
-import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetInput from '@/Jetstream/Input.vue'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import TextInput from '@/Components/TextInput.vue'
 import {BarController, BarElement, CategoryScale, Chart, Legend, LinearScale, LineController, LineElement, PointElement, TimeScale, Title} from 'chart.js'
 import zoomPlugin from 'chartjs-plugin-zoom';
 import 'chartjs-adapter-moment';
@@ -21,10 +21,10 @@ const makeRange = (start, end) => {
 export default defineComponent({
     props: ['dataSetLabels', 'dataSetData', 'yLabel', 'xLabel', 'title', 'id'],
     components: {
-        JetApplicationLogo,
-        JetButton,
-        JetLabel,
-        JetInput
+        ApplicationLogo,
+        PrimaryButton,
+        InputLabel,
+        TextInput
     },
     data: function () {
         return {}

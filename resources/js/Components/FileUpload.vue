@@ -170,13 +170,13 @@
 
 <script>
 import {defineComponent} from "vue";
-import JetButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
 
 export default defineComponent({
     components: {
-        JetButton,
-        JetInput,
+        PrimaryButton,
+        TextInput,
     },
 
     props: ["items", "meta"],

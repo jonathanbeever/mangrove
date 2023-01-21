@@ -65,7 +65,7 @@
 <script>
 import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import Logo from "@/Jetstream/ApplicationLogo.vue";
+import Logo from "@/Components/ApplicationLogo.vue";
 
 
 export default defineComponent({

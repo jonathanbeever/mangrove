@@ -1,16 +1,14 @@
 <script setup>
-import {ref} from 'vue';
-import {Inertia} from '@inertiajs/inertia';
-import {Head, Link} from '@inertiajs/inertia-vue3';
-import JetApplicationMark from '@/Jetstream/ApplicationMark.vue';
-import JetBanner from '@/Jetstream/Banner.vue';
-import JetDropdown from '@/Jetstream/Dropdown.vue';
-import JetDropdownLink from '@/Jetstream/DropdownLink.vue';
-import JetButton from '@/Jetstream/Button.vue';
-import JetNavLink from '@/Jetstream/NavLink.vue';
-import JetResponsiveNavLink from '@/Jetstream/ResponsiveNavLink.vue';
-import ErrorToast from "@/Components/ErrorToast.vue";
+import { ref } from 'vue';
+import { Head, Link, router } from '@inertiajs/vue3';
+import ApplicationMark from '@/Components/ApplicationMark.vue';
+import Banner from '@/Components/Banner.vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import NavLink from '@/Components/NavLink.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SuccessToast from "@/Components/SuccessToast.vue";
+import ErrorToast from "@/Components/ErrorToast.vue";
 
 defineProps({
     title: String,
@@ -19,7 +17,7 @@ defineProps({
 const showingNavigationDropdown = ref(false);
 
 const switchToTeam = (team) => {
-    Inertia.put(route('current-team.update'), {
+    router.put(route('current-team.update'), {
         team_id: team.id,
     }, {
         preserveState: false,
@@ -27,7 +25,7 @@ const switchToTeam = (team) => {
 };
 
 const logout = () => {
-    Inertia.post(route('logout'));
+    router.post(route('logout'));
 };
 
 const stopImpersonation = () => {
@@ -38,9 +36,9 @@ const stopImpersonation = () => {
 
 <template>
     <div>
-        <Head :title="title"/>
+        <Head :title="title" />
 
-        <JetBanner/>
+        <Banner />
 
         <div v-if="$page.props.flash.success">
             <SuccessToast></SuccessToast>
@@ -51,9 +49,7 @@ const stopImpersonation = () => {
         </div>
 
         <div class="min-h-screen bg-gradient-to-b from-sky-200 to-sky-50 dark:from-slate-900 dark:via-sky-900 dark:to-slate-700 dark:text-white">
-
             <nav class="bg-white border-b dark:border-cyan-500 dark:bg-slate-900">
-
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -61,54 +57,45 @@ const stopImpersonation = () => {
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
                                 <Link :href="route('import.index')">
-                                    <JetApplicationMark class="block h-9 w-auto"/>
+                                    <ApplicationMark class="block h-9 w-auto" />
                                 </Link>
                             </div>
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:ml-10 sm:flex">
-                                <JetNavLink :active="route().current('import.index')" :href="route('import.index')" class="dark:text-gray-200">
+                                <NavLink :active="route().current('import.index')" :href="route('import.index')" class="dark:text-gray-200">
                                     Import Data
-                                </JetNavLink>
-                                <JetNavLink :active="route().current('jobs.create')" :href="route('jobs.create')" class="dark:text-gray-200">
+                                </NavLink>
+                                <NavLink :active="route().current('jobs.create')" :href="route('jobs.create')" class="dark:text-gray-200">
                                     Create Jobs
-                                </JetNavLink>
-                                <JetNavLink :active="route().current('jobs.index')" :href="route('jobs.index')" class="dark:text-gray-200">
+                                </NavLink>
+                                <NavLink :active="route().current('jobs.index')" :href="route('jobs.index')" class="dark:text-gray-200">
                                     Job Queue
-                                </JetNavLink>
-                                <JetNavLink :active="route().current('results.index')" :href="route('results.index')" class="dark:text-gray-200">
+                                </NavLink>
+                                <NavLink :active="route().current('results.index')" :href="route('results.index')" class="dark:text-gray-200">
                                     Results
-                                </JetNavLink>
-                                <JetNavLink :active="route().current('about')" :href="route('about')" class="dark:text-gray-200">
+                                </NavLink>
+                                <NavLink :active="route().current('about')" :href="route('about')" class="dark:text-gray-200">
                                     About
-                                </JetNavLink>
-                                <JetNavLink v-if="$page.props.user.role === 1" :active="route().current('admin.index')" :href="route('admin.index')" class="dark:text-gray-200">
+                                </NavLink>
+                                <NavLink v-if="$page.props.user.role === 1" :active="route().current('admin.index')" :href="route('admin.index')" class="dark:text-gray-200">
                                     Admin Panel
-                                </JetNavLink>
+                                </NavLink>
                                 <!-- Navigation -->
-
                             </div>
                         </div>
 
-                        <div class="hidden sm:flex sm:items-center sm:ml-6 ">
+                        <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <div class="ml-3 relative">
                                 <!-- Teams Dropdown -->
-                                <JetDropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
+                                <Dropdown v-if="$page.props.jetstream.hasTeamFeatures" align="right" width="60">
                                     <template #trigger>
                                         <span class="inline-flex rounded-md">
-                                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-neutral-900 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition"
-                                                    type="button">
+                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-neutral-900 bg-white hover:bg-gray-50 hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
                                                 {{ $page.props.user.current_team.name }}
 
-                                                <svg
-                                                    class="ml-2 -mr-0.5 h-4 w-4"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path clip-rule="evenodd"
-                                                          d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                                                          fill-rule="evenodd"/>
+                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15L12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
                                                 </svg>
                                             </button>
                                         </span>
@@ -123,15 +110,15 @@ const stopImpersonation = () => {
                                                 </div>
 
                                                 <!-- Team Settings -->
-                                                <JetDropdownLink :href="route('teams.show', $page.props.user.current_team)">
+                                                <DropdownLink :href="route('teams.show', $page.props.user.current_team)">
                                                     Team Settings
-                                                </JetDropdownLink>
+                                                </DropdownLink>
 
-                                                <JetDropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
+                                                <DropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
                                                     Create New Team
-                                                </JetDropdownLink>
+                                                </DropdownLink>
 
-                                                <div class="border-t border-gray-100"/>
+                                                <div class="border-t border-gray-100" />
 
                                                 <!-- Team Switcher -->
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
@@ -140,50 +127,37 @@ const stopImpersonation = () => {
 
                                                 <template v-for="team in $page.props.user.all_teams" :key="team.id">
                                                     <form @submit.prevent="switchToTeam(team)">
-                                                        <JetDropdownLink as="button">
+                                                        <DropdownLink as="button">
                                                             <div class="flex items-center">
-                                                                <svg
-                                                                    v-if="team.id == $page.props.user.current_team_id"
-                                                                    class="mr-2 h-5 w-5 text-green-400"
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    stroke-linecap="round"
-                                                                    stroke-linejoin="round"
-                                                                    stroke-width="2"
-                                                                    viewBox="0 0 24 24"
-                                                                >
-                                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                                <svg v-if="team.id == $page.props.user.current_team_id" class="mr-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                                 </svg>
+
                                                                 <div>{{ team.name }}</div>
                                                             </div>
-                                                        </JetDropdownLink>
+                                                        </DropdownLink>
                                                     </form>
                                                 </template>
                                             </template>
                                         </div>
                                     </template>
-                                </JetDropdown>
+                                </Dropdown>
                             </div>
 
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
-                                <JetDropdown align="right" width="48">
+                                <Dropdown align="right" width="48">
                                     <template #trigger>
                                         <button v-if="$page.props.jetstream.managesProfilePhotos" class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                            <img :alt="$page.props.user.name" :src="$page.props.user.profile_photo_url" class="h-8 w-8 rounded-full object-cover">
+                                            <img class="h-8 w-8 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
                                         </button>
 
                                         <span v-else class="inline-flex rounded-md">
-                                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-neutral-900 bg-white hover:text-gray-700 focus:outline-none transition" type="button">
+                                            <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition">
                                                 {{ $page.props.user.name }}
 
-                                                <svg
-                                                    class="ml-2 -mr-0.5 h-4 w-4"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 20 20"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                >
-                                                    <path clip-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" fill-rule="evenodd"/>
+                                                <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                                                 </svg>
                                             </button>
                                         </span>
@@ -195,30 +169,30 @@ const stopImpersonation = () => {
                                             Manage Account
                                         </div>
 
-                                        <JetDropdownLink :href="route('profile.show')">
+                                        <DropdownLink :href="route('profile.show')">
                                             Profile
-                                        </JetDropdownLink>
+                                        </DropdownLink>
 
-                                        <JetDropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
+                                        <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
                                             API Tokens
-                                        </JetDropdownLink>
+                                        </DropdownLink>
 
-                                        <div class="border-t border-gray-100"/>
+                                        <div class="border-t border-gray-100" />
 
                                         <!-- Authentication -->
                                         <form v-if="$page.props.impersonating" @submit.prevent="stopImpersonation">
-                                            <JetDropdownLink as="button">
+                                            <DropdownLink as="button">
                                                 Stop Impersonating
-                                            </JetDropdownLink>
+                                            </DropdownLink>
                                         </form>
 
                                         <form @submit.prevent="logout">
-                                            <JetDropdownLink as="button">
+                                            <DropdownLink as="button">
                                                 Log Out
-                                            </JetDropdownLink>
+                                            </DropdownLink>
                                         </form>
                                     </template>
-                                </JetDropdown>
+                                </Dropdown>
                             </div>
                         </div>
 
@@ -227,23 +201,23 @@ const stopImpersonation = () => {
                             <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-neutral-900 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-neutral-900 transition" @click="showingNavigationDropdown = ! showingNavigationDropdown">
                                 <svg
                                     class="h-6 w-6"
-                                    fill="none"
                                     stroke="currentColor"
+                                    fill="none"
                                     viewBox="0 0 24 24"
                                 >
                                     <path
                                         :class="{'hidden': showingNavigationDropdown, 'inline-flex': ! showingNavigationDropdown }"
-                                        d="M4 6h16M4 12h16M4 18h16"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
+                                        d="M4 6h16M4 12h16M4 18h16"
                                     />
                                     <path
                                         :class="{'hidden': ! showingNavigationDropdown, 'inline-flex': showingNavigationDropdown }"
-                                        d="M6 18L18 6M6 6l12 12"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"
                                     />
                                 </svg>
                             </button>
@@ -254,28 +228,31 @@ const stopImpersonation = () => {
                 <!-- Responsive Navigation Menu -->
                 <div :class="{'block': showingNavigationDropdown, 'hidden': ! showingNavigationDropdown}" class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
-                        <JetResponsiveNavLink :active="route().current('import.index')" :href="route('import.index')" class="dark:text-gray-200">
+                        <ResponsiveNavLink :active="route().current('import.index')" :href="route('import.index')" class="dark:text-gray-200">
                             Import Data
-                        </JetResponsiveNavLink>
-                        <JetResponsiveNavLink :active="route().current('jobs.create')" :href="route('jobs.create')" class="dark:text-gray-200">
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :active="route().current('jobs.create')" :href="route('jobs.create')" class="dark:text-gray-200">
                             Create Jobs
-                        </JetResponsiveNavLink>
-                        <JetResponsiveNavLink :active="route().current('jobs.index')" :href="route('jobs.index')" class="dark:text-gray-200">
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :active="route().current('jobs.index')" :href="route('jobs.index')" class="dark:text-gray-200">
                             Job Queue
-                        </JetResponsiveNavLink>
-                        <JetResponsiveNavLink :active="route().current('results.index')" :href="route('results.index')" class="dark:text-gray-200">
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :active="route().current('results.index')" :href="route('results.index')" class="dark:text-gray-200">
                             Results
-                        </JetResponsiveNavLink>
-                        <JetResponsiveNavLink :active="route().current('about')" :href="route('about')" class="dark:text-gray-200">
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :active="route().current('about')" :href="route('about')" class="dark:text-gray-200">
                             About
-                        </JetResponsiveNavLink>
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink v-if="$page.props.user.role === 1" :active="route().current('admin.index')" :href="route('admin.index')" class="dark:text-gray-200">
+                            Admin Panel
+                        </ResponsiveNavLink>
                     </div>
 
                     <!-- Responsive Settings Options -->
                     <div class="pt-4 pb-1 border-t border-gray-200">
                         <div class="flex items-center px-4">
                             <div v-if="$page.props.jetstream.managesProfilePhotos" class="shrink-0 mr-3">
-                                <img :alt="$page.props.user.name" :src="$page.props.user.profile_photo_url" class="h-10 w-10 rounded-full object-cover">
+                                <img class="h-10 w-10 rounded-full object-cover" :src="$page.props.user.profile_photo_url" :alt="$page.props.user.name">
                             </div>
 
                             <div>
@@ -289,39 +266,39 @@ const stopImpersonation = () => {
                         </div>
 
                         <div class="mt-3 space-y-1">
-                            <JetResponsiveNavLink :active="route().current('profile.show')" :href="route('profile.show')">
+                            <ResponsiveNavLink :href="route('profile.show')" :active="route().current('profile.show')">
                                 Profile
-                            </JetResponsiveNavLink>
+                            </ResponsiveNavLink>
 
-                            <JetResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :active="route().current('api-tokens.index')" :href="route('api-tokens.index')">
+                            <ResponsiveNavLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')" :active="route().current('api-tokens.index')">
                                 API Tokens
-                            </JetResponsiveNavLink>
+                            </ResponsiveNavLink>
 
                             <!-- Authentication -->
                             <form method="POST" @submit.prevent="logout">
-                                <JetResponsiveNavLink as="button">
+                                <ResponsiveNavLink as="button">
                                     Log Out
-                                </JetResponsiveNavLink>
+                                </ResponsiveNavLink>
                             </form>
 
                             <!-- Team Management -->
                             <template v-if="$page.props.jetstream.hasTeamFeatures">
-                                <div class="border-t border-gray-200"/>
+                                <div class="border-t border-gray-200" />
 
                                 <div class="block px-4 py-2 text-xs text-gray-400">
                                     Manage Team
                                 </div>
 
                                 <!-- Team Settings -->
-                                <JetResponsiveNavLink :active="route().current('teams.show')" :href="route('teams.show', $page.props.user.current_team)">
+                                <ResponsiveNavLink :href="route('teams.show', $page.props.user.current_team)" :active="route().current('teams.show')">
                                     Team Settings
-                                </JetResponsiveNavLink>
+                                </ResponsiveNavLink>
 
-                                <JetResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams" :active="route().current('teams.create')" :href="route('teams.create')">
+                                <ResponsiveNavLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')" :active="route().current('teams.create')">
                                     Create New Team
-                                </JetResponsiveNavLink>
+                                </ResponsiveNavLink>
 
-                                <div class="border-t border-gray-200"/>
+                                <div class="border-t border-gray-200" />
 
                                 <!-- Team Switcher -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">
@@ -330,23 +307,14 @@ const stopImpersonation = () => {
 
                                 <template v-for="team in $page.props.user.all_teams" :key="team.id">
                                     <form @submit.prevent="switchToTeam(team)">
-                                        <JetResponsiveNavLink as="button">
+                                        <ResponsiveNavLink as="button">
                                             <div class="flex items-center">
-                                                <svg
-                                                    v-if="team.id == $page.props.user.current_team_id"
-                                                    class="mr-2 h-5 w-5 text-green-400"
-                                                    fill="none"
-                                                    stroke="currentColor"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
-                                                    stroke-width="2"
-                                                    viewBox="0 0 24 24"
-                                                >
-                                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                                <svg v-if="team.id == $page.props.user.current_team_id" class="mr-2 h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
                                                 <div>{{ team.name }}</div>
                                             </div>
-                                        </JetResponsiveNavLink>
+                                        </ResponsiveNavLink>
                                     </form>
                                 </template>
                             </template>
@@ -358,13 +326,13 @@ const stopImpersonation = () => {
             <!-- Page Heading -->
             <header v-if="$slots.header">
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header"/>
+                    <slot name="header" />
                 </div>
             </header>
 
             <!-- Page Content -->
             <main>
-                <slot/>
+                <slot />
             </main>
         </div>
     </div>

@@ -4,25 +4,25 @@
             class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full flex justify-center"
         >
             <div class="flex flex-row justify-between content-center w-full">
-                <JetButton
+                <PrimaryButton
                     class="mr-[15px] float-left"
                     v-on:click="onRemoveRender"
                 >
                     Back
-                </JetButton>
+                </PrimaryButton>
                 <div class="flex flex-row w-full items-center justify-center">
-                    <jet-label class="mr-[5px]"> Choose Audio Files</jet-label>
+                    <InputLabel class="mr-[5px]"> Choose Audio Files</InputLabel>
                     <hr class="flex flex-grow"/>
-                    <jet-label class="mr-[5px] ml-[5px] font-bold">
+                    <InputLabel class="mr-[5px] ml-[5px] font-bold">
                         Select R index
-                    </jet-label>
+                    </InputLabel>
                     <hr class="flex flex-grow"/>
-                    <jet-label class="ml-[5px]"> Set Parameters</jet-label>
+                    <InputLabel class="ml-[5px]"> Set Parameters</InputLabel>
                 </div>
             </div>
             <div class="flex flex-row w-full mt-[50px]">
                 <div class="flex flex-col w-1/2">
-                    <jet-label class="text-2xl mb-[10px]"> Index</jet-label>
+                    <InputLabel class="text-2xl mb-[10px]"> Index</InputLabel>
                     <div>
                         <div v-if="false" class="form-check mb-[10px]">
                             <input
@@ -32,12 +32,12 @@
                                 type="checkbox"
                                 v-on:click="onChange($event)"
                             />
-                            <jet-label
+                            <InputLabel
                                 class="form-check-label inline-block text-gray-800 text-1xl"
                                 for="aci"
                             >
                                 ACI
-                            </jet-label>
+                            </InputLabel>
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
@@ -48,12 +48,12 @@
                                 type="checkbox"
                                 v-on:click="onChange($event)"
                             />
-                            <jet-label
+                            <InputLabel
                                 class="form-check-label inline-block text-gray-800 text-1xl"
                                 for="ndsi"
                             >
                                 NDSI
-                            </jet-label>
+                            </InputLabel>
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
@@ -63,12 +63,12 @@
                                 type="checkbox"
                                 v-on:click="onChange($event)"
                             />
-                            <jet-label
+                            <InputLabel
                                 class="form-check-label inline-block text-gray-800 text-1xl"
                                 for="aei"
                             >
                                 AEI
-                            </jet-label>
+                            </InputLabel>
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
@@ -78,12 +78,12 @@
                                 type="checkbox"
                                 v-on:click="onChange($event)"
                             />
-                            <jet-label
+                            <InputLabel
                                 class="form-check-label inline-block text-gray-800 text-1xl"
                                 for="adi"
                             >
                                 ADI
-                            </jet-label>
+                            </InputLabel>
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
@@ -93,12 +93,12 @@
                                 type="checkbox"
                                 v-on:click="onChange($event)"
                             />
-                            <jet-label
+                            <InputLabel
                                 class="form-check-label inline-block text-gray-800 text-1xl"
                                 for="bio"
                             >
                                 BIO
-                            </jet-label>
+                            </InputLabel>
                         </div>
                         <div class="form-check mb-[10px]">
                             <input
@@ -108,32 +108,32 @@
                                 type="checkbox"
                                 v-on:click="onChange($event)"
                             />
-                            <jet-label
+                            <InputLabel
                                 class="form-check-label inline-block text-gray-800 text-1xl"
                                 for="rms"
                             >
                                 RMS
-                            </jet-label>
+                            </InputLabel>
                         </div>
                     </div>
                 </div>
                 <div class="w-1/2 flex flex-col h-full">
-                    <jet-label class="font-bold text-3xl">
+                    <InputLabel class="font-bold text-3xl">
                         {{ selectedIndex[selectedIndex.length - 1] }}
-                    </jet-label>
-                    <jet-label class="text-xl h-[150px]">
+                    </InputLabel>
+                    <InputLabel class="text-xl h-[150px]">
                         {{ descriptionText }}
-                    </jet-label>
+                    </InputLabel>
                     <div
                         class="flex w-full justify-end content-end align-end mt-[150px]"
                     >
-                        <JetButton
+                        <PrimaryButton
                             class="flex w-1/3 justify-center"
                             :disabled="this.selectedIndex.length == 0"
                             v-on:click="onNext($event)"
                         >
                             Next
-                        </JetButton>
+                        </PrimaryButton>
                     </div>
                 </div>
             </div>
@@ -144,9 +144,9 @@
 
 <script>
 import {defineComponent} from "vue";
-import JetApplicationLogo from "@/Jetstream/ApplicationLogo.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import JetLabel from "@/Jetstream/Label.vue";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import InputLabel from "@/Components/InputLabel.vue";
 import SetParameters from "@/Pages/Jobs/SetParameters.vue";
 
 let indexText = {
@@ -160,9 +160,9 @@ let indexText = {
 
 export default defineComponent({
     components: {
-        JetApplicationLogo,
-        JetButton,
-        JetLabel,
+        ApplicationLogo,
+        PrimaryButton,
+        InputLabel,
         SetParameters,
     },
     data: function () {

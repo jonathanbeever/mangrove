@@ -1,11 +1,11 @@
 <template>
     <app-layout title="Results">
         <div class="absolute bottom-0 left-0 p-4 border-gray-200 invisible">
-        <jet-button
+        <PrimaryButton
             class="btn btn-success border-gray-200"
             @click="exportToCSV()"
         >Export To CSV
-        </jet-button>
+        </PrimaryButton>
         </div>
         <div class="flex flex-col dark:text-black">
             <div class="py-4 flex flex-row flex-shrink">
@@ -39,39 +39,39 @@
                         class="p-4 flex bg-white shadow-xl sm:rounded-lg flex grow justify-between self-center max-h-24 w-full dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white"
                     >
                         <div class="pr-2 float-left self-end">
-                            <jet-button
+                            <PrimaryButton
                                 v-if="evaluateSingleFile()"
                                 class="btn btn-success border-gray-200"
                                 @click="switchMode()"
                             >Single File Analysis
-                            </jet-button
+                            </PrimaryButton
                             >
-                            <jet-button
+                            <PrimaryButton
                                 v-if="evaluateMultiFile()"
                                 class="btn btn-success border-gray-200"
                                 @click="switchModeSeries()"
                             >Multi File Analysis
-                            </jet-button
+                            </PrimaryButton
                             >
-                            <jet-button
+                            <PrimaryButton
                                 v-if="evaluateSingleSeries()"
                                 class="btn btn-success border-gray-200"
                                 @click="switchModeMultiSeries()"
                             >Single Series Analysis
-                            </jet-button
+                            </PrimaryButton
                             >
-                            <jet-button
+                            <PrimaryButton
                                 v-if="evaluateMultiSeries()"
                                 class="btn btn-success border-gray-200"
                                 @click="switchModeAllInSite()"
                             >Multi Series Analysis
-                            </jet-button>
-                            <jet-button
+                            </PrimaryButton>
+                            <PrimaryButton
                                 v-if="allInSite"
                                 class="btn btn-success border-gray-200"
                                 @click="switchModeBackToSingle()"
                             >All Series
-                            </jet-button>
+                            </PrimaryButton>
                         </div>
 
                         <div v-if="!allInSite" class="flex-row px-4">
@@ -421,7 +421,7 @@ import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/src/plugin/regions";
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram";
 import VueElementLoading from "vue-element-loading";
-import JetButton from "@/Jetstream/Button.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
 import VisualizationsDemo from "@/Pages/ChartVisualizations/VisualizationsDemo.vue";
 import CompareBar from '@/Pages/ChartVisualizations/CompareBar.vue';
 import DualLine from '@/Pages/ChartVisualizations/DualLine.vue';
@@ -430,7 +430,7 @@ import SingleBar from '@/Pages/ChartVisualizations/SingleBar.vue';
 import SingleLine from '@/Pages/ChartVisualizations/SingleLine.vue';
 import AllInSiteChart from '@/Pages/ChartVisualizations/AllInSiteChart.vue';
 import QuadLine from '@/Pages/ChartVisualizations/QuadLine.vue'
-import {usePage} from '@inertiajs/inertia-vue3'
+import {usePage} from '@inertiajs/vue3'
 
 let compareIndex = "";
 let graphInput, graphInputC;
@@ -438,7 +438,7 @@ let graphInput, graphInputC;
 export default defineComponent({
     components: {
         AppLayout,
-        JetButton,
+        PrimaryButton,
         WaveSurfer,
         VisualizationsDemo,
         CompareBar,
@@ -938,7 +938,7 @@ export default defineComponent({
             }
         });
 
-        this.sites = usePage().props.value.sites
+        this.sites = usePage().props.sites
         this.populateSiteDropdown()
     }
     ,

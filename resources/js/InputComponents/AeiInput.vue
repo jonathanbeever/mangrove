@@ -1,37 +1,37 @@
 <template>
     <div class="w-full">
         <div class="flex flex-col h-full dark:text-black">
-            <jet-label class="text-2xl mb-[10px]">
+            <InputLabel class="text-2xl mb-[10px]">
                 AEI Specifications
-            </jet-label>
-            <jet-label class="mt-[10px]">
+            </InputLabel>
+            <InputLabel class="mt-[10px]">
                 maxFreq
-            </jet-label>
-            <jet-label v-if="maxFreqError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="maxFreqError" class="text-red-500">
                 {{ errorMessages.maxFreq }}
-            </jet-label>
-            <jet-input v-model="maxFreq" :value="maxFreq" v-on:blur="validateFreq()">
+            </InputLabel>
+            <TextInput v-model="maxFreq" :value="maxFreq" v-on:blur="validateFreq()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 dbThreshold
-            </jet-label>
-            <jet-input v-model="dbThreshold" :value="dbThreshold" v-on:change="onChange()">
+            </InputLabel>
+            <TextInput v-model="dbThreshold" :value="dbThreshold" v-on:change="onChange()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 freqStep
-            </jet-label>
-            <jet-label v-if="freqStepError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="freqStepError" class="text-red-500">
                 {{ errorMessages.freqStep }}
-            </jet-label>
-            <jet-input v-model="freqStep" :value="freqStep" v-on:blur="validateFreqStep()">
+            </InputLabel>
+            <TextInput v-model="freqStep" :value="freqStep" v-on:blur="validateFreqStep()">
 
-            </jet-input>
+            </TextInput>
             <div class="flex w-full justify-start align-baselien content-end">
-                <JetButton class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
+                <PrimaryButton class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
                     Restore Defaults
-                </JetButton>
+                </PrimaryButton>
             </div>
         </div>
     </div>
@@ -39,10 +39,10 @@
 
 <script>
 import {defineComponent} from 'vue'
-import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetInput from '@/Jetstream/Input.vue'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import TextInput from '@/Components/TextInput.vue'
 
 const specificationDefaults = {
     maxFreq: 10000,
@@ -62,10 +62,10 @@ let freqStepError = false
 
 export default defineComponent({
     components: {
-        JetApplicationLogo,
-        JetButton,
-        JetLabel,
-        JetInput
+        ApplicationLogo,
+        PrimaryButton,
+        InputLabel,
+        TextInput
     },
     data: function () {
         return {

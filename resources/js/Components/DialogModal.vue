@@ -25,23 +25,23 @@ const close = () => {
 
 <template>
     <Modal
-        :closeable="closeable"
-        :max-width="maxWidth"
         :show="show"
+        :max-width="maxWidth"
+        :closeable="closeable"
         @close="close"
     >
         <div class="px-6 py-4">
             <div class="text-lg">
-                <slot name="title"/>
+                <slot name="title" />
             </div>
 
             <div class="mt-4">
-                <slot name="content"/>
+                <slot name="content" />
             </div>
         </div>
 
         <div class="flex flex-row justify-end px-6 py-4 bg-gray-100 text-right">
-            <slot name="footer"/>
+            <slot name="footer" />
         </div>
     </Modal>
 </template>

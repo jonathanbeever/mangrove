@@ -16,7 +16,7 @@
                         <div
                             class="flex flex-col"
                         >
-                            <jet-input
+                            <TextInput
                                 v-model="search"
                                 class="p-4 mx-6 align-content-center dark:text-black"
                                 placeholder="Search"
@@ -77,9 +77,9 @@
                                                         class="px-6 py-4 whitespace-nowrap"
                                                     >
 
-                                                        <JetButton class="ml-4 float-right border-tl p-4 m-4 border-gray-200" v-on:click="onClickUseSeries(item)"
+                                                        <PrimaryButton class="ml-4 float-right border-tl p-4 m-4 border-gray-200" v-on:click="onClickUseSeries(item)"
                                                         >Use This Series
-                                                        </JetButton>
+                                                        </PrimaryButton>
 
 
                                                     </td>
@@ -112,25 +112,25 @@
 <script>
 import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetCheckbox from "@/Jetstream/Checkbox.vue";
-import JetLabel from "@/Jetstream/Label.vue";
-import {usePage} from '@inertiajs/inertia-vue3'
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import Checkbox from "@/Components/Checkbox.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import {usePage} from '@inertiajs/vue3'
 import JobCreation from '@/Pages/Jobs/JobCreation.vue'
 
 
 export default defineComponent({
     components: {
         AppLayout,
-        JetButton,
-        JetInput,
-        JetCheckbox,
-        JetLabel,
+        PrimaryButton,
+        TextInput,
+        Checkbox,
+        InputLabel,
         JobCreation
     },
     mounted() {
-        this.items = usePage().props.value.series
+        this.items = usePage().props.series
         this.filtered()
     },
     data() {

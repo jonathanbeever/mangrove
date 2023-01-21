@@ -137,13 +137,13 @@
 <script>
 import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import {usePage} from "@inertiajs/inertia-vue3";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import {usePage} from "@inertiajs/vue3";
 
 export default defineComponent({
     components: {
         AppLayout,
-        JetButton,
+        PrimaryButton,
 
     },
     data() {
@@ -202,7 +202,7 @@ export default defineComponent({
             return {indices: indicesUsed};
         };
 
-        this.items = usePage().props.value.jobs;
+        this.items = usePage().props.jobs;
         this.items.forEach((element, ind) => {
             let result = findIndicesUsed(element);
             this.items[ind]["indicesUsed"] = result.indices;

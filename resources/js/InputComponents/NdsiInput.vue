@@ -1,58 +1,58 @@
 <template>
     <div class="w-full">
         <div class="flex flex-col h-full dark:text-black">
-            <jet-label class="text-2xl mb-[10px]">
+            <InputLabel class="text-2xl mb-[10px]">
                 NDSI Specifications
-            </jet-label>
-            <jet-label class="mt-[10px]">
+            </InputLabel>
+            <InputLabel class="mt-[10px]">
                 anthroMin
-            </jet-label>
-            <jet-label v-if="anthroMinError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="anthroMinError" class="text-red-500">
                 {{ errorMessages.anthroMin }}
-            </jet-label>
-            <jet-input v-model="anthroMin" :value="anthroMin" v-on:blur="validateAnthroMin()">
+            </InputLabel>
+            <TextInput v-model="anthroMin" :value="anthroMin" v-on:blur="validateAnthroMin()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 anthroMax
-            </jet-label>
-            <jet-label v-if="anthroMaxError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="anthroMaxError" class="text-red-500">
                 {{ errorMessages.anthroMax }}
-            </jet-label>
-            <jet-input v-model="anthroMax" :value="anthroMax" v-on:blur="validateAnthroMax()">
+            </InputLabel>
+            <TextInput v-model="anthroMax" :value="anthroMax" v-on:blur="validateAnthroMax()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 bioMin
-            </jet-label>
-            <jet-label v-if="bioMinError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="bioMinError" class="text-red-500">
                 {{ errorMessages.biomin }}
-            </jet-label>
-            <jet-input v-model="bioMin" :value="bioMin" v-on:blur="validateBioMin()">
+            </InputLabel>
+            <TextInput v-model="bioMin" :value="bioMin" v-on:blur="validateBioMin()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 bioMax
-            </jet-label>
-            <jet-label v-if="bioMaxError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="bioMaxError" class="text-red-500">
                 {{ errorMessages.bioMax }}
-            </jet-label>
-            <jet-input v-model="bioMax" :value="bioMax" v-on:blur="validateBioMax()">
+            </InputLabel>
+            <TextInput v-model="bioMax" :value="bioMax" v-on:blur="validateBioMax()">
 
-            </jet-input>
-            <jet-label class="mt-[10px]">
+            </TextInput>
+            <InputLabel class="mt-[10px]">
                 FFTW
-            </jet-label>
-            <jet-label v-if="fftWError" class="text-red-500">
+            </InputLabel>
+            <InputLabel v-if="fftWError" class="text-red-500">
                 {{ errorMessages.fftW }}
-            </jet-label>
-            <jet-input v-model="fftW" :value="fftW" v-on:blur="validatefftW()">
+            </InputLabel>
+            <TextInput v-model="fftW" :value="fftW" v-on:blur="validatefftW()">
 
-            </jet-input>
+            </TextInput>
             <div class="flex w-full justify-start align-baselien content-end">
-                <JetButton class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
+                <PrimaryButton class="flex w-2/3 justify-center mt-[20px]" v-on:click="onRestoreDefault($event)">
                     Restore Defaults
-                </JetButton>
+                </PrimaryButton>
             </div>
         </div>
     </div>
@@ -60,10 +60,10 @@
 
 <script>
 import {defineComponent} from 'vue'
-import JetApplicationLogo from '@/Jetstream/ApplicationLogo.vue'
-import JetButton from '@/Jetstream/Button.vue'
-import JetLabel from '@/Jetstream/Label.vue'
-import JetInput from '@/Jetstream/Input.vue'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import TextInput from '@/Components/TextInput.vue'
 
 const specificationDefaults = {
     anthroMin: 1000,
@@ -92,10 +92,10 @@ let fftWError = false
 
 export default defineComponent({
     components: {
-        JetApplicationLogo,
-        JetButton,
-        JetLabel,
-        JetInput
+        ApplicationLogo,
+        PrimaryButton,
+        InputLabel,
+        TextInput
     },
     data: function () {
         return {

@@ -16,7 +16,7 @@
                         <div
                             class="flex flex-col"
                         >
-                            <jet-input
+                            <TextInput
                                 v-model="search"
                                 class="p-4 mx-6 align-content-center dark:text-black"
                                 placeholder="Search"
@@ -65,18 +65,18 @@
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap"
                                                 >
-                                                    <jet-input v-model="siteCreationName" :value="siteCreationName" :maxlength="50" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Site Name"/>
+                                                    <TextInput v-model="siteCreationName" :value="siteCreationName" :maxlength="50" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Site Name"/>
 
                                                 </td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap"
                                                 >
-                                                    <jet-input v-model="siteCreationLocation" :value="siteCreationLocation" :maxlength="50" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Location"/>
+                                                    <TextInput v-model="siteCreationLocation" :value="siteCreationLocation" :maxlength="50" class="p-2 border-rounded-half border-b bg-slate-50 dark:text-black" placeholder="Location"/>
                                                 </td>
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap"
                                                 >
-                                                    <JetButton :disabled="siteCreationName.length == 0" class="float-right" v-on:click="onClickSiteSelectedNew()">Use This Site</JetButton>
+                                                    <PrimaryButton :disabled="siteCreationName.length == 0" class="float-right" v-on:click="onClickSiteSelectedNew()">Use This Site</PrimaryButton>
                                                 </td>
                                             </tr>
                                             <tr
@@ -122,7 +122,7 @@
                                                 <td
                                                     class="px-6 py-4 whitespace-nowrap"
                                                 >
-                                                    <JetButton class="ml-4 float-right border-tl p-4 m-4 border-gray-200" v-on:click="onClickSiteSelected(item)">Use This Site</JetButton>
+                                                    <PrimaryButton class="ml-4 float-right border-tl p-4 m-4 border-gray-200" v-on:click="onClickSiteSelected(item)">Use This Site</PrimaryButton>
 
                                                 </td>
                                             </tr>
@@ -133,12 +133,12 @@
                             </div>
                         </div>
                     </div>
-                    <JetButton
+                    <PrimaryButton
                         class="ml-4 float-right border-tl p-4 m-4 border-gray-200"
                         v-on:click="onClickCreateSite()"
                     >
                         {{ (!siteCreationEnabled) ? createNewSite : closeMenu }}
-                    </JetButton>
+                    </PrimaryButton>
                 </div>
             </div>
         </div>
@@ -150,12 +150,12 @@
 import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Modal from "@/Pages/Partial/Modal.vue";
-import JetButton from "@/Jetstream/Button.vue";
-import JetInput from "@/Jetstream/Input.vue";
-import JetCheckbox from "@/Jetstream/Checkbox.vue";
-import JetLabel from "@/Jetstream/Label.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import TextInput from "@/Components/TextInput.vue";
+import Checkbox from "@/Components/Checkbox.vue";
+import InputLabel from "@/Components/InputLabel.vue";
 import Series from "@/Pages/Jobs/Series.vue"
-import {usePage} from '@inertiajs/inertia-vue3'
+import {usePage} from '@inertiajs/vue3'
 
 
 let editPop = false;
@@ -164,16 +164,16 @@ let siteCreationEnabled = false;
 export default defineComponent({
     components: {
         AppLayout,
-        JetButton,
-        JetInput,
-        JetCheckbox,
-        JetLabel,
+        PrimaryButton,
+        TextInput,
+        Checkbox,
+        InputLabel,
         Modal,
         Series
     },
     computed: {},
     mounted() {
-        this.items = usePage().props.value.sites
+        this.items = usePage().props.sites
         this.filtered()
     },
     data() {
