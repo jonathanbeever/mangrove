@@ -66,7 +66,7 @@ if (!function_exists('normalize_path')) {
                 $mountPath = '/'.$mount.$path;
                 break;
             // If the root folder is not in the mount point, check if the drive letter is for windows.
-            } elseif (is_dir(rootfs_path('/'.$mount.'/'.$driveLetter.'/'.$rootFolder))) {
+            } elseif ($driveLetter !== null && is_dir(rootfs_path('/'.$mount.'/'.$driveLetter.'/'.$rootFolder))) {
                 // Use substr to remove the windows formatted drive letter from the path.
                 $mountPath = '/'.$mount.'/'.$driveLetter.substr($path, 2);
                 break;
