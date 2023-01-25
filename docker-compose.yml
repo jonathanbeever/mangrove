@@ -20,7 +20,7 @@ services:
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
             - '.:/var/www/html'
-            - '/:/var/www/html/rootfs'
+            - '/:/rootfs'
         networks:
             - sail
         depends_on:
@@ -44,7 +44,7 @@ services:
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
             - '.:/var/www/html'
-            - '/:/var/www/html/rootfs'
+            - '/:/rootfs'
         networks:
             - sail
         depends_on:
