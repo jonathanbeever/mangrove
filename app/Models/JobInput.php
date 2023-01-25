@@ -122,7 +122,7 @@ class JobInput extends Model
     /**
      * Get the input object to send to the R script.
      *
-     * @return string|false
+     * @return string
      */
     public function getInput(): string
     {

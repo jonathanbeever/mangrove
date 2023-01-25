@@ -15,13 +15,14 @@ if (!function_exists('rootfs_path')) {
 
 if (!function_exists('normalize_path')) {
     /**
-     * Convert windows paths to unix paths.
+     * Convert windows paths to unix paths and substitute /mnt or /mnt_host
+     * for non-linux filesystems.
      *
      * Inspired from:
      * https://developer.wordpress.org/reference/functions/wp_normalize_path/
      *
      * @param $path
-     * @return string
+     * @return string|null
      */
     function normalize_path($path): ?string
     {
@@ -45,21 +46,27 @@ if (!function_exists('normalize_path')) {
         // they will be accessed through WSL mnt folder.
         if (':' === $path[1]) {
             $path = lcfirst($path);
-
-            // Some WSL installations had the mount path set to /mnt_host during testing.
-            if (is_dir(rootfs_path('/mnt/'.$path[0]))) {
-                $mount_path = '/mnt/'.$path[0];
-            } else {
-                if (is_dir(rootfs_path('/host_mnt/'.$path[0]))) {
-                    $mount_path = '/host_mnt/'.$path[0];
-                } else {
-                    return null;
-                }
-            }
-
-            $path = $mount_path.substr($path, 2);
         }
 
-        return $wrapper.$path;
+        // Non-linux operating systems had the mount path set to /mnt_host
+        // or /mnt during testing.
+        $rootFolder = explode('/', $path);
+        if (array_key_exists(1, $rootFolder)) {
+            $rootFolder = $rootFolder[1];
+        } else {
+            return null;
+        }
+
+        if (is_dir(rootfs_path('/host_mnt/'.$rootFolder))) {
+            $mountPath = '/host_mnt'.$path;
+        } else if (is_dir(rootfs_path('/mnt/'.$rootFolder))) {
+            $mountPath = '/mnt'.$path;
+        } else if (is_dir(rootfs_path('/'.$rootFolder))) {
+            $mountPath = $path;
+        } else {
+            return null;
+        }
+
+        return $wrapper.$mountPath;
     }
 }

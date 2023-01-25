@@ -50,7 +50,7 @@ class Import implements ImportContract
                 }
 
                 if (isset($input['files'][0]['path'])) {
-                    $seriesPath = pathinfo($input['files'][0]['path'], PATHINFO_DIRNAME);
+                    $seriesPath = pathinfo(normalize_path($input['files'][0]['path']), PATHINFO_DIRNAME);
                 } else {
                     return false;
                 }
