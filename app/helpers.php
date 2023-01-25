@@ -44,26 +44,42 @@ if (!function_exists('normalize_path')) {
 
         // Windows paths should lowercase the drive letter because
         // they will be accessed through WSL mnt folder.
+        // Also, store drive letter for later use.
+        $driveLetter = null;
         if (':' === $path[1]) {
             $path = lcfirst($path);
+            $driveLetter = $path[0];
         }
 
-        // Non-linux operating systems had the mount path set to /mnt_host
-        // or /mnt during testing.
+        // Split the path into an array of path segments, so we can grab the root folder.
         $rootFolder = explode('/', $path);
-        if (array_key_exists(1, $rootFolder)) {
+        if (isset($rootFolder[1])) {
             $rootFolder = $rootFolder[1];
         } else {
             return null;
         }
 
-        if (is_dir(rootfs_path('/host_mnt/'.$rootFolder))) {
-            $mountPath = '/host_mnt'.$path;
-        } else if (is_dir(rootfs_path('/mnt/'.$rootFolder))) {
-            $mountPath = '/mnt'.$path;
-        } else if (is_dir(rootfs_path('/'.$rootFolder))) {
+        // Check if the root folder is in a docker mount point.
+        $mountPath = null;
+        foreach (['host_mnt', 'mnt'] as $mount) {
+            if (is_dir(rootfs_path('/'.$mount.'/'.$rootFolder))) {
+                $mountPath = '/'.$mount.$path;
+                break;
+            // If the root folder is not in the mount point, check if the drive letter is for windows.
+            } elseif (is_dir(rootfs_path('/'.$mount.'/'.$driveLetter.'/'.$rootFolder))) {
+                // Use substr to remove the windows formatted drive letter from the path.
+                $mountPath = '/'.$mount.'/'.$driveLetter.substr($path, 2);
+                break;
+            }
+        }
+
+        // Check if the root folder is in the rootfs without a mount point.
+        if ($mountPath === null && is_dir(rootfs_path('/'.$rootFolder))) {
             $mountPath = $path;
-        } else {
+        }
+
+        // If the root folder is not in the rootfs, return null.
+        if ($mountPath === null) {
             return null;
         }
 
