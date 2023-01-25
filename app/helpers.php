@@ -9,7 +9,7 @@ if (!function_exists('rootfs_path')) {
      */
     function rootfs_path(string $path = ''): string
     {
-        return app()->basePath('rootfs'.$path);
+        return '/rootfs'.$path;
     }
 }
 
