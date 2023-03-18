@@ -74,6 +74,8 @@ import AciInput from '@/InputComponents/AciInput.vue'
 import AdiInput from '@/InputComponents/AdiInput.vue'
 import AeiInput from '@/InputComponents/AeiInput.vue'
 import BiInput from '@/InputComponents/BiInput.vue'
+import FrequencyFilterInput from '@/InputComponents/FrequencyFilterInput.vue'
+import AcousticFilterInput from '@/InputComponents/AcousticFilterInput.vue'
 import {router} from '@inertiajs/vue3'
 
 let descriptionText = 'The selected specifications will influence the ouput of the job to reflect the values selected. Specifications are job specific and cannot be altered after the creation of a job.  Default values have been pre-selected to provide general output.'
@@ -169,7 +171,7 @@ export default defineComponent({
         }
         if (this.index.includes('acousticFilter')) {
             this.acousticFilter = {
-                soundindex: 'ACI',
+                soundindex: '',
                 max_value: 100,
                 timeStep: 3
             }
