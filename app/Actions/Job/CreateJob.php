@@ -75,11 +75,11 @@ class CreateJob implements CreateJobContract
         }
 
         if (isset($input['acousticfilter'])) {
-            $job->aciFilterInput()->create($input['acousticFilter']);
+            $job->acousticFilterInput()->create($input['acousticFilter']);
         }
         
         if (isset($input['frequencyfilter'])) {
-            $job->adiFilterInput()->create($input['adiFilter']);
+            $job->frequencyFilterInput()->create($input['frequencyFilter']);
         }
     }
 }

@@ -209,11 +209,19 @@ class JobInput extends Model
         }
 
         if ($this->frequencyFilterInput != null) {
+            if (!empty($frequencyFilterInput)) {
             $jobInput['inputs']['frequencyFilter'] = $frequencyFilterInput;
+            $jobInput['inputs']['freqeuncyFilter']['name'] = 'frequencyFilter';
+            $jobInput['inputs']['frequencyFilter']['type'] = 'NULL';
+            }
         }
 
         if ($this->acousticFilterInput != null) {
-            $jobInput['inputs']['acousticFilter'] = $acousticFilterInput;
+            if (!empty($acousticFilterInput)) {
+                $jobInput['inputs']['acousticFilter'] = $frequencyFilterInput;
+                $jobInput['inputs']['acousticFilter']['name'] = 'acousticFilter';
+                $jobInput['inputs']['acousticFilter']['type'] = 'NULL';
+                }
         }
 
         try {
