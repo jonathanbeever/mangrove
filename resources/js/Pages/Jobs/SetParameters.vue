@@ -26,6 +26,8 @@
                     <AdiInput v-if="indexCurrent == 'ADI'" @adiChanged="adiChanged($event)"/>
                     <AeiInput v-if="indexCurrent == 'AEI'" @aeiChanged="aeiChanged($event)"/>
                     <BiInput v-if="indexCurrent == 'BIO'" @biChanged="biChanged($event)"/>
+                    <FrequencyFilterInput v-if="indexCurrent == 'FrequencyFilter'" @frequencyFilterChanged="frequencyFilterChanged($event)"/>
+                    <AcousticFilterInput v-if="indexCurrent == 'AcousticFilter'" @acousticFilterChanged="acousticFilterChanged($event)"/>
                     <div class="flex pt-20 justify-between">
                         <PrimaryButton :disabled="prevDisabled" class="justify-center mr-[5px]" v-on:click="prevIndex()">Previous Index</PrimaryButton>
                         <PrimaryButton :disabled="nextDisabled" class="justify-center ml-[5px]" v-on:click="nextIndex()">Next Index</PrimaryButton>
@@ -72,6 +74,8 @@ import AciInput from '@/InputComponents/AciInput.vue'
 import AdiInput from '@/InputComponents/AdiInput.vue'
 import AeiInput from '@/InputComponents/AeiInput.vue'
 import BiInput from '@/InputComponents/BiInput.vue'
+import FrequencyFilterInput from '@/InputComponents/FrequencyFilterInput.vue'
+import AcousticFilterInput from '@/InputComponents/AcousticFilterInput.vue'
 import {router} from '@inertiajs/vue3'
 
 let descriptionText = 'The selected specifications will influence the ouput of the job to reflect the values selected. Specifications are job specific and cannot be altered after the creation of a job.  Default values have been pre-selected to provide general output.'
@@ -86,7 +90,9 @@ export default defineComponent({
         AciInput,
         AdiInput,
         AeiInput,
-        BiInput
+        BiInput,
+        FrequencyFilterInput,
+        AcousticFilterInput
     },
     props: ['index', 'seriesID'],
     data: function () {
@@ -155,6 +161,24 @@ export default defineComponent({
         } else {
             this.adi = null
         }
+        if (this.index.includes('frequencyFilter')) {
+            this.frequencyFilter = {
+                min_freq:  0,
+                max_freq: 10000
+            }
+        } else {
+            this.frequencyFilter = null
+        }
+        if (this.index.includes('acousticFilter')) {
+            this.acousticFilter = {
+                soundindex: '',
+                max_value: 100,
+                timeStep: 3
+            }
+        } else {
+            this.acousticFilter = null
+        }
+
     },
     methods: {
         onBack: function () {
@@ -188,6 +212,16 @@ export default defineComponent({
         aeiChanged: function (aei) {
             this.aei = {...aei}
         },
+        aeiChanged: function (aei) {
+            this.aei = {...aei}
+        },
+        frequencyFilterChanged: function (frequencyFilter) {
+            this.frequencyFilter = {...frequencyFilter}
+        },
+        acouaticFilterChanged: function (acousticFilter) {
+            this.acousticFilter = {...acousticFilter}
+        },
+
         postJobData: function () {
             this.finishDisabled = true
             if (this.name == '' || this.name == null) {
@@ -201,6 +235,8 @@ export default defineComponent({
                 bi: this.bi,
                 ndsi: this.ndsi,
                 rms: this.rms,
+                frequencyFilter: this.frequencyFilter,
+                acousticFilter: this.acousticFilter,
                 series_id: this.seriesID
             }
             router.post(route('jobs.store'), request)
