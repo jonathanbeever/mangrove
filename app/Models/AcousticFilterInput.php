@@ -20,7 +20,7 @@ class AcousticFilterInput extends Model
     protected $fillable = [
         'soundindex',
         'max_value',
-        'timeStep'
+        'timeStep',
     ];
 
     /**

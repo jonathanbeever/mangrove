@@ -19,7 +19,7 @@ class FrequencyFilterInput extends Model
      */
     protected $fillable = [
         'min_freq',
-        'max_freq'
+        'max_freq',
     ];
 
     /**

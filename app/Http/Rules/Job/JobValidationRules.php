@@ -44,8 +44,8 @@ class JobValidationRules implements ValidationRuleContract
             'frequencyFilter.min_freq' => ['sometimes', 'numeric', 'required_without:frequencyFilter.max_freq', 'min:0', 'max:2147483647'],
             'frequencyFilter.max_freq' => ['sometimes', 'numeric', 'required_without:frequencyFilter.min_freq','min:0', 'max:2147483647'],
             'acousticFilter' => ['nullable'],
-            'acousticFilter.soundindex' => ['required', 'string', 'max:50'],
-            'acousticFilter.max_value' => ['required', 'numeric', 'max:2147483647'],
+            'acousticFilter.soundindex' => ['sometimes', 'string', 'required_with:acousticFilter.max_value','max:50'],
+            'acousticFilter.max_value' => ['sometimes', 'numeric', 'required_with:acousticFilter.soundindex', 'max:2147483647'],
             'acousticFilter.timeStep' => ['sometimes', 'numeric','min:2', 'max:2147483647']
         ];
     }
