@@ -36,7 +36,7 @@ acoustic_helper <- function(data, indices) {
 
 acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
 
-    if (file.access(directory) == -1) {
+    if (file.access(dir_path) == -1) {
     stop(paste("The directory specified does not exist or this user is not autorized to read it:\n    ", directory))
     }
 
