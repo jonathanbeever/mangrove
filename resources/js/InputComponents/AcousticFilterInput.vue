@@ -54,7 +54,7 @@ const specificationDefaults = {
     timeStep: 3
 };
 const errorMessages = {
-    soundindex: "soundindex must be a string of the form ['aci','adi','aei','bi','ndsi']",
+    soundindex: "soundindex must be a string of the form ['ACI','ADI','AEI','BI','NDSI']",
     max_val: "max_val must be an integer greater than 0",
     timeStep: "timeStep must be an integer greater than or equal to 2"
 }
@@ -92,10 +92,7 @@ export default defineComponent({
             this.onChange();
         },
         validateSoundIndex: function() {
-            if (isNaN(this.soundindex)) {
-                this.soundindexError = true
-                return
-            } else if (['ACI','ADI','AEI','BI','NDSI'].includes(this.soundindex)) {
+            if (!['ACI','ADI','AEI','BI','NDSI'].includes(this.soundindex)) {
                 this.soundindexError = true
                 return
             }
