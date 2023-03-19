@@ -61,8 +61,8 @@ export default defineComponent({
             specificationDefaults,
             minFreq,
             maxFreq,
-            minFreqError,
-            maxFreqError,
+            minError,
+            maxError,
             errorMessages
         }
     },
@@ -70,9 +70,8 @@ export default defineComponent({
         onRestoreDefault: function (event) {
             this.minFreq = specificationDefaults.minFreq
             this.maxFreq = specificationDefaults.maxFreq
-            this.minFreqError = false
-            this.maxFreqError = false
-            this.freqStepError = false
+            this.minError = false
+            this.maxError = false
             this.onChange();
         },
         validateFreq: function () {

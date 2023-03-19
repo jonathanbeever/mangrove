@@ -58,11 +58,11 @@ const errorMessages = {
     max_val: "max_val must be an integer greater than 0",
     timeStep: "timeStep must be an integer greater than or equal to 2"
 }
-let minFreq = specificationDefaults.minFreq
+let soundindex = specificationDefaults.soundindex
 let max_val = specificationDefaults.max_val
 let timeStep = specificationDefaults.timeStep
 let errorText = ''
-let soundindexError = false;
+let soundIndexError = false;
 let max_valError = false;
 let timeStepError = false;
 
@@ -87,17 +87,17 @@ export default defineComponent({
     },
     methods: {
         onRestoreDefault: function (event) {
-            this.minFreq = specificationDefaults.minFreq;
-            this.maxFreq = specificationDefaults.maxFreq;
-            this.j = specificationDefaults.j;
-            this.fftW = specificationDefaults.fftW;
+            this.soundindex = specificationDefaults.soundindex;
+            this.max_val = specificationDefaults.max_val;
+            this.timeStep = specificationDefaults.timeStep;
+            
             return
         },
         validateSoundIndex: function() {
             if (isNaN(this.soundindex)) {
                 this.soundIndexError = true
                 return
-            } else if (['aci','adi','aei','bi','ndsi'].includes(this.soundindex)) {
+            } else if (['ACI','ADI','AEI','BI','NDSI'].includes(this.soundindex)) {
                 this.soundIndexError = true
                 return
             }
