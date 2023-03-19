@@ -23,12 +23,12 @@ acoustic_helper <- function(data, indices) {
 
     ADI <- function() {
     data.adi <- soundecology::acoustic_diversity(data)
-    return(data.ndsi$adi_left)
+    return(data.adi$adi_left)
     }
 
     AEI <- function() {
     data.aei <- soundecology::acoustic_evenness(data)
-    return(data.ndsi$aei_left)
+    return(data.aei$aei_left)
     }
 
     return(get(indices)())
