@@ -51,10 +51,13 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
         subarrays <- split(audio_data, rep(1:timeStep, each=file_length,length.out = length(audio_data@left)))
         #subarrays <- split(audio_data, ceiling(seq_along(audio_data)/ts))
 
-        # Calculates the <insert acoustic index here> for each subarray
+        
         count <- 0
-        indices <- vector("list",timeStep)
+        indices <- vector("list",timeStep) # Stores acoustic index value
+        filtered_list <-list() # A list to store the filtered audio data
         concatenated_wav <- tuneR::Wave(rep(0, 0), samp.rate = sample_rate, bit = bit)
+
+        # Calculates the <insert acoustic index here> for each subarray
         for (i in seq_along(subarrays)) {
             indices[i] <- acoustic_helper(subarrays[[i]], acoustic_index)
             if (indices[i] > max_val) {
@@ -67,9 +70,12 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
         }
 
         temp_filePath <- file.path(dir_path,fileName)
+        filted_list[[fileName]] <- concatenated_wav
         tuneR::writeWave(concatenated_wav, filename = fileName, sample_rate)
 
+
     }
+    return(filtered_list)
 
 }
 
@@ -77,10 +83,13 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
     if (file.access(dir_path) == -1) {
 		stop(paste("The directory specified does not exist or this user is not autorized to read it:\n    ", directory))
 		}
+
     file_Names <- list.files(path = dir_path, pattern = "\\.wav$", full.names = TRUE)
 
-    for (fileName in file_Names) {
-        audio_data <- tuneR::readWave(fileName)
+    filtered_list <-list() # A list to store the filtered audio data
+
+    for (file_name in file_Names) {
+        audio_data <- tuneR::readWave(file_name)
         tuneR::normalize(audio_data, unit = c("1"), center =FALSE, rescale = FALSE) # the interval chosen is [-1,1]
         sample_rate <- audio_data@samp.rate
 
@@ -94,8 +103,10 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
         fourier[freq > max_freq] <- 0 # Low pass filter
 
         filtered_wav <- stats::Re(stats::ifft(fourier)) # Inverse fourier transformation
-        tuneR::writeWave(filtered_wav, filename = fileName, sample_rate)
+        filted_list[[file_name]] <-filted_wav #Stores the new filtered data
+        tuneR::writeWave(filtered_wav, filename = file_name, sample_rate)
     }
+    return(filtered_list)
 }
 
 
@@ -149,12 +160,12 @@ runJob <- function(job) {
                                                 soundindex = input$name,
                                                 no_cores = job$meta$cores)
         } else if (input$type == "acousticFilter") {
-            acoustic_filter(directory = job$meta$path,
+            result[["acousticFilter"]] <- acoustic_filter(directory = job$meta$path,
                             soundindex = input$soundindex,
                             max_val = input$max_val,
                             timeStep = input$timeStep)
         } else if (input$type == "frequencyFilter") {
-            frequency_filter(directory = job$meta$path,
+            result[["frequnecyFilter"]] <- frequency_filter(directory = job$meta$path,
                              min_freq = input$min_freq,
                              max_freq = input$max_freq)
         }
