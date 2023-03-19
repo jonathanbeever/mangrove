@@ -26,8 +26,8 @@
                     <AdiInput v-if="indexCurrent == 'ADI'" @adiChanged="adiChanged($event)"/>
                     <AeiInput v-if="indexCurrent == 'AEI'" @aeiChanged="aeiChanged($event)"/>
                     <BiInput v-if="indexCurrent == 'BIO'" @biChanged="biChanged($event)"/>
-                    <FrequencyFilterInput v-if="indexCurrent == 'FrequencyFilter'" @frequencyFilterChanged="frequencyFilterChanged($event)"/>
-                    <AcousticFilterInput v-if="indexCurrent == 'AcousticFilter'" @acousticFilterChanged="acousticFilterChanged($event)"/>
+                    <FrequencyFilterInput v-if="indexCurrent == 'FREQUENCYFILTER'" @frequencyFilterChanged="frequencyFilterChanged($event)"/>
+                    <AcousticFilterInput v-if="indexCurrent == 'ACOUSTICFILTER'" @acousticFilterChanged="acousticFilterChanged($event)"/>
                     <div class="flex pt-20 justify-between">
                         <PrimaryButton :disabled="prevDisabled" class="justify-center mr-[5px]" v-on:click="prevIndex()">Previous Index</PrimaryButton>
                         <PrimaryButton :disabled="nextDisabled" class="justify-center ml-[5px]" v-on:click="nextIndex()">Next Index</PrimaryButton>

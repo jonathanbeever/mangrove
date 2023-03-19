@@ -91,6 +91,8 @@ export default defineComponent({
             }
             this.maxError = false;
             this.minError = false;
+            
+            this.onChange();
             return
         },
         onChange: function () {

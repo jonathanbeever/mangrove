@@ -5,7 +5,7 @@
                 Acoustic Filter Specifications
             </InputLabel>
             <InputLabel class="mt-[10px]">
-                Acoustic Index
+                Acoustic Index ('ACI','AEI','ADI','BI','NDSI')
             </InputLabel>
             <InputLabel v-if="soundindexError" class="text-red-500">
                 {{ errorMessages.soundindex }}
@@ -49,8 +49,8 @@ import InputLabel from '@/Components/InputLabel.vue'
 import TextInput from '@/Components/TextInput.vue'
 
 const specificationDefaults = {
-    soundindex: '',
-    max_val: 100,
+    soundindex: 'ADI',
+    max_val: 10,
     timeStep: 3
 };
 const errorMessages = {
@@ -61,8 +61,7 @@ const errorMessages = {
 let soundindex = specificationDefaults.soundindex
 let max_val = specificationDefaults.max_val
 let timeStep = specificationDefaults.timeStep
-let errorText = ''
-let soundIndexError = false;
+let soundindexError = false;
 let max_valError = false;
 let timeStepError = false;
 
@@ -80,7 +79,7 @@ export default defineComponent({
             max_val,
             timeStep,
             errorMessages,
-            soundIndexError,
+            soundindexError,
             max_valError,
             timeStepError
         }
@@ -90,18 +89,18 @@ export default defineComponent({
             this.soundindex = specificationDefaults.soundindex;
             this.max_val = specificationDefaults.max_val;
             this.timeStep = specificationDefaults.timeStep;
-            
-            return
+            this.onChange();
         },
         validateSoundIndex: function() {
             if (isNaN(this.soundindex)) {
-                this.soundIndexError = true
+                this.soundindexError = true
                 return
             } else if (['ACI','ADI','AEI','BI','NDSI'].includes(this.soundindex)) {
-                this.soundIndexError = true
+                this.soundindexError = true
                 return
             }
-            this.soundIndexError = false
+            this.soundindexError = false
+            this.onChange();
             return
         },
         validateMax_val: function () {
@@ -114,6 +113,7 @@ export default defineComponent({
             }
             
             this.max_valError = false;
+            this.onChange();
             return
         },
         validatetimeStep: function () {
@@ -125,6 +125,18 @@ export default defineComponent({
                 return
             }
             this.timeStepError = false;
+            this.onChange();
+            return
+        },
+        onChange: function () {
+            if (!this.soundindexError && !this.max_valError && !this.timeStepError) {
+                let acousticFilter = {
+                    soundindex: this.soundindex,
+                    max_val: this.max_val,
+                    timeStep: this.timeStep
+                }
+                this.$emit("acousticFilterChanged", acousticFilter)
+            }
             return
         }
     }
