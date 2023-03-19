@@ -42,8 +42,8 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
 
     file_Names <- list.files(path = dir_path, pattern = "\\.wav$", full.names = TRUE)
 
-    for (fileName in file_Names) {
-        audio_data <- tuneR::readWave(fileName)
+    for (file_name in file_Names) {
+        audio_data <- tuneR::readWave(file_name)
         sample_rate <- audio_data@samp.rate
         bit <- audio_data@bit
 
@@ -69,9 +69,9 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
             count <- count + file_length
         }
 
-        temp_filePath <- file.path(dir_path,fileName)
-        filted_list[[fileName]] <- concatenated_wav
-        tuneR::writeWave(concatenated_wav, filename = fileName, sample_rate)
+        temp_filePath <- file.path(dir_path,file_name)
+        filtered_list[[file_name]] <- concatenated_wav
+        tuneR::writeWave(concatenated_wav, filename = temp_filePath, sample_rate)
 
 
     }
@@ -103,8 +103,10 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
         fourier[freq > max_freq] <- 0 # Low pass filter
 
         filtered_wav <- stats::Re(stats::ifft(fourier)) # Inverse fourier transformation
-        filted_list[[file_name]] <-filted_wav #Stores the new filtered data
-        tuneR::writeWave(filtered_wav, filename = file_name, sample_rate)
+        filted_list[[file_name]] <-filtered_wav #Stores the new filtered data
+
+        temp_filePath <- file.path(dir_path,file_name)
+        tuneR::writeWave(filtered_wav, filename = temp_filePath, sample_rate)
     }
     return(filtered_list)
 }
