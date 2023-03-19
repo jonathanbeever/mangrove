@@ -50,7 +50,7 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
         file_length <- floor(length(audio_data)/timeStep)
         subarrays <- split(audio_data, rep(1:timeStep, each=file_length,length.out = length(audio_data@left)))
         #subarrays <- split(audio_data, ceiling(seq_along(audio_data)/ts))
-        
+
         # Calculates the <insert acoustic index here> for each subarray
         count <- 0
         indices <- vector("list",timeStep)
@@ -65,10 +65,10 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
             concatenated_wav <- tuneR::Wave(concatenated_waveform, samp.rate = sample_rate, bit = bit)
             count <- count + file_length
         }
-        
+
         temp_filePath <- file.path(dir_path,fileName)
         tuneR::writeWave(concatenated_wav, filename = fileName, sample_rate)
-    
+
     }
 
 }
@@ -100,7 +100,7 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
 
 
 runJob <- function(job) {
-    result <- list("aci" = NULL, "adi" = NULL, "aei" = NULL, "bi" = NULL, "ndsi" = NULL, "rms" = NULL,"acousticFilter" = null,"frequencyFilter" = null)
+    result <- list("aci" = NULL, "adi" = NULL, "aei" = NULL, "bi" = NULL, "ndsi" = NULL, "rms" = NULL,"acousticFilter" = NULL,"frequencyFilter" = NULL)
 
     for (input in job$inputs) {
         if (input$type == "aci") {
@@ -152,7 +152,7 @@ runJob <- function(job) {
             acoustic_filter(directory = job$meta$path,
                             soundindex = input$soundindex,
                             max_val = input$max_val,
-                            timeStep = input$timeStep)                             
+                            timeStep = input$timeStep)
         } else if (input$type == "frequencyFilter") {
             frequency_filter(directory = job$meta$path,
                              min_freq = input$min_freq,
