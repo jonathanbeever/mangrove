@@ -198,6 +198,20 @@ export default defineComponent({
                 ) {
                     indicesUsed.push("RMS");
                 }
+                if (
+                    key.includes("frequencyFilter") &&
+                    object[key] != null &&
+                    !indicesUsed.includes("FREQUENCYFILTER")
+                ) {
+                    indicesUsed.push("FREQUENCYFILTER");
+                }
+                if (
+                    key.includes("acousticFilter") &&
+                    object[key] != null &&
+                    !indicesUsed.includes("ACOUSTICFILTER")
+                ) {
+                    indicesUsed.push("ACOUSTICFILTER");
+                }
             });
             return {indices: indicesUsed};
         };

@@ -186,8 +186,8 @@ let indexText = {
     ADI: "The accoustic diversity index is an algorithm used to determine the overall diversity of sound in a soundscape. An elevated ADI implies a significant occupation of frequencies and a strong level of diversity.",
     BIO: "the bioacoustic index is an algoirithm used to determine the sound level and number of frequency bands occupied in a soundscape. It is used as a general determinant of occupied frequencies to investigate the abundance of biological sound.",
     RMS: "RMS is the root mean square or quadratic mean",
-    frequencyFilter: "Silences the audio sample(s) outside a specified frequency range",
-    acousticFilter: " Silences the audio sample(s) outside a specifies acoustic indice's range"
+    FREQUENCYFILTER: "Silences the audio sample(s) outside a specified frequency range",
+    ACOUSTICFILTER: " Silences the audio sample(s) outside a specifies acoustic indice's range"
 };
 
 export default defineComponent({

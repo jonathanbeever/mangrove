@@ -113,7 +113,7 @@ export default defineComponent({
             this.onChange();
             return
         },
-        validatetimeStep: function () {
+        validateTimeStep: function () {
             if (isNaN(this.timeStep)) {
                 this.timeStepError = true
                 return

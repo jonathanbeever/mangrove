@@ -171,8 +171,8 @@ export default defineComponent({
         }
         if (this.index.includes('ACOUSTICFILTER')) {
             this.acousticFilter = {
-                soundindex: 'AEI',
-                max_value: 100,
+                soundindex: 'ACI',
+                max_val: 10,
                 timeStep: 3
             }
         } else {
@@ -208,9 +208,6 @@ export default defineComponent({
         },
         adiChanged: function (adi) {
             this.adi = {...adi}
-        },
-        aeiChanged: function (aei) {
-            this.aei = {...aei}
         },
         aeiChanged: function (aei) {
             this.aei = {...aei}
