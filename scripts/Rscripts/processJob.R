@@ -167,7 +167,7 @@ runJob <- function(job) {
                             max_val = input$max_val,
                             timeStep = input$timeStep)
         } else if (input$type == "frequencyFilter") {
-            result[["frequnecyFilter"]] <- frequency_filter(directory = job$meta$path,
+            result[["frequencyFilter"]] <- frequency_filter(directory = job$meta$path,
                              min_freq = input$min_freq,
                              max_freq = input$max_freq)
         }
