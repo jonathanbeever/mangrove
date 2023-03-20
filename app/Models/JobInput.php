@@ -208,7 +208,7 @@ class JobInput extends Model
             $jobInput['inputs']['rms']['type'] = 'rms';
         }
 
-        if ($this->frequencyFilterInput != null) {
+        if ($this->frequencyFilterInput !== null) {
             $frequencyFilterInput = $this->frequencyFilterInput->toArray();
             if (!empty($frequencyFilterInput)) {
             $jobInput['inputs']['frequencyFilter'] = $frequencyFilterInput;
@@ -217,7 +217,7 @@ class JobInput extends Model
             }
         }
 
-        if ($this->acousticFilterInput != null) {
+        if ($this->acousticFilterInput !== null) {
             $acousticFilterInput = $this->acousticFilterInput->toArray();
             if (!empty($acousticFilterInput)) {
                 $jobInput['inputs']['acousticFilter'] = $acousticFilterInput;
