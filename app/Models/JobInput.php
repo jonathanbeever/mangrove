@@ -17,7 +17,7 @@ class JobInput extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $with = ['aciInput', 'adiInput', 'aeiInput', 'biInput', 'ndsiInput', 'rmsInput','acousticFilterInput','frequencyFilterInput'];
+    protected $with = ['aciInput', 'adiInput', 'aeiInput', 'biInput', 'ndsiInput', 'rmsInput','frequencyFilterInput','acousticFilterInput'];
 
     /**
      * The attributes that are mass assignable.
@@ -209,18 +209,20 @@ class JobInput extends Model
         }
 
         if ($this->frequencyFilterInput != null) {
+            $frequencyFilterInput = $this->frequencyFilterInput->toArray();
             if (!empty($frequencyFilterInput)) {
             $jobInput['inputs']['frequencyFilter'] = $frequencyFilterInput;
             $jobInput['inputs']['freqeuncyFilter']['name'] = 'frequencyFilter';
-            $jobInput['inputs']['frequencyFilter']['type'] = 'NULL';
+            $jobInput['inputs']['frequencyFilter']['type'] = 'frequencyFilter';
             }
         }
 
         if ($this->acousticFilterInput != null) {
+            $acousticFilterInput = $this->acousticFilterInput->toArray();
             if (!empty($acousticFilterInput)) {
-                $jobInput['inputs']['acousticFilter'] = $frequencyFilterInput;
+                $jobInput['inputs']['acousticFilter'] = $acousticFilterInput;
                 $jobInput['inputs']['acousticFilter']['name'] = 'acousticFilter';
-                $jobInput['inputs']['acousticFilter']['type'] = 'NULL';
+                $jobInput['inputs']['acousticFilter']['type'] = 'acousticFilter';
                 }
         }
 

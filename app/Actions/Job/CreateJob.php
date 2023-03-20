@@ -74,11 +74,11 @@ class CreateJob implements CreateJobContract
             $job->rmsInput()->create();
         }
 
-        if (isset($input['acousticfilter'])) {
+        if (isset($input['acousticFilter'])) {
             $job->acousticFilterInput()->create($input['acousticFilter']);
         }
         
-        if (isset($input['frequencyfilter'])) {
+        if (isset($input['frequencyFilter'])) {
             $job->frequencyFilterInput()->create($input['frequencyFilter']);
         }
     }
