@@ -171,7 +171,7 @@ export default defineComponent({
         }
         if (this.index.includes('ACOUSTICFILTER')) {
             this.acousticFilter = {
-                soundindex: 'ACI',
+                soundindex: 'ADI',
                 max_val: 10,
                 timeStep: 3
             }

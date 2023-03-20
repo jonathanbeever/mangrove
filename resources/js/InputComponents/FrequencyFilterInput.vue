@@ -48,6 +48,8 @@ const errorMessages = {
 }
 let minFreq = specificationDefaults.minFreq
 let maxFreq = specificationDefaults.maxFreq
+let minError = false
+let maxError = false
 
 export default defineComponent({
     components: {
@@ -96,7 +98,7 @@ export default defineComponent({
             return
         },
         onChange: function () {
-            if (!this.maxFreqError && !this.minFreqError) {
+            if (!this.maxqError && !this.minError) {
                 let frequencyFilter = {
                     min_freq: this.minFreq,
                     max_freq: this.maxFreq,
