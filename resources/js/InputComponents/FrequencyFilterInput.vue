@@ -92,13 +92,12 @@ export default defineComponent({
                 return
             }
             this.maxError = false;
-            this.minError = false;
-            
+            this.minError = false;           
             this.onChange();
             return
         },
         onChange: function () {
-            if (!this.maxqError && !this.minError) {
+            if (!this.maxError && !this.minError) {
                 let frequencyFilter = {
                     min_freq: this.minFreq,
                     max_freq: this.maxFreq,

@@ -89,6 +89,9 @@ export default defineComponent({
             this.soundindex = specificationDefaults.soundindex;
             this.max_val = specificationDefaults.max_val;
             this.timeStep = specificationDefaults.timeStep;
+            this.soundindexError = false
+            this.max_valError = false
+            this.timeStepError = false
             this.onChange();
         },
         validateSoundIndex: function() {
