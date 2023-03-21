@@ -13,22 +13,22 @@ acoustic_helper <- function(data, indices) {
 
     NDSI <- function() {
     data.ndsi <- soundecology::ndsi(data)
-    return(data.ndsi$ndsi_left)
+    return(data.ndsi$ndsiL)
     }
 
     BI <- function() {
     data.bi <- soundecology::bioacoustic_index(data)
-    return(data.bi$left_area)
+    return(data.bi$areaL)
     }
 
     ADI <- function() {
     data.adi <- soundecology::acoustic_diversity(data)
-    return(data.adi$adi_left)
+    return(data.adi$adiL)
     }
 
     AEI <- function() {
     data.aei <- soundecology::acoustic_evenness(data)
-    return(data.aei$aei_left)
+    return(data.aei$aeiL)
     }
 
     return(get(indices)())
@@ -49,34 +49,22 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
 
         file_length <- floor(length(audio_data)/timeStep)
         subarrays <- split(audio_data, rep(1:timeStep, each=file_length,length.out = length(audio_data@left)))
-        #subarrays <- split(audio_data, ceiling(seq_along(audio_data)/ts))
 
-        
-        count <- 0
-        indices <- vector("list",timeStep) # Stores acoustic index value
         filtered_list <-list() # A list to store the filtered audio data
         concatenated_wav <- tuneR::Wave(rep(0, 0), samp.rate = sample_rate, bit = bit)
 
         # Calculates the <insert acoustic index here> for each subarray
         for (i in seq_along(subarrays)) {
-            indices[i] <- acoustic_helper(subarrays[[i]], acoustic_index)
-            if (indices[i] > max_val) {
+            indices <- acoustic_helper(subarrays[[i]], acoustic_index) 
+            if (indices > max_val) {
                 subarrays[[i]] <- tuneR::Wave(rep(0, length(subarrays[[i]])), samp.rate = sample_rate, bit = bit)
             }
-            #concatenated_wav <- c(concatenated_wav,subarrays[[i]])
             concatenated_waveform <- c(as.vector(concatenated_wav@left), as.vector(subarrays[[i]]@left))
             concatenated_wav <- tuneR::Wave(concatenated_waveform, samp.rate = sample_rate, bit = bit)
-            count <- count + file_length
         }
-
-        temp_filePath <- file.path(dir_path,file_name)
         filtered_list[[file_name]] <- concatenated_wav
-        tuneR::writeWave(concatenated_wav, filename = temp_filePath, sample_rate)
-
-
+        tuneR::writeWave(concatenated_wav, filename = file_name, sample_rate) # Writes new .wav
     }
-    return(filtered_list)
-
 }
 
 frequency_filter <-function(dir_path, min_freq, max_freq) {
@@ -87,7 +75,6 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
     file_Names <- list.files(path = dir_path, pattern = "\\.wav$", full.names = TRUE)
 
     filtered_list <-list() # A list to store the filtered audio data
-
     for (file_name in file_Names) {
         audio_data <- tuneR::readWave(file_name)
         tuneR::normalize(audio_data, unit = c("1"), center =FALSE, rescale = FALSE) # the interval chosen is [-1,1]
@@ -103,12 +90,10 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
         fourier[freq > max_freq] <- 0 # Low pass filter
 
         filtered_wav <- stats::Re(stats::ifft(fourier)) # Inverse fourier transformation
-        filted_list[[file_name]] <-filtered_wav #Stores the new filtered data
+        filted_list[[file_name]] <- filtered_wav #Stores the new filtered data
 
-        temp_filePath <- file.path(dir_path,file_name)
-        tuneR::writeWave(filtered_wav, filename = temp_filePath, sample_rate)
+        tuneR::writeWave(filtered_wav, filename = file_name, sample_rate)
     }
-    return(filtered_list)
 }
 
 
@@ -162,14 +147,14 @@ runJob <- function(job) {
                                                 soundindex = input$name,
                                                 no_cores = job$meta$cores)
         } else if (input$type == "acousticFilter") {
-            result[["acousticFilter"]] <- acoustic_filter(directory = job$meta$path,
-                            soundindex = input$soundindex,
-                            max_val = input$max_val,
-                            timeStep = input$timeStep)
+            acoustic_filter(job$meta$path,
+                            input$soundindex,
+                            input$max_val,
+                            input$timeStep)
         } else if (input$type == "frequencyFilter") {
-            result[["frequencyFilter"]] <- frequency_filter(directory = job$meta$path,
-                             min_freq = input$min_freq,
-                             max_freq = input$max_freq)
+            frequency_filter(job$meta$path,
+                             input$min_freq,
+                             input$max_freq)
         }
 
     }
