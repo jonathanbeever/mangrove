@@ -161,7 +161,9 @@ export default defineComponent({
         } else {
             this.adi = null
         }
+
         if (this.index.includes('FREQUENCYFILTER')) {
+
             this.frequencyFilter = {
                 min_freq:  0,
                 max_freq: 10000
@@ -169,10 +171,12 @@ export default defineComponent({
         } else {
             this.frequencyFilter = null
         }
+
         if (this.index.includes('ACOUSTICFILTER')) {
             this.acousticFilter = {
                 soundindex: 'ADI',
                 max_val: 10,
+
                 timeStep: 3
             }
         } else {
@@ -212,10 +216,12 @@ export default defineComponent({
         aeiChanged: function (aei) {
             this.aei = {...aei}
         },
+
         frequencyFilterChanged: function (frequencyFilter) {
             this.frequencyFilter = {...frequencyFilter}
         },
         acousticFilterChanged: function (acousticFilter) {
+
             this.acousticFilter = {...acousticFilter}
         },
 

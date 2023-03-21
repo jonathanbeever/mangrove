@@ -17,7 +17,9 @@ class JobInput extends Model
     use HasFactory;
     use SoftDeletes;
 
+
     protected $with = ['aciInput', 'adiInput', 'aeiInput', 'biInput', 'ndsiInput', 'rmsInput','frequencyFilterInput','acousticFilterInput'];
+
 
     /**
      * The attributes that are mass assignable.
@@ -224,6 +226,7 @@ class JobInput extends Model
                 $jobInput['inputs']['acousticFilter']['name'] = 'acousticFilter';
                 $jobInput['inputs']['acousticFilter']['type'] = 'acousticFilter';
                 }
+
         }
 
         try {

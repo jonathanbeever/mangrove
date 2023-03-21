@@ -5,7 +5,9 @@
                 Acoustic Filter Specifications
             </InputLabel>
             <InputLabel class="mt-[10px]">
+
                 Acoustic Index ('ACI','AEI','ADI','BI','NDSI')
+
             </InputLabel>
             <InputLabel v-if="soundindexError" class="text-red-500">
                 {{ errorMessages.soundindex }}
@@ -49,6 +51,7 @@ import InputLabel from '@/Components/InputLabel.vue'
 import TextInput from '@/Components/TextInput.vue'
 
 const specificationDefaults = {
+
     soundindex: 'ADI',
     max_val: 10,
     timeStep: 3
@@ -61,6 +64,7 @@ const errorMessages = {
 let soundindex = specificationDefaults.soundindex
 let max_val = specificationDefaults.max_val
 let timeStep = specificationDefaults.timeStep
+
 let soundindexError = false;
 let max_valError = false;
 let timeStepError = false;
@@ -79,6 +83,7 @@ export default defineComponent({
             max_val,
             timeStep,
             errorMessages,
+
             soundindexError,
             max_valError,
             timeStepError
@@ -117,6 +122,7 @@ export default defineComponent({
             return
         },
         validateTimeStep: function () {
+
             if (isNaN(this.timeStep)) {
                 this.timeStepError = true
                 return

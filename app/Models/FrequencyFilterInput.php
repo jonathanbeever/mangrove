@@ -30,3 +30,4 @@ class FrequencyFilterInput extends Model
         return $this->belongsTo(JobInput::class);
     }
 }
+

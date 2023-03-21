@@ -80,6 +80,7 @@ class CreateJob implements CreateJobContract
 
         if (isset($input['acousticFilter'])) {
             $job->acousticFilterInput()->create($input['acousticFilter']);
+
         }
     }
 }

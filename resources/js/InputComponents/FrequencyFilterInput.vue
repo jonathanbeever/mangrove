@@ -51,6 +51,7 @@ let maxFreq = specificationDefaults.maxFreq
 let minError = false
 let maxError = false
 
+
 export default defineComponent({
     components: {
         ApplicationLogo,
@@ -65,15 +66,16 @@ export default defineComponent({
             maxFreq,
             minError,
             maxError,
+
             errorMessages
         }
     },
     methods: {
         onRestoreDefault: function (event) {
             this.minFreq = specificationDefaults.minFreq
-            this.maxFreq = specificationDefaults.maxFreq
             this.minError = false
             this.maxError = false
+
             this.onChange();
         },
         validateFreq: function () {
