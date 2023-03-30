@@ -39,7 +39,14 @@ class JobValidationRules implements ValidationRuleContract
             'ndsi.bio_max' => ['sometimes', 'numeric', 'required_with:ndsi.fftw,ndsi.anthro_min,ndsi.anthro_max,ndsi.bio_min', 'min:0', 'max:2147483647'],
             'ndsi.bio_min' => ['sometimes', 'numeric', 'required_with:ndsi.fftw,ndsi.anthro_min,ndsi.anthro_max,ndsi.bio_max', 'min:0', 'max:2147483647'],
             'ndsi.fftw' => ['sometimes', 'numeric', 'required_with:ndsi.anthro_min,ndsi.anthro_max,ndsi.bio_min,ndsi.bio_max', 'min:1', 'max:2147483647'],
-            'rms' => ['sometimes', 'nullable', 'boolean']
+            'rms' => ['sometimes', 'nullable', 'boolean'],
+            'frequencyFilter' => ['nullable'],
+            'frequencyFilter.min_freq' => ['sometimes', 'numeric', 'required_without:frequencyFilter.max_freq', 'min:0', 'max:2147483647'],
+            'frequencyFilter.max_freq' => ['sometimes', 'numeric', 'required_without:frequencyFilter.min_freq','min:0', 'max:2147483647'],
+            'acousticFilter' => ['nullable'],
+            'acousticFilter.soundindex' => ['sometimes', 'string', 'required_with:acousticFilter.max_val','max:50'],
+            'acousticFilter.max_val' => ['sometimes', 'numeric', 'required_with:acousticFilter.soundindex', 'min:-2147483647','max:2147483647'],
+            'acousticFilter.timeStep' => ['sometimes', 'numeric','min:2', 'max:2147483647']
         ];
     }
 

@@ -17,7 +17,7 @@ class JobInput extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $with = ['aciInput', 'adiInput', 'aeiInput', 'biInput', 'ndsiInput', 'rmsInput'];
+    protected $with = ['aciInput', 'adiInput', 'aeiInput', 'biInput', 'ndsiInput', 'rmsInput','frequencyFilterInput','acousticFilterInput'];
 
     /**
      * The attributes that are mass assignable.
@@ -120,6 +120,26 @@ class JobInput extends Model
     }
 
     /**
+     * Get the Frequency Filter input for this job.
+     *
+     * @return HasOne
+     */
+    public function frequencyFilterInput(): HasOne
+    {
+        return $this->hasOne(FrequencyFilterInput::class);
+    }
+
+    /**
+     * Get the Acoustic Indices Filter input for this job.
+     *
+     * @return HasOne
+     */
+    public function acousticFilterInput(): HasOne
+    {
+        return $this->hasOne(AcousticFilterInput::class);
+    }
+
+    /**
      * Get the input object to send to the R script.
      *
      * @return string
@@ -185,6 +205,24 @@ class JobInput extends Model
         if ($this->rmsInput !== null) {
             $jobInput['inputs']['rms']['name'] = 'root_mean_square';
             $jobInput['inputs']['rms']['type'] = 'rms';
+        }
+
+        if ($this->frequencyFilterInput !== null) {
+            $frequencyFilterInput = $this->frequencyFilterInput->toArray();
+            if (!empty($frequencyFilterInput)) {
+            $jobInput['inputs']['frequencyFilter'] = $frequencyFilterInput;
+            $jobInput['inputs']['freqeuncyFilter']['name'] = 'frequencyFilter';
+            $jobInput['inputs']['frequencyFilter']['type'] = 'frequencyFilter';
+            }
+        }
+
+        if ($this->acousticFilterInput !== null) {
+            $acousticFilterInput = $this->acousticFilterInput->toArray();
+            if (!empty($acousticFilterInput)) {
+                $jobInput['inputs']['acousticFilter'] = $acousticFilterInput;
+                $jobInput['inputs']['acousticFilter']['name'] = 'acousticFilter';
+                $jobInput['inputs']['acousticFilter']['type'] = 'acousticFilter';
+                }
         }
 
         try {

@@ -20,7 +20,8 @@ class ExecuteJob implements ExecuteJobContract
         $jobInput = $job->getInput();
 
         $process = proc_open(
-            'Rscript processJob.R 2>&1',
+            "Rscript processJob.R 2>&1",
+            // "Rscript --max-ppsize=80000000 processJob.R 2>&1",
             [1 => ["pipe", "w"]],
             $pipes,
             base_path('scripts/Rscripts'),
@@ -59,7 +60,7 @@ class ExecuteJob implements ExecuteJobContract
     protected function saveJobResults(JobInput $job, array $results): bool
     {
         try {
-            foreach (['aci', 'adi', 'aei', 'bi', 'ndsi', 'rms'] as $index) {
+            foreach (['aci', 'adi', 'aei', 'bi', 'ndsi', 'rms', 'frequencyFilter', 'acousticFilter'] as $index) {
                 if (isset($results[$index])) {
                     foreach ($results[$index] as $fileName => $data) {
                         $job->series->fileByName($fileName)?->results()->updateOrCreate([

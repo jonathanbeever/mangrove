@@ -115,6 +115,36 @@
                                 RMS
                             </InputLabel>
                         </div>
+                        <div class="form-check mb-[10px]">
+                            <input
+                                id="frequencyFilter"
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
+                            />
+                            <InputLabel
+                                class="form-check-label inline-block text-gray-800 text-1xl"
+                                for="frequencyFilter"
+                            >
+                                Frequency Filter
+                            </InputLabel>
+                        </div>
+                        <div class="form-check mb-[10px]">
+                            <input
+                                id="acousticFilter"
+                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                name="indexRadio"
+                                type="checkbox"
+                                v-on:click="onChange($event)"
+                            />
+                            <InputLabel
+                                class="form-check-label inline-block text-gray-800 text-1xl"
+                                for="acousticFilter"
+                            >
+                                Acoustic Filter
+                            </InputLabel>
+                        </div>
                     </div>
                 </div>
                 <div class="w-1/2 flex flex-col h-full">
@@ -156,6 +186,8 @@ let indexText = {
     ADI: "The accoustic diversity index is an algorithm used to determine the overall diversity of sound in a soundscape. An elevated ADI implies a significant occupation of frequencies and a strong level of diversity.",
     BIO: "the bioacoustic index is an algoirithm used to determine the sound level and number of frequency bands occupied in a soundscape. It is used as a general determinant of occupied frequencies to investigate the abundance of biological sound.",
     RMS: "RMS is the root mean square or quadratic mean",
+    FREQUENCYFILTER: "Silences the audio sample(s) outside a specified frequency range",
+    ACOUSTICFILTER: " Silences the audio sample(s) outside a specifies acoustic indice's range",
 };
 
 export default defineComponent({
