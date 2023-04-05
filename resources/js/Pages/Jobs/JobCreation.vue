@@ -4,12 +4,6 @@
             class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full flex justify-center"
         >
             <div class="flex flex-row justify-between content-center w-full">
-                <PrimaryButton
-                    class="mr-[15px] float-left"
-                    v-on:click="onRemoveRender"
-                >
-                    Back
-                </PrimaryButton>
                 <div class="flex flex-row w-full items-center justify-center">
                     <InputLabel class="mr-[5px]"> Choose Audio Files</InputLabel>
                     <hr class="flex flex-grow"/>
@@ -20,212 +14,126 @@
                     <InputLabel class="ml-[5px]"> Set Parameters</InputLabel>
                 </div>
             </div>
-            <div class="flex flex-row w-full mt-[50px]">
+
+            <div class="flex flex-row w-full mt-4">
+                <!-- Selection -->
                 <div class="flex flex-col w-1/2">
-                    <InputLabel class="text-2xl mb-[10px]"> Index</InputLabel>
+                    <InputLabel class="!text-xl mb-2 !pointer-events-autofont-bold" value="Select Indices" />
                     <div>
-                        <div v-if="false" class="form-check mb-[10px]">
+                        <div v-for="index in indices" :key="index">
                             <input
-                                id="aci"
+                                :id="index"
+                                v-model="selectedIndices"
                                 class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
                                 type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="aci"
+                                :value="index"
                             >
-                                ACI
-                            </InputLabel>
-                        </div>
-                        <div class="form-check mb-[10px]">
-                            <input
-                                id="ndsi"
-                                checked
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
-                                type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
                             <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="ndsi"
+                                class="form-check-label inline-block text-gray-800"
+                                :for="index"
                             >
-                                NDSI
-                            </InputLabel>
-                        </div>
-                        <div class="form-check mb-[10px]">
-                            <input
-                                id="aei"
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
-                                type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="aei"
-                            >
-                                AEI
-                            </InputLabel>
-                        </div>
-                        <div class="form-check mb-[10px]">
-                            <input
-                                id="adi"
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
-                                type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="adi"
-                            >
-                                ADI
-                            </InputLabel>
-                        </div>
-                        <div class="form-check mb-[10px]">
-                            <input
-                                id="bio"
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
-                                type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="bio"
-                            >
-                                BIO
-                            </InputLabel>
-                        </div>
-                        <div class="form-check mb-[10px]">
-                            <input
-                                id="rms"
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
-                                type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="rms"
-                            >
-                                RMS
-                            </InputLabel>
-                        </div>
-                        <div class="form-check mb-[10px]">
-                            <input
-                                id="frequencyFilter"
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
-                                type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="frequencyFilter"
-                            >
-                                Frequency Filter
-                            </InputLabel>
-                        </div>
-                        <div class="form-check mb-[10px]">
-                            <input
-                                id="acousticFilter"
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                name="indexRadio"
-                                type="checkbox"
-                                v-on:click="onChange($event)"
-                            />
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800 text-1xl"
-                                for="acousticFilter"
-                            >
-                                Acoustic Filter
+                                {{ indexLabels[index] }}
                             </InputLabel>
                         </div>
                     </div>
                 </div>
-                <div class="w-1/2 flex flex-col h-full">
-                    <InputLabel class="font-bold text-3xl">
-                        {{ selectedIndex[selectedIndex.length - 1] }}
-                    </InputLabel>
-                    <InputLabel class="text-xl h-[150px]">
-                        {{ descriptionText }}
-                    </InputLabel>
-                    <div
-                        class="flex w-full justify-end content-end align-end mt-[150px]"
-                    >
-                        <PrimaryButton
-                            class="flex w-1/3 justify-center"
-                            :disabled="this.selectedIndex.length == 0"
-                            v-on:click="onNext($event)"
-                        >
-                            Next
-                        </PrimaryButton>
+
+                <!-- Descriptions -->
+                <div class="w-1/2 flex flex-col max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-rounded scrollbar-thumb-rounded  scrollbar-thumb-gray-700 scrollbar-track-gray-300">
+                    <div v-for="index in indices" :key="index" class="mr-2">
+                        <div v-if="selectedIndices.includes(index)">
+                            <h3 class="font-bold text-2xl text-gray-700">
+                                {{ indexLabels[index] }}
+                            </h3>
+                            <p class="text-lg text-gray-700 mb-2">
+                                {{ indexDescriptions[index] }}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Nav -->
+            <nav class="flex justify-end mt-4">
+                <SecondaryButton
+                    class="mr-6"
+                    v-on:click="onRemoveRender"
+                >
+                    Back
+                </SecondaryButton>
+                <PrimaryButton
+                        :disabled="selectedIndices.length == 0"
+                        v-on:click="onNext($event)"
+                    >
+                        Next
+                </PrimaryButton>
+            </nav>
         </div>
     </div>
-    <SetParameters v-else :index="selectedIndex" :seriesID="seriesID" @back="onBackParameters"/>
+    <SetParameters v-else :index="selectedIndices" :seriesID="seriesID" @back="onBackParameters"/>
 </template>
 
 <script>
 import {defineComponent} from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue"
 import InputLabel from "@/Components/InputLabel.vue";
 import SetParameters from "@/Pages/Jobs/SetParameters.vue";
 
-let indexText = {
+const indices = ["NDSI", "ACI", "ADI", "AEI", "BIO", "RMS", "FREQUENCYFILTER", "ACOUSTICFILTER"]
+const indexLabels = {
+    ACI: "ACI",
+    NDSI: "NDSI",
+    AEI: "AEI",
+    ADI: "ADI",
+    BIO: "BIO",
+    RMS: "RMS",
+    FREQUENCYFILTER: "Frequency Filter",
+    ACOUSTICFILTER: "Acoustic Filter",
+};
+const indexDescriptions = {
     ACI: "The accoustic complexity index is an algorithm used to determine the complexity of natural sound. It was initially developed for computing the complexity of bird song. Variability in sound intensities are measured and compared to provide a measured complexity.",
     NDSI: "NDSI is an algorithm used to determine the level of anthropogenic disturbance in an area. It computes the ratio of human-generated sound to natural sound in the soundscape.",
     AEI: "The accoustic evenness index is an algorithm used to determine the overall eveness of sound in a soundscape. An elevated AEI implies a homogeneous soundscape and a subsequent lack of diversity.",
     ADI: "The accoustic diversity index is an algorithm used to determine the overall diversity of sound in a soundscape. An elevated ADI implies a significant occupation of frequencies and a strong level of diversity.",
-    BIO: "the bioacoustic index is an algoirithm used to determine the sound level and number of frequency bands occupied in a soundscape. It is used as a general determinant of occupied frequencies to investigate the abundance of biological sound.",
+    BIO: "The bioacoustic index is an algoirithm used to determine the sound level and number of frequency bands occupied in a soundscape. It is used as a general determinant of occupied frequencies to investigate the abundance of biological sound.",
     RMS: "RMS is the root mean square or quadratic mean",
     FREQUENCYFILTER: "Silences the audio sample(s) outside a specified frequency range",
-    ACOUSTICFILTER: " Silences the audio sample(s) outside a specifies acoustic indice's range",
+    ACOUSTICFILTER: "Silences the audio sample(s) outside a specifies acoustic indice's range",
 };
 
 export default defineComponent({
     components: {
         ApplicationLogo,
         PrimaryButton,
+        SecondaryButton,
         InputLabel,
         SetParameters,
     },
     data: function () {
         return {
-            descriptionText: indexText['NDSI'],
-            selectedIndex: ['NDSI'],
             displayIndexSelection: true,
+
+            // Selections
+            selectedIndices: [],
+
+            // List of indices and their descriptions
+            indices: indices,
+            indexLabels: indexLabels,
+            indexDescriptions: indexDescriptions,
         };
     },
     props: ["seriesID"],
+    watch: {
+    },
     methods: {
-        onChange: function (event) {
-            let e = this.selectedIndex.indexOf(event.target.id.toUpperCase());
-
-            if (e != -1) {
-                this.selectedIndex.splice(e, 1);
-                this.descriptionText = indexText[this.selectedIndex[this.selectedIndex.length - 1]];
-            } else {
-                this.selectedIndex.push(event.target.id.toUpperCase());
-                this.descriptionText = indexText[event.target.id.toUpperCase()];
-            }
-            return;
-        },
         onNext: function (event) {
             this.displayIndexSelection = false;
             return;
         },
         onBackParameters: function (value) {
             this.displayIndexSelection = true;
-            this.selectedIndex = ["NDSI"];
-            this.descriptionText = indexText["NDSI"];
             return;
         },
         onRemoveRender: function () {
