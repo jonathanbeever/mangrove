@@ -1,53 +1,106 @@
 <template>
-    <div v-if="displayIndexSelection" class="w-full">
+    <div class="w-full">
         <div
             class="flex flex-col p-6 sm:px-10 bg-white border-b border-gray-200 w-full flex justify-center"
         >
-            <div class="flex flex-row justify-between content-center w-full">
-                <div class="flex flex-row w-full items-center justify-center">
-                    <InputLabel class="mr-[5px]"> Choose Audio Files</InputLabel>
-                    <hr class="flex flex-grow"/>
-                    <InputLabel class="mr-[5px] ml-[5px] font-bold">
-                        Select R index
-                    </InputLabel>
-                    <hr class="flex flex-grow"/>
-                    <InputLabel class="ml-[5px]"> Set Parameters</InputLabel>
-                </div>
+            <!-- Header -->
+            <div class="flex flex-row w-full items-center justify-center">
+                <template v-for="(header, index) in pageHeaders" :key="index">
+                    <h4 class="block text-sm text-gray-700" :class="(index+1==page) ? 'font-extrabold' : 'font-medium'">
+                        {{ header }}
+                    </h4>
+                    <hr v-if="!(index == pageHeaders.length-1)" class="flex-grow mx-4">
+                </template>
             </div>
 
-            <div class="flex flex-row w-full mt-4">
-                <!-- Selection -->
-                <div class="flex flex-col w-1/2">
-                    <InputLabel class="!text-xl mb-2 !pointer-events-autofont-bold" value="Select Indices" />
-                    <div>
-                        <div v-for="index in indices" :key="index">
-                            <input
-                                :id="index"
-                                v-model="selectedIndices"
-                                class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                                type="checkbox"
-                                :value="index"
-                            >
-                            <InputLabel
-                                class="form-check-label inline-block text-gray-800"
-                                :for="index"
-                            >
-                                {{ indexLabels[index] }}
-                            </InputLabel>
+            <!-- Select Indices -->
+            <div v-if="page == 2">
+                <div class="flex flex-row w-full mt-4">
+                    <!-- Selections -->
+                    <div class="flex flex-col w-1/2">
+                        <InputLabel class="!text-xl mb-2 !pointer-events-autofont-bold" value="Select Indices" />
+                        <div>
+                            <div v-for="index in indices" :key="index">
+                                <input
+                                    :id="index"
+                                    v-model="selectedIndices"
+                                    class="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                                    type="checkbox"
+                                    :value="index"
+                                >
+                                <InputLabel
+                                    class="form-check-label inline-block text-gray-800"
+                                    :for="index"
+                                >
+                                    {{ indexLabels[index] }}
+                                </InputLabel>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descriptions -->
+                    <div class="w-1/2 flex flex-col max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-rounded scrollbar-thumb-rounded  scrollbar-thumb-gray-700 scrollbar-track-gray-300">
+                        <div v-for="index in indices" :key="index" class="mr-2">
+                            <div v-if="selectedIndices.includes(index)">
+                                <h3 class="font-bold text-2xl text-gray-700">
+                                    {{ indexLabels[index] }}
+                                </h3>
+                                <p class="text-lg text-gray-700 mb-2">
+                                    {{ indexDescriptions[index] }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Descriptions -->
-                <div class="w-1/2 flex flex-col max-h-96 overflow-y-auto scrollbar-thin scrollbar-track-rounded scrollbar-thumb-rounded  scrollbar-thumb-gray-700 scrollbar-track-gray-300">
-                    <div v-for="index in indices" :key="index" class="mr-2">
-                        <div v-if="selectedIndices.includes(index)">
-                            <h3 class="font-bold text-2xl text-gray-700">
-                                {{ indexLabels[index] }}
-                            </h3>
-                            <p class="text-lg text-gray-700 mb-2">
-                                {{ indexDescriptions[index] }}
+            <!-- Set Parameters -->
+            <div v-if="page == 3">
+                <div class="flex mt-4">
+                    <!-- Parameters -->
+                    <div class="w-1/3 max-h-96 overflow-y-auto pl-2 min-w-min scrollbar-thin scrollbar-track-rounded scrollbar-thumb-rounded  scrollbar-thumb-gray-700 scrollbar-track-gray-300">
+                        <NdsiParameters v-if="selectedIndices.includes('NDSI')" v-model="ndsi"/>
+                        <AciParameters v-if="selectedIndices.includes('ACI')" v-model="aci"/>
+                        <AdiParameters v-if="selectedIndices.includes('ADI')" v-model="adi"/>
+                        <AeiParameters v-if="selectedIndices.includes('AEI')" v-model="aei"/>
+                        <BiParameters v-if="selectedIndices.includes('BIO')" v-model="bi"/>
+                        <div v-if="selectedIndices.includes('RMS')" class="dark:text-gray-700">
+                            <h2 class="text-xl font-semibold">
+                                RMS Specifications
+                            </h2>
+                            <p class="italic">
+                                RMS does not have parameters
                             </p>
+                        </div>
+                        <FrequencyFilterParameters v-if="selectedIndices.includes('FREQUENCYFILTER')" v-model="frequencyFilter"/>
+                        <AcousticFilterParameters v-if="selectedIndices.includes('ACOUSTICFILTER')" v-model="acousticFilter"/>
+                    </div>
+
+                    <div class="w-2/3 ml-4 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-700">
+                                Usage of Specifications
+                            </h3>
+                            <p class="text-lg text-gray-700">
+                                {{ parameterUseDescription }}
+                            </p>
+                        </div>
+                        <div class="flex justify-between mt-10 dark:text-gray-700">
+                            <div>
+                                <h4 class="text-gray-700 font-medium underline">
+                                    Indices Selected
+                                </h4>
+                                <p>{{ "- " + selectedIndices.join(", ") }}</p>
+                            </div>
+                            <div class="ml-6">
+                                <InputLabel for="jobName" value="Job Name" />
+                                <TextInput
+                                    id="jobName"
+                                    v-model="jobName"
+                                    type="text"
+                                    placeholder="Job Name"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -55,32 +108,44 @@
 
             <!-- Nav -->
             <nav class="flex justify-end mt-4">
-                <SecondaryButton
-                    class="mr-6"
-                    v-on:click="onRemoveRender"
-                >
+                <nav class="flex justify-end mt-4">
+                <SecondaryButton v-if="page > 1" class="mr-6" @click="page -= 1">
                     Back
                 </SecondaryButton>
-                <PrimaryButton
-                        :disabled="selectedIndices.length == 0"
-                        v-on:click="onNext($event)"
-                    >
-                        Next
+                <PrimaryButton v-if="page < numPages" :disabled="nextDisabled" @click="page += 1">
+                    Next
                 </PrimaryButton>
+                <PrimaryButton v-else :disabled="nextDisabled" @click="onSubmit">
+                    Finish
+                </PrimaryButton>
+            </nav>
             </nav>
         </div>
     </div>
-    <SetParameters v-else :index="selectedIndices" :seriesID="seriesID" @back="onBackParameters"/>
 </template>
 
 <script>
 import {defineComponent} from "vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue"
-import InputLabel from "@/Components/InputLabel.vue";
-import SetParameters from "@/Pages/Jobs/SetParameters.vue";
+import {router} from '@inertiajs/vue3'
 
+import ApplicationLogo from "@/Components/ApplicationLogo.vue"
+import InputLabel from "@/Components/InputLabel.vue"
+import PrimaryButton from "@/Components/PrimaryButton.vue"
+import SecondaryButton from "@/Components/SecondaryButton.vue"
+import TextInput from "@/Components/TextInput.vue"
+
+import NdsiParameters from '@/ParameterComponents/NdsiParameters.vue'
+import AciParameters from '@/ParameterComponents/AciParameters.vue'
+import AdiParameters from '@/ParameterComponents/AdiParameters.vue'
+import AeiParameters from '@/ParameterComponents/AeiParameters.vue'
+import BiParameters from '@/ParameterComponents/BiParameters.vue'
+import FrequencyFilterParameters from '@/ParameterComponents/FrequencyFilterParameters.vue'
+import AcousticFilterParameters from '@/ParameterComponents/AcousticFilterParameters.vue'
+
+// Page Headers
+const pageHeaders = ['Choose Series', 'Select Indices', 'Set Parameters']
+
+// Index Meta
 const indices = ["NDSI", "ACI", "ADI", "AEI", "BIO", "RMS", "FREQUENCYFILTER", "ACOUSTICFILTER"]
 const indexLabels = {
     ACI: "ACI",
@@ -103,43 +168,126 @@ const indexDescriptions = {
     ACOUSTICFILTER: "Silences the audio sample(s) outside a specifies acoustic indice's range",
 };
 
+// General description of parameters
+const parameterUseDescription = 'The selected specifications will influence the ouput of the job to reflect the values selected. Specifications are job specific and cannot be altered after the creation of a job.  Default values have been pre-selected to provide general output.'
+
 export default defineComponent({
     components: {
         ApplicationLogo,
+        InputLabel,
         PrimaryButton,
         SecondaryButton,
-        InputLabel,
-        SetParameters,
+        TextInput,
+        NdsiParameters,
+        AciParameters,
+        AdiParameters,
+        AeiParameters,
+        BiParameters,
+        FrequencyFilterParameters,
+        AcousticFilterParameters,
     },
+    props: ["seriesID"],
+    emits: ['goToSeriesSelection'],
     data: function () {
         return {
-            displayIndexSelection: true,
-
             // Selections
             selectedIndices: [],
+            aci: {},
+            ndsi: {},
+            aei: {},
+            adi: {},
+            bi: {},
+            rms: true,
+            frequencyFilter: {},
+            acousticFilter: {},
+            jobName: "",
 
             // List of indices and their descriptions
             indices: indices,
             indexLabels: indexLabels,
             indexDescriptions: indexDescriptions,
+
+            // Page
+            pageHeaders: pageHeaders,
+            page: 2,
+            numPages: 3,
+
+            // Parameter description
+            parameterUseDescription: parameterUseDescription,
         };
     },
-    props: ["seriesID"],
+    computed: {
+        nextDisabled() {
+            if (this.page == 2) { // Disabling next on second page
+                return !this    .selectedIndices.length
+            } else { // Disabling finish on third page
+                return !this.jobName.length
+            }
+        },
+    },
     watch: {
+        page() {
+            // Workaround for the first "page" not being a page
+            if (this.page == 1)
+            {
+                // Set page to 2 so it is ready next time we come here
+                this.page = 2
+                // Go back to series selection
+                this.$emit("goToSeriesSelection");
+            }
+        }
     },
     methods: {
-        onNext: function (event) {
-            this.displayIndexSelection = false;
-            return;
+        onSubmit() {
+            let request = {}
+            let indexParams = {}
+            let convertedParams = {}
+            let convertedIndex = ""
+
+            // Add parameters to our request
+            this.selectedIndices.forEach((index) => {
+                convertedIndex = this.convertIndex(index)
+
+                // RMS does not have params, just return true
+                if (convertedIndex == 'rms')
+                {
+                    request[convertedIndex] = true
+                    return;
+                }
+
+                // Get index params and clear convertedParams
+                indexParams = this[convertedIndex]
+                convertedParams = {}
+
+                // Convert keys to snake_case
+                Object.keys(indexParams).forEach((key) => {
+                    if (key == "timeStep") return; // Exception because it is timeStep not time_step in database
+                    convertedParams[this.convertCamelToSnakeCase(key)] = indexParams[key]
+                })
+
+                request[convertedIndex] = convertedParams
+            })
+
+            request.name = this.jobName
+            request.series_id = this.seriesID
+
+            // Perform request
+            router.post(route('jobs.store'), request)
         },
-        onBackParameters: function (value) {
-            this.displayIndexSelection = true;
-            return;
+        convertCamelToSnakeCase(str) {
+            return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
         },
-        onRemoveRender: function () {
-            this.$emit("goToSeriesSelection");
-            return;
-        },
-    },
+        convertIndex(str) {
+            if (str == "FREQUENCYFILTER") {
+                return "frequencyFilter"
+            } else if (str == "ACOUSTICFILTER") {
+                return "acousticFilter"
+            } else if (str == "BIO") {
+                return "bi"
+            } else {
+                return str.toLowerCase()
+            }
+        }
+    }
 });
 </script>
