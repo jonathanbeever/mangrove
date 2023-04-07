@@ -62,7 +62,7 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
             concatenated_wav <- tuneR::Wave(concatenated_waveform, samp.rate = sample_rate, bit = bit)
         }
         filtered_list[[file_name]] <- concatenated_wav
-        new_file_name <- paste0(sub("\\.wav$", "", file_name), "_",acoustic_index, "_", max_val,"_timeStep_", timeStep, ".wav")
+        new_file_name <- paste0(sub("\\.wav$", "", file_name), "_",acoustic_index, "_",  as.character(max_val),"_timeStep_",  as.character(timeStep), ".wav")
         tuneR::writeWave(concatenated_wav, filename = new_file_name, sample_rate) # Writes new .wav
     }
 }
@@ -91,7 +91,7 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
 
         filtered_sig <- Re(signal::ifft(fourier)) # Inverse fourier transformation
         filtered_wav <- tuneR::Wave(filtered_sig, samp.rate = sample_rate, bit = bit)
-        new_file_name <- paste0(sub("\\.wav$", "", file_name), "_minFreq_", min_freq, "_maxFreq_", max_freq, ".wav")
+        new_file_name <- paste0(sub("\\.wav$", "", file_name), "_minFreq_",  as.character(min_freq), "_maxFreq_",  as.character(max_freq), ".wav")
         tuneR::writeWave(filtered_wav, filename = new_file_name, sample_rate)
     }
 }
