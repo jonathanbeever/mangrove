@@ -129,7 +129,7 @@ export default defineComponent({
         const findIndicesUsed = (object) => {
             let indicesUsed = [];
             Object.keys(object).map((key) => {
-                ["aci", "adi", "aei", "bi", "ndsi", "rms", "frequencyFilter", "acousticFilter"].forEach((index) => {
+                ["aci", "adi", "aei", "bi", "ndsi", "rms", "frequency_filter", "acoustic_filter"].forEach((index) => {
                     if (
                         key.includes(index) &&
                         object[key] != null &&
