@@ -28,12 +28,12 @@
                         <!-- Editable -->
                         <input
                             v-if="editable"
-                            class="text-gray-500"
+                            class="text-gray-900"
                             :value="column.id.split('.').reduce((e, prop) => e[prop], entry)"
                             @change.prevent="$emit('edit', entry, column.id, $event.target.value)"
                         >
                         <!-- Not Editable -->
-                        <p class="text-gray-500">
+                        <p class="text-gray-900">
                             {{ column.id.split('.').reduce((e, prop) => e[prop], entry) }}
                         </p>
                     </slot>
