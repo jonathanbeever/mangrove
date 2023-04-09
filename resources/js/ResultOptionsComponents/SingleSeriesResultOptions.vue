@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import {defineComponent} from "vue";
+import {defineComponent} from "vue"
 
-import ResultOptions from "@/ResultOptionsComponents/ResultOptions.vue";
+import ResultOptions from "@/ResultOptionsComponents/ResultOptions.vue"
 
 export default defineComponent({
     components: {
@@ -52,28 +52,28 @@ export default defineComponent({
         seriesOptions() {
             return this.selections.site != null
                 ? this.selections.site.series
-                : [];
+                : []
         },
         indexOptions() {
             return this.selections.series != null
                 ? this.findIndicesUsed(this.selections.series.results[0])
-                : [];
+                : []
         },
     },
     methods: {
         findIndicesUsed(result) {
-            let indicesUsed = [];
+            let indicesUsed = []
             Object.keys(result).forEach((key) => {
                 ["aci", "adi", "aei", "bi", "ndsi", "rms"].forEach((index) => {
                     if (
                         key.includes(index) &&
                         result[key] != null
                     ) {
-                        indicesUsed.push(index.toUpperCase());
+                        indicesUsed.push(index.toUpperCase())
                     }
                 })
-            });
-            return indicesUsed;
+            })
+            return indicesUsed
         }
     }
 })
