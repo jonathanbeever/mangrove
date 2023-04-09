@@ -1,10 +1,10 @@
 <template>
-    <ResultOptions :options="multiFileOptions" v-model="selections"/>
+    <ResultOptions :options="multiSeriesOptions" v-model="selections"/>
 </template>
 
 <script>
 // TODO alert user when the two files (results) dont have any indices in common
-import {defineComponent} from "vue"
+import {defineComponent} from "vue";
 
 import ResultOptions from "@/ResultOptionsComponents/ResultOptions.vue"
 
@@ -31,72 +31,56 @@ export default defineComponent({
                 this.$emit('update:modelValue', selections)
             }
         },
-        multiFileOptions() {
+        multiSeriesOptions() {
             return {
-                site: {
-                    label: "Site",
+                siteOne: {
+                    label: "Site One",
                     options: this.sites,
                     labelKey: "name"
                 },
-                series: {
-                    label: "Series",
-                    options: this.seriesOptions,
+                seriesOne: {
+                    label: "Series One",
+                    options: this.seriesOptionsOne,
                     labelKey: "name"
                 },
-                fileOne: {
-                    label: "File",
-                    options: this.fileOptions,
-                    labelKey: "file.name",
+                siteTwo: {
+                    label: "Site Two",
+                    options: this.sites,
+                    labelKey: "name"
                 },
-                fileTwo: {
-                    label: "File",
-                    options: this.fileOptions,
-                    labelKey: "file.name",
+                seriesTwo: {
+                    label: "Series Two",
+                    options: this.seriesOptionsTwo,
+                    labelKey: "name"
                 },
                 index: {
                     label: "Index",
                     options: this.indexOptions,
                     labelKey: null,
                 },
-                chart: {
-                    label: "Chart",
-                    options: this.chartOptions,
-                    labelKey: null,
-                }
             }
         },
-        seriesOptions() {
-            return this.selections.site != null
-                ? this.selections.site.series
+        seriesOptionsOne() {
+            return this.selections.site_one != null
+                ? this.selections.site_one.series
                 : []
         },
-        fileOptions() {
-            return this.selections.series != null
-                ? this.selections.series.results // we are choosing the results, but displaying the file name
+        seriesOptionsTwo() {
+            return this.selections.site_two != null
+                ? this.selections.site_two.series
                 : []
         },
         indexOptions() {
-            return (this.selections.file_one != null && this.selections.file_two != null)
-                ? this.findIndicesUsed(this.selections.file_one, this.selections.file_two) // file is really the results
+            return (this.selections.series_one != null && this.selections.series_two != null)
+                ? this.findIndicesUsed(this.selections.series_one.results[0], this.selections.series_two.results[0])
                 : []
         },
-        chartOptions() {
-            return this.selections.index != null
-                ? this.getChartOptions(this.selections.index)
-                : []
-        }
-    },
-    watch: {
-        'selections.index'(newIndex) {
-            if (newIndex == "NDSI" || newIndex == "RMS") {
-                this.selections.chart = "Compare Bar"
-            }
-        }
     },
     methods: {
         findIndicesUsed(result_one, result_two) {
             let indicesUsedOne = []
             let indicesUsedTwo = []
+
 
             Object.keys(result_one).forEach((key) => {
                 ["aci", "adi", "aei", "bi", "ndsi", "rms"].forEach((index) => {
@@ -107,7 +91,7 @@ export default defineComponent({
                         indicesUsedOne.push(index.toUpperCase())
                     }
                 })
-            })
+            });
             Object.keys(result_two).forEach((key) => {
                 ["aci", "adi", "aei", "bi", "ndsi", "rms"].forEach((index) => {
                     if (
@@ -117,21 +101,10 @@ export default defineComponent({
                         indicesUsedTwo.push(index.toUpperCase())
                     }
                 })
-            })
+            });
 
             // Only return what is in both
             return indicesUsedOne.filter(index => indicesUsedTwo.includes(index))
-        },
-        getChartOptions(index) {
-            // NDSI and RMS have no choice
-            if (index == "NDSI" || index == "RMS") {
-                return []
-            }
-
-            return [
-                "Dual Line",
-                "Compare Bar"
-            ]
         },
     }
 })

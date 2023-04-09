@@ -114,7 +114,6 @@ export default defineComponent({
                     "Single Bar",
                     "Dual Line",
                     "Compare Bar",
-                    "Frequency Over Time",
                 ]
 
             // BI can also choose Frequency Over Time graph
