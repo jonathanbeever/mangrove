@@ -42,7 +42,6 @@ export default defineComponent({
                     options: this.indexOptions,
                     labelKey: null,
                 },
-
             }
         },
         indexOptions() {
