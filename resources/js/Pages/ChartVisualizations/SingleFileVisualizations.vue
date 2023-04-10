@@ -1,5 +1,8 @@
 <template>
-    <div class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center">
+    <div
+        class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
+        id="root"
+    >
         <div v-if="index == 'ACI'" class="w-4/5">
             <SingleLine
                 v-if="chart == 'Single Line'"
@@ -227,6 +230,19 @@ export default defineComponent({
         graphData: {
             type: Object,
             required: true
+        },
+        modelValue: { // Active Chart Element
+            type: Object,
+            required: true
+        }
+    },
+    emits: ['update:modelValue'],
+    watch: {
+        index() {
+            modelValue = document.getElementById("root").firstElementChild.firstElementChild
+        },
+        chart() {
+            modelValue = document.getElementById("root").firstElementChild.firstElementChild
         }
     }
 })
