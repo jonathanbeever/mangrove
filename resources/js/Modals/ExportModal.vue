@@ -1,5 +1,5 @@
 <template>
-    <DialogModal :show="show" @close="$emit('close')" class="w-0">
+    <DialogModal :show="show" @close="$emit('close')">
         <template #title>
             <div class="border-b-2 pb-2 border-grey-500">
                 <div class="flex">
@@ -320,7 +320,7 @@ export default defineComponent({
         },
         wavFile: {
             type: Object,
-            required: true
+            required: false
         },
         exportVisualizations: {
             type: Array,
@@ -328,7 +328,7 @@ export default defineComponent({
         },
         jsonNotes: {
             type: String,
-            required: true
+            required: false
         }
     },
     emits: ['close', 'moveUpExportEntry','moveDownExportEntry', 'deleteExportEntry'],
