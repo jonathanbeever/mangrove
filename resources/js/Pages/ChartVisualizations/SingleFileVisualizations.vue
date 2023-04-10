@@ -221,7 +221,7 @@ export default defineComponent({
         },
         chart: {
             type: String,
-            required: true
+            required: false
         },
         fileName: {
             type: String,
@@ -239,10 +239,10 @@ export default defineComponent({
     emits: ['update:modelValue'],
     watch: {
         index() {
-            modelValue = document.getElementById("root").firstElementChild.firstElementChild
+            this.$emit('update:modelValue', document.getElementById("root").firstElementChild.firstElementChild)
         },
         chart() {
-            modelValue = document.getElementById("root").firstElementChild.firstElementChild
+            this.$emit('update:modelValue', document.getElementById("root").firstElementChild.firstElementChild)
         }
     }
 })
