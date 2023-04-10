@@ -117,7 +117,6 @@ export default {
             }
 
             // Sorting from same column
-
             if (this.sortMode === SortMode.Ascending) { // If ascending, go to descending
                 this.sortMode = SortMode.Descending
             } else if (this.sortMode === SortMode.Descending) { // If descending, clear sort

@@ -171,7 +171,6 @@ export default defineComponent({
                 const statuses = response.data.statuses;
                 const statusArray = Object.entries(statuses).map(([id, status]) => ({id: parseInt(id), status}));
 
-                // console.log(statusArray);
                 statusArray.forEach(statusObj => {
                     const index = this.items.findIndex(item => item.id === statusObj.id);
                     if (index !== -1 && this.items[index].status !== statusObj.status) {
