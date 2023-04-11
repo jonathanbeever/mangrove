@@ -62,9 +62,10 @@ export default defineComponent({
         }
     },
     created() {
-        // Populate selections to be empty
+        // Populate selections to be empty, unless already set
         Object.keys(this.options).forEach((key) => {
-            this.selections[key] = null
+            if (this.selections[key] == undefined)
+                this.selections[key] = null
         })
     },
 })

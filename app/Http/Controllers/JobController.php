@@ -105,15 +105,19 @@ class JobController extends Controller
      *
      * @return Response
      */
-    public function results(): Response
+    public function results(Request $request): Response
     {
         $user = auth()->user();
         if ($user !== null) {
             $sites = $user->sites()->with(['series.results', 'series.fileMetadata'])->get()->toArray();
         }
+        if (sizeof($request->keys()) == 0) {
+            $request = null;
+        }
 
         return Inertia::render('Jobs/Results', [
             'sites' => $sites ?? [],
+            'sentResult' => $request
         ]);
     }
 

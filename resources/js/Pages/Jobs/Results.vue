@@ -224,7 +224,6 @@
 
 <script>
 import { defineComponent } from "vue"
-import { usePage } from "@inertiajs/vue3"
 import _ from "lodash"
 import * as JSZip from "jszip"
 
@@ -303,18 +302,19 @@ export default defineComponent({
         SingleSeriesVisualizations
     },
     props: {
-        entry: {
+        sites: { // User sites
+            type: Array,
+            required: true
+        },
+        sentResult: { // Job to be loaded in
             type: Object,
             required: false
         }
     },
     data() {
         return {
-            // User's sites
-            sites: [],
-
             // Result Mode
-            resultMode: ResultMode.SingleFile,
+            resultMode: null,
             ResultMode: ResultMode,
             resultModeOptions: resultModeOptions,
 
@@ -341,6 +341,9 @@ export default defineComponent({
 
             // Metadata
             metadataFields: [],
+
+            // Misc
+            firstLoad: true
         }
     },
     computed: {
@@ -443,12 +446,53 @@ export default defineComponent({
     },
     watch: {
         resultMode() {
+            // WORDAROUND: The watch handler gets triggered after beforeMount runs, wiping data
+            // This skips the handler the first time it is called
+            if (this.firstLoad) {
+                this.firstLoad = false
+                return
+            }
             // Clear selections when the mode changes
             this.selections = {}
         }
     },
     created() {
         this.updateMetadata()
+    },
+    beforeMount() {
+        // The component was not passed a result
+        if (this.sentResult == null) {
+            this.resultMode = ResultMode.SingleFile
+        } else { // The component was passed a result
+            this.resultMode = ResultMode.SingleSeries
+
+            // Find the series the job was run on
+            for (let site of this.sites) {
+                for (let series of site.series) {
+                    // // Series found
+                    if (series.id == this.sentResult.series_id) {
+                        // Set the selections
+                        this.selections.site = site
+                        this.selections.series = series
+
+                        // If only one index in the job, select it. if not, do not set an index
+                        let found;
+                        ["aci", "adi", "aei", "bi", "ndsi", "rms"].forEach((index) => {
+                            if(this.sentResult[index + "_input"] != null) {
+                                if (found) {
+                                    this.selections.index = null
+                                } else {
+                                    this.selections.index = index.toUpperCase()
+                                    found = true
+                                }
+                            }
+                        })
+                        break;
+                    }
+                }
+                if (this.selections.site != null) break
+            }
+        }
     },
     mounted() {
         const self = this
@@ -581,8 +625,6 @@ export default defineComponent({
             region.remove()
             form.reset()
         })
-
-        this.sites = usePage().props.sites
     },
     methods: {
 

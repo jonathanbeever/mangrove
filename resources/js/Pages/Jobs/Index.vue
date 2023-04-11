@@ -75,7 +75,7 @@
 import {defineComponent} from "vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import {usePage} from "@inertiajs/vue3";
+import {router, usePage} from "@inertiajs/vue3";
 import DataTable from "@/Components/DataTable.vue";
 
 const jobQueueColumns = [
@@ -185,7 +185,7 @@ export default defineComponent({
         onJobEntryClicked(entry) {
             // Job is successful
             if (entry.status === 2) {
-                // TODO Redirect to job results with this job filled in
+                router.get(route('results.index'), entry)
             }
         },
     },
