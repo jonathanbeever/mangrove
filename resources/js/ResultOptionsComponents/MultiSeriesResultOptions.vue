@@ -61,18 +61,18 @@ export default defineComponent({
             }
         },
         seriesOptionsOne() {
-            return this.selections.site_one != null
-                ? this.selections.site_one.series
+            return this.selections.siteOne != null
+                ? this.selections.siteOne.series
                 : []
         },
         seriesOptionsTwo() {
-            return this.selections.site_two != null
-                ? this.selections.site_two.series
+            return this.selections.siteTwo != null
+                ? this.selections.siteTwo.series
                 : []
         },
         indexOptions() {
-            return (this.selections.series_one != null && this.selections.series_two != null)
-                ? this.findIndicesUsed(this.selections.series_one.results[0], this.selections.series_two.results[0])
+            return (this.selections.seriesOne != null && this.selections.seriesTwo != null)
+                ? this.findIndicesUsed(this.selections.seriesOne.results[0], this.selections.seriesTwo.results[0])
                 : []
         },
     },

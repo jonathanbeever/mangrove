@@ -44,12 +44,12 @@ export default defineComponent({
                     labelKey: "name"
                 },
                 fileOne: {
-                    label: "File",
+                    label: "File One",
                     options: this.fileOptions,
                     labelKey: "file.name",
                 },
                 fileTwo: {
-                    label: "File",
+                    label: "File Two",
                     options: this.fileOptions,
                     labelKey: "file.name",
                 },
@@ -76,8 +76,8 @@ export default defineComponent({
                 : []
         },
         indexOptions() {
-            return (this.selections.file_one != null && this.selections.file_two != null)
-                ? this.findIndicesUsed(this.selections.file_one, this.selections.file_two) // file is really the results
+            return (this.selections.fileOne != null && this.selections.fileTwo != null)
+                ? this.findIndicesUsed(this.selections.fileOne, this.selections.fileTwo) // file is really the results
                 : []
         },
         chartOptions() {
