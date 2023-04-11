@@ -1,15 +1,18 @@
 <template>
-    <div class="flex flex-row">
-        <div v-for="(option, key) in options" :key="key" class="px-2">
-            <p class="text-gray-700">
+    <div class="w-full flex flex-row justify-around">
+        <div v-for="(option, key) in options" :key="key" class="px-2 grow max-w-lg min-w-min">
+            <p class="dark:text-white whitespace-nowrap">
                 {{ option.label }}
             </p>
             <select
-                class="text-gray-900 rounded"
+                :id="key + 'select'"
+                class="grow dark:text-black rounded w-full min-w-fit"
                 v-model="selections[key]"
                 :disabled="Object.keys(option.options).length == 0"
             >
                 <option
+                    :id="key + 'option'"
+                    class="min-w-min"
                     v-for="choice in option.options"
                     :value="choice"
                 >
@@ -58,7 +61,7 @@ export default defineComponent({
             }
         }
     },
-    beforeMount() {
+    created() {
         // Populate selections to be empty
         Object.keys(this.options).forEach((key) => {
             this.selections[key] = null
