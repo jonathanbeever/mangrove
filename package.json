@@ -32,6 +32,8 @@
         "html2canvas": "^1.4.1",
         "jspdf": "^2.5.1",
         "jszip": "^3.10.1",
+        "primeicons": "^6.0.1",
+        "primevue": "^3.26.1",
         "wavefile": "^11.0.0"
     }
 }

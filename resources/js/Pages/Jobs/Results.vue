@@ -1,10 +1,10 @@
 <template>
     <AppLayout title="Results">
         <div class="dark:text-black">
-            <SplitScreen>
-                <template #left>
+            <Splitter :gutter-size="10">
+                <SplitterPanel :size="30">
                     <!-- Wavesurfer -->
-                    <div class="mt-4 mx-4">
+                    <div class="mt-4 ml-4 mr-2">
                         <div
                             class="bg-white shadow-xl sm:rounded-lg dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white"
                             ref="wavesurferRegion"
@@ -110,10 +110,10 @@
                             </div>
                         </div>
                     </div>
-                </template>
-                <template #right>
+                </SplitterPanel>
+                <SplitterPanel :size="70" :min-size="40">
                     <!-- Analysis Selection / Data Visualization -->
-                    <div class="mt-4 mx-4">
+                    <div class="mt-4 ml-2 mr-4">
                         <!-- Analysis Mode / Result Option Selection -->
                         <div class="flex flex-col grow dark:text-white">
                             <div class="w-full p-4 flex flex-row justify-between rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
@@ -216,8 +216,8 @@
                             </div>
                         </div>
                     </div>
-                </template>
-            </SplitScreen>
+                </SplitterPanel>
+            </Splitter>
         </div>
     </AppLayout>
 </template>
@@ -232,7 +232,6 @@ import ExportModal from "@/Modals/ExportModal.vue"
 import PrimaryButton from "@/Components/PrimaryButton.vue"
 import RegionsPlugin from "wavesurfer.js/src/plugin/regions"
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram"
-import SplitScreen from "@/Components/SplitScreen.vue"
 import VueElementLoading from "vue-element-loading"
 import WaveSurfer from "wavesurfer.js"
 
@@ -247,6 +246,9 @@ import MultiFileVisualizations from "@/Pages/ChartVisualizations/MultiFileVisual
 import MultiSeriesVisualizations from "@/Pages/ChartVisualizations/MultiSeriesVisualizations.vue"
 import SingleFileVisualizations from "@/Pages/ChartVisualizations/SingleFileVisualizations.vue"
 import SingleSeriesVisualizations from "@/Pages/ChartVisualizations/SingleSeriesVisualizations.vue"
+
+import Splitter from 'primevue/splitter';
+import SplitterPanel from 'primevue/splitterpanel';
 
 // Psuedo-Enum
 const ResultMode = {
@@ -285,7 +287,8 @@ export default defineComponent({
         AppLayout,
         ExportModal,
         PrimaryButton,
-        SplitScreen,
+        Splitter,
+        SplitterPanel,
         VueElementLoading,
         WaveSurfer,
 
