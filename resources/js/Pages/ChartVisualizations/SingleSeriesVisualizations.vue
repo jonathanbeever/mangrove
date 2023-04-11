@@ -82,7 +82,7 @@ export default defineComponent({
         },
         modelValue: { // Active Chart Element
             type: Object,
-            required: true
+            required: false
         }
     },
     emits: ['update:modelValue'],
