@@ -1,27 +1,24 @@
 <template>
-    <div class="w-full flex flex-row justify-around">
-        <div v-for="(option, key) in options" :key="key" class="px-2 grow max-w-lg min-w-min">
-            <p class="dark:text-white whitespace-nowrap">
-                {{ option.label }}
-            </p>
-            <select
-                :id="key + 'select'"
-                class="grow dark:text-black rounded w-full min-w-fit"
-                v-model="selections[key]"
-                :disabled="Object.keys(option.options).length == 0"
+    <div v-for="(option, key) in options" :key="key" class="px-2 grow max-w-lg min-w-min">
+        <p class="dark:text-white whitespace-nowrap">
+            {{ option.label }}
+        </p>
+        <select
+            :id="key + 'select'"
+            class="grow dark:text-black rounded w-full"
+            v-model="selections[key]"
+            :disabled="Object.keys(option.options).length == 0"
+        >
+            <option
+                :id="key + 'option'"
+                v-for="choice in option.options"
+                :value="choice"
             >
-                <option
-                    :id="key + 'option'"
-                    class="min-w-min"
-                    v-for="choice in option.options"
-                    :value="choice"
-                >
-                    {{ option.labelKey != null
-                        ? option.labelKey.split('.').reduce((c, key) => c[key], choice)
-                        : choice }}
-                </option>
-            </select>
-        </div>
+                {{ option.labelKey != null
+                    ? option.labelKey.split('.').reduce((c, key) => c[key], choice)
+                    : choice }}
+            </option>
+        </select>
     </div>
 </template>
 
