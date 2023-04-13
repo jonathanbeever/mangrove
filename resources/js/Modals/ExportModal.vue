@@ -102,9 +102,9 @@
                                             <div class="">
                                                 <div class="text-sm font-medium text-gray-900 break-words">
                                                     {{
-                                                    item.site2 == ""
-                                                        ? `${item.site1}`
-                                                        : `${item.site1}, ${item.site2}`
+                                                    item.site2 == null
+                                                        ? `${item.site1.name}`
+                                                        : `${item.site1.name}, ${item.site2.name}`
                                                     }}
                                                 </div>
                                             </div>
@@ -114,9 +114,9 @@
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
-                                                            item.series2 == ""
-                                                            ? `${item.series1}`
-                                                            : `${item.series1}, ${item.series2}`
+                                                            item.series2 == null
+                                                            ? `${item.series1.name}`
+                                                            : `${item.series1.name}, ${item.series2.name}`
                                                         }}
                                                     </div>
                                                 </div>
@@ -149,9 +149,9 @@
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
-                                                            item.cFile == ""
-                                                            ? `${item.sFile}`
-                                                            : `${item.sFile}, ${item.cFile}`
+                                                            item.cFile == null
+                                                            ? `${item.sFile.file.name}`
+                                                            : `${item.sFile.file.name}, ${item.cFile.file.name}`
                                                         }}
                                                     </div>
                                                 </div>
