@@ -116,7 +116,7 @@
                     <div class="mt-4 ml-2 mr-4">
                         <!-- Analysis Mode / Result Option Selection -->
                         <div class="flex flex-col grow dark:text-white">
-                            <div class="w-full p-4 flex flex-row justify-between rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
+                            <div class="w-full p-4 flex flex-row flex-wrap justify-between rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
                                 <div class="px-2">
                                     <p class="dark:text-white">
                                         Analysis Mode
@@ -415,10 +415,10 @@ export default defineComponent({
                 chart: this.selections.chart,
                 indices: this.selections.index,
 
-                sFile: this.selections.file != null
+                fileOne: this.selections.file != null
                         ? this.selections.file
                         : (this.selections.fileOne != null ? this.selections.fileOne : null),
-                cFile: this.selections.fileTwo != null ? this.selections.fileTwo : null,
+                fileTwo: this.selections.fileTwo != null ? this.selections.fileTwo : null,
 
                 site1: this.selections.site != null
                         ? this.selections.site
@@ -449,7 +449,7 @@ export default defineComponent({
     },
     watch: {
         resultMode() {
-            // WORDAROUND: The watch handler gets triggered after beforeMount runs, wiping data
+            // WORKAROUND: The watch handler gets triggered after beforeMount runs, wiping data
             // This skips the handler the first time it is called
             if (this.firstLoad) {
                 this.firstLoad = false
@@ -646,10 +646,10 @@ export default defineComponent({
                 chart: this.selections.chart,
                 indices: this.selections.index,
 
-                sFile: this.selections.file != null
+                fileOne: this.selections.file != null
                         ? this.selections.file
                         : (this.selections.fileOne != null ? this.selections.fileOne : null),
-                cFile: this.selections.fileTwo != null ? this.selections.fileTwo : null,
+                fileTwo: this.selections.fileTwo != null ? this.selections.fileTwo : null,
 
                 site1: this.selections.site != null
                         ? this.selections.site
@@ -680,6 +680,8 @@ export default defineComponent({
                 }
             } else {
                 // Add Chart to list
+                console.log(this.currentChart)
+                console.log(this.currentCanvas)
                 entry.imageURL = this.currentCanvas.toDataURL("image/png")
                 this.exportVisualizations.push(entry)
             }
@@ -757,6 +759,88 @@ export default defineComponent({
                 region.color = "rgba(245,189,31,0.3)"
                 surfer.addRegion(region)
             })
+        },
+
+        /***************************
+         *   DATA TRANSFORMATION   *
+         ***************************/
+
+        // Takes a series and the desired index and returns the results for each file
+        // on that index if it has been run on that index
+        buildIndicesData(series, index) {
+            const regex = /^[A-Za-z0-9]+_\d{8}_\d{6}\.wav$/ // Regex for Song Meter SM4 recorder files.
+            let output = {}
+            let noDate = false
+
+            // Set up the output fields with empty arrays to be pushed to later
+            switch(index) {
+                    case "ADI":
+                        output["adiL"] = []
+                        output["adiR"] = []
+                        break;
+                    case "AEI":
+                        output["aeiL"] = []
+                        output["aeiR"] = []
+                        break;
+                    case "BI":
+                        output["areaL"] = []
+                        output["areaR"] = []
+                        break;
+                    case "RMS":
+                        output["rmsL"] = []
+                        output["rmsR"] = []
+                        break;
+                    case "NDSI":
+                        output["anthrophonyL"] = []
+                        output["biophonyL"] = []
+                        break;
+                }
+
+            series.results.forEach((result) => {
+                let resultData
+                let rangeData
+
+                // Get the result
+                resultData = JSON.parse(result[`${index.toLowerCase() + "_results"}`])
+
+                // This series does not have data for the chosen index. Escape
+                if (resultData == null) return
+
+                // Get the range
+                if (regex.test(result.file.name)) {
+                    // This is really fragile, could break
+                    let fileName = result.file.name.split("_")
+                    let year = (fileName[1].slice(4, 6) + "/" + fileName[1].slice(6) + "/"+ fileName[1].slice(0, 4))
+                    let time = ((fileName[2].split(".")[0].slice(0, 2) + ":" + fileName[2].split(".")[0].slice(2)).slice(0, 5))
+
+                    rangeData = year + " - " + time
+                } else {
+                    // No date information. We will just assign each entry a number later
+                    noDate = true;
+                    rangeData = -1
+                }
+
+                // Push the result and range onto output
+                Object.keys(output).forEach((key) => {
+                    output[key].push({x: rangeData, y: resultData[key]})
+                })
+            })
+
+            // Found at least one entry with no date
+            if (noDate) {
+                Object.keys(output).forEach((key) => {
+                    output[key].forEach((val, index) => {
+                        val.x = index+1
+                    })
+                })
+            }
+
+            // Sort based on result value (I dont know why this is here, but it was in the previous version)
+            Object.keys(output).forEach((key) => {
+                output[key].sort((a, b) => a.y > b.y)
+            })
+
+            return output
         },
 
         /*
@@ -888,151 +972,6 @@ export default defineComponent({
 
         getMetadataSource(metadataFields, index) {
             itemToLookup = metadataFields[index]
-        },
-
-        /* TODO Assumes that all series passed will have results for the index. Fails on all series in site because not all series
-        in a site necessarily have the same indices run */
-        buildIndicesData: function (item, index) {
-            const regex = /^[A-Za-z0-9]+_\d{8}_\d{6}\.wav$/ // Regex for Song Meter SM4 recorder files.
-
-            const prettyUpYear = (item) => {
-                let prettyYear = item
-                return (
-                prettyYear.slice(4, 6) +
-                "/" +
-                prettyYear.slice(6) +
-                "/" +
-                prettyYear.slice(0, 4)
-                )
-            }
-            const prettyUpTime = (item) => {
-                let prettyTime = item
-                prettyTime = prettyTime.slice(0, 2) + ":" + prettyTime.slice(2)
-                return prettyTime.slice(0, 5)
-            }
-
-            let resultsOne = []
-            let range = []
-            let data = {}
-            let seriesIndex = index
-            item.results.forEach((x) => {
-                resultsOne.push(JSON.parse(x[`${seriesIndex.toLowerCase() + "_results"}`]))
-
-                // let fileName = x.file.name.split('_')
-                // range.push(prettyUpYear(fileName[1]) + ' - ' + prettyUpTime(fileName[2].split('.')[0]))
-                if (regex.test(x.file.name)) {
-                let fileName = x.file.name.split("_")
-                range.push(
-                    prettyUpYear(fileName[1]) + " - " + prettyUpTime(fileName[2].split(".")[0])
-                )
-                } else {
-                //range.push()
-                range = [...Array(10).keys()]
-                }
-            })
-
-            if (seriesIndex == "ADI") {
-                let array = []
-                resultsOne.forEach((x) => {
-                array.push(x.adiL)
-                })
-                data["adiL"] = array
-
-                let array2 = []
-                resultsOne.forEach((x) => {
-                array2.push(x.adiR)
-                })
-                data["adiR"] = array2
-            }
-            if (seriesIndex == "AEI") {
-                let array = []
-                resultsOne.forEach((x) => {
-                array.push(x.aeiL)
-                })
-                data["aeiL"] = array
-
-                let array2 = []
-                resultsOne.forEach((x) => {
-                array2.push(x.aeiR)
-                })
-                data["aeiR"] = array2
-            }
-            if (seriesIndex == "BI") {
-                let array = []
-                resultsOne.forEach((x) => {
-                array.push(x.areaL)
-                })
-                data["areaL"] = array
-
-                let array2 = []
-                resultsOne.forEach((x) => {
-                    array2.push(x.areaR)
-                })
-                data["areaR"] = array2
-            }
-            if (seriesIndex == "RMS") {
-                let array = []
-                resultsOne.forEach((x) => {
-                    array.push(x.rmsL)
-                })
-                data["rmsL"] = array
-
-                let array2 = []
-                resultsOne.forEach((x) => {
-                    array2.push(x.rmsR)
-                })
-                data["rmsR"] = array2
-            }
-            if (seriesIndex == "NDSI") {
-                let array = []
-                resultsOne.forEach((x) => {
-                array.push(x.anthrophonyL)
-                })
-                data["anthrophonyL"] = array
-
-                let array2 = []
-                resultsOne.forEach((x) => {
-                array2.push(x.biophonyL)
-                })
-                data["biophonyL"] = array2
-            }
-
-        let output = {}
-
-            Object.keys(data).forEach((x) => {
-                output[x] = []
-                data[x].forEach((y) => {
-                output[x].push({ x: range[data[x].indexOf(y)], y: y })
-                })
-                output[x].sort((a, b) => a.y > b.y)
-            })
-
-            return output
-        },
-
-        findIndicesUsed: function (object) {
-            let indicesUsed = []
-            Object.keys(object).map((key) => {
-                if (key.includes("aci") && object[key] != null && !indicesUsed.includes("ACI")) {
-                    indicesUsed.push("ACI")
-                }
-                if (key.includes("adi") && object[key] != null && !indicesUsed.includes("ADI")) {
-                    indicesUsed.push("ADI")
-                }
-                if (key.includes("aei") && object[key] != null && !indicesUsed.includes("AEI")) {
-                    indicesUsed.push("AEI")
-                }
-                if (key.includes("bi") && object[key] != null && !indicesUsed.includes("BI")) {
-                    indicesUsed.push("BI")
-                }
-                if (key.includes("ndsi") && object[key] != null && !indicesUsed.includes("NDSI")) {
-                    indicesUsed.push("NDSI")
-                }
-                if (key.includes("rms") && object[key] != null && !indicesUsed.includes("RMS")) {
-                    indicesUsed.push("RMS")
-                }
-            })
-            return indicesUsed
         },
 
         updateSpectrogramTime() {

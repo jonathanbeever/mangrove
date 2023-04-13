@@ -149,9 +149,11 @@
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
-                                                            item.cFile == null
-                                                            ? `${item.sFile.file.name}`
-                                                            : `${item.sFile.file.name}, ${item.cFile.file.name}`
+                                                            item.fileOne == null ?
+                                                            "" :
+                                                            (item.fileTwo == null
+                                                            ? `${item.fileOne.file.name}`
+                                                            : `${item.fileOne.file.name}, ${item.fileTwo.file.name}`)
                                                         }}
                                                     </div>
                                                 </div>
@@ -425,9 +427,9 @@ export default defineComponent({
                     }
 
                     if (this.pdfOptions.includes("audio")) {
-                        doc.text(`${entry.sFile.file.name}`, inch, padding);
+                        doc.text(`${entry.fileOne.file.name}`, inch, padding);
                         doc.text(
-                            entry.cFile.file.name.length >= 40 ? "" : `${entry.cFile.file.name}`,
+                            entry.fileTwo.file.name.length >= 40 ? "" : `${entry.fileTwo.file.name}`,
                             inch + 75,
                             padding
                         );
