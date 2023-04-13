@@ -335,7 +335,7 @@ export default defineComponent({
     data() {
         return {
             exportTitle: "",
-            exportingJson: false,
+            exportingJSON: false,
             pdfOptions: []
         }
     },
@@ -343,7 +343,7 @@ export default defineComponent({
         show(newShow) {
             // Default to PDF
             if (newShow) {
-                this.exportingJson = false
+                this.exportingJSON = false
             }
             // Clear the inputs when the modal closes
             else {
@@ -425,9 +425,9 @@ export default defineComponent({
                     }
 
                     if (this.pdfOptions.includes("audio")) {
-                        doc.text(`${entry.sFile}`, inch, padding);
+                        doc.text(`${entry.sFile.file.name}`, inch, padding);
                         doc.text(
-                            entry.cFile.length >= 40 ? "" : `${entry.cFile}`,
+                            entry.cFile.file.name.length >= 40 ? "" : `${entry.cFile.file.name}`,
                             inch + 75,
                             padding
                         );
