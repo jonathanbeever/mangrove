@@ -3,8 +3,8 @@
         <div class="dark:text-black">
             <Splitter :gutter-size="10">
                 <SplitterPanel :size="30">
-                    <!-- Wavesurfer -->
                     <div class="mt-4 ml-4 mr-2">
+                        <!-- Wavesurfer -->
                         <div
                             class="bg-white shadow-xl sm:rounded-lg dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white"
                             ref="wavesurferRegion"
@@ -43,8 +43,15 @@
                                         />
                                 </div>
                             </div>
+                            <div class="absolute margin: auto; inset-x-0 bottom-10 text-slate-800" style="text-align: center; position: fixed; bottom: 0; z-index: 99 !important; display: none;">
+                                <audio id="player" ref="player" class="player" controls style="width: 40%; display: inline-block;" v-bind:currentTime="currTime" volume="0.1" @pause="pause" @play="play" @seeked="updateSpectrogramTime">
+                                    <source v-bind:src="spFile">
+                                    Audio playback is not supported.
+                                </audio>
+                            </div>
                         </div>
 
+                        <!-- Annotation Form -->
                         <form
                             role="form"
                             name="edit"
@@ -88,6 +95,8 @@
                                 Delete
                             </button>
                         </form>
+
+                        <!-- Import/Export -->
                         <div class="flex flex-wrap justify-start items-center p-2 mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
                             <ExportModal
                                 :show="showExportModal"
@@ -961,11 +970,7 @@ export default defineComponent({
         },
 
         searchMetadata(key, metadata) {
-            if (metadata == key) {
-                return true
-            }
-
-            return false
+            return metadata == key
         },
 
         getMetadataSource(metadataFields, index) {
