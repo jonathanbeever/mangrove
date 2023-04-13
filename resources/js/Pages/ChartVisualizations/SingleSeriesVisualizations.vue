@@ -86,10 +86,20 @@ export default defineComponent({
         }
     },
     emits: ['update:modelValue'],
-    watch: {
-        index() {
-            this.$emit('update:modelValue',  document.getElementById("root").firstElementChild.firstElementChild)
-        }
+    mounted() {
+        let root = document.getElementById("root")
+
+        // Set up listener on root element so we can update the chart
+        this.observer = new MutationObserver(() => {
+            this.$emit('update:modelValue', root.firstElementChild.firstElementChild)
+        })
+        this.observer.observe(root, { childList: true })
+
+        // Emit the value of the initial chart
+        this.$emit('update:modelValue', root.firstElementChild.firstElementChild)
+    },
+    beforeDestroy() {
+        this.observer.disconnect()
     }
 })
 
