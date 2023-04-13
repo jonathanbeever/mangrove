@@ -10,7 +10,9 @@
                             ref="wavesurferRegion"
                         >
                             <div class="p-2">
-                                2D Waveform Spectrogram
+                                <h2>
+                                    2D Waveform Spectrogram
+                                </h2>
                                 <div class="flex-row pr-2 pt-2 overflow-hidden">
                                     <input
                                         id="file-input"
@@ -52,49 +54,53 @@
                         </div>
 
                         <!-- Annotation Form -->
-                        <form
-                            role="form"
-                            name="edit"
-                            style="opacity: 0; transition: opacity 300ms linear; margin: 30px 0"
+                        <div
+                            v-if="showAnnotationForm"
+                            class="p-4 mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white"
                         >
-                            <div class="form-group">
-                                <label for="start">Start</label>
-                                <input
-                                    class="form-control text-black shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="start"
-                                    name="start"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="end">End</label>
-                                <input
-                                    class="form-control text-black shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="end"
-                                    name="end"
-                                />
-                            </div>
-
-                            <div class="form-group">
-                                <label for="note">Note</label>
-                                <textarea
-                                    id="note"
-                                    class="form-control text-black shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    rows="3"
-                                    name="note"
-                                ></textarea>
-                            </div>
-
-                            <button type="submit" class="btn btn-success btn-block">Save</button>
-                            <i>or</i>
-                            <button
-                                @click="deleteRegion"
-                                class="btn btn-danger btn-block"
-                                id="delete-region"
+                            <form
+                                role="form"
+                                name="edit"
                             >
-                                Delete
-                            </button>
-                        </form>
+                                <div class="form-group">
+                                    <label for="start">Start</label>
+                                    <input
+                                        class="form-control text-black shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="start"
+                                        name="start"
+                                    />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="end">End</label>
+                                    <input
+                                        class="form-control text-black shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        id="end"
+                                        name="end"
+                                    />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="note">Note</label>
+                                    <textarea
+                                        id="note"
+                                        class="form-control text-black shadow appearance-none border rounded w-full py-2 px-3 mb-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                        rows="3"
+                                        name="note"
+                                    ></textarea>
+                                </div>
+
+                                <div class="flex flex-row justify-end">
+                                    <PrimaryButton type="submit" class="mr-2">Save</PrimaryButton>
+                                    <DangerButton
+                                        @click="deleteRegion"
+                                        id="delete-region"
+                                    >
+                                        Delete
+                                    </DangerButton>
+                                </div>
+                            </form>
+                        </div>
 
                         <!-- Import/Export -->
                         <div class="flex flex-wrap justify-start items-center p-2 mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
@@ -237,6 +243,7 @@ import _ from "lodash"
 import * as JSZip from "jszip"
 
 import AppLayout from "@/Layouts/AppLayout.vue"
+import DangerButton from "@/Components/DangerButton.vue"
 import ExportModal from "@/Modals/ExportModal.vue"
 import PrimaryButton from "@/Components/PrimaryButton.vue"
 import RegionsPlugin from "wavesurfer.js/src/plugin/regions"
@@ -294,6 +301,7 @@ const resultModeOptions = [
 export default defineComponent({
     components: {
         AppLayout,
+        DangerButton,
         ExportModal,
         PrimaryButton,
         Splitter,
@@ -350,6 +358,7 @@ export default defineComponent({
             spFile: "", // Spectrogram File
             currTime: 0.0, // Time position on sepctrogram
             loading: false, // Spectrogram is loading
+            showAnnotationForm: false, // Show the annotaiton form
 
             // Metadata
             metadataFields: [],
@@ -607,7 +616,7 @@ export default defineComponent({
         // edit regional annotation
         this.wavesurfer.on("region-click", function (region) {
             let form = document.forms.edit
-            form.style.opacity = 1
+            self.showAnnotationForm = true
             form.elements.start.value = Math.round(region.start * 10) / 10
             form.elements.end.value = Math.round(region.end * 10) / 10
             form.elements.note.value = region.data.note || ""
@@ -621,11 +630,11 @@ export default defineComponent({
                         note: form.elements.note.value,
                     },
                 })
-                form.style.opacity = 0
+                self.showAnnotationForm = false
             }
 
             form.onreset = function () {
-                form.style.opacity = 0
+                self.showAnnotationForm = false
                 form.dataset.region = null
             }
             form.dataset.region = region.id
@@ -868,6 +877,7 @@ export default defineComponent({
         },
 
         onFileChange: function (e) {
+            if (e.target.files[0] == null) return
             this.loading = true
             this.wavFile = e.target.files[0]
             // this.spFile = URL.createObjectURL(e.target.files[0])
@@ -880,6 +890,10 @@ export default defineComponent({
 
         createSpectrogram() {
             this.wavesurfer.load(this.spFile)
+        },
+
+        slideView() {
+            this.wavesurfer.zoom(Number(this.$refs.slider.value))
         },
 
         // This function is supposed to dynamically load metadata from the file picked, but I can't get it working
@@ -983,10 +997,6 @@ export default defineComponent({
             if (timeDelta > 0.1) {
                 this.wavesurfer.seekTo(this.currTime / this.wavesurfer.getDuration())
             }
-        },
-
-        slideView() {
-            this.wavesurfer.zoom(Number(this.$refs.slider.value))
         },
 
         exportToCSV() {
