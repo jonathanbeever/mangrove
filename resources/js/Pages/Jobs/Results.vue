@@ -88,25 +88,25 @@
                                 Delete
                             </button>
                         </form>
-                        <div class="mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
-                            <div>
-                                <ExportModal
-                                    :show="showExportModal"
-                                    :wavFile="wavFile"
-                                    :exportVisualizations="exportVisualizations"
-                                    :jsonNotes="jsonNotes"
-                                    @close="showExportModal = false"
-                                    @move-up-export-entry="handleMoveUpExportEntry"
-                                    @move-down-export-entry="handleMoveDownExportEntry"
-                                    @delete-export-entry="handleDeleteExportEntry"
-                                />
-                                <PrimaryButton class="btn btn-success border-gray-200" @click="showExportModal = true">
-                                    Export Data
-                                </PrimaryButton>
-                                <div>
-                                    <label>Upload Zipped Folder: </label>
-                                    <input type="file" accept=".zip" @change="loadZipFile" />
-                                </div>
+                        <div class="flex flex-wrap justify-start items-center p-2 mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
+                            <ExportModal
+                                :show="showExportModal"
+                                :wavFile="wavFile"
+                                :exportVisualizations="exportVisualizations"
+                                :jsonNotes="jsonNotes"
+                                @close="showExportModal = false"
+                                @move-up-export-entry="handleMoveUpExportEntry"
+                                @move-down-export-entry="handleMoveDownExportEntry"
+                                @delete-export-entry="handleDeleteExportEntry"
+                            />
+                            <PrimaryButton class="mr-2 my-2 whitespace-nowrap border-gray-200" @click="showExportModal = true">
+                                Export Data
+                            </PrimaryButton>
+                            <div class="my-2">
+                                <label for="import" class="px-4 py-2 bg-gray-800 border border-gray-200 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300">
+                                    Upload Zipped Folder
+                                </label>
+                                <input id="import" class="hidden" type="file" accept=".zip" @change="loadZipFile" />
                             </div>
                         </div>
                     </div>
@@ -680,8 +680,6 @@ export default defineComponent({
                 }
             } else {
                 // Add Chart to list
-                console.log(this.currentChart)
-                console.log(this.currentCanvas)
                 entry.imageURL = this.currentCanvas.toDataURL("image/png")
                 this.exportVisualizations.push(entry)
             }
