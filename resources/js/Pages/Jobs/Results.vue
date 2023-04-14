@@ -1,8 +1,7 @@
 <template>
     <AppLayout title="Results">
         <div class="dark:text-black">
-            <Splitter :gutter-size="10">
-                <SplitterPanel :size="30">
+
                     <div class="mt-4 ml-4 mr-2">
                         <!-- Wavesurfer -->
                         <div
@@ -125,8 +124,7 @@
                             </div>
                         </div>
                     </div>
-                </SplitterPanel>
-                <SplitterPanel :size="70" :min-size="40">
+
                     <!-- Analysis Selection / Data Visualization -->
                     <div class="mt-4 ml-2 mr-4">
                         <!-- Analysis Mode / Result Option Selection -->
@@ -231,8 +229,7 @@
                             </div>
                         </div>
                     </div>
-                </SplitterPanel>
-            </Splitter>
+
         </div>
     </AppLayout>
 </template>
@@ -262,9 +259,6 @@ import MultiFileVisualizations from "@/Pages/ChartVisualizations/MultiFileVisual
 import MultiSeriesVisualizations from "@/Pages/ChartVisualizations/MultiSeriesVisualizations.vue"
 import SingleFileVisualizations from "@/Pages/ChartVisualizations/SingleFileVisualizations.vue"
 import SingleSeriesVisualizations from "@/Pages/ChartVisualizations/SingleSeriesVisualizations.vue"
-
-import Splitter from 'primevue/splitter';
-import SplitterPanel from 'primevue/splitterpanel';
 
 // Psuedo-Enum
 const ResultMode = {
@@ -304,8 +298,6 @@ export default defineComponent({
         DangerButton,
         ExportModal,
         PrimaryButton,
-        Splitter,
-        SplitterPanel,
         VueElementLoading,
         WaveSurfer,
 
