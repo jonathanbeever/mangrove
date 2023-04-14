@@ -102,7 +102,19 @@
                                 </div>
                             </form>
                         </div>
-
+                        <!-- Metadata -->
+                        <div>
+                            <PrimaryButton class="btn btn-success border-gray-200" @click="showMetadataPopup = true">
+                                Show metadata
+                            </PrimaryButton>
+                            <MetaModal
+                                    :show="showMetadataPopup"
+                                    :mode="resultMode"
+                                    :fileName="selections?.file?.file?.name || ''"
+                                    :meta="selections?.series || ''"
+                                    @close="showMetadataPopup = false"
+                                />
+                        </div>
                         <!-- Import/Export -->
                         <div class="flex flex-wrap justify-start items-center p-2 mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
                             <ExportModal
@@ -223,19 +235,6 @@
                                 </PrimaryButton>
                             </div>
                         </div>
-
-                        <!-- Metadata -->
-                        <div class=" mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white">
-                            <div class="p-2">
-                                Metadata
-                                <div class="flex-row pr-2 pt-2 overflow-hidden">
-                                    <p v-for="field in metadataFields" :key="field.name">
-                                        {{ field.name }}: {{ field.value }}
-                                        <br />
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -251,6 +250,7 @@ import * as JSZip from "jszip"
 import AppLayout from "@/Layouts/AppLayout.vue"
 import DangerButton from "@/Components/DangerButton.vue"
 import ExportModal from "@/Modals/ExportModal.vue"
+import MetaModal from "@/Modals/MetaModal.vue"
 import PrimaryButton from "@/Components/PrimaryButton.vue"
 import RegionsPlugin from "wavesurfer.js/src/plugin/regions"
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram"
@@ -306,6 +306,7 @@ export default defineComponent({
         AppLayout,
         DangerButton,
         ExportModal,
+        MetaModal,
         PrimaryButton,
         VueElementLoading,
         WaveSurfer,
@@ -342,7 +343,10 @@ export default defineComponent({
             // Analysis Selections
             selections: {},
             currentChart: null,
-
+            
+            // Metadata
+            showMetadataPopup: false,
+            
             // Exporting
             showExportModal: false,
             exportVisualizations: [],
@@ -910,40 +914,6 @@ export default defineComponent({
         slideView() {
             this.wavesurfer.zoom(Number(this.$refs.slider.value))
         },
-
-        // This function is supposed to dynamically load metadata from the file picked, but I can't get it working
-        // This isn't part of the required section, not even sure if the wav files will ever have metadata
-        // The function above (getMetadataFromSeries()) uses the uploaded txt (really csv) file, which is the requirement
-        // If I come back to this it will be because everything else is done and I don't have anything better to do
-        /* Failed idea, may try again later
-        updateMetadata() {
-        if (this.spFile !== null && this.spFile !== "") {
-            fetch(this.spFile)
-            .then((response) => response.arrayBuffer())
-            .then((arrayBuffer) => {
-                const wavFile = new WaveFile(arrayBuffer)
-                const metadataFields = [
-                { name: "Channels", value: wavFile.fmt.numChannels },
-                { name: "Sample rate", value: wavFile.fmt.sampleRate },
-                { name: "Bits per sample", value: wavFile.bitDepth },
-                { name: "Length", value: wavFile.duration },
-                ]
-                this.metadataFields = metadataFields
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-        } else {
-            const metadataFields = [
-            { name: "Channels", value: "" },
-            { name: "Sample rate", value: "" },
-            { name: "Bits per sample", value: "" },
-            { name: "Length", value: "" },
-            ]
-            this.metadataFields = metadataFields
-        }
-        },
-        */
 
         updateMetadata() {
             // This is the main metadata update function

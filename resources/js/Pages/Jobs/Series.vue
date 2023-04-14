@@ -118,10 +118,6 @@ export default defineComponent({
         return null;
       }
 
-        // there are 11 values in the file, this is a decent guess
-      size = this.meta.length % 11;
-
-
       return {
         name: this.meta[0].name,
         path: this.meta[0].path,
