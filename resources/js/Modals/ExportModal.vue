@@ -10,8 +10,11 @@
                         id="exportTitleInput"
                         class="text-xl ml-2 mr-2 pl-2 border-2 border-black-700 rounded-md"
                     />
-                    <p class="text-xl">
-                        {{ exportingJSON ? ".zip" : ".pdf" }}
+                    <p v-if="exportingJSON" class="text-xl" >
+                        .zip
+                    </p>
+                    <p v-else class="text-xl">
+                        {{ exportingImages ? ".zip" : ".pdf" }}
                     </p>
                 </div>
                 <!-- Div for switching between exporting PDF or JSON -->
@@ -41,14 +44,27 @@
         </template>
 
         <template #content>
-            <div v-if="!exportingJSON">Options for PDF file:</div>
-            <!-- JSON export options-->
+            <div class="flex flex-row items-center mt-2 mb-4 " v-if="!exportingJSON">
+                <input
+                    type="checkbox"
+                    class="form-checkbox"
+                    id="export-images"
+                    value="index"
+                    v-model="exportingImages"
+                />
+                <label for="export-images" class="ml-2">
+                    Export charts as images only.
+                </label>
+            </div>
+
+            <div v-if="(!exportingJSON && !exportingImages)">Configure PDF file:</div>
+            <div v-if="(!exportingJSON && exportingImages)">Confirm charts to export:</div>
             <div v-if="exportingJSON">
                 Export a zipped file containing the currently loaded audio (.wav) and its given
                 annotations (.json).
             </div>
-            <!-- PDF export options-->
-            <div v-else>
+            <!-- PNG export options-->
+            <div v-if="(!exportingJSON && exportingImages)">
                 <!-- table -->
                 <div class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96">
                     <div class="py-4 align-middle inline-block min-w-full">
@@ -149,11 +165,165 @@
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
-                                                            item.fileOne == null ?
-                                                            "" :
-                                                            (item.fileTwo == null
+                                                            item.fileTwo == null
                                                             ? `${item.fileOne.file.name}`
-                                                            : `${item.fileOne.file.name}, ${item.fileTwo.file.name}`)
+                                                            : `${item.fileOne.file.name}, ${item.fileTwo.file.name}`
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-normal max-w-[60px]">
+                                            <div class="flex justify-between items-center">
+                                                <!-- X to remove from list -->
+                                                <div>
+                                                    <svg
+                                                        class="h-5 w-5 text-red-600 hover:bg-red-100"
+                                                        width="24"
+                                                        height="24"
+                                                        viewBox="0 0 24 24"
+                                                        stroke-width="2"
+                                                        stroke="currentColor"
+                                                        fill="none"
+                                                        stroke-linecap="round"
+                                                        stroke-linejoin="round"
+                                                        @click="$emit('deleteExportEntry', index)"
+                                                    >
+                                                        <path stroke="none" d="M0 0h24v24H0z" />
+                                                        <line x1="18" y1="6" x2="6" y2="18" />
+                                                        <line x1="6" y1="6" x2="18" y2="18" />
+                                                    </svg>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-6 mt-4 flex flex-row space-between">
+                            <div class="flex flex-col w-1/2">
+                                <div class="flex flex-row items-center">
+                                    <input
+                                        type="checkbox"
+                                        class="form-checkbox"
+                                        id="export-spectrogram"
+                                        value="audio"
+                                        v-model="exportingSpectrogram"
+                                    />
+                                    <label for="export-spectrogram" class="ml-2">
+                                        Include Audio Spectrogram (CURRENTLY DOES NOTHING)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- PDF export options-->
+            <div v-if="(!exportingJSON && !exportingImages)">
+                <!-- table -->
+                <div class="flex flex-col px-6 overflow-y-auto overflow-x-hidden max-h-96">
+                    <div class="py-4 align-middle inline-block min-w-full">
+                        <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase"
+                                            scope="col"
+                                        >
+                                            Site
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase"
+                                            scope="col"
+                                        >
+                                            Series
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase"
+                                            scope="col"
+                                        >
+                                            Ind.
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase"
+                                            scope="col"
+                                        >
+                                            Chart
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase"
+                                            scope="col"
+                                        >
+                                            File
+                                        </th>
+                                        <th
+                                            class="px-6 py-3 text-left font-medium text-neutral-900 uppercase"
+                                            scope="col"
+                                        ></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="(item, index) in exportVisualizations"
+                                        :key="index"
+                                        class="border-2 border-grey-500"
+                                    >
+                                        <td class="px-6 py-4 whitespace-normal max-w-[100px]">
+                                            <div class="">
+                                                <div class="text-sm font-medium text-gray-900 break-words">
+                                                    {{
+                                                    item.site2 == null
+                                                        ? `${item.site1.name}`
+                                                        : `${item.site1.name}, ${item.site2.name}`
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-normal max-w-[100px]">
+                                            <div class="f">
+                                                <div>
+                                                    <div class="text-sm text-gray-500 break-words">
+                                                        {{
+                                                            item.series2 == null
+                                                            ? `${item.series1.name}`
+                                                            : `${item.series1.name}, ${item.series2.name}`
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-normal max-w-[10px]">
+                                            <div class="">
+                                                <div>
+                                                    <div class="text-sm text-gray-500 break-words">
+                                                        {{ item.indices }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-normal max-w-[115px]">
+                                            <div class="">
+                                                <div>
+                                                    <div class="text-sm text-gray-500 break-words">
+                                                        {{
+                                                            item.indices == "RMS" || item.indices == "NDSI"
+                                                            ? `Compare Bar`
+                                                            : `${item.chart}`
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-normal max-w-[100px]">
+                                            <div class="i">
+                                                <div>
+                                                    <div class="text-sm text-gray-500 break-words">
+                                                        {{
+                                                            item.fileTwo == null
+                                                            ? `${item.fileOne.file.name}`
+                                                            : `${item.fileOne.file.name}, ${item.fileTwo.file.name}`
                                                         }}
                                                     </div>
                                                 </div>
@@ -291,7 +461,7 @@
             <PrimaryButton
                 @click="exportData"
                 class="ml-3"
-                :disabled="exportVisualizations.length < 1 && !exportingJSON"
+                :disabled="(exportVisualizations.length < 1 && !exportingJSON)"
             >
                 Export
             </PrimaryButton>
@@ -338,7 +508,9 @@ export default defineComponent({
         return {
             exportTitle: "",
             exportingJSON: false,
-            pdfOptions: []
+            pdfOptions: [],
+            exportingImages: false,         // Change PDF export to be a zipped folder of PNG files instead.
+            exportingSpectrogram: false,    // Include PNG of spectrogram in exported images.
         }
     },
     watch: {
@@ -358,7 +530,9 @@ export default defineComponent({
             var title = this.exportTitle != ("" || null || undefined)
                 ? this.exportTitle
                 : "exported_data"
-            this.exportingJSON ? this.exportAsJSON(title) : this.exportAsPDF(title);
+            if(this.exportingJSON) this.exportAsJSON(title);
+            else this.exportingImages? this.exportAsImages(title) : this.exportAsPDF(title);
+            // this.exportingJSON ? this.exportAsJSON(title) : this.exportAsPDF(title);
         },
         exportAsJSON(title) {
             let test = this.jsonNotes;
@@ -370,6 +544,38 @@ export default defineComponent({
                 zip.file("audio.wav", this.wavFile); // Add audio file
 
             zip.generateAsync({ type: "blob" }).then(function (content) {
+                saveAs(content, `${title}.zip`);
+            });
+        },
+        exportAsImages(title) {
+            const zip = new JSZip();
+            let readmeContent = "Exported charts' corresponding information:\n\n"
+
+            // Loop through the visualizations and add each chart as a .png file
+            this.exportVisualizations.forEach(async (entry, index) => {
+
+                const imgData = entry.imageURL.split("base64,")[1];
+                zip.file(`chart_${index + 1}.png`, imgData, { base64: true });
+                console.log(`added chart number ${index + 1}`)
+
+                // Generate Readme //
+                readmeContent += `Chart ${index + 1}:\n`;
+                entry.site2 != null ?
+                    readmeContent += `\tSites: ${entry.site1.name}, ${entry.site2.name}\n`
+                   :readmeContent += `\tSite: ${entry.site1.name}\n`;
+                entry.series2 != null ?
+                    readmeContent += `\tSeries: ${entry.series1.name}, ${entry.series2.name}\n`
+                   :readmeContent += `\tSeries: ${entry.series1.name}\n`;
+                readmeContent += `\tIndex: ${entry.indices}\n`;
+                readmeContent += `\tChart: ${entry.chart}\n`;
+                entry.fileTwo != null ?
+                    readmeContent += `\tFiles: ${entry.fileOne.file.name}, ${entry.fileTwo.file.name}\n`
+                   :readmeContent += `\tFile: ${entry.fileOne.file.name}\n`;
+
+            });
+            zip.file('README.txt', readmeContent);
+            // Generate the zip file and prompt the user to save it
+            zip.generateAsync({ type: "blob" }).then((content) => {
                 saveAs(content, `${title}.zip`);
             });
         },
@@ -428,23 +634,26 @@ export default defineComponent({
 
                     if (this.pdfOptions.includes("audio")) {
                         doc.text(`${entry.fileOne.file.name}`, inch, padding);
-                        doc.text(
-                            entry.fileTwo.file.name.length >= 40 ? "" : `${entry.fileTwo.file.name}`,
-                            inch + 75,
-                            padding
-                        );
+                        if(entry.fileTwo)
+                        {
+                            doc.text(
+                                entry.fileTwo.file.name.length >= 40 ? "" : `${entry.fileTwo.file.name}`,
+                                inch + 75,
+                                padding
+                            );
+                        }
                         padding += 6;
                     }
 
                     if (this.pdfOptions.includes("sites")) {
                         doc.text(`Site: ${entry.site1}`, inch, padding);
-                        doc.text(`${entry.site2}`, inch + 75, padding);
+                        if(entry.site2 != null) doc.text(`${entry.site2}`, inch + 75, padding);
                         padding += 6;
                     }
 
                     if (this.pdfOptions.includes("series")) {
                         doc.text(`Series: ${entry.series1}`, inch, padding);
-                        doc.text(`${entry.series2}`, inch + 75, padding);
+                        if(entry.series2 != null) doc.text(`${entry.series2}`, inch + 75, padding);
                         padding += 6;
                     }
 
