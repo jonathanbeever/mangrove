@@ -1,7 +1,9 @@
 <template>
     <AppLayout title="Results">
         <div class="dark:text-black">
-
+            <div class="flex flex-row">
+                <!-- Left -->
+                <div :class="leftPanelClass">
                     <div class="mt-4 ml-4 mr-2">
                         <!-- Wavesurfer -->
                         <div
@@ -116,15 +118,21 @@
                             <PrimaryButton class="mr-2 my-2 whitespace-nowrap border-gray-200" @click="showExportModal = true">
                                 Export Data
                             </PrimaryButton>
-                            <div class="my-2">
+                            <div class="mr-2 my-2">
                                 <label for="import" class="px-4 py-2 bg-gray-800 border border-gray-200 rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300">
                                     Upload Zipped Folder
                                 </label>
                                 <input id="import" class="hidden" type="file" accept=".zip" @change="loadZipFile" />
                             </div>
+                            <PrimaryButton class="my-2 whitespace-nowrap border-gray-200" @click="layoutSwapped = !layoutSwapped">
+                                Swap Sides
+                            </PrimaryButton>
                         </div>
                     </div>
+                </div>
 
+                <!-- Right -->
+                <div :class="rightPanelClass">
                     <!-- Analysis Selection / Data Visualization -->
                     <div class="mt-4 ml-2 mr-4">
                         <!-- Analysis Mode / Result Option Selection -->
@@ -229,7 +237,8 @@
                             </div>
                         </div>
                     </div>
-
+                </div>
+            </div>
         </div>
     </AppLayout>
 </template>
@@ -356,7 +365,8 @@ export default defineComponent({
             metadataFields: [],
 
             // Misc
-            firstLoad: true
+            firstLoad: true,
+            layoutSwapped: false
         }
     },
     computed: {
@@ -455,6 +465,19 @@ export default defineComponent({
                 }
             }
             return false
+        },
+        rightPanelClass() {
+            return {
+                'order-first': this.layoutSwapped,
+                'w-1/4': this.layoutSwapped,
+                'w-3/4': !this.layoutSwapped
+            }
+        },
+        leftPanelClass() {
+            return {
+                'w-1/4': !this.layoutSwapped,
+                'w-3/4': this.layoutSwapped
+            }
         }
     },
     watch: {
