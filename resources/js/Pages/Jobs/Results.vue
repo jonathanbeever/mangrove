@@ -667,8 +667,119 @@ export default defineComponent({
             form.dataset.region = region.id
         })
 
+        // selects region to focus on clip by creating a new buffer that wavesurfer can load
+        this.wavesurfer.on('region-dblclick', function (region) {
+
+            // self.wavesurfer.pause();
+
+            // console.log("double click has been registered" + " -> " + self.wavesurfer.backend.buffer.length);
+
+            let start = region.start;
+            let end = region.end;
+
+            let string = self.NameExtractedRegion();
+
+            self.regionExtract(self.wavesurfer, region, string);
+        });
+
     },
     methods: {
+
+
+        /***************************
+         *     SOUND EXTRACTION    *
+         ***************************/
+
+        NameExtractedRegion: function () {
+            let name = prompt("Create a new file name!");
+            if (name == null || name == "") {
+                alert ("No input detected. Please try again");
+            }
+            else
+                return name;
+        },
+
+        async downloadWavFromBlobURL (blobURL, filename) {
+            try {
+                const response = await fetch(blobURL);
+                const blob = await response.blob();
+                saveAs(blob, filename);
+            } catch (error) {
+                console.error("Failed to download .wav file:", error);
+            }
+        },
+
+        sliceWavBlob: function (blob, start, duration) {
+            return new Promise((resolve) => {
+
+            const fileReader = new FileReader();
+
+            fileReader.onload = (event) => {
+            const buffer = event.target.result;
+            console.log("In slice .wav blob");
+            console.log(buffer);
+            const dataView = new DataView(buffer);
+
+            // WAV file header
+            const headerSize = 44;
+            const header = new Uint8Array(buffer.slice(0, headerSize));
+
+            // Extract WAV file information
+            const numChannels = dataView.getUint16(22, true);
+            const sampleRate = dataView.getUint32(24, true);
+            const bytesPerSample = dataView.getUint16(34, true) / 8;
+
+            // Calculate the start and end byte positions
+            const startByte = headerSize + start * numChannels * sampleRate * bytesPerSample;
+            const endByte = startByte + duration * numChannels * sampleRate * bytesPerSample;
+
+            // Extract the desired portion of the audio data
+            const audioData = new Uint8Array(buffer.slice(startByte, endByte));
+
+            // Create a new Blob with the extracted portion and the WAV header
+            const slicedWavBlob = new Blob([header, audioData], { type: "audio/wav" });
+            // console.log("-----" + slicedWavBlob + "------");
+            resolve(slicedWavBlob);
+            };
+
+            fileReader.readAsArrayBuffer(blob);
+
+
+        });
+        },
+
+        regionExtract: function (surfer, region, string) {
+
+            // console.log("commencing region extract");
+
+            const file = this.wavFile;
+
+            // console.log(file);
+
+            if (!file) {
+                console.log("returning");
+                return;
+            }
+
+            const wavFileBlob = new Blob([file], {type: "audio/wav"});
+
+            const start = Math.round(region.start);
+            const end = Math.round(region.end);
+
+            const duration = end - start;
+
+            this.sliceWavBlob(wavFileBlob, start, duration).then((slicedWavBlob) => {
+                const audioBlob = slicedWavBlob;
+
+                const blobURL = URL.createObjectURL(audioBlob);
+
+                const filename = string + ".wav";
+
+                // console.log(filename);
+
+                this.downloadWavFromBlobURL(blobURL, filename);
+            });
+        },
 
         /***************************
          *       EXPORTING         *
