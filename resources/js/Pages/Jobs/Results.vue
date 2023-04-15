@@ -102,6 +102,14 @@
                                 </div>
                             </form>
                         </div>
+                        <!-- Audio Extract -->
+                        <div>
+                            <AudioModal
+                                    :show="showAudioExtractPopup"
+                                    @close="showAudioExtractPopup = false"
+                                    @userInput="pass"
+                                />
+                        </div>
                         <!-- Metadata -->
                         <div>
                             <PrimaryButton class="btn btn-success border-gray-200" @click="showMetadataPopup = true">
@@ -251,6 +259,7 @@ import AppLayout from "@/Layouts/AppLayout.vue"
 import DangerButton from "@/Components/DangerButton.vue"
 import ExportModal from "@/Modals/ExportModal.vue"
 import MetaModal from "@/Modals/MetaModal.vue"
+import AudioModal from "@/Modals/RegionExtractionModal.vue"
 import PrimaryButton from "@/Components/PrimaryButton.vue"
 import RegionsPlugin from "wavesurfer.js/src/plugin/regions"
 import SpectrogramPlugin from "wavesurfer.js/src/plugin/spectrogram"
@@ -307,6 +316,7 @@ export default defineComponent({
         DangerButton,
         ExportModal,
         MetaModal,
+        AudioModal,
         PrimaryButton,
         VueElementLoading,
         WaveSurfer,
@@ -347,6 +357,9 @@ export default defineComponent({
             // Metadata
             showMetadataPopup: false,
 
+            // Audio Extracting
+            showAudioExtractPopup: false,
+
             // Exporting
             showExportModal: false,
             exportVisualizations: [],
@@ -355,6 +368,7 @@ export default defineComponent({
             regionToDelete: null,
             wavesurferRegionListOBJ: null,
             globalWavesurferReference: null,
+            regionToExtract:null,
             jsonNotes: null,
 
             // Spectrogram
@@ -672,32 +686,43 @@ export default defineComponent({
 
             // self.wavesurfer.pause();
 
-            // console.log("double click has been registered" + " -> " + self.wavesurfer.backend.buffer.length);
+            self.regionToExtract = region;
+
+            console.log("double click has been registered" + " -> " + self.wavesurfer.backend.buffer.length);
+
+            self.showAudioExtractPopup = true;
+
+            console.log();
 
             let start = region.start;
             let end = region.end;
 
-            let string = self.NameExtractedRegion();
+            // let string = self.NameExtractedRegion();
 
-            self.regionExtract(self.wavesurfer, region, string);
+            // self.regionExtract(self.wavesurfer, region);
         });
 
     },
     methods: {
 
+        // meant for testing but will be used to pass userinput for file nameing
+        pass: function (string) {
+            // console.log(string);
 
+            this.regionExtract(this.globalWavesurferReference, this.regionToExtract, string);
+        },
         /***************************
          *     SOUND EXTRACTION    *
          ***************************/
 
-        NameExtractedRegion: function () {
-            let name = prompt("Create a new file name!");
-            if (name == null || name == "") {
-                alert ("No input detected. Please try again");
-            }
-            else
-                return name;
-        },
+        // NameExtractedRegion: function () {
+        //     let name = prompt("Create a new file name!");
+        //     if (name == null || name == "") {
+        //         alert ("No input detected. Please try again");
+        //     }
+        //     else
+        //         return name;
+        // },
 
         async downloadWavFromBlobURL (blobURL, filename) {
             try {
@@ -775,7 +800,7 @@ export default defineComponent({
 
                 const filename = string + ".wav";
 
-                // console.log(filename);
+                console.log(filename);
 
                 this.downloadWavFromBlobURL(blobURL, filename);
             });
