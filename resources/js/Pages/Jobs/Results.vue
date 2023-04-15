@@ -56,7 +56,7 @@
 
                         <!-- Annotation Form -->
                         <div
-                            v-if="showAnnotationForm"
+                            v-show="showAnnotationForm"
                             class="p-4 mt-2 bg-white shadow-xl rounded-md dark:shadow-inner dark:shadow-cyan-500 dark:bg-slate-900 dark:text-white"
                         >
                             <form
