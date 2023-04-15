@@ -593,17 +593,19 @@ export default defineComponent({
 
             var currentIdx = 0;
             while (pageNum <= finalPage) {
-                doc.setFontSize(22);
+                doc.setFontSize(16);
                 doc.text(`${title}`, inch, inch);
                 doc.text(`${pageNum}`, width - inch, inch);
-                doc.setFontSize(12);
-                padding += 12;
+                doc.setFontSize(8);
+                padding += 8;
 
                 for (let i = 0; i < 2; i++) {
                     let entry = this.exportVisualizations[currentIdx];
 
                     if (entry == undefined) break;
 
+
+                    if(this.pdfOptions.length <= 0) padding += 20   // Space the charts out if there is no text.
                     if (this.pdfOptions.includes("index")) {
                         let index = "";
                         switch (entry.indices) {
@@ -646,16 +648,19 @@ export default defineComponent({
                     }
 
                     if (this.pdfOptions.includes("sites")) {
-                        doc.text(`Site: ${entry.site1}`, inch, padding);
-                        if(entry.site2 != null) doc.text(`${entry.site2}`, inch + 75, padding);
+                        doc.text(`Site: ${entry.site1.name}`, inch, padding);
+                        if(entry.site2 != null) doc.text(`${entry.site2.name}`, inch + 75, padding);
                         padding += 6;
                     }
 
                     if (this.pdfOptions.includes("series")) {
-                        doc.text(`Series: ${entry.series1}`, inch, padding);
-                        if(entry.series2 != null) doc.text(`${entry.series2}`, inch + 75, padding);
+                        doc.text(`Series: ${entry.series1.name}`, inch, padding);
+                        if(entry.series2 != null) doc.text(`${entry.series2.name}`, inch + 75, padding);
                         padding += 6;
                     }
+                    padding += 10;
+                    console.log(entry);
+                    // console.log(entry.imageURL)
 
                     doc.addImage(entry.imageURL, "PNG", inch, padding - 10, 150, 100);
                     padding += 100;
