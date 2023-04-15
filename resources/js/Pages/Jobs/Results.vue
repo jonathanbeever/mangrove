@@ -94,7 +94,7 @@
                                 <div class="flex flex-row justify-end">
                                     <PrimaryButton type="submit" class="mr-2">Save</PrimaryButton>
                                     <DangerButton
-                                        @click="deleteRegion"
+                                        @click="deleteRegionCall"
                                         id="delete-region"
                                     >
                                         Delete
@@ -343,10 +343,10 @@ export default defineComponent({
             // Analysis Selections
             selections: {},
             currentChart: null,
-            
+
             // Metadata
             showMetadataPopup: false,
-            
+
             // Exporting
             showExportModal: false,
             exportVisualizations: [],
@@ -627,13 +627,10 @@ export default defineComponent({
             }
         })
 
-        // loop region on shift + right click
-        this.wavesurfer.on("region-click", function (region, e) {
-            e.shiftKey ? region.playLoop() : region.play()
-        })
-
         // edit regional annotation
         this.wavesurfer.on("region-click", function (region) {
+            self.regionToDelete = region.id;
+
             let form = document.forms.edit
             self.showAnnotationForm = true
             form.elements.start.value = Math.round(region.start * 10) / 10
@@ -659,12 +656,6 @@ export default defineComponent({
             form.dataset.region = region.id
         })
 
-        // quicker region delete by double right clicking
-        this.wavesurfer.on("region-dblclick", function (region) {
-            let form = document.forms.edit
-            region.remove()
-            form.reset()
-        })
     },
     methods: {
 
@@ -882,11 +873,15 @@ export default defineComponent({
         * UNSORTED
         */
 
+        // after delete button presson region will be removed
         deleteRegionCall: function (e) {
         if (this.regionToDelete != null)
             this.wavesurferRegionListOBJ[this.regionToDelete].remove()
 
         this.regionToDelete = null
+
+        // console.log("Region has been successfully deleted");
+
         },
 
         setSpFilePath: function () {
