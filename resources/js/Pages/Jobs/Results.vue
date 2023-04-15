@@ -119,6 +119,8 @@
                                     :show="showMetadataPopup"
                                     :mode="resultMode"
                                     :fileName="selections?.file?.file?.name || ''"
+                                    :fileNameOne="selections?.fileOne?.file?.name"
+                                    :fileNameTwo="selections?.fileTwo?.file?.name"
                                     :meta="selections?.series || ''"
                                     @close="showMetadataPopup = false"
                                 />
