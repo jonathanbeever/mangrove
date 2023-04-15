@@ -69,31 +69,37 @@ export default defineComponent({
     emits: ['close'],
     methods: {
     findMatchingEntry(fileNameInput, metadataDatabase) {
-        const nameParts = fileNameInput.split('_');
-        const dateInFileName = nameParts[1];  //Extract date
-        const timeInFileName = nameParts[2].slice(0, -4); // Extract time, remove the ".wav" extension
+        try {
+            const nameParts = fileNameInput.split('_');
+            const dateInFileName = nameParts[1];  //Extract date
+            const timeInFileName = nameParts[2].slice(0, -4); // Extract time, remove the ".wav" extension
+            const dateTimeInFileName = `${dateInFileName}T${timeInFileName}:00.000000Z`; // Combine date and time
 
-        const dateTimeInFileName = `${dateInFileName}T${timeInFileName}:00.000000Z`; // Combine date and time
+            const year = dateTimeInFileName.substring(0, 4);
+            const month = dateTimeInFileName.substring(4, 6) - 1; // JS months are 0-indexed
+            const day = dateTimeInFileName.substring(6, 8);
+            const hour = dateTimeInFileName.substring(9, 11);
+            const minute = dateTimeInFileName.substring(11, 13);
+            const second = dateTimeInFileName.substring(13, 15);
+            const dateTimeInFile = new Date(Date.UTC(year, month, day, hour, minute, second));
 
-        const year = dateTimeInFileName.substring(0, 4);
-        const month = dateTimeInFileName.substring(4, 6) - 1; // JS months are 0-indexed
-        const day = dateTimeInFileName.substring(6, 8);
-        const hour = dateTimeInFileName.substring(9, 11);
-        const minute = dateTimeInFileName.substring(11, 13);
-        const second = dateTimeInFileName.substring(13, 15);
-        const dateTimeInFile = new Date(Date.UTC(year, month, day, hour, minute, second));
-
-        for (const object of metadataDatabase) {
-            const recordedDate = new Date(object.recorded);
-            if (recordedDate > dateTimeInFile) {
-                return object;
+            for (const object of metadataDatabase) {
+                const recordedDate = new Date(object.recorded);
+                if (recordedDate > dateTimeInFile) {
+                    return object;
+                }
             }
+        } catch {
+            return "No metadata could be found for this file. Maybe the name is wrong?";
         }
         //This is 100% based on name, so if the naming scheme is different it will not work.
-        return "No metadata could be found for this file. Maybe the name is wrong?"
+        return "No metadata could be found for this file. Maybe the name is wrong?";
     },
     formatInputString(input) {
         const inputString = JSON.stringify(input);
+        if (input === "No metadata could be found for this file. Maybe the name is wrong?") {
+            return input;
+        }
         const parsedInput = JSON.parse(inputString);
         let formattedString = '';
         for (const key in parsedInput) {
