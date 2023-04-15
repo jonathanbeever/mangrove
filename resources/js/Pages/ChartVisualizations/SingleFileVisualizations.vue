@@ -247,10 +247,11 @@ export default defineComponent({
 
         // Set up listener on root element so we can update the chart
         this.observer = new MutationObserver(() => {
+            // console.log("MutationObserver triggered.")
             this.$emit('update:modelValue', root.firstElementChild.firstElementChild)
         })
-        this.observer.observe(root, { childList: true })
-
+        // this.observer.observe(root, { childList: true })
+        this.observer.observe(root, { childList: true , subtree: true})
         // Emit the value of the initial chart
         this.$emit('update:modelValue', root.firstElementChild.firstElementChild)
     },
