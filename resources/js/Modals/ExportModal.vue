@@ -282,7 +282,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-normal max-w-[100px]">
-                                            <div class="f">
+                                            <div v-if="item.series1" class="f">
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
@@ -317,7 +317,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-normal max-w-[100px]">
-                                            <div class="i">
+                                            <div v-if="item.fileOne" class="i">
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
@@ -556,21 +556,29 @@ export default defineComponent({
 
                 const imgData = entry.imageURL.split("base64,")[1];
                 zip.file(`chart_${index + 1}.png`, imgData, { base64: true });
-                console.log(`added chart number ${index + 1}`)
 
                 // Generate Readme //
                 readmeContent += `Chart ${index + 1}:\n`;
-                entry.site2 != null ?
-                    readmeContent += `\tSites: ${entry.site1.name}, ${entry.site2.name}\n`
-                   :readmeContent += `\tSite: ${entry.site1.name}\n`;
-                entry.series2 != null ?
-                    readmeContent += `\tSeries: ${entry.series1.name}, ${entry.series2.name}\n`
-                   :readmeContent += `\tSeries: ${entry.series1.name}\n`;
+                if(entry.site1)
+                {
+                    entry.site2 != null ?
+                        readmeContent += `\tSites: ${entry.site1.name}, ${entry.site2.name}\n`
+                        :readmeContent += `\tSite: ${entry.site1.name}\n`;
+                }
+                if(entry.series1)
+                {
+                    entry.series2 != null ?
+                        readmeContent += `\tSeries: ${entry.series1.name}, ${entry.series2.name}\n`
+                        :readmeContent += `\tSeries: ${entry.series1.name}\n`;
+                }
                 readmeContent += `\tIndex: ${entry.indices}\n`;
                 readmeContent += `\tChart: ${entry.chart}\n`;
-                entry.fileTwo != null ?
-                    readmeContent += `\tFiles: ${entry.fileOne.file.name}, ${entry.fileTwo.file.name}\n`
-                   :readmeContent += `\tFile: ${entry.fileOne.file.name}\n`;
+                if(entry.fileOne){
+                    entry.fileTwo != null ?
+                        readmeContent += `\tFiles: ${entry.fileOne.file.name}, ${entry.fileTwo.file.name}\n`
+                        :readmeContent += `\tFile: ${entry.fileOne.file.name}\n`;
+                }
+
 
             });
             zip.file('README.txt', readmeContent);
@@ -634,7 +642,7 @@ export default defineComponent({
                         padding += 6;
                     }
 
-                    if (this.pdfOptions.includes("audio")) {
+                    if (this.pdfOptions.includes("audio") && entry.fileOne) {
                         doc.text(`${entry.fileOne.file.name}`, inch, padding);
                         if(entry.fileTwo)
                         {
@@ -647,20 +655,19 @@ export default defineComponent({
                         padding += 6;
                     }
 
-                    if (this.pdfOptions.includes("sites")) {
+                    if (this.pdfOptions.includes("sites") && entry.site1) {
                         doc.text(`Site: ${entry.site1.name}`, inch, padding);
                         if(entry.site2 != null) doc.text(`${entry.site2.name}`, inch + 75, padding);
                         padding += 6;
                     }
 
-                    if (this.pdfOptions.includes("series")) {
+                    if (this.pdfOptions.includes("series") && entry.series1) {
                         doc.text(`Series: ${entry.series1.name}`, inch, padding);
                         if(entry.series2 != null) doc.text(`${entry.series2.name}`, inch + 75, padding);
                         padding += 6;
                     }
                     padding += 10;
-                    console.log(entry);
-                    // console.log(entry.imageURL)
+                    // console.log(entry);
 
                     doc.addImage(entry.imageURL, "PNG", inch, padding - 10, 150, 100);
                     padding += 100;
