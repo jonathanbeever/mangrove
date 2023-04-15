@@ -577,8 +577,19 @@ export default defineComponent({
         this.wavesurfer.on("ready", function () {
             if (self.annotations) {
                 self.loadAnnotations(self.annotations, self.wavesurfer)
+                self.annotations = null;
             }
+            else
+                self.wavesurfer.clearRegions();
         })
+
+        // change the RGB of the region to something more visible
+        this.wavesurfer.on('region-created', function (region) {
+            // console.log("---->" + self.annotations);
+
+            if (self.annotations == null)
+                self.addRegionColor(region);
+        });
 
         // save annotations into browser while notes are generated
         this.wavesurfer.on("region-updated", function () {
@@ -780,11 +791,12 @@ export default defineComponent({
         },
 
         loadAnnotations(regions, surfer) {
-            surfer.clearRegions()
+            surfer.clearRegions();
             regions.forEach(function (region) {
-                region.color = "rgba(245,189,31,0.3)"
-                surfer.addRegion(region)
-            })
+                region.color = "rgba(245,189,31,0.3)";
+                surfer.addRegion(region);
+            });
+
         },
 
         /***************************
@@ -872,6 +884,11 @@ export default defineComponent({
         /*
         * UNSORTED
         */
+
+        // for region visibility by adjusting color
+        addRegionColor (passedRegion) {
+            passedRegion.color = "rgba(117,224,1,0.3)";
+        },
 
         // after delete button presson region will be removed
         deleteRegionCall: function (e) {
