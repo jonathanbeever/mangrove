@@ -81,10 +81,49 @@ export default defineComponent({
         }
     },
     watch: {
-        'selections.index'(newIndex) {
-            if (newIndex == "NDSI" || newIndex == "RMS") {
-                this.selections.chart = "Single Bar"
+        'selections.site'(newSite) {
+            if (newSite) {
+                this.selections.series = null;
+                this.selections.file = null;
+                this.selections.index = null;
+                this.selections.chart = null;
             }
+        },
+        'selections.series'(newSeries) {
+            if (newSeries) {
+                this.selections.file = null;
+                this.selections.index = null;
+                this.selections.chart = null;
+            }
+        },
+        'selections.file'(newFile) {
+            if (newFile) {
+                this.selections.index = null;
+                this.selections.chart = null;
+            }
+        },
+        'selections.index'(newIndex) {
+            console.log(newIndex)
+            if (newIndex) {
+                if (newIndex == "NDSI" || newIndex == "RMS") {
+                    this.$nextTick(() => {
+                        console.log("ndsi stuff or rms")
+                        this.selections.chart = "Single Bar"
+                    });
+                }
+                else {
+                    // I believe nextTick is necessary because the SingleFileVisualizations was trying to
+                    // generate the next chart before the selections were actually nulled
+                    this.$nextTick(() => {
+                        this.selections.chart = null;
+                    });
+                }
+                console.log(this.selections.chart)
+            }
+            // vv ORIGINAL CODE for selections.index vv
+            // if (newIndex == "NDSI" || newIndex == "RMS") {
+            //     this.selections.chart = "Single Bar"
+            // }
         }
     },
     methods: {

@@ -200,6 +200,7 @@
                                 </tbody>
                             </table>
                         </div>
+                        <!--
                         <div class="px-6 mt-4 flex flex-row space-between">
                             <div class="flex flex-col w-1/2">
                                 <div class="flex flex-row items-center">
@@ -215,7 +216,8 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+
                     </div>
                 </div>
             </div>
