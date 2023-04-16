@@ -76,6 +76,34 @@ export default defineComponent({
                 : []
         },
     },
+    watch: {
+        'selections.siteOne'(newSiteOne) {
+            if (newSiteOne) {
+                this.selections.seriesOne = null;
+                this.selections.siteTwo = null;
+                this.selections.seriesTwo = null;
+                this.selections.index = null;
+            }
+        },
+        'selections.seriesOne'(newSeriesOne) {
+            if (newSeriesOne) {
+                this.selections.siteTwo = null;
+                this.selections.seriesTwo = null;
+                this.selections.index = null;
+            }
+        },
+        'selections.siteTwo'(newSiteTwo) {
+            if (newSiteTwo) {
+                this.selections.seriesTwo = null;
+                this.selections.index = null;
+            }
+        },
+        'selections.seriesTwo'(newseriesTwo) {
+            if (newseriesTwo) {
+                this.selections.index = null;
+            }
+        },
+    },
     methods: {
         findIndicesUsed(result_one, result_two) {
             let indicesUsedOne = []

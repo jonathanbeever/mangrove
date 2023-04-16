@@ -115,7 +115,7 @@
                                         class="border-2 border-grey-500"
                                     >
                                         <td class="px-6 py-4 whitespace-normal max-w-[100px]">
-                                            <div class="">
+                                            <div v-if="item.site1" class="">
                                                 <div class="text-sm font-medium text-gray-900 break-words">
                                                     {{
                                                     item.site2 == null
@@ -126,7 +126,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-normal max-w-[100px]">
-                                            <div class="f">
+                                            <div v-if="item.series1" class="f">
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
@@ -139,7 +139,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-normal max-w-[10px]">
-                                            <div class="">
+                                            <div v-if="item.indices" class="">
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{ item.indices }}
@@ -148,7 +148,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-normal max-w-[115px]">
-                                            <div class="">
+                                            <div v-if="(item.chart || (item.indices == 'RMS' || item.indices == 'NDSI'))" class="">
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{
@@ -161,7 +161,7 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-normal max-w-[100px]">
-                                            <div class="i">
+                                            <div v-if="item.fileOne" class="i">
                                                 <div>
                                                     <div class="text-sm text-gray-500 break-words">
                                                         {{

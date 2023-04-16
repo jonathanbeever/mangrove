@@ -148,7 +148,7 @@ export default defineComponent({
         this.observer = new MutationObserver(() => {
             this.$emit('update:modelValue', root.firstElementChild.firstElementChild)
         })
-        this.observer.observe(root, { childList: true })
+        this.observer.observe(root, { childList: true, subtree: true })
 
         // Emit the value of the initial chart
         this.$emit('update:modelValue', root.firstElementChild.firstElementChild)

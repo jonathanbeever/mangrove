@@ -3,7 +3,52 @@
         class="flex-col flex bg-white shadow-xl sm:rounded-lg p-4 mt-4 w-full items-center"
         id="root"
     >
-        <div class="w-4/5">
+        <div v-if="index == 'ACI'" class="w-4/5">
+            <AllInSiteChart
+                :id="siteName + index + 'AllInSite'"
+                :dataSetData="graphData"
+                :dataSetLabels="graphLabels"
+                :xLabel="'Date'"
+                :yLabel="index"
+            />
+        </div>
+        <div v-if="index == 'NDSI'" class="w-4/5">
+            <AllInSiteChart
+                :id="siteName + index + 'AllInSite'"
+                :dataSetData="graphData"
+                :dataSetLabels="graphLabels"
+                :xLabel="'Date'"
+                :yLabel="index"
+            />
+        </div>
+        <div v-if="index == 'AEI'" class="w-4/5">
+            <AllInSiteChart
+                :id="siteName + index + 'AllInSite'"
+                :dataSetData="graphData"
+                :dataSetLabels="graphLabels"
+                :xLabel="'Date'"
+                :yLabel="index"
+            />
+        </div>
+        <div v-if="index == 'ADI'" class="w-4/5">
+            <AllInSiteChart
+                :id="siteName + index + 'AllInSite'"
+                :dataSetData="graphData"
+                :dataSetLabels="graphLabels"
+                :xLabel="'Date'"
+                :yLabel="index"
+            />
+        </div>
+        <div v-if="index == 'BI'" class="w-4/5">
+            <AllInSiteChart
+                :id="siteName + index + 'AllInSite'"
+                :dataSetData="graphData"
+                :dataSetLabels="graphLabels"
+                :xLabel="'Date'"
+                :yLabel="index"
+            />
+        </div>
+        <div v-if="index == 'RMS'" class="w-4/5">
             <AllInSiteChart
                 :id="siteName + index + 'AllInSite'"
                 :dataSetData="graphData"

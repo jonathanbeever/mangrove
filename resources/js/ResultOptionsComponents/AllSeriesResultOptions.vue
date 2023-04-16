@@ -50,6 +50,13 @@ export default defineComponent({
                 : [];
         },
     },
+    watch: {
+        'selections.site'(newSite) {
+            if (newSite) {
+                this.selections.index = null;
+            }
+        },
+    },
     methods: {
         findIndicesUsed(site) {
             let indicesUsed = [];
