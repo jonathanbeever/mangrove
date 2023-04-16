@@ -1,13 +1,22 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-defineProps({
-    modelValue: String,
+const props = defineProps({
+    modelValue: [String, Number],
+    modelModifiers: { default: () => ({})}
 });
 
-defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
 
 const input = ref(null);
+
+function emitValue(e) {
+    let value = e.target.value
+    if (props.modelModifiers.number && !isNaN(parseFloat(value))) {
+        value = parseFloat(value)
+    }
+    emit('update:modelValue', value)
+}
 
 onMounted(() => {
     if (input.value.hasAttribute('autofocus')) {
@@ -21,8 +30,8 @@ defineExpose({ focus: () => input.value.focus() });
 <template>
     <input
         ref="input"
-        class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm"
+        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-lg shadow-sm"
         :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
+        @input="emitValue"
     >
 </template>
