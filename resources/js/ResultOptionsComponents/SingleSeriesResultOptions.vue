@@ -60,6 +60,19 @@ export default defineComponent({
                 : []
         },
     },
+    watch: {
+        'selections.site'(newSite) {
+            if (newSite) {
+                this.selections.series = null;
+                this.selections.index = null;
+            }
+        },
+        'selections.series'(newSeries) {
+            if (newSeries) {
+                this.selections.index = null;
+            }
+        },
+    },
     methods: {
         findIndicesUsed(result) {
             let indicesUsed = []

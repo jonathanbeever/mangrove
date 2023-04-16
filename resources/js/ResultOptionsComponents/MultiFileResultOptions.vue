@@ -87,10 +87,54 @@ export default defineComponent({
         }
     },
     watch: {
-        'selections.index'(newIndex) {
-            if (newIndex == "NDSI" || newIndex == "RMS") {
-                this.selections.chart = "Compare Bar"
+        'selections.site'(newSite) {
+            if (newSite) {
+                this.selections.series = null;
+                this.selections.fileOne = null;
+                this.selections.fileTwo = null;
+                this.selections.index = null;
+                this.selections.chart = null;
             }
+        },
+        'selections.series'(newSeries) {
+            if (newSeries) {
+                this.selections.fileOne = null;
+                this.selections.fileTwo = null;
+                this.selections.index = null;
+                this.selections.chart = null;
+            }
+        },
+        'selections.fileOne'(newFileOne) {
+            if (newFileOne) {
+                this.selections.fileTwo = null;
+                this.selections.index = null;
+                this.selections.chart = null;
+            }
+        },
+        'selections.fileTwo'(newFileTwo) {
+            if (newFileTwo) {
+                this.selections.index = null;
+                this.selections.chart = null;
+            }
+        },
+        'selections.index'(newIndex) {
+            if (newIndex) {
+                if (newIndex == "NDSI" || newIndex == "RMS") {
+                    this.$nextTick(() => {
+                        this.selections.chart = "Single Bar"
+                    });
+                }
+                else {
+                    // I believe nextTick is necessary because the SingleFileVisualizations was trying to
+                    // generate the next chart before the selections were actually nulled
+                    this.$nextTick(() => {
+                        this.selections.chart = null;
+                    });
+                }
+            }
+            // if (newIndex == "NDSI" || newIndex == "RMS") {
+            //     this.selections.chart = "Compare Bar"
+            // }
         }
     },
     methods: {

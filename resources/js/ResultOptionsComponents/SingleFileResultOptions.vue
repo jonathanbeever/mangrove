@@ -103,11 +103,9 @@ export default defineComponent({
             }
         },
         'selections.index'(newIndex) {
-            console.log(newIndex)
             if (newIndex) {
                 if (newIndex == "NDSI" || newIndex == "RMS") {
                     this.$nextTick(() => {
-                        console.log("ndsi stuff or rms")
                         this.selections.chart = "Single Bar"
                     });
                 }
@@ -118,7 +116,6 @@ export default defineComponent({
                         this.selections.chart = null;
                     });
                 }
-                console.log(this.selections.chart)
             }
             // vv ORIGINAL CODE for selections.index vv
             // if (newIndex == "NDSI" || newIndex == "RMS") {
