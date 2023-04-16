@@ -15,6 +15,7 @@
             <span class="ml-2 text-red-500" v-if="mode !== 'SingleFile' && mode !== 'MultiFile'">Metadata viewing only works on single or multi file analysis mode</span>
             <span class="ml-2" v-else-if="fileName"><pre>{{ formatInputString(findMatchingEntry(fileName, meta["file_metadata"])) }}</pre></span>
             <span class="ml-2" v-else-if="fileNameOne && fileNameTwo"><pre>{{  formatOutputMutliFile(fileNameOne, fileNameTwo, formatInputString(findMatchingEntry(fileNameOne, meta["file_metadata"])), formatInputString(findMatchingEntry(fileNameTwo, meta["file_metadata"]))) }}</pre></span>
+            <span class="ml-2 text-red-500" v-else-f="mode == 'MultiFile'">You need to select both files first</span>
             <span class="ml-2 text-red-500" v-else>You need to select a file first</span>
         </template>
 
@@ -114,7 +115,6 @@ export default defineComponent({
         finalString += oneformat + "\n\n\n";
         finalString += twoname + "\n";
         finalString += twoformat;
-        console.log(finalString);
         return finalString;
     },
 }
