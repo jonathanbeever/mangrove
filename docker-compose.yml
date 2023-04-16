@@ -27,6 +27,7 @@ services:
         depends_on:
             - mysql
             - redis
+        restart: always
     mangrove-worker:
         platform: linux/amd64
         build:
@@ -50,6 +51,7 @@ services:
             - sail
         depends_on:
             - mangrove
+        restart: always
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
@@ -70,6 +72,7 @@ services:
             test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
             timeout: 5s
+        restart: always
     redis:
         image: 'redis:alpine'
         ports:
@@ -82,6 +85,7 @@ services:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
+        restart: always
 networks:
     sail:
         driver: bridge
