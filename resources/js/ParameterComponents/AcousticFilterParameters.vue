@@ -10,17 +10,17 @@ import Parameters from './Parameters.vue'
 const acousticFilterHeader = "Acoustic Filter Specifications"
 const acousticFilterParams = {
     soundindex: 'ADI',
-    maxVal: 10,
+    max_val: 10,
     timeStep: 3
 }
 const acousticFilterLabels = {
     soundindex: "Acoustic Index ('NDSI','ACI','ADI','AEI','BI')",
-    maxVal: "maxVal",
+    max_val: "max_val",
     timeStep: "timeStep"
 }
 const acousticFilterErrors = {
     soundindex: "",
-    maxVal: "",
+    max_val: "",
     timeStep: ""
 }
 const acousticFilterNotNumbers = ['soundindex']
@@ -58,7 +58,7 @@ export default defineComponent({
         // Errors
         acousticFilter: {
             handler() {
-                let {soundindex, maxVal, timeStep} = this.acousticFilter
+                let {soundindex, max_val, timeStep} = this.acousticFilter
 
                 if (!['NDSI','ACI','ADI','AEI','BI'].includes(soundindex)) {
                     this.acousticFilterErrors.soundindex = "Must be one of: NDSI, ACI, ADI, AEI, or BI"
@@ -66,12 +66,12 @@ export default defineComponent({
                     this.acousticFilterErrors.soundindex = ""
                 }
 
-                if (isNaN(maxVal)) {
-                    this.acousticFilterErrors.maxVal = "Must be a number"
-                } else if (maxVal < 0) {
-                    this.acousticFilterErrors.maxVal = "Must be greater than or equal to 0"
+                if (isNaN(max_val)) {
+                    this.acousticFilterErrors.max_val = "Must be a number"
+                } else if (max_val < 0) {
+                    this.acousticFilterErrors.max_val = "Must be greater than or equal to 0"
                 } else {
-                    this.acousticFilterErrors.maxVal = ""
+                    this.acousticFilterErrors.max_val = ""
                 }
 
                 if (isNaN(timeStep)) {
