@@ -40,6 +40,7 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
     }
 
     file_Names <- list.files(path = dir_path, pattern = "\\.wav$", full.names = TRUE)
+    results <- list()
 
     for (file_name in file_Names) {
         audio_data <- tuneR::readWave(file_name)
@@ -64,7 +65,15 @@ acoustic_filter <- function(dir_path, acoustic_index, max_val, timeStep) {
         filtered_list[[file_name]] <- concatenated_wav
         new_file_name <- paste0(sub("\\.wav$", "", file_name), "_",acoustic_index, "_",  as.character(max_val),"_timeStep_",  as.character(timeStep), ".wav")
         tuneR::writeWave(concatenated_wav, filename = new_file_name, sample_rate) # Writes new .wav
+
+        # Append results for current file
+        current_result <- list( directory_path = new_file_name,
+                                sample_rate = sample_rate,
+                                wav_object = concatenated_wav
+                                )
+        results <- c(results, list(current_result)) 
     }
+    return(results)
 }
 
 frequency_filter <-function(dir_path, min_freq, max_freq) {
@@ -73,6 +82,7 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
 		}
 
     file_Names <- list.files(path = dir_path, pattern = "\\.wav$", full.names = TRUE)
+    results <-list()
 
     for (file_name in file_Names) {
         audio_data <- tuneR::readWave(file_name)
@@ -93,7 +103,15 @@ frequency_filter <-function(dir_path, min_freq, max_freq) {
         filtered_wav <- tuneR::Wave(filtered_sig, samp.rate = sample_rate, bit = bit)
         new_file_name <- paste0(sub("\\.wav$", "", file_name), "_minFreq_",  as.character(min_freq), "_maxFreq_",  as.character(max_freq), ".wav")
         tuneR::writeWave(filtered_wav, filename = new_file_name, sample_rate)
+
+        # Append results for current file
+        current_result <- list( directory_path = new_file_name,
+                                sample_rate = sample_rate,
+                                wav_object = filtered_wav
+                                )
+        results <- c(results, list(current_result))
     }
+    return(results)
 }
 
 
@@ -147,16 +165,14 @@ runJob <- function(job) {
                                                 soundindex = input$name,
                                                 no_cores = job$meta$cores)
         } else if (input$type == "acousticFilter") {
-            acoustic_filter(job$meta$path,
+            result[["acousticFilter"]] <- acoustic_filter(job$meta$path,
                             input$soundindex,
                             input$max_val,
                             input$timeStep)
-            result <- list(acousticFilter = "")                       
         } else if (input$type == "frequencyFilter") {
-            frequency_filter(job$meta$path,
+            result[["frequencyFilter"]] <- frequency_filter(job$meta$path,
                              input$min_freq,
                              input$max_freq)
-            result <- list(frequencyFilter = "")
         }
 
     }
