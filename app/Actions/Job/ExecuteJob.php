@@ -61,6 +61,12 @@ class ExecuteJob implements ExecuteJobContract
     {
         try {
             foreach (['aci', 'adi', 'aei', 'bi', 'ndsi', 'rms', 'frequencyFilter', 'acousticFilter'] as $index) {
+                if ($index === 'frequencyFilter') {
+                    continue; // No job result to save
+                }
+                if ($index === 'acousticFilter') {
+                    continue; // No job result to save
+                }
                 if (isset($results[$index])) {
                     foreach ($results[$index] as $fileName => $data) {
                         $job->series->fileByName($fileName)?->results()->updateOrCreate([
