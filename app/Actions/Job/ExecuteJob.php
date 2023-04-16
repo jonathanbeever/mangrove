@@ -71,6 +71,12 @@ class ExecuteJob implements ExecuteJobContract
                         ]);
                     }
                 }
+                elseif ($index === 'frequencyFilter') {
+                    continue; // No job result to save
+                }
+                elseif ($index === 'acousticFilter') {
+                    continue; // No job result to save
+                }
             }
 
             return true;
