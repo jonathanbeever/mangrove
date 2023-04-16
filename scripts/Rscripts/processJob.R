@@ -151,10 +151,12 @@ runJob <- function(job) {
                             input$soundindex,
                             input$max_val,
                             input$timeStep)
+            result <- list(acousticFilter = "")                       
         } else if (input$type == "frequencyFilter") {
             frequency_filter(job$meta$path,
                              input$min_freq,
                              input$max_freq)
+            result <- list(frequencyFilter = "")
         }
 
     }
