@@ -146,9 +146,11 @@
                                 </label>
                                 <input id="import" class="hidden" type="file" accept=".zip" @change="loadZipFile" />
                             </div>
+                            <!--
                             <PrimaryButton class="my-2 whitespace-nowrap border-gray-200" @click="layoutSwapped = !layoutSwapped">
                                 Swap Sides
                             </PrimaryButton>
+                            -->
                         </div>
                     </div>
                 </div>
