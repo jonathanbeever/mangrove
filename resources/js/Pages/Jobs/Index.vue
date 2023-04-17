@@ -173,7 +173,11 @@ export default defineComponent({
 
                 statusArray.forEach(statusObj => {
                     const index = this.items.findIndex(item => item.id === statusObj.id);
-                    if (index !== -1 && this.items[index].status !== statusObj.status) {
+                    if (this.items[index].indicesUsed.includes("FREQUENCY_FILTER")) {
+                        this.items[index].status = "Succeeded";
+                        this.currentStatuses[statusObj.id] = "Succeeded";
+                    }
+                    else if (index !== -1 && this.items[index].status !== statusObj.status) {
                         this.items[index].status = statusObj.status;
                         this.currentStatuses[statusObj.id] = statusObj.status;
                     }
